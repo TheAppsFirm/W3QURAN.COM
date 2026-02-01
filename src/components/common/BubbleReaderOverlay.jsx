@@ -15,6 +15,8 @@ import { useQuranAPI, useMultilingualWords, TRANSLATIONS, TAJWEED_RULES, WORD_TR
 import { useLocalStorage } from '../../hooks';
 import { logReadingSession } from '../../utils/trackingUtils';
 import { shareVerse } from '../../utils/shareUtils';
+import FeatureBubbles from './FeatureBubbles';
+import FeaturePanel from './FeaturePanels';
 
 // Audio CDN
 const AUDIO_CDN = 'https://cdn.islamic.network/quran/audio/128';
@@ -155,26 +157,48 @@ const analyzeArabicWord = (word) => {
 };
 
 // Simple Word Component - just highlights and triggers callback
-const WordItem = memo(function WordItem({ word, isActive, onClick }) {
+// Supports memorization mode with hidden words
+const WordItem = memo(function WordItem({ word, isActive, onClick, hidden = false, showOnHover = false }) {
+  const [revealed, setRevealed] = useState(false);
+
   const handleClick = (e) => {
     e.stopPropagation();
     e.preventDefault();
-    if (onClick) onClick();
+    if (hidden) {
+      setRevealed(!revealed);
+    } else if (onClick) {
+      onClick();
+    }
   };
+
+  const isHidden = hidden && !revealed;
 
   return (
     <span
       onClick={handleClick}
+      onMouseEnter={() => showOnHover && setRevealed(true)}
+      onMouseLeave={() => showOnHover && setRevealed(false)}
       role="button"
       tabIndex={0}
       className={`inline-block mx-0.5 cursor-pointer transition-all duration-200 rounded px-1.5 py-1 ${
         isActive
           ? 'bg-yellow-400/60 scale-110 shadow-lg ring-2 ring-yellow-300/50'
+          : isHidden
+          ? 'bg-amber-500/40 hover:bg-amber-500/60'
           : 'hover:bg-white/30 hover:scale-105'
       }`}
       style={{ userSelect: 'none' }}
     >
-      {word}
+      {isHidden ? (
+        <span className="opacity-0 select-none" aria-hidden="true">{word}</span>
+      ) : (
+        word
+      )}
+      {isHidden && (
+        <span className="absolute inset-0 flex items-center justify-center text-white/50 text-xs">
+          ?
+        </span>
+      )}
     </span>
   );
 });
@@ -452,6 +476,10 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({
 
   // Word selection state (for tracking active word with full data)
   const [selectedWordData, setSelectedWordData] = useState(null);
+
+  // Feature bubbles state
+  const [activeFeature, setActiveFeature] = useState(null);
+  const [memorizeSettings, setMemorizeSettings] = useState({ hideLevel: 0 });
 
   // Audio State
   const [isPlaying, setIsPlaying] = useState(false);
@@ -1081,13 +1109,24 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({
                       // Get meanings from Quran.com API (matched by position)
                       const wordMeanings = wordsMap[ayahNum] || [];
 
+                      // Calculate which words to hide based on memorization settings
+                      const hideLevel = memorizeSettings.hideLevel || 0;
+                      const shouldHideWord = (wordIdx, totalWords) => {
+                        if (hideLevel === 0) return false; // Show all
+                        if (hideLevel === 4) return true; // Hide all
+                        // Progressive hiding: 25%, 50%, 75%
+                        const hideRatio = hideLevel * 0.25;
+                        // Use a deterministic pattern based on word index
+                        return (wordIdx % Math.ceil(1 / hideRatio)) === 0;
+                      };
+
                       return (
                         <div
                           key={ayahNum}
                           data-ayah={ayahNum}
                           className={`rounded-2xl p-3 sm:p-4 transition-all duration-500 ${
                             isCurrentAyah ? 'bg-white/25' : 'bg-white/10'
-                          }`}
+                          } ${hideLevel > 0 ? 'ring-2 ring-amber-400/30' : ''}`}
                           style={{
                             transform: isCurrentAyah ? 'scale(1.01)' : 'scale(1)',
                             boxShadow: isCurrentAyah ? '0 0 20px rgba(255,255,255,0.2)' : 'none',
@@ -1095,7 +1134,7 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({
                           }}
                         >
                           <div
-                            className="leading-[2.2] mb-2"
+                            className="leading-[2.2] mb-2 relative"
                             style={{
                               fontFamily: "'Scheherazade New', serif",
                               fontSize: fontSizeMap[fontSize].arabic,
@@ -1109,11 +1148,14 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({
                                 // Use words from API (accurate word boundaries)
                                 wordMeanings.map((wordData, wordIdx) => {
                                   const wordKey = `${ayahNum}-${wordIdx}`;
+                                  const isHidden = shouldHideWord(wordIdx, wordMeanings.length);
                                   return (
                                     <WordItem
                                       key={wordKey}
                                       word={wordData.arabic}
                                       isActive={selectedWordData?.key === wordKey}
+                                      hidden={isHidden}
+                                      showOnHover={hideLevel > 0 && hideLevel < 4}
                                       onClick={() => setSelectedWordData({
                                         key: wordKey,
                                         word: wordData.arabic,
@@ -1128,11 +1170,14 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({
                                 // Fallback to split words while loading
                                 arabicWords.map((word, wordIdx) => {
                                   const wordKey = `${ayahNum}-${wordIdx}`;
+                                  const isHidden = shouldHideWord(wordIdx, arabicWords.length);
                                   return (
                                     <WordItem
                                       key={wordKey}
                                       word={word}
                                       isActive={selectedWordData?.key === wordKey}
+                                      hidden={isHidden}
+                                      showOnHover={hideLevel > 0 && hideLevel < 4}
                                       onClick={() => setSelectedWordData({
                                         key: wordKey,
                                         word,
@@ -1245,8 +1290,35 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({
         </div>
       </div>
 
+      {/* Feature Bubbles - Left side */}
+      <FeatureBubbles
+        activeFeature={activeFeature}
+        onFeatureSelect={(feature) => {
+          setActiveFeature(feature);
+          // Close word meaning bubble when opening a feature
+          if (feature) setSelectedWordData(null);
+        }}
+        position="left"
+      />
+
+      {/* Feature Panel - Right side (when feature is active) */}
+      {activeFeature && (
+        <FeaturePanel
+          feature={activeFeature}
+          surahId={surah?.id}
+          surahName={surah?.name}
+          surahArabic={surah?.arabic}
+          ayahNumber={currentAyah}
+          verseArabic={verses[currentAyah - 1]?.arabic}
+          verseTranslation={verses[currentAyah - 1]?.translation}
+          palette={palette}
+          onClose={() => setActiveFeature(null)}
+          onMemorizeModeChange={setMemorizeSettings}
+        />
+      )}
+
       {/* Word Meaning Bubble - Fixed on right side of screen */}
-      {selectedWordData && (
+      {selectedWordData && !activeFeature && (
         <WordMeaningBubble
           word={selectedWordData.word}
           meaning={selectedWordData.meaning}
