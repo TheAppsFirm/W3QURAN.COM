@@ -11,6 +11,9 @@
 import { useState, useEffect, useRef, useCallback, memo, useMemo } from 'react';
 import { Icons } from './Icons';
 import YouTubePlayer from './YouTubePlayer';
+import VerseArtGenerator from './VerseArtGenerator';
+import EmotionalTracker, { MoodEntryForm } from './EmotionalTracker';
+import AyahConnectionMap from './AyahConnectionMap';
 import { PALETTES, SURAHS, fetchTafseer, getTafseersByLanguage, getDefaultTafseer, TRANSLATION_TO_TAFSEER_LANG, getVideosForSurah, generateSearchQuery, SCHOLARS, SURAH_TOPICS, TAFSEER_SOURCES } from '../../data';
 import { useQuranAPI, useMultilingualWords, TRANSLATIONS, TAJWEED_RULES, POS_LABELS } from '../../hooks/useQuranAPI';
 import { useLocalStorage } from '../../hooks';
@@ -626,7 +629,7 @@ const BookmarkFloatingBubble = memo(function BookmarkFloatingBubble({
 
 // Share Floating Bubble
 const ShareFloatingBubble = memo(function ShareFloatingBubble({
-  isVisible, onClose, surahId, surahName, ayahNumber, verseArabic, verseTranslation, multipleVerses
+  isVisible, onClose, surahId, surahName, ayahNumber, verseArabic, verseTranslation, multipleVerses, onOpenArtGenerator
 }) {
   return (
     <FloatingFeatureBubble
@@ -646,6 +649,7 @@ const ShareFloatingBubble = memo(function ShareFloatingBubble({
         verseTranslation={verseTranslation}
         multipleVerses={multipleVerses}
         onClose={onClose}
+        onOpenArtGenerator={onOpenArtGenerator}
       />
     </FloatingFeatureBubble>
   );
@@ -1074,7 +1078,7 @@ const YouTubePanel = memo(function YouTubePanel({ surahId, surahName, onClose })
 });
 
 // Share Panel
-const SharePanel = memo(function SharePanel({ surahId, surahName, ayahNumber, verseArabic, verseTranslation, multipleVerses, onClose }) {
+const SharePanel = memo(function SharePanel({ surahId, surahName, ayahNumber, verseArabic, verseTranslation, multipleVerses, onClose, onOpenArtGenerator }) {
   const [shareStatus, setShareStatus] = useState(null);
   const [downloadStatus, setDownloadStatus] = useState(null);
   const [selectedStyle, setSelectedStyle] = useState('classic');
@@ -1324,6 +1328,12 @@ const SharePanel = memo(function SharePanel({ surahId, surahName, ayahNumber, ve
 
         {/* Action Buttons */}
         <div className="space-y-2">
+          {/* Art Generator Button - NEW */}
+          <button onClick={onOpenArtGenerator}
+            className="w-full py-3 bg-gradient-to-r from-amber-500/60 to-orange-500/60 hover:from-amber-500/80 hover:to-orange-500/80 rounded-xl text-white font-medium transition-all flex items-center justify-center gap-2">
+            <Icons.Palette className="w-5 h-5" /> Create Beautiful Art
+          </button>
+
           {/* Download Image Button */}
           <button onClick={downloadImage} disabled={downloadStatus === 'generating'}
             className="w-full py-3 bg-gradient-to-r from-purple-500/60 to-pink-500/60 hover:from-purple-500/80 hover:to-pink-500/80 rounded-xl text-white font-medium transition-all flex items-center justify-center gap-2 disabled:opacity-50">
@@ -1332,7 +1342,7 @@ const SharePanel = memo(function SharePanel({ surahId, surahName, ayahNumber, ve
             ) : downloadStatus === 'done' ? (
               <><Icons.Check className="w-5 h-5" /> Downloaded!</>
             ) : (
-              <><Icons.Download className="w-5 h-5" /> Download Image</>
+              <><Icons.Download className="w-5 h-5" /> Quick Download</>
             )}
           </button>
 
@@ -1378,6 +1388,10 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
   const [isAnimating, setIsAnimating] = useState(true);
   const [showSettings, setShowSettings] = useState(false);
   const [selectedWordData, setSelectedWordData] = useState(null);
+  const [showArtGenerator, setShowArtGenerator] = useState(false);
+  const [showEmotionalTracker, setShowEmotionalTracker] = useState(false);
+  const [showMoodEntry, setShowMoodEntry] = useState(false);
+  const [showConnectionMap, setShowConnectionMap] = useState(false);
   // Separate state for right (tafseer) and left (other features) panels
   const [showTafseer, setShowTafseer] = useState(false);
   const [leftFeature, setLeftFeature] = useState(null); // 'youtube', 'memorize', 'bookmark', 'share'
@@ -1519,7 +1533,12 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
     const duration = Math.round((Date.now() - startTime.current) / 60000);
     logReadingSession(surah.id, verses.length > 0 ? 1 : 0, duration);
     if (audioRef.current) { audioRef.current.pause(); audioRef.current.src = ''; }
-    onClose();
+    // Show mood entry if read for more than 1 minute
+    if (duration >= 1) {
+      setShowMoodEntry(true);
+    } else {
+      onClose();
+    }
   }, [surah, verses.length, onClose]);
 
   const toggleAyahPlayback = useCallback((ayahNum) => {
@@ -1555,6 +1574,12 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
     if (featureId === 'tafseer') {
       // Toggle tafseer (right side) - independent of left features
       setShowTafseer(prev => !prev);
+    } else if (featureId === 'mood') {
+      // Open emotional tracker
+      setShowEmotionalTracker(true);
+    } else if (featureId === 'connections') {
+      // Open connection map
+      setShowConnectionMap(true);
     } else {
       // Toggle left side features - only one can be active at a time
       setLeftFeature(prev => {
@@ -1704,6 +1729,54 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
         verseArabic={shareVerseData?.multiple ? shareVerseData.verses[0]?.arabic : (shareVerseData?.arabic || currentVerse?.arabic)}
         verseTranslation={shareVerseData?.multiple ? shareVerseData.verses[0]?.translation : (shareVerseData?.translation || currentVerse?.translation)}
         multipleVerses={shareVerseData?.multiple ? shareVerseData.verses : null}
+        onOpenArtGenerator={() => setShowArtGenerator(true)}
+      />
+
+      {/* Verse Art Generator */}
+      <VerseArtGenerator
+        isVisible={showArtGenerator}
+        onClose={() => setShowArtGenerator(false)}
+        verseArabic={shareVerseData?.arabic || currentVerse?.arabic}
+        verseTranslation={shareVerseData?.translation || currentVerse?.translation}
+        surahName={surah.name}
+        surahId={surah.id}
+        ayahNumber={shareVerseData?.ayahNumber || currentAyah}
+      />
+
+      {/* Emotional Journey Tracker */}
+      <EmotionalTracker
+        isVisible={showEmotionalTracker}
+        onClose={() => setShowEmotionalTracker(false)}
+      />
+
+      {/* Mood Entry Form - shown after reading */}
+      <MoodEntryForm
+        isVisible={showMoodEntry}
+        onClose={() => { setShowMoodEntry(false); onClose(); }}
+        surahId={surah.id}
+        surahName={surah.name}
+        readingDuration={Math.round((Date.now() - startTime.current) / 60000)}
+        versesRead={currentAyah}
+      />
+
+      {/* Ayah Connection Map */}
+      <AyahConnectionMap
+        isVisible={showConnectionMap}
+        onClose={() => setShowConnectionMap(false)}
+        initialSurah={surah.id}
+        initialAyah={currentAyah}
+        onNavigateToVerse={(surahId, ayahNum) => {
+          if (surahId === surah.id) {
+            setCurrentAyah(ayahNum);
+          } else {
+            const targetSurah = SURAHS.find(s => s.id === surahId);
+            if (targetSurah && onChangeSurah) {
+              onChangeSurah(targetSurah);
+              setTimeout(() => setCurrentAyah(ayahNum), 100);
+            }
+          }
+          setShowConnectionMap(false);
+        }}
       />
 
       {/* Top Feature Buttons Bar */}
@@ -1718,6 +1791,8 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
             { id: 'memorize', icon: Icons.Brain, color: '#F59E0B', label: 'Memorize', side: 'left' },
             { id: 'bookmark', icon: Icons.Bookmark, color: '#EC4899', label: 'Bookmark', side: 'left' },
             { id: 'share', icon: Icons.Share, color: '#10B981', label: 'Share', side: 'left' },
+            { id: 'mood', icon: Icons.Activity, color: '#06B6D4', label: 'Mood', side: 'special' },
+            { id: 'connections', icon: Icons.Network, color: '#A855F7', label: 'Map', side: 'special' },
           ].map((btn) => {
             const Icon = btn.icon;
             // Tafseer uses showTafseer, others use leftFeature

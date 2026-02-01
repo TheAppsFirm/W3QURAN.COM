@@ -567,6 +567,154 @@ const CheckSquareIcon = (props) => (
 );
 
 // ============================================================================
+// Verse Art Generator Icons
+// ============================================================================
+
+export const PaletteIcon = (props) => (
+  <Icon {...props}>
+    <circle cx="13.5" cy="6.5" r="0.5" fill="currentColor" />
+    <circle cx="17.5" cy="10.5" r="0.5" fill="currentColor" />
+    <circle cx="8.5" cy="7.5" r="0.5" fill="currentColor" />
+    <circle cx="6.5" cy="12.5" r="0.5" fill="currentColor" />
+    <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.555C21.965 6.012 17.461 2 12 2z" />
+  </Icon>
+);
+
+export const MaximizeIcon = (props) => (
+  <Icon {...props}>
+    <path d="M8 3H5a2 2 0 0 0-2 2v3" />
+    <path d="M21 8V5a2 2 0 0 0-2-2h-3" />
+    <path d="M3 16v3a2 2 0 0 0 2 2h3" />
+    <path d="M16 21h3a2 2 0 0 0 2-2v-3" />
+  </Icon>
+);
+
+export const SquareIcon = (props) => (
+  <Icon {...props}>
+    <rect x="3" y="3" width="18" height="18" rx="2" />
+  </Icon>
+);
+
+export const SmartphoneIcon = (props) => (
+  <Icon {...props}>
+    <rect x="5" y="2" width="14" height="20" rx="2" ry="2" />
+    <line x1="12" y1="18" x2="12.01" y2="18" />
+  </Icon>
+);
+
+export const MonitorIcon = (props) => (
+  <Icon {...props}>
+    <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
+    <line x1="8" y1="21" x2="16" y2="21" />
+    <line x1="12" y1="17" x2="12" y2="21" />
+  </Icon>
+);
+
+export const MessageCircleIcon = (props) => (
+  <Icon {...props}>
+    <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
+  </Icon>
+);
+
+export const InstagramIcon = (props) => (
+  <Icon {...props}>
+    <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+  </Icon>
+);
+
+export const TwitterIcon = (props) => (
+  <Icon {...props}>
+    <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z" />
+  </Icon>
+);
+
+export const FacebookIcon = (props) => (
+  <Icon {...props}>
+    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+  </Icon>
+);
+
+export const WandIcon = (props) => (
+  <Icon {...props}>
+    <path d="M15 4V2" />
+    <path d="M15 16v-2" />
+    <path d="M8 9h2" />
+    <path d="M20 9h2" />
+    <path d="M17.8 11.8 19 13" />
+    <path d="M15 9h0" />
+    <path d="M17.8 6.2 19 5" />
+    <path d="m3 21 9-9" />
+    <path d="M12.2 6.2 11 5" />
+  </Icon>
+);
+
+export const SmileIcon = (props) => (
+  <Icon {...props}>
+    <circle cx="12" cy="12" r="10" />
+    <path d="M8 14s1.5 2 4 2 4-2 4-2" />
+    <line x1="9" y1="9" x2="9.01" y2="9" />
+    <line x1="15" y1="9" x2="15.01" y2="9" />
+  </Icon>
+);
+
+export const MehIcon = (props) => (
+  <Icon {...props}>
+    <circle cx="12" cy="12" r="10" />
+    <line x1="8" y1="15" x2="16" y2="15" />
+    <line x1="9" y1="9" x2="9.01" y2="9" />
+    <line x1="15" y1="9" x2="15.01" y2="9" />
+  </Icon>
+);
+
+export const FrownIcon = (props) => (
+  <Icon {...props}>
+    <circle cx="12" cy="12" r="10" />
+    <path d="M16 16s-1.5-2-4-2-4 2-4 2" />
+    <line x1="9" y1="9" x2="9.01" y2="9" />
+    <line x1="15" y1="9" x2="15.01" y2="9" />
+  </Icon>
+);
+
+export const ZapIcon = (props) => (
+  <Icon {...props}>
+    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+  </Icon>
+);
+
+export const CloudIcon = (props) => (
+  <Icon {...props}>
+    <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z" />
+  </Icon>
+);
+
+export const ActivityIcon = (props) => (
+  <Icon {...props}>
+    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+  </Icon>
+);
+
+export const LinkIcon = (props) => (
+  <Icon {...props}>
+    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+  </Icon>
+);
+
+export const NetworkIcon = (props) => (
+  <Icon {...props}>
+    <circle cx="12" cy="5" r="3" />
+    <circle cx="5" cy="19" r="3" />
+    <circle cx="19" cy="19" r="3" />
+    <line x1="12" y1="8" x2="12" y2="12" />
+    <line x1="8" y1="14" x2="5" y2="16" />
+    <line x1="16" y1="14" x2="19" y2="16" />
+    <line x1="9" y1="12" x2="15" y2="12" />
+  </Icon>
+);
+
+// ============================================================================
 // Export all icons as object for dynamic usage
 // ============================================================================
 
@@ -640,6 +788,24 @@ export const Icons = {
   Image: ImageIcon,
   Headphones: HeadphonesIcon,
   CheckSquare: CheckSquareIcon,
+  Palette: PaletteIcon,
+  Maximize: MaximizeIcon,
+  Square: SquareIcon,
+  Smartphone: SmartphoneIcon,
+  Monitor: MonitorIcon,
+  MessageCircle: MessageCircleIcon,
+  Instagram: InstagramIcon,
+  Twitter: TwitterIcon,
+  Facebook: FacebookIcon,
+  Wand: WandIcon,
+  Smile: SmileIcon,
+  Meh: MehIcon,
+  Frown: FrownIcon,
+  Zap: ZapIcon,
+  Cloud: CloudIcon,
+  Activity: ActivityIcon,
+  Link: LinkIcon,
+  Network: NetworkIcon,
 };
 
 export default Icons;

@@ -141,3 +141,14 @@ export {
   clearRecentSearches,
   clearSearchCache,
 } from './searchIndex';
+
+// Ayah Connections (Visual Quran)
+export {
+  CONNECTION_TYPES,
+  QURAN_THEMES,
+  QURAN_STORIES,
+  KEY_WORDS,
+  getVerseConnections,
+  getAllThemes,
+  getAllStories,
+} from './ayahConnections';

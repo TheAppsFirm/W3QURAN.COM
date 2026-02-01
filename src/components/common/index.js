@@ -17,3 +17,6 @@ export { default as HifzMode } from './HifzMode';
 export { default as SearchPanel } from './SearchPanel';
 export { default as DonateModal } from './DonateModal';
 export { Logo, LogoIcon, LogoFull } from './Logo';
+export { default as VerseArtGenerator } from './VerseArtGenerator';
+export { default as EmotionalTracker, MoodEntryForm, MoodSelector } from './EmotionalTracker';
+export { default as AyahConnectionMap } from './AyahConnectionMap';
