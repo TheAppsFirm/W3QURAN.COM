@@ -1,6 +1,6 @@
 /**
  * Header Component
- * Single Responsibility: Display and handle filter controls
+ * Beautiful animated header with glass morphism and floating elements
  */
 
 import { useState, useEffect, useRef, memo } from 'react';
@@ -11,9 +11,10 @@ const Header = memo(function Header({ filters, setFilters, showAnalytics, setSho
   const [open, setOpen] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [showTopics, setShowTopics] = useState(false);
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
   const debounceTimer = useRef(null);
 
-  // Debounced search - only update filters after 300ms of no typing
+  // Debounced search
   useEffect(() => {
     if (debounceTimer.current) clearTimeout(debounceTimer.current);
     debounceTimer.current = setTimeout(() => {
@@ -22,122 +23,297 @@ const Header = memo(function Header({ filters, setFilters, showAnalytics, setSho
     return () => clearTimeout(debounceTimer.current);
   }, [searchQuery, setFilters]);
 
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClick = () => setOpen(null);
+    if (open) {
+      document.addEventListener('click', handleClick);
+      return () => document.removeEventListener('click', handleClick);
+    }
+  }, [open]);
+
   const filterConfigs = [
-    { id: 'rev', label: 'Revelation', icon: Icons.Clock, opts: ['All', 'Makki', 'Madani'] },
-    { id: 'ayahRange', label: 'Ayahs', icon: Icons.BarChart, opts: ['All', '1-20', '21-50', '51-100', '100+'] },
+    { id: 'rev', label: 'Revelation', icon: Icons.Book, opts: ['All', 'Makki', 'Madani'] },
+    { id: 'ayahRange', label: 'Verses', icon: Icons.BarChart, opts: ['All', '1-20', '21-50', '51-100', '100+'] },
     { id: 'chronOrder', label: 'Order', icon: Icons.Clock, opts: ['Default', 'Chronological', 'Reverse Chron'] },
   ];
 
+  const hasActiveFilters = filters.type || filters.ayahRange || filters.chronOrder || filters.topic;
+
   return (
-    <header className="bg-gradient-to-r from-violet-600 via-purple-600 to-fuchsia-600 px-2 sm:px-4 py-2 sm:py-4 shadow-2xl relative z-40">
-      <div className="flex items-center justify-center gap-1.5 sm:gap-3 flex-wrap">
-        {/* Search */}
-        <div className="relative">
-          <div className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 bg-white/15 rounded-full border border-white/25">
-            <Icons.Search className="w-4 h-4 text-white/70" />
-            <input
-              type="text"
-              placeholder="Search..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="bg-transparent text-white placeholder-white/50 outline-none w-20 sm:w-32 text-xs sm:text-sm"
-            />
-          </div>
-        </div>
+    <header className="relative z-40 overflow-hidden">
+      {/* Animated gradient background */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 25%, #6B8DD6 50%, #8E37D7 75%, #667eea 100%)',
+          backgroundSize: '400% 400%',
+          animation: 'gradientShift 15s ease infinite',
+        }}
+      />
 
-        {/* Filter Dropdowns - Hidden on very small screens, shown on sm+ */}
-        {filterConfigs.map((f) => (
-          <div key={f.id} className="relative hidden sm:block">
-            <button
-              onClick={() => setOpen(open === f.id ? null : f.id)}
-              className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 sm:py-2.5 rounded-full text-white font-medium transition-all backdrop-blur-sm border shadow-lg text-xs sm:text-sm ${
-                (f.id === 'rev' && filters.type) ||
-                (f.id === 'ayahRange' && filters.ayahRange) ||
-                (f.id === 'chronOrder' && filters.chronOrder)
-                  ? 'bg-white/30 border-white/50'
-                  : 'bg-white/15 hover:bg-white/25 border-white/25'
-              }`}
-            >
-              <f.icon className="w-4 h-4" />
-              <span className="text-sm">{f.label}</span>
-              <Icons.ChevronDown className={`w-4 h-4 transition-transform duration-300 ${open === f.id ? 'rotate-180' : ''}`} />
-            </button>
-            {open === f.id && (
-              <div className="absolute top-full mt-2 left-1/2 -translate-x-1/2 bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl py-2 min-w-[160px] z-50 border border-white/50">
-                {f.opts.map((o) => (
-                  <button
-                    key={o}
-                    onClick={() => {
-                      if (f.id === 'rev') setFilters({ ...filters, type: o === 'All' ? null : o });
-                      if (f.id === 'ayahRange') setFilters({ ...filters, ayahRange: o === 'All' ? null : o });
-                      if (f.id === 'chronOrder') setFilters({ ...filters, chronOrder: o === 'Default' ? null : o });
-                      setOpen(null);
-                    }}
-                    className={`w-full px-5 py-3 text-left hover:bg-purple-50 text-gray-700 font-medium transition-colors flex items-center gap-2 ${
-                      (f.id === 'rev' && filters.type === o) ||
-                      (f.id === 'ayahRange' && filters.ayahRange === o) ||
-                      (f.id === 'chronOrder' && filters.chronOrder === o)
-                        ? 'bg-purple-100 text-purple-700'
-                        : ''
-                    }`}
-                  >
-                    {((f.id === 'rev' && filters.type === o) ||
-                      (f.id === 'ayahRange' && filters.ayahRange === o) ||
-                      (f.id === 'chronOrder' && filters.chronOrder === o)) && <Icons.Check className="w-4 h-4" />}
-                    {o}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
+      {/* Floating orbs */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {[...Array(5)].map((_, i) => (
+          <div
+            key={i}
+            className="absolute rounded-full opacity-30"
+            style={{
+              width: 60 + i * 20,
+              height: 60 + i * 20,
+              background: 'radial-gradient(circle, rgba(255,255,255,0.8) 0%, transparent 70%)',
+              left: `${10 + i * 20}%`,
+              top: `${-20 + (i % 2) * 40}%`,
+              animation: `floatOrb ${4 + i}s ease-in-out infinite`,
+              animationDelay: `${i * 0.5}s`,
+            }}
+          />
         ))}
-
-        {/* Topics/FAQ Button */}
-        <button
-          onClick={() => setShowTopics(!showTopics)}
-          className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-white font-medium transition-all backdrop-blur-sm border shadow-lg ${
-            filters.topic ? 'bg-white/30 border-white/50' : 'bg-white/15 hover:bg-white/25 border-white/25'
-          }`}
-        >
-          <Icons.Tag className="w-4 h-4" />
-          <span className="text-sm">Topics</span>
-        </button>
-
-        {/* Analytics Toggle */}
-        <button
-          onClick={() => setShowAnalytics(!showAnalytics)}
-          className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-white font-medium transition-all backdrop-blur-sm border shadow-lg ${
-            showAnalytics ? 'bg-white/30 border-white/50' : 'bg-white/15 hover:bg-white/25 border-white/25'
-          }`}
-        >
-          <Icons.BarChart className="w-4 h-4" />
-          <span className="text-sm">Analytics</span>
-        </button>
       </div>
 
-      {/* Topic Tags Panel */}
-      {showTopics && (
-        <div className="mt-4 p-4 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20">
-          <div className="flex flex-wrap gap-2 justify-center">
-            {FAQ_TOPICS.map((topic) => (
-              <button
-                key={topic.id}
-                onClick={() => {
-                  setFilters({ ...filters, topic: filters.topic === topic.id ? null : topic.id });
-                }}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                  filters.topic === topic.id
-                    ? 'bg-white text-purple-600 shadow-lg'
-                    : 'bg-white/20 text-white hover:bg-white/30'
-                }`}
-              >
-                <span className="mr-1">{topic.icon}</span>
-                {topic.label}
-              </button>
-            ))}
+      {/* Shimmer overlay */}
+      <div
+        className="absolute inset-0 opacity-20 pointer-events-none"
+        style={{
+          background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.4) 50%, transparent 100%)',
+          backgroundSize: '200% 100%',
+          animation: 'shimmer 3s linear infinite',
+        }}
+      />
+
+      {/* Content */}
+      <div className="relative px-3 sm:px-6 py-3 sm:py-4">
+        {/* Main Row */}
+        <div className="flex items-center justify-center gap-2 sm:gap-3 flex-wrap">
+
+          {/* App Logo/Title - Animated */}
+          <div className="hidden lg:flex items-center gap-2 mr-4">
+            <div
+              className="w-10 h-10 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center"
+              style={{ animation: 'pulse 2s ease-in-out infinite' }}
+            >
+              <Icons.Book className="w-5 h-5 text-white" />
+            </div>
+            <span
+              className="text-xl font-bold text-white"
+              style={{
+                textShadow: '0 2px 10px rgba(0,0,0,0.3)',
+                fontFamily: "'Scheherazade New', serif",
+              }}
+            >
+              القرآن
+            </span>
           </div>
+
+          {/* Search - Enhanced */}
+          <div className="relative group">
+            <div
+              className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl transition-all duration-300 border ${
+                isSearchFocused
+                  ? 'bg-white/25 border-white/50 shadow-lg shadow-white/20 scale-105'
+                  : 'bg-white/15 border-white/25 hover:bg-white/20'
+              }`}
+              style={{ backdropFilter: 'blur(10px)' }}
+            >
+              <Icons.Search className={`w-4 h-4 transition-all duration-300 ${isSearchFocused ? 'text-white scale-110' : 'text-white/70'}`} />
+              <input
+                type="text"
+                placeholder="Search surahs..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onFocus={() => setIsSearchFocused(true)}
+                onBlur={() => setIsSearchFocused(false)}
+                className="bg-transparent text-white placeholder-white/50 outline-none w-24 sm:w-36 text-sm font-medium"
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery('')}
+                  className="p-1 rounded-full hover:bg-white/20 transition-colors"
+                >
+                  <Icons.X className="w-3 h-3 text-white/70" />
+                </button>
+              )}
+            </div>
+            {/* Search glow effect */}
+            {isSearchFocused && (
+              <div className="absolute -inset-1 bg-gradient-to-r from-pink-500 to-violet-500 rounded-2xl blur opacity-30 -z-10 animate-pulse" />
+            )}
+          </div>
+
+          {/* Filter Pills */}
+          {filterConfigs.map((f, idx) => (
+            <div key={f.id} className="relative hidden sm:block" onClick={(e) => e.stopPropagation()}>
+              <button
+                onClick={() => setOpen(open === f.id ? null : f.id)}
+                className={`group flex items-center gap-2 px-4 py-2.5 rounded-2xl text-white font-medium transition-all duration-300 border ${
+                  (f.id === 'rev' && filters.type) ||
+                  (f.id === 'ayahRange' && filters.ayahRange) ||
+                  (f.id === 'chronOrder' && filters.chronOrder)
+                    ? 'bg-white/30 border-white/50 shadow-lg'
+                    : 'bg-white/10 hover:bg-white/20 border-white/20 hover:border-white/40'
+                }`}
+                style={{
+                  backdropFilter: 'blur(10px)',
+                  animationDelay: `${idx * 0.1}s`,
+                }}
+              >
+                <f.icon className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                <span className="text-sm">{f.label}</span>
+                <Icons.ChevronDown className={`w-4 h-4 transition-transform duration-300 ${open === f.id ? 'rotate-180' : ''}`} />
+              </button>
+
+              {/* Dropdown */}
+              {open === f.id && (
+                <div
+                  className="absolute top-full mt-2 left-1/2 -translate-x-1/2 bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl py-2 min-w-[180px] z-50 border border-purple-100 overflow-hidden"
+                  style={{ animation: 'dropdownSlide 0.2s ease-out' }}
+                >
+                  {f.opts.map((o, i) => {
+                    const isActive = (f.id === 'rev' && filters.type === o) ||
+                      (f.id === 'ayahRange' && filters.ayahRange === o) ||
+                      (f.id === 'chronOrder' && filters.chronOrder === o);
+
+                    return (
+                      <button
+                        key={o}
+                        onClick={() => {
+                          if (f.id === 'rev') setFilters({ ...filters, type: o === 'All' ? null : o });
+                          if (f.id === 'ayahRange') setFilters({ ...filters, ayahRange: o === 'All' ? null : o });
+                          if (f.id === 'chronOrder') setFilters({ ...filters, chronOrder: o === 'Default' ? null : o });
+                          setOpen(null);
+                        }}
+                        className={`w-full px-4 py-3 text-left transition-all flex items-center gap-3 ${
+                          isActive
+                            ? 'bg-gradient-to-r from-purple-500 to-fuchsia-500 text-white'
+                            : 'text-gray-700 hover:bg-purple-50'
+                        }`}
+                        style={{ animationDelay: `${i * 0.05}s` }}
+                      >
+                        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                          isActive ? 'border-white bg-white' : 'border-gray-300'
+                        }`}>
+                          {isActive && <Icons.Check className="w-3 h-3 text-purple-600" />}
+                        </div>
+                        <span className="font-medium">{o}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          ))}
+
+          {/* Topics Button */}
+          <button
+            onClick={() => setShowTopics(!showTopics)}
+            className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-white font-medium transition-all duration-300 border ${
+              filters.topic || showTopics
+                ? 'bg-gradient-to-r from-amber-500/80 to-orange-500/80 border-amber-400/50 shadow-lg shadow-amber-500/30'
+                : 'bg-white/10 hover:bg-white/20 border-white/20 hover:border-white/40'
+            }`}
+            style={{ backdropFilter: 'blur(10px)' }}
+          >
+            <Icons.Tag className="w-4 h-4" />
+            <span className="text-sm">Topics</span>
+            {filters.topic && (
+              <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
+            )}
+          </button>
+
+          {/* Analytics Button */}
+          <button
+            onClick={() => setShowAnalytics(!showAnalytics)}
+            className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-white font-medium transition-all duration-300 border ${
+              showAnalytics
+                ? 'bg-gradient-to-r from-emerald-500/80 to-teal-500/80 border-emerald-400/50 shadow-lg shadow-emerald-500/30'
+                : 'bg-white/10 hover:bg-white/20 border-white/20 hover:border-white/40'
+            }`}
+            style={{ backdropFilter: 'blur(10px)' }}
+          >
+            <Icons.BarChart className="w-4 h-4" />
+            <span className="text-sm hidden sm:inline">Analytics</span>
+          </button>
+
+          {/* Clear Filters - Only show when filters active */}
+          {hasActiveFilters && (
+            <button
+              onClick={() => setFilters({ type: null, ayahRange: null, chronOrder: null, topic: null, search: '' })}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-white/80 hover:text-white font-medium transition-all bg-red-500/20 hover:bg-red-500/40 border border-red-400/30"
+              style={{ animation: 'fadeIn 0.3s ease-out' }}
+            >
+              <Icons.X className="w-3.5 h-3.5" />
+              <span className="text-xs">Clear</span>
+            </button>
+          )}
         </div>
-      )}
+
+        {/* Topic Tags Panel - Animated */}
+        {showTopics && (
+          <div
+            className="mt-4 p-4 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20"
+            style={{ animation: 'slideDown 0.3s ease-out' }}
+          >
+            <div className="flex flex-wrap gap-2 justify-center">
+              {FAQ_TOPICS.map((topic, i) => (
+                <button
+                  key={topic.id}
+                  onClick={() => {
+                    setFilters({ ...filters, topic: filters.topic === topic.id ? null : topic.id });
+                  }}
+                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
+                    filters.topic === topic.id
+                      ? 'bg-white text-purple-600 shadow-lg scale-105'
+                      : 'bg-white/15 text-white hover:bg-white/25 hover:scale-105'
+                  }`}
+                  style={{
+                    animationDelay: `${i * 0.03}s`,
+                    animation: 'popIn 0.3s ease-out backwards',
+                  }}
+                >
+                  <span className="mr-1.5">{topic.icon}</span>
+                  {topic.label}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* CSS Animations */}
+      <style>{`
+        @keyframes gradientShift {
+          0%, 100% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+        }
+        @keyframes floatOrb {
+          0%, 100% { transform: translateY(0) scale(1); }
+          50% { transform: translateY(-20px) scale(1.1); }
+        }
+        @keyframes shimmer {
+          0% { background-position: -200% 0; }
+          100% { background-position: 200% 0; }
+        }
+        @keyframes dropdownSlide {
+          from { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+          to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+        @keyframes slideDown {
+          from { opacity: 0; transform: translateY(-10px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes popIn {
+          from { opacity: 0; transform: scale(0.8); }
+          to { opacity: 1; transform: scale(1); }
+        }
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        @keyframes pulse {
+          0%, 100% { transform: scale(1); }
+          50% { transform: scale(1.05); }
+        }
+      `}</style>
     </header>
   );
 });

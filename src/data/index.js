@@ -4,7 +4,7 @@
  */
 
 // Surah data
-export { SURAHS, MAX_AYAHS, TOTAL_SURAHS, JUZZ, getSurahById, getSurahsByType } from './surahs';
+export { SURAHS, MAX_AYAHS, TOTAL_SURAHS, JUZZ, getSurahById, getSurahsByType, getJuzzById, getJuzzForVerse, getSurahsInJuzz } from './surahs';
 
 // Color palettes
 export { PALETTES, TOPIC_PALETTES, TOPIC_ICONS, getTopicPalette, getTopicIcon } from './palettes';
@@ -25,3 +25,12 @@ export {
   getRandomQuestions,
   getPointsForDifficulty,
 } from './quizQuestions';
+
+// Word Meanings (Multi-language)
+export {
+  WORD_MEANINGS,
+  AVAILABLE_LANGUAGES,
+  getWordMeanings,
+  hasLocalWordMeanings,
+  getSurahsWithWordMeanings,
+} from './wordMeanings';

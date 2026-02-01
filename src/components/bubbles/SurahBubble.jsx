@@ -1,79 +1,112 @@
 /**
  * SurahBubble Component
- * Single Responsibility: Render an interactive surah bubble
+ * Beautiful bubble with fibonacci spiral layout and rich effects
  */
 
-import { useState, memo } from 'react';
-import { getTopicPalette, getTopicIcon } from '../../data';
+import { useState, memo, useCallback } from 'react';
+import { getTopicPalette } from '../../data';
 
-const SurahBubble = memo(function SurahBubble({ surah, index, onClick, maxAyahs, total, zoom = 1 }) {
+const SurahBubble = memo(function SurahBubble({
+  surah,
+  index,
+  onClick,
+  maxAyahs,
+  total,
+  zoom = 1,
+  contentZoom = 1,
+}) {
   const [hovered, setHovered] = useState(false);
-  const [hueRotate, setHueRotate] = useState(0);
 
-  // Use topic-based coloring
   const palette = getTopicPalette(surah);
-  const topicIcon = getTopicIcon(surah);
 
-  // Golden angle spiral positioning
-  const baseSize = 90 + (surah.ayahs / maxAyahs) * 70;
-  const size = baseSize * zoom;
-  const r = Math.sqrt(index + 1) * 65 * zoom;
+  // Variable size based on ayahs (like reference)
+  const baseMinSize = 78;
+  const baseMaxSize = 160;
+  const minSize = baseMinSize * zoom;
+  const maxSize = baseMaxSize * zoom;
+  const size = minSize + ((surah.ayahs / maxAyahs) * (maxSize - minSize));
+
+  // Fibonacci spiral positioning (golden angle = 137.508°)
+  const baseScale = Math.min(54, 620 / Math.sqrt(total));
+  const scale = baseScale * zoom;
+  const r = Math.sqrt(index + 1) * scale;
   const a = index * 137.508 * (Math.PI / 180);
   const x = r * Math.cos(a);
   const y = r * Math.sin(a);
 
+  const handleClick = useCallback((e) => {
+    // Get bubble center position for animation
+    const rect = e.currentTarget.getBoundingClientRect();
+    const position = {
+      x: rect.left + rect.width / 2,
+      y: rect.top + rect.height / 2,
+      width: rect.width,
+      height: rect.height,
+    };
+    onClick(surah, position);
+  }, [onClick, surah]);
+
+  // Animation timing
+  const floatDur = 6 + (index % 4);
+  const floatDelay = (index % 15) * 0.2;
+  const hueRotate = (index * 15) % 360;
+
   return (
     <div
-      onMouseEnter={() => {
-        setHovered(true);
-        setHueRotate((prev) => prev + 15);
-      }}
+      onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      onClick={() => onClick(surah)}
-      className="absolute cursor-pointer"
+      onClick={handleClick}
+      className="absolute cursor-pointer select-none"
       style={{
         width: size,
         height: size,
         left: `calc(50% + ${x}px - ${size / 2}px)`,
         top: `calc(50% + ${y}px - ${size / 2}px)`,
-        transform: `scale(${hovered ? 1.22 : 1}) ${hovered ? 'translateY(-10px)' : ''}`,
+        transform: `scale(${hovered ? 1.18 : 1}) ${hovered ? 'translateY(-8px)' : ''}`,
         transition: 'all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)',
-        zIndex: hovered ? 100 : 50 - index,
-        animation: `floatBubble ${6 + (index % 5)}s ease-in-out infinite`,
-        animationDelay: `${(index % 15) * 0.15}s`,
+        zIndex: hovered ? 100 : 50 - Math.floor(index * 0.3),
+        animation: `gentleFloat ${floatDur}s ease-in-out infinite`,
+        animationDelay: `${floatDelay}s`,
+        perspective: '1000px',
       }}
     >
-      {/* GLOW LAYER */}
+      {/* LAYER 1: Outer Soft Glow */}
       <div
-        className="absolute rounded-full transition-all duration-700"
+        className="absolute rounded-full transition-all duration-700 pointer-events-none"
         style={{
-          inset: '-20%',
-          background: `radial-gradient(circle, ${palette.glow}50 0%, transparent 70%)`,
-          opacity: hovered ? 1 : 0.3,
+          inset: '-25%',
+          background: `radial-gradient(circle at 50% 50%, ${palette.glow}40 0%, ${palette.colors[0]}20 40%, transparent 70%)`,
+          opacity: hovered ? 1 : 0.4,
           filter: 'blur(15px)',
+          animation: hovered ? 'breathe 2s ease-in-out infinite' : 'none',
         }}
       />
 
-      {/* OUTER RING */}
+      {/* LAYER 2: Iridescent Rainbow Ring */}
       <div
-        className="absolute rounded-full transition-all duration-500"
+        className="absolute rounded-full transition-all duration-500 pointer-events-none"
         style={{
           inset: '-8%',
-          background: `conic-gradient(from 0deg, ${palette.colors[0]}90, ${palette.colors[1]}90, ${palette.colors[2]}90, ${palette.colors[0]}90)`,
-          opacity: hovered ? 0.9 : 0.25,
-          animation: hovered ? 'spinSlow 8s linear infinite' : 'none',
-          filter: 'blur(3px)',
+          background: `conic-gradient(from ${hueRotate}deg,
+            ${palette.colors[0]}90,
+            ${palette.colors[1]}90,
+            ${palette.colors[2]}90,
+            ${palette.glow}90,
+            ${palette.colors[0]}90
+          )`,
+          opacity: hovered ? 0.9 : 0.3,
+          animation: hovered ? 'spinSlow 10s linear infinite' : 'none',
+          filter: 'blur(2px)',
         }}
       />
 
-      {/* Breathing glow effect */}
+      {/* LAYER 3: Inner Glow Ring */}
       <div
-        className="absolute rounded-full"
+        className="absolute rounded-full pointer-events-none"
         style={{
           inset: '-4%',
-          background: `radial-gradient(circle, ${palette.glow}30 0%, transparent 70%)`,
-          animation: 'breathe 4s ease-in-out infinite',
-          animationDelay: `${index * 0.1}s`,
+          background: `radial-gradient(circle at 30% 30%, ${palette.colors[2]}60 0%, transparent 50%)`,
+          opacity: hovered ? 0.8 : 0.4,
         }}
       />
 
@@ -81,10 +114,11 @@ const SurahBubble = memo(function SurahBubble({ surah, index, onClick, maxAyahs,
       <div
         className="relative w-full h-full rounded-full overflow-hidden"
         style={{
-          background: `linear-gradient(135deg, ${palette.colors[0]}, ${palette.colors[1]}, ${palette.colors[2]})`,
+          background: `linear-gradient(135deg, ${palette.colors[0]} 0%, ${palette.colors[1]} 50%, ${palette.colors[2]} 100%)`,
           boxShadow: hovered
             ? `
-                0 30px 60px -15px ${palette.colors[0]}70,
+                0 30px 60px -10px ${palette.colors[0]}70,
+                0 0 0 2px rgba(255,255,255,0.5),
                 0 0 40px ${palette.glow}50,
                 inset 0 -30px 60px ${palette.colors[2]}60,
                 inset 0 30px 60px rgba(255,255,255,0.25),
@@ -98,14 +132,14 @@ const SurahBubble = memo(function SurahBubble({ surah, index, onClick, maxAyahs,
               `,
         }}
       >
-        {/* Background Pattern with Blend */}
+        {/* Background Pattern */}
         <div
-          className="absolute inset-0 transition-all duration-700"
+          className="absolute inset-0 transition-all duration-700 pointer-events-none"
           style={{
             background: `
               radial-gradient(circle at 20% 20%, rgba(255,255,255,0.3) 0%, transparent 30%),
               radial-gradient(circle at 80% 80%, ${palette.glow}30 0%, transparent 30%),
-              radial-gradient(circle at 50% 50%, ${palette.accent}20 0%, transparent 50%)
+              radial-gradient(circle at 50% 50%, ${palette.colors[2]}20 0%, transparent 50%)
             `,
             opacity: hovered ? 0.6 : 0.4,
             transform: hovered ? 'scale(1.2)' : 'scale(1)',
@@ -114,10 +148,10 @@ const SurahBubble = memo(function SurahBubble({ surah, index, onClick, maxAyahs,
 
         {/* Color Overlay with Gradient */}
         <div
-          className="absolute inset-0"
+          className="absolute inset-0 pointer-events-none"
           style={{
             background: `
-              radial-gradient(ellipse at 25% 25%, ${palette.accent}50 0%, transparent 50%),
+              radial-gradient(ellipse at 25% 25%, ${palette.colors[2]}50 0%, transparent 50%),
               radial-gradient(ellipse at 75% 75%, ${palette.colors[2]}50 0%, transparent 50%),
               linear-gradient(135deg, ${palette.colors[0]}cc 0%, transparent 50%, ${palette.colors[2]}aa 100%)
             `,
@@ -126,7 +160,7 @@ const SurahBubble = memo(function SurahBubble({ surah, index, onClick, maxAyahs,
 
         {/* Glass Layer 1 - Main Glass */}
         <div
-          className="absolute rounded-full"
+          className="absolute rounded-full pointer-events-none"
           style={{
             inset: '6%',
             background: `
@@ -144,7 +178,7 @@ const SurahBubble = memo(function SurahBubble({ surah, index, onClick, maxAyahs,
 
         {/* Glass Layer 2 - Inner Circle */}
         <div
-          className="absolute rounded-full"
+          className="absolute rounded-full pointer-events-none"
           style={{
             inset: '15%',
             background: `
@@ -159,7 +193,7 @@ const SurahBubble = memo(function SurahBubble({ surah, index, onClick, maxAyahs,
 
         {/* PRIMARY HIGHLIGHT - Top Crescent */}
         <div
-          className="absolute"
+          className="absolute pointer-events-none"
           style={{
             width: '70%',
             height: '40%',
@@ -181,7 +215,7 @@ const SurahBubble = memo(function SurahBubble({ surah, index, onClick, maxAyahs,
 
         {/* SECONDARY HIGHLIGHT - Small Bright Spot */}
         <div
-          className="absolute"
+          className="absolute pointer-events-none"
           style={{
             width: '18%',
             height: '12%',
@@ -194,7 +228,7 @@ const SurahBubble = memo(function SurahBubble({ surah, index, onClick, maxAyahs,
 
         {/* TERTIARY HIGHLIGHT - Extra Sparkle */}
         <div
-          className="absolute"
+          className="absolute pointer-events-none"
           style={{
             width: '8%',
             height: '6%',
@@ -207,7 +241,7 @@ const SurahBubble = memo(function SurahBubble({ surah, index, onClick, maxAyahs,
 
         {/* LEFT EDGE HIGHLIGHT */}
         <div
-          className="absolute"
+          className="absolute pointer-events-none"
           style={{
             width: '8%',
             height: '30%',
@@ -221,13 +255,13 @@ const SurahBubble = memo(function SurahBubble({ surah, index, onClick, maxAyahs,
 
         {/* BOTTOM REFLECTION */}
         <div
-          className="absolute"
+          className="absolute pointer-events-none"
           style={{
             width: '60%',
             height: '30%',
             bottom: '5%',
             left: '20%',
-            background: `linear-gradient(0deg, ${palette.glow}50 0%, ${palette.accent}20 50%, transparent 100%)`,
+            background: `linear-gradient(0deg, ${palette.glow}50 0%, ${palette.colors[2]}20 50%, transparent 100%)`,
             borderRadius: '50%',
             filter: 'blur(8px)',
             transform: 'scaleY(0.5)',
@@ -236,7 +270,7 @@ const SurahBubble = memo(function SurahBubble({ surah, index, onClick, maxAyahs,
 
         {/* RAINBOW SHIMMER ON HOVER */}
         <div
-          className="absolute inset-0 rounded-full overflow-hidden"
+          className="absolute inset-0 rounded-full overflow-hidden pointer-events-none"
           style={{
             opacity: hovered ? 1 : 0,
             transition: 'opacity 0.4s ease',
@@ -261,7 +295,7 @@ const SurahBubble = memo(function SurahBubble({ surah, index, onClick, maxAyahs,
 
         {/* Iridescent Color Shift Overlay */}
         <div
-          className="absolute inset-0 rounded-full"
+          className="absolute inset-0 rounded-full pointer-events-none"
           style={{
             background: `linear-gradient(${45 + hueRotate}deg,
               rgba(255,100,100,0.1) 0%,
@@ -274,44 +308,42 @@ const SurahBubble = memo(function SurahBubble({ surah, index, onClick, maxAyahs,
           }}
         />
 
-        {/* TOPIC SVG ICON - Subtle Background */}
-        <div
-          className="absolute inset-0 flex items-center justify-center pointer-events-none transition-all duration-500"
-          style={{
-            opacity: hovered ? 0.25 : 0.12,
-            transform: hovered ? 'scale(1.15)' : 'scale(1)',
-          }}
-        >
-          <svg
-            viewBox="0 0 24 24"
+        {/* CONTENT */}
+        <div className="absolute inset-0 flex flex-col items-center justify-center p-2 text-center z-10">
+          {/* Surah Number Badge */}
+          <div
+            className="absolute flex items-center justify-center rounded-full"
             style={{
-              width: size * 0.55,
-              height: size * 0.55,
-              fill: 'rgba(255,255,255,0.4)',
-              filter: `drop-shadow(0 0 8px ${palette.glow}60)`,
+              top: '5%',
+              left: '50%',
+              transform: 'translateX(-50%)',
+              width: Math.max(size * 0.18 * contentZoom, 16),
+              height: Math.max(size * 0.18 * contentZoom, 16),
+              background: 'rgba(255,255,255,0.3)',
+              fontSize: Math.max(size * 0.08 * contentZoom, 8),
+              fontWeight: '700',
+              color: 'white',
+              textShadow: '0 1px 2px rgba(0,0,0,0.2)',
             }}
           >
-            <path d={topicIcon} />
-          </svg>
-        </div>
+            {surah.id}
+          </div>
 
-        {/* CONTENT */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center p-3 text-center z-10">
-          {/* Arabic Text */}
+          {/* Arabic Name */}
           <span
             style={{
-              fontSize: Math.max(size * 0.28, 20),
+              fontSize: Math.max(size * 0.24 * contentZoom, 18),
               fontFamily: "'Scheherazade New', 'Amiri', serif",
               fontWeight: 'bold',
               color: 'white',
               textShadow: `
                 0 2px 4px rgba(0,0,0,0.3),
                 0 4px 20px ${palette.colors[1]}90,
-                0 0 40px ${palette.glow}60,
-                0 0 60px ${palette.glow}40
+                0 0 40px ${palette.glow}60
               `,
               letterSpacing: '0.03em',
-              lineHeight: 1,
+              lineHeight: 1.1,
+              marginTop: size * 0.05,
             }}
           >
             {surah.arabic}
@@ -320,15 +352,30 @@ const SurahBubble = memo(function SurahBubble({ surah, index, onClick, maxAyahs,
           {/* English Name */}
           <span
             style={{
-              fontSize: Math.max(size * 0.09, 10),
+              fontSize: Math.max(size * 0.08 * contentZoom, 8),
               fontWeight: '600',
               color: 'rgba(255,255,255,0.95)',
               textShadow: '0 2px 8px rgba(0,0,0,0.4)',
               letterSpacing: '0.05em',
-              marginTop: 4,
+              marginTop: 3,
+              maxWidth: '88%',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
             }}
           >
             {surah.name}
+          </span>
+
+          {/* Ayahs Count */}
+          <span
+            style={{
+              fontSize: Math.max(size * 0.065 * contentZoom, 7),
+              color: 'rgba(255,255,255,0.75)',
+              marginTop: 2,
+            }}
+          >
+            {surah.ayahs} ayahs
           </span>
         </div>
 
@@ -336,20 +383,40 @@ const SurahBubble = memo(function SurahBubble({ surah, index, onClick, maxAyahs,
         {hovered && (
           <>
             <div
-              className="absolute w-2 h-2 bg-white rounded-full"
-              style={{ top: '15%', right: '20%', animation: 'floatParticle 2s ease-in-out infinite', boxShadow: '0 0 10px white' }}
+              className="absolute w-2 h-2 bg-white rounded-full pointer-events-none"
+              style={{
+                top: '15%',
+                right: '20%',
+                animation: 'floatParticle 2s ease-in-out infinite',
+                boxShadow: '0 0 10px white',
+              }}
             />
             <div
-              className="absolute w-1.5 h-1.5 bg-white rounded-full"
-              style={{ bottom: '25%', left: '15%', animation: 'floatParticle 2.5s ease-in-out infinite 0.3s', boxShadow: '0 0 8px white' }}
+              className="absolute w-1.5 h-1.5 bg-white rounded-full pointer-events-none"
+              style={{
+                bottom: '25%',
+                left: '15%',
+                animation: 'floatParticle 2.5s ease-in-out infinite 0.3s',
+                boxShadow: '0 0 8px white',
+              }}
             />
             <div
-              className="absolute w-1 h-1 bg-white rounded-full"
-              style={{ top: '40%', right: '10%', animation: 'floatParticle 1.8s ease-in-out infinite 0.6s', boxShadow: '0 0 6px white' }}
+              className="absolute w-1 h-1 bg-white rounded-full pointer-events-none"
+              style={{
+                top: '40%',
+                right: '10%',
+                animation: 'floatParticle 1.8s ease-in-out infinite 0.6s',
+                boxShadow: '0 0 6px white',
+              }}
             />
             <div
-              className="absolute w-1.5 h-1.5 bg-white rounded-full"
-              style={{ top: '60%', left: '12%', animation: 'floatParticle 2.2s ease-in-out infinite 0.9s', boxShadow: '0 0 8px white' }}
+              className="absolute w-1.5 h-1.5 bg-white rounded-full pointer-events-none"
+              style={{
+                top: '60%',
+                left: '12%',
+                animation: 'floatParticle 2.2s ease-in-out infinite 0.9s',
+                boxShadow: '0 0 8px white',
+              }}
             />
           </>
         )}

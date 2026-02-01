@@ -10,12 +10,11 @@
  */
 
 import { Suspense, useState, useEffect, useMemo, useCallback } from 'react';
-import { ErrorBoundary, LoadingSpinner, Modal } from './components/common';
+import { ErrorBoundary, LoadingSpinner, BubbleModal, BubbleReaderOverlay } from './components/common';
 import { Header, FloatingMenu, ZoomSlider, StatsBar } from './components/layout';
 import { SurahBubble, JuzzBubble } from './components/bubbles';
 import { AnalyticsPanel } from './components/widgets';
 import {
-  QuranReaderView,
   NamesOfAllahView,
   QuizView,
   SettingsView,
@@ -25,46 +24,125 @@ import {
   DonateView,
   PrayerTimesView,
 } from './components/views';
-import { SURAHS, JUZZ, MAX_AYAHS } from './data';
+import { SURAHS, JUZZ, MAX_AYAHS, getSurahsInJuzz } from './data';
 import { useLocalStorage } from './hooks';
 
-// CSS Animations - Inline styles for bubble animations
+// CSS Animations - Beautiful bubble animations
 const AnimationStyles = () => (
   <style>{`
-    @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Scheherazade+New:wght@400;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Scheherazade+New:wght@400;700&family=Noto+Nastaliq+Urdu:wght@400;700&display=swap');
 
-    @keyframes floatBubble {
-      0%, 100% { transform: translateY(0) rotate(0deg); }
-      25% { transform: translateY(-8px) rotate(1deg); }
-      50% { transform: translateY(-15px) rotate(0deg); }
-      75% { transform: translateY(-8px) rotate(-1deg); }
+    /* Gentle floating animation */
+    @keyframes gentleFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
     }
 
-    @keyframes breathe {
-      0%, 100% { transform: scale(1); opacity: 0.8; }
-      50% { transform: scale(1.08); opacity: 1; }
-    }
-
+    /* Slow spinning for outer ring */
     @keyframes spinSlow {
       from { transform: rotate(0deg); }
       to { transform: rotate(360deg); }
     }
 
-    @keyframes shimmerWave {
-      0% { transform: translateX(-100%) rotate(25deg); }
-      100% { transform: translateX(200%) rotate(25deg); }
-    }
-
+    /* Floating particles */
     @keyframes floatParticle {
       0%, 100% { transform: translateY(0) scale(1); opacity: 1; }
-      50% { transform: translateY(-12px) scale(1.3); opacity: 0.7; }
+      50% { transform: translateY(-8px) scale(1.2); opacity: 0.7; }
     }
 
+    /* Breathing glow animation */
+    @keyframes breathe {
+      0%, 100% { transform: scale(1); opacity: 0.8; }
+      50% { transform: scale(1.1); opacity: 1; }
+    }
+
+    /* Shimmer wave animation */
+    @keyframes shimmerWave {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+
+    /* Color shift animation */
     @keyframes colorShift {
       0%, 100% { filter: hue-rotate(0deg); }
       50% { filter: hue-rotate(30deg); }
     }
 
+    /* Connection line pulse */
+    @keyframes connectionPulse {
+      0%, 100% { stroke-opacity: 0.12; }
+      50% { stroke-opacity: 0.28; }
+    }
+
+    .connection-line {
+      animation: connectionPulse 4s ease-in-out infinite;
+    }
+
+    /* Aurora background animation */
+    @keyframes aurora {
+      0%, 100% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+    }
+
+    /* Floating ambient orbs */
+    @keyframes floatOrb {
+      0%, 100% {
+        transform: translate(0, 0) scale(1);
+        opacity: 0.4;
+      }
+      25% {
+        transform: translate(10px, -20px) scale(1.1);
+        opacity: 0.6;
+      }
+      50% {
+        transform: translate(-5px, -10px) scale(0.9);
+        opacity: 0.5;
+      }
+      75% {
+        transform: translate(-15px, 5px) scale(1.05);
+        opacity: 0.45;
+      }
+    }
+
+    /* Sparkle animation */
+    @keyframes sparkle {
+      0%, 100% {
+        opacity: 0;
+        transform: scale(0);
+      }
+      50% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    /* Ripple effect */
+    @keyframes ripple {
+      0% {
+        transform: scale(1);
+        opacity: 0.5;
+      }
+      100% {
+        transform: scale(2);
+        opacity: 0;
+      }
+    }
+
+    /* Bubble hover effect */
+    .bubble-item {
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .bubble-item:hover {
+      transform: scale(1.08) translateY(-5px);
+      z-index: 10;
+    }
+
+    /* Utility classes */
     .touch-target {
       min-width: 44px;
       min-height: 44px;
@@ -73,7 +151,79 @@ const AnimationStyles = () => (
     .safe-area-bottom {
       padding-bottom: env(safe-area-inset-bottom);
     }
+
+    .bubble-container {
+      scroll-behavior: smooth;
+    }
+
+    /* Animated background gradient */
+    .animated-bg {
+      background: linear-gradient(-45deg, #f0fdfa, #ecfeff, #f0f9ff, #eff6ff, #eef2ff, #fdf4ff);
+      background-size: 400% 400%;
+      animation: aurora 20s ease infinite;
+    }
+
+    /* Dark mode animated background */
+    .animated-bg-dark {
+      background: linear-gradient(-45deg, #0f172a, #1e1b4b, #172554, #1e3a5f, #1e1b4b, #0f172a);
+      background-size: 400% 400%;
+      animation: aurora 20s ease infinite;
+    }
+
+    /* Reduce motion for accessibility */
+    @media (prefers-reduced-motion: reduce) {
+      .bubble-item, .connection-line, .animated-bg, .animated-bg-dark {
+        animation: none !important;
+      }
+      .bubble-item:hover {
+        transform: scale(1.02);
+      }
+    }
   `}</style>
+);
+
+// Ambient Floating Particles Component
+const AmbientParticles = ({ darkMode }) => (
+  <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
+    {/* Large ambient orbs */}
+    {[...Array(6)].map((_, i) => (
+      <div
+        key={`orb-${i}`}
+        className="absolute rounded-full blur-3xl"
+        style={{
+          width: 200 + i * 100,
+          height: 200 + i * 100,
+          left: `${(i * 17) % 100}%`,
+          top: `${(i * 23) % 100}%`,
+          background: darkMode
+            ? `radial-gradient(circle, ${['#6366f1', '#8b5cf6', '#a855f7', '#ec4899', '#06b6d4', '#10b981'][i]}30 0%, transparent 70%)`
+            : `radial-gradient(circle, ${['#6366f1', '#8b5cf6', '#a855f7', '#ec4899', '#06b6d4', '#10b981'][i]}20 0%, transparent 70%)`,
+          animation: `floatOrb ${15 + i * 3}s ease-in-out infinite`,
+          animationDelay: `${i * 2}s`,
+        }}
+      />
+    ))}
+
+    {/* Small sparkle particles */}
+    {[...Array(20)].map((_, i) => (
+      <div
+        key={`sparkle-${i}`}
+        className="absolute rounded-full"
+        style={{
+          width: 4 + (i % 4),
+          height: 4 + (i % 4),
+          left: `${(i * 5.3) % 100}%`,
+          top: `${(i * 7.1) % 100}%`,
+          background: darkMode ? 'rgba(255,255,255,0.6)' : 'rgba(139,92,246,0.5)',
+          boxShadow: darkMode
+            ? '0 0 10px rgba(255,255,255,0.5)'
+            : '0 0 10px rgba(139,92,246,0.4)',
+          animation: `sparkle ${3 + (i % 4)}s ease-in-out infinite`,
+          animationDelay: `${i * 0.3}s`,
+        }}
+      />
+    ))}
+  </div>
 );
 
 /**
@@ -87,6 +237,7 @@ function QuranBubbleAppInner() {
   const [streak, setStreak] = useLocalStorage('streak', 3);
   const [badges] = useLocalStorage('badges', 2);
   const [selected, setSelected] = useState(null);
+  const [clickPosition, setClickPosition] = useState(null);
   const [filters, setFilters] = useState({
     type: null,
     ayahRange: null,
@@ -95,11 +246,13 @@ function QuranBubbleAppInner() {
     search: '',
   });
   const [zoom, setZoom] = useLocalStorage('zoom', 1);
+  const [contentZoom, setContentZoom] = useLocalStorage('contentZoom', 1);
   const [showAnalytics, setShowAnalytics] = useState(false);
   const [darkMode, setDarkMode] = useLocalStorage('darkMode', false);
   const [bookmarks, setBookmarks] = useLocalStorage('bookmarks', {});
   const [readingProgress, setReadingProgress] = useLocalStorage('readingProgress', {});
-  const [readerSurah, setReaderSurah] = useState(null);
+  const [overlayReaderSurah, setOverlayReaderSurah] = useState(null);
+  const [selectedJuzz, setSelectedJuzz] = useState(null);
 
   // Memoized filtered surahs
   const filtered = useMemo(() => {
@@ -143,12 +296,14 @@ function QuranBubbleAppInner() {
   }, [filters]);
 
   // Memoized callbacks to prevent child re-renders
-  const handleSelectSurah = useCallback((surah) => {
+  const handleSelectSurah = useCallback((surah, position) => {
     setSelected(surah);
+    setClickPosition(position || null);
   }, []);
 
   const handleReadSurah = useCallback((surah) => {
-    setReaderSurah(surah);
+    // Use overlay reader instead of full page navigation
+    setOverlayReaderSurah(surah);
     setSelected(null);
     setPoints((p) => p + 10);
     // Update reading progress
@@ -158,6 +313,32 @@ function QuranBubbleAppInner() {
     }));
   }, [setPoints, setReadingProgress]);
 
+  // Handle closing the reader overlay
+  const handleCloseOverlayReader = useCallback(() => {
+    setOverlayReaderSurah(null);
+    setSelectedJuzz(null);
+  }, []);
+
+  // Handle changing surah (from next/prev buttons in reader)
+  const handleChangeSurah = useCallback((newSurah) => {
+    setOverlayReaderSurah(newSurah);
+    // Update reading progress
+    setReadingProgress((prev) => ({
+      ...prev,
+      [newSurah.id]: { lastRead: Date.now(), ayahsRead: (prev[newSurah.id]?.ayahsRead || 0) + 1 },
+    }));
+  }, [setReadingProgress]);
+
+  // Handle Juzz click - open the first surah of the Juzz
+  const handleJuzzClick = useCallback((juzz) => {
+    const startSurah = SURAHS.find(s => s.id === juzz.startSurah);
+    if (startSurah) {
+      setSelectedJuzz(juzz);
+      setOverlayReaderSurah(startSurah);
+      setPoints((p) => p + 10);
+    }
+  }, [setPoints]);
+
   const handleUpgrade = useCallback(() => setLevel('pro'), [setLevel]);
 
   const handleEarnPoints = useCallback((pts) => setPoints((p) => p + pts), [setPoints]);
@@ -166,31 +347,14 @@ function QuranBubbleAppInner() {
     setFilters({ type: null, ayahRange: null, chronOrder: null, topic: null, search: '' });
   }, []);
 
-  // If reader is open, show full screen reader
-  if (readerSurah) {
-    return (
-      <QuranReaderView
-        surah={readerSurah}
-        onBack={() => setReaderSurah(null)}
-        darkMode={darkMode}
-        bookmarks={bookmarks}
-        setBookmarks={setBookmarks}
-      />
-    );
-  }
-
   return (
     <div
-      className={`h-screen flex flex-col overflow-hidden transition-colors duration-300 ${darkMode ? 'bg-gray-900' : ''}`}
-      style={
-        darkMode
-          ? {}
-          : {
-              background:
-                'linear-gradient(135deg, #f0fdfa 0%, #ecfeff 25%, #f0f9ff 50%, #eff6ff 75%, #eef2ff 100%)',
-            }
-      }
+      className={`h-screen flex flex-col overflow-hidden transition-colors duration-500 ${
+        darkMode ? 'animated-bg-dark' : 'animated-bg'
+      }`}
     >
+      {/* Ambient floating particles */}
+      <AmbientParticles darkMode={darkMode} />
       {/* Header - only on surahs view */}
       {view === 'surahs' && (
         <Header
@@ -202,7 +366,9 @@ function QuranBubbleAppInner() {
       )}
 
       {/* Analytics Panel */}
-      {view === 'surahs' && showAnalytics && <AnalyticsPanel surahs={filtered} />}
+      {view === 'surahs' && showAnalytics && (
+        <AnalyticsPanel surahs={filtered} readingProgress={readingProgress} darkMode={darkMode} />
+      )}
 
       {/* Stats Bar */}
       {view === 'surahs' && (
@@ -220,12 +386,20 @@ function QuranBubbleAppInner() {
         {/* Surahs View */}
         {view === 'surahs' && (
           <>
-            <ZoomSlider zoom={zoom} setZoom={setZoom} />
-            <div className="absolute inset-0 overflow-auto">
+            <ZoomSlider zoom={zoom} setZoom={setZoom} contentZoom={contentZoom} setContentZoom={setContentZoom} />
+            <div className="absolute inset-0 overflow-auto bubble-container">
+              {/* Fibonacci spiral container - bubbles positioned relative to center */}
               <div
-                className="relative w-full"
-                style={{ height: `${180 * zoom}%`, minHeight: `${1200 * zoom}px` }}
+                className="relative"
+                style={{
+                  // Large container for spiral layout
+                  width: Math.max(1400 * zoom, 1400),
+                  height: Math.max(1400 * zoom, 1400),
+                  margin: '0 auto',
+                  marginTop: '2rem',
+                }}
               >
+                {/* Surah bubbles - fibonacci spiral formation */}
                 {filtered.map((s, i) => (
                   <SurahBubble
                     key={s.id}
@@ -235,6 +409,7 @@ function QuranBubbleAppInner() {
                     maxAyahs={MAX_AYAHS}
                     total={filtered.length}
                     zoom={zoom}
+                    contentZoom={contentZoom}
                   />
                 ))}
               </div>
@@ -262,18 +437,37 @@ function QuranBubbleAppInner() {
 
         {/* Juzz View */}
         {view === 'juzz' && (
-          <div className="absolute inset-0 overflow-auto">
-            <div className="relative w-full" style={{ height: '150%', minHeight: '1000px' }}>
-              {JUZZ.map((j, i) => (
-                <JuzzBubble key={j.id} juzz={j} index={i} />
-              ))}
+          <>
+            <ZoomSlider zoom={zoom} setZoom={setZoom} contentZoom={contentZoom} setContentZoom={setContentZoom} />
+            <div className="absolute inset-0 overflow-auto bubble-container">
+              {/* Fibonacci spiral container for Juzz */}
+              <div
+                className="relative"
+                style={{
+                  width: Math.max(900 * zoom, 900),
+                  height: Math.max(900 * zoom, 900),
+                  margin: '0 auto',
+                  marginTop: '2rem',
+                }}
+              >
+                {JUZZ.map((j, i) => (
+                  <JuzzBubble
+                    key={j.id}
+                    juzz={j}
+                    index={i}
+                    zoom={zoom}
+                    contentZoom={contentZoom}
+                    onClick={handleJuzzClick}
+                  />
+                ))}
+              </div>
             </div>
-          </div>
+          </>
         )}
 
         {/* Other Views */}
-        {view === 'listen' && <ListenView level={level} />}
-        {view === 'donate' && <DonateView />}
+        {view === 'listen' && <ListenView level={level} darkMode={darkMode} />}
+        {view === 'donate' && <DonateView darkMode={darkMode} />}
         {view === 'settings' && <SettingsView darkMode={darkMode} setDarkMode={setDarkMode} />}
         {view === 'names' && <NamesOfAllahView darkMode={darkMode} />}
         {view === 'quiz' && <QuizView darkMode={darkMode} onEarnPoints={handleEarnPoints} />}
@@ -292,8 +486,30 @@ function QuranBubbleAppInner() {
       {/* Floating Menu */}
       <FloatingMenu view={view} setView={setView} darkMode={darkMode} />
 
-      {/* Modal */}
-      {selected && <Modal surah={selected} onClose={() => setSelected(null)} onRead={handleReadSurah} />}
+      {/* Bubble Modal */}
+      {selected && (
+        <BubbleModal
+          surah={selected}
+          onClose={() => {
+            setSelected(null);
+            setClickPosition(null);
+          }}
+          onRead={handleReadSurah}
+          darkMode={darkMode}
+          originPosition={clickPosition}
+        />
+      )}
+
+      {/* Bubble Reader Overlay */}
+      {overlayReaderSurah && (
+        <BubbleReaderOverlay
+          surah={overlayReaderSurah}
+          onClose={handleCloseOverlayReader}
+          onChangeSurah={handleChangeSurah}
+          darkMode={darkMode}
+          currentJuzz={selectedJuzz}
+        />
+      )}
 
       {/* Animation Styles */}
       <AnimationStyles />

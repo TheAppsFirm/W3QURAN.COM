@@ -35,6 +35,13 @@ const FilledIcon = ({ children, className = 'w-5 h-5', ...props }) => (
 // Navigation Icons
 // ============================================================================
 
+export const ArrowLeftIcon = (props) => (
+  <Icon {...props}>
+    <path d="M19 12H5" />
+    <path d="M12 19l-7-7 7-7" />
+  </Icon>
+);
+
 export const BookIcon = (props) => (
   <Icon {...props}>
     <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
@@ -98,6 +105,12 @@ export const XIcon = (props) => (
 export const ChevronDownIcon = (props) => (
   <Icon {...props}>
     <polyline points="6 9 12 15 18 9" />
+  </Icon>
+);
+
+export const ChevronUpIcon = (props) => (
+  <Icon {...props}>
+    <polyline points="18 15 12 9 6 15" />
   </Icon>
 );
 
@@ -393,6 +406,80 @@ export const BrainIcon = (props) => (
 );
 
 // ============================================================================
+// Additional Icons (Fire, Trophy, Lock, Bell)
+// ============================================================================
+
+export const FireIcon = (props) => (
+  <FilledIcon {...props}>
+    <path d="M12 23c-3.866 0-7-3.134-7-7 0-2.1 1.2-4.5 2.4-6.3.9-1.35 2.1-2.7 3.6-4.2.3-.3.6-.45.9-.45s.6.15.9.45c1.5 1.5 2.7 2.85 3.6 4.2C17.8 11.5 19 13.9 19 16c0 3.866-3.134 7-7 7zm0-12.5c-1.2 1.2-2.1 2.4-2.7 3.45-.75 1.2-1.3 2.4-1.3 3.55 0 2.2 1.8 4 4 4s4-1.8 4-4c0-1.15-.55-2.35-1.3-3.55-.6-1.05-1.5-2.25-2.7-3.45z" />
+  </FilledIcon>
+);
+
+export const TrophyIcon = (props) => (
+  <Icon {...props}>
+    <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" />
+    <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" />
+    <path d="M4 22h16" />
+    <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22" />
+    <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22" />
+    <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z" />
+  </Icon>
+);
+
+export const LockIcon = (props) => (
+  <Icon {...props}>
+    <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+  </Icon>
+);
+
+export const BellIcon = (props) => (
+  <Icon {...props}>
+    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+    <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+  </Icon>
+);
+
+export const TypeIcon = (props) => (
+  <Icon {...props}>
+    <polyline points="4 7 4 4 20 4 20 7" />
+    <line x1="9" y1="20" x2="15" y2="20" />
+    <line x1="12" y1="4" x2="12" y2="20" />
+  </Icon>
+);
+
+export const RefreshIcon = (props) => (
+  <Icon {...props}>
+    <polyline points="23 4 23 10 17 10" />
+    <polyline points="1 20 1 14 7 14" />
+    <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
+  </Icon>
+);
+
+export const MapPinIcon = (props) => (
+  <Icon {...props}>
+    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+    <circle cx="12" cy="10" r="3" />
+  </Icon>
+);
+
+export const DownloadIcon = (props) => (
+  <Icon {...props}>
+    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+    <polyline points="7 10 12 15 17 10" />
+    <line x1="12" y1="15" x2="12" y2="3" />
+  </Icon>
+);
+
+export const ExternalLinkIcon = (props) => (
+  <Icon {...props}>
+    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+    <polyline points="15 3 21 3 21 9" />
+    <line x1="10" y1="14" x2="21" y2="3" />
+  </Icon>
+);
+
+// ============================================================================
 // Loading Icon
 // ============================================================================
 
@@ -414,6 +501,7 @@ export const LoaderIcon = (props) => (
 // ============================================================================
 
 export const Icons = {
+  ArrowLeft: ArrowLeftIcon,
   Book: BookIcon,
   Grid: GridIcon,
   Volume: VolumeIcon,
@@ -423,6 +511,7 @@ export const Icons = {
   Search: SearchIcon,
   X: XIcon,
   ChevronDown: ChevronDownIcon,
+  ChevronUp: ChevronUpIcon,
   ChevronLeft: ChevronLeftIcon,
   ChevronRight: ChevronRightIcon,
   ZoomIn: ZoomInIcon,
@@ -462,6 +551,15 @@ export const Icons = {
   EyeOff: EyeOffIcon,
   Brain: BrainIcon,
   Loader: LoaderIcon,
+  Fire: FireIcon,
+  Trophy: TrophyIcon,
+  Lock: LockIcon,
+  Bell: BellIcon,
+  Type: TypeIcon,
+  Refresh: RefreshIcon,
+  MapPin: MapPinIcon,
+  Download: DownloadIcon,
+  ExternalLink: ExternalLinkIcon,
 };
 
 export default Icons;

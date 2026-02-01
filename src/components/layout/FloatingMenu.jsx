@@ -89,7 +89,7 @@ function FloatingMenu({ view, setView, darkMode }) {
                 <span className="text-[10px] sm:text-xs font-semibold">{i.label}</span>
                 {i.id === 'more' && (
                   <span className="absolute -top-1 -right-1 w-4 h-4 sm:w-5 sm:h-5 bg-gradient-to-br from-violet-500 to-purple-500 text-white text-[10px] sm:text-xs font-bold rounded-full flex items-center justify-center shadow-lg">
-                    7
+                    {moreItems.length}
                   </span>
                 )}
               </button>

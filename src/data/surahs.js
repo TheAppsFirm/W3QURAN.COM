@@ -124,8 +124,60 @@ export const SURAHS = [
 export const MAX_AYAHS = Math.max(...SURAHS.map(s => s.ayahs));
 export const TOTAL_SURAHS = SURAHS.length;
 
-// Juzz data
-export const JUZZ = Array.from({ length: 30 }, (_, i) => ({
-  id: i + 1,
-  arabic: ['الم', 'سيقول', 'تلك الرسل', 'لن تنالوا', 'والمحصنات', 'لا يحب الله', 'وإذا سمعوا', 'ولو أننا', 'قال الملأ', 'واعلموا', 'يعتذرون', 'وما من دابة', 'وما أبرئ', 'ربما', 'سبحان الذي', 'قال ألم', 'اقترب', 'قد أفلح', 'وقال الذين', 'أمن خلق', 'اتل ما أوحي', 'ومن يقنت', 'ومالي', 'فمن أظلم', 'إليه يرد', 'حم', 'قال فما', 'قد سمع', 'تبارك الذي', 'عم'][i],
-}));
+// Complete Juzz data with surah/ayah ranges
+export const JUZZ = [
+  { id: 1, arabic: 'الم', name: 'Alif Lam Meem', startSurah: 1, startAyah: 1, endSurah: 2, endAyah: 141, verses: 148, description: 'Opens with Al-Fatiha and the beginning of Al-Baqarah' },
+  { id: 2, arabic: 'سيقول', name: 'Sayaqul', startSurah: 2, startAyah: 142, endSurah: 2, endAyah: 252, verses: 111, description: 'Continuation of Al-Baqarah with change of Qibla' },
+  { id: 3, arabic: 'تلك الرسل', name: 'Tilkal Rusul', startSurah: 2, startAyah: 253, endSurah: 3, endAyah: 92, verses: 126, description: 'End of Al-Baqarah and beginning of Al-Imran' },
+  { id: 4, arabic: 'لن تنالوا', name: 'Lan Tanaloo', startSurah: 3, startAyah: 93, endSurah: 4, endAyah: 23, verses: 131, description: 'End of Al-Imran and beginning of An-Nisa' },
+  { id: 5, arabic: 'والمحصنات', name: 'Wal Muhsanat', startSurah: 4, startAyah: 24, endSurah: 4, endAyah: 147, verses: 124, description: 'Laws regarding women and family in An-Nisa' },
+  { id: 6, arabic: 'لا يحب الله', name: 'La Yuhibbullah', startSurah: 4, startAyah: 148, endSurah: 5, endAyah: 81, verses: 110, description: 'End of An-Nisa and most of Al-Maidah' },
+  { id: 7, arabic: 'وإذا سمعوا', name: 'Wa Iza Samiu', startSurah: 5, startAyah: 82, endSurah: 6, endAyah: 110, verses: 149, description: 'End of Al-Maidah and most of Al-Anam' },
+  { id: 8, arabic: 'ولو أننا', name: 'Wa Lau Annana', startSurah: 6, startAyah: 111, endSurah: 7, endAyah: 87, verses: 142, description: 'End of Al-Anam and beginning of Al-Araf' },
+  { id: 9, arabic: 'قال الملأ', name: 'Qalal Mala', startSurah: 7, startAyah: 88, endSurah: 8, endAyah: 40, verses: 159, description: 'End of Al-Araf and beginning of Al-Anfal' },
+  { id: 10, arabic: 'واعلموا', name: 'Wa Alamu', startSurah: 8, startAyah: 41, endSurah: 9, endAyah: 92, verses: 127, description: 'End of Al-Anfal and most of At-Tawbah' },
+  { id: 11, arabic: 'يعتذرون', name: 'Yatazeroon', startSurah: 9, startAyah: 93, endSurah: 11, endAyah: 5, verses: 151, description: 'End of At-Tawbah, Yunus, and start of Hud' },
+  { id: 12, arabic: 'وما من دابة', name: 'Wa Ma Min Dabbah', startSurah: 11, startAyah: 6, endSurah: 12, endAyah: 52, verses: 170, description: 'Most of Hud and half of Yusuf' },
+  { id: 13, arabic: 'وما أبرئ', name: 'Wa Ma Ubarriu', startSurah: 12, startAyah: 53, endSurah: 14, endAyah: 52, verses: 154, description: 'End of Yusuf, Ar-Rad, and Ibrahim' },
+  { id: 14, arabic: 'ربما', name: 'Rubama', startSurah: 15, startAyah: 1, endSurah: 16, endAyah: 128, verses: 227, description: 'Al-Hijr and An-Nahl complete' },
+  { id: 15, arabic: 'سبحان الذي', name: 'Subhanallazi', startSurah: 17, startAyah: 1, endSurah: 18, endAyah: 74, verses: 185, description: 'Al-Isra and most of Al-Kahf' },
+  { id: 16, arabic: 'قال ألم', name: 'Qal Alam', startSurah: 18, startAyah: 75, endSurah: 20, endAyah: 135, verses: 269, description: 'End of Al-Kahf, Maryam, and Ta-Ha' },
+  { id: 17, arabic: 'اقترب', name: 'Iqtaraba', startSurah: 21, startAyah: 1, endSurah: 22, endAyah: 78, verses: 190, description: 'Al-Anbiya and Al-Hajj complete' },
+  { id: 18, arabic: 'قد أفلح', name: 'Qad Aflaha', startSurah: 23, startAyah: 1, endSurah: 25, endAyah: 20, verses: 202, description: 'Al-Muminun, An-Nur, and start of Al-Furqan' },
+  { id: 19, arabic: 'وقال الذين', name: 'Wa Qalallazina', startSurah: 25, startAyah: 21, endSurah: 27, endAyah: 55, verses: 342, description: 'End of Al-Furqan, Ash-Shuara, and most of An-Naml' },
+  { id: 20, arabic: 'أمن خلق', name: 'Amman Khalaq', startSurah: 27, startAyah: 56, endSurah: 29, endAyah: 45, verses: 170, description: 'End of An-Naml, Al-Qasas, and most of Al-Ankabut' },
+  { id: 21, arabic: 'اتل ما أوحي', name: 'Utlu Ma Uhiya', startSurah: 29, startAyah: 46, endSurah: 33, endAyah: 30, verses: 178, description: 'End of Al-Ankabut to middle of Al-Ahzab' },
+  { id: 22, arabic: 'ومن يقنت', name: 'Wa Man Yaqnut', startSurah: 33, startAyah: 31, endSurah: 36, endAyah: 27, verses: 169, description: 'End of Al-Ahzab, Saba, Fatir, and start of Ya-Sin' },
+  { id: 23, arabic: 'ومالي', name: 'Wa Mali', startSurah: 36, startAyah: 28, endSurah: 39, endAyah: 31, verses: 357, description: 'End of Ya-Sin, As-Saffat, Sad, and most of Az-Zumar' },
+  { id: 24, arabic: 'فمن أظلم', name: 'Faman Azlam', startSurah: 39, startAyah: 32, endSurah: 41, endAyah: 46, verses: 175, description: 'End of Az-Zumar, Ghafir, and most of Fussilat' },
+  { id: 25, arabic: 'إليه يرد', name: 'Ilayhi Yurad', startSurah: 41, startAyah: 47, endSurah: 45, endAyah: 37, verses: 246, description: 'End of Fussilat to Al-Jathiyah' },
+  { id: 26, arabic: 'حم', name: 'Ha Meem', startSurah: 46, startAyah: 1, endSurah: 51, endAyah: 30, verses: 225, description: 'Al-Ahqaf to middle of Adh-Dhariyat' },
+  { id: 27, arabic: 'قال فما', name: 'Qala Fama', startSurah: 51, startAyah: 31, endSurah: 57, endAyah: 29, verses: 399, description: 'End of Adh-Dhariyat to Al-Hadid' },
+  { id: 28, arabic: 'قد سمع', name: 'Qad Samia', startSurah: 58, startAyah: 1, endSurah: 66, endAyah: 12, verses: 137, description: 'Al-Mujadila to At-Tahrim' },
+  { id: 29, arabic: 'تبارك الذي', name: 'Tabarakallazi', startSurah: 67, startAyah: 1, endSurah: 77, endAyah: 50, verses: 431, description: 'Al-Mulk to Al-Mursalat' },
+  { id: 30, arabic: 'عم', name: 'Amma', startSurah: 78, startAyah: 1, endSurah: 114, endAyah: 6, verses: 564, description: 'An-Naba to An-Nas (Juz Amma)' },
+];
+
+// Helper to get Juzz by ID
+export const getJuzzById = (id) => JUZZ.find((j) => j.id === id);
+
+// Helper to get which Juzz a surah/ayah belongs to
+export const getJuzzForVerse = (surahId, ayahNum) => {
+  for (const juzz of JUZZ) {
+    const afterStart = surahId > juzz.startSurah || (surahId === juzz.startSurah && ayahNum >= juzz.startAyah);
+    const beforeEnd = surahId < juzz.endSurah || (surahId === juzz.endSurah && ayahNum <= juzz.endAyah);
+    if (afterStart && beforeEnd) return juzz;
+  }
+  return null;
+};
+
+// Get all surahs in a Juzz
+export const getSurahsInJuzz = (juzzId) => {
+  const juzz = getJuzzById(juzzId);
+  if (!juzz) return [];
+  return SURAHS.filter(s => s.id >= juzz.startSurah && s.id <= juzz.endSurah);
+};
+
+// Helper functions
+export const getSurahById = (id) => SURAHS.find((s) => s.id === id);
+export const getSurahsByType = (type) => SURAHS.filter((s) => s.type === type);

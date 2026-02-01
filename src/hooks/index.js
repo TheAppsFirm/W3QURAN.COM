@@ -22,3 +22,26 @@ export {
   useSearch,
   useAudio,
 } from './useQuranData';
+
+// Quran verses from static data (quran-json package)
+export { useQuranVerses, getAllSurahsInfo, getVerse } from './useQuranVerses';
+
+// Audio player hook
+export { useAudioPlayer, getAudioUrl, RECITERS } from './useAudioPlayer';
+
+// Quran Cloud API hook (Tajweed, Word-by-Word, Translations)
+export {
+  useQuranAPI,
+  useWordByWord,
+  useMultilingualWords,
+  fetchVerse,
+  fetchMultilingualWords,
+  fetchWordMorphology,
+  getAvailableTranslations,
+  getWordMeanings,
+  parseTajweedText,
+  TRANSLATIONS,
+  TAJWEED_RULES,
+  WORD_TRANSLATION_LANGUAGES,
+  POS_LABELS,
+} from './useQuranAPI';

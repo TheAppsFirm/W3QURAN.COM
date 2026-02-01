@@ -1,13 +1,129 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📖</text></svg>" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Quran Bubble App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+
+    <!-- Primary Meta Tags -->
+    <title>w3Quran - Interactive Quran Explorer</title>
+    <meta name="title" content="w3Quran - Interactive Quran Explorer" />
+    <meta name="description" content="Explore the Holy Quran with beautiful 3D bubble visualization, daily verses, quizzes, audio recitation, and more. A modern Islamic learning experience." />
+    <meta name="keywords" content="Quran, Islam, Islamic, Muslim, Arabic, Surah, Ayah, Verse, Holy Book, w3Quran, Quran App, Learn Quran" />
+    <meta name="author" content="w3Quran" />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Favicon and Icons -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#1e1b4b" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="w3Quran" />
+    <link rel="manifest" href="/manifest.json" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://w3quran.com/" />
+    <meta property="og:title" content="w3Quran - Interactive Quran Explorer" />
+    <meta property="og:description" content="Explore the Holy Quran with beautiful 3D bubble visualization, daily verses, quizzes, audio recitation, and more." />
+    <meta property="og:image" content="/og-image.png" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://w3quran.com/" />
+    <meta property="twitter:title" content="w3Quran - Interactive Quran Explorer" />
+    <meta property="twitter:description" content="Explore the Holy Quran with beautiful 3D bubble visualization, daily verses, quizzes, audio recitation, and more." />
+    <meta property="twitter:image" content="/og-image.png" />
+
+    <!-- Preconnect to external resources -->
+    <link rel="preconnect" href="https://api.alquran.cloud" crossorigin />
+    <link rel="preconnect" href="https://cdn.islamic.network" crossorigin />
+
+    <!-- Arabic Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap" rel="stylesheet" />
+
+    <style>
+      /* Critical CSS for initial load */
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        background: linear-gradient(135deg, #0f172a 0%, #581c87 50%, #0f172a 100%);
+        min-height: 100vh;
+      }
+
+      .font-arabic {
+        font-family: 'Amiri', serif;
+      }
+
+      /* Initial loading screen */
+      #initial-loader {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #0f172a 0%, #581c87 50%, #0f172a 100%);
+        z-index: 9999;
+        transition: opacity 0.3s ease-out;
+      }
+
+      #initial-loader.hidden {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .loader-content {
+        text-align: center;
+        color: white;
+      }
+
+      .loader-spinner {
+        width: 60px;
+        height: 60px;
+        border: 4px solid rgba(255, 255, 255, 0.1);
+        border-top-color: #8b5cf6;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 20px;
+      }
+
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+    </style>
   </head>
   <body>
+    <!-- Initial loader shown before React loads -->
+    <div id="initial-loader">
+      <div class="loader-content">
+        <div class="loader-spinner"></div>
+        <p style="font-size: 18px; margin: 0;">w3Quran</p>
+        <p style="font-size: 14px; opacity: 0.7; margin-top: 8px;">Loading...</p>
+      </div>
+    </div>
+
     <div id="root"></div>
+
     <script type="module" src="/src/main.jsx"></script>
+
+    <script>
+      // Hide initial loader when React app is ready
+      window.addEventListener('load', function() {
+        setTimeout(function() {
+          var loader = document.getElementById('initial-loader');
+          if (loader) {
+            loader.classList.add('hidden');
+            setTimeout(function() {
+              loader.remove();
+            }, 300);
+          }
+        }, 100);
+      });
+    </script>
   </body>
 </html>

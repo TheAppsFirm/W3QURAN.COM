@@ -1,23 +1,25 @@
 /**
  * ListenView Component
- * Single Responsibility: Display reciters and translations
+ * Single Responsibility: Display reciters and translations with audio playback
  */
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { Icons } from '../common/Icons';
 import { PALETTES } from '../../data';
+import { useLocalStorage } from '../../hooks';
+import { RECITERS as RECITER_DATA, getAudioUrl } from '../../hooks/useAudioPlayer';
 
-// Sample reciters data
+// Extended reciters data with styles
 const RECITERS = [
-  { id: 1, name: 'Mishary Rashid', country: 'Kuwait', style: 'Murattal', popular: true },
-  { id: 2, name: 'Abdul Rahman Al-Sudais', country: 'Saudi Arabia', style: 'Murattal', popular: true },
-  { id: 3, name: 'Saud Al-Shuraim', country: 'Saudi Arabia', style: 'Murattal', popular: true },
-  { id: 4, name: 'Maher Al-Muaiqly', country: 'Saudi Arabia', style: 'Murattal', popular: true },
-  { id: 5, name: 'Ahmad Al-Ajmi', country: 'Kuwait', style: 'Murattal' },
-  { id: 6, name: 'Abdul Basit', country: 'Egypt', style: 'Mujawwad', pro: true },
+  { id: 'ar.alafasy', name: 'Mishary Rashid Alafasy', country: 'Kuwait', style: 'Murattal', popular: true },
+  { id: 'ar.abdurrahmaansudais', name: 'Abdul Rahman Al-Sudais', country: 'Saudi Arabia', style: 'Murattal', popular: true },
+  { id: 'ar.shaatree', name: 'Abu Bakr Al-Shatri', country: 'Saudi Arabia', style: 'Murattal', popular: true },
+  { id: 'ar.abdulsamad', name: 'Abdul Samad', country: 'Egypt', style: 'Mujawwad', popular: false },
+  { id: 'ar.husary', name: 'Mahmoud Al-Husary', country: 'Egypt', style: 'Murattal', popular: true },
+  { id: 'ar.minshawi', name: 'Mohamed Al-Minshawi', country: 'Egypt', style: 'Mujawwad', popular: false },
 ];
 
-// Sample translations
+// Available translations
 const TRANSLATIONS = [
   { id: 'sahih', name: 'Sahih International', language: 'English', description: 'Clear and accurate' },
   { id: 'pickthall', name: 'Pickthall', language: 'English', description: 'Traditional translation' },
@@ -25,11 +27,14 @@ const TRANSLATIONS = [
   { id: 'urdu', name: 'Fateh Muhammad Jalandhri', language: 'Urdu', description: 'Popular Urdu translation' },
 ];
 
-function ListenView({ level }) {
+function ListenView({ level, darkMode }) {
   const [activeTab, setActiveTab] = useState('reciters');
-  const [selectedReciter, setSelectedReciter] = useState(null);
-  const [selectedTranslation, setSelectedTranslation] = useState('sahih');
+  const [selectedReciter, setSelectedReciter] = useLocalStorage('settings_reciter', 'ar.alafasy');
+  const [selectedTranslation, setSelectedTranslation] = useLocalStorage('settings_translation', 'sahih');
   const [reciterFilter, setReciterFilter] = useState('all');
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [playingReciter, setPlayingReciter] = useState(null);
+  const [currentAudio, setCurrentAudio] = useState(null);
 
   const filteredReciters = RECITERS.filter((r) => {
     if (reciterFilter === 'popular') return r.popular;
@@ -38,9 +43,55 @@ function ListenView({ level }) {
     return true;
   });
 
+  // Play a sample verse from selected reciter
+  const handlePlaySample = useCallback((reciterId) => {
+    // Stop current audio if playing
+    if (currentAudio) {
+      currentAudio.pause();
+      currentAudio.src = '';
+    }
+
+    if (playingReciter === reciterId && isPlaying) {
+      setIsPlaying(false);
+      setPlayingReciter(null);
+      return;
+    }
+
+    // Play first verse of Al-Fatiha as sample
+    const url = getAudioUrl(1, 1, reciterId);
+    const audio = new Audio(url);
+
+    audio.onended = () => {
+      setIsPlaying(false);
+      setPlayingReciter(null);
+    };
+
+    audio.onerror = () => {
+      setIsPlaying(false);
+      setPlayingReciter(null);
+    };
+
+    audio.play().catch((err) => {
+      console.error('Play failed:', err);
+      setIsPlaying(false);
+      setPlayingReciter(null);
+    });
+
+    setCurrentAudio(audio);
+    setIsPlaying(true);
+    setPlayingReciter(reciterId);
+  }, [currentAudio, isPlaying, playingReciter]);
+
+  // Select reciter
+  const handleSelectReciter = useCallback((reciterId) => {
+    setSelectedReciter(reciterId);
+  }, [setSelectedReciter]);
+
   return (
-    <div className="h-full flex flex-col p-6 overflow-auto">
-      <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">Listen to Quran</h2>
+    <div className={`h-full flex flex-col p-6 overflow-auto ${darkMode ? 'text-white' : ''}`}>
+      <h2 className={`text-3xl font-bold mb-6 text-center ${darkMode ? 'text-white' : 'text-gray-800'}`}>
+        Listen to Quran
+      </h2>
 
       {/* Tab Switcher */}
       <div className="flex justify-center gap-2 mb-6">
@@ -49,7 +100,9 @@ function ListenView({ level }) {
           className={`px-6 py-3 rounded-full font-semibold transition-all ${
             activeTab === 'reciters'
               ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg'
-              : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+              : darkMode
+                ? 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
           }`}
         >
           <Icons.Mic className="w-4 h-4 inline mr-2" />
@@ -60,7 +113,9 @@ function ListenView({ level }) {
           className={`px-6 py-3 rounded-full font-semibold transition-all ${
             activeTab === 'translations'
               ? 'bg-gradient-to-r from-violet-500 to-purple-500 text-white shadow-lg'
-              : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+              : darkMode
+                ? 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
           }`}
         >
           <Icons.Globe className="w-4 h-4 inline mr-2" />
@@ -82,7 +137,11 @@ function ListenView({ level }) {
                 key={f.id}
                 onClick={() => setReciterFilter(f.id)}
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                  reciterFilter === f.id ? 'bg-emerald-500 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  reciterFilter === f.id
+                    ? 'bg-emerald-500 text-white'
+                    : darkMode
+                      ? 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                 }`}
               >
                 {f.label}
@@ -90,19 +149,27 @@ function ListenView({ level }) {
             ))}
           </div>
 
+          {/* Selected Reciter Indicator */}
+          {selectedReciter && (
+            <div className={`text-center mb-4 text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+              Current reciter: <span className="font-semibold text-emerald-500">
+                {RECITERS.find(r => r.id === selectedReciter)?.name || 'Mishary Alafasy'}
+              </span>
+            </div>
+          )}
+
           {/* Reciters Grid */}
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 max-w-3xl mx-auto">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 max-w-3xl mx-auto pb-24">
             {filteredReciters.map((reciter, i) => {
               const p = PALETTES[(i + 4) % 10];
-              const locked = reciter.pro && level === 'starter';
               const isSelected = selectedReciter === reciter.id;
+              const isCurrentlyPlaying = playingReciter === reciter.id && isPlaying;
               return (
                 <div
                   key={reciter.id}
-                  onClick={() => !locked && setSelectedReciter(reciter.id)}
-                  className={`relative rounded-2xl p-4 text-center cursor-pointer overflow-hidden shadow-lg hover:shadow-xl transition-all ${
-                    locked ? 'opacity-60' : 'hover:scale-105'
-                  } ${isSelected ? 'ring-4 ring-white ring-offset-2' : ''}`}
+                  className={`relative rounded-2xl p-4 text-center overflow-hidden shadow-lg transition-all ${
+                    isSelected ? 'ring-4 ring-white ring-offset-2 scale-105' : 'hover:scale-105 hover:shadow-xl'
+                  }`}
                   style={{ background: `linear-gradient(135deg, ${p.colors[0]}, ${p.colors[1]}, ${p.colors[2]})` }}
                 >
                   <div
@@ -112,17 +179,42 @@ function ListenView({ level }) {
                     }}
                   />
                   <div className="relative z-10">
-                    <div className="w-16 h-16 mx-auto rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center mb-3 border border-white/30">
-                      {isSelected ? <Icons.Check className="w-8 h-8 text-white" /> : <Icons.Volume className="w-8 h-8 text-white" />}
+                    {/* Avatar/Icon */}
+                    <div
+                      className="w-16 h-16 mx-auto rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center mb-3 border border-white/30 cursor-pointer hover:bg-white/30 transition-all"
+                      onClick={() => handlePlaySample(reciter.id)}
+                    >
+                      {isCurrentlyPlaying ? (
+                        <Icons.Pause className="w-8 h-8 text-white" />
+                      ) : (
+                        <Icons.Play className="w-8 h-8 text-white" />
+                      )}
                     </div>
+
                     <h3 className="font-bold text-white text-sm">{reciter.name}</h3>
                     <p className="text-white/70 text-xs">{reciter.country}</p>
-                    <span className="inline-block mt-2 px-2 py-0.5 bg-white/20 rounded-full text-white text-xs">{reciter.style}</span>
-                    {locked && (
-                      <div className="flex items-center justify-center gap-1 text-yellow-200 mt-2 text-xs font-semibold">
-                        <Icons.Lock className="w-3 h-3" /> PRO
-                      </div>
-                    )}
+                    <span className="inline-block mt-2 px-2 py-0.5 bg-white/20 rounded-full text-white text-xs">
+                      {reciter.style}
+                    </span>
+
+                    {/* Select Button */}
+                    <button
+                      onClick={() => handleSelectReciter(reciter.id)}
+                      className={`mt-3 w-full py-2 rounded-xl text-sm font-semibold transition-all ${
+                        isSelected
+                          ? 'bg-white text-gray-800'
+                          : 'bg-white/20 text-white hover:bg-white/30'
+                      }`}
+                    >
+                      {isSelected ? (
+                        <>
+                          <Icons.Check className="w-4 h-4 inline mr-1" />
+                          Selected
+                        </>
+                      ) : (
+                        'Select'
+                      )}
+                    </button>
                   </div>
                 </div>
               );
@@ -132,8 +224,10 @@ function ListenView({ level }) {
       )}
 
       {activeTab === 'translations' && (
-        <div className="max-w-2xl mx-auto w-full">
-          <p className="text-center text-gray-500 mb-6">Select your preferred translation</p>
+        <div className="max-w-2xl mx-auto w-full pb-24">
+          <p className={`text-center mb-6 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+            Select your preferred translation
+          </p>
           <div className="space-y-3">
             {TRANSLATIONS.map((trans, i) => {
               const isSelected = selectedTranslation === trans.id;
@@ -143,15 +237,21 @@ function ListenView({ level }) {
                   key={trans.id}
                   onClick={() => setSelectedTranslation(trans.id)}
                   className={`p-4 rounded-2xl cursor-pointer transition-all ${
-                    isSelected ? 'bg-gradient-to-r shadow-lg' : 'bg-white hover:bg-gray-50 border border-gray-100'
+                    isSelected
+                      ? 'shadow-lg'
+                      : darkMode
+                        ? 'bg-gray-800 hover:bg-gray-750 border border-gray-700'
+                        : 'bg-white hover:bg-gray-50 border border-gray-100'
                   }`}
                   style={isSelected ? { background: `linear-gradient(135deg, ${p.colors[0]}, ${p.colors[1]})` } : {}}
                 >
                   <div className="flex items-center justify-between">
                     <div>
-                      <h3 className={`font-bold ${isSelected ? 'text-white' : 'text-gray-800'}`}>{trans.name}</h3>
-                      <p className={`text-sm ${isSelected ? 'text-white/80' : 'text-gray-500'}`}>
-                        {trans.language} • {trans.description}
+                      <h3 className={`font-bold ${isSelected ? 'text-white' : darkMode ? 'text-white' : 'text-gray-800'}`}>
+                        {trans.name}
+                      </h3>
+                      <p className={`text-sm ${isSelected ? 'text-white/80' : darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                        {trans.language} - {trans.description}
                       </p>
                     </div>
                     {isSelected && (
