@@ -45,7 +45,8 @@ function Modal({ surah, onClose, onRead }) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      className="fixed inset-0 flex items-center justify-center p-4"
+      style={{ zIndex: 9999999 }}
       onClick={onClose}
       role="dialog"
       aria-modal="true"

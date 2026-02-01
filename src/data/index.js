@@ -12,6 +12,14 @@ export { PALETTES, TOPIC_PALETTES, TOPIC_ICONS, getTopicPalette, getTopicIcon } 
 // Topic categories
 export { FAQ_TOPICS, getTopicById, getTopicsForSurah } from './topics';
 
+// Surah Topics and Key Verses
+export {
+  SURAH_TOPICS,
+  getAllTags,
+  getSurahsByTag,
+  getKeyVerseLabel,
+} from './surahTopics';
+
 // Names of Allah
 export { NAMES_OF_ALLAH, TOTAL_NAMES } from './namesOfAllah';
 
@@ -34,3 +42,102 @@ export {
   hasLocalWordMeanings,
   getSurahsWithWordMeanings,
 } from './wordMeanings';
+
+// Tafseer Data (Multi-language)
+export {
+  TAFSEER_SOURCES,
+  getTafseersByLanguage,
+  getDefaultTafseer,
+  TRANSLATION_TO_TAFSEER_LANG,
+  fetchTafseer,
+  fetchTafseerAlternative,
+} from './tafseerData';
+
+// YouTube Videos (Authentic Scholars)
+export {
+  SCHOLARS,
+  VIDEO_CATEGORIES,
+  SURAH_VIDEOS,
+  getVideosForSurah,
+  getScholarInfo,
+  getYouTubeEmbedUrl,
+  getYouTubeWatchUrl,
+  generateSearchQuery,
+} from './youtubeVideos';
+
+// Progress Tracker
+export {
+  TOTAL_QURAN_AYAHS,
+  loadProgress,
+  saveProgress,
+  loadStreak,
+  saveStreak,
+  loadGoals,
+  saveGoals,
+  markAyahRead,
+  markAyahsRead,
+  markSurahComplete,
+  getSurahProgress,
+  getOverallProgress,
+  getReadingHistory,
+  getReadingStats,
+  resetAllProgress,
+  exportProgressData,
+  importProgressData,
+} from './progressTracker';
+
+// Offline Storage
+export {
+  initDB,
+  saveSurahOffline,
+  getCachedSurah,
+  isSurahCached,
+  saveTafseerOffline,
+  getCachedTafseer,
+  saveAudioOffline,
+  getCachedAudio,
+  getDownloadedSurahs,
+  getTotalStorageUsed,
+  deleteCachedSurah,
+  clearAllCache,
+  downloadSurahForOffline,
+  downloadSurahsForOffline,
+  isOfflineModeAvailable,
+  isOnline,
+} from './offlineStorage';
+
+// Hifz Tracker (Spaced Repetition)
+export {
+  RATING,
+  HIFZ_STATE,
+  loadHifzData,
+  saveHifzData,
+  addAyahToHifz,
+  addAyahRangeToHifz,
+  removeAyahFromHifz,
+  reviewAyah,
+  getDueAyahs,
+  getNewAyahs,
+  getLearningAyahs,
+  getMasteredAyahs,
+  getSurahHifzStats,
+  getHifzStats,
+  getTodaySession,
+  updateDailyGoals,
+  getAyahHifzData,
+  isAyahInHifz,
+  resetHifzData,
+  exportHifzData,
+  importHifzData,
+} from './hifzTracker';
+
+// Search Index
+export {
+  searchQuran,
+  searchArabic,
+  getSearchSuggestions,
+  getRecentSearches,
+  addRecentSearch,
+  clearRecentSearches,
+  clearSearchCache,
+} from './searchIndex';

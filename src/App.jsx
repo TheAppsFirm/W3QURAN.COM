@@ -10,9 +10,9 @@
  */
 
 import { Suspense, useState, useEffect, useMemo, useCallback } from 'react';
-import { ErrorBoundary, LoadingSpinner, BubbleModal, BubbleReaderOverlay } from './components/common';
-import { Header, FloatingMenu, ZoomSlider, StatsBar } from './components/layout';
-import { SurahBubble, JuzzBubble } from './components/bubbles';
+import { ErrorBoundary, LoadingSpinner, BubbleModal, BubbleReaderOverlay, ProgressDashboard, OfflineManager, HifzMode, SearchPanel, DonateModal } from './components/common';
+import { Header, FloatingMenu, StatsBar } from './components/layout';
+import { SurahBubble, JuzzBubble, LayoutSelector, ClockLayout, GridLayout, JuzzGroupLayout, AlphabetLayout, RevelationLayout } from './components/bubbles';
 import { AnalyticsPanel } from './components/widgets';
 import {
   NamesOfAllahView,
@@ -253,6 +253,12 @@ function QuranBubbleAppInner() {
   const [readingProgress, setReadingProgress] = useLocalStorage('readingProgress', {});
   const [overlayReaderSurah, setOverlayReaderSurah] = useState(null);
   const [selectedJuzz, setSelectedJuzz] = useState(null);
+  const [surahLayout, setSurahLayout] = useLocalStorage('surahLayout', 'spiral');
+  const [showProgressDashboard, setShowProgressDashboard] = useState(false);
+  const [showOfflineManager, setShowOfflineManager] = useState(false);
+  const [showHifzMode, setShowHifzMode] = useState(false);
+  const [showSearchPanel, setShowSearchPanel] = useState(false);
+  const [showDonateModal, setShowDonateModal] = useState(false);
 
   // Memoized filtered surahs
   const filtered = useMemo(() => {
@@ -378,6 +384,14 @@ function QuranBubbleAppInner() {
           streak={streak}
           badges={badges}
           onUpgrade={handleUpgrade}
+          zoom={zoom}
+          setZoom={setZoom}
+          contentZoom={contentZoom}
+          setContentZoom={setContentZoom}
+          surahLayout={surahLayout}
+          setSurahLayout={setSurahLayout}
+          showControls={true}
+          onDonate={() => setShowDonateModal(true)}
         />
       )}
 
@@ -386,34 +400,89 @@ function QuranBubbleAppInner() {
         {/* Surahs View */}
         {view === 'surahs' && (
           <>
-            <ZoomSlider zoom={zoom} setZoom={setZoom} contentZoom={contentZoom} setContentZoom={setContentZoom} />
-            <div className="absolute inset-0 overflow-auto bubble-container">
-              {/* Fibonacci spiral container - bubbles positioned relative to center */}
-              <div
-                className="relative"
-                style={{
-                  // Large container for spiral layout
-                  width: Math.max(1400 * zoom, 1400),
-                  height: Math.max(1400 * zoom, 1400),
-                  margin: '0 auto',
-                  marginTop: '2rem',
-                }}
-              >
-                {/* Surah bubbles - fibonacci spiral formation */}
-                {filtered.map((s, i) => (
-                  <SurahBubble
-                    key={s.id}
-                    surah={s}
-                    index={i}
-                    onClick={handleSelectSurah}
-                    maxAyahs={MAX_AYAHS}
-                    total={filtered.length}
-                    zoom={zoom}
-                    contentZoom={contentZoom}
-                  />
-                ))}
-              </div>
+            <div className="absolute inset-0 overflow-auto bubble-container pt-4">
+              {/* Spiral Layout (Default) */}
+              {surahLayout === 'spiral' && (
+                <div
+                  className="relative"
+                  style={{
+                    width: Math.max(1400 * zoom, 1400),
+                    height: Math.max(1400 * zoom, 1400),
+                    margin: '0 auto',
+                    marginTop: '2rem',
+                  }}
+                >
+                  {filtered.map((s, i) => (
+                    <SurahBubble
+                      key={s.id}
+                      surah={s}
+                      index={i}
+                      onClick={handleSelectSurah}
+                      maxAyahs={MAX_AYAHS}
+                      total={filtered.length}
+                      zoom={zoom}
+                      contentZoom={contentZoom}
+                    />
+                  ))}
+                </div>
+              )}
+
+              {/* Clock Layout */}
+              {surahLayout === 'clock' && (
+                <ClockLayout
+                  surahs={filtered}
+                  onSurahClick={handleSelectSurah}
+                  zoom={zoom}
+                  contentZoom={contentZoom}
+                  darkMode={darkMode}
+                />
+              )}
+
+              {/* Grid Layout */}
+              {surahLayout === 'grid' && (
+                <GridLayout
+                  surahs={filtered}
+                  onSurahClick={handleSelectSurah}
+                  zoom={zoom}
+                  contentZoom={contentZoom}
+                  darkMode={darkMode}
+                />
+              )}
+
+              {/* Juzz Group Layout */}
+              {surahLayout === 'juzz' && (
+                <JuzzGroupLayout
+                  surahs={filtered}
+                  onSurahClick={handleSelectSurah}
+                  zoom={zoom}
+                  contentZoom={contentZoom}
+                  darkMode={darkMode}
+                />
+              )}
+
+              {/* Alphabet Layout */}
+              {surahLayout === 'alphabet' && (
+                <AlphabetLayout
+                  surahs={filtered}
+                  onSurahClick={handleSelectSurah}
+                  zoom={zoom}
+                  contentZoom={contentZoom}
+                  darkMode={darkMode}
+                />
+              )}
+
+              {/* Revelation Order Layout */}
+              {surahLayout === 'revelation' && (
+                <RevelationLayout
+                  surahs={filtered}
+                  onSurahClick={handleSelectSurah}
+                  zoom={zoom}
+                  contentZoom={contentZoom}
+                  darkMode={darkMode}
+                />
+              )}
             </div>
+
             {/* Filter info */}
             {(filters.type || filters.ayahRange || filters.topic || filters.search) && (
               <div
@@ -438,16 +507,15 @@ function QuranBubbleAppInner() {
         {/* Juzz View */}
         {view === 'juzz' && (
           <>
-            <ZoomSlider zoom={zoom} setZoom={setZoom} contentZoom={contentZoom} setContentZoom={setContentZoom} />
-            <div className="absolute inset-0 overflow-auto bubble-container">
+            <div className="absolute inset-0 overflow-auto bubble-container flex items-start justify-center pt-8">
               {/* Fibonacci spiral container for Juzz */}
               <div
-                className="relative"
+                className="relative flex-shrink-0"
                 style={{
                   width: Math.max(900 * zoom, 900),
                   height: Math.max(900 * zoom, 900),
-                  margin: '0 auto',
-                  marginTop: '2rem',
+                  minWidth: Math.max(900 * zoom, 900),
+                  minHeight: Math.max(900 * zoom, 900),
                 }}
               >
                 {JUZZ.map((j, i) => (
@@ -484,7 +552,7 @@ function QuranBubbleAppInner() {
       </main>
 
       {/* Floating Menu */}
-      <FloatingMenu view={view} setView={setView} darkMode={darkMode} />
+      <FloatingMenu view={view} setView={setView} darkMode={darkMode} onDonate={() => setShowDonateModal(true)} />
 
       {/* Bubble Modal */}
       {selected && (
@@ -510,6 +578,172 @@ function QuranBubbleAppInner() {
           currentJuzz={selectedJuzz}
         />
       )}
+
+      {/* Floating Bubble Buttons - Feature Access - Vertical Stack on Right Side */}
+      {view === 'surahs' && (
+        <div className="fixed right-3 sm:right-4 z-40 flex flex-col gap-3" style={{ bottom: '100px' }}>
+          {/* Search Button */}
+          <button
+            onClick={() => setShowSearchPanel(true)}
+            className="w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center transition-all hover:scale-110 active:scale-95 group"
+            style={{
+              background: 'linear-gradient(145deg, #f59e0b, #d97706)',
+              boxShadow: `
+                0 0 20px rgba(245, 158, 11, 0.35),
+                0 4px 15px rgba(0, 0, 0, 0.2),
+                inset 0 -3px 10px rgba(0,0,0,0.2),
+                inset 0 3px 10px rgba(255,255,255,0.25)
+              `,
+              animation: 'gentleFloat 4s ease-in-out infinite',
+            }}
+            title="Search Quran"
+          >
+            <div className="absolute inset-1 rounded-full opacity-50" style={{
+              background: 'linear-gradient(180deg, rgba(255,255,255,0.5) 0%, transparent 50%)',
+            }} />
+            <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            <span className="absolute right-full mr-3 px-2 py-1 rounded-lg text-xs font-medium text-white whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
+              style={{ background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(4px)' }}>
+              Search
+            </span>
+          </button>
+
+          {/* Progress Button */}
+          <button
+            onClick={() => setShowProgressDashboard(true)}
+            className="w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center transition-all hover:scale-110 active:scale-95 group"
+            style={{
+              background: 'linear-gradient(145deg, #10b981, #059669)',
+              boxShadow: `
+                0 0 20px rgba(16, 185, 129, 0.35),
+                0 4px 15px rgba(0, 0, 0, 0.2),
+                inset 0 -3px 10px rgba(0,0,0,0.2),
+                inset 0 3px 10px rgba(255,255,255,0.25)
+              `,
+              animation: 'gentleFloat 4s ease-in-out infinite',
+              animationDelay: '0.5s',
+            }}
+            title="Reading Progress"
+          >
+            <div className="absolute inset-1 rounded-full opacity-50" style={{
+              background: 'linear-gradient(180deg, rgba(255,255,255,0.5) 0%, transparent 50%)',
+            }} />
+            <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+            </svg>
+            <span className="absolute right-full mr-3 px-2 py-1 rounded-lg text-xs font-medium text-white whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
+              style={{ background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(4px)' }}>
+              Progress
+            </span>
+          </button>
+
+          {/* Hifz Mode Button */}
+          <button
+            onClick={() => setShowHifzMode(true)}
+            className="w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center transition-all hover:scale-110 active:scale-95 group"
+            style={{
+              background: 'linear-gradient(145deg, #8b5cf6, #6366f1)',
+              boxShadow: `
+                0 0 20px rgba(139, 92, 246, 0.35),
+                0 4px 15px rgba(0, 0, 0, 0.2),
+                inset 0 -3px 10px rgba(0,0,0,0.2),
+                inset 0 3px 10px rgba(255,255,255,0.25)
+              `,
+              animation: 'gentleFloat 4s ease-in-out infinite',
+              animationDelay: '1s',
+            }}
+            title="Hifz Mode (Memorization)"
+          >
+            <div className="absolute inset-1 rounded-full opacity-50" style={{
+              background: 'linear-gradient(180deg, rgba(255,255,255,0.5) 0%, transparent 50%)',
+            }} />
+            <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+            </svg>
+            <span className="absolute right-full mr-3 px-2 py-1 rounded-lg text-xs font-medium text-white whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
+              style={{ background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(4px)' }}>
+              Memorize
+            </span>
+          </button>
+
+          {/* Offline Mode Button */}
+          <button
+            onClick={() => setShowOfflineManager(true)}
+            className="w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center transition-all hover:scale-110 active:scale-95 group"
+            style={{
+              background: 'linear-gradient(145deg, #3b82f6, #2563eb)',
+              boxShadow: `
+                0 0 20px rgba(59, 130, 246, 0.35),
+                0 4px 15px rgba(0, 0, 0, 0.2),
+                inset 0 -3px 10px rgba(0,0,0,0.2),
+                inset 0 3px 10px rgba(255,255,255,0.25)
+              `,
+              animation: 'gentleFloat 4s ease-in-out infinite',
+              animationDelay: '1.5s',
+            }}
+            title="Offline Mode"
+          >
+            <div className="absolute inset-1 rounded-full opacity-50" style={{
+              background: 'linear-gradient(180deg, rgba(255,255,255,0.5) 0%, transparent 50%)',
+            }} />
+            <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+            </svg>
+            <span className="absolute right-full mr-3 px-2 py-1 rounded-lg text-xs font-medium text-white whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
+              style={{ background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(4px)' }}>
+              Offline
+            </span>
+          </button>
+        </div>
+      )}
+
+      {/* Progress Dashboard */}
+      {showProgressDashboard && (
+        <ProgressDashboard
+          onClose={() => setShowProgressDashboard(false)}
+          onNavigateToSurah={(surah) => {
+            setShowProgressDashboard(false);
+            setOverlayReaderSurah(surah);
+          }}
+        />
+      )}
+
+      {/* Offline Manager */}
+      {showOfflineManager && (
+        <OfflineManager
+          onClose={() => setShowOfflineManager(false)}
+        />
+      )}
+
+      {/* Hifz Mode */}
+      {showHifzMode && (
+        <HifzMode
+          onClose={() => setShowHifzMode(false)}
+        />
+      )}
+
+      {/* Search Panel */}
+      {showSearchPanel && (
+        <SearchPanel
+          onClose={() => setShowSearchPanel(false)}
+          onSelectResult={(surah, ayahNumber) => {
+            setShowSearchPanel(false);
+            setOverlayReaderSurah(surah);
+          }}
+        />
+      )}
+
+      {/* Donate Modal */}
+      <DonateModal
+        isOpen={showDonateModal}
+        onClose={() => setShowDonateModal(false)}
+      />
 
       {/* Animation Styles */}
       <AnimationStyles />

@@ -67,7 +67,7 @@ const ZoomSlider = memo(function ZoomSlider({
   setContentZoom
 }) {
   return (
-    <div className="fixed left-2 sm:left-4 top-1/2 -translate-y-1/2 z-40 bg-white/95 backdrop-blur-xl rounded-xl sm:rounded-2xl p-2 sm:p-3 shadow-2xl border border-gray-200/60">
+    <div className="fixed left-2 sm:left-4 top-1/2 -translate-y-1/2 z-40 bg-white rounded-xl sm:rounded-2xl p-2 sm:p-3 shadow-2xl border border-gray-200/60">
       <div className="flex gap-3 sm:gap-4">
         {/* Bubble Size Zoom */}
         <ZoomControl

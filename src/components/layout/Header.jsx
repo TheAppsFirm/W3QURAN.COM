@@ -5,6 +5,7 @@
 
 import { useState, useEffect, useRef, memo } from 'react';
 import { Icons } from '../common/Icons';
+import { Logo } from '../common/Logo';
 import { FAQ_TOPICS } from '../../data';
 
 const Header = memo(function Header({ filters, setFilters, showAnalytics, setShowAnalytics }) {
@@ -12,7 +13,9 @@ const Header = memo(function Header({ filters, setFilters, showAnalytics, setSho
   const [searchQuery, setSearchQuery] = useState('');
   const [showTopics, setShowTopics] = useState(false);
   const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const [dropdownPos, setDropdownPos] = useState({ top: 0, left: 0 });
   const debounceTimer = useRef(null);
+  const buttonRefs = useRef({});
 
   // Debounced search
   useEffect(() => {
@@ -32,6 +35,14 @@ const Header = memo(function Header({ filters, setFilters, showAnalytics, setSho
     }
   }, [open]);
 
+  // Update dropdown position when opened
+  useEffect(() => {
+    if (open && buttonRefs.current[open]) {
+      const rect = buttonRefs.current[open].getBoundingClientRect();
+      setDropdownPos({ top: rect.bottom + 8, left: rect.left + rect.width / 2 });
+    }
+  }, [open]);
+
   const filterConfigs = [
     { id: 'rev', label: 'Revelation', icon: Icons.Book, opts: ['All', 'Makki', 'Madani'] },
     { id: 'ayahRange', label: 'Verses', icon: Icons.BarChart, opts: ['All', '1-20', '21-50', '51-100', '100+'] },
@@ -41,7 +52,7 @@ const Header = memo(function Header({ filters, setFilters, showAnalytics, setSho
   const hasActiveFilters = filters.type || filters.ayahRange || filters.chronOrder || filters.topic;
 
   return (
-    <header className="relative z-40 overflow-hidden">
+    <header className="relative" style={{ zIndex: 200 }}>
       {/* Animated gradient background */}
       <div
         className="absolute inset-0"
@@ -86,23 +97,9 @@ const Header = memo(function Header({ filters, setFilters, showAnalytics, setSho
         {/* Main Row */}
         <div className="flex items-center justify-center gap-2 sm:gap-3 flex-wrap">
 
-          {/* App Logo/Title - Animated */}
-          <div className="hidden lg:flex items-center gap-2 mr-4">
-            <div
-              className="w-10 h-10 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center"
-              style={{ animation: 'pulse 2s ease-in-out infinite' }}
-            >
-              <Icons.Book className="w-5 h-5 text-white" />
-            </div>
-            <span
-              className="text-xl font-bold text-white"
-              style={{
-                textShadow: '0 2px 10px rgba(0,0,0,0.3)',
-                fontFamily: "'Scheherazade New', serif",
-              }}
-            >
-              القرآن
-            </span>
+          {/* App Logo - w3Quran bubble logo */}
+          <div className="hidden lg:flex items-center mr-4">
+            <Logo size="medium" showText={true} />
           </div>
 
           {/* Search - Enhanced */}
@@ -142,8 +139,9 @@ const Header = memo(function Header({ filters, setFilters, showAnalytics, setSho
 
           {/* Filter Pills */}
           {filterConfigs.map((f, idx) => (
-            <div key={f.id} className="relative hidden sm:block" onClick={(e) => e.stopPropagation()}>
+            <div key={f.id} className="relative" onClick={(e) => e.stopPropagation()}>
               <button
+                ref={(el) => buttonRefs.current[f.id] = el}
                 onClick={() => setOpen(open === f.id ? null : f.id)}
                 className={`group flex items-center gap-2 px-4 py-2.5 rounded-2xl text-white font-medium transition-all duration-300 border ${
                   (f.id === 'rev' && filters.type) ||
@@ -162,44 +160,6 @@ const Header = memo(function Header({ filters, setFilters, showAnalytics, setSho
                 <Icons.ChevronDown className={`w-4 h-4 transition-transform duration-300 ${open === f.id ? 'rotate-180' : ''}`} />
               </button>
 
-              {/* Dropdown */}
-              {open === f.id && (
-                <div
-                  className="absolute top-full mt-2 left-1/2 -translate-x-1/2 bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl py-2 min-w-[180px] z-50 border border-purple-100 overflow-hidden"
-                  style={{ animation: 'dropdownSlide 0.2s ease-out' }}
-                >
-                  {f.opts.map((o, i) => {
-                    const isActive = (f.id === 'rev' && filters.type === o) ||
-                      (f.id === 'ayahRange' && filters.ayahRange === o) ||
-                      (f.id === 'chronOrder' && filters.chronOrder === o);
-
-                    return (
-                      <button
-                        key={o}
-                        onClick={() => {
-                          if (f.id === 'rev') setFilters({ ...filters, type: o === 'All' ? null : o });
-                          if (f.id === 'ayahRange') setFilters({ ...filters, ayahRange: o === 'All' ? null : o });
-                          if (f.id === 'chronOrder') setFilters({ ...filters, chronOrder: o === 'Default' ? null : o });
-                          setOpen(null);
-                        }}
-                        className={`w-full px-4 py-3 text-left transition-all flex items-center gap-3 ${
-                          isActive
-                            ? 'bg-gradient-to-r from-purple-500 to-fuchsia-500 text-white'
-                            : 'text-gray-700 hover:bg-purple-50'
-                        }`}
-                        style={{ animationDelay: `${i * 0.05}s` }}
-                      >
-                        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                          isActive ? 'border-white bg-white' : 'border-gray-300'
-                        }`}>
-                          {isActive && <Icons.Check className="w-3 h-3 text-purple-600" />}
-                        </div>
-                        <span className="font-medium">{o}</span>
-                      </button>
-                    );
-                  })}
-                </div>
-              )}
             </div>
           ))}
 
@@ -278,6 +238,55 @@ const Header = memo(function Header({ filters, setFilters, showAnalytics, setSho
           </div>
         )}
       </div>
+
+      {/* Fixed Position Filter Dropdowns */}
+      {filterConfigs.map((f) => (
+        open === f.id && (
+          <div
+            key={f.id}
+            className="fixed bg-white backdrop-blur-xl rounded-2xl shadow-2xl py-2 min-w-[160px] sm:min-w-[180px] border border-purple-100 overflow-hidden"
+            style={{
+              zIndex: 999999,
+              top: dropdownPos.top,
+              left: dropdownPos.left,
+              transform: 'translateX(-50%)',
+              animation: 'dropdownSlide 0.2s ease-out'
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {f.opts.map((o, i) => {
+              const isActive = (f.id === 'rev' && filters.type === o) ||
+                (f.id === 'ayahRange' && filters.ayahRange === o) ||
+                (f.id === 'chronOrder' && filters.chronOrder === o);
+
+              return (
+                <button
+                  key={o}
+                  onClick={() => {
+                    if (f.id === 'rev') setFilters({ ...filters, type: o === 'All' ? null : o });
+                    if (f.id === 'ayahRange') setFilters({ ...filters, ayahRange: o === 'All' ? null : o });
+                    if (f.id === 'chronOrder') setFilters({ ...filters, chronOrder: o === 'Default' ? null : o });
+                    setOpen(null);
+                  }}
+                  className={`w-full px-4 py-3 text-left transition-all flex items-center gap-3 ${
+                    isActive
+                      ? 'bg-gradient-to-r from-purple-500 to-fuchsia-500 text-white'
+                      : 'text-gray-700 hover:bg-purple-50'
+                  }`}
+                  style={{ animationDelay: `${i * 0.05}s` }}
+                >
+                  <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                    isActive ? 'border-white bg-white' : 'border-gray-300'
+                  }`}>
+                    {isActive && <Icons.Check className="w-3 h-3 text-purple-600" />}
+                  </div>
+                  <span className="font-medium">{o}</span>
+                </button>
+              );
+            })}
+          </div>
+        )
+      ))}
 
       {/* CSS Animations */}
       <style>{`

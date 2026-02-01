@@ -5,6 +5,7 @@
 
 import { useState, memo, useCallback } from 'react';
 import { getTopicPalette } from '../../data';
+import { playThrottledHoverSound, playClickSound } from '../../utils/soundUtils';
 
 const SurahBubble = memo(function SurahBubble({
   surah,
@@ -53,10 +54,26 @@ const SurahBubble = memo(function SurahBubble({
 
   return (
     <div
-      onMouseEnter={() => setHovered(true)}
+      onMouseEnter={() => {
+        setHovered(true);
+        playThrottledHoverSound();
+      }}
       onMouseLeave={() => setHovered(false)}
-      onClick={handleClick}
+      onClick={(e) => {
+        playClickSound();
+        handleClick(e);
+      }}
       className="absolute cursor-pointer select-none"
+      role="button"
+      tabIndex={0}
+      aria-label={`Surah ${surah.id}: ${surah.name} - ${surah.arabic}, ${surah.ayahs} ayahs`}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          playClickSound();
+          handleClick(e);
+        }
+      }}
       style={{
         width: size,
         height: size,

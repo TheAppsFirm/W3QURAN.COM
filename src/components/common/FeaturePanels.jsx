@@ -735,8 +735,8 @@ const FeaturePanel = memo(function FeaturePanel({
 
   return (
     <div
-      className="fixed z-50 top-1/2 -translate-y-1/2 right-4 sm:right-8 w-[320px] max-h-[70vh]"
-      style={{ animation: 'bubblePanelIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)' }}
+      className="fixed top-1/2 -translate-y-1/2 right-4 sm:right-8 w-[320px] max-h-[70vh]"
+      style={{ zIndex: 9999999, animation: 'bubblePanelIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)' }}
     >
       {/* Thought bubble connection */}
       <div className="absolute right-full mr-2 top-1/2 -translate-y-1/2 flex items-center gap-1">

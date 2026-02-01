@@ -87,7 +87,8 @@ const BubbleModal = memo(function BubbleModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      className="fixed inset-0 flex items-center justify-center p-4"
+      style={{ zIndex: 9999999 }}
       onClick={onClose}
       role="dialog"
       aria-modal="true"
@@ -379,7 +380,7 @@ const BubbleModal = memo(function BubbleModal({
         </div>
       </div>
 
-      {/* Animations */}
+      {/* Animations & Custom Scrollbar */}
       <style>{`
         @keyframes spin {
           from { transform: rotate(0deg); }
@@ -396,6 +397,21 @@ const BubbleModal = memo(function BubbleModal({
         @keyframes floatParticle {
           0%, 100% { transform: translateY(0) scale(1); opacity: 0.8; }
           50% { transform: translateY(-8px) scale(1.2); opacity: 0.5; }
+        }
+        @keyframes shimmerWave {
+          0% { transform: translateX(-100%); }
+          100% { transform: translateX(100%); }
+        }
+        .scrollbar-thin::-webkit-scrollbar {
+          width: 4px;
+        }
+        .scrollbar-thin::-webkit-scrollbar-track {
+          background: rgba(255,255,255,0.1);
+          border-radius: 2px;
+        }
+        .scrollbar-thin::-webkit-scrollbar-thumb {
+          background: rgba(255,255,255,0.3);
+          border-radius: 2px;
         }
       `}</style>
     </div>

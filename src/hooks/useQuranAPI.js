@@ -220,7 +220,6 @@ export function useQuranAPI(surahId, options = {}) {
         setLoading(false);
       } catch (err) {
         if (cancelled) return;
-        console.error('Quran API Error:', err);
         setError(err.message);
         setLoading(false);
       }
@@ -315,8 +314,8 @@ export async function fetchVerse(surahId, ayahNumber, translationId = 'en.sahih'
       surahId,
       ayahNumber,
     };
-  } catch (err) {
-    console.error('Fetch verse error:', err);
+  } catch {
+    // Failed to fetch verse
     return null;
   }
 }
@@ -408,19 +407,22 @@ export const POS_LABELS = {
 
 /**
  * Fetch word-by-word translations from Quran.com API
- * Supports multiple languages including Urdu
- * Also fetches morphological data (root, grammar, part of speech)
+ * Note: API only supports English word translations currently
+ * For other languages, we fall back to English with a note
  */
 export async function fetchMultilingualWords(surahId, translationLang = 'en') {
-  const cacheKey = `wbw-qurancom-${surahId}-${translationLang}-v2`;
+  // Quran.com API only has English word-by-word translations
+  // Always fetch English and note the limitation
+  const actualLang = 'en';
+  const cacheKey = `wbw-qurancom-${surahId}-${actualLang}-v3`;
 
   if (wordCache.has(cacheKey)) {
     return wordCache.get(cacheKey);
   }
 
   try {
-    // Fetch words with translations
-    const url = `${QURAN_COM_API}/verses/by_chapter/${surahId}?words=true&word_translation_language=${translationLang}&per_page=300&word_fields=text_uthmani,text_indopak,code_v1`;
+    // Fetch words with English translations (only language available)
+    const url = `${QURAN_COM_API}/verses/by_chapter/${surahId}?words=true&word_translation_language=en&per_page=300&word_fields=text_uthmani,text_indopak,code_v1`;
     const response = await fetch(url);
 
     if (!response.ok) {
@@ -445,12 +447,10 @@ export async function fetchMultilingualWords(surahId, translationLang = 'en') {
         })) || [];
     });
 
-    console.log('Quran.com API loaded words for surah', surahId, '- Sample:', wordsMap[1]?.slice(0, 2));
-
     wordCache.set(cacheKey, wordsMap);
     return wordsMap;
-  } catch (err) {
-    console.error('Quran.com word fetch error:', err);
+  } catch {
+    // Failed to fetch word meanings from API
     return null;
   }
 }
@@ -497,8 +497,8 @@ export async function fetchWordMorphology(verseKey) {
 
     morphologyCache.set(cacheKey, morphologyMap);
     return morphologyMap;
-  } catch (err) {
-    console.error('Morphology fetch error:', err);
+  } catch {
+    // Failed to fetch morphology data
     return null;
   }
 }
@@ -506,6 +506,7 @@ export async function fetchWordMorphology(verseKey) {
 /**
  * Hook to fetch word-by-word translations
  * Uses local data (multi-language) when available, falls back to API (English only)
+ * Note: Quran.com API only has English word meanings - Urdu/other languages only available in local data
  */
 export function useMultilingualWords(surahId, translationId = 'en.sahih') {
   const [wordsMap, setWordsMap] = useState({});
@@ -513,17 +514,18 @@ export function useMultilingualWords(surahId, translationId = 'en.sahih') {
   const [error, setError] = useState(null);
   const [isLocalData, setIsLocalData] = useState(false);
   const [currentLang, setCurrentLang] = useState('en');
+  const [isFallback, setIsFallback] = useState(false); // True if using English fallback
 
   // Get the user's preferred language from translation ID
   const userLang = useMemo(() => {
-    const lang = WORD_TRANSLATION_LANGUAGES[translationId] || 'en';
-    console.log('Word translation language detected:', { translationId, lang });
-    return lang;
+    return WORD_TRANSLATION_LANGUAGES[translationId] || 'en';
   }, [translationId]);
 
   useEffect(() => {
     // Reset state when language changes
     setCurrentLang(userLang);
+    setWordsMap({});
+    setIsFallback(false);
   }, [userLang]);
 
   useEffect(() => {
@@ -537,20 +539,18 @@ export function useMultilingualWords(surahId, translationId = 'en.sahih') {
     setLoading(true);
     setError(null);
 
-    // Capture the current language for this effect
     const targetLang = userLang;
 
     async function fetchWords() {
       try {
-        // First check if we have local data for this surah
+        // First check if we have local data for this surah (has multi-language support)
         if (hasLocalWordMeanings(surahId)) {
           const surahData = WORD_MEANINGS[surahId];
           const localWordsMap = {};
 
-          // Convert local data to the expected format using TARGET language
+          // Convert local data using target language, fallback to English
           Object.entries(surahData).forEach(([ayahNum, words]) => {
             localWordsMap[parseInt(ayahNum)] = words.map(w => {
-              // Get meaning in target language, fallback to English
               const meaning = w[targetLang] || w.en;
               return {
                 arabic: w.ar,
@@ -561,17 +561,16 @@ export function useMultilingualWords(surahId, translationId = 'en.sahih') {
           });
 
           if (!cancelled) {
-            console.log(`Loading local word meanings for Surah ${surahId} in "${targetLang}":`,
-              localWordsMap[1]?.[0]?.meaning || 'no data');
             setWordsMap(localWordsMap);
             setIsLocalData(true);
+            setIsFallback(!WORD_MEANINGS[surahId]?.[1]?.[0]?.[targetLang]); // Check if target lang exists
+            setCurrentLang(targetLang);
             setLoading(false);
           }
           return;
         }
 
-        // Fall back to API (English only)
-        console.log(`No local data for Surah ${surahId}, falling back to API (English only)`);
+        // Fall back to API - only English available from Quran.com
         const data = await fetchMultilingualWords(surahId, 'en');
 
         if (cancelled) return;
@@ -579,6 +578,9 @@ export function useMultilingualWords(surahId, translationId = 'en.sahih') {
         if (data) {
           setWordsMap(data);
           setIsLocalData(false);
+          // If user wanted non-English but API only has English, mark as fallback
+          setIsFallback(targetLang !== 'en');
+          setCurrentLang('en'); // API only returns English
         } else {
           setError('Failed to load word meanings');
         }
@@ -595,12 +597,17 @@ export function useMultilingualWords(surahId, translationId = 'en.sahih') {
     return () => {
       cancelled = true;
     };
-  }, [surahId, userLang]); // Re-run when surahId OR userLang changes
+  }, [surahId, userLang]);
 
-  // Return actual language being used
-  const actualLang = isLocalData ? currentLang : 'en';
-
-  return { wordsMap, loading, error, language: actualLang, userLanguage: userLang, isLocalData };
+  return {
+    wordsMap,
+    loading,
+    error,
+    language: currentLang,
+    userLanguage: userLang,
+    isLocalData,
+    isFallback // True if showing English instead of requested language
+  };
 }
 
 /**

@@ -6,6 +6,8 @@
  * Implements QuranApiInterface following Liskov Substitution Principle (LSP)
  */
 
+import { fetchWithRetry } from '../../utils/retryUtils';
+
 const BASE_URL = 'https://api.alquran.cloud/v1';
 
 /**
@@ -64,12 +66,12 @@ export const FreeQuranApi = {
    */
   getChapters: async () => {
     try {
-      const response = await fetch(`${BASE_URL}/surah`);
+      const response = await fetchWithRetry(`${BASE_URL}/surah`);
       const data = await handleResponse(response);
       return data.map(transformChapter);
-    } catch (error) {
-      console.error('Failed to fetch chapters:', error);
-      throw error;
+    } catch {
+      // Failed to fetch chapters after retries
+      throw new Error('Unable to fetch chapters. Please check your connection.');
     }
   },
 
@@ -80,12 +82,11 @@ export const FreeQuranApi = {
    */
   getChapterById: async (id) => {
     try {
-      const response = await fetch(`${BASE_URL}/surah/${id}`);
+      const response = await fetchWithRetry(`${BASE_URL}/surah/${id}`);
       const data = await handleResponse(response);
       return transformChapter(data);
-    } catch (error) {
-      console.error(`Failed to fetch chapter ${id}:`, error);
-      throw error;
+    } catch {
+      throw new Error(`Unable to fetch chapter ${id}. Please check your connection.`);
     }
   },
 
@@ -96,15 +97,14 @@ export const FreeQuranApi = {
    */
   getChapterInfo: async (id) => {
     try {
-      const response = await fetch(`${BASE_URL}/surah/${id}`);
+      const response = await fetchWithRetry(`${BASE_URL}/surah/${id}`);
       const data = await handleResponse(response);
       return {
         ...transformChapter(data),
         verses: data.ayahs?.map((v) => transformVerse(v)) || [],
       };
-    } catch (error) {
-      console.error(`Failed to fetch chapter info ${id}:`, error);
-      throw error;
+    } catch {
+      throw new Error(`Unable to fetch chapter info for ${id}. Please check your connection.`);
     }
   },
 
@@ -118,10 +118,10 @@ export const FreeQuranApi = {
     const { translationId = 'en.sahih' } = options;
 
     try {
-      // Fetch Arabic and translation in parallel
+      // Fetch Arabic and translation in parallel with retry
       const [arabicRes, translationRes] = await Promise.all([
-        fetch(`${BASE_URL}/surah/${chapterId}`),
-        fetch(`${BASE_URL}/surah/${chapterId}/${translationId}`),
+        fetchWithRetry(`${BASE_URL}/surah/${chapterId}`),
+        fetchWithRetry(`${BASE_URL}/surah/${chapterId}/${translationId}`),
       ]);
 
       const [arabicData, translationData] = await Promise.all([
@@ -135,9 +135,8 @@ export const FreeQuranApi = {
         ...transformVerse(verse),
         textTranslation: translations[index]?.text || '',
       }));
-    } catch (error) {
-      console.error(`Failed to fetch verses for chapter ${chapterId}:`, error);
-      throw error;
+    } catch {
+      throw new Error(`Unable to fetch verses for chapter ${chapterId}. Please check your connection.`);
     }
   },
 
@@ -153,8 +152,8 @@ export const FreeQuranApi = {
 
     try {
       const [arabicRes, translationRes] = await Promise.all([
-        fetch(`${BASE_URL}/ayah/${key}`),
-        fetch(`${BASE_URL}/ayah/${key}/${translationId}`),
+        fetchWithRetry(`${BASE_URL}/ayah/${key}`),
+        fetchWithRetry(`${BASE_URL}/ayah/${key}/${translationId}`),
       ]);
 
       const [arabicData, translationData] = await Promise.all([
@@ -168,9 +167,8 @@ export const FreeQuranApi = {
         chapterId,
         verseNumber: verseNum,
       };
-    } catch (error) {
-      console.error(`Failed to fetch verse ${key}:`, error);
-      throw error;
+    } catch {
+      throw new Error(`Unable to fetch verse ${key}. Please check your connection.`);
     }
   },
 
@@ -186,9 +184,8 @@ export const FreeQuranApi = {
       const chapterInfo = await FreeQuranApi.getChapterInfo(randomChapter);
       const randomVerseNum = Math.floor(Math.random() * chapterInfo.versesCount) + 1;
       return FreeQuranApi.getVerseByKey(`${randomChapter}:${randomVerseNum}`);
-    } catch (error) {
-      console.error('Failed to fetch random verse:', error);
-      throw error;
+    } catch {
+      throw new Error('Unable to fetch random verse. Please check your connection.');
     }
   },
 
@@ -199,7 +196,7 @@ export const FreeQuranApi = {
   getReciters: async () => {
     // Al-Quran Cloud provides audio editions as reciters
     try {
-      const response = await fetch(`${BASE_URL}/edition/format/audio`);
+      const response = await fetchWithRetry(`${BASE_URL}/edition/format/audio`);
       const data = await handleResponse(response);
 
       return data.map((edition) => ({
@@ -209,9 +206,8 @@ export const FreeQuranApi = {
         style: edition.type,
         language: edition.language,
       }));
-    } catch (error) {
-      console.error('Failed to fetch reciters:', error);
-      throw error;
+    } catch {
+      throw new Error('Unable to fetch reciters. Please check your connection.');
     }
   },
 
@@ -223,7 +219,7 @@ export const FreeQuranApi = {
    */
   getAudioUrl: async (chapterId, reciterId = 'ar.alafasy') => {
     try {
-      const response = await fetch(`${BASE_URL}/surah/${chapterId}/${reciterId}`);
+      const response = await fetchWithRetry(`${BASE_URL}/surah/${chapterId}/${reciterId}`);
       const data = await handleResponse(response);
 
       return {
@@ -234,9 +230,8 @@ export const FreeQuranApi = {
           audioUrl: ayah.audio,
         })),
       };
-    } catch (error) {
-      console.error(`Failed to fetch audio for chapter ${chapterId}:`, error);
-      throw error;
+    } catch {
+      throw new Error(`Unable to fetch audio for chapter ${chapterId}. Please check your connection.`);
     }
   },
 
@@ -246,7 +241,7 @@ export const FreeQuranApi = {
    */
   getTranslations: async () => {
     try {
-      const response = await fetch(`${BASE_URL}/edition/type/translation`);
+      const response = await fetchWithRetry(`${BASE_URL}/edition/type/translation`);
       const data = await handleResponse(response);
 
       return data.map((edition) => ({
@@ -256,9 +251,8 @@ export const FreeQuranApi = {
         languageName: edition.language,
         direction: edition.direction,
       }));
-    } catch (error) {
-      console.error('Failed to fetch translations:', error);
-      throw error;
+    } catch {
+      throw new Error('Unable to fetch translations. Please check your connection.');
     }
   },
 
@@ -272,7 +266,7 @@ export const FreeQuranApi = {
     const { surah = 'all', language = 'en' } = options;
 
     try {
-      const response = await fetch(
+      const response = await fetchWithRetry(
         `${BASE_URL}/search/${encodeURIComponent(query)}/${surah}/${language}`
       );
       const data = await handleResponse(response);
@@ -287,9 +281,8 @@ export const FreeQuranApi = {
           verseNumber: match.numberInSurah,
         })),
       };
-    } catch (error) {
-      console.error(`Failed to search for "${query}":`, error);
-      throw error;
+    } catch {
+      throw new Error(`Search failed for "${query}". Please check your connection.`);
     }
   },
 };

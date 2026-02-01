@@ -1,22 +1,21 @@
 /**
- * BubbleReaderOverlay Component
- * Horizontal ellipse bubble-shaped Quran reader with:
- * - Tajweed color-coded text
- * - Word-by-Word meanings with side panel
- * - Multiple translation options
- * - Audio player with multiple reciters
- * - Next/Previous surah navigation
+ * BubbleReaderOverlay Component - Complete Redesign
+ * Beautiful integrated bubble reader with:
+ * - External floating menu panel (outside the bubble)
+ * - Left panel for features inside bubble
+ * - Multi-language Tafseer support
+ * - Embedded YouTube player
+ * - All features integrated beautifully
  */
 
 import { useState, useEffect, useRef, useCallback, memo, useMemo } from 'react';
 import { Icons } from './Icons';
-import { PALETTES, SURAHS } from '../../data';
-import { useQuranAPI, useMultilingualWords, TRANSLATIONS, TAJWEED_RULES, WORD_TRANSLATION_LANGUAGES, POS_LABELS } from '../../hooks/useQuranAPI';
+import YouTubePlayer from './YouTubePlayer';
+import { PALETTES, SURAHS, fetchTafseer, getTafseersByLanguage, getDefaultTafseer, TRANSLATION_TO_TAFSEER_LANG, getVideosForSurah, generateSearchQuery, SCHOLARS, SURAH_TOPICS, TAFSEER_SOURCES } from '../../data';
+import { useQuranAPI, useMultilingualWords, TRANSLATIONS, TAJWEED_RULES, POS_LABELS } from '../../hooks/useQuranAPI';
 import { useLocalStorage } from '../../hooks';
 import { logReadingSession } from '../../utils/trackingUtils';
 import { shareVerse } from '../../utils/shareUtils';
-import FeatureBubbles from './FeatureBubbles';
-import FeaturePanel from './FeaturePanels';
 
 // Audio CDN
 const AUDIO_CDN = 'https://cdn.islamic.network/quran/audio/128';
@@ -30,6 +29,15 @@ const RECITERS = {
   'ar.husary': { name: 'Mahmoud Khalil Al-Husary', country: 'Egypt' },
   'ar.minshawi': { name: 'Mohamed Al-Minshawi', country: 'Egypt' },
 };
+
+// Feature definitions with colors
+const FEATURES = [
+  { id: 'tafseer', icon: 'BookOpen', label: 'Tafseer', color: '#8B5CF6', gradient: 'from-purple-500 to-indigo-600' },
+  { id: 'memorize', icon: 'Brain', label: 'Memorize', color: '#F59E0B', gradient: 'from-amber-500 to-orange-600' },
+  { id: 'bookmark', icon: 'Bookmark', label: 'Bookmarks', color: '#EC4899', gradient: 'from-pink-500 to-rose-600' },
+  { id: 'youtube', icon: 'Video', label: 'Videos', color: '#EF4444', gradient: 'from-red-500 to-rose-600' },
+  { id: 'share', icon: 'Share', label: 'Share', color: '#10B981', gradient: 'from-emerald-500 to-teal-600' },
+];
 
 // Verse counts for global ayah calculation
 const VERSE_COUNTS = [
@@ -59,12 +67,7 @@ const TajweedText = memo(function TajweedText({ segments }) {
           return <span key={index}>{segment.text}</span>;
         }
         return (
-          <span
-            key={index}
-            style={{ color: segment.color }}
-            title={`${segment.name}: ${segment.description}`}
-            className="cursor-help"
-          >
+          <span key={index} style={{ color: segment.color }} title={`${segment.name}: ${segment.description}`} className="cursor-help">
             {segment.text}
           </span>
         );
@@ -73,91 +76,7 @@ const TajweedText = memo(function TajweedText({ segments }) {
   );
 });
 
-// Arabic grammar helper - analyzes word patterns
-const analyzeArabicWord = (word) => {
-  if (!word) return null;
-
-  // Remove diacritics for pattern matching
-  const stripped = word.replace(/[\u064B-\u065F\u0670]/g, '');
-
-  // Common Arabic word patterns (أوزان)
-  const patterns = {
-    // Verb patterns (أوزان الفعل)
-    verb: [
-      { regex: /^ي.{2,}$/, pattern: 'يَفْعَلُ', type: 'V', desc: 'Present tense (مضارع)' },
-      { regex: /^ت.{2,}$/, pattern: 'تَفْعَلُ', type: 'V', desc: 'Present tense (2nd person)' },
-      { regex: /^أ.{2,}$/, pattern: 'أَفْعَلُ', type: 'V', desc: 'Present tense (1st person)' },
-      { regex: /^ن.{2,}$/, pattern: 'نَفْعَلُ', type: 'V', desc: 'Present tense (we)' },
-      { regex: /^است.+$/, pattern: 'اِسْتَفْعَلَ', type: 'V', desc: 'Form X (استفعال)' },
-      { regex: /^انف.+$/, pattern: 'اِنْفَعَلَ', type: 'V', desc: 'Form VII (انفعال)' },
-      { regex: /^افت.+$/, pattern: 'اِفْتَعَلَ', type: 'V', desc: 'Form VIII (افتعال)' },
-      { regex: /^تف.+ل$/, pattern: 'تَفَعَّلَ', type: 'V', desc: 'Form V (تفعّل)' },
-      { regex: /^تفا.+$/, pattern: 'تَفَاعَلَ', type: 'V', desc: 'Form VI (تفاعل)' },
-      { regex: /^أف.+$/, pattern: 'أَفْعَلَ', type: 'V', desc: 'Form IV (أفعل)' },
-    ],
-    // Noun patterns (أوزان الاسم)
-    noun: [
-      { regex: /^ال.+$/, pattern: 'الـ...', type: 'N', desc: 'Definite noun (معرفة)' },
-      { regex: /.+ون$/, pattern: 'فاعِلُونَ', type: 'N', desc: 'Masculine plural' },
-      { regex: /.+ين$/, pattern: 'فاعِلِينَ', type: 'N', desc: 'Masculine plural (oblique)' },
-      { regex: /.+ات$/, pattern: 'فاعِلات', type: 'N', desc: 'Feminine plural' },
-      { regex: /.+ة$/, pattern: 'فَعْلَة', type: 'N', desc: 'Feminine singular (تاء مربوطة)' },
-      { regex: /^م.{3,}$/, pattern: 'مَفْعُول', type: 'N', desc: 'Passive participle / place noun' },
-    ],
-    // Particle patterns (الحروف)
-    particle: [
-      { regex: /^ب$|^بـ$/, pattern: 'بِ', type: 'P', desc: 'Preposition "by/with"' },
-      { regex: /^ل$|^لـ$/, pattern: 'لِ', type: 'P', desc: 'Preposition "for/to"' },
-      { regex: /^ف$|^فـ$/, pattern: 'فَ', type: 'CONJ', desc: 'Conjunction "then/so"' },
-      { regex: /^و$|^وَ$/, pattern: 'وَ', type: 'CONJ', desc: 'Conjunction "and"' },
-      { regex: /^من$/, pattern: 'مِنْ', type: 'P', desc: 'Preposition "from"' },
-      { regex: /^في$/, pattern: 'فِي', type: 'P', desc: 'Preposition "in"' },
-      { regex: /^على$/, pattern: 'عَلَى', type: 'P', desc: 'Preposition "on/upon"' },
-      { regex: /^إلى$/, pattern: 'إِلَى', type: 'P', desc: 'Preposition "to"' },
-      { regex: /^إن$|^أن$/, pattern: 'إِنَّ/أَنَّ', type: 'ACC', desc: 'Accusative particle' },
-      { regex: /^لا$/, pattern: 'لَا', type: 'NEG', desc: 'Negation particle' },
-      { regex: /^ما$/, pattern: 'مَا', type: 'REL', desc: 'Relative/Negation' },
-      { regex: /^الذي$|^التي$/, pattern: 'الَّذِي', type: 'REL', desc: 'Relative pronoun' },
-      { regex: /^هذا$|^هذه$/, pattern: 'هٰذَا', type: 'DEM', desc: 'Demonstrative pronoun' },
-      { regex: /^ذلك$|^تلك$/, pattern: 'ذٰلِكَ', type: 'DEM', desc: 'Demonstrative (far)' },
-    ],
-    // Pronoun suffixes
-    pronoun: [
-      { regex: /.+هم$/, pattern: '...هُمْ', type: 'PRON', desc: 'Their/them (masc.)' },
-      { regex: /.+هن$/, pattern: '...هُنَّ', type: 'PRON', desc: 'Their/them (fem.)' },
-      { regex: /.+ه$/, pattern: '...هُ', type: 'PRON', desc: 'His/him' },
-      { regex: /.+ها$/, pattern: '...هَا', type: 'PRON', desc: 'Her/it' },
-      { regex: /.+ك$/, pattern: '...كَ', type: 'PRON', desc: 'Your (masc.)' },
-      { regex: /.+كم$/, pattern: '...كُمْ', type: 'PRON', desc: 'Your (plural)' },
-      { regex: /.+نا$/, pattern: '...نَا', type: 'PRON', desc: 'Our/us' },
-    ],
-  };
-
-  // Try to match patterns
-  for (const category of Object.values(patterns)) {
-    for (const p of category) {
-      if (p.regex.test(stripped)) {
-        return {
-          pattern: p.pattern,
-          type: p.type,
-          description: p.desc,
-          category: p.type,
-        };
-      }
-    }
-  }
-
-  // Default - unknown pattern
-  return {
-    pattern: null,
-    type: 'default',
-    description: 'Quranic word',
-    category: 'default',
-  };
-};
-
-// Simple Word Component - just highlights and triggers callback
-// Supports memorization mode with hidden words
+// Simple Word Component
 const WordItem = memo(function WordItem({ word, isActive, onClick, hidden = false, showOnHover = false }) {
   const [revealed, setRevealed] = useState(false);
 
@@ -180,286 +99,1272 @@ const WordItem = memo(function WordItem({ word, isActive, onClick, hidden = fals
       onMouseLeave={() => showOnHover && setRevealed(false)}
       role="button"
       tabIndex={0}
-      className={`inline-block mx-0.5 cursor-pointer transition-all duration-200 rounded px-1.5 py-1 ${
-        isActive
-          ? 'bg-yellow-400/60 scale-110 shadow-lg ring-2 ring-yellow-300/50'
-          : isHidden
-          ? 'bg-amber-500/40 hover:bg-amber-500/60'
+      className={`inline-block mx-0.5 cursor-pointer transition-all duration-200 rounded px-1.5 py-1 relative ${
+        isActive ? 'bg-yellow-400/60 scale-110 shadow-lg ring-2 ring-yellow-300/50'
+          : isHidden ? 'bg-amber-500/40 hover:bg-amber-500/60'
           : 'hover:bg-white/30 hover:scale-105'
       }`}
       style={{ userSelect: 'none' }}
     >
       {isHidden ? (
-        <span className="opacity-0 select-none" aria-hidden="true">{word}</span>
+        <>
+          <span className="opacity-0 select-none" aria-hidden="true">{word}</span>
+          <span className="absolute inset-0 flex items-center justify-center text-white/50 text-xs">?</span>
+        </>
       ) : (
         word
-      )}
-      {isHidden && (
-        <span className="absolute inset-0 flex items-center justify-center text-white/50 text-xs">
-          ?
-        </span>
       )}
     </span>
   );
 });
 
-// Language display names
-const LANG_NAMES = {
-  'en': 'English',
-  'ur': 'اردو',
-  'fr': 'Français',
-  'de': 'Deutsch',
-  'id': 'Indonesia',
-  'tr': 'Türkçe',
-  'ru': 'Русский',
-};
+// ============================================
+// FLOATING FEATURE BUBBLES (Separate bubbles for each feature)
+// ============================================
 
-// Floating Word Meaning Bubble - Fixed position on right side of screen
-const WordMeaningBubble = memo(function WordMeaningBubble({
-  word,
-  meaning,
-  transliteration,
-  wordLang,
-  palette,
+// Generic Floating Feature Bubble Container
+const FloatingFeatureBubble = memo(function FloatingFeatureBubble({
+  children,
+  isVisible,
   onClose,
-  isLoading
+  title,
+  icon: IconComponent,
+  gradient,
+  position = { top: '15%', left: '80px' },
+  size = 'medium' // small, medium, large
 }) {
-  const [showDetails, setShowDetails] = useState(false);
+  const sizeStyles = {
+    small: { width: '280px', height: '350px' },
+    medium: { width: '320px', height: '420px' },
+    large: { width: '360px', height: '480px' },
+  };
 
-  // Analyze word for grammar patterns
-  const wordAnalysis = useMemo(() => analyzeArabicWord(word), [word]);
+  if (!isVisible) return null;
 
-  const isRTL = wordLang === 'ur' || wordLang === 'ar';
-  const langName = LANG_NAMES[wordLang] || 'English';
-  const posInfo = POS_LABELS[wordAnalysis?.type] || POS_LABELS['default'];
-
-  if (!word) return null;
+  // Extract transform from position if it exists
+  const { transform, ...positionWithoutTransform } = position;
 
   return (
-    <>
-      {/* Thinking dots connecting to the bubble */}
+    <div
+      className="fixed transition-all duration-500"
+      style={{
+        zIndex: 99999999,
+        ...positionWithoutTransform,
+        ...sizeStyles[size],
+        transform: transform || 'none',
+        animation: 'bubblePopIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
+      }}
+      onClick={(e) => e.stopPropagation()}
+    >
+      {/* Outer glow */}
       <div
-        className="fixed z-[60] flex items-center gap-2"
+        className="absolute rounded-full pointer-events-none"
         style={{
-          right: '240px',
-          top: '50%',
-          transform: 'translateY(-50%)',
-          animation: 'fadeIn 0.2s ease-out',
+          inset: '-20px',
+          background: `radial-gradient(circle, ${gradient[0]}40 0%, transparent 70%)`,
+          filter: 'blur(15px)',
+          animation: 'breathe 3s ease-in-out infinite',
+        }}
+      />
+
+      {/* Main bubble */}
+      <div
+        className="relative w-full h-full rounded-[40px] overflow-hidden"
+        style={{
+          background: `linear-gradient(145deg, ${gradient[0]}ee, ${gradient[1]}dd, ${gradient[2] || gradient[1]}cc)`,
+          boxShadow: `0 0 60px ${gradient[0]}50, 0 20px 60px rgba(0,0,0,0.4), inset 0 -30px 60px rgba(0,0,0,0.3), inset 0 30px 60px rgba(255,255,255,0.15)`,
         }}
       >
+        {/* Glass highlight */}
         <div
-          className="w-2 h-2 rounded-full"
+          className="absolute pointer-events-none"
           style={{
-            background: `${palette?.colors?.[0] || '#6366f1'}`,
-            animation: 'bubbleDot 0.3s ease-out 0.05s both',
+            top: '2%', left: '10%', width: '60%', height: '15%',
+            background: 'linear-gradient(180deg, rgba(255,255,255,0.4) 0%, transparent 100%)',
+            borderRadius: '50%', filter: 'blur(2px)', transform: 'scaleY(0.3)',
           }}
         />
-        <div
-          className="w-3 h-3 rounded-full"
-          style={{
-            background: `${palette?.colors?.[1] || '#8b5cf6'}`,
-            animation: 'bubbleDot 0.3s ease-out 0.1s both',
-          }}
-        />
-        <div
-          className="w-4 h-4 rounded-full"
-          style={{
-            background: `${palette?.colors?.[0] || '#6366f1'}`,
-            animation: 'bubbleDot 0.3s ease-out 0.15s both',
-          }}
-        />
-      </div>
 
-      {/* Main Bubble - Fixed on right side */}
-      <div
-        className="fixed z-[60] right-4 top-1/2 -translate-y-1/2 w-[220px]"
-        style={{ animation: 'slideInFromRight 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)' }}
-        onClick={(e) => e.stopPropagation()}
-      >
-        {/* Bubble shape */}
-        <div
-          className="relative rounded-[40px] px-5 py-6 text-center shadow-2xl"
-          style={{
-            background: `linear-gradient(145deg, ${palette?.colors?.[0] || '#6366f1'}f5, ${palette?.colors?.[1] || '#8b5cf6'}f5)`,
-            boxShadow: `
-              0 20px 60px ${palette?.colors?.[0] || '#6366f1'}70,
-              0 0 40px ${palette?.colors?.[1] || '#8b5cf6'}50,
-              inset 0 -15px 40px rgba(0,0,0,0.25),
-              inset 0 15px 40px rgba(255,255,255,0.2)
-            `,
-          }}
-        >
-          {/* Close button */}
+        {/* Header */}
+        <div className="flex items-center justify-between p-4 border-b border-white/20">
+          <div className="flex items-center gap-3">
+            <div
+              className="w-10 h-10 rounded-full flex items-center justify-center"
+              style={{ background: 'rgba(255,255,255,0.25)' }}
+            >
+              {IconComponent && <IconComponent className="w-5 h-5 text-white" />}
+            </div>
+            <h3 className="text-white font-bold text-lg">{title}</h3>
+          </div>
           <button
             onClick={onClose}
-            className="absolute top-3 right-3 w-7 h-7 rounded-full bg-white/30 flex items-center justify-center hover:bg-white/50 transition-all text-white hover:scale-110"
+            className="w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center transition-all"
           >
-            <Icons.X className="w-4 h-4" />
+            <Icons.X className="w-4 h-4 text-white" />
           </button>
+        </div>
 
-          {/* Glass highlight */}
-          <div
-            className="absolute top-2 left-6 right-6 h-4 rounded-full opacity-50"
-            style={{
-              background: 'linear-gradient(180deg, rgba(255,255,255,0.7) 0%, transparent 100%)',
-            }}
-          />
+        {/* Content */}
+        <div className="p-4 h-[calc(100%-70px)] overflow-y-auto custom-scrollbar">
+          {children}
+        </div>
+      </div>
+    </div>
+  );
+});
 
-          {/* Floating particles */}
-          {[...Array(3)].map((_, i) => (
-            <div
-              key={i}
-              className="absolute rounded-full pointer-events-none"
-              style={{
-                width: 4 + i * 2,
-                height: 4 + i * 2,
-                right: `${20 + i * 15}%`,
-                top: `${20 + i * 20}%`,
-                background: 'rgba(255,255,255,0.6)',
-                animation: `floatParticle ${2 + i}s ease-in-out infinite`,
-                animationDelay: `${i * 0.3}s`,
-              }}
-            />
-          ))}
+// Tafseer Floating Bubble
+const TafseerFloatingBubble = memo(function TafseerFloatingBubble({
+  isVisible, onClose, surahId, ayahNumber, verseArabic, translationId, totalAyahs = 7, onAyahChange
+}) {
+  const [tafseer, setTafseer] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [selectedTafseer, setSelectedTafseer] = useState(null);
+  const [textZoom, setTextZoom] = useState(1);
+  const [selectedAyah, setSelectedAyah] = useState(ayahNumber);
 
-          {/* Content */}
-          <div className="relative z-10 mt-2">
-            {/* Arabic word - Large and prominent */}
-            <div
-              className="text-4xl text-white font-bold mb-2"
-              style={{
-                fontFamily: "'Scheherazade New', serif",
-                textShadow: '0 4px 15px rgba(0,0,0,0.4)',
-              }}
-              dir="rtl"
-              lang="ar"
-            >
-              {word}
-            </div>
+  const tafseerLang = TRANSLATION_TO_TAFSEER_LANG[translationId] || 'en';
+  const availableTafseers = getTafseersByLanguage(tafseerLang);
 
-            {/* Transliteration */}
-            {transliteration && (
-              <p className="text-sm text-white/80 italic mb-2">
-                {transliteration}
-              </p>
-            )}
+  // Update selected ayah when prop changes
+  useEffect(() => {
+    setSelectedAyah(ayahNumber);
+  }, [ayahNumber]);
 
-            {/* Part of speech badges */}
-            <div className="flex items-center justify-center gap-2 mb-3">
-              <span className="px-3 py-1 bg-white/30 rounded-full text-xs text-white font-semibold">
-                {posInfo.en}
-              </span>
-              <span
-                className="px-3 py-1 bg-white/25 rounded-full text-sm text-white"
-                style={{ fontFamily: "'Scheherazade New', serif" }}
-                dir="rtl"
+  useEffect(() => {
+    if (availableTafseers.length > 0 && !selectedTafseer) {
+      setSelectedTafseer(availableTafseers[0].id);
+    }
+  }, [tafseerLang, availableTafseers, selectedTafseer]);
+
+  const loadTafseer = useCallback(async () => {
+    if (!selectedTafseer || !surahId || !selectedAyah) return;
+    setLoading(true);
+    try {
+      const result = await fetchTafseer(surahId, selectedAyah, selectedTafseer);
+      setTafseer(result);
+    } catch {
+      setTafseer({ text: 'Failed to load tafseer', error: true });
+    }
+    setLoading(false);
+  }, [selectedTafseer, surahId, selectedAyah]);
+
+  useEffect(() => {
+    if (isVisible) loadTafseer();
+  }, [isVisible, loadTafseer]);
+
+  // Handle ayah navigation
+  const goToPrevAyah = () => {
+    if (selectedAyah > 1) {
+      const newAyah = selectedAyah - 1;
+      setSelectedAyah(newAyah);
+      if (onAyahChange) onAyahChange(newAyah);
+    }
+  };
+
+  const goToNextAyah = () => {
+    if (selectedAyah < totalAyahs) {
+      const newAyah = selectedAyah + 1;
+      setSelectedAyah(newAyah);
+      if (onAyahChange) onAyahChange(newAyah);
+    }
+  };
+
+  // Font sizes based on zoom
+  const fontSizes = {
+    0.8: { text: '12px', lineHeight: '1.6' },
+    0.9: { text: '13px', lineHeight: '1.7' },
+    1: { text: '14px', lineHeight: '1.8' },
+    1.1: { text: '15px', lineHeight: '1.9' },
+    1.2: { text: '16px', lineHeight: '2' },
+    1.3: { text: '18px', lineHeight: '2.1' },
+    1.4: { text: '20px', lineHeight: '2.2' },
+  };
+
+  const currentFontSize = fontSizes[textZoom] || fontSizes[1];
+
+  return (
+    <FloatingFeatureBubble
+      isVisible={isVisible}
+      onClose={onClose}
+      title="Tafseer"
+      icon={Icons.BookOpen}
+      gradient={['#8B5CF6', '#6366F1', '#4F46E5']}
+      position={{ top: '50%', right: '10px', transform: 'translateY(-50%)' }}
+      size="medium"
+    >
+      {/* Controls Row - Tafseer Source + Zoom */}
+      <div className="mb-3 pb-3 border-b border-white/20">
+        {/* Tafseer Source Selector with Icons */}
+        <div className="flex flex-wrap gap-1.5 mb-2">
+          {availableTafseers.map(t => {
+            const TafseerIcon = Icons[t.icon] || Icons.BookOpen;
+            return (
+              <button
+                key={t.id}
+                onClick={() => setSelectedTafseer(t.id)}
+                className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-[10px] font-medium transition-all ${
+                  selectedTafseer === t.id
+                    ? 'text-white shadow-lg'
+                    : 'bg-white/10 text-white/70 hover:bg-white/20'
+                }`}
+                style={{
+                  background: selectedTafseer === t.id ? `linear-gradient(135deg, ${t.color || '#8B5CF6'}, ${t.color || '#8B5CF6'}99)` : undefined,
+                  boxShadow: selectedTafseer === t.id ? `0 4px 15px ${t.color || '#8B5CF6'}40` : undefined,
+                }}
               >
-                {posInfo.ar}
-              </span>
-            </div>
+                <TafseerIcon className="w-3 h-3" />
+                {t.name}
+              </button>
+            );
+          })}
+        </div>
 
-            {/* Divider */}
-            <div className="w-16 h-1 mx-auto mb-3 bg-white/40 rounded-full" />
+        {/* Selected Tafseer Introduction */}
+        {selectedTafseer && TAFSEER_SOURCES[selectedTafseer]?.intro && (
+          <div className="px-2 py-1.5 bg-white/5 rounded-lg mb-2">
+            <p className="text-white/60 text-[10px] leading-relaxed" dir={TAFSEER_SOURCES[selectedTafseer]?.direction}>
+              {TAFSEER_SOURCES[selectedTafseer].intro}
+            </p>
+          </div>
+        )}
 
-            {/* Meaning - Main focus */}
-            <div className="bg-white/15 rounded-2xl p-3 mb-3">
-              {isLoading ? (
-                <div className="flex items-center justify-center gap-2 py-2">
-                  <Icons.Loader className="w-4 h-4 animate-spin text-white/70" />
-                  <span className="text-white/70 text-sm">Loading...</span>
-                </div>
-              ) : (
-                <p
-                  className="text-base text-white leading-relaxed font-medium"
-                  dir={isRTL ? 'rtl' : 'ltr'}
-                  style={isRTL ? { fontFamily: "'Noto Nastaliq Urdu', serif", fontSize: '1.1rem' } : {}}
-                >
-                  {meaning || 'Meaning not available'}
-                </p>
-              )}
-            </div>
-
-            {/* Grammar toggle */}
+        {/* Text Zoom Control */}
+        <div className="flex items-center justify-end gap-1">
+          <div className="flex items-center gap-1 bg-white/10 rounded-full px-2 py-1">
             <button
-              onClick={() => setShowDetails(!showDetails)}
-              className="w-full px-4 py-2 bg-white/20 hover:bg-white/30 rounded-full text-sm text-white transition-all flex items-center justify-center gap-2"
+              onClick={() => setTextZoom(Math.max(0.8, textZoom - 0.1))}
+              className="w-6 h-6 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center text-white transition-all"
+              title="Decrease text size"
             >
-              <span>{showDetails ? 'Hide Grammar' : 'Show Grammar'}</span>
-              <span className="text-xs">{showDetails ? '▲' : '▼'}</span>
+              <Icons.ZoomOut className="w-3 h-3" />
             </button>
+            <span className="text-[10px] text-white/70 w-8 text-center">{Math.round(textZoom * 100)}%</span>
+            <button
+              onClick={() => setTextZoom(Math.min(1.4, textZoom + 0.1))}
+              className="w-6 h-6 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center text-white transition-all"
+              title="Increase text size"
+            >
+              <Icons.ZoomIn className="w-3 h-3" />
+            </button>
+          </div>
+        </div>
+      </div>
 
-            {/* Grammar Details - expandable */}
-            {showDetails && wordAnalysis && (
+      {/* Verse Selector */}
+      <div className="flex items-center gap-2 mb-3 p-2 bg-white/10 rounded-xl">
+        <button
+          onClick={goToPrevAyah}
+          disabled={selectedAyah <= 1}
+          className={`w-8 h-8 rounded-full flex items-center justify-center transition-all ${
+            selectedAyah <= 1 ? 'bg-white/5 text-white/30 cursor-not-allowed' : 'bg-white/20 hover:bg-white/30 text-white'
+          }`}
+        >
+          <Icons.ChevronLeft className="w-4 h-4" />
+        </button>
+
+        <div className="flex-1 flex items-center justify-center gap-2">
+          <span className="text-white/60 text-xs">Ayah</span>
+          <select
+            value={selectedAyah}
+            onChange={(e) => {
+              const newAyah = parseInt(e.target.value);
+              setSelectedAyah(newAyah);
+              if (onAyahChange) onAyahChange(newAyah);
+            }}
+            className="bg-white/20 text-white text-sm font-bold px-3 py-1 rounded-lg cursor-pointer outline-none"
+            style={{ minWidth: '60px' }}
+          >
+            {Array.from({ length: totalAyahs }, (_, i) => i + 1).map(num => (
+              <option key={num} value={num} className="text-gray-800">{num}</option>
+            ))}
+          </select>
+          <span className="text-white/40 text-xs">of {totalAyahs}</span>
+        </div>
+
+        <button
+          onClick={goToNextAyah}
+          disabled={selectedAyah >= totalAyahs}
+          className={`w-8 h-8 rounded-full flex items-center justify-center transition-all ${
+            selectedAyah >= totalAyahs ? 'bg-white/5 text-white/30 cursor-not-allowed' : 'bg-white/20 hover:bg-white/30 text-white'
+          }`}
+        >
+          <Icons.ChevronRight className="w-4 h-4" />
+        </button>
+      </div>
+
+      {/* Tafseer Content - Increased height */}
+      <div className="flex-1 overflow-y-auto" style={{ maxHeight: '380px', minHeight: '200px' }}>
+        {loading ? (
+          <div className="flex flex-col items-center justify-center py-8">
+            <Icons.Loader className="w-8 h-8 animate-spin text-white/60 mb-2" />
+            <p className="text-white/50 text-sm">Loading tafseer...</p>
+          </div>
+        ) : tafseer?.error ? (
+          <div className="flex flex-col items-center justify-center py-8">
+            <Icons.AlertCircle className="w-10 h-10 text-white/40 mb-2" />
+            <p className="text-white/50 text-sm mb-3">{tafseer.text}</p>
+            <button
+              onClick={loadTafseer}
+              className="px-4 py-2 bg-white/20 hover:bg-white/30 rounded-full text-white text-xs transition-all"
+            >
+              Try Again
+            </button>
+          </div>
+        ) : tafseer ? (
+          <div
+            className={`text-white/90 leading-relaxed ${tafseer.direction === 'rtl' ? 'text-right' : ''}`}
+            dir={tafseer.direction}
+            style={{
+              fontFamily: tafseer.direction === 'rtl' ? "'Noto Nastaliq Urdu', 'Scheherazade New', serif" : 'inherit',
+              fontSize: currentFontSize.text,
+              lineHeight: currentFontSize.lineHeight,
+            }}
+            dangerouslySetInnerHTML={{ __html: tafseer.text }}
+          />
+        ) : null}
+      </div>
+
+      {tafseer && !tafseer.error && (
+        <div className="pt-2 mt-2 border-t border-white/10 flex items-center justify-between">
+          <p className="text-white/40 text-[10px]">Source: {tafseer.source}</p>
+          <p className="text-white/30 text-[10px]">Surah {surahId}, Ayah {selectedAyah}</p>
+        </div>
+      )}
+    </FloatingFeatureBubble>
+  );
+});
+
+// World-renowned Quran Scholars and Reciters
+const YOUTUBE_SCHOLARS = [
+  // Reciters
+  { id: 'alafasy', name: 'Mishary Rashid Alafasy', type: 'reciter', country: 'Kuwait', channel: 'allolooo', searchQuery: 'Mishary Alafasy' },
+  { id: 'sudais', name: 'Abdul Rahman Al-Sudais', type: 'reciter', country: 'Saudi Arabia', channel: '', searchQuery: 'Abdul Rahman Al Sudais' },
+  { id: 'shuraim', name: 'Saud Al-Shuraim', type: 'reciter', country: 'Saudi Arabia', channel: '', searchQuery: 'Saud Al Shuraim' },
+  { id: 'minshawi', name: 'Mohamed Siddiq Al-Minshawi', type: 'reciter', country: 'Egypt', channel: '', searchQuery: 'Minshawi' },
+  { id: 'husary', name: 'Mahmoud Khalil Al-Husary', type: 'reciter', country: 'Egypt', channel: '', searchQuery: 'Al Husary' },
+  { id: 'abdulbasit', name: 'Abdul Basit Abdul Samad', type: 'reciter', country: 'Egypt', channel: '', searchQuery: 'Abdul Basit' },
+  { id: 'maher', name: 'Maher Al Muaiqly', type: 'reciter', country: 'Saudi Arabia', channel: '', searchQuery: 'Maher Al Muaiqly' },
+  // Scholars/Explainers
+  { id: 'nouman', name: 'Nouman Ali Khan', type: 'scholar', country: 'USA', channel: 'baaboroom', searchQuery: 'Nouman Ali Khan' },
+  { id: 'mufti-menk', name: 'Mufti Menk', type: 'scholar', country: 'Zimbabwe', channel: 'MuftiMenk', searchQuery: 'Mufti Menk' },
+  { id: 'omar-suleiman', name: 'Omar Suleiman', type: 'scholar', country: 'USA', channel: 'OmarSuleiman', searchQuery: 'Omar Suleiman' },
+  { id: 'yasir-qadhi', name: 'Yasir Qadhi', type: 'scholar', country: 'USA', channel: 'YasirQadhi', searchQuery: 'Yasir Qadhi' },
+  { id: 'tariq-jameel', name: 'Maulana Tariq Jameel', type: 'scholar', country: 'Pakistan', channel: '', searchQuery: 'Tariq Jameel' },
+  { id: 'zakir-naik', name: 'Dr. Zakir Naik', type: 'scholar', country: 'India', channel: 'Abordem1', searchQuery: 'Zakir Naik' },
+  { id: 'israr-ahmed', name: 'Dr. Israr Ahmed', type: 'scholar', country: 'Pakistan', channel: '', searchQuery: 'Dr Israr Ahmed' },
+  { id: 'assim-hakeem', name: 'Assim Al Hakeem', type: 'scholar', country: 'Saudi Arabia', channel: 'assaboreem1', searchQuery: 'Assim Al Hakeem' },
+  { id: 'tahir-qadri', name: 'Dr. Tahir-ul-Qadri', type: 'scholar', country: 'Pakistan', channel: 'MinhajTV', searchQuery: 'Tahir ul Qadri' },
+  { id: 'ghamidi', name: 'Javed Ahmad Ghamidi', type: 'scholar', country: 'Pakistan', channel: 'GhamidiCenterOfIslamicLearning', searchQuery: 'Javed Ghamidi' },
+];
+
+// Videos/Lectures Floating Bubble with Scholar Selection
+const VideosFloatingBubble = memo(function VideosFloatingBubble({
+  isVisible, onClose, surahId, surahName
+}) {
+  const [selectedType, setSelectedType] = useState('all');
+  const [selectedScholar, setSelectedScholar] = useState(null);
+
+  const filteredScholars = useMemo(() => {
+    if (selectedType === 'all') return YOUTUBE_SCHOLARS;
+    return YOUTUBE_SCHOLARS.filter(s => s.type === selectedType);
+  }, [selectedType]);
+
+  const openYouTubeSearch = (scholar) => {
+    const query = `${scholar.searchQuery} Surah ${surahName} ${selectedType === 'reciter' ? 'recitation' : 'tafseer'}`;
+    window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`, '_blank');
+  };
+
+  const openGeneralSearch = (type) => {
+    const query = `Surah ${surahName} ${type}`;
+    window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`, '_blank');
+  };
+
+  return (
+    <FloatingFeatureBubble
+      isVisible={isVisible}
+      onClose={onClose}
+      title="Quran Videos"
+      icon={Icons.Video}
+      gradient={['#EF4444', '#DC2626', '#B91C1C']}
+      position={{ top: '50%', left: '10px', transform: 'translateY(-50%)' }}
+      size="medium"
+    >
+      {/* Type Filter */}
+      <div className="flex gap-1 mb-3 p-1 bg-white/10 rounded-xl">
+        {[
+          { id: 'all', label: 'All' },
+          { id: 'reciter', label: 'Reciters' },
+          { id: 'scholar', label: 'Scholars' },
+        ].map(type => (
+          <button
+            key={type.id}
+            onClick={() => setSelectedType(type.id)}
+            className={`flex-1 py-2 rounded-lg text-xs font-medium transition-all ${
+              selectedType === type.id ? 'bg-white/25 text-white' : 'text-white/60 hover:text-white'
+            }`}
+          >
+            {type.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Quick Search Buttons */}
+      <div className="flex gap-2 mb-3">
+        <button
+          onClick={() => openGeneralSearch('recitation')}
+          className="flex-1 py-2 px-3 bg-white/10 hover:bg-white/20 rounded-xl text-xs text-white font-medium transition-all flex items-center justify-center gap-2"
+        >
+          <Icons.Headphones className="w-3.5 h-3.5" />
+          Recitations
+        </button>
+        <button
+          onClick={() => openGeneralSearch('tafseer explanation')}
+          className="flex-1 py-2 px-3 bg-white/10 hover:bg-white/20 rounded-xl text-xs text-white font-medium transition-all flex items-center justify-center gap-2"
+        >
+          <Icons.BookOpen className="w-3.5 h-3.5" />
+          Tafseer
+        </button>
+      </div>
+
+      {/* Scholar/Reciter List */}
+      <div className="space-y-2 max-h-[240px] overflow-y-auto">
+        <p className="text-white/50 text-[10px] uppercase tracking-wide mb-2">
+          {selectedType === 'reciter' ? 'World-Renowned Reciters' : selectedType === 'scholar' ? 'Islamic Scholars' : 'Scholars & Reciters'}
+        </p>
+        {filteredScholars.map(scholar => (
+          <button
+            key={scholar.id}
+            onClick={() => openYouTubeSearch(scholar)}
+            className="w-full p-3 bg-white/10 hover:bg-white/20 rounded-xl transition-all text-left group"
+          >
+            <div className="flex items-center gap-3">
               <div
-                className="mt-3 p-3 bg-black/20 rounded-2xl text-left"
-                style={{ animation: 'slideDown 0.2s ease-out' }}
+                className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm"
+                style={{
+                  background: scholar.type === 'reciter'
+                    ? 'linear-gradient(135deg, #10B981, #059669)'
+                    : 'linear-gradient(135deg, #8B5CF6, #6366F1)'
+                }}
               >
-                {/* Pattern info */}
-                {wordAnalysis.pattern && (
-                  <div className="mb-2">
-                    <span className="text-[10px] text-white/60 block uppercase tracking-wide">Pattern (الوزن)</span>
-                    <span
-                      className="text-lg text-white"
-                      style={{ fontFamily: "'Scheherazade New', serif" }}
-                      dir="rtl"
-                    >
-                      {wordAnalysis.pattern}
-                    </span>
-                  </div>
-                )}
-
-                {/* Grammar description */}
-                {wordAnalysis.description && (
-                  <div className="mb-2">
-                    <span className="text-[10px] text-white/60 block uppercase tracking-wide">Type</span>
-                    <span className="text-sm text-white/90">
-                      {wordAnalysis.description}
-                    </span>
-                  </div>
-                )}
-
-                {/* Learning tip */}
-                <div className="mt-3 p-2 bg-white/10 rounded-xl">
-                  <p className="text-[10px] text-white/70">
-                    💡 Learn Quranic Arabic by understanding word patterns and grammar.
-                  </p>
+                {scholar.name.charAt(0)}
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-white text-sm font-medium">{scholar.name}</p>
+                <div className="flex items-center gap-2">
+                  <span className={`text-[10px] px-2 py-0.5 rounded-full ${
+                    scholar.type === 'reciter' ? 'bg-emerald-500/30 text-emerald-300' : 'bg-purple-500/30 text-purple-300'
+                  }`}>
+                    {scholar.type === 'reciter' ? 'Reciter' : 'Scholar'}
+                  </span>
+                  <span className="text-white/40 text-[10px]">{scholar.country}</span>
                 </div>
               </div>
-            )}
-
-            {/* Language indicator */}
-            <div className="mt-3 text-center space-y-1">
-              <span className="inline-block px-3 py-1 bg-white/20 rounded-full text-[10px] text-white/70">
-                {langName}
-              </span>
+              <Icons.ExternalLink className="w-4 h-4 text-white/40 group-hover:text-white/70 transition-colors" />
             </div>
+          </button>
+        ))}
+      </div>
+
+      {/* Footer */}
+      <div className="pt-3 mt-3 border-t border-white/10">
+        <p className="text-white/40 text-[10px] text-center">
+          Click on any scholar to search their {surahName} videos on YouTube
+        </p>
+      </div>
+    </FloatingFeatureBubble>
+  );
+});
+
+// Memorize Floating Bubble
+const MemorizeFloatingBubble = memo(function MemorizeFloatingBubble({
+  isVisible, onClose, onSettingsChange, currentSettings
+}) {
+  return (
+    <FloatingFeatureBubble
+      isVisible={isVisible}
+      onClose={onClose}
+      title="Memorize Mode"
+      icon={Icons.Brain}
+      gradient={['#F59E0B', '#D97706', '#B45309']}
+      position={{ top: '50%', left: '10px', transform: 'translateY(-50%)' }}
+      size="small"
+    >
+      <MemorizePanel
+        onSettingsChange={onSettingsChange}
+        currentSettings={currentSettings}
+        onClose={onClose}
+      />
+    </FloatingFeatureBubble>
+  );
+});
+
+// Bookmark Floating Bubble
+const BookmarkFloatingBubble = memo(function BookmarkFloatingBubble({
+  isVisible, onClose, surahId, surahName, ayahNumber, verseArabic
+}) {
+  return (
+    <FloatingFeatureBubble
+      isVisible={isVisible}
+      onClose={onClose}
+      title="Bookmarks"
+      icon={Icons.Bookmark}
+      gradient={['#EC4899', '#DB2777', '#BE185D']}
+      position={{ top: '50%', left: '10px', transform: 'translateY(-50%)' }}
+      size="medium"
+    >
+      <BookmarksPanel
+        surahId={surahId}
+        surahName={surahName}
+        ayahNumber={ayahNumber}
+        verseArabic={verseArabic}
+        onClose={onClose}
+      />
+    </FloatingFeatureBubble>
+  );
+});
+
+// Share Floating Bubble
+const ShareFloatingBubble = memo(function ShareFloatingBubble({
+  isVisible, onClose, surahId, surahName, ayahNumber, verseArabic, verseTranslation, multipleVerses
+}) {
+  return (
+    <FloatingFeatureBubble
+      isVisible={isVisible}
+      onClose={onClose}
+      title="Share"
+      icon={Icons.Share}
+      gradient={['#10B981', '#059669', '#047857']}
+      position={{ top: '50%', left: '10px', transform: 'translateY(-50%)' }}
+      size="medium"
+    >
+      <SharePanel
+        surahId={surahId}
+        surahName={surahName}
+        ayahNumber={ayahNumber}
+        verseArabic={verseArabic}
+        verseTranslation={verseTranslation}
+        multipleVerses={multipleVerses}
+        onClose={onClose}
+      />
+    </FloatingFeatureBubble>
+  );
+});
+
+// Small Feature Toggle Buttons (shown inside main bubble)
+const FeatureToggleButtons = memo(function FeatureToggleButtons({ activeFeature, onToggle }) {
+  const buttons = [
+    { id: 'tafseer', icon: Icons.BookOpen, label: 'Tafseer', color: '#8B5CF6' },
+    { id: 'youtube', icon: Icons.Video, label: 'Videos', color: '#EF4444' },
+    { id: 'memorize', icon: Icons.Brain, label: 'Memorize', color: '#F59E0B' },
+    { id: 'bookmark', icon: Icons.Bookmark, label: 'Bookmark', color: '#EC4899' },
+    { id: 'share', icon: Icons.Share, label: 'Share', color: '#10B981' },
+  ];
+
+  return (
+    <div className="flex items-center gap-1.5 flex-wrap justify-center">
+      {buttons.map(btn => {
+        const Icon = btn.icon;
+        const isActive = activeFeature === btn.id;
+        return (
+          <button
+            key={btn.id}
+            onClick={() => onToggle(isActive ? null : btn.id)}
+            className={`relative px-2.5 py-1.5 rounded-full text-[10px] font-medium transition-all flex items-center gap-1.5 ${
+              isActive ? 'text-white scale-105' : 'text-white/70 hover:text-white hover:scale-105'
+            }`}
+            style={{
+              background: isActive ? `linear-gradient(135deg, ${btn.color}cc, ${btn.color}99)` : 'rgba(255,255,255,0.15)',
+              boxShadow: isActive ? `0 4px 15px ${btn.color}50` : 'none',
+            }}
+          >
+            <Icon className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline">{btn.label}</span>
+          </button>
+        );
+      })}
+    </div>
+  );
+});
+
+// ============================================
+// FEATURE PANELS
+// ============================================
+
+// Tafseer Panel with Multi-language Support
+const TafseerPanel = memo(function TafseerPanel({ surahId, ayahNumber, verseArabic, translationId, onClose }) {
+  const [tafseer, setTafseer] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [selectedTafseer, setSelectedTafseer] = useState(null);
+  const [retryCount, setRetryCount] = useState(0);
+
+  const tafseerLang = TRANSLATION_TO_TAFSEER_LANG[translationId] || 'en';
+  const availableTafseers = getTafseersByLanguage(tafseerLang);
+
+  useEffect(() => {
+    // Reset selection when language changes
+    if (availableTafseers.length > 0) {
+      const defaultTafseer = availableTafseers[0].id;
+      setSelectedTafseer(defaultTafseer);
+    }
+  }, [tafseerLang]);
+
+  const loadTafseer = useCallback(async () => {
+    if (!selectedTafseer || !surahId || !ayahNumber) return;
+    setLoading(true);
+    setTafseer(null);
+    try {
+      const result = await fetchTafseer(surahId, ayahNumber, selectedTafseer);
+      setTafseer(result);
+    } catch {
+      setTafseer({ text: 'Failed to load tafseer. Please try again.', error: true });
+    }
+    setLoading(false);
+  }, [selectedTafseer, surahId, ayahNumber]);
+
+  useEffect(() => {
+    loadTafseer();
+  }, [loadTafseer, retryCount]);
+
+  const handleRetry = () => {
+    setRetryCount(prev => prev + 1);
+  };
+
+  return (
+    <div className="h-full flex flex-col">
+      <div className="flex-shrink-0 flex items-center justify-between pb-3 border-b border-white/20">
+        <div className="flex items-center gap-2">
+          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center">
+            <Icons.BookOpen className="w-5 h-5 text-white" />
+          </div>
+          <div>
+            <h3 className="text-white font-bold">Tafseer</h3>
+            <p className="text-white/60 text-xs">Ayah {ayahNumber}</p>
+          </div>
+        </div>
+        <button onClick={onClose} className="p-2 rounded-full hover:bg-white/10 transition-all">
+          <Icons.X className="w-4 h-4 text-white/70" />
+        </button>
+      </div>
+
+      <div className="flex-shrink-0 py-3 border-b border-white/10">
+        <div className="flex flex-wrap gap-1">
+          {availableTafseers.map(t => (
+            <button key={t.id} onClick={() => setSelectedTafseer(t.id)}
+              className={`px-3 py-1.5 rounded-full text-xs transition-all ${selectedTafseer === t.id ? 'bg-purple-500/60 text-white font-medium' : 'bg-white/10 text-white/70 hover:bg-white/20'}`}>
+              {t.name}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="flex-shrink-0 py-3 bg-white/5 rounded-xl my-2 px-3">
+        <p className="text-white text-right leading-loose" style={{ fontFamily: "'Scheherazade New', serif", fontSize: '1.1rem' }} dir="rtl">
+          {verseArabic?.substring(0, 150)}{verseArabic?.length > 150 ? '...' : ''}
+        </p>
+      </div>
+
+      <div className="flex-1 overflow-y-auto py-2">
+        {loading ? (
+          <div className="flex flex-col items-center justify-center py-8">
+            <Icons.Loader className="w-8 h-8 animate-spin text-purple-400 mb-2" />
+            <p className="text-white/50 text-xs">Loading tafseer...</p>
+          </div>
+        ) : tafseer?.error ? (
+          <div className="flex flex-col items-center justify-center py-8">
+            <Icons.AlertCircle className="w-10 h-10 text-red-400/60 mb-2" />
+            <p className="text-white/50 text-center text-sm mb-3">{tafseer.text}</p>
+            <button
+              onClick={handleRetry}
+              className="px-4 py-2 bg-purple-500/40 hover:bg-purple-500/60 rounded-full text-white text-xs font-medium transition-all"
+            >
+              Try Again
+            </button>
+          </div>
+        ) : tafseer ? (
+          <div
+            className={`text-white/90 leading-loose ${tafseer.direction === 'rtl' ? 'text-right' : ''}`}
+            dir={tafseer.direction}
+            style={{
+              fontFamily: tafseer.direction === 'rtl' ? "'Noto Nastaliq Urdu', 'Scheherazade New', serif" : 'inherit',
+              fontSize: tafseer.direction === 'rtl' ? '1rem' : '0.9rem',
+              lineHeight: tafseer.direction === 'rtl' ? '2' : '1.75',
+            }}
+            dangerouslySetInnerHTML={{ __html: tafseer.text }}
+          />
+        ) : (
+          <div className="flex flex-col items-center justify-center py-8">
+            <Icons.BookOpen className="w-10 h-10 text-white/30 mb-2" />
+            <p className="text-white/50 text-center text-sm">Select a tafseer source above</p>
+          </div>
+        )}
+      </div>
+
+      {tafseer && !tafseer.error && (
+        <div className="flex-shrink-0 pt-2 border-t border-white/10">
+          <p className="text-white/40 text-[10px]">Source: {tafseer.source}</p>
+        </div>
+      )}
+    </div>
+  );
+});
+
+// Memorization Panel
+const MemorizePanel = memo(function MemorizePanel({ onSettingsChange, currentSettings, onClose }) {
+  const [hideLevel, setHideLevel] = useState(currentSettings?.hideLevel || 0);
+  const [repeatCount, setRepeatCount] = useState(3);
+
+  useEffect(() => {
+    onSettingsChange({ hideLevel, repeatCount });
+  }, [hideLevel, repeatCount, onSettingsChange]);
+
+  const HIDE_LEVELS = [
+    { level: 0, label: 'Show All', desc: 'All words visible', bars: 5 },
+    { level: 1, label: 'Hide 25%', desc: 'Every 4th word hidden', bars: 4 },
+    { level: 2, label: 'Hide 50%', desc: 'Every 2nd word hidden', bars: 3 },
+    { level: 3, label: 'Hide 75%', desc: 'Most words hidden', bars: 2 },
+    { level: 4, label: 'Hide All', desc: 'All words hidden', bars: 1 },
+  ];
+
+  return (
+    <div className="h-full flex flex-col">
+      <div className="flex-shrink-0 flex items-center justify-between pb-3 border-b border-white/20">
+        <div className="flex items-center gap-2">
+          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center">
+            <Icons.Brain className="w-5 h-5 text-white" />
+          </div>
+          <div>
+            <h3 className="text-white font-bold">Memorize</h3>
+            <p className="text-white/60 text-xs">Hifz Mode</p>
+          </div>
+        </div>
+        <button onClick={onClose} className="p-2 rounded-full hover:bg-white/10 transition-all">
+          <Icons.X className="w-4 h-4 text-white/70" />
+        </button>
+      </div>
+
+      <div className="flex-1 overflow-y-auto py-3 space-y-4">
+        <div>
+          <label className="text-white/80 text-xs font-medium mb-2 block">Word Visibility</label>
+          <div className="space-y-2">
+            {HIDE_LEVELS.map(({ level, label, desc, bars }) => (
+              <button key={level} onClick={() => setHideLevel(level)}
+                className={`w-full p-3 rounded-xl text-left transition-all ${hideLevel === level ? 'bg-amber-500/30 ring-2 ring-amber-400/50' : 'bg-white/10 hover:bg-white/15'}`}>
+                <div className="flex items-center justify-between">
+                  <span className="text-white text-sm font-medium">{label}</span>
+                  <div className="flex gap-0.5">
+                    {[...Array(5)].map((_, i) => (
+                      <div key={i} className={`w-2 h-4 rounded ${i < bars ? 'bg-amber-400' : 'bg-white/20'}`} />
+                    ))}
+                  </div>
+                </div>
+                <p className="text-white/50 text-xs mt-0.5">{desc}</p>
+              </button>
+            ))}
           </div>
         </div>
 
-        {/* Bubble pointer/tail pointing left */}
-        <div
-          className="absolute left-0 top-1/2 -translate-x-full -translate-y-1/2"
-          style={{
-            width: 0,
-            height: 0,
-            borderTop: '15px solid transparent',
-            borderBottom: '15px solid transparent',
-            borderRight: `20px solid ${palette?.colors?.[0] || '#6366f1'}f5`,
-            filter: 'drop-shadow(-4px 0 8px rgba(0,0,0,0.3))',
-          }}
-        />
+        <div>
+          <label className="text-white/80 text-xs font-medium mb-2 block">Repeat Each Ayah</label>
+          <div className="flex gap-2">
+            {[1, 3, 5, 7, 10].map(count => (
+              <button key={count} onClick={() => setRepeatCount(count)}
+                className={`flex-1 py-2.5 rounded-xl text-sm font-medium transition-all ${repeatCount === count ? 'bg-amber-500/50 text-white' : 'bg-white/10 text-white/70 hover:bg-white/20'}`}>
+                {count}x
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="p-4 bg-gradient-to-br from-amber-500/20 to-orange-500/20 rounded-xl">
+          <div className="flex items-start gap-3">
+            <span className="text-2xl">💡</span>
+            <div>
+              <p className="text-white font-medium text-sm mb-1">Memorization Tip</p>
+              <p className="text-white/70 text-xs leading-relaxed">
+                Start with "Show All" and recite along with audio. Gradually increase the hide level as you become more confident.
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
+    </div>
+  );
+});
+
+// Bookmarks Panel
+const BookmarksPanel = memo(function BookmarksPanel({ surahId, surahName, ayahNumber, verseArabic, onClose }) {
+  const [bookmarks, setBookmarks] = useLocalStorage('quran_bookmarks', []);
+  const [notes, setNotes] = useState('');
+  const [showNoteInput, setShowNoteInput] = useState(false);
+
+  const isCurrentBookmarked = bookmarks.some(b => b.surahId === surahId && b.ayahNumber === ayahNumber);
+
+  const addBookmark = () => {
+    const newBookmark = { id: Date.now(), surahId, surahName, ayahNumber, versePreview: verseArabic?.substring(0, 60), note: notes, timestamp: new Date().toISOString() };
+    setBookmarks([newBookmark, ...bookmarks]);
+    setNotes('');
+    setShowNoteInput(false);
+  };
+
+  const removeBookmark = (id) => setBookmarks(bookmarks.filter(b => b.id !== id));
+
+  return (
+    <div className="h-full flex flex-col">
+      <div className="flex-shrink-0 flex items-center justify-between pb-3 border-b border-white/20">
+        <div className="flex items-center gap-2">
+          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-pink-500 to-rose-600 flex items-center justify-center">
+            <Icons.Bookmark className="w-5 h-5 text-white" />
+          </div>
+          <div>
+            <h3 className="text-white font-bold">Bookmarks</h3>
+            <p className="text-white/60 text-xs">{bookmarks.length} saved</p>
+          </div>
+        </div>
+        <button onClick={onClose} className="p-2 rounded-full hover:bg-white/10 transition-all">
+          <Icons.X className="w-4 h-4 text-white/70" />
+        </button>
+      </div>
+
+      <div className="flex-shrink-0 py-3 border-b border-white/10">
+        {isCurrentBookmarked ? (
+          <div className="flex items-center gap-2 p-3 bg-pink-500/20 rounded-xl">
+            <Icons.Check className="w-5 h-5 text-pink-400" />
+            <span className="text-white/80 text-sm">Ayah {ayahNumber} is bookmarked</span>
+          </div>
+        ) : showNoteInput ? (
+          <div className="space-y-2">
+            <textarea value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Add a note (optional)..."
+              className="w-full p-3 bg-white/10 rounded-xl text-white text-sm placeholder-white/40 resize-none" rows={2} />
+            <div className="flex gap-2">
+              <button onClick={addBookmark} className="flex-1 py-2 bg-pink-500/50 hover:bg-pink-500/70 rounded-xl text-white text-sm font-medium transition-all">Save</button>
+              <button onClick={() => setShowNoteInput(false)} className="px-4 py-2 bg-white/10 hover:bg-white/20 rounded-xl text-white/70 text-sm transition-all">Cancel</button>
+            </div>
+          </div>
+        ) : (
+          <button onClick={() => setShowNoteInput(true)}
+            className="w-full py-3 bg-gradient-to-r from-pink-500/40 to-rose-500/40 hover:from-pink-500/60 hover:to-rose-500/60 rounded-xl text-white font-medium transition-all flex items-center justify-center gap-2">
+            <Icons.Plus className="w-4 h-4" /> Bookmark Ayah {ayahNumber}
+          </button>
+        )}
+      </div>
+
+      <div className="flex-1 overflow-y-auto py-3 space-y-2">
+        {bookmarks.length === 0 ? (
+          <div className="text-center py-8">
+            <Icons.Bookmark className="w-12 h-12 mx-auto text-white/20 mb-3" />
+            <p className="text-white/50 text-sm">No bookmarks yet</p>
+          </div>
+        ) : (
+          bookmarks.map(bookmark => (
+            <div key={bookmark.id} className="p-3 bg-white/10 rounded-xl hover:bg-white/15 transition-all group">
+              <div className="flex items-start justify-between gap-2">
+                <div className="flex-1 min-w-0">
+                  <p className="text-white font-medium text-sm">{bookmark.surahName} : {bookmark.ayahNumber}</p>
+                  <p className="text-white/50 text-xs truncate mt-1" dir="rtl" style={{ fontFamily: "'Scheherazade New', serif" }}>{bookmark.versePreview}...</p>
+                  {bookmark.note && <p className="text-white/40 text-xs mt-1 italic">"{bookmark.note}"</p>}
+                </div>
+                <button onClick={() => removeBookmark(bookmark.id)} className="p-1.5 rounded-full opacity-0 group-hover:opacity-100 hover:bg-white/20 transition-all">
+                  <Icons.X className="w-3 h-3 text-white/50" />
+                </button>
+              </div>
+            </div>
+          ))
+        )}
+      </div>
+    </div>
+  );
+});
+
+// YouTube Videos Panel
+const YouTubePanel = memo(function YouTubePanel({ surahId, surahName, onClose }) {
+  const [category, setCategory] = useState('tafseer');
+  const [selectedVideo, setSelectedVideo] = useState(null);
+
+  const videos = getVideosForSurah(surahId, category);
+  const allVideos = useMemo(() => {
+    const surahVideos = getVideosForSurah(surahId);
+    if (!surahVideos) return [];
+    return [...(surahVideos.tafseer || []), ...(surahVideos.recitation || []), ...(surahVideos.lecture || [])];
+  }, [surahId]);
+
+  const CATEGORIES = [
+    { id: 'tafseer', label: 'Tafseer', icon: 'BookOpen' },
+    { id: 'recitation', label: 'Recitation', icon: 'Headphones' },
+    { id: 'lecture', label: 'Lectures', icon: 'Video' },
+  ];
+
+  return (
+    <>
+      <div className="h-full flex flex-col">
+        <div className="flex-shrink-0 flex items-center justify-between pb-3 border-b border-white/20">
+          <div className="flex items-center gap-2">
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-red-500 to-rose-600 flex items-center justify-center">
+              <Icons.Video className="w-5 h-5 text-white" />
+            </div>
+            <div>
+              <h3 className="text-white font-bold">Video Lectures</h3>
+              <p className="text-white/60 text-xs">{surahName}</p>
+            </div>
+          </div>
+          <button onClick={onClose} className="p-2 rounded-full hover:bg-white/10 transition-all">
+            <Icons.X className="w-4 h-4 text-white/70" />
+          </button>
+        </div>
+
+        <div className="flex-shrink-0 flex gap-1 py-3 border-b border-white/10">
+          {CATEGORIES.map(cat => {
+            const Icon = Icons[cat.icon] || Icons.Video;
+            return (
+              <button key={cat.id} onClick={() => setCategory(cat.id)}
+                className={`flex-1 py-2 rounded-xl text-xs font-medium transition-all flex items-center justify-center gap-1.5 ${category === cat.id ? 'bg-red-500/40 text-white' : 'bg-white/10 text-white/70 hover:bg-white/15'}`}>
+                <Icon className="w-3.5 h-3.5" /> {cat.label}
+              </button>
+            );
+          })}
+        </div>
+
+        <div className="flex-1 overflow-y-auto py-3 space-y-2">
+          {!videos || videos.length === 0 ? (
+            <div className="text-center py-8">
+              <Icons.Video className="w-12 h-12 mx-auto text-white/20 mb-3" />
+              <p className="text-white/50 text-sm mb-4">No curated videos yet</p>
+              <a href={`https://www.youtube.com/results?search_query=${encodeURIComponent(generateSearchQuery(surahName, category))}`}
+                target="_blank" rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-4 py-2 bg-red-500/30 hover:bg-red-500/50 rounded-xl text-white text-sm transition-all">
+                <Icons.Search className="w-4 h-4" /> Search YouTube
+              </a>
+            </div>
+          ) : (
+            videos.map(video => {
+              const scholar = SCHOLARS[video.scholar];
+              return (
+                <button key={video.id} onClick={() => setSelectedVideo(video)}
+                  className="w-full p-3 bg-white/10 rounded-xl hover:bg-white/15 transition-all text-left group">
+                  <div className="flex gap-3">
+                    <div className="w-20 h-12 bg-red-500/30 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:bg-red-500/50 transition-all">
+                      <Icons.Play className="w-5 h-5 text-white group-hover:scale-110 transition-transform" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-white text-sm font-medium line-clamp-2">{video.title}</p>
+                      <div className="flex items-center gap-2 mt-1 flex-wrap">
+                        {scholar && (
+                          <>
+                            <span className="text-white/60 text-xs">{scholar.name}</span>
+                            {scholar.verified && <Icons.CheckCircle className="w-3 h-3 text-blue-400" />}
+                          </>
+                        )}
+                        {video.duration && <><span className="text-white/30">|</span><span className="text-white/50 text-xs">{video.duration}</span></>}
+                      </div>
+                    </div>
+                  </div>
+                </button>
+              );
+            })
+          )}
+        </div>
+      </div>
+
+      {selectedVideo && (
+        <YouTubePlayer videoId={selectedVideo.id} title={selectedVideo.title} scholarId={selectedVideo.scholar}
+          duration={selectedVideo.duration} onClose={() => setSelectedVideo(null)} relatedVideos={allVideos} onVideoSelect={setSelectedVideo} />
+      )}
     </>
   );
 });
 
-const BubbleReaderOverlay = memo(function BubbleReaderOverlay({
-  surah,
-  onClose,
-  darkMode,
-  onChangeSurah, // New prop for surah navigation
-}) {
-  // Settings State
+// Share Panel
+const SharePanel = memo(function SharePanel({ surahId, surahName, ayahNumber, verseArabic, verseTranslation, multipleVerses, onClose }) {
+  const [shareStatus, setShareStatus] = useState(null);
+  const [downloadStatus, setDownloadStatus] = useState(null);
+  const [selectedStyle, setSelectedStyle] = useState('classic');
+  const cardRef = useRef(null);
+
+  // Check if we have multiple verses
+  const isMultiple = multipleVerses && multipleVerses.length > 1;
+  const versesToShare = isMultiple ? multipleVerses : [{ ayahNumber, arabic: verseArabic, translation: verseTranslation }];
+
+  const STYLES = [
+    { id: 'classic', name: 'Classic', bg: 'linear-gradient(135deg, #1a1a2e, #16213e)', colors: ['#1a1a2e', '#16213e'] },
+    { id: 'sunset', name: 'Sunset', bg: 'linear-gradient(135deg, #ff6b6b, #feca57)', colors: ['#ff6b6b', '#feca57'] },
+    { id: 'ocean', name: 'Ocean', bg: 'linear-gradient(135deg, #667eea, #764ba2)', colors: ['#667eea', '#764ba2'] },
+    { id: 'forest', name: 'Forest', bg: 'linear-gradient(135deg, #11998e, #38ef7d)', colors: ['#11998e', '#38ef7d'] },
+    { id: 'gold', name: 'Gold', bg: 'linear-gradient(135deg, #f5af19, #f12711)', colors: ['#f5af19', '#f12711'] },
+    { id: 'midnight', name: 'Midnight', bg: 'linear-gradient(135deg, #232526, #414345)', colors: ['#232526', '#414345'] },
+  ];
+
+  // Generate ayah range string for multiple verses
+  const ayahRangeStr = isMultiple
+    ? `${versesToShare[0].ayahNumber}-${versesToShare[versesToShare.length - 1].ayahNumber}`
+    : ayahNumber;
+
+  const handleShare = async () => {
+    setShareStatus('generating');
+    try {
+      if (isMultiple) {
+        // Share multiple verses
+        const combinedArabic = versesToShare.map(v => v.arabic).join(' ');
+        const combinedTranslation = versesToShare.map(v => v.translation).join(' ');
+        await shareVerse({ surahName, surahId, ayahNumber: ayahRangeStr, arabic: combinedArabic, translation: combinedTranslation });
+      } else {
+        await shareVerse({ surahName, surahId, ayahNumber, arabic: verseArabic, translation: verseTranslation });
+      }
+      setShareStatus('copied');
+      setTimeout(() => setShareStatus(null), 2000);
+    } catch {
+      setShareStatus('error');
+      setTimeout(() => setShareStatus(null), 2000);
+    }
+  };
+
+  const copyText = () => {
+    let text;
+    if (isMultiple) {
+      text = versesToShare.map(v =>
+        `${v.arabic}\n"${v.translation}"\n(${surahId}:${v.ayahNumber})`
+      ).join('\n\n') + `\n\n— ${surahName}`;
+    } else {
+      text = `${verseArabic}\n\n"${verseTranslation}"\n\n— ${surahName} (${surahId}:${ayahNumber})`;
+    }
+    navigator.clipboard.writeText(text);
+    setShareStatus('copied');
+    setTimeout(() => setShareStatus(null), 2000);
+  };
+
+  // Download image function
+  const downloadImage = async () => {
+    setDownloadStatus('generating');
+    try {
+      const style = STYLES.find(s => s.id === selectedStyle);
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+
+      // Set canvas size (Instagram story size)
+      canvas.width = 1080;
+      canvas.height = 1920;
+
+      // Create gradient background
+      const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+      gradient.addColorStop(0, style.colors[0]);
+      gradient.addColorStop(1, style.colors[1]);
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Add decorative elements
+      ctx.globalAlpha = 0.1;
+      ctx.beginPath();
+      ctx.arc(canvas.width * 0.8, canvas.height * 0.2, 300, 0, Math.PI * 2);
+      ctx.fillStyle = '#ffffff';
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(canvas.width * 0.2, canvas.height * 0.8, 250, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.globalAlpha = 1;
+
+      // Add Islamic pattern border
+      ctx.strokeStyle = 'rgba(255,255,255,0.2)';
+      ctx.lineWidth = 4;
+      ctx.strokeRect(40, 40, canvas.width - 80, canvas.height - 80);
+      ctx.strokeRect(60, 60, canvas.width - 120, canvas.height - 120);
+
+      // Bismillah at top
+      ctx.font = '48px "Scheherazade New", serif';
+      ctx.fillStyle = 'rgba(255,255,255,0.6)';
+      ctx.textAlign = 'center';
+      ctx.fillText('بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ', canvas.width / 2, 150);
+
+      // Arabic verse
+      ctx.font = '72px "Scheherazade New", serif';
+      ctx.fillStyle = '#ffffff';
+      ctx.textAlign = 'center';
+
+      // Word wrap for Arabic text
+      const arabicText = verseArabic || '';
+      const maxWidth = canvas.width - 160;
+      const words = arabicText.split(' ');
+      let lines = [];
+      let currentLine = '';
+
+      for (let word of words) {
+        const testLine = currentLine ? currentLine + ' ' + word : word;
+        const metrics = ctx.measureText(testLine);
+        if (metrics.width > maxWidth && currentLine) {
+          lines.push(currentLine);
+          currentLine = word;
+        } else {
+          currentLine = testLine;
+        }
+      }
+      if (currentLine) lines.push(currentLine);
+
+      // Draw Arabic lines
+      const arabicStartY = 500;
+      const arabicLineHeight = 120;
+      lines.forEach((line, i) => {
+        ctx.fillText(line, canvas.width / 2, arabicStartY + i * arabicLineHeight);
+      });
+
+      // Translation
+      ctx.font = 'italic 36px Georgia, serif';
+      ctx.fillStyle = 'rgba(255,255,255,0.85)';
+
+      const translationText = verseTranslation || '';
+      const transWords = translationText.split(' ');
+      let transLines = [];
+      let transCurrentLine = '';
+
+      for (let word of transWords) {
+        const testLine = transCurrentLine ? transCurrentLine + ' ' + word : word;
+        const metrics = ctx.measureText(testLine);
+        if (metrics.width > maxWidth - 100 && transCurrentLine) {
+          transLines.push(transCurrentLine);
+          transCurrentLine = word;
+        } else {
+          transCurrentLine = testLine;
+        }
+      }
+      if (transCurrentLine) transLines.push(transCurrentLine);
+
+      // Draw translation lines
+      const transStartY = arabicStartY + lines.length * arabicLineHeight + 150;
+      const transLineHeight = 55;
+      transLines.slice(0, 8).forEach((line, i) => {
+        ctx.fillText(`"${line}${i === transLines.length - 1 || i === 7 ? '"' : ''}`, canvas.width / 2, transStartY + i * transLineHeight);
+      });
+
+      // Surah reference
+      ctx.font = '32px Georgia, serif';
+      ctx.fillStyle = 'rgba(255,255,255,0.7)';
+      ctx.fillText(`— ${surahName} (${surahId}:${ayahNumber})`, canvas.width / 2, canvas.height - 200);
+
+      // App branding
+      ctx.font = '24px Arial, sans-serif';
+      ctx.fillStyle = 'rgba(255,255,255,0.4)';
+      ctx.fillText('Quran App', canvas.width / 2, canvas.height - 100);
+
+      // Convert to blob and download
+      canvas.toBlob((blob) => {
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `Quran_${surahName}_${surahId}_${ayahNumber}.png`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+        setDownloadStatus('done');
+        setTimeout(() => setDownloadStatus(null), 2000);
+      }, 'image/png');
+
+    } catch (error) {
+      console.error('Error generating image:', error);
+      setDownloadStatus('error');
+      setTimeout(() => setDownloadStatus(null), 2000);
+    }
+  };
+
+  return (
+    <div className="h-full flex flex-col">
+      <div className="flex-shrink-0 flex items-center justify-between pb-3 border-b border-white/20">
+        <div className="flex items-center gap-2">
+          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center">
+            <Icons.Share className="w-5 h-5 text-white" />
+          </div>
+          <div>
+            <h3 className="text-white font-bold">{isMultiple ? `Share ${versesToShare.length} Verses` : 'Share Verse'}</h3>
+            <p className="text-white/60 text-xs">{surahName} : {ayahRangeStr}</p>
+          </div>
+        </div>
+        <button onClick={onClose} className="p-2 rounded-full hover:bg-white/10 transition-all">
+          <Icons.X className="w-4 h-4 text-white/70" />
+        </button>
+      </div>
+
+      <div className="flex-1 overflow-y-auto py-3 space-y-4">
+        {/* Preview Card */}
+        <div ref={cardRef} className="p-4 rounded-2xl max-h-48 overflow-y-auto" style={{ background: STYLES.find(s => s.id === selectedStyle)?.bg }}>
+          {isMultiple ? (
+            <div className="space-y-3">
+              {versesToShare.slice(0, 3).map((v, i) => (
+                <div key={v.ayahNumber} className="text-center">
+                  <p className="text-white text-base leading-relaxed" style={{ fontFamily: "'Scheherazade New', serif" }} dir="rtl">
+                    {v.arabic?.substring(0, 60)}{v.arabic?.length > 60 ? '...' : ''} <span className="text-white/50 text-xs">({v.ayahNumber})</span>
+                  </p>
+                  <p className="text-white/70 text-xs italic">"{v.translation?.substring(0, 60)}{v.translation?.length > 60 ? '...' : ''}"</p>
+                </div>
+              ))}
+              {versesToShare.length > 3 && (
+                <p className="text-white/50 text-xs text-center">...and {versesToShare.length - 3} more verse(s)</p>
+              )}
+            </div>
+          ) : (
+            <>
+              <p className="text-white text-lg mb-3 leading-relaxed text-center" style={{ fontFamily: "'Scheherazade New', serif" }} dir="rtl">
+                {verseArabic?.substring(0, 100)}{verseArabic?.length > 100 ? '...' : ''}
+              </p>
+              <p className="text-white/80 text-sm italic text-center mb-2">"{verseTranslation?.substring(0, 120)}{verseTranslation?.length > 120 ? '...' : ''}"</p>
+            </>
+          )}
+          <p className="text-white/60 text-xs text-center mt-2">— {surahName} ({surahId}:{ayahRangeStr})</p>
+        </div>
+
+        {/* Style Selector */}
+        <div>
+          <label className="text-white/80 text-xs font-medium mb-2 block">Card Style</label>
+          <div className="grid grid-cols-6 gap-2">
+            {STYLES.map(style => (
+              <button key={style.id} onClick={() => setSelectedStyle(style.id)}
+                className={`aspect-square rounded-xl transition-all ${selectedStyle === style.id ? 'ring-2 ring-white scale-105' : 'opacity-70 hover:opacity-100'}`}
+                style={{ background: style.bg }}
+                title={style.name}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* Action Buttons */}
+        <div className="space-y-2">
+          {/* Download Image Button */}
+          <button onClick={downloadImage} disabled={downloadStatus === 'generating'}
+            className="w-full py-3 bg-gradient-to-r from-purple-500/60 to-pink-500/60 hover:from-purple-500/80 hover:to-pink-500/80 rounded-xl text-white font-medium transition-all flex items-center justify-center gap-2 disabled:opacity-50">
+            {downloadStatus === 'generating' ? (
+              <><Icons.Loader className="w-5 h-5 animate-spin" /> Generating...</>
+            ) : downloadStatus === 'done' ? (
+              <><Icons.Check className="w-5 h-5" /> Downloaded!</>
+            ) : (
+              <><Icons.Download className="w-5 h-5" /> Download Image</>
+            )}
+          </button>
+
+          {/* Share Button */}
+          <button onClick={handleShare} disabled={shareStatus === 'generating'}
+            className="w-full py-3 bg-gradient-to-r from-emerald-500/60 to-teal-500/60 hover:from-emerald-500/80 hover:to-teal-500/80 rounded-xl text-white font-medium transition-all flex items-center justify-center gap-2 disabled:opacity-50">
+            {shareStatus === 'generating' ? <Icons.Loader className="w-5 h-5 animate-spin" /> : shareStatus === 'copied' ? <><Icons.Check className="w-5 h-5" /> Copied!</> : <><Icons.Share className="w-5 h-5" /> Share</>}
+          </button>
+
+          {/* Copy Text */}
+          <button onClick={copyText} className="w-full py-2.5 bg-white/10 hover:bg-white/20 rounded-xl text-white/80 font-medium transition-all flex items-center justify-center gap-2">
+            <Icons.Copy className="w-4 h-4" /> Copy Text
+          </button>
+
+          {/* Social Buttons */}
+          <div className="flex gap-2">
+            <button onClick={() => window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(`"${verseTranslation?.substring(0, 200)}..." — ${surahName} (${surahId}:${ayahNumber})`)}`, '_blank')}
+              className="flex-1 py-2.5 bg-[#1DA1F2]/30 hover:bg-[#1DA1F2]/50 rounded-xl text-white font-medium transition-all text-sm">Twitter</button>
+            <button onClick={() => window.open(`https://wa.me/?text=${encodeURIComponent(`${verseArabic}\n\n"${verseTranslation}"\n\n— ${surahName} (${surahId}:${ayahNumber})`)}`, '_blank')}
+              className="flex-1 py-2.5 bg-[#25D366]/30 hover:bg-[#25D366]/50 rounded-xl text-white font-medium transition-all text-sm">WhatsApp</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+});
+
+// ============================================
+// MAIN COMPONENT
+// ============================================
+
+const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, darkMode, onChangeSurah }) {
   const [fontSize, setFontSize] = useLocalStorage('reader_fontsize', 'medium');
   const [selectedReciter, setSelectedReciter] = useLocalStorage('reader_reciter', 'ar.alafasy');
   const [selectedTranslation, setSelectedTranslation] = useLocalStorage('reader_translation', 'en.sahih');
@@ -469,19 +1374,18 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({
   const [repeatMode, setRepeatMode] = useLocalStorage('reader_repeat', 'none');
   const [autoScroll, setAutoScroll] = useLocalStorage('reader_autoscroll', true);
 
-  // UI State
   const [shareStatus, setShareStatus] = useState(null);
   const [isAnimating, setIsAnimating] = useState(true);
   const [showSettings, setShowSettings] = useState(false);
-
-  // Word selection state (for tracking active word with full data)
   const [selectedWordData, setSelectedWordData] = useState(null);
-
-  // Feature bubbles state
-  const [activeFeature, setActiveFeature] = useState(null);
+  // Separate state for right (tafseer) and left (other features) panels
+  const [showTafseer, setShowTafseer] = useState(false);
+  const [leftFeature, setLeftFeature] = useState(null); // 'youtube', 'memorize', 'bookmark', 'share'
   const [memorizeSettings, setMemorizeSettings] = useState({ hideLevel: 0 });
+  const [showSurahDetails, setShowSurahDetails] = useState(false);
+  const [selectionMode, setSelectionMode] = useState(false);
+  const [selectedVerses, setSelectedVerses] = useState([]);
 
-  // Audio State
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentAyah, setCurrentAyah] = useState(1);
   const [audioLoading, setAudioLoading] = useState(false);
@@ -491,85 +1395,61 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({
   const versesContainerRef = useRef(null);
   const startTime = useRef(Date.now());
 
-  // Refs to track current state for event handlers (avoid stale closures)
   const isPlayingRef = useRef(isPlaying);
   const currentAyahRef = useRef(currentAyah);
   const repeatModeRef = useRef(repeatMode);
-  const selectedReciterRef = useRef(selectedReciter);
 
-  // Keep refs in sync
   useEffect(() => { isPlayingRef.current = isPlaying; }, [isPlaying]);
   useEffect(() => { currentAyahRef.current = currentAyah; }, [currentAyah]);
   useEffect(() => { repeatModeRef.current = repeatMode; }, [repeatMode]);
-  useEffect(() => { selectedReciterRef.current = selectedReciter; }, [selectedReciter]);
 
-  // Fetch verses with API
-  const { verses, loading, error } = useQuranAPI(surah?.id, {
-    translationId: selectedTranslation,
-    includeTajweed: tajweedMode,
-    includeWordByWord: false, // We use the multilingual hook instead
-  });
+  const { verses, loading, error } = useQuranAPI(surah?.id, { translationId: selectedTranslation, includeTajweed: tajweedMode, includeWordByWord: false });
+  const { wordsMap, loading: wordsLoading } = useMultilingualWords(wordByWordMode ? surah?.id : null, selectedTranslation);
 
-  // Fetch word-by-word meanings (local data = multi-language, API = English only)
-  const { wordsMap, loading: wordsLoading, language: wordLang, userLanguage, isLocalData } = useMultilingualWords(
-    wordByWordMode ? surah?.id : null,
-    selectedTranslation
-  );
-
-  const palette = PALETTES[(surah?.id - 1) % 10];
+  const palette = useMemo(() => PALETTES[(surah?.id - 1) % 10], [surah?.id]);
   const totalVerses = verses.length || surah?.ayahs || 0;
   const totalVersesRef = useRef(totalVerses);
   useEffect(() => { totalVersesRef.current = totalVerses; }, [totalVerses]);
 
-  // Get prev/next surah info
-  const prevSurah = surah?.id > 1 ? SURAHS.find(s => s.id === surah.id - 1) : null;
-  const nextSurah = surah?.id < 114 ? SURAHS.find(s => s.id === surah.id + 1) : null;
+  // Memoize surah navigation to prevent recalculation on every render
+  const prevSurah = useMemo(() => surah?.id > 1 ? SURAHS.find(s => s.id === surah.id - 1) : null, [surah?.id]);
+  const nextSurah = useMemo(() => surah?.id < 114 ? SURAHS.find(s => s.id === surah.id + 1) : null, [surah?.id]);
 
-  // Font size mapping
-  const fontSizeMap = {
+  // Memoize fontSizeMap to prevent object recreation
+  const fontSizeMap = useMemo(() => ({
     small: { arabic: '1.4rem', translation: '0.8rem' },
     medium: { arabic: '1.8rem', translation: '0.95rem' },
     large: { arabic: '2.2rem', translation: '1.1rem' },
     xlarge: { arabic: '2.6rem', translation: '1.2rem' },
-  };
+  }), []);
 
-  // Initialize audio element once
+  // Memoize particle positions to prevent random regeneration on every render
+  const particles = useMemo(() =>
+    [...Array(6)].map((_, i) => ({
+      size: 3 + (i % 3) * 2,
+      left: 20 + (i * 12) % 60,
+      top: 15 + (i * 11) % 65,
+      duration: 2.5 + (i % 3) * 0.8,
+      delay: i * 0.3,
+    })), []);
+
+  // Audio setup
   useEffect(() => {
     const audio = new Audio();
     audio.preload = 'auto';
     audioRef.current = audio;
 
-    const handleCanPlay = () => {
-      setAudioLoading(false);
-      setAudioError(null);
-    };
-
-    const handleLoadStart = () => {
-      setAudioLoading(true);
-      setAudioError(null);
-    };
-
-    const handleError = () => {
-      setAudioError('Failed to load audio');
-      setAudioLoading(false);
-      setIsPlaying(false);
-    };
-
+    const handleCanPlay = () => { setAudioLoading(false); setAudioError(null); };
+    const handleLoadStart = () => { setAudioLoading(true); setAudioError(null); };
+    const handleError = () => { setAudioError('Failed to load audio'); setAudioLoading(false); setIsPlaying(false); };
     const handleEnded = () => {
       const repeat = repeatModeRef.current;
       const current = currentAyahRef.current;
       const total = totalVersesRef.current;
-
-      if (repeat === 'verse') {
-        audio.currentTime = 0;
-        audio.play().catch(console.error);
-      } else if (current < total) {
-        setCurrentAyah(prev => prev + 1);
-      } else if (repeat === 'surah') {
-        setCurrentAyah(1);
-      } else {
-        setIsPlaying(false);
-      }
+      if (repeat === 'verse') { audio.currentTime = 0; audio.play().catch(() => {}); }
+      else if (current < total) { setCurrentAyah(prev => prev + 1); }
+      else if (repeat === 'surah') { setCurrentAyah(1); }
+      else { setIsPlaying(false); }
     };
 
     audio.addEventListener('canplay', handleCanPlay);
@@ -584,517 +1464,527 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({
       audio.removeEventListener('ended', handleEnded);
       audio.pause();
       audio.src = '';
-      audioRef.current = null;
     };
-  }, []); // Empty deps - only run once
+  }, []);
 
-  // Load and play audio when source changes
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio || !surah?.id) return;
-
     const globalAyah = getGlobalAyahNumber(surah.id, currentAyah);
     const url = `${AUDIO_CDN}/${selectedReciter}/${globalAyah}.mp3`;
-
-    // Always update source when these change
     audio.pause();
     audio.src = url;
     audio.load();
 
-    // Auto-scroll to current ayah
     if (autoScroll && versesContainerRef.current) {
       const ayahElement = versesContainerRef.current.querySelector(`[data-ayah="${currentAyah}"]`);
-      if (ayahElement) {
-        ayahElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
+      if (ayahElement) ayahElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   }, [surah?.id, currentAyah, selectedReciter, autoScroll]);
 
-  // Handle play/pause separately
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
-
     if (isPlaying) {
-      const attemptPlay = () => {
-        audio.play().catch(err => {
-          if (err.name !== 'AbortError') {
-            console.error('Playback error:', err);
-            setAudioError('Playback failed');
-            setIsPlaying(false);
-          }
-        });
-      };
-
-      if (audio.readyState >= 3) {
-        attemptPlay();
-      } else {
-        const handleCanPlay = () => {
-          if (isPlayingRef.current) {
-            attemptPlay();
-          }
-        };
+      const attemptPlay = () => { audio.play().catch(err => { if (err.name !== 'AbortError') { setAudioError('Playback failed'); setIsPlaying(false); } }); };
+      if (audio.readyState >= 3) attemptPlay();
+      else {
+        const handleCanPlay = () => { if (isPlayingRef.current) attemptPlay(); };
         audio.addEventListener('canplaythrough', handleCanPlay, { once: true });
         return () => audio.removeEventListener('canplaythrough', handleCanPlay);
       }
-    } else {
-      audio.pause();
-    }
+    } else { audio.pause(); }
   }, [isPlaying, currentAyah, selectedReciter]);
 
-  // Animation and keyboard
   useEffect(() => {
     setIsAnimating(true);
     const timer = setTimeout(() => setIsAnimating(false), 50);
-
     const handleKeyDown = (e) => {
       if (e.key === 'Escape') {
-        if (selectedWordData) {
-          setSelectedWordData(null);
-        } else {
-          handleClose();
-        }
+        if (selectedWordData) setSelectedWordData(null);
+        else if (leftFeature) setLeftFeature(null);
+        else if (showTafseer) setShowTafseer(false);
+        else handleClose();
       }
-      if (e.key === ' ' && !e.target.matches('input, textarea, select')) {
-        e.preventDefault();
-        setIsPlaying(prev => !prev);
-      }
+      if (e.key === ' ' && !e.target.matches('input, textarea, select')) { e.preventDefault(); setIsPlaying(prev => !prev); }
       if (e.key === 'ArrowRight') currentAyah < totalVerses && setCurrentAyah(prev => prev + 1);
       if (e.key === 'ArrowLeft') currentAyah > 1 && setCurrentAyah(prev => prev - 1);
     };
-
     document.addEventListener('keydown', handleKeyDown);
     document.body.style.overflow = 'hidden';
-
-    return () => {
-      clearTimeout(timer);
-      document.removeEventListener('keydown', handleKeyDown);
-      document.body.style.overflow = '';
-    };
-  }, [currentAyah, totalVerses, selectedWordData]);
+    return () => { clearTimeout(timer); document.removeEventListener('keydown', handleKeyDown); document.body.style.overflow = ''; };
+  }, [currentAyah, totalVerses, selectedWordData, leftFeature, showTafseer]);
 
   const handleClose = useCallback(() => {
     const duration = Math.round((Date.now() - startTime.current) / 60000);
     logReadingSession(surah.id, verses.length > 0 ? 1 : 0, duration);
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.src = '';
-    }
+    if (audioRef.current) { audioRef.current.pause(); audioRef.current.src = ''; }
     onClose();
   }, [surah, verses.length, onClose]);
 
-  const handleShareVerse = useCallback(async (verse, ayahNum) => {
-    setShareStatus(ayahNum);
-    await shareVerse({
-      surahName: surah.name,
-      surahId: surah.id,
-      ayahNumber: ayahNum,
-      arabic: verse.arabic,
-      translation: verse.translation,
-    });
-    setTimeout(() => setShareStatus(null), 2000);
-  }, [surah]);
-
-  // Toggle play/pause for specific ayah - FIXED
   const toggleAyahPlayback = useCallback((ayahNum) => {
-    if (currentAyah === ayahNum && isPlaying) {
-      // Same ayah and playing -> pause
-      setIsPlaying(false);
-    } else if (currentAyah === ayahNum && !isPlaying) {
-      // Same ayah and paused -> play
-      setIsPlaying(true);
-    } else {
-      // Different ayah -> switch to it and play
-      setCurrentAyah(ayahNum);
-      setIsPlaying(true);
-    }
+    if (currentAyah === ayahNum && isPlaying) setIsPlaying(false);
+    else if (currentAyah === ayahNum && !isPlaying) setIsPlaying(true);
+    else { setCurrentAyah(ayahNum); setIsPlaying(true); }
   }, [currentAyah, isPlaying]);
 
-  // Navigate to surah
   const goToSurah = useCallback((newSurah) => {
     if (!newSurah || !onChangeSurah) return;
-
-    // Reset audio state
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.src = '';
-    }
-    setIsPlaying(false);
-    setCurrentAyah(1);
-    setSelectedWordData(null);
-
+    if (audioRef.current) { audioRef.current.pause(); audioRef.current.src = ''; }
+    setIsPlaying(false); setCurrentAyah(1); setSelectedWordData(null);
+    setShowTafseer(false); setLeftFeature(null);
     onChangeSurah(newSurah);
   }, [onChangeSurah]);
+
+  // State to track which verse to share in the Share dialog
+  const [shareVerseData, setShareVerseData] = useState(null);
+
+  const handleShareVerse = useCallback((verse, ayahNum) => {
+    // Set the verse data and open the share panel
+    setShareVerseData({
+      ayahNumber: ayahNum,
+      arabic: verse.arabic,
+      translation: verse.translation
+    });
+    setLeftFeature('share');
+  }, []);
+
+  // Handle feature selection - tafseer is independent (right side), others share left side
+  const handleFeatureSelect = useCallback((featureId) => {
+    setSelectedWordData(null);
+    if (featureId === 'tafseer') {
+      // Toggle tafseer (right side) - independent of left features
+      setShowTafseer(prev => !prev);
+    } else {
+      // Toggle left side features - only one can be active at a time
+      setLeftFeature(prev => {
+        if (prev === featureId) {
+          if (featureId === 'share') setShareVerseData(null);
+          return null;
+        } else {
+          // Clear shareVerseData when opening share from top bar (will use currentVerse)
+          if (featureId === 'share') setShareVerseData(null);
+          return featureId;
+        }
+      });
+    }
+  }, []);
+
+  // Memoized close handlers to prevent re-renders
+  const closeTafseer = useCallback(() => setShowTafseer(false), []);
+  const closeLeftFeature = useCallback(() => setLeftFeature(null), []);
+  const closeShareFeature = useCallback(() => { setLeftFeature(null); setShareVerseData(null); }, []);
+  const handleAyahChange = useCallback((newAyah) => setCurrentAyah(newAyah), []);
+
+  // Memoize settings toggle handlers
+  const toggleSettings = useCallback(() => setShowSettings(prev => !prev), []);
+  const toggleWordByWord = useCallback(() => setWordByWordMode(prev => !prev), [setWordByWordMode]);
+  const toggleTajweed = useCallback(() => setTajweedMode(prev => !prev), [setTajweedMode]);
+  const toggleTranslation = useCallback(() => setShowTranslation(prev => !prev), [setShowTranslation]);
+  const togglePlayPause = useCallback(() => setIsPlaying(prev => !prev), []);
+  const cycleRepeatMode = useCallback(() => setRepeatMode(prev => prev === 'none' ? 'verse' : prev === 'verse' ? 'surah' : 'none'), [setRepeatMode]);
+
+  // Memoize stopPropagation handler
+  const stopPropagation = useCallback((e) => e.stopPropagation(), []);
+
+  // Memoize navigation handlers
+  const goToPrevAyah = useCallback(() => setCurrentAyah(prev => prev > 1 ? prev - 1 : prev), []);
+  const goToNextAyah = useCallback(() => setCurrentAyah(prev => prev < totalVerses ? prev + 1 : prev), [totalVerses]);
+  const clearSelectedWord = useCallback(() => setSelectedWordData(null), []);
+
+  // Memoize close button handler with stopPropagation
+  const handleCloseClick = useCallback((e) => { e.stopPropagation(); handleClose(); }, [handleClose]);
+
+  // Memoize surah nav handlers
+  const handleGoPrevSurah = useCallback((e) => { e.stopPropagation(); goToSurah(prevSurah); }, [goToSurah, prevSurah]);
+  const handleGoNextSurah = useCallback((e) => { e.stopPropagation(); goToSurah(nextSurah); }, [goToSurah, nextSurah]);
+
+  // Memoize currentVerse calculation
+  const currentVerse = useMemo(() => verses[currentAyah - 1], [verses, currentAyah]);
+
+  // Get surah topics data
+  const surahTopics = useMemo(() => SURAH_TOPICS[surah?.id] || {}, [surah?.id]);
+
+  // Toggle surah details panel
+  const toggleSurahDetails = useCallback(() => setShowSurahDetails(prev => !prev), []);
+  const closeSurahDetails = useCallback(() => setShowSurahDetails(false), []);
+
+  // Jump to a specific ayah (from key verses)
+  const jumpToAyah = useCallback((ayahNum) => {
+    setCurrentAyah(ayahNum);
+    setShowSurahDetails(false);
+    // Scroll to the ayah
+    setTimeout(() => {
+      const ayahElement = versesContainerRef.current?.querySelector(`[data-ayah="${ayahNum}"]`);
+      if (ayahElement) ayahElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 100);
+  }, []);
+
+  // Multi-select handlers
+  const toggleSelectionMode = useCallback(() => {
+    setSelectionMode(prev => !prev);
+    if (selectionMode) setSelectedVerses([]); // Clear selection when exiting
+  }, [selectionMode]);
+
+  const toggleVerseSelection = useCallback((ayahNum) => {
+    setSelectedVerses(prev =>
+      prev.includes(ayahNum)
+        ? prev.filter(n => n !== ayahNum)
+        : [...prev, ayahNum].sort((a, b) => a - b)
+    );
+  }, []);
+
+  const selectVerseRange = useCallback((start, end) => {
+    const range = [];
+    for (let i = start; i <= end; i++) range.push(i);
+    setSelectedVerses(range);
+  }, []);
+
+  const shareSelectedVerses = useCallback(() => {
+    if (selectedVerses.length === 0) return;
+    // Gather selected verse data
+    const selectedData = selectedVerses.map(ayahNum => {
+      const verse = verses[ayahNum - 1];
+      return { ayahNumber: ayahNum, arabic: verse?.arabic, translation: verse?.translation };
+    });
+    setShareVerseData(selectedData.length === 1 ? selectedData[0] : { multiple: true, verses: selectedData });
+    setLeftFeature('share');
+  }, [selectedVerses, verses]);
 
   if (!surah) return null;
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-2"
-      onClick={handleClose}
-      role="dialog"
-      aria-modal="true"
-    >
-      {/* Backdrop */}
-      <div
-        className={`absolute inset-0 transition-opacity duration-500 ${
-          isAnimating ? 'opacity-0' : 'opacity-100'
-        }`}
-        style={{
-          background: darkMode
-            ? 'radial-gradient(ellipse at center, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.85) 100%)'
-            : 'radial-gradient(ellipse at center, rgba(255,255,255,0.4) 0%, rgba(200,200,220,0.7) 100%)',
-          backdropFilter: 'blur(12px)',
-        }}
+    <div className="fixed inset-0 flex items-center justify-center p-4" style={{ zIndex: 9999999 }} onClick={handleClose} role="dialog" aria-modal="true">
+      <div className={`absolute inset-0 transition-opacity duration-500 ${isAnimating ? 'opacity-0' : 'opacity-100'}`}
+        style={{ background: darkMode ? 'radial-gradient(ellipse at center, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.9) 100%)' : 'radial-gradient(ellipse at center, rgba(255,255,255,0.4) 0%, rgba(200,200,220,0.8) 100%)', backdropFilter: 'blur(15px)' }} />
+
+      {/* Floating Feature Bubbles */}
+      {/* Tafseer - Right Side (Independent) */}
+      <TafseerFloatingBubble
+        isVisible={showTafseer}
+        onClose={closeTafseer}
+        surahId={surah.id}
+        ayahNumber={currentAyah}
+        verseArabic={currentVerse?.arabic}
+        translationId={selectedTranslation}
+        totalAyahs={surah.ayahs}
+        onAyahChange={handleAyahChange}
       />
 
-      {/* Previous Surah Button - Left Side */}
-      {prevSurah && onChangeSurah && (
-        <button
-          onClick={(e) => { e.stopPropagation(); goToSurah(prevSurah); }}
-          className={`absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-40 group transition-all duration-300 ${
-            isAnimating ? 'opacity-0 -translate-x-4' : 'opacity-100 translate-x-0'
-          }`}
-          style={{ transitionDelay: '0.2s' }}
-        >
-          <div
-            className="w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center text-white transition-all hover:scale-110"
-            style={{
-              background: `linear-gradient(135deg, ${PALETTES[(prevSurah.id - 1) % 10].colors[0]}90, ${PALETTES[(prevSurah.id - 1) % 10].colors[1]}90)`,
-              boxShadow: `0 4px 20px ${PALETTES[(prevSurah.id - 1) % 10].colors[0]}50`,
-            }}
-          >
-            <Icons.ChevronLeft className="w-6 h-6 sm:w-7 sm:h-7" />
-          </div>
-          <div className="absolute left-full ml-2 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-black/70 backdrop-blur-sm rounded-lg px-3 py-2 whitespace-nowrap pointer-events-none">
-            <p className="text-white text-xs font-medium">{prevSurah.name}</p>
-            <p className="text-white/60 text-[10px]">Surah {prevSurah.id}</p>
-          </div>
-        </button>
-      )}
+      {/* Left Side Features (Only one at a time) */}
+      <VideosFloatingBubble
+        isVisible={leftFeature === 'youtube'}
+        onClose={closeLeftFeature}
+        surahId={surah.id}
+        surahName={surah.name}
+      />
 
-      {/* Next Surah Button - Right Side */}
-      {nextSurah && onChangeSurah && (
-        <button
-          onClick={(e) => { e.stopPropagation(); goToSurah(nextSurah); }}
-          className={`absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-40 group transition-all duration-300 ${
-            isAnimating ? 'opacity-0 translate-x-4' : 'opacity-100 translate-x-0'
-          }`}
-          style={{ transitionDelay: '0.2s' }}
-        >
-          <div
-            className="w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center text-white transition-all hover:scale-110"
-            style={{
-              background: `linear-gradient(135deg, ${PALETTES[(nextSurah.id - 1) % 10].colors[0]}90, ${PALETTES[(nextSurah.id - 1) % 10].colors[1]}90)`,
-              boxShadow: `0 4px 20px ${PALETTES[(nextSurah.id - 1) % 10].colors[0]}50`,
-            }}
-          >
-            <Icons.ChevronRight className="w-6 h-6 sm:w-7 sm:h-7" />
-          </div>
-          <div className="absolute right-full mr-2 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-black/70 backdrop-blur-sm rounded-lg px-3 py-2 whitespace-nowrap pointer-events-none">
-            <p className="text-white text-xs font-medium">{nextSurah.name}</p>
-            <p className="text-white/60 text-[10px]">Surah {nextSurah.id}</p>
-          </div>
-        </button>
-      )}
+      <MemorizeFloatingBubble
+        isVisible={leftFeature === 'memorize'}
+        onClose={closeLeftFeature}
+        onSettingsChange={setMemorizeSettings}
+        currentSettings={memorizeSettings}
+      />
 
-      {/* Main Bubble - Horizontal Ellipse */}
+      <BookmarkFloatingBubble
+        isVisible={leftFeature === 'bookmark'}
+        onClose={closeLeftFeature}
+        surahId={surah.id}
+        surahName={surah.name}
+        ayahNumber={currentAyah}
+        verseArabic={currentVerse?.arabic}
+      />
+
+      <ShareFloatingBubble
+        isVisible={leftFeature === 'share'}
+        onClose={closeShareFeature}
+        surahId={surah.id}
+        surahName={surah.name}
+        ayahNumber={shareVerseData?.multiple ? shareVerseData.verses[0]?.ayahNumber : (shareVerseData?.ayahNumber || currentAyah)}
+        verseArabic={shareVerseData?.multiple ? shareVerseData.verses[0]?.arabic : (shareVerseData?.arabic || currentVerse?.arabic)}
+        verseTranslation={shareVerseData?.multiple ? shareVerseData.verses[0]?.translation : (shareVerseData?.translation || currentVerse?.translation)}
+        multipleVerses={shareVerseData?.multiple ? shareVerseData.verses : null}
+      />
+
+      {/* Top Feature Buttons Bar */}
       <div
-        className={`relative transition-all duration-500 ease-out ${
-          isAnimating ? 'scale-50 opacity-0' : 'scale-100 opacity-100'
-        }`}
-        style={{
-          width: 'min(92vw, 900px)',
-          height: 'min(88vh, 680px)',
-        }}
-        onClick={(e) => e.stopPropagation()}
+        className={`fixed top-4 left-1/2 -translate-x-1/2 z-[60] transition-all duration-500 ${isAnimating ? 'opacity-0 -translate-y-10' : 'opacity-100 translate-y-0'}`}
+        onClick={stopPropagation}
       >
-        {/* Outer Glow - Breathing */}
-        <div
-          className="absolute pointer-events-none"
-          style={{
-            inset: '-35px',
-            borderRadius: '50%',
-            background: `radial-gradient(ellipse 55% 45% at center, ${palette.colors[0]}50 0%, transparent 70%)`,
-            animation: 'breathe 3s ease-in-out infinite',
-          }}
-        />
+        <div className="flex items-center gap-2 sm:gap-3 px-4 py-2 rounded-full bg-black/30 backdrop-blur-xl border border-white/20">
+          {[
+            { id: 'tafseer', icon: Icons.BookOpen, color: '#8B5CF6', label: 'Tafseer', side: 'right' },
+            { id: 'youtube', icon: Icons.Video, color: '#EF4444', label: 'Videos', side: 'left' },
+            { id: 'memorize', icon: Icons.Brain, color: '#F59E0B', label: 'Memorize', side: 'left' },
+            { id: 'bookmark', icon: Icons.Bookmark, color: '#EC4899', label: 'Bookmark', side: 'left' },
+            { id: 'share', icon: Icons.Share, color: '#10B981', label: 'Share', side: 'left' },
+          ].map((btn) => {
+            const Icon = btn.icon;
+            // Tafseer uses showTafseer, others use leftFeature
+            const isActive = btn.id === 'tafseer' ? showTafseer : leftFeature === btn.id;
+            return (
+              <button
+                key={btn.id}
+                onClick={() => handleFeatureSelect(btn.id)}
+                className={`flex items-center gap-2 px-3 py-2 rounded-full transition-all hover:scale-105 ${isActive ? 'scale-105' : ''}`}
+                style={{
+                  background: isActive ? `linear-gradient(135deg, ${btn.color}, ${btn.color}cc)` : `rgba(255,255,255,0.1)`,
+                  boxShadow: isActive ? `0 0 20px ${btn.color}60` : 'none',
+                }}
+                title={btn.label}
+              >
+                <Icon className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+                <span className="text-white text-xs font-medium hidden sm:inline">{btn.label}</span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
 
-        {/* Spinning Rainbow Ring */}
+      {/* Left Info Bubble - Expands in place to show Surah Details */}
+      <div
+        className={`fixed left-4 sm:left-6 top-1/2 -translate-y-1/2 z-[55] transition-all duration-500 ${isAnimating ? 'opacity-0 scale-50' : 'opacity-100 scale-100'}`}
+        onClick={stopPropagation}
+        style={{ animation: showSurahDetails ? 'none' : 'floatBubble 4s ease-in-out infinite' }}
+      >
         <div
-          className="absolute opacity-50 pointer-events-none"
+          className={`relative text-white text-center overflow-hidden cursor-pointer transition-all duration-300 ease-out ${
+            showSurahDetails
+              ? 'w-64 sm:w-72 rounded-3xl'
+              : 'w-20 h-20 sm:w-24 sm:h-24 rounded-full hover:scale-110'
+          }`}
           style={{
-            inset: '-18px',
-            borderRadius: '50%',
-            background: `conic-gradient(from 0deg, ${palette.colors[0]}, ${palette.colors[1]}, ${palette.colors[2]}, ${palette.colors[0]})`,
-            filter: 'blur(15px)',
-            animation: 'spin 15s linear infinite',
-          }}
-        />
-
-        {/* Main Bubble - Ellipse */}
-        <div
-          className="absolute inset-0 overflow-hidden"
-          style={{
-            borderRadius: '50%',
-            background: `linear-gradient(145deg, ${palette.colors[0]}, ${palette.colors[1]}, ${palette.colors[2]})`,
-            boxShadow: `
-              0 0 70px ${palette.colors[0]}60,
-              0 0 100px ${palette.colors[1]}40,
-              inset 0 -35px 70px rgba(0,0,0,0.3),
-              inset 0 35px 70px rgba(255,255,255,0.2)
-            `,
+            background: `linear-gradient(145deg, ${palette.colors[0]}${showSurahDetails ? 'ee' : 'cc'}, ${palette.colors[1]}${showSurahDetails ? 'dd' : 'bb'}, ${palette.colors[2]}${showSurahDetails ? 'cc' : 'aa'})`,
+            boxShadow: showSurahDetails
+              ? `0 0 60px ${palette.colors[0]}60, 0 20px 60px rgba(0,0,0,0.4), inset 0 -30px 60px rgba(0,0,0,0.3), inset 0 30px 60px rgba(255,255,255,0.15)`
+              : `0 0 40px ${palette.colors[0]}50, 0 0 60px ${palette.colors[1]}30, inset 0 -20px 40px rgba(0,0,0,0.3), inset 0 20px 40px rgba(255,255,255,0.15)`,
           }}
         >
-          {/* Glass Highlight */}
-          <div
-            className="absolute pointer-events-none"
-            style={{
-              top: '3%',
-              left: '15%',
-              width: '50%',
-              height: '18%',
-              background: 'linear-gradient(180deg, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0.1) 50%, transparent 100%)',
-              borderRadius: '50%',
-              filter: 'blur(2px)',
-              transform: 'scaleY(0.35)',
-            }}
-          />
+          {/* Glass highlight */}
+          <div className="absolute pointer-events-none" style={{ top: '5%', left: showSurahDetails ? '10%' : '15%', width: showSurahDetails ? '60%' : '50%', height: showSurahDetails ? '15%' : '20%', background: 'linear-gradient(180deg, rgba(255,255,255,0.4) 0%, transparent 100%)', borderRadius: '50%', filter: 'blur(2px)', transform: 'scaleY(0.4)' }} />
 
-          {/* Bright Spot */}
-          <div
-            className="absolute pointer-events-none"
-            style={{
-              top: '6%',
-              left: '20%',
-              width: '10%',
-              height: '6%',
-              background: 'radial-gradient(ellipse, rgba(255,255,255,0.9) 0%, transparent 70%)',
-              borderRadius: '50%',
-            }}
-          />
-
-          {/* Floating Particles */}
-          {[...Array(5)].map((_, i) => (
-            <div
-              key={i}
-              className="absolute rounded-full pointer-events-none"
-              style={{
-                width: 3 + Math.random() * 4,
-                height: 3 + Math.random() * 4,
-                left: `${20 + Math.random() * 60}%`,
-                top: `${15 + Math.random() * 65}%`,
-                background: 'rgba(255,255,255,0.8)',
-                boxShadow: '0 0 6px rgba(255,255,255,0.8)',
-                animation: `floatParticle ${2.5 + Math.random() * 2}s ease-in-out infinite`,
-                animationDelay: `${Math.random() * 2}s`,
-              }}
-            />
-          ))}
-
-          {/* Close Button - positioned well inside the ellipse */}
-          <button
-            onClick={(e) => { e.stopPropagation(); handleClose(); }}
-            className="absolute w-9 h-9 rounded-full bg-white/30 backdrop-blur-sm flex items-center justify-center hover:bg-white/50 hover:scale-110 transition-all z-20 text-white"
-            style={{ top: '4%', right: '42%' }}
-            aria-label="Close"
-          >
-            <Icons.X className="w-4 h-4" />
-          </button>
-
-          {/* Surah Number - positioned well inside the ellipse */}
-          <div
-            className="absolute w-10 h-10 rounded-full flex items-center justify-center text-base font-bold text-white z-20"
-            style={{ top: '4%', left: '42%', background: 'rgba(255,255,255,0.25)', backdropFilter: 'blur(10px)' }}
-          >
-            {surah.id}
-          </div>
-
-          {/* Content Container */}
-          <div
-            className="absolute flex flex-col text-white"
-            style={{
-              top: '12%',
-              left: '10%',
-              right: selectedWordData ? '0' : '10%',
-              bottom: '10%',
-              transition: 'right 0.2s ease-out',
-            }}
-          >
-            {/* Header */}
-            <div className="text-center flex-shrink-0 mb-1" style={{ paddingRight: selectedWordData ? '10%' : 0 }}>
-              <div
-                className="text-2xl sm:text-3xl mb-0.5"
-                style={{ fontFamily: "'Scheherazade New', serif", textShadow: '0 2px 12px rgba(0,0,0,0.4)' }}
-                lang="ar" dir="rtl"
-              >
-                {surah.arabic}
+          {/* Collapsed State - Click to expand */}
+          {!showSurahDetails && (
+            <div onClick={toggleSurahDetails} className="relative z-10 flex flex-col items-center justify-center h-full">
+              <div className="text-sm sm:text-base font-bold mb-0.5" style={{ fontFamily: "'Scheherazade New', serif" }} dir="rtl">{surah.arabic}</div>
+              <div className="text-[8px] sm:text-[9px] font-medium opacity-90">{surah.type}</div>
+              <div className="text-[7px] sm:text-[8px] opacity-70">{surah.ayahs} Ayahs</div>
+              {/* Expand indicator */}
+              <div className="absolute bottom-1 left-1/2 -translate-x-1/2">
+                <Icons.ChevronDown className="w-3 h-3 text-white/60 animate-bounce" />
               </div>
-              <h1 className="text-base sm:text-lg font-bold" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.3)' }}>
-                {surah.name}
-              </h1>
+            </div>
+          )}
 
-              {/* Options Row */}
-              <div className="flex items-center justify-center gap-1 sm:gap-1.5 mt-2 flex-wrap px-4">
-                <span className="px-2 py-0.5 bg-white/20 rounded-full text-[10px] sm:text-xs">
-                  {surah.ayahs} Ayahs
-                </span>
-                <span className="px-2 py-0.5 bg-white/20 rounded-full text-[10px] sm:text-xs">
-                  {surah.type}
-                </span>
-
+          {/* Expanded State - Shows details inside the bubble */}
+          {showSurahDetails && (
+            <div className="relative z-10">
+              {/* Header with close button */}
+              <div className="p-3 pb-2 border-b border-white/20 relative">
                 <button
-                  onClick={() => setShowSettings(!showSettings)}
-                  className={`w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center transition-all hover:scale-110 ${
-                    showSettings ? 'bg-white/40' : 'bg-white/20'
-                  }`}
+                  onClick={(e) => { e.stopPropagation(); closeSurahDetails(); }}
+                  className="absolute top-2 right-2 w-6 h-6 rounded-full bg-white/20 hover:bg-white/40 flex items-center justify-center transition-all z-20"
                 >
-                  <Icons.Settings className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+                  <Icons.X className="w-3 h-3" />
                 </button>
 
-                <button
-                  onClick={() => setShowTranslation(!showTranslation)}
-                  className={`px-2 py-0.5 rounded-full text-[10px] sm:text-xs transition-all ${
-                    showTranslation ? 'bg-white/40 font-medium' : 'bg-white/15'
-                  }`}
-                >
-                  Translation
-                </button>
-                <button
-                  onClick={() => setTajweedMode(!tajweedMode)}
-                  className={`px-2 py-0.5 rounded-full text-[10px] sm:text-xs transition-all ${
-                    tajweedMode ? 'bg-gradient-to-r from-red-500/80 to-green-500/80 font-medium' : 'bg-white/15'
-                  }`}
-                >
-                  Tajweed
-                </button>
-                <button
-                  onClick={() => setWordByWordMode(!wordByWordMode)}
-                  className={`px-2 py-0.5 rounded-full text-[10px] sm:text-xs transition-all ${
-                    wordByWordMode ? 'bg-gradient-to-r from-amber-500/80 to-orange-500/80 font-medium' : 'bg-white/15'
-                  }`}
-                >
-                  Word
-                </button>
-                <button
-                  onClick={() => setAutoScroll(!autoScroll)}
-                  className={`px-2 py-0.5 rounded-full text-[10px] sm:text-xs transition-all ${
-                    autoScroll ? 'bg-white/40 font-medium' : 'bg-white/15'
-                  }`}
-                >
-                  Auto-Scroll
-                </button>
-                <button
-                  onClick={() => setRepeatMode(repeatMode === 'none' ? 'verse' : repeatMode === 'verse' ? 'surah' : 'none')}
-                  className={`px-2 py-0.5 rounded-full text-[10px] sm:text-xs transition-all ${
-                    repeatMode !== 'none' ? 'bg-purple-500/80 font-medium' : 'bg-white/15'
-                  }`}
-                >
-                  {repeatMode === 'none' ? 'Repeat' : repeatMode === 'verse' ? 'Verse' : 'Surah'}
-                </button>
+                <div className="text-xl font-bold" style={{ fontFamily: "'Scheherazade New', serif" }} dir="rtl">{surah.arabic}</div>
+                <h3 className="text-sm font-bold">{surah.name}</h3>
+                <p className="text-white/70 text-[10px]">{surah.meaning}</p>
+                <div className="flex items-center justify-center gap-2 mt-1 text-[9px]">
+                  <span className="px-1.5 py-0.5 rounded-full bg-white/20">{surah.type}</span>
+                  <span className="px-1.5 py-0.5 rounded-full bg-white/20">{surah.ayahs} Ayahs</span>
+                </div>
               </div>
 
-              {/* Settings Panel */}
-              {showSettings && (
-                <div className="mt-2 p-2 sm:p-3 bg-black/20 backdrop-blur-sm rounded-xl mx-4" style={{ animation: 'slideDown 0.2s ease-out' }}>
-                  <div className="flex flex-wrap items-center justify-center gap-2">
-                    <div className="flex items-center gap-1">
-                      <span className="text-[10px] text-white/70">Size:</span>
-                      <button
-                        onClick={() => {
-                          const sizes = ['small', 'medium', 'large', 'xlarge'];
-                          const idx = sizes.indexOf(fontSize);
-                          if (idx > 0) setFontSize(sizes[idx - 1]);
-                        }}
-                        className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-white/20 flex items-center justify-center hover:bg-white/30"
-                      >
-                        <Icons.ZoomOut className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
-                      </button>
-                      <span className="text-[10px] sm:text-xs w-4 text-center font-bold">{fontSize.charAt(0).toUpperCase()}</span>
-                      <button
-                        onClick={() => {
-                          const sizes = ['small', 'medium', 'large', 'xlarge'];
-                          const idx = sizes.indexOf(fontSize);
-                          if (idx < sizes.length - 1) setFontSize(sizes[idx + 1]);
-                        }}
-                        className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-white/20 flex items-center justify-center hover:bg-white/30"
-                      >
-                        <Icons.ZoomIn className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
-                      </button>
-                    </div>
-
-                    <div className="w-px h-4 bg-white/30" />
-
-                    <select
-                      value={selectedTranslation}
-                      onChange={(e) => setSelectedTranslation(e.target.value)}
-                      className="px-2 py-1 rounded-full text-[10px] sm:text-xs bg-white/20 text-white cursor-pointer max-w-[120px] sm:max-w-[140px]"
-                    >
-                      {Object.entries(TRANSLATIONS).map(([id, info]) => (
-                        <option key={id} value={id} className="text-gray-800">{info.name}</option>
-                      ))}
-                    </select>
-
-                    <select
-                      value={selectedReciter}
-                      onChange={(e) => setSelectedReciter(e.target.value)}
-                      className="px-2 py-1 rounded-full text-[10px] sm:text-xs bg-white/20 text-white cursor-pointer max-w-[120px] sm:max-w-[140px]"
-                    >
-                      {Object.entries(RECITERS).map(([id, info]) => (
-                        <option key={id} value={id} className="text-gray-800">{info.name}</option>
-                      ))}
-                    </select>
+              {/* Topics/Themes */}
+              {surahTopics.themes && surahTopics.themes.length > 0 && (
+                <div className="p-2 border-b border-white/10">
+                  <h4 className="text-[9px] font-semibold text-white/60 mb-1.5 uppercase tracking-wide">Themes</h4>
+                  <div className="flex flex-wrap gap-1">
+                    {surahTopics.themes.slice(0, 4).map((theme, i) => (
+                      <span key={i} className="px-1.5 py-0.5 rounded-full text-[9px] font-medium bg-white/15">
+                        {theme}
+                      </span>
+                    ))}
                   </div>
+                </div>
+              )}
 
-                  {tajweedMode && (
-                    <div className="mt-2 flex flex-wrap justify-center gap-1">
-                      {Object.entries(TAJWEED_RULES).slice(0, 6).map(([key, rule]) => (
-                        <span key={key} className="px-1.5 py-0.5 rounded bg-black/20 text-[9px]" style={{ color: rule.color }}>
-                          ● {rule.name}
+              {/* Key Verses - Compact scrollable list */}
+              {surahTopics.keyVerses && surahTopics.keyVerses.length > 0 && (
+                <div className="p-2 max-h-32 overflow-y-auto custom-scrollbar">
+                  <h4 className="text-[9px] font-semibold text-white/60 mb-1.5 uppercase tracking-wide">Key Verses</h4>
+                  <div className="space-y-1">
+                    {surahTopics.keyVerses.slice(0, 5).map((kv, i) => (
+                      <button
+                        key={i}
+                        onClick={(e) => { e.stopPropagation(); jumpToAyah(kv.ayah); }}
+                        className="w-full text-left p-1.5 rounded-lg bg-white/10 hover:bg-white/20 transition-all flex items-center gap-1.5 group"
+                      >
+                        <span className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center text-[9px] font-bold flex-shrink-0">
+                          {kv.ayah}
                         </span>
-                      ))}
-                    </div>
-                  )}
+                        <span className="text-[10px] leading-tight flex-1 line-clamp-1">{kv.label}</span>
+                        <Icons.ChevronRight className="w-3 h-3 text-white/40" />
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Tags */}
+              {surahTopics.tags && surahTopics.tags.length > 0 && (
+                <div className="p-2 border-t border-white/10">
+                  <div className="flex flex-wrap gap-1">
+                    {surahTopics.tags.slice(0, 5).map((tag, i) => (
+                      <span key={i} className="px-1.5 py-0.5 rounded text-[8px] bg-white/10 text-white/70">
+                        #{tag}
+                      </span>
+                    ))}
+                  </div>
                 </div>
               )}
             </div>
+          )}
+        </div>
+      </div>
 
-            {/* Main Content Area with Word Panel */}
-            <div className="flex-1 flex overflow-hidden relative">
-              {/* Verses Container */}
-              <div
-                ref={versesContainerRef}
-                className="flex-1 overflow-y-auto overflow-x-hidden px-2 sm:px-4"
-                style={{
-                  maskImage: 'linear-gradient(to bottom, transparent 0%, black 4%, black 96%, transparent 100%)',
-                  WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 4%, black 96%, transparent 100%)',
-                  scrollBehavior: 'smooth',
-                }}
-              >
+      {prevSurah && onChangeSurah && (
+        <button onClick={handleGoPrevSurah}
+          className={`absolute left-24 top-1/2 -translate-y-1/2 z-40 transition-all duration-300 ${isAnimating ? 'opacity-0' : 'opacity-100'}`}>
+          <div className="w-12 h-12 rounded-full flex items-center justify-center text-white transition-all hover:scale-110"
+            style={{ background: `linear-gradient(135deg, ${PALETTES[(prevSurah.id - 1) % 10].colors[0]}90, ${PALETTES[(prevSurah.id - 1) % 10].colors[1]}90)`, boxShadow: `0 4px 20px ${PALETTES[(prevSurah.id - 1) % 10].colors[0]}50` }}>
+            <Icons.ChevronLeft className="w-6 h-6" />
+          </div>
+        </button>
+      )}
+
+      {nextSurah && onChangeSurah && (
+        <button onClick={handleGoNextSurah}
+          className={`absolute right-4 top-1/2 -translate-y-1/2 z-40 transition-all duration-300 ${isAnimating ? 'opacity-0' : 'opacity-100'}`}>
+          <div className="w-12 h-12 rounded-full flex items-center justify-center text-white transition-all hover:scale-110"
+            style={{ background: `linear-gradient(135deg, ${PALETTES[(nextSurah.id - 1) % 10].colors[0]}90, ${PALETTES[(nextSurah.id - 1) % 10].colors[1]}90)`, boxShadow: `0 4px 20px ${PALETTES[(nextSurah.id - 1) % 10].colors[0]}50` }}>
+            <Icons.ChevronRight className="w-6 h-6" />
+          </div>
+        </button>
+      )}
+
+      <div className={`relative transition-all duration-500 ease-out ${isAnimating ? 'scale-50 opacity-0' : 'scale-100 opacity-100'}`}
+        style={{ width: 'min(85vw, 900px)', height: 'min(85vh, 650px)' }} onClick={stopPropagation}>
+
+        <div className="absolute pointer-events-none" style={{ inset: '-40px', borderRadius: '50%', background: `radial-gradient(ellipse 55% 45% at center, ${palette.colors[0]}50 0%, transparent 70%)`, animation: 'breathe 3s ease-in-out infinite' }} />
+        <div className="absolute opacity-40 pointer-events-none" style={{ inset: '-20px', borderRadius: '50%', background: `conic-gradient(from 0deg, ${palette.colors[0]}, ${palette.colors[1]}, ${palette.colors[2]}, ${palette.colors[0]})`, filter: 'blur(18px)', animation: 'spin 15s linear infinite' }} />
+
+        <div className="absolute inset-0 overflow-hidden" style={{ borderRadius: '50%', background: `linear-gradient(145deg, ${palette.colors[0]}, ${palette.colors[1]}, ${palette.colors[2]})`, boxShadow: `0 0 80px ${palette.colors[0]}60, 0 0 120px ${palette.colors[1]}40, inset 0 -40px 80px rgba(0,0,0,0.3), inset 0 40px 80px rgba(255,255,255,0.2)` }}>
+          <div className="absolute pointer-events-none" style={{ top: '3%', left: '15%', width: '50%', height: '18%', background: 'linear-gradient(180deg, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0.1) 50%, transparent 100%)', borderRadius: '50%', filter: 'blur(2px)', transform: 'scaleY(0.35)' }} />
+
+          {particles.map((p, i) => (
+            <div key={i} className="absolute rounded-full pointer-events-none"
+              style={{ width: p.size, height: p.size, left: `${p.left}%`, top: `${p.top}%`, background: 'rgba(255,255,255,0.8)', boxShadow: '0 0 8px rgba(255,255,255,0.8)', animation: `floatParticle ${p.duration}s ease-in-out infinite`, animationDelay: `${p.delay}s` }} />
+          ))}
+
+          <button onClick={handleCloseClick}
+            className="absolute w-9 h-9 rounded-full bg-white/30 backdrop-blur-sm flex items-center justify-center hover:bg-white/50 hover:scale-110 transition-all z-20 text-white"
+            style={{ top: '3%', right: '46%' }}>
+            <Icons.X className="w-5 h-5" />
+          </button>
+
+          <div className="absolute w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold text-white z-20"
+            style={{ top: '3%', left: '46%', background: 'rgba(255,255,255,0.25)', backdropFilter: 'blur(10px)' }}>
+            {surah.id}
+          </div>
+
+          <div className="absolute flex text-white overflow-hidden" style={{ top: '14%', left: '7%', right: '7%', bottom: '7%' }}>
+            <div className="flex-1 flex flex-col min-w-0">
+              <div className="text-center flex-shrink-0 mb-1">
+                <div className="text-2xl mb-0.5" style={{ fontFamily: "'Scheherazade New', serif", textShadow: '0 2px 12px rgba(0,0,0,0.4)' }} lang="ar" dir="rtl">{surah.arabic}</div>
+                <h1 className="text-base font-bold" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.3)' }}>{surah.name}</h1>
+
+                <div className="flex items-center justify-center gap-2 mt-2">
+                  <button onClick={toggleSettings} className={`p-2 rounded-full transition-all ${showSettings ? 'bg-white/30' : 'bg-white/15 hover:bg-white/25'}`}>
+                    <Icons.Settings className="w-4 h-4" />
+                  </button>
+                  <button onClick={toggleWordByWord} className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${wordByWordMode ? 'bg-amber-500/60' : 'bg-white/15 hover:bg-white/25'}`}>Word</button>
+                  <button onClick={toggleTajweed} className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${tajweedMode ? 'bg-gradient-to-r from-red-500/60 to-green-500/60' : 'bg-white/15 hover:bg-white/25'}`}>Tajweed</button>
+                  <button onClick={toggleSelectionMode} className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all flex items-center gap-1 ${selectionMode ? 'bg-emerald-500/60' : 'bg-white/15 hover:bg-white/25'}`}>
+                    <Icons.CheckSquare className="w-3 h-3" />
+                    Select
+                  </button>
+                </div>
+
+                {/* Selection Mode Bar */}
+                {selectionMode && (
+                  <div className="mt-2 p-2 bg-emerald-500/30 backdrop-blur-sm rounded-xl mx-4 flex items-center justify-between gap-2" style={{ animation: 'slideDown 0.2s ease-out' }}>
+                    <div className="flex items-center gap-2 flex-1">
+                      <span className="text-xs text-white/90">
+                        {selectedVerses.length === 0 ? 'Tap verses to select' : `${selectedVerses.length} verse${selectedVerses.length > 1 ? 's' : ''} selected`}
+                      </span>
+                      {selectedVerses.length > 0 && (
+                        <span className="text-[10px] text-white/60">
+                          ({selectedVerses.join(', ')})
+                        </span>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-1">
+                      {selectedVerses.length > 0 && (
+                        <>
+                          <button onClick={() => setSelectedVerses([])} className="px-2 py-1 rounded-full text-[10px] bg-white/20 hover:bg-white/30 transition-all">
+                            Clear
+                          </button>
+                          <button onClick={shareSelectedVerses} className="px-2 py-1 rounded-full text-[10px] bg-white/30 hover:bg-white/40 transition-all flex items-center gap-1">
+                            <Icons.Share className="w-3 h-3" />
+                            Share
+                          </button>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {showSettings && (
+                  <div className="mt-2 p-3 bg-black/20 backdrop-blur-sm rounded-xl mx-4" style={{ animation: 'slideDown 0.2s ease-out' }}>
+                    <div className="flex flex-wrap items-center justify-center gap-2">
+                      <div className="flex items-center gap-1">
+                        <span className="text-[10px] text-white/70">Size:</span>
+                        <button onClick={() => { const sizes = ['small', 'medium', 'large', 'xlarge']; const idx = sizes.indexOf(fontSize); if (idx > 0) setFontSize(sizes[idx - 1]); }}
+                          className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center hover:bg-white/30"><Icons.ZoomOut className="w-3 h-3" /></button>
+                        <span className="text-xs w-5 text-center font-bold">{fontSize.charAt(0).toUpperCase()}</span>
+                        <button onClick={() => { const sizes = ['small', 'medium', 'large', 'xlarge']; const idx = sizes.indexOf(fontSize); if (idx < sizes.length - 1) setFontSize(sizes[idx + 1]); }}
+                          className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center hover:bg-white/30"><Icons.ZoomIn className="w-3 h-3" /></button>
+                      </div>
+                      <div className="w-px h-5 bg-white/30" />
+                      <select value={selectedTranslation} onChange={(e) => setSelectedTranslation(e.target.value)} className="px-2 py-1 rounded-full text-xs bg-white/20 text-white cursor-pointer max-w-[120px]">
+                        {Object.entries(TRANSLATIONS).map(([id, info]) => (<option key={id} value={id} className="text-gray-800">{info.name}</option>))}
+                      </select>
+                      <select value={selectedReciter} onChange={(e) => setSelectedReciter(e.target.value)} className="px-2 py-1 rounded-full text-xs bg-white/20 text-white cursor-pointer max-w-[120px]">
+                        {Object.entries(RECITERS).map(([id, info]) => (<option key={id} value={id} className="text-gray-800">{info.name}</option>))}
+                      </select>
+                      <button onClick={toggleTranslation} className={`px-2 py-1 rounded-full text-xs ${showTranslation ? 'bg-white/30' : 'bg-white/15'}`}>Translation</button>
+                      <button onClick={cycleRepeatMode} className={`px-2 py-1 rounded-full text-xs ${repeatMode !== 'none' ? 'bg-purple-500/60' : 'bg-white/15'}`}>
+                        {repeatMode === 'none' ? 'Repeat' : repeatMode === 'verse' ? 'Verse' : 'Surah'}
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <div ref={versesContainerRef} className="flex-1 overflow-y-auto overflow-x-hidden px-3"
+                style={{ maskImage: 'linear-gradient(to bottom, transparent 0%, black 4%, black 96%, transparent 100%)', WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 4%, black 96%, transparent 100%)' }}>
                 {loading ? (
                   <div className="flex flex-col items-center justify-center h-32 gap-2">
-                    <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
-                      <Icons.Loader className="w-5 h-5 animate-spin" />
-                    </div>
+                    <Icons.Loader className="w-10 h-10 animate-spin text-white/60" />
                     <p className="text-xs text-white/70">Loading...</p>
                   </div>
                 ) : error ? (
                   <div className="text-center py-8">
-                    <Icons.AlertCircle className="w-8 h-8 mx-auto mb-2 opacity-50" />
-                    <p className="text-xs">{error}</p>
+                    <Icons.AlertCircle className="w-10 h-10 mx-auto mb-2 opacity-50" />
+                    <p className="text-sm">{error}</p>
                   </div>
                 ) : (
-                  <div className="space-y-3">
+                  <div className="space-y-3 py-2">
                     {surah.id !== 9 && surah.id !== 1 && (
-                      <div
-                        className="text-center py-2"
-                        style={{
-                          fontFamily: "'Scheherazade New', serif",
-                          fontSize: fontSizeMap[fontSize].arabic,
-                          textShadow: '0 2px 8px rgba(0,0,0,0.3)',
-                        }}
-                        dir="rtl" lang="ar"
-                      >
+                      <div className="text-center py-2" style={{ fontFamily: "'Scheherazade New', serif", fontSize: fontSizeMap[fontSize].arabic, textShadow: '0 2px 8px rgba(0,0,0,0.3)' }} dir="rtl" lang="ar">
                         بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
                       </div>
                     )}
@@ -1102,138 +1992,117 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({
                     {verses.map((verse, index) => {
                       const ayahNum = verse.number || index + 1;
                       const isCurrentAyah = currentAyah === ayahNum;
-
-                      // Always use original Arabic text (split by space)
                       const arabicWords = verse.arabic.split(' ').filter(w => w.trim());
-
-                      // Get meanings from Quran.com API (matched by position)
                       const wordMeanings = wordsMap[ayahNum] || [];
-
-                      // Calculate which words to hide based on memorization settings
                       const hideLevel = memorizeSettings.hideLevel || 0;
-                      const shouldHideWord = (wordIdx, totalWords) => {
-                        if (hideLevel === 0) return false; // Show all
-                        if (hideLevel === 4) return true; // Hide all
-                        // Progressive hiding: 25%, 50%, 75%
+                      const shouldHideWord = (wordIdx) => {
+                        if (hideLevel === 0) return false;
+                        if (hideLevel === 4) return true;
                         const hideRatio = hideLevel * 0.25;
-                        // Use a deterministic pattern based on word index
                         return (wordIdx % Math.ceil(1 / hideRatio)) === 0;
                       };
 
+                      const isSelected = selectedVerses.includes(ayahNum);
+
                       return (
-                        <div
-                          key={ayahNum}
-                          data-ayah={ayahNum}
-                          className={`rounded-2xl p-3 sm:p-4 transition-all duration-500 ${
-                            isCurrentAyah ? 'bg-white/25' : 'bg-white/10'
-                          } ${hideLevel > 0 ? 'ring-2 ring-amber-400/30' : ''}`}
-                          style={{
-                            transform: isCurrentAyah ? 'scale(1.01)' : 'scale(1)',
-                            boxShadow: isCurrentAyah ? '0 0 20px rgba(255,255,255,0.2)' : 'none',
-                            transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
-                          }}
-                        >
-                          <div
-                            className="leading-[2.2] mb-2 relative"
-                            style={{
-                              fontFamily: "'Scheherazade New', serif",
-                              fontSize: fontSizeMap[fontSize].arabic,
-                              textShadow: '0 1px 6px rgba(0,0,0,0.3)',
-                            }}
-                            dir="rtl" lang="ar"
-                          >
-                            {/* Word mode - use API words directly for accurate mapping */}
+                        <div key={ayahNum} data-ayah={ayahNum}
+                          onClick={selectionMode ? () => toggleVerseSelection(ayahNum) : undefined}
+                          className={`rounded-2xl p-3 transition-all duration-500 ${isCurrentAyah ? 'bg-white/25' : 'bg-white/10'} ${hideLevel > 0 ? 'ring-2 ring-amber-400/30' : ''} ${isSelected ? 'ring-2 ring-emerald-400/60 bg-emerald-500/20' : ''} ${selectionMode ? 'cursor-pointer hover:bg-white/20' : ''}`}
+                          style={{ transform: isCurrentAyah ? 'scale(1.01)' : 'scale(1)', boxShadow: isCurrentAyah ? '0 0 20px rgba(255,255,255,0.2)' : isSelected ? '0 0 15px rgba(16,185,129,0.3)' : 'none' }}>
+
+                          {/* Selection checkbox */}
+                          {selectionMode && (
+                            <div className="flex items-center gap-2 mb-2">
+                              <div className={`w-5 h-5 rounded-md flex items-center justify-center transition-all ${isSelected ? 'bg-emerald-500' : 'bg-white/20'}`}>
+                                {isSelected && <Icons.Check className="w-3.5 h-3.5 text-white" />}
+                              </div>
+                              <span className="text-xs text-white/60">Verse {ayahNum}</span>
+                            </div>
+                          )}
+                          <div className="leading-[2.2] mb-2" style={{ fontFamily: "'Scheherazade New', serif", fontSize: fontSizeMap[fontSize].arabic, textShadow: '0 1px 6px rgba(0,0,0,0.3)' }} dir="rtl" lang="ar">
                             {wordByWordMode ? (
                               wordMeanings.length > 0 ? (
-                                // Use words from API (accurate word boundaries)
-                                wordMeanings.map((wordData, wordIdx) => {
-                                  const wordKey = `${ayahNum}-${wordIdx}`;
-                                  const isHidden = shouldHideWord(wordIdx, wordMeanings.length);
-                                  return (
-                                    <WordItem
-                                      key={wordKey}
-                                      word={wordData.arabic}
-                                      isActive={selectedWordData?.key === wordKey}
-                                      hidden={isHidden}
-                                      showOnHover={hideLevel > 0 && hideLevel < 4}
-                                      onClick={() => setSelectedWordData({
-                                        key: wordKey,
-                                        word: wordData.arabic,
-                                        meaning: wordData.meaning,
-                                        transliteration: wordData.transliteration,
-                                        isLoading: false,
-                                      })}
-                                    />
-                                  );
-                                })
+                                wordMeanings.map((wordData, wordIdx) => (
+                                  <WordItem key={`${ayahNum}-${wordIdx}`} word={wordData.arabic} isActive={selectedWordData?.key === `${ayahNum}-${wordIdx}`} hidden={shouldHideWord(wordIdx)} showOnHover={hideLevel > 0 && hideLevel < 4}
+                                    onClick={() => setSelectedWordData({ key: `${ayahNum}-${wordIdx}`, word: wordData.arabic, meaning: wordData.meaning, transliteration: wordData.transliteration, audioUrl: wordData.audioUrl || null, isLoading: false })} />
+                                ))
                               ) : (
-                                // Fallback to split words while loading
-                                arabicWords.map((word, wordIdx) => {
-                                  const wordKey = `${ayahNum}-${wordIdx}`;
-                                  const isHidden = shouldHideWord(wordIdx, arabicWords.length);
-                                  return (
-                                    <WordItem
-                                      key={wordKey}
-                                      word={word}
-                                      isActive={selectedWordData?.key === wordKey}
-                                      hidden={isHidden}
-                                      showOnHover={hideLevel > 0 && hideLevel < 4}
-                                      onClick={() => setSelectedWordData({
-                                        key: wordKey,
-                                        word,
-                                        meaning: '',
-                                        transliteration: '',
-                                        isLoading: wordsLoading,
-                                      })}
-                                    />
-                                  );
-                                })
+                                arabicWords.map((word, wordIdx) => (
+                                  <WordItem key={`${ayahNum}-${wordIdx}`} word={word} isActive={selectedWordData?.key === `${ayahNum}-${wordIdx}`} hidden={shouldHideWord(wordIdx)} showOnHover={hideLevel > 0 && hideLevel < 4}
+                                    onClick={() => setSelectedWordData({ key: `${ayahNum}-${wordIdx}`, word, meaning: '', transliteration: '', isLoading: wordsLoading })} />
+                                ))
                               )
                             ) : tajweedMode && verse.tajweedSegments ? (
                               <TajweedText segments={verse.tajweedSegments} />
                             ) : (
                               verse.arabic
                             )}
-                            <span className="inline-flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded-full ml-2 text-xs sm:text-sm font-bold align-middle bg-white/25">
-                              {ayahNum}
-                            </span>
+                            <span className="inline-flex items-center justify-center w-7 h-7 rounded-full ml-2 text-xs font-bold align-middle bg-white/25">{ayahNum}</span>
                           </div>
 
                           {showTranslation && verse.translation && (
-                            <p
-                              className="text-white/85 leading-relaxed mb-2"
-                              style={{ fontSize: fontSizeMap[fontSize].translation }}
-                            >
-                              {verse.translation}
-                            </p>
+                            <p className="text-white/85 leading-relaxed mb-2" style={{ fontSize: fontSizeMap[fontSize].translation }}>{verse.translation}</p>
+                          )}
+
+                          {selectedWordData?.key?.startsWith(`${ayahNum}-`) && (
+                            <div className="mt-2 p-3 bg-black/30 rounded-xl" style={{ animation: 'slideDown 0.2s ease-out' }}>
+                              <div className="flex items-start gap-3">
+                                {/* Play Word Audio Button - Always show, disabled if no audio */}
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    if (!selectedWordData.audioUrl) return;
+                                    const btn = e.currentTarget;
+                                    btn.classList.add('animate-pulse');
+                                    const audio = new Audio(selectedWordData.audioUrl);
+                                    audio.onended = () => btn.classList.remove('animate-pulse');
+                                    audio.onerror = () => {
+                                      btn.classList.remove('animate-pulse');
+                                      btn.classList.add('bg-red-500/50');
+                                      setTimeout(() => btn.classList.remove('bg-red-500/50'), 1000);
+                                    };
+                                    audio.play().catch(() => {
+                                      btn.classList.remove('animate-pulse');
+                                      btn.classList.add('bg-red-500/50');
+                                      setTimeout(() => btn.classList.remove('bg-red-500/50'), 1000);
+                                    });
+                                  }}
+                                  disabled={!selectedWordData.audioUrl}
+                                  className={`p-2 rounded-full transition-all ${
+                                    selectedWordData.audioUrl
+                                      ? 'bg-emerald-500/80 hover:bg-emerald-500 hover:scale-110 cursor-pointer'
+                                      : 'bg-gray-500/30 cursor-not-allowed opacity-50'
+                                  }`}
+                                  aria-label={selectedWordData.audioUrl ? "Play word audio" : "Audio not available"}
+                                  title={selectedWordData.audioUrl ? "Play pronunciation" : "Audio not available for this word"}
+                                >
+                                  {selectedWordData.audioUrl ? (
+                                    <Icons.Play className="w-4 h-4 text-white" />
+                                  ) : (
+                                    <Icons.Volume className="w-4 h-4 text-white/50" />
+                                  )}
+                                </button>
+                                <div className="text-2xl" style={{ fontFamily: "'Scheherazade New', serif" }} dir="rtl">{selectedWordData.word}</div>
+                                <div className="flex-1 text-left">
+                                  {selectedWordData.transliteration && <p className="text-white/60 text-xs italic">{selectedWordData.transliteration}</p>}
+                                  <p className="text-white text-sm">{selectedWordData.meaning || 'Loading...'}</p>
+                                  {!selectedWordData.audioUrl && (
+                                    <p className="text-amber-400/60 text-[10px] mt-1">Audio not available</p>
+                                  )}
+                                </div>
+                                <button onClick={clearSelectedWord} className="p-1 rounded-full hover:bg-white/20">
+                                  <Icons.X className="w-3 h-3 text-white/50" />
+                                </button>
+                              </div>
+                            </div>
                           )}
 
                           <div className="flex items-center gap-1.5">
-                            <button
-                              onClick={() => toggleAyahPlayback(ayahNum)}
-                              className={`p-1.5 sm:p-2 rounded-full transition-all hover:scale-110 ${
-                                isCurrentAyah && isPlaying ? 'bg-white/40' : 'bg-white/15'
-                              }`}
-                            >
-                              {audioLoading && isCurrentAyah ? (
-                                <Icons.Loader className="w-3 h-3 sm:w-3.5 sm:h-3.5 animate-spin" />
-                              ) : isCurrentAyah && isPlaying ? (
-                                <Icons.Pause className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
-                              ) : (
-                                <Icons.Play className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
-                              )}
+                            <button onClick={() => toggleAyahPlayback(ayahNum)} className={`p-1.5 rounded-full transition-all hover:scale-110 ${isCurrentAyah && isPlaying ? 'bg-white/40' : 'bg-white/15'}`}>
+                              {audioLoading && isCurrentAyah ? <Icons.Loader className="w-3 h-3 animate-spin" /> : isCurrentAyah && isPlaying ? <Icons.Pause className="w-3 h-3" /> : <Icons.Play className="w-3 h-3" />}
                             </button>
-                            <button
-                              onClick={() => handleShareVerse(verse, ayahNum)}
-                              className={`p-1.5 sm:p-2 rounded-full transition-all hover:scale-110 ${
-                                shareStatus === ayahNum ? 'bg-emerald-500/80' : 'bg-white/15'
-                              }`}
-                            >
-                              {shareStatus === ayahNum ? (
-                                <Icons.Check className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
-                              ) : (
-                                <Icons.Share className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
-                              )}
+                            <button onClick={() => handleShareVerse(verse, ayahNum)} className={`p-1.5 rounded-full transition-all hover:scale-110 ${shareStatus === ayahNum ? 'bg-emerald-500/80' : 'bg-white/15'}`}>
+                              {shareStatus === ayahNum ? <Icons.Check className="w-3 h-3" /> : <Icons.Share className="w-3 h-3" />}
                             </button>
                           </div>
                         </div>
@@ -1244,151 +2113,43 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({
                 )}
               </div>
 
-            </div>
-
-            {/* Audio Controls */}
-            <div className="flex-shrink-0 pt-1">
-              {audioError && (
-                <p className="text-center text-red-300 text-[10px] mb-1">{audioError}</p>
-              )}
-              <div className="flex items-center justify-center gap-2 sm:gap-3">
-                <button
-                  onClick={() => currentAyah > 1 && setCurrentAyah(prev => prev - 1)}
-                  disabled={currentAyah <= 1}
-                  className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/20 flex items-center justify-center hover:bg-white/30 transition-all disabled:opacity-30"
-                >
-                  <Icons.SkipBack className="w-3 h-3 sm:w-4 sm:h-4" />
-                </button>
-
-                <button
-                  onClick={() => setIsPlaying(prev => !prev)}
-                  className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/30 flex items-center justify-center hover:bg-white/40 transition-all hover:scale-105"
-                  style={{ boxShadow: '0 4px 15px rgba(0,0,0,0.2)' }}
-                >
-                  {audioLoading ? (
-                    <Icons.Loader className="w-4 h-4 sm:w-5 sm:h-5 animate-spin" />
-                  ) : isPlaying ? (
-                    <Icons.Pause className="w-4 h-4 sm:w-5 sm:h-5" />
-                  ) : (
-                    <Icons.Play className="w-4 h-4 sm:w-5 sm:h-5 ml-0.5" />
-                  )}
-                </button>
-
-                <button
-                  onClick={() => currentAyah < totalVerses && setCurrentAyah(prev => prev + 1)}
-                  disabled={currentAyah >= totalVerses}
-                  className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/20 flex items-center justify-center hover:bg-white/30 transition-all disabled:opacity-30"
-                >
-                  <Icons.SkipForward className="w-3 h-3 sm:w-4 sm:h-4" />
-                </button>
-              </div>
-              <div className="text-center mt-0.5 text-[10px] sm:text-xs text-white/70">
-                {currentAyah} / {totalVerses}
+              <div className="flex-shrink-0 pt-1">
+                {audioError && <p className="text-center text-red-300 text-[10px] mb-1">{audioError}</p>}
+                <div className="flex items-center justify-center gap-3">
+                  <button onClick={goToPrevAyah} disabled={currentAyah <= 1}
+                    className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center hover:bg-white/30 transition-all disabled:opacity-30">
+                    <Icons.SkipBack className="w-4 h-4" />
+                  </button>
+                  <button onClick={togglePlayPause}
+                    className="w-12 h-12 rounded-full bg-white/30 flex items-center justify-center hover:bg-white/40 transition-all hover:scale-105"
+                    style={{ boxShadow: '0 4px 15px rgba(0,0,0,0.2)' }}>
+                    {audioLoading ? <Icons.Loader className="w-5 h-5 animate-spin" /> : isPlaying ? <Icons.Pause className="w-5 h-5" /> : <Icons.Play className="w-5 h-5 ml-0.5" />}
+                  </button>
+                  <button onClick={goToNextAyah} disabled={currentAyah >= totalVerses}
+                    className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center hover:bg-white/30 transition-all disabled:opacity-30">
+                    <Icons.SkipForward className="w-4 h-4" />
+                  </button>
+                </div>
+                <div className="text-center mt-0.5 text-xs text-white/70">{currentAyah} / {totalVerses}</div>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Feature Bubbles - Left side */}
-      <FeatureBubbles
-        activeFeature={activeFeature}
-        onFeatureSelect={(feature) => {
-          setActiveFeature(feature);
-          // Close word meaning bubble when opening a feature
-          if (feature) setSelectedWordData(null);
-        }}
-        position="left"
-      />
-
-      {/* Feature Panel - Right side (when feature is active) */}
-      {activeFeature && (
-        <FeaturePanel
-          feature={activeFeature}
-          surahId={surah?.id}
-          surahName={surah?.name}
-          surahArabic={surah?.arabic}
-          ayahNumber={currentAyah}
-          verseArabic={verses[currentAyah - 1]?.arabic}
-          verseTranslation={verses[currentAyah - 1]?.translation}
-          palette={palette}
-          onClose={() => setActiveFeature(null)}
-          onMemorizeModeChange={setMemorizeSettings}
-        />
-      )}
-
-      {/* Word Meaning Bubble - Fixed on right side of screen */}
-      {selectedWordData && !activeFeature && (
-        <WordMeaningBubble
-          word={selectedWordData.word}
-          meaning={selectedWordData.meaning}
-          transliteration={selectedWordData.transliteration}
-          wordLang={wordLang}
-          palette={palette}
-          isLoading={selectedWordData.isLoading}
-          onClose={() => setSelectedWordData(null)}
-        />
-      )}
-
-      {/* Animations */}
       <style>{`
-        @keyframes spin {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
-        }
-        @keyframes breathe {
-          0%, 100% { transform: scale(1); opacity: 0.6; }
-          50% { transform: scale(1.04); opacity: 0.9; }
-        }
-        @keyframes floatParticle {
-          0%, 100% { transform: translateY(0) scale(1); opacity: 0.8; }
-          50% { transform: translateY(-6px) scale(1.2); opacity: 0.5; }
-        }
-        @keyframes slideDown {
-          from { opacity: 0; transform: translateY(-8px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes slideInRight {
-          from { opacity: 0; transform: translateX(20px); }
-          to { opacity: 1; transform: translateX(0); }
-        }
-        @keyframes bubbleGrow {
-          0% {
-            opacity: 0;
-            transform: translateX(-50%) scale(0.3);
-          }
-          50% {
-            transform: translateX(-50%) scale(1.1);
-          }
-          100% {
-            opacity: 1;
-            transform: translateX(-50%) scale(1);
-          }
-        }
-        @keyframes slideInFromRight {
-          0% {
-            opacity: 0;
-            transform: translateY(-50%) translateX(30px);
-          }
-          100% {
-            opacity: 1;
-            transform: translateY(-50%) translateX(0);
-          }
-        }
-        @keyframes fadeIn {
-          0% { opacity: 0; }
-          100% { opacity: 1; }
-        }
-        @keyframes bubbleDot {
-          0% {
-            opacity: 0;
-            transform: scale(0);
-          }
-          100% {
-            opacity: 1;
-            transform: scale(1);
-          }
-        }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes breathe { 0%, 100% { transform: scale(1); opacity: 0.6; } 50% { transform: scale(1.05); opacity: 0.9; } }
+        @keyframes floatParticle { 0%, 100% { transform: translateY(0) scale(1); opacity: 0.8; } 50% { transform: translateY(-8px) scale(1.2); opacity: 0.5; } }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideInBubbles { from { opacity: 0; transform: translateY(-50%) translateX(-30px); } to { opacity: 1; transform: translateY(-50%) translateX(0); } }
+        @keyframes floatBubble { 0%, 100% { transform: translateY(0); } 25% { transform: translateY(-4px); } 75% { transform: translateY(4px); } }
+        @keyframes pulseRing { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(2); opacity: 0; } }
+        @keyframes bubblePopIn { 0% { opacity: 0; transform: scale(0.5); } 100% { opacity: 1; transform: scale(1); } }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: rgba(255,255,255,0.1); border-radius: 3px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.3); border-radius: 3px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.5); }
       `}</style>
     </div>
   );

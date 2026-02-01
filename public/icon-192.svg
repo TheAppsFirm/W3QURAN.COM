@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" width="192" height="192">
+  <defs>
+    <linearGradient id="bubbleGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8B5CF6"/>
+      <stop offset="50%" style="stop-color:#6366F1"/>
+      <stop offset="100%" style="stop-color:#4F46E5"/>
+    </linearGradient>
+    <linearGradient id="glowGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#A78BFA;stop-opacity:0.6"/>
+      <stop offset="100%" style="stop-color:#6366F1;stop-opacity:0"/>
+    </linearGradient>
+    <radialGradient id="highlight" cx="35%" cy="25%" r="60%">
+      <stop offset="0%" style="stop-color:rgba(255,255,255,0.6)"/>
+      <stop offset="50%" style="stop-color:rgba(255,255,255,0.2)"/>
+      <stop offset="100%" style="stop-color:rgba(255,255,255,0)"/>
+    </radialGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#4F46E5" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="192" height="192" rx="40" fill="#0f172a"/>
+
+  <!-- Outer glow -->
+  <circle cx="96" cy="96" r="72" fill="url(#glowGrad)" filter="url(#shadow)"/>
+
+  <!-- Main bubble -->
+  <circle cx="96" cy="96" r="60" fill="url(#bubbleGrad)"/>
+
+  <!-- Glass highlight -->
+  <ellipse cx="78" cy="70" rx="30" ry="18" fill="url(#highlight)"/>
+
+  <!-- Small highlight -->
+  <circle cx="68" cy="60" r="8" fill="rgba(255,255,255,0.5)"/>
+
+  <!-- Arabic Qaf (ق) symbol -->
+  <text x="96" y="115"
+        font-family="'Scheherazade New', 'Amiri', 'Arial', serif"
+        font-size="70"
+        font-weight="bold"
+        fill="white"
+        text-anchor="middle"
+        style="text-shadow: 0 2px 8px rgba(0,0,0,0.3);">ق</text>
+
+  <!-- Small decorative dots -->
+  <circle cx="130" cy="55" r="4" fill="rgba(255,255,255,0.6)"/>
+  <circle cx="145" cy="75" r="3" fill="rgba(255,255,255,0.4)"/>
+</svg>

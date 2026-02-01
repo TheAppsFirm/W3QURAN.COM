@@ -1,7 +1,7 @@
 # w3Quran - Project Context for Claude
 
 ## Project Overview
-w3Quran is an interactive Quran explorer app built with React + Vite + Tailwind CSS. It features beautiful 3D bubble visualizations for Surahs and Juzz, audio recitation, quizzes, daily verses, and more.
+w3Quran is an interactive Quran explorer app built with React + Vite + Tailwind CSS. It features beautiful 3D bubble visualizations for Surahs and Juzz, audio recitation, word-by-word meanings, Tajweed highlighting, quizzes, daily verses, and more.
 
 ## Tech Stack
 - **React 18** with functional components and hooks
@@ -9,48 +9,117 @@ w3Quran is an interactive Quran explorer app built with React + Vite + Tailwind 
 - **Tailwind CSS** for styling
 - **No external state management** - uses React useState/useContext and custom hooks
 - **LocalStorage** for persistence via `useLocalStorage` hook
+- **IndexedDB** for offline storage via `offlineStorage.js`
+- **Service Worker** for PWA offline support
 
 ## Project Structure
 ```
 src/
 ├── components/
-│   ├── bubbles/          # Bubble visualizations
-│   │   ├── SurahBubble.jsx    # Individual surah bubble (fibonacci spiral)
-│   │   ├── JuzzBubble.jsx     # Individual juzz bubble
-│   │   └── BubbleConnections.jsx  # SVG connections (currently unused)
-│   ├── common/           # Shared components
+│   ├── bubbles/              # Bubble visualizations
+│   │   ├── SurahBubble.jsx   # Individual surah bubble with hover sounds
+│   │   ├── JuzzBubble.jsx    # Individual juzz bubble
+│   │   ├── StyledBubble.jsx  # Reusable styled bubble component
+│   │   └── BubbleLayouts.jsx # Different layout patterns
+│   ├── common/               # Shared components
 │   │   ├── ErrorBoundary.jsx
 │   │   ├── LoadingSpinner.jsx
+│   │   ├── Icons.jsx         # 50+ SVG icons
+│   │   ├── Logo.jsx          # w3Quran logo (w3quran text inside bubble)
+│   │   ├── BubbleOverlay.jsx # Reusable bubble-style modal
+│   │   ├── BubbleReaderOverlay.jsx # Full-featured Quran reader
 │   │   └── Modal.jsx
-│   ├── layout/           # Layout components
-│   │   ├── Header.jsx
-│   │   ├── FloatingMenu.jsx
-│   │   ├── ZoomSlider.jsx     # Dual zoom (bubble size + content size)
+│   ├── layout/               # Layout components
+│   │   ├── Header.jsx        # Filter controls
+│   │   ├── FloatingMenu.jsx  # Bottom navigation with sound effects
+│   │   ├── ZoomSlider.jsx    # Dual zoom controls
 │   │   └── StatsBar.jsx
-│   ├── views/            # Full-page views
+│   ├── views/                # Full-page views
 │   │   ├── QuranReaderView.jsx
 │   │   ├── NamesOfAllahView.jsx
 │   │   ├── QuizView.jsx
-│   │   ├── SettingsView.jsx
+│   │   ├── SettingsView.jsx  # Includes hover sound toggle
 │   │   ├── DailyVerseView.jsx
 │   │   ├── StatisticsView.jsx
 │   │   ├── ListenView.jsx
 │   │   ├── DonateView.jsx
 │   │   └── PrayerTimesView.jsx
-│   └── widgets/          # Dashboard widgets
+│   └── widgets/
 │       └── AnalyticsPanel.jsx
 ├── data/
-│   ├── index.js          # Main data exports
-│   ├── surahs.js         # SURAHS array with all 114 surahs
-│   ├── juzz.js           # JUZZ array with 30 juzz
-│   └── quran_en.js       # Full Quran English translation
+│   ├── index.js              # Main data exports
+│   ├── surahs.js             # SURAHS array with all 114 surahs
+│   ├── juzz.js               # JUZZ array with 30 juzz
+│   ├── wordMeanings.js       # Multi-language word meanings (local data)
+│   ├── offlineStorage.js     # IndexedDB for offline data
+│   ├── searchIndex.js        # Search functionality
+│   ├── tafseerData.js        # Tafseer content
+│   ├── progressTracker.js    # Reading progress tracking
+│   └── hifzTracker.js        # Memorization tracking
 ├── hooks/
 │   ├── index.js
-│   ├── useLocalStorage.js
-│   └── useAudioPlayer.js # Audio playback with race condition handling
-├── App.jsx               # Main app with view routing
-└── main.jsx              # Entry point
+│   ├── useLocalStorage.js    # Persistent state with prefix
+│   ├── useQuranAPI.js        # Quran API with word-by-word support
+│   └── useAudioPlayer.js     # Audio playback with race condition handling
+├── services/api/
+│   ├── QuranApiInterface.js  # API contract
+│   ├── FreeQuranApi.js       # Al-Quran Cloud API (with retry logic)
+│   └── QuranJsApi.js         # @quranjs/api adapter
+├── utils/
+│   ├── soundUtils.js         # Hover sounds (Islamic-style, with on/off toggle)
+│   ├── retryUtils.js         # Fetch with retry and circuit breaker
+│   ├── sanitize.js           # XSS prevention for search highlights
+│   └── shareUtils.js         # Sharing functionality
+├── App.jsx                   # Main app with view routing
+├── main.jsx                  # Entry point
+└── index.css                 # Global styles with bubble animations
 ```
+
+## Key Features
+
+### Logo Component (`Logo.jsx`)
+- Animated bubble with "w3Quran" text inside
+- Multiple sizes: small, medium, large, xlarge
+- Animated glow, spinning rainbow ring, floating particles
+- Exports: `Logo`, `LogoIcon`, `LogoFull`
+
+### Sound System (`soundUtils.js`)
+- Calming, Islamic-inspired hover sounds
+- Web Audio API for tone generation
+- Throttled playback to prevent spam
+- On/off toggle stored in localStorage (`w3quran_sound_enabled`)
+- Key functions:
+  - `playThrottledHoverSound()` - For bubble hovers
+  - `isSoundEnabled()` / `setSoundEnabled()` - Toggle control
+  - `toggleSound()` - Quick toggle
+
+### Word-by-Word System (`useQuranAPI.js`)
+- Multi-language word meanings (English, Urdu, etc.)
+- Local data support for common surahs
+- Quran.com API fallback for word translations
+- Language determined from translation ID via `WORD_TRANSLATION_LANGUAGES`
+- Single word audio playback for Tajweed learning
+- Key hook: `useMultilingualWords(surahId, translationId)`
+
+### Bubble Reader Overlay (`BubbleReaderOverlay.jsx`)
+- Full-featured Quran reading experience
+- Word-by-word mode with tap-to-show meanings
+- Single word audio playback button
+- Tajweed highlighting with color-coded rules
+- Memorization mode (hide words/verses)
+- Audio playback with verse navigation
+- Tafseer panel integration
+- Share/bookmark functionality
+
+### Retry Utilities (`retryUtils.js`)
+- `fetchWithRetry()` - Exponential backoff for API calls
+- `withCircuitBreaker()` - Prevents cascade failures
+- Used by FreeQuranApi for all API calls
+
+### PWA Support
+- Service Worker (`public/sw.js`) for offline caching
+- PWA icons (icon-192.svg, icon-512.svg)
+- Cache strategies: cache-first for static, network-first for API
 
 ## Key Data Structures
 
@@ -64,119 +133,82 @@ src/
   type: 'Makki',            // 'Makki' or 'Madani'
   meaning: 'The Opening',   // English meaning
   chronOrder: 5,            // Chronological revelation order
-  topics: ['prayer', 'faith', 'guidance']  // Topic tags
+  topics: ['prayer', 'faith', 'guidance']
 }
 ```
 
-### Juzz Object
+### Word Meaning Object
 ```javascript
 {
-  id: 1,                    // Juzz number (1-30)
-  arabic: 'الم'              // First word of juzz in Arabic
+  arabic: 'بِسْمِ',
+  meaning: 'In the name of',
+  transliteration: "bismi",
+  audioUrl: 'https://audio.qurancdn.com/...'  // Optional
 }
 ```
 
 ## Bubble Layout System
 
 ### Fibonacci Spiral (Phyllotaxis)
-Bubbles use the golden angle (137.508°) for organic positioning:
 ```javascript
 const scale = baseScale * zoom;
 const r = Math.sqrt(index + 1) * scale;
 const a = index * 137.508 * (Math.PI / 180);
 const x = r * Math.cos(a);
 const y = r * Math.sin(a);
-
-// Position with calc() for centering
-left: `calc(50% + ${x}px - ${size / 2}px)`
-top: `calc(50% + ${y}px - ${size / 2}px)`
 ```
 
-### Variable Bubble Sizes (Surahs)
-Bubble size scales with ayah count:
+### Variable Bubble Sizes
 ```javascript
-const baseMinSize = 78;
-const baseMaxSize = 160;
 const size = minSize + ((surah.ayahs / maxAyahs) * (maxSize - minSize));
 ```
 
-### Color Palettes
-Topic-based colors from `getTopicPalette(surah)`:
-```javascript
-{
-  colors: ['#6366f1', '#8b5cf6', '#a855f7'],  // Gradient colors
-  glow: '#6366f1'                              // Glow/accent color
-}
-```
-
-## CSS Animations (defined in App.jsx)
+## CSS Animations (index.css)
 - `gentleFloat` - Subtle vertical floating
 - `spinSlow` - Slow rotation for rainbow rings
 - `floatParticle` - Particle hover effect
 - `breathe` - Pulsing glow
-- `shimmerWave` - Light sweep on hover
-- `colorShift` - Subtle hue rotation
+- `shimmerWave` - Light sweep
+- `bubbleWobble` - Gentle wobble effect
+- `bubblePop` - Pop-in animation
+- `glowPulse` - Pulsing glow shadows
+- `orbitalSpin` - Orbital motion
+- `rainbowBorder` - Cycling border colors
 
-## Bubble Visual Layers (bottom to top)
-1. Outer soft glow (blur, radial gradient)
-2. Iridescent rainbow ring (conic gradient, spins on hover)
-3. Inner glow ring
-4. Main bubble body (linear gradient)
-5. Background pattern overlay
-6. Color overlay gradients
-7. Glass layers (2 layers with borders)
-8. Top crescent highlight
-9. Secondary/tertiary bright spots
-10. Bottom reflection
-11. Rainbow shimmer (hover only)
-12. Content (number badge, Arabic name, English name, ayah count)
-13. Floating particles (hover only)
-14. Outer ring border
+## Audio System
 
-## Zoom System
-Two independent zoom controls:
-- **Bubble Zoom** (`zoom`): Scales bubble size and positions
-- **Content Zoom** (`contentZoom`): Scales text inside bubbles
-
-Both stored in localStorage.
-
-## Audio System (useAudioPlayer.js)
+### Verse Audio (useAudioPlayer.js)
 - Uses Al-Quran Cloud API CDN
 - Supports multiple reciters
 - Handles race conditions with separate load/play effects
-- AbortError is expected and ignored when switching tracks
 
-### Audio URL Format
-```javascript
-const globalAyah = getGlobalAyahNumber(surahId, ayahNum);
-// https://cdn.islamic.network/quran/audio/128/ar.alafasy/{globalAyah}.mp3
-```
+### Word Audio
+- Individual word audio from Quran.com CDN
+- Played via simple Audio element in word tooltip
+- Available when `audioUrl` is present in word data
 
-## Common Issues & Solutions
+## Settings
+Settings stored in localStorage with prefix:
+- `settings_notifications` - Daily reminders
+- `settings_autoplay` - Auto-play next verse
+- `settings_translation` - Show translation
+- `settings_tajweed` - Tajweed highlighting
+- `settings_wordbyword` - Word-by-word mode
+- `settings_fontsize` - Arabic font size
+- `settings_reciter` - Default reciter
+- `w3quran_sound_enabled` - Hover sounds on/off
 
-### "All 114 surahs not showing"
-- Container size must accommodate spiral layout
-- Use large container (1400px+) with margin auto
-- Bubbles position from center using `calc(50% + ...)`
-
-### "Audio AbortError spam"
-- Separate audio loading from play/pause logic
-- Track current URL to avoid unnecessary reloads
-- Ignore AbortError (expected when source changes)
-
-### "Deprecated meta tag warning"
-- Use `mobile-web-app-capable` instead of `apple-mobile-web-app-capable`
+## External APIs
+- **Al-Quran Cloud** (`api.alquran.cloud/v1`): Verses, audio, translations
+- **Quran.com API** (`api.quran.com/api/v4`): Word-by-word, morphology
+- **Islamic Network CDN**: Audio files
 
 ## Build Commands
 ```bash
-npm run dev      # Development server
+npm run dev      # Development server (localhost:5173)
 npm run build    # Production build
 npm run preview  # Preview production build
 ```
-
-## External APIs
-- **Al-Quran Cloud**: Audio CDN and verse data
-- **Islamic Network CDN**: Audio files
 
 ## Design Philosophy
 - Beautiful glass-morphism bubbles with multiple layers
@@ -184,4 +216,6 @@ npm run preview  # Preview production build
 - Rich hover effects (glow, particles, shimmer)
 - Topic-based color coding
 - RTL support for Arabic content
-- Accessibility: reduced motion support
+- Accessibility: ARIA labels, reduced motion support
+- Islamic aesthetic: calming sounds, pleasant animations
+- Mobile-first responsive design with touch targets

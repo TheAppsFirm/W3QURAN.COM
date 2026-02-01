@@ -1,29 +1,49 @@
 # w3Quran
 
-A beautiful, interactive Quran application built with React, Vite, and Tailwind CSS. Features stunning 3D bubble visualizations for navigating surahs, comprehensive reading tools, and gamification elements.
+A beautiful, interactive Quran application built with React, Vite, and Tailwind CSS. Features stunning 3D bubble visualizations for navigating surahs, comprehensive reading tools, word-by-word learning, Tajweed support, and gamification elements.
 
 ## Features
 
+### Navigation & Visualization
 - **Interactive Bubble Navigation** - Beautiful 3D glass-morphism bubbles arranged in a golden spiral pattern
 - **114 Surahs** - Complete Quran with topic-based color coding
 - **30 Juzz View** - Navigate by Juzz (parts)
+- **Hover Sounds** - Calming, Islamic-inspired sounds on bubble hover (toggleable in settings)
+
+### Reading & Learning
 - **Quran Reader** - Read with Arabic text, transliteration, and translation
-- **Memorization Mode** - Hide/reveal verses for memorization practice
+- **Word-by-Word Mode** - Tap any word to see its meaning and transliteration
+- **Single Word Audio** - Play individual word pronunciation for Tajweed learning
+- **Multi-language Support** - Word meanings in English, Urdu, and more
+- **Tajweed Highlighting** - Color-coded tajweed rules for proper recitation
+- **Memorization Mode** - Hide/reveal words and verses for memorization practice
+
+### Additional Features
 - **99 Names of Allah** - Learn the beautiful names with meanings
 - **Daily Verses** - Inspirational verses for daily reflection
 - **Quiz Mode** - Test your knowledge with multiple difficulty levels
 - **Prayer Times** - View prayer times with Qibla compass
 - **Statistics** - Track your reading progress and achievements
-- **Dark Mode** - Eye-friendly dark theme
+- **Tafseer** - Access verse interpretations and explanations
+- **Search** - Find verses by text or topic
+- **Bookmarks** - Save your favorite verses
+- **Share** - Share verses as text or beautiful images
+
+### Technical Features
+- **Dark Mode** - Eye-friendly dark theme (default)
 - **Responsive Design** - Works on desktop and mobile devices
-- **Offline Support** - Cached data for offline access
+- **PWA Support** - Install as an app with offline support
+- **Offline Mode** - Cached data for reading without internet
+- **Accessibility** - ARIA labels, reduced motion support
 
 ## Tech Stack
 
-- **React 18** - UI library
-- **Vite** - Build tool and dev server
+- **React 18** - UI library with functional components and hooks
+- **Vite** - Fast build tool and dev server
 - **Tailwind CSS** - Utility-first CSS framework
-- **@quranjs/api** - Quran API (optional, with free API fallback)
+- **Web Audio API** - For hover sounds
+- **IndexedDB** - For offline data storage
+- **Service Worker** - For PWA offline caching
 
 ## Project Structure
 
@@ -32,76 +52,57 @@ w3quran/
 ├── src/
 │   ├── components/
 │   │   ├── common/              # Shared components
-│   │   │   ├── ErrorBoundary.jsx
-│   │   │   ├── LoadingSpinner.jsx
+│   │   │   ├── Logo.jsx         # w3Quran logo component
 │   │   │   ├── Icons.jsx        # 50+ SVG icons
-│   │   │   ├── Modal.jsx
-│   │   │   └── index.js
+│   │   │   ├── BubbleOverlay.jsx    # Reusable modal
+│   │   │   ├── BubbleReaderOverlay.jsx # Full reader
+│   │   │   └── ErrorBoundary.jsx
 │   │   ├── layout/              # Layout components
 │   │   │   ├── Header.jsx       # Filter controls
 │   │   │   ├── FloatingMenu.jsx # Bottom navigation
-│   │   │   ├── ZoomSlider.jsx   # Zoom controls
-│   │   │   ├── StatsBar.jsx     # User stats display
-│   │   │   └── index.js
+│   │   │   └── ZoomSlider.jsx   # Zoom controls
 │   │   ├── bubbles/             # Bubble visualizations
 │   │   │   ├── SurahBubble.jsx  # Surah bubble with 3D effects
-│   │   │   ├── JuzzBubble.jsx   # Juzz bubble
-│   │   │   └── index.js
-│   │   ├── views/               # Page views
-│   │   │   ├── QuranReaderView.jsx
-│   │   │   ├── NamesOfAllahView.jsx
-│   │   │   ├── QuizView.jsx
-│   │   │   ├── SettingsView.jsx
-│   │   │   ├── DailyVerseView.jsx
-│   │   │   ├── StatisticsView.jsx
-│   │   │   ├── ListenView.jsx
-│   │   │   ├── DonateView.jsx
-│   │   │   ├── PrayerTimesView.jsx
-│   │   │   └── index.js
-│   │   └── widgets/
-│   │       ├── AnalyticsPanel.jsx
-│   │       └── index.js
-│   ├── data/                    # Static data
+│   │   │   └── JuzzBubble.jsx   # Juzz bubble
+│   │   └── views/               # Page views
+│   │       ├── QuranReaderView.jsx
+│   │       ├── NamesOfAllahView.jsx
+│   │       ├── QuizView.jsx
+│   │       ├── SettingsView.jsx
+│   │       ├── DailyVerseView.jsx
+│   │       ├── StatisticsView.jsx
+│   │       ├── ListenView.jsx
+│   │       ├── DonateView.jsx
+│   │       └── PrayerTimesView.jsx
+│   ├── data/                    # Static data & storage
 │   │   ├── surahs.js            # All 114 surahs metadata
-│   │   ├── palettes.js          # Color palettes & topic icons
-│   │   ├── topics.js            # Topic categories
-│   │   ├── namesOfAllah.js      # 99 Names of Allah
-│   │   ├── dailyVerses.js       # Inspirational verses
-│   │   ├── quizQuestions.js     # Quiz content
-│   │   └── index.js
+│   │   ├── wordMeanings.js      # Multi-language word meanings
+│   │   ├── offlineStorage.js    # IndexedDB storage
+│   │   └── progressTracker.js   # Reading progress
 │   ├── hooks/                   # Custom React hooks
 │   │   ├── useLocalStorage.js   # Persistent state
-│   │   ├── useDebounce.js       # Debounce/throttle utilities
-│   │   ├── useQuranData.js      # API data fetching
-│   │   └── index.js
+│   │   ├── useQuranAPI.js       # API with word-by-word
+│   │   └── useAudioPlayer.js    # Audio playback
 │   ├── services/api/            # API abstraction layer
-│   │   ├── QuranApiInterface.js # API contract/interface
-│   │   ├── FreeQuranApi.js      # Free API implementation
-│   │   ├── QuranJsApi.js        # @quranjs/api adapter
+│   │   ├── FreeQuranApi.js      # Al-Quran Cloud API
 │   │   └── index.js
-│   ├── context/
-│   │   └── AppContext.jsx       # Global state management
+│   ├── utils/                   # Utility functions
+│   │   ├── soundUtils.js        # Hover sounds
+│   │   ├── retryUtils.js        # API retry logic
+│   │   └── shareUtils.js        # Sharing utilities
 │   ├── App.jsx                  # Main app component
 │   ├── main.jsx                 # Entry point
-│   └── index.css                # Global styles
+│   └── index.css                # Global styles & animations
 ├── public/
+│   ├── sw.js                    # Service Worker
+│   ├── icon-192.svg             # PWA icon
+│   └── icon-512.svg             # PWA icon
 ├── index.html
 ├── package.json
 ├── vite.config.js
 ├── tailwind.config.js
-├── postcss.config.js
-└── README.md
+└── CLAUDE.md                    # Claude AI context file
 ```
-
-## Architecture
-
-This project follows **SOLID principles**:
-
-- **Single Responsibility** - Each component has one clear purpose
-- **Open/Closed** - Easy to add new features without modifying existing code
-- **Liskov Substitution** - API implementations can be swapped seamlessly
-- **Interface Segregation** - Small, focused hooks and components
-- **Dependency Inversion** - Components depend on abstractions (context, hooks)
 
 ## Getting Started
 
@@ -147,48 +148,42 @@ The built files will be in the `dist/` directory.
 npm run preview
 ```
 
-## API Configuration (Optional)
+## Settings
 
-The app uses a free Quran API by default. To use the official @quranjs/api:
+The app provides various customization options:
 
-1. Get credentials from [quranjs.com](https://quranjs.com)
-2. Create a `.env` file:
-```env
-VITE_QURANJS_CLIENT_ID=your_client_id
-VITE_QURANJS_CLIENT_SECRET=your_client_secret
-```
-
-The app will automatically switch to the official API when credentials are provided.
-
-## Available Scripts
-
-| Command | Description |
+| Setting | Description |
 |---------|-------------|
-| `npm run dev` | Start development server |
-| `npm run build` | Build for production |
-| `npm run preview` | Preview production build |
+| Dark Mode | Toggle dark/light theme |
+| Font Size | Adjust Arabic text size (Small/Medium/Large/XLarge) |
+| Default Reciter | Choose preferred Qari |
+| Hover Sounds | Enable/disable calming hover sounds |
+| Auto-play Audio | Automatically play next verse |
+| Show Translation | Display English translation |
+| Tajweed Highlighting | Color-code tajweed rules |
+| Word-by-Word Mode | Enable tap-to-reveal word meanings |
+| Notifications | Daily verse and prayer reminders |
 
 ## Key Features Explained
 
 ### Bubble Visualization
 Surahs are displayed as beautiful glass-morphism bubbles arranged in a golden spiral (Fibonacci) pattern. Each bubble's size corresponds to the number of ayahs, and colors represent the surah's primary topic.
 
-### Topic-Based Coloring
-Surahs are colored based on their primary topic:
-- Prayer (blue)
-- Faith (purple)
-- Prophets (gold)
-- Paradise (green)
-- And 20+ more topics
+### Word-by-Word Learning
+Enable Word-by-Word mode in settings, then tap any Arabic word to see:
+- Word meaning in your selected language
+- Transliteration
+- Play button for word audio (great for Tajweed practice)
 
-### Memorization Mode
-In the Quran Reader, enable memorization mode to hide verses. Click on hidden verses to reveal them - perfect for testing your memorization.
+### Tajweed Highlighting
+When enabled, Arabic text is color-coded according to Tajweed rules:
+- Blue shades - Madd (prolongation)
+- Green - Ghunnah (nasalization)
+- Red - Qalqalah (echo sound)
+- And more...
 
-### Gamification
-- Earn points for reading
-- Track daily streaks
-- Unlock achievements
-- Level up from Starter to Pro
+### Hover Sounds
+The app features calming, Islamic-inspired hover sounds when navigating bubbles. These can be toggled on/off in the Audio section of Settings.
 
 ## Browser Support
 
@@ -214,6 +209,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Acknowledgments
 
 - Quran data from [Al-Quran Cloud API](https://alquran.cloud/api)
+- Word translations from [Quran.com API](https://quran.com)
 - Arabic fonts: Scheherazade New, Amiri
 - Icons: Custom SVG icons
 

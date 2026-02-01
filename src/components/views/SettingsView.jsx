@@ -5,11 +5,13 @@
 
 import { Icons } from '../common/Icons';
 import { useLocalStorage } from '../../hooks';
+import { isSoundEnabled, setSoundEnabled } from '../../utils/soundUtils';
 
 function SettingsView({ darkMode, setDarkMode }) {
   // All settings persisted to localStorage
   const [notifications, setNotifications] = useLocalStorage('settings_notifications', true);
   const [autoPlayAudio, setAutoPlayAudio] = useLocalStorage('settings_autoplay', false);
+  const [hoverSounds, setHoverSounds] = useLocalStorage('w3quran_sound_enabled', isSoundEnabled());
   const [showTranslation, setShowTranslation] = useLocalStorage('settings_translation', true);
   const [tajweedHighlight, setTajweedHighlight] = useLocalStorage('settings_tajweed', false);
   const [wordByWord, setWordByWord] = useLocalStorage('settings_wordbyword', false);
@@ -39,6 +41,12 @@ function SettingsView({ darkMode, setDarkMode }) {
     { value: 'ar.minshawi', label: 'Mohamed Al-Minshawi' },
     { value: 'ar.shaatree', label: 'Abu Bakr Al-Shatri' },
   ];
+
+  // Handler for hover sounds toggle - sync with soundUtils
+  const handleHoverSoundsToggle = (value) => {
+    setHoverSounds(value);
+    setSoundEnabled(value);
+  };
 
   return (
     <div className={`h-full overflow-auto p-6 ${darkMode ? 'text-white' : ''}`}>
@@ -158,6 +166,43 @@ function SettingsView({ darkMode, setDarkMode }) {
                 </option>
               ))}
             </select>
+          </div>
+
+          {/* Hover Sounds Toggle */}
+          <div
+            className={`rounded-2xl p-4 shadow-lg border mt-3 ${
+              darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'
+            }`}
+          >
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <Icons.Volume className={`w-5 h-5 ${hoverSounds ? 'text-cyan-500' : darkMode ? 'text-gray-400' : 'text-gray-500'}`} />
+                <div>
+                  <span className={`font-bold block ${darkMode ? 'text-white' : 'text-gray-800'}`}>
+                    Hover Sounds
+                  </span>
+                  <span className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                    Calming sounds on bubble hover
+                  </span>
+                </div>
+              </div>
+              <button
+                onClick={() => handleHoverSoundsToggle(!hoverSounds)}
+                className={`w-14 h-8 rounded-full relative transition-all ${
+                  hoverSounds
+                    ? 'bg-gradient-to-r from-cyan-500 to-blue-500 shadow-lg shadow-cyan-500/30'
+                    : darkMode
+                      ? 'bg-gray-600'
+                      : 'bg-gray-200'
+                }`}
+              >
+                <div
+                  className={`absolute top-1 w-6 h-6 bg-white rounded-full shadow-md transition-all ${
+                    hoverSounds ? 'left-7' : 'left-1'
+                  }`}
+                />
+              </button>
+            </div>
           </div>
         </div>
 

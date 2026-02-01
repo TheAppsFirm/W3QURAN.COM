@@ -526,6 +526,21 @@ export const FilterIcon = (props) => (
   </Icon>
 );
 
+export const ImageIcon = (props) => (
+  <Icon {...props}>
+    <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+    <circle cx="8.5" cy="8.5" r="1.5" />
+    <polyline points="21 15 16 10 5 21" />
+  </Icon>
+);
+
+export const HeadphonesIcon = (props) => (
+  <Icon {...props}>
+    <path d="M3 18v-6a9 9 0 0 1 18 0v6" />
+    <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z" />
+  </Icon>
+);
+
 // ============================================================================
 // Loading Icon
 // ============================================================================
@@ -540,6 +555,14 @@ export const LoaderIcon = (props) => (
     <line x1="18" y1="12" x2="22" y2="12" />
     <line x1="4.93" y1="19.07" x2="7.76" y2="16.24" />
     <line x1="16.24" y1="7.76" x2="19.07" y2="4.93" />
+  </Icon>
+);
+
+// CheckSquare Icon
+const CheckSquareIcon = (props) => (
+  <Icon {...props} viewBox="0 0 24 24">
+    <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+    <polyline points="9 11 12 14 22 4" />
   </Icon>
 );
 
@@ -614,6 +637,9 @@ export const Icons = {
   AlertCircle: AlertCircleIcon,
   Minus: MinusIcon,
   Filter: FilterIcon,
+  Image: ImageIcon,
+  Headphones: HeadphonesIcon,
+  CheckSquare: CheckSquareIcon,
 };
 
 export default Icons;
