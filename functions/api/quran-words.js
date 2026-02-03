@@ -30,18 +30,20 @@ async function getAccessToken(env) {
     throw new Error('Missing OAuth credentials');
   }
 
-  // OAuth2 client credentials flow
-  const tokenUrl = 'https://oauth2.quran.foundation/oauth/token';
+  // OAuth2 client credentials flow with Basic Auth
+  const tokenUrl = 'https://oauth2.quran.foundation/oauth2/token';
+
+  // Create Basic Auth header
+  const basicAuth = btoa(`${clientId}:${clientSecret}`);
 
   const response = await fetch(tokenUrl, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
+      'Authorization': `Basic ${basicAuth}`,
     },
     body: new URLSearchParams({
       grant_type: 'client_credentials',
-      client_id: clientId,
-      client_secret: clientSecret,
       scope: 'content',
     }),
   });

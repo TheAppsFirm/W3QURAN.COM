@@ -43,6 +43,8 @@ export function useQuranVerses(surahId) {
 
   useEffect(() => {
     if (!surahId || surahId < 1 || surahId > 114) {
+      setVerses([]);
+      setSurahInfo(null);
       setLoading(false);
       setError('Invalid surah ID');
       return;

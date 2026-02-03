@@ -143,6 +143,8 @@ export function useQuranAPI(surahId, options = {}) {
 
   useEffect(() => {
     if (!surahId || surahId < 1 || surahId > 114) {
+      setVerses([]);
+      setSurahInfo(null);
       setLoading(false);
       setError('Invalid surah ID');
       return;
@@ -184,17 +186,19 @@ export function useQuranAPI(surahId, options = {}) {
         const tajweedData = data.find(d => d.edition.identifier === 'quran-tajweed');
         const wordByWordData = data.find(d => d.edition.identifier === 'quran-wordbyword');
 
-        // Set surah info
-        if (arabicData) {
-          setSurahInfo({
-            id: arabicData.number,
-            name: arabicData.englishName,
-            arabicName: arabicData.name,
-            meaning: arabicData.englishNameTranslation,
-            type: arabicData.revelationType,
-            totalVerses: arabicData.numberOfAyahs,
-          });
+        if (!arabicData?.ayahs) {
+          throw new Error('Arabic edition unavailable');
         }
+
+        // Set surah info
+        setSurahInfo({
+          id: arabicData.number,
+          name: arabicData.englishName,
+          arabicName: arabicData.name,
+          meaning: arabicData.englishNameTranslation,
+          type: arabicData.revelationType,
+          totalVerses: arabicData.numberOfAyahs,
+        });
 
         // Combine verse data
         const combinedVerses = arabicData.ayahs.map((ayah, index) => {
@@ -220,6 +224,8 @@ export function useQuranAPI(surahId, options = {}) {
         setLoading(false);
       } catch (err) {
         if (cancelled) return;
+        setVerses([]);
+        setSurahInfo(null);
         setError(err.message);
         setLoading(false);
       }

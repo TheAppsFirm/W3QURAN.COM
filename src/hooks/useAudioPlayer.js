@@ -144,6 +144,13 @@ export function useAudioPlayer(options = {}) {
     };
   }, [totalVerses]);
 
+  // Reset/clamp when surah or total verse count changes
+  useEffect(() => {
+    setError(null);
+    setCurrentAyah((prev) => (prev > totalVerses ? 1 : prev));
+    setIsPlaying(false);
+  }, [surahId, totalVerses]);
+
   // Load audio when source changes (surahId, currentAyah, reciterId)
   useEffect(() => {
     const audio = audioRef.current;
