@@ -87,6 +87,60 @@ const SurahBubble = memo(function SurahBubble({
         perspective: '1000px',
       }}
     >
+      {/* CLOCK ZOOM EFFECT - Radial sweep on hover */}
+      <div
+        className="absolute rounded-full pointer-events-none overflow-hidden"
+        style={{
+          inset: '-5%',
+          opacity: hovered ? 1 : 0,
+          transition: 'opacity 0.3s ease',
+        }}
+      >
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            background: `conic-gradient(from 0deg at 50% 50%,
+              transparent 0deg,
+              ${palette.glow}60 0deg,
+              ${palette.colors[0]}40 60deg,
+              transparent 120deg
+            )`,
+            animation: hovered ? 'spinSlow 2s linear infinite' : 'none',
+            borderRadius: '50%',
+          }}
+        />
+      </div>
+
+      {/* CLOCK TICK MARKS - Decorative time markers */}
+      {hovered && (
+        <div
+          className="absolute pointer-events-none"
+          style={{
+            inset: '-2%',
+            borderRadius: '50%',
+          }}
+        >
+          {[...Array(12)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute"
+              style={{
+                width: '2px',
+                height: i % 3 === 0 ? '8%' : '5%',
+                background: `linear-gradient(to bottom, rgba(255,255,255,${i % 3 === 0 ? 0.8 : 0.4}), transparent)`,
+                left: '50%',
+                top: '2%',
+                transformOrigin: '50% 500%',
+                transform: `translateX(-50%) rotate(${i * 30}deg)`,
+                opacity: 0,
+                animation: `floatParticle 0.5s ease-out ${i * 0.03}s forwards`,
+              }}
+            />
+          ))}
+        </div>
+      )}
+
       {/* LAYER 1: Outer Soft Glow */}
       <div
         className="absolute rounded-full transition-all duration-700 pointer-events-none"

@@ -417,7 +417,8 @@ export const GridLayout = memo(function GridLayout({
 
   return (
     <div
-      className="flex flex-wrap justify-center gap-4 p-8"
+      className="flex flex-wrap flex-row-reverse justify-center gap-4 p-8"
+      dir="rtl"
       style={{ maxWidth: (bubbleSize + gap) * columns + 100 }}
     >
       {surahs.map((surah, index) => {

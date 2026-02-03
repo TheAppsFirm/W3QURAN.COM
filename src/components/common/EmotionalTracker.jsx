@@ -239,7 +239,7 @@ export const MoodEntryForm = memo(function MoodEntryForm({
 });
 
 // Main Emotional Journey Dashboard
-const EmotionalTracker = memo(function EmotionalTracker({ isVisible, onClose }) {
+const EmotionalTracker = memo(function EmotionalTracker({ isVisible, onClose, onNavigateToSurah }) {
   const [data, setData] = useState({ entries: [], insights: {} });
   const [activeTab, setActiveTab] = useState('overview'); // overview, history, suggestions
   const [currentMoodState, setCurrentMoodState] = useState(null);
@@ -280,20 +280,28 @@ const EmotionalTracker = memo(function EmotionalTracker({ isVisible, onClose }) 
 
     // Streak calculation
     let streak = 0;
-    const today = new Date().toDateString();
     const entriesByDate = {};
     entries.forEach((e) => {
       const dateStr = new Date(e.date).toDateString();
       entriesByDate[dateStr] = true;
     });
 
-    for (let i = 0; i < 365; i++) {
+    // Start checking from yesterday if today has no entry yet
+    const today = new Date().toDateString();
+    const startOffset = entriesByDate[today] ? 0 : 1;
+
+    for (let i = startOffset; i < 365; i++) {
       const checkDate = new Date(Date.now() - i * 24 * 60 * 60 * 1000).toDateString();
       if (entriesByDate[checkDate]) {
         streak++;
-      } else if (i > 0) {
+      } else {
         break;
       }
+    }
+
+    // If we started from yesterday and today has an entry, add it
+    if (startOffset === 0) {
+      // Already counting from today
     }
 
     return {
@@ -489,7 +497,7 @@ const EmotionalTracker = memo(function EmotionalTracker({ isVisible, onClose }) 
                         <div className="flex items-center justify-between">
                           <p className="text-white font-medium">{entry.surahName}</p>
                           <span className="text-white/40 text-xs">
-                            {date.toLocaleDateString()}
+                            {date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                           </span>
                         </div>
                         <p className="text-white/60 text-sm">{mood?.label}</p>
@@ -553,9 +561,10 @@ const EmotionalTracker = memo(function EmotionalTracker({ isVisible, onClose }) 
                   <h3 className="text-white font-medium mb-4">Recommended for You</h3>
                   <div className="space-y-3">
                     {suggestions.map((surah) => (
-                      <div
+                      <button
                         key={surah.id}
-                        className="p-4 rounded-xl bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-500/20 flex items-center gap-4"
+                        onClick={() => onNavigateToSurah && onNavigateToSurah(surah.id)}
+                        className="w-full p-4 rounded-xl bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-500/20 flex items-center gap-4 hover:from-purple-500/30 hover:to-pink-500/30 transition-all hover:scale-[1.02] text-left"
                       >
                         <div className="w-12 h-12 rounded-full bg-purple-500/30 flex items-center justify-center">
                           <span className="text-white font-bold">{surah.id}</span>
@@ -570,7 +579,8 @@ const EmotionalTracker = memo(function EmotionalTracker({ isVisible, onClose }) 
                           </p>
                           <p className="text-white/40 text-xs">{surah.ayahs} verses</p>
                         </div>
-                      </div>
+                        <Icons.ChevronRight className="w-5 h-5 text-white/40" />
+                      </button>
                     ))}
                   </div>
                 </div>

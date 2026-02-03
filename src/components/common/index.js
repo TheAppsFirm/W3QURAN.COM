@@ -20,3 +20,5 @@ export { Logo, LogoIcon, LogoFull } from './Logo';
 export { default as VerseArtGenerator } from './VerseArtGenerator';
 export { default as EmotionalTracker, MoodEntryForm, MoodSelector } from './EmotionalTracker';
 export { default as AyahConnectionMap } from './AyahConnectionMap';
+export { default as ScholarVideoSync } from './ScholarVideoSync';
+export { default as WordSearchMap } from './WordSearchMap';

@@ -243,6 +243,92 @@ body {
   }
 }
 
+/* Clock-shaped zoom effect for bubbles */
+@keyframes clockZoom {
+  0% {
+    clip-path: polygon(50% 50%, 50% 0%, 50% 0%, 50% 0%, 50% 0%, 50% 0%, 50% 0%, 50% 0%, 50% 0%);
+    opacity: 0;
+  }
+  12.5% {
+    clip-path: polygon(50% 50%, 50% 0%, 100% 0%, 100% 0%, 100% 0%, 100% 0%, 100% 0%, 100% 0%, 100% 0%);
+  }
+  25% {
+    clip-path: polygon(50% 50%, 50% 0%, 100% 0%, 100% 50%, 100% 50%, 100% 50%, 100% 50%, 100% 50%, 100% 50%);
+  }
+  37.5% {
+    clip-path: polygon(50% 50%, 50% 0%, 100% 0%, 100% 50%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%);
+  }
+  50% {
+    clip-path: polygon(50% 50%, 50% 0%, 100% 0%, 100% 50%, 100% 100%, 50% 100%, 50% 100%, 50% 100%, 50% 100%);
+  }
+  62.5% {
+    clip-path: polygon(50% 50%, 50% 0%, 100% 0%, 100% 50%, 100% 100%, 50% 100%, 0% 100%, 0% 100%, 0% 100%);
+  }
+  75% {
+    clip-path: polygon(50% 50%, 50% 0%, 100% 0%, 100% 50%, 100% 100%, 50% 100%, 0% 100%, 0% 50%, 0% 50%);
+  }
+  87.5% {
+    clip-path: polygon(50% 50%, 50% 0%, 100% 0%, 100% 50%, 100% 100%, 50% 100%, 0% 100%, 0% 50%, 0% 0%);
+  }
+  100% {
+    clip-path: polygon(50% 50%, 50% 0%, 100% 0%, 100% 50%, 100% 100%, 50% 100%, 0% 100%, 0% 50%, 0% 0%);
+    opacity: 1;
+  }
+}
+
+@keyframes clockZoomReverse {
+  0% {
+    clip-path: polygon(50% 50%, 50% 0%, 100% 0%, 100% 50%, 100% 100%, 50% 100%, 0% 100%, 0% 50%, 0% 0%);
+    opacity: 1;
+  }
+  100% {
+    clip-path: polygon(50% 50%, 50% 0%, 50% 0%, 50% 0%, 50% 0%, 50% 0%, 50% 0%, 50% 0%, 50% 0%);
+    opacity: 0;
+  }
+}
+
+/* Radial clock sweep effect */
+@keyframes clockSweep {
+  0% {
+    background: conic-gradient(from 0deg, transparent 0deg, rgba(255,255,255,0.3) 0deg, transparent 30deg);
+  }
+  100% {
+    background: conic-gradient(from 360deg, transparent 0deg, rgba(255,255,255,0.3) 0deg, transparent 30deg);
+  }
+}
+
+/* Mind map node pulse */
+@keyframes nodePulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 currentColor;
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px 5px currentColor;
+  }
+}
+
+/* Mind map connection flow */
+@keyframes connectionFlow {
+  0% {
+    stroke-dashoffset: 20;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Bubble button hover glow */
+@keyframes bubbleButtonGlow {
+  0%, 100% {
+    filter: brightness(1) drop-shadow(0 0 5px currentColor);
+  }
+  50% {
+    filter: brightness(1.2) drop-shadow(0 0 15px currentColor);
+  }
+}
+
 @keyframes bubbleWobble {
   0%, 100% {
     transform: scale(1) rotate(0deg);

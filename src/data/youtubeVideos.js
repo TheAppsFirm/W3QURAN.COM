@@ -242,4 +242,142 @@ export const generateSearchQuery = (surahName, category = 'tafseer') => {
   return queries[category] || `${surahName} quran`;
 };
 
+// Verse-synced videos with timestamps (for Scholar Video Sync feature)
+// timestamps: { verseNumber: secondsFromStart }
+export const VERSE_SYNCED_VIDEOS = {
+  1: [ // Al-Fatiha
+    {
+      id: 'Al4OE0sE3kI',
+      title: 'Word-by-Word Analysis of Al-Fatiha',
+      scholar: 'nouman-ali-khan',
+      duration: '1:02:34',
+      timestamps: {
+        1: 120,    // Bismillah starts at 2:00
+        2: 480,    // Al-hamdu lillahi starts at 8:00
+        3: 780,    // Ar-Rahman starts at 13:00
+        4: 1020,   // Maliki yawmid-din at 17:00
+        5: 1380,   // Iyyaka na'budu at 23:00
+        6: 1800,   // Ihdinas-sirat at 30:00
+        7: 2400,   // Siratal-ladheena at 40:00
+      },
+      language: 'en',
+    },
+  ],
+  36: [ // Ya-Sin
+    {
+      id: 'demo_yasin_sync',
+      title: 'Surah Ya-Sin Verse by Verse',
+      scholar: 'nouman-ali-khan',
+      duration: '2:15:00',
+      timestamps: {
+        1: 60,
+        2: 180,
+        3: 300,
+        4: 420,
+        5: 540,
+        // More timestamps would be added
+      },
+      language: 'en',
+    },
+  ],
+  55: [ // Ar-Rahman
+    {
+      id: 'demo_rahman_sync',
+      title: 'Divine Attributes in Ar-Rahman',
+      scholar: 'nouman-ali-khan',
+      duration: '1:45:00',
+      timestamps: {
+        1: 90,
+        2: 210,
+        3: 330,
+        4: 450,
+        5: 570,
+        6: 690,
+        7: 810,
+        8: 930,
+      },
+      language: 'en',
+    },
+  ],
+  67: [ // Al-Mulk
+    {
+      id: 'nKn9IChwF88',
+      title: 'Tafseer Surah Al-Mulk - The Kingdom',
+      scholar: 'nouman-ali-khan',
+      duration: '52:30',
+      timestamps: {
+        1: 60,
+        2: 180,
+        3: 300,
+        4: 420,
+        5: 540,
+      },
+      language: 'en',
+    },
+  ],
+  112: [ // Al-Ikhlas
+    {
+      id: '8xOqKbMKOcI',
+      title: 'Understanding Tawheed through Al-Ikhlas',
+      scholar: 'nouman-ali-khan',
+      duration: '28:15',
+      timestamps: {
+        1: 120,   // Qul huwa Allahu ahad
+        2: 420,   // Allahus-samad
+        3: 720,   // Lam yalid
+        4: 1020,  // Wa lam yakun
+      },
+      language: 'en',
+    },
+  ],
+};
+
+// Get verse-synced videos for a surah
+export const getVerseSyncedVideos = (surahId) => {
+  return VERSE_SYNCED_VIDEOS[surahId] || [];
+};
+
+// Get timestamp for a specific verse in a video
+export const getVerseTimestamp = (surahId, videoId, verseNumber) => {
+  const videos = VERSE_SYNCED_VIDEOS[surahId] || [];
+  const video = videos.find(v => v.id === videoId);
+  if (video && video.timestamps) {
+    return video.timestamps[verseNumber] || null;
+  }
+  return null;
+};
+
+// Get verse number from current video time
+export const getVerseFromTime = (surahId, videoId, currentTime) => {
+  const videos = VERSE_SYNCED_VIDEOS[surahId] || [];
+  const video = videos.find(v => v.id === videoId);
+  if (!video || !video.timestamps) return null;
+
+  let currentVerse = 1;
+  const timestamps = Object.entries(video.timestamps)
+    .map(([verse, time]) => ({ verse: parseInt(verse), time }))
+    .sort((a, b) => a.time - b.time);
+
+  for (const { verse, time } of timestamps) {
+    if (currentTime >= time) {
+      currentVerse = verse;
+    } else {
+      break;
+    }
+  }
+  return currentVerse;
+};
+
+// Format seconds to MM:SS or HH:MM:SS
+export const formatTime = (seconds) => {
+  if (!seconds || seconds < 0) return '0:00';
+  const hrs = Math.floor(seconds / 3600);
+  const mins = Math.floor((seconds % 3600) / 60);
+  const secs = Math.floor(seconds % 60);
+  if (hrs > 0) {
+    return `${hrs}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  }
+  return `${mins}:${secs.toString().padStart(2, '0')}`;
+};
+
 export default SURAH_VIDEOS;

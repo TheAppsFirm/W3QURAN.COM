@@ -10,9 +10,9 @@
  */
 
 import { Suspense, useState, useEffect, useMemo, useCallback } from 'react';
-import { ErrorBoundary, LoadingSpinner, BubbleModal, BubbleReaderOverlay, ProgressDashboard, OfflineManager, HifzMode, SearchPanel, DonateModal } from './components/common';
+import { ErrorBoundary, LoadingSpinner, BubbleModal, BubbleReaderOverlay, ProgressDashboard, OfflineManager, HifzMode, SearchPanel, DonateModal, WordSearchMap, EmotionalTracker, ScholarVideoSync } from './components/common';
 import { Header, FloatingMenu, StatsBar } from './components/layout';
-import { SurahBubble, JuzzBubble, LayoutSelector, ClockLayout, GridLayout, JuzzGroupLayout, AlphabetLayout, RevelationLayout } from './components/bubbles';
+import { SurahBubble, LayoutSelector, ClockLayout, GridLayout, JuzzGroupLayout, AlphabetLayout, RevelationLayout } from './components/bubbles';
 import { AnalyticsPanel } from './components/widgets';
 import {
   NamesOfAllahView,
@@ -23,52 +23,18 @@ import {
   ListenView,
   DonateView,
   PrayerTimesView,
+  PrivacyPolicyView,
+  TermsOfServiceView,
 } from './components/views';
-import { SURAHS, JUZZ, MAX_AYAHS, getSurahsInJuzz } from './data';
+import { SURAHS, MAX_AYAHS } from './data';
 import { useLocalStorage } from './hooks';
 
-// CSS Animations - Beautiful bubble animations
+// CSS Styles - Font imports and utility classes (animations defined in index.css)
 const AnimationStyles = () => (
   <style>{`
     @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Scheherazade+New:wght@400;700&family=Noto+Nastaliq+Urdu:wght@400;700&display=swap');
 
-    /* Gentle floating animation */
-    @keyframes gentleFloat {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-8px); }
-    }
-
-    /* Slow spinning for outer ring */
-    @keyframes spinSlow {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-
-    /* Floating particles */
-    @keyframes floatParticle {
-      0%, 100% { transform: translateY(0) scale(1); opacity: 1; }
-      50% { transform: translateY(-8px) scale(1.2); opacity: 0.7; }
-    }
-
-    /* Breathing glow animation */
-    @keyframes breathe {
-      0%, 100% { transform: scale(1); opacity: 0.8; }
-      50% { transform: scale(1.1); opacity: 1; }
-    }
-
-    /* Shimmer wave animation */
-    @keyframes shimmerWave {
-      0% { transform: translateX(-100%); }
-      100% { transform: translateX(100%); }
-    }
-
-    /* Color shift animation */
-    @keyframes colorShift {
-      0%, 100% { filter: hue-rotate(0deg); }
-      50% { filter: hue-rotate(30deg); }
-    }
-
-    /* Connection line pulse */
+    /* Connection line pulse - not in index.css */
     @keyframes connectionPulse {
       0%, 100% { stroke-opacity: 0.12; }
       50% { stroke-opacity: 0.28; }
@@ -78,58 +44,30 @@ const AnimationStyles = () => (
       animation: connectionPulse 4s ease-in-out infinite;
     }
 
-    /* Aurora background animation */
+    /* Aurora background animation - not in index.css */
     @keyframes aurora {
-      0%, 100% {
-        background-position: 0% 50%;
-      }
-      50% {
-        background-position: 100% 50%;
-      }
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
     }
 
-    /* Floating ambient orbs */
+    /* Floating ambient orbs - not in index.css */
     @keyframes floatOrb {
-      0%, 100% {
-        transform: translate(0, 0) scale(1);
-        opacity: 0.4;
-      }
-      25% {
-        transform: translate(10px, -20px) scale(1.1);
-        opacity: 0.6;
-      }
-      50% {
-        transform: translate(-5px, -10px) scale(0.9);
-        opacity: 0.5;
-      }
-      75% {
-        transform: translate(-15px, 5px) scale(1.05);
-        opacity: 0.45;
-      }
+      0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.4; }
+      25% { transform: translate(10px, -20px) scale(1.1); opacity: 0.6; }
+      50% { transform: translate(-5px, -10px) scale(0.9); opacity: 0.5; }
+      75% { transform: translate(-15px, 5px) scale(1.05); opacity: 0.45; }
     }
 
-    /* Sparkle animation */
+    /* Sparkle animation - not in index.css */
     @keyframes sparkle {
-      0%, 100% {
-        opacity: 0;
-        transform: scale(0);
-      }
-      50% {
-        opacity: 1;
-        transform: scale(1);
-      }
+      0%, 100% { opacity: 0; transform: scale(0); }
+      50% { opacity: 1; transform: scale(1); }
     }
 
-    /* Ripple effect */
+    /* Ripple effect - not in index.css */
     @keyframes ripple {
-      0% {
-        transform: scale(1);
-        opacity: 0.5;
-      }
-      100% {
-        transform: scale(2);
-        opacity: 0;
-      }
+      0% { transform: scale(1); opacity: 0.5; }
+      100% { transform: scale(2); opacity: 0; }
     }
 
     /* Bubble hover effect */
@@ -146,10 +84,6 @@ const AnimationStyles = () => (
     .touch-target {
       min-width: 44px;
       min-height: 44px;
-    }
-
-    .safe-area-bottom {
-      padding-bottom: env(safe-area-inset-bottom);
     }
 
     .bubble-container {
@@ -227,9 +161,9 @@ const AmbientParticles = ({ darkMode }) => (
 );
 
 /**
- * Main App Inner Component
+ * Main App Component
  */
-function QuranBubbleAppInner() {
+function QuranBubbleApp() {
   // State management using custom hooks for persistence
   const [view, setView] = useState('surahs');
   const [level, setLevel] = useLocalStorage('level', 'starter');
@@ -252,13 +186,16 @@ function QuranBubbleAppInner() {
   const [bookmarks, setBookmarks] = useLocalStorage('bookmarks', {});
   const [readingProgress, setReadingProgress] = useLocalStorage('readingProgress', {});
   const [overlayReaderSurah, setOverlayReaderSurah] = useState(null);
-  const [selectedJuzz, setSelectedJuzz] = useState(null);
+  // Default layout is spiral
   const [surahLayout, setSurahLayout] = useLocalStorage('surahLayout', 'spiral');
   const [showProgressDashboard, setShowProgressDashboard] = useState(false);
   const [showOfflineManager, setShowOfflineManager] = useState(false);
   const [showHifzMode, setShowHifzMode] = useState(false);
   const [showSearchPanel, setShowSearchPanel] = useState(false);
   const [showDonateModal, setShowDonateModal] = useState(false);
+  const [showMindMap, setShowMindMap] = useState(false);
+  const [showMoodTracker, setShowMoodTracker] = useState(false);
+  const [showVideoSync, setShowVideoSync] = useState(false);
 
   // Memoized filtered surahs
   const filtered = useMemo(() => {
@@ -322,7 +259,6 @@ function QuranBubbleAppInner() {
   // Handle closing the reader overlay
   const handleCloseOverlayReader = useCallback(() => {
     setOverlayReaderSurah(null);
-    setSelectedJuzz(null);
   }, []);
 
   // Handle changing surah (from next/prev buttons in reader)
@@ -334,16 +270,6 @@ function QuranBubbleAppInner() {
       [newSurah.id]: { lastRead: Date.now(), ayahsRead: (prev[newSurah.id]?.ayahsRead || 0) + 1 },
     }));
   }, [setReadingProgress]);
-
-  // Handle Juzz click - open the first surah of the Juzz
-  const handleJuzzClick = useCallback((juzz) => {
-    const startSurah = SURAHS.find(s => s.id === juzz.startSurah);
-    if (startSurah) {
-      setSelectedJuzz(juzz);
-      setOverlayReaderSurah(startSurah);
-      setPoints((p) => p + 10);
-    }
-  }, [setPoints]);
 
   const handleUpgrade = useCallback(() => setLevel('pro'), [setLevel]);
 
@@ -392,6 +318,8 @@ function QuranBubbleAppInner() {
           setSurahLayout={setSurahLayout}
           showControls={true}
           onDonate={() => setShowDonateModal(true)}
+          onMood={() => setShowMoodTracker(true)}
+          onMindMap={() => setShowMindMap(true)}
         />
       )}
 
@@ -412,6 +340,119 @@ function QuranBubbleAppInner() {
                     marginTop: '2rem',
                   }}
                 >
+                  {/* Beautiful Quran Word in Clock Shape - Center */}
+                  <div
+                    className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none z-10"
+                    style={{ transform: `translate(-50%, -50%) scale(${zoom})` }}
+                  >
+                    {/* Outer rotating ring */}
+                    <div
+                      className="absolute inset-0 rounded-full"
+                      style={{
+                        width: 280,
+                        height: 280,
+                        left: '50%',
+                        top: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        background: 'conic-gradient(from 0deg, #8B5CF6, #06B6D4, #10B981, #F59E0B, #EC4899, #8B5CF6)',
+                        animation: 'spinSlow 20s linear infinite',
+                        opacity: 0.3,
+                        filter: 'blur(20px)',
+                      }}
+                    />
+
+                    {/* Clock markers - 12 dots around */}
+                    {[...Array(12)].map((_, i) => (
+                      <div
+                        key={i}
+                        className="absolute"
+                        style={{
+                          width: 8,
+                          height: 8,
+                          borderRadius: '50%',
+                          background: `linear-gradient(135deg, ${['#8B5CF6', '#06B6D4', '#10B981', '#F59E0B'][i % 4]}, ${['#6366F1', '#0891B2', '#059669', '#D97706'][i % 4]})`,
+                          left: '50%',
+                          top: '50%',
+                          transform: `translate(-50%, -50%) rotate(${i * 30}deg) translateY(-120px)`,
+                          boxShadow: `0 0 10px ${['#8B5CF6', '#06B6D4', '#10B981', '#F59E0B'][i % 4]}60`,
+                          animation: `breathe ${2 + (i % 3) * 0.5}s ease-in-out infinite`,
+                          animationDelay: `${i * 0.1}s`,
+                        }}
+                      />
+                    ))}
+
+                    {/* Inner glowing circle */}
+                    <div
+                      className="absolute rounded-full"
+                      style={{
+                        width: 200,
+                        height: 200,
+                        left: '50%',
+                        top: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        background: darkMode
+                          ? 'radial-gradient(circle, rgba(139,92,246,0.15) 0%, rgba(6,182,212,0.1) 50%, transparent 70%)'
+                          : 'radial-gradient(circle, rgba(139,92,246,0.2) 0%, rgba(6,182,212,0.15) 50%, transparent 70%)',
+                        animation: 'breathe 4s ease-in-out infinite',
+                      }}
+                    />
+
+                    {/* Main Quran text container */}
+                    <div
+                      className="relative flex flex-col items-center justify-center"
+                      style={{ width: 240, height: 240 }}
+                    >
+                      {/* Arabic Quran word */}
+                      <span
+                        className="text-transparent bg-clip-text font-bold"
+                        style={{
+                          fontFamily: "'Scheherazade New', 'Amiri', serif",
+                          fontSize: '4.5rem',
+                          background: darkMode
+                            ? 'linear-gradient(135deg, #C4B5FD 0%, #67E8F9 50%, #A7F3D0 100%)'
+                            : 'linear-gradient(135deg, #7C3AED 0%, #0891B2 50%, #059669 100%)',
+                          WebkitBackgroundClip: 'text',
+                          WebkitTextFillColor: 'transparent',
+                          textShadow: 'none',
+                          filter: darkMode ? 'drop-shadow(0 0 20px rgba(139,92,246,0.5))' : 'drop-shadow(0 0 15px rgba(139,92,246,0.3))',
+                          lineHeight: 1,
+                        }}
+                        dir="rtl"
+                      >
+                        القرآن
+                      </span>
+
+                      {/* English subtitle */}
+                      <span
+                        className="text-transparent bg-clip-text font-semibold tracking-widest mt-1"
+                        style={{
+                          fontSize: '0.9rem',
+                          background: darkMode
+                            ? 'linear-gradient(90deg, #94A3B8, #CBD5E1)'
+                            : 'linear-gradient(90deg, #64748B, #475569)',
+                          WebkitBackgroundClip: 'text',
+                          WebkitTextFillColor: 'transparent',
+                          letterSpacing: '0.3em',
+                        }}
+                      >
+                        THE HOLY QURAN
+                      </span>
+
+                      {/* Decorative line */}
+                      <div
+                        className="mt-2"
+                        style={{
+                          width: 60,
+                          height: 2,
+                          background: darkMode
+                            ? 'linear-gradient(90deg, transparent, #8B5CF6, #06B6D4, transparent)'
+                            : 'linear-gradient(90deg, transparent, #7C3AED, #0891B2, transparent)',
+                          borderRadius: 1,
+                        }}
+                      />
+                    </div>
+                  </div>
+
                   {filtered.map((s, i) => (
                     <SurahBubble
                       key={s.id}
@@ -504,39 +545,10 @@ function QuranBubbleAppInner() {
           </>
         )}
 
-        {/* Juzz View */}
-        {view === 'juzz' && (
-          <>
-            <div className="absolute inset-0 overflow-auto bubble-container flex items-start justify-center pt-8">
-              {/* Fibonacci spiral container for Juzz */}
-              <div
-                className="relative flex-shrink-0"
-                style={{
-                  width: Math.max(900 * zoom, 900),
-                  height: Math.max(900 * zoom, 900),
-                  minWidth: Math.max(900 * zoom, 900),
-                  minHeight: Math.max(900 * zoom, 900),
-                }}
-              >
-                {JUZZ.map((j, i) => (
-                  <JuzzBubble
-                    key={j.id}
-                    juzz={j}
-                    index={i}
-                    zoom={zoom}
-                    contentZoom={contentZoom}
-                    onClick={handleJuzzClick}
-                  />
-                ))}
-              </div>
-            </div>
-          </>
-        )}
-
         {/* Other Views */}
         {view === 'listen' && <ListenView level={level} darkMode={darkMode} />}
         {view === 'donate' && <DonateView darkMode={darkMode} />}
-        {view === 'settings' && <SettingsView darkMode={darkMode} setDarkMode={setDarkMode} />}
+        {view === 'settings' && <SettingsView darkMode={darkMode} setDarkMode={setDarkMode} onNavigate={setView} />}
         {view === 'names' && <NamesOfAllahView darkMode={darkMode} />}
         {view === 'quiz' && <QuizView darkMode={darkMode} onEarnPoints={handleEarnPoints} />}
         {view === 'prayer' && <PrayerTimesView darkMode={darkMode} />}
@@ -549,10 +561,20 @@ function QuranBubbleAppInner() {
           />
         )}
         {view === 'daily' && <DailyVerseView darkMode={darkMode} />}
+        {view === 'privacy' && <PrivacyPolicyView darkMode={darkMode} onBack={() => setView('surahs')} />}
+        {view === 'terms' && <TermsOfServiceView darkMode={darkMode} onBack={() => setView('surahs')} />}
       </main>
 
       {/* Floating Menu */}
-      <FloatingMenu view={view} setView={setView} darkMode={darkMode} onDonate={() => setShowDonateModal(true)} />
+      <FloatingMenu
+        view={view}
+        setView={setView}
+        darkMode={darkMode}
+        onDonate={() => setShowDonateModal(true)}
+        onMindMap={() => setShowMindMap(true)}
+        onMood={() => setShowMoodTracker(true)}
+        onVideoSync={() => setShowVideoSync(true)}
+      />
 
       {/* Bubble Modal */}
       {selected && (
@@ -575,7 +597,6 @@ function QuranBubbleAppInner() {
           onClose={handleCloseOverlayReader}
           onChangeSurah={handleChangeSurah}
           darkMode={darkMode}
-          currentJuzz={selectedJuzz}
         />
       )}
 
@@ -745,6 +766,45 @@ function QuranBubbleAppInner() {
         onClose={() => setShowDonateModal(false)}
       />
 
+      {/* Word Search Mind Map */}
+      <WordSearchMap
+        isVisible={showMindMap}
+        onClose={() => setShowMindMap(false)}
+        onNavigateToVerse={(surahId, ayahNumber) => {
+          const surah = SURAHS.find(s => s.id === surahId);
+          if (surah) {
+            setShowMindMap(false);
+            setOverlayReaderSurah(surah);
+          }
+        }}
+      />
+
+      {/* Mood Tracker */}
+      <EmotionalTracker
+        isVisible={showMoodTracker}
+        onClose={() => setShowMoodTracker(false)}
+        onNavigateToSurah={(surahId) => {
+          const surah = SURAHS.find(s => s.id === surahId);
+          if (surah) {
+            setShowMoodTracker(false);
+            setOverlayReaderSurah(surah);
+          }
+        }}
+      />
+
+      {/* Video Sync - Standalone mode */}
+      <ScholarVideoSync
+        isVisible={showVideoSync}
+        onClose={() => setShowVideoSync(false)}
+        onNavigateToSurah={(surahId) => {
+          const surah = SURAHS.find(s => s.id === surahId);
+          if (surah) {
+            setShowVideoSync(false);
+            setOverlayReaderSurah(surah);
+          }
+        }}
+      />
+
       {/* Animation Styles */}
       <AnimationStyles />
     </div>
@@ -758,7 +818,7 @@ export default function App() {
   return (
     <ErrorBoundary>
       <Suspense fallback={<LoadingSpinner message="Loading Quran App..." />}>
-        <QuranBubbleAppInner />
+        <QuranBubbleApp />
       </Suspense>
     </ErrorBoundary>
   );

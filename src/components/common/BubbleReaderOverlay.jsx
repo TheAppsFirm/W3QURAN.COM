@@ -14,11 +14,38 @@ import YouTubePlayer from './YouTubePlayer';
 import VerseArtGenerator from './VerseArtGenerator';
 import EmotionalTracker, { MoodEntryForm } from './EmotionalTracker';
 import AyahConnectionMap from './AyahConnectionMap';
-import { PALETTES, SURAHS, fetchTafseer, getTafseersByLanguage, getDefaultTafseer, TRANSLATION_TO_TAFSEER_LANG, getVideosForSurah, generateSearchQuery, SCHOLARS, SURAH_TOPICS, TAFSEER_SOURCES } from '../../data';
+import ScholarVideoSync from './ScholarVideoSync';
+import { PALETTES, SURAHS, fetchTafseer, getTafseersByLanguage, getDefaultTafseer, TRANSLATION_TO_TAFSEER_LANG, getVideosForSurah, generateSearchQuery, SCHOLARS, SURAH_TOPICS, TAFSEER_SOURCES, markAyahRead } from '../../data';
 import { useQuranAPI, useMultilingualWords, TRANSLATIONS, TAJWEED_RULES, POS_LABELS } from '../../hooks/useQuranAPI';
 import { useLocalStorage } from '../../hooks';
 import { logReadingSession } from '../../utils/trackingUtils';
 import { shareVerse } from '../../utils/shareUtils';
+
+// Simple HTML sanitizer to prevent XSS attacks in tafseer content
+const sanitizeHTML = (html) => {
+  if (!html || typeof html !== 'string') return '';
+
+  // Create a temporary element to parse HTML
+  const temp = document.createElement('div');
+  temp.innerHTML = html;
+
+  // Remove script tags and event handlers
+  const scripts = temp.querySelectorAll('script, style, iframe, object, embed, form');
+  scripts.forEach(el => el.remove());
+
+  // Remove dangerous attributes from all elements
+  const allElements = temp.querySelectorAll('*');
+  allElements.forEach(el => {
+    // Remove event handlers (onclick, onerror, etc.)
+    Array.from(el.attributes).forEach(attr => {
+      if (attr.name.startsWith('on') || attr.name === 'href' && attr.value.startsWith('javascript:')) {
+        el.removeAttribute(attr.name);
+      }
+    });
+  });
+
+  return temp.innerHTML;
+};
 
 // Audio CDN
 const AUDIO_CDN = 'https://cdn.islamic.network/quran/audio/128';
@@ -240,21 +267,35 @@ const TafseerFloatingBubble = memo(function TafseerFloatingBubble({
     }
   }, [tafseerLang, availableTafseers, selectedTafseer]);
 
-  const loadTafseer = useCallback(async () => {
-    if (!selectedTafseer || !surahId || !selectedAyah) return;
-    setLoading(true);
-    try {
-      const result = await fetchTafseer(surahId, selectedAyah, selectedTafseer);
-      setTafseer(result);
-    } catch {
-      setTafseer({ text: 'Failed to load tafseer', error: true });
-    }
-    setLoading(false);
-  }, [selectedTafseer, surahId, selectedAyah]);
-
+  // Load tafseer with race condition protection
   useEffect(() => {
-    if (isVisible) loadTafseer();
-  }, [isVisible, loadTafseer]);
+    if (!isVisible || !selectedTafseer || !surahId || !selectedAyah) return;
+
+    let cancelled = false;
+    setLoading(true);
+
+    const loadTafseer = async () => {
+      try {
+        const result = await fetchTafseer(surahId, selectedAyah, selectedTafseer);
+        if (!cancelled) {
+          setTafseer(result);
+        }
+      } catch {
+        if (!cancelled) {
+          setTafseer({ text: 'Failed to load tafseer', error: true });
+        }
+      }
+      if (!cancelled) {
+        setLoading(false);
+      }
+    };
+
+    loadTafseer();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [isVisible, selectedTafseer, surahId, selectedAyah]);
 
   // Handle ayah navigation
   const goToPrevAyah = () => {
@@ -423,7 +464,7 @@ const TafseerFloatingBubble = memo(function TafseerFloatingBubble({
               fontSize: currentFontSize.text,
               lineHeight: currentFontSize.lineHeight,
             }}
-            dangerouslySetInnerHTML={{ __html: tafseer.text }}
+            dangerouslySetInnerHTML={{ __html: sanitizeHTML(tafseer.text) }}
           />
         ) : null}
       </div>
@@ -794,7 +835,7 @@ const TafseerPanel = memo(function TafseerPanel({ surahId, ayahNumber, verseArab
               fontSize: tafseer.direction === 'rtl' ? '1rem' : '0.9rem',
               lineHeight: tafseer.direction === 'rtl' ? '2' : '1.75',
             }}
-            dangerouslySetInnerHTML={{ __html: tafseer.text }}
+            dangerouslySetInnerHTML={{ __html: sanitizeHTML(tafseer.text) }}
           />
         ) : (
           <div className="flex flex-col items-center justify-center py-8">
@@ -1377,7 +1418,7 @@ const SharePanel = memo(function SharePanel({ surahId, surahName, ayahNumber, ve
 const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, darkMode, onChangeSurah }) {
   const [fontSize, setFontSize] = useLocalStorage('reader_fontsize', 'medium');
   const [selectedReciter, setSelectedReciter] = useLocalStorage('reader_reciter', 'ar.alafasy');
-  const [selectedTranslation, setSelectedTranslation] = useLocalStorage('reader_translation', 'en.sahih');
+  const [selectedTranslation, setSelectedTranslation] = useLocalStorage('reader_translation', 'ur.jalandhry');
   const [showTranslation, setShowTranslation] = useLocalStorage('reader_show_translation', true);
   const [tajweedMode, setTajweedMode] = useLocalStorage('reader_tajweed', false);
   const [wordByWordMode, setWordByWordMode] = useLocalStorage('reader_wbw', false);
@@ -1388,10 +1429,13 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
   const [isAnimating, setIsAnimating] = useState(true);
   const [showSettings, setShowSettings] = useState(false);
   const [selectedWordData, setSelectedWordData] = useState(null);
+  const [wordAudioError, setWordAudioError] = useState(null);
+  const [wordAudioPlaying, setWordAudioPlaying] = useState(false);
   const [showArtGenerator, setShowArtGenerator] = useState(false);
   const [showEmotionalTracker, setShowEmotionalTracker] = useState(false);
   const [showMoodEntry, setShowMoodEntry] = useState(false);
   const [showConnectionMap, setShowConnectionMap] = useState(false);
+  const [showScholarSync, setShowScholarSync] = useState(false);
   // Separate state for right (tafseer) and left (other features) panels
   const [showTafseer, setShowTafseer] = useState(false);
   const [leftFeature, setLeftFeature] = useState(null); // 'youtube', 'memorize', 'bookmark', 'share'
@@ -1418,7 +1462,7 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
   useEffect(() => { repeatModeRef.current = repeatMode; }, [repeatMode]);
 
   const { verses, loading, error } = useQuranAPI(surah?.id, { translationId: selectedTranslation, includeTajweed: tajweedMode, includeWordByWord: false });
-  const { wordsMap, loading: wordsLoading } = useMultilingualWords(wordByWordMode ? surah?.id : null, selectedTranslation);
+  const { wordsMap, loading: wordsLoading, isFallback: isWordsFallback, userLanguage: wordsUserLang } = useMultilingualWords(wordByWordMode ? surah?.id : null, selectedTranslation);
 
   const palette = useMemo(() => PALETTES[(surah?.id - 1) % 10], [surah?.id]);
   const totalVerses = verses.length || surah?.ayahs || 0;
@@ -1545,7 +1589,19 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
     if (currentAyah === ayahNum && isPlaying) setIsPlaying(false);
     else if (currentAyah === ayahNum && !isPlaying) setIsPlaying(true);
     else { setCurrentAyah(ayahNum); setIsPlaying(true); }
-  }, [currentAyah, isPlaying]);
+    // Track progress when user plays a verse
+    if (surah?.id) markAyahRead(surah.id, ayahNum);
+  }, [currentAyah, isPlaying, surah?.id]);
+
+  // Track reading progress when viewing verses
+  useEffect(() => {
+    if (!surah?.id || !currentAyah) return;
+    // Debounce to track only after viewing for 2 seconds
+    const timer = setTimeout(() => {
+      markAyahRead(surah.id, currentAyah);
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, [surah?.id, currentAyah]);
 
   const goToSurah = useCallback((newSurah) => {
     if (!newSurah || !onChangeSurah) return;
@@ -1580,6 +1636,9 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
     } else if (featureId === 'connections') {
       // Open connection map
       setShowConnectionMap(true);
+    } else if (featureId === 'scholarsync') {
+      // Open scholar video sync
+      setShowScholarSync(true);
     } else {
       // Toggle left side features - only one can be active at a time
       setLeftFeature(prev => {
@@ -1615,7 +1674,11 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
   // Memoize navigation handlers
   const goToPrevAyah = useCallback(() => setCurrentAyah(prev => prev > 1 ? prev - 1 : prev), []);
   const goToNextAyah = useCallback(() => setCurrentAyah(prev => prev < totalVerses ? prev + 1 : prev), [totalVerses]);
-  const clearSelectedWord = useCallback(() => setSelectedWordData(null), []);
+  const clearSelectedWord = useCallback(() => {
+    setSelectedWordData(null);
+    setWordAudioError(null);
+    setWordAudioPlaying(false);
+  }, []);
 
   // Memoize close button handler with stopPropagation
   const handleCloseClick = useCallback((e) => { e.stopPropagation(); handleClose(); }, [handleClose]);
@@ -1779,29 +1842,38 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
         }}
       />
 
+      {/* Scholar Video Sync */}
+      <ScholarVideoSync
+        isVisible={showScholarSync}
+        onClose={() => setShowScholarSync(false)}
+        surahId={surah.id}
+        surahName={surah.name}
+        currentAyah={currentAyah}
+        onAyahChange={setCurrentAyah}
+      />
+
       {/* Top Feature Buttons Bar */}
       <div
         className={`fixed top-4 left-1/2 -translate-x-1/2 z-[60] transition-all duration-500 ${isAnimating ? 'opacity-0 -translate-y-10' : 'opacity-100 translate-y-0'}`}
         onClick={stopPropagation}
       >
-        <div className="flex items-center gap-2 sm:gap-3 px-4 py-2 rounded-full bg-black/30 backdrop-blur-xl border border-white/20">
+        <div className="flex items-center gap-1.5 sm:gap-2 px-3 py-2 rounded-full bg-black/30 backdrop-blur-xl border border-white/20 max-w-[95vw] overflow-x-auto scrollbar-hide">
           {[
             { id: 'tafseer', icon: Icons.BookOpen, color: '#8B5CF6', label: 'Tafseer', side: 'right' },
             { id: 'youtube', icon: Icons.Video, color: '#EF4444', label: 'Videos', side: 'left' },
             { id: 'memorize', icon: Icons.Brain, color: '#F59E0B', label: 'Memorize', side: 'left' },
             { id: 'bookmark', icon: Icons.Bookmark, color: '#EC4899', label: 'Bookmark', side: 'left' },
             { id: 'share', icon: Icons.Share, color: '#10B981', label: 'Share', side: 'left' },
-            { id: 'mood', icon: Icons.Activity, color: '#06B6D4', label: 'Mood', side: 'special' },
-            { id: 'connections', icon: Icons.Network, color: '#A855F7', label: 'Map', side: 'special' },
           ].map((btn) => {
             const Icon = btn.icon;
             // Tafseer uses showTafseer, others use leftFeature
             const isActive = btn.id === 'tafseer' ? showTafseer : leftFeature === btn.id;
+
             return (
               <button
                 key={btn.id}
                 onClick={() => handleFeatureSelect(btn.id)}
-                className={`flex items-center gap-2 px-3 py-2 rounded-full transition-all hover:scale-105 ${isActive ? 'scale-105' : ''}`}
+                className={`flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 rounded-full transition-all hover:scale-105 flex-shrink-0 ${isActive ? 'scale-105' : ''}`}
                 style={{
                   background: isActive ? `linear-gradient(135deg, ${btn.color}, ${btn.color}cc)` : `rgba(255,255,255,0.1)`,
                   boxShadow: isActive ? `0 0 20px ${btn.color}60` : 'none',
@@ -2017,6 +2089,16 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
                   </div>
                 )}
 
+                {/* Word-by-Word Fallback Indicator */}
+                {wordByWordMode && isWordsFallback && (
+                  <div className="mt-2 mx-4 p-2 bg-amber-500/30 backdrop-blur-sm rounded-xl flex items-center justify-center gap-2" style={{ animation: 'slideDown 0.2s ease-out' }}>
+                    <Icons.AlertCircle className="w-3.5 h-3.5 text-amber-200" />
+                    <span className="text-[10px] text-white/90">
+                      Word meanings shown in <strong>English</strong> — {wordsUserLang === 'ur' ? 'Urdu' : wordsUserLang} not available for this surah
+                    </span>
+                  </div>
+                )}
+
                 {showSettings && (
                   <div className="mt-2 p-3 bg-black/20 backdrop-blur-sm rounded-xl mx-4" style={{ animation: 'slideDown 0.2s ease-out' }}>
                     <div className="flex flex-wrap items-center justify-center gap-2">
@@ -2126,32 +2208,48 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
                                 <button
                                   onClick={(e) => {
                                     e.stopPropagation();
-                                    if (!selectedWordData.audioUrl) return;
-                                    const btn = e.currentTarget;
-                                    btn.classList.add('animate-pulse');
+                                    if (!selectedWordData.audioUrl || wordAudioPlaying) return;
+                                    setWordAudioError(null);
+                                    setWordAudioPlaying(true);
                                     const audio = new Audio(selectedWordData.audioUrl);
-                                    audio.onended = () => btn.classList.remove('animate-pulse');
+
+                                    // Set timeout for slow loading
+                                    const timeout = setTimeout(() => {
+                                      setWordAudioError('Audio loading slow...');
+                                    }, 3000);
+
+                                    audio.oncanplaythrough = () => clearTimeout(timeout);
+                                    audio.onended = () => {
+                                      setWordAudioPlaying(false);
+                                      setWordAudioError(null);
+                                    };
                                     audio.onerror = () => {
-                                      btn.classList.remove('animate-pulse');
-                                      btn.classList.add('bg-red-500/50');
-                                      setTimeout(() => btn.classList.remove('bg-red-500/50'), 1000);
+                                      clearTimeout(timeout);
+                                      setWordAudioPlaying(false);
+                                      setWordAudioError('Failed to load audio');
+                                      setTimeout(() => setWordAudioError(null), 3000);
                                     };
                                     audio.play().catch(() => {
-                                      btn.classList.remove('animate-pulse');
-                                      btn.classList.add('bg-red-500/50');
-                                      setTimeout(() => btn.classList.remove('bg-red-500/50'), 1000);
+                                      clearTimeout(timeout);
+                                      setWordAudioPlaying(false);
+                                      setWordAudioError('Playback failed');
+                                      setTimeout(() => setWordAudioError(null), 3000);
                                     });
                                   }}
-                                  disabled={!selectedWordData.audioUrl}
+                                  disabled={!selectedWordData.audioUrl || wordAudioPlaying}
                                   className={`p-2 rounded-full transition-all ${
-                                    selectedWordData.audioUrl
-                                      ? 'bg-emerald-500/80 hover:bg-emerald-500 hover:scale-110 cursor-pointer'
-                                      : 'bg-gray-500/30 cursor-not-allowed opacity-50'
+                                    wordAudioPlaying
+                                      ? 'bg-emerald-500 animate-pulse cursor-wait'
+                                      : selectedWordData.audioUrl
+                                        ? 'bg-emerald-500/80 hover:bg-emerald-500 hover:scale-110 cursor-pointer'
+                                        : 'bg-gray-500/30 cursor-not-allowed opacity-50'
                                   }`}
                                   aria-label={selectedWordData.audioUrl ? "Play word audio" : "Audio not available"}
                                   title={selectedWordData.audioUrl ? "Play pronunciation" : "Audio not available for this word"}
                                 >
-                                  {selectedWordData.audioUrl ? (
+                                  {wordAudioPlaying ? (
+                                    <Icons.Loader className="w-4 h-4 text-white animate-spin" />
+                                  ) : selectedWordData.audioUrl ? (
                                     <Icons.Play className="w-4 h-4 text-white" />
                                   ) : (
                                     <Icons.Volume className="w-4 h-4 text-white/50" />
@@ -2163,6 +2261,9 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
                                   <p className="text-white text-sm">{selectedWordData.meaning || 'Loading...'}</p>
                                   {!selectedWordData.audioUrl && (
                                     <p className="text-amber-400/60 text-[10px] mt-1">Audio not available</p>
+                                  )}
+                                  {wordAudioError && (
+                                    <p className="text-red-400/80 text-[10px] mt-1">{wordAudioError}</p>
                                   )}
                                 </div>
                                 <button onClick={clearSelectedWord} className="p-1 rounded-full hover:bg-white/20">

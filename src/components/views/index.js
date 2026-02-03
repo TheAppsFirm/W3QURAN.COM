@@ -12,3 +12,5 @@ export { default as StatisticsView } from './StatisticsView';
 export { default as ListenView } from './ListenView';
 export { default as DonateView } from './DonateView';
 export { default as PrayerTimesView } from './PrayerTimesView';
+export { default as PrivacyPolicyView } from './PrivacyPolicyView';
+export { default as TermsOfServiceView } from './TermsOfServiceView';

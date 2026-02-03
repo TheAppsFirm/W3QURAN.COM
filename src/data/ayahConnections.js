@@ -55,7 +55,7 @@ export const QURAN_THEMES = {
     name: 'Repentance (Tawbah)',
     nameAr: 'التوبة',
     color: '#EC4899',
-    icon: 'RefreshCw',
+    icon: 'Refresh',
     description: 'Verses about seeking forgiveness',
     verses: [
       { surah: 2, ayah: 37 }, { surah: 2, ayah: 128 }, { surah: 4, ayah: 17 },

@@ -1,12 +1,13 @@
 /**
  * Search Index Module
  * Single Responsibility: Full-text search across Quran verses
+ * Uses Quran.com API for reliable search
  */
 
 import { SURAHS } from './surahs';
 
-// API base URL
-const API_BASE = 'https://api.alquran.cloud/v1';
+// API base URLs
+const QURAN_COM_API = 'https://api.quran.com/api/v4';
 
 // Search result cache
 let searchCache = {};
@@ -19,12 +20,11 @@ export const clearSearchCache = () => {
 };
 
 /**
- * Search across all surahs using API
+ * Search across all surahs using Quran.com API
  */
 export const searchQuran = async (query, options = {}) => {
   const {
     language = 'en',
-    translationId = 'en.sahih',
     limit = 50,
   } = options;
 
@@ -32,15 +32,15 @@ export const searchQuran = async (query, options = {}) => {
     return { results: [], total: 0, query };
   }
 
-  const cacheKey = `${query}_${translationId}_${limit}`;
+  const cacheKey = `${query}_${language}_${limit}`;
   if (searchCache[cacheKey]) {
     return searchCache[cacheKey];
   }
 
   try {
-    // Use the search API
+    // Use Quran.com search API
     const response = await fetch(
-      `${API_BASE}/search/${encodeURIComponent(query)}/${translationId}/all`
+      `${QURAN_COM_API}/search?q=${encodeURIComponent(query)}&size=${limit}&language=${language}`
     );
 
     if (!response.ok) {
@@ -49,29 +49,27 @@ export const searchQuran = async (query, options = {}) => {
 
     const data = await response.json();
 
-    if (data.code !== 200 || !data.data) {
+    if (!data.search || !data.search.results) {
       return { results: [], total: 0, query };
     }
 
     // Process results
-    const results = (data.data.matches || [])
-      .slice(0, limit)
-      .map(match => {
-        const surah = SURAHS.find(s => s.id === match.surah.number);
-        return {
-          surahId: match.surah.number,
-          surahName: surah?.name || match.surah.englishName,
-          surahArabic: surah?.arabic || match.surah.name,
-          ayahNumber: match.numberInSurah,
-          text: match.text,
-          highlighted: highlightText(match.text, query),
-          edition: match.edition?.identifier || translationId,
-        };
-      });
+    const results = data.search.results.map(match => {
+      const surah = SURAHS.find(s => s.id === match.verse_key?.split(':')[0] * 1);
+      const [surahId, ayahNumber] = (match.verse_key || '1:1').split(':').map(Number);
+      return {
+        surahId,
+        surahName: surah?.name || `Surah ${surahId}`,
+        surahArabic: surah?.arabic || '',
+        ayahNumber,
+        text: match.text || '',
+        highlighted: match.highlighted || highlightText(match.text || '', query),
+      };
+    });
 
     const result = {
       results,
-      total: data.data.count || results.length,
+      total: data.search.total_results || results.length,
       query,
     };
 
@@ -86,7 +84,7 @@ export const searchQuran = async (query, options = {}) => {
 };
 
 /**
- * Search in Arabic text
+ * Search in Arabic text using Quran.com API
  */
 export const searchArabic = async (query, limit = 50) => {
   if (!query || query.trim().length < 2) {
@@ -99,8 +97,9 @@ export const searchArabic = async (query, limit = 50) => {
   }
 
   try {
+    // Use Quran.com search API with Arabic
     const response = await fetch(
-      `${API_BASE}/search/${encodeURIComponent(query)}/quran-uthmani/all`
+      `${QURAN_COM_API}/search?q=${encodeURIComponent(query)}&size=${limit}&language=ar`
     );
 
     if (!response.ok) {
@@ -109,27 +108,27 @@ export const searchArabic = async (query, limit = 50) => {
 
     const data = await response.json();
 
-    if (data.code !== 200 || !data.data) {
+    if (!data.search || !data.search.results) {
       return { results: [], total: 0, query };
     }
 
-    const results = (data.data.matches || [])
-      .slice(0, limit)
-      .map(match => {
-        const surah = SURAHS.find(s => s.id === match.surah.number);
-        return {
-          surahId: match.surah.number,
-          surahName: surah?.name || match.surah.englishName,
-          surahArabic: surah?.arabic || match.surah.name,
-          ayahNumber: match.numberInSurah,
-          text: match.text,
-          isArabic: true,
-        };
-      });
+    const results = data.search.results.map(match => {
+      const [surahId, ayahNumber] = (match.verse_key || '1:1').split(':').map(Number);
+      const surah = SURAHS.find(s => s.id === surahId);
+      return {
+        surahId,
+        surahName: surah?.name || `Surah ${surahId}`,
+        surahArabic: surah?.arabic || '',
+        ayahNumber,
+        text: match.text || '',
+        highlighted: match.highlighted,
+        isArabic: true,
+      };
+    });
 
     const result = {
       results,
-      total: data.data.count || results.length,
+      total: data.search.total_results || results.length,
       query,
     };
 

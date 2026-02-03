@@ -58,11 +58,16 @@ export {
   SCHOLARS,
   VIDEO_CATEGORIES,
   SURAH_VIDEOS,
+  VERSE_SYNCED_VIDEOS,
   getVideosForSurah,
   getScholarInfo,
   getYouTubeEmbedUrl,
   getYouTubeWatchUrl,
   generateSearchQuery,
+  getVerseSyncedVideos,
+  getVerseTimestamp,
+  getVerseFromTime,
+  formatTime,
 } from './youtubeVideos';
 
 // Progress Tracker

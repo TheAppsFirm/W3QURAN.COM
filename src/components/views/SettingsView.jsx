@@ -7,7 +7,7 @@ import { Icons } from '../common/Icons';
 import { useLocalStorage } from '../../hooks';
 import { isSoundEnabled, setSoundEnabled } from '../../utils/soundUtils';
 
-function SettingsView({ darkMode, setDarkMode }) {
+function SettingsView({ darkMode, setDarkMode, onNavigate }) {
   // All settings persisted to localStorage
   const [notifications, setNotifications] = useLocalStorage('settings_notifications', true);
   const [autoPlayAudio, setAutoPlayAudio] = useLocalStorage('settings_autoplay', false);
@@ -254,6 +254,65 @@ function SettingsView({ darkMode, setDarkMode }) {
                 </div>
               );
             })}
+          </div>
+        </div>
+
+        {/* Legal Section */}
+        <div className="mb-6">
+          <h3 className={`text-sm font-semibold uppercase tracking-wider mb-3 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+            Legal
+          </h3>
+
+          <div className="space-y-3">
+            {/* Privacy Policy */}
+            <button
+              onClick={() => onNavigate && onNavigate('privacy')}
+              className={`w-full rounded-2xl p-4 shadow-lg border text-left transition-all hover:scale-[1.02] ${
+                darkMode ? 'bg-gray-800 border-gray-700 hover:bg-gray-750' : 'bg-white border-gray-100 hover:bg-gray-50'
+              }`}
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center">
+                    <Icons.Shield className="w-5 h-5 text-purple-500" />
+                  </div>
+                  <div>
+                    <span className={`font-bold block ${darkMode ? 'text-white' : 'text-gray-800'}`}>
+                      Privacy Policy
+                    </span>
+                    <span className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                      How we handle your data
+                    </span>
+                  </div>
+                </div>
+                <Icons.ChevronRight className={`w-5 h-5 ${darkMode ? 'text-gray-500' : 'text-gray-400'}`} />
+              </div>
+            </button>
+
+            {/* Terms of Service */}
+            <button
+              onClick={() => onNavigate && onNavigate('terms')}
+              className={`w-full rounded-2xl p-4 shadow-lg border text-left transition-all hover:scale-[1.02] ${
+                darkMode ? 'bg-gray-800 border-gray-700 hover:bg-gray-750' : 'bg-white border-gray-100 hover:bg-gray-50'
+              }`}
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-emerald-500/20 flex items-center justify-center">
+                    <Icons.FileText className="w-5 h-5 text-emerald-500" />
+                  </div>
+                  <div>
+                    <span className={`font-bold block ${darkMode ? 'text-white' : 'text-gray-800'}`}>
+                      Terms of Service
+                    </span>
+                    <span className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                      Rules for using w3Quran
+                    </span>
+                  </div>
+                </div>
+                <Icons.ChevronRight className={`w-5 h-5 ${darkMode ? 'text-gray-500' : 'text-gray-400'}`} />
+              </div>
+            </button>
           </div>
         </div>
 

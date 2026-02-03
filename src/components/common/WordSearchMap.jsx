@@ -707,10 +707,17 @@ const WordSearchMap = memo(function WordSearchMap({
   useEffect(() => {
     if (isVisible && containerRef.current) {
       const updateSize = () => {
-        if (containerRef.current) {
+        if (isFullscreen) {
+          // Use full viewport in fullscreen
+          const headerOffset = 130;
+          setContainerSize({
+            width: window.innerWidth,
+            height: window.innerHeight - headerOffset
+          });
+        } else if (containerRef.current) {
           const rect = containerRef.current.getBoundingClientRect();
           if (rect.width > 0 && rect.height > 0) {
-            const headerOffset = isFullscreen ? 140 : 160;
+            const headerOffset = 160;
             setContainerSize({ width: rect.width, height: Math.max(rect.height - headerOffset, 400) });
           }
         }
@@ -832,7 +839,7 @@ const WordSearchMap = memo(function WordSearchMap({
     setPanY(0);
   }, []);
 
-  // Search function with auto-translation
+  // Search function with auto-translation using Quran.com API
   const performSearch = useCallback(async (query, lang) => {
     if (!query || query.length < 2) {
       setSearchResults([]);
@@ -841,7 +848,6 @@ const WordSearchMap = memo(function WordSearchMap({
     }
 
     setIsSearching(true);
-    const langConfig = SEARCH_LANGUAGES.find(l => l.id === lang) || SEARCH_LANGUAGES[0];
 
     // Check for translations
     const lowerQuery = query.toLowerCase().trim();
@@ -853,25 +859,26 @@ const WordSearchMap = memo(function WordSearchMap({
     }
 
     try {
+      // Use Quran.com API for reliable search
       const response = await fetch(
-        `https://api.alquran.cloud/v1/search/${encodeURIComponent(query)}/all/${langConfig.edition}`
+        `https://api.quran.com/api/v4/search?q=${encodeURIComponent(query)}&size=100&language=${lang}`
       );
       const data = await response.json();
 
-      if (data.code === 200 && data.data?.matches) {
+      if (data.search && data.search.results) {
         const surahMatches = {};
-        data.data.matches.forEach(match => {
-          const surahId = match.surah.number;
+        data.search.results.forEach(match => {
+          const [surahId, ayahNumber] = (match.verse_key || '1:1').split(':').map(Number);
           if (!surahMatches[surahId]) {
             const surahData = SURAHS.find(s => s.id === surahId);
             surahMatches[surahId] = {
-              surah: surahData || { id: surahId, name: match.surah.englishName, arabic: match.surah.name, type: 'Makki', ayahs: 0 },
+              surah: surahData || { id: surahId, name: `Surah ${surahId}`, arabic: '', type: 'Makki', ayahs: 0 },
               matches: [],
             };
           }
           surahMatches[surahId].matches.push({
-            ayah: match.numberInSurah,
-            text: match.text,
+            ayah: ayahNumber,
+            text: match.text || '',
           });
         });
 
@@ -1017,23 +1024,177 @@ const WordSearchMap = memo(function WordSearchMap({
     URL.revokeObjectURL(link.href);
   }, [searchQuery, filteredResults, currentLang]);
 
-  // Suggested words based on language
-  const suggestedWords = {
-    en: ['mercy', 'patience', 'light', 'heart', 'truth', 'peace'],
-    ar: ['رحمة', 'صبر', 'نور', 'قلب', 'حق', 'سلام'],
-    ur: ['رحمت', 'صبر', 'نور', 'دل', 'سچ', 'امن'],
+  // Comprehensive Quranic keywords organized by themes
+  const FAMOUS_KEYWORDS = {
+    en: {
+      'Names of Allah': [
+        { word: 'Allah', meaning: 'God', color: '#22C55E' },
+        { word: 'Rahman', meaning: 'Most Merciful', color: '#EC4899' },
+        { word: 'Rahim', meaning: 'Most Compassionate', color: '#8B5CF6' },
+        { word: 'Malik', meaning: 'King/Master', color: '#F59E0B' },
+        { word: 'Quddus', meaning: 'The Holy', color: '#10B981' },
+        { word: 'Salam', meaning: 'The Peace', color: '#3B82F6' },
+        { word: 'Ghafoor', meaning: 'The Forgiving', color: '#06B6D4' },
+        { word: 'Hakeem', meaning: 'The Wise', color: '#A855F7' },
+      ],
+      'Faith & Worship': [
+        { word: 'Iman', meaning: 'Faith', color: '#22C55E' },
+        { word: 'Salah', meaning: 'Prayer', color: '#3B82F6' },
+        { word: 'Zakah', meaning: 'Charity', color: '#10B981' },
+        { word: 'Sawm', meaning: 'Fasting', color: '#F59E0B' },
+        { word: 'Hajj', meaning: 'Pilgrimage', color: '#EC4899' },
+        { word: 'Tawbah', meaning: 'Repentance', color: '#8B5CF6' },
+        { word: 'Dhikr', meaning: 'Remembrance', color: '#06B6D4' },
+        { word: 'Dua', meaning: 'Supplication', color: '#A855F7' },
+      ],
+      'Key Concepts': [
+        { word: 'Taqwa', meaning: 'God-consciousness', color: '#3B82F6' },
+        { word: 'Sabr', meaning: 'Patience', color: '#06B6D4' },
+        { word: 'Shukr', meaning: 'Gratitude', color: '#22C55E' },
+        { word: 'Tawakkul', meaning: 'Trust in Allah', color: '#A855F7' },
+        { word: 'Ihsan', meaning: 'Excellence', color: '#F43F5E' },
+        { word: 'Hidayah', meaning: 'Guidance', color: '#EAB308' },
+        { word: 'Rizq', meaning: 'Provision', color: '#10B981' },
+        { word: 'Barakah', meaning: 'Blessing', color: '#EC4899' },
+      ],
+      'Afterlife': [
+        { word: 'Jannah', meaning: 'Paradise', color: '#22C55E' },
+        { word: 'Jahannam', meaning: 'Hellfire', color: '#EF4444' },
+        { word: 'Qiyamah', meaning: 'Day of Judgment', color: '#F59E0B' },
+        { word: 'Akhirah', meaning: 'Hereafter', color: '#8B5CF6' },
+        { word: 'Barzakh', meaning: 'Intermediate realm', color: '#6366F1' },
+        { word: 'Mizan', meaning: 'The Scale', color: '#06B6D4' },
+      ],
+      'Common Words': [
+        { word: 'mercy', meaning: 'Rahma', color: '#EC4899' },
+        { word: 'light', meaning: 'Noor', color: '#FBBF24' },
+        { word: 'heart', meaning: 'Qalb', color: '#EF4444' },
+        { word: 'truth', meaning: 'Haqq', color: '#10B981' },
+        { word: 'peace', meaning: 'Salam', color: '#3B82F6' },
+        { word: 'forgiveness', meaning: 'Maghfirah', color: '#8B5CF6' },
+        { word: 'knowledge', meaning: 'Ilm', color: '#A855F7' },
+        { word: 'justice', meaning: 'Adl', color: '#F59E0B' },
+      ],
+      'Prophets': [
+        { word: 'Muhammad', meaning: 'Final Prophet ﷺ', color: '#22C55E' },
+        { word: 'Ibrahim', meaning: 'Abraham', color: '#F59E0B' },
+        { word: 'Musa', meaning: 'Moses', color: '#3B82F6' },
+        { word: 'Isa', meaning: 'Jesus', color: '#06B6D4' },
+        { word: 'Nuh', meaning: 'Noah', color: '#8B5CF6' },
+        { word: 'Yusuf', meaning: 'Joseph', color: '#EC4899' },
+        { word: 'Adam', meaning: 'First human', color: '#10B981' },
+        { word: 'Dawud', meaning: 'David', color: '#A855F7' },
+      ],
+      'Angels & Beings': [
+        { word: 'Jibreel', meaning: 'Gabriel', color: '#3B82F6' },
+        { word: 'Malaika', meaning: 'Angels', color: '#8B5CF6' },
+        { word: 'Shaytan', meaning: 'Satan', color: '#EF4444' },
+        { word: 'Jinn', meaning: 'Unseen beings', color: '#F59E0B' },
+      ],
+      'Nature': [
+        { word: 'heaven', meaning: 'Sama', color: '#3B82F6' },
+        { word: 'earth', meaning: 'Ard', color: '#22C55E' },
+        { word: 'water', meaning: 'Ma', color: '#06B6D4' },
+        { word: 'sun', meaning: 'Shams', color: '#F59E0B' },
+        { word: 'moon', meaning: 'Qamar', color: '#8B5CF6' },
+        { word: 'star', meaning: 'Najm', color: '#EC4899' },
+      ],
+    },
+    ar: {
+      'أسماء الله': [
+        { word: 'الله', meaning: 'God', color: '#22C55E' },
+        { word: 'الرحمن', meaning: 'Most Merciful', color: '#EC4899' },
+        { word: 'الرحيم', meaning: 'Most Compassionate', color: '#8B5CF6' },
+        { word: 'الملك', meaning: 'The King', color: '#F59E0B' },
+        { word: 'القدوس', meaning: 'The Holy', color: '#10B981' },
+        { word: 'الغفور', meaning: 'The Forgiving', color: '#06B6D4' },
+      ],
+      'العبادات': [
+        { word: 'صلاة', meaning: 'Prayer', color: '#3B82F6' },
+        { word: 'زكاة', meaning: 'Charity', color: '#10B981' },
+        { word: 'صوم', meaning: 'Fasting', color: '#F59E0B' },
+        { word: 'حج', meaning: 'Pilgrimage', color: '#EC4899' },
+        { word: 'دعاء', meaning: 'Supplication', color: '#8B5CF6' },
+      ],
+      'مفاهيم أساسية': [
+        { word: 'تقوى', meaning: 'God-consciousness', color: '#3B82F6' },
+        { word: 'صبر', meaning: 'Patience', color: '#06B6D4' },
+        { word: 'شكر', meaning: 'Gratitude', color: '#22C55E' },
+        { word: 'توكل', meaning: 'Trust', color: '#A855F7' },
+        { word: 'هداية', meaning: 'Guidance', color: '#EAB308' },
+        { word: 'توبة', meaning: 'Repentance', color: '#EC4899' },
+      ],
+      'الآخرة': [
+        { word: 'جنة', meaning: 'Paradise', color: '#22C55E' },
+        { word: 'نار', meaning: 'Hellfire', color: '#EF4444' },
+        { word: 'قيامة', meaning: 'Resurrection', color: '#F59E0B' },
+        { word: 'حساب', meaning: 'Reckoning', color: '#8B5CF6' },
+      ],
+      'كلمات شائعة': [
+        { word: 'رحمة', meaning: 'Mercy', color: '#EC4899' },
+        { word: 'نور', meaning: 'Light', color: '#FBBF24' },
+        { word: 'قلب', meaning: 'Heart', color: '#EF4444' },
+        { word: 'حق', meaning: 'Truth', color: '#10B981' },
+        { word: 'سلام', meaning: 'Peace', color: '#3B82F6' },
+        { word: 'علم', meaning: 'Knowledge', color: '#A855F7' },
+      ],
+    },
+    ur: {
+      'اللہ کے نام': [
+        { word: 'اللہ', meaning: 'God', color: '#22C55E' },
+        { word: 'رحمٰن', meaning: 'Most Merciful', color: '#EC4899' },
+        { word: 'رحیم', meaning: 'Most Compassionate', color: '#8B5CF6' },
+        { word: 'مالک', meaning: 'The King', color: '#F59E0B' },
+        { word: 'غفور', meaning: 'The Forgiving', color: '#06B6D4' },
+      ],
+      'عبادات': [
+        { word: 'نماز', meaning: 'Prayer', color: '#3B82F6' },
+        { word: 'زکوٰۃ', meaning: 'Charity', color: '#10B981' },
+        { word: 'روزہ', meaning: 'Fasting', color: '#F59E0B' },
+        { word: 'حج', meaning: 'Pilgrimage', color: '#EC4899' },
+        { word: 'دعا', meaning: 'Supplication', color: '#8B5CF6' },
+      ],
+      'اہم تصورات': [
+        { word: 'تقویٰ', meaning: 'God-consciousness', color: '#3B82F6' },
+        { word: 'صبر', meaning: 'Patience', color: '#06B6D4' },
+        { word: 'شکر', meaning: 'Gratitude', color: '#22C55E' },
+        { word: 'توکل', meaning: 'Trust', color: '#A855F7' },
+        { word: 'ہدایت', meaning: 'Guidance', color: '#EAB308' },
+        { word: 'توبہ', meaning: 'Repentance', color: '#EC4899' },
+      ],
+      'آخرت': [
+        { word: 'جنت', meaning: 'Paradise', color: '#22C55E' },
+        { word: 'جہنم', meaning: 'Hellfire', color: '#EF4444' },
+        { word: 'قیامت', meaning: 'Resurrection', color: '#F59E0B' },
+      ],
+      'عام الفاظ': [
+        { word: 'رحمت', meaning: 'Mercy', color: '#EC4899' },
+        { word: 'نور', meaning: 'Light', color: '#FBBF24' },
+        { word: 'دل', meaning: 'Heart', color: '#EF4444' },
+        { word: 'سچ', meaning: 'Truth', color: '#10B981' },
+        { word: 'امن', meaning: 'Peace', color: '#3B82F6' },
+        { word: 'علم', meaning: 'Knowledge', color: '#A855F7' },
+      ],
+    },
   };
+
+  const currentKeywords = FAMOUS_KEYWORDS[searchLanguage] || FAMOUS_KEYWORDS.en;
 
   if (!isVisible) return null;
 
   return (
-    <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4" onClick={onClose}>
-      <div className="absolute inset-0 bg-black/90 backdrop-blur-md" />
+    <div
+      className={`fixed z-[99999] flex items-center justify-center ${isFullscreen ? 'inset-0 p-0' : 'inset-0 p-4'}`}
+      onClick={onClose}
+    >
+      <div className={`absolute inset-0 ${isFullscreen ? 'bg-black' : 'bg-black/90 backdrop-blur-md'}`} />
 
       <div
         ref={containerRef}
-        className={`relative bg-gradient-to-br from-gray-900/95 via-gray-800/95 to-gray-900/95 overflow-hidden flex flex-col shadow-2xl border border-white/10 transition-all duration-300 ${
-          isFullscreen ? 'w-full h-full rounded-none' : 'max-w-6xl w-full max-h-[95vh] rounded-3xl'
+        className={`relative bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 overflow-hidden flex flex-col shadow-2xl transition-all duration-300 ${
+          isFullscreen
+            ? 'w-screen h-screen rounded-none border-0'
+            : 'max-w-6xl w-full max-h-[95vh] rounded-3xl border border-white/10'
         }`}
         onClick={(e) => e.stopPropagation()}
       >
@@ -1170,7 +1331,10 @@ const WordSearchMap = memo(function WordSearchMap({
         <div
           ref={mapRef}
           className={`flex-1 overflow-hidden relative ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
-          style={{ minHeight: '400px', height: containerSize.height }}
+          style={{
+            minHeight: isFullscreen ? 'calc(100vh - 130px)' : '400px',
+            height: isFullscreen ? 'calc(100vh - 130px)' : containerSize.height,
+          }}
           onMouseDown={handleMouseDown}
           onMouseMove={handleMouseMove}
           onMouseUp={handleMouseUp}
@@ -1194,42 +1358,103 @@ const WordSearchMap = memo(function WordSearchMap({
           {/* Hover Preview */}
           <HoverPreview data={hoverData} containerSize={containerSize} searchLanguage={searchLanguage} />
 
-          {/* Empty state */}
+          {/* Empty state with scrollable famous keywords */}
           {!searchQuery && (
-            <div className="flex flex-col items-center justify-center h-full p-6">
-              <div className="w-20 h-20 mb-4 rounded-full bg-gradient-to-br from-purple-500/30 to-pink-500/30 flex items-center justify-center relative">
-                <Icons.Search className="w-10 h-10 text-purple-400" />
-                {animationsEnabled && (
-                  <div
-                    className="absolute rounded-full"
-                    style={{
-                      inset: '-4px',
-                      background: 'conic-gradient(from 0deg, #8B5CF680, #EC489980, #8B5CF680)',
-                      animation: 'spinSlow 4s linear infinite',
-                      opacity: 0.6,
-                    }}
-                  />
-                )}
+            <div className="absolute inset-0 flex flex-col">
+              {/* Fixed Header */}
+              <div className="flex-shrink-0 text-center py-3 border-b border-white/10 bg-gray-900/80 backdrop-blur-sm">
+                <div className="w-12 h-12 mb-2 mx-auto rounded-full bg-gradient-to-br from-purple-500/30 to-pink-500/30 flex items-center justify-center relative">
+                  <Icons.Search className="w-6 h-6 text-purple-400" />
+                  {animationsEnabled && (
+                    <div
+                      className="absolute rounded-full"
+                      style={{
+                        inset: '-4px',
+                        background: 'conic-gradient(from 0deg, #8B5CF680, #EC489980, #8B5CF680)',
+                        animation: 'spinSlow 4s linear infinite',
+                        opacity: 0.6,
+                      }}
+                    />
+                  )}
+                </div>
+                <h3 className="text-white font-bold text-base">Explore Quranic Words</h3>
+                <p className="text-white/50 text-xs mt-0.5">
+                  Scroll to explore • Click any word to search
+                </p>
               </div>
-              <h3 className="text-white font-bold text-lg mb-2">Search Any Word</h3>
-              <p className="text-white/60 text-center max-w-md text-sm mb-4">
-                Type a word to see a visual map of all surahs where it appears.
-              </p>
-              <div className="flex flex-wrap justify-center gap-2">
-                {(suggestedWords[searchLanguage] || suggestedWords.en).map((word) => (
-                  <button
-                    key={word}
-                    onClick={() => setSearchQuery(word)}
-                    className={`px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white/70 hover:text-white text-sm transition-all ${
-                      searchLanguage === 'ar' || searchLanguage === 'ur' ? 'font-arabic' : ''
-                    }`}
-                  >
-                    {word}
-                  </button>
-                ))}
+
+              {/* Scrollable Keywords Area - Takes remaining height */}
+              <div
+                className="flex-1 overflow-y-auto overscroll-contain px-4 py-4"
+                style={{
+                  scrollbarWidth: 'thin',
+                  scrollbarColor: 'rgba(139,92,246,0.5) rgba(255,255,255,0.1)',
+                }}
+              >
+                <div className="max-w-4xl mx-auto space-y-3 pb-16">
+                  {Object.entries(currentKeywords).map(([category, words], catIndex) => (
+                    <div
+                      key={category}
+                      className="rounded-xl p-3 transition-all hover:bg-white/[0.07]"
+                      style={{
+                        background: 'rgba(255,255,255,0.05)',
+                        opacity: animationsEnabled ? 0 : 1,
+                        animation: animationsEnabled ? `fadeSlideIn 0.4s ease-out ${catIndex * 0.08}s forwards` : 'none',
+                      }}
+                    >
+                      <h4 className={`text-white/80 text-sm font-semibold mb-2 flex items-center gap-2 ${
+                        searchLanguage === 'ar' || searchLanguage === 'ur' ? 'flex-row-reverse text-right font-arabic' : ''
+                      }`}>
+                        <span className="w-2 h-2 rounded-full flex-shrink-0" style={{
+                          background: words[0]?.color || '#8B5CF6'
+                        }} />
+                        {category}
+                        <span className="text-white/40 text-xs font-normal">({words.length})</span>
+                      </h4>
+                      <div className={`flex flex-wrap gap-2 ${
+                        searchLanguage === 'ar' || searchLanguage === 'ur' ? 'justify-end' : ''
+                      }`}>
+                        {words.map((item, idx) => (
+                          <button
+                            key={item.word}
+                            onClick={() => setSearchQuery(item.word)}
+                            className="group relative px-3 py-1.5 rounded-lg transition-all hover:scale-105 active:scale-95"
+                            style={{
+                              background: `linear-gradient(135deg, ${item.color}25, ${item.color}10)`,
+                              border: `1px solid ${item.color}30`,
+                              animation: animationsEnabled ? `keywordPop 0.3s ease-out ${(catIndex * 0.1) + (idx * 0.03)}s both` : 'none',
+                            }}
+                          >
+                            <span className={`text-white font-medium text-sm block ${
+                              searchLanguage === 'ar' || searchLanguage === 'ur' ? 'font-arabic' : ''
+                            }`}>
+                              {item.word}
+                            </span>
+                            <span className="text-white/40 text-[10px] block">
+                              {item.meaning}
+                            </span>
+                            {/* Hover glow */}
+                            <div
+                              className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
+                              style={{ boxShadow: `0 0 15px ${item.color}30` }}
+                            />
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
-              <div className="mt-6 text-white/40 text-xs">
-                Keyboard: Arrow keys to pan • +/- zoom • 1-4 layouts • R reset • F fullscreen
+
+              {/* Fixed Footer with scroll hint */}
+              <div className="flex-shrink-0 py-2 px-4 border-t border-white/10 bg-gray-900/80 backdrop-blur-sm flex items-center justify-between">
+                <div className="flex items-center gap-2 text-white/40 text-xs">
+                  <Icons.ChevronDown className="w-4 h-4 animate-bounce" />
+                  <span>Scroll for more categories</span>
+                </div>
+                <div className="text-white/30 text-xs">
+                  Press F for fullscreen
+                </div>
               </div>
             </div>
           )}
@@ -1447,6 +1672,10 @@ const WordSearchMap = memo(function WordSearchMap({
           0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
           100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
         }
+        @keyframes keywordPop {
+          0% { transform: scale(0.8); opacity: 0; }
+          100% { transform: scale(1); opacity: 1; }
+        }
         @keyframes connectionFlow {
           from { stroke-dashoffset: 18; }
           to { stroke-dashoffset: 0; }
@@ -1455,8 +1684,27 @@ const WordSearchMap = memo(function WordSearchMap({
           from { transform: rotate(0deg); }
           to { transform: rotate(360deg); }
         }
+        @keyframes fadeSlideIn {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
         .font-arabic {
           font-family: 'Scheherazade New', 'Amiri', 'Noto Naskh Arabic', serif;
+        }
+        /* Custom scrollbar for keywords */
+        .overflow-y-auto::-webkit-scrollbar {
+          width: 6px;
+        }
+        .overflow-y-auto::-webkit-scrollbar-track {
+          background: rgba(255,255,255,0.05);
+          border-radius: 3px;
+        }
+        .overflow-y-auto::-webkit-scrollbar-thumb {
+          background: rgba(139,92,246,0.4);
+          border-radius: 3px;
+        }
+        .overflow-y-auto::-webkit-scrollbar-thumb:hover {
+          background: rgba(139,92,246,0.6);
         }
         input[type="range"]::-webkit-slider-thumb {
           -webkit-appearance: none;
