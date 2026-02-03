@@ -336,6 +336,9 @@ export function getAvailableTranslations() {
 
 const QURAN_COM_API = 'https://api.quran.com/api/v4';
 
+// Authenticated API endpoint (Cloudflare Function)
+const AUTH_API_ENDPOINT = '/api/quran-words';
+
 // Map our translation IDs to Quran.com word translation language codes
 export const WORD_TRANSLATION_LANGUAGES = {
   'en.sahih': 'en',
@@ -406,22 +409,51 @@ export const POS_LABELS = {
 };
 
 /**
- * Fetch word-by-word translations from Quran.com API
- * Note: API only supports English word translations currently
- * For other languages, we fall back to English with a note
+ * Fetch word-by-word translations from authenticated Quran Foundation API
+ * Supports multiple languages including Urdu, English, French, etc.
  */
-export async function fetchMultilingualWords(surahId, translationLang = 'en') {
-  // Quran.com API only has English word-by-word translations
-  // Always fetch English and note the limitation
-  const actualLang = 'en';
-  const cacheKey = `wbw-qurancom-${surahId}-${actualLang}-v3`;
+async function fetchAuthenticatedWords(surahId, language = 'en') {
+  const cacheKey = `wbw-auth-${surahId}-${language}-v1`;
+
+  if (wordCache.has(cacheKey)) {
+    return { data: wordCache.get(cacheKey), authenticated: true };
+  }
+
+  try {
+    // Use our Cloudflare Function for authenticated requests
+    const url = `${AUTH_API_ENDPOINT}?surah=${surahId}&lang=${language}`;
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      throw new Error(`Auth API error: ${response.status}`);
+    }
+
+    const result = await response.json();
+
+    if (result.error || result.fallback) {
+      throw new Error(result.error || 'Fallback required');
+    }
+
+    wordCache.set(cacheKey, result.words);
+    return { data: result.words, authenticated: true, language: result.language };
+  } catch {
+    // Auth endpoint failed, return null to trigger fallback
+    return { data: null, authenticated: false };
+  }
+}
+
+/**
+ * Fetch word-by-word translations from Quran.com API (public, English only)
+ * Fallback when authenticated API is unavailable
+ */
+async function fetchPublicWords(surahId) {
+  const cacheKey = `wbw-public-${surahId}-en-v3`;
 
   if (wordCache.has(cacheKey)) {
     return wordCache.get(cacheKey);
   }
 
   try {
-    // Fetch words with English translations (only language available)
     const url = `${QURAN_COM_API}/verses/by_chapter/${surahId}?words=true&word_translation_language=en&per_page=300&word_fields=text_uthmani,text_indopak,code_v1`;
     const response = await fetch(url);
 
@@ -431,13 +463,11 @@ export async function fetchMultilingualWords(surahId, translationLang = 'en') {
 
     const data = await response.json();
 
-    // Transform data into a map: { verseNumber: [{ arabic, meaning, transliteration }] }
     const wordsMap = {};
-
     data.verses?.forEach(verse => {
       const verseNum = verse.verse_number;
       wordsMap[verseNum] = verse.words
-        ?.filter(w => w.char_type_name === 'word') // Only actual words, not verse markers
+        ?.filter(w => w.char_type_name === 'word')
         ?.map(w => ({
           arabic: w.text_uthmani || w.text,
           meaning: w.translation?.text || '',
@@ -450,9 +480,24 @@ export async function fetchMultilingualWords(surahId, translationLang = 'en') {
     wordCache.set(cacheKey, wordsMap);
     return wordsMap;
   } catch {
-    // Failed to fetch word meanings from API
     return null;
   }
+}
+
+/**
+ * Fetch word-by-word translations - tries authenticated API first, then public
+ * Authenticated API supports: en, ur, bn, fr, de, id, tr, ru, etc.
+ */
+export async function fetchMultilingualWords(surahId, translationLang = 'en') {
+  // Try authenticated API first (supports multiple languages)
+  const authResult = await fetchAuthenticatedWords(surahId, translationLang);
+
+  if (authResult.authenticated && authResult.data) {
+    return authResult.data;
+  }
+
+  // Fall back to public API (English only)
+  return fetchPublicWords(surahId);
 }
 
 // Morphology cache
@@ -505,8 +550,8 @@ export async function fetchWordMorphology(verseKey) {
 
 /**
  * Hook to fetch word-by-word translations
- * Uses local data (multi-language) when available, falls back to API (English only)
- * Note: Quran.com API only has English word meanings - Urdu/other languages only available in local data
+ * Priority: 1) Local data (if available) 2) Authenticated API (multi-language) 3) Public API (English)
+ * Authenticated API supports: en, ur, bn, fr, de, id, tr, ru, and more
  */
 export function useMultilingualWords(surahId, translationId = 'en.sahih') {
   const [wordsMap, setWordsMap] = useState({});
@@ -514,7 +559,8 @@ export function useMultilingualWords(surahId, translationId = 'en.sahih') {
   const [error, setError] = useState(null);
   const [isLocalData, setIsLocalData] = useState(false);
   const [currentLang, setCurrentLang] = useState('en');
-  const [isFallback, setIsFallback] = useState(false); // True if using English fallback
+  const [isFallback, setIsFallback] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   // Get the user's preferred language from translation ID
   const userLang = useMemo(() => {
@@ -522,7 +568,6 @@ export function useMultilingualWords(surahId, translationId = 'en.sahih') {
   }, [translationId]);
 
   useEffect(() => {
-    // Reset state when language changes
     setCurrentLang(userLang);
     setWordsMap({});
     setIsFallback(false);
@@ -543,12 +588,11 @@ export function useMultilingualWords(surahId, translationId = 'en.sahih') {
 
     async function fetchWords() {
       try {
-        // First check if we have local data for this surah (has multi-language support)
+        // Priority 1: Check local data (has curated multi-language support)
         if (hasLocalWordMeanings(surahId)) {
           const surahData = WORD_MEANINGS[surahId];
           const localWordsMap = {};
 
-          // Convert local data using target language, fallback to English
           Object.entries(surahData).forEach(([ayahNum, words]) => {
             localWordsMap[parseInt(ayahNum)] = words.map(w => {
               const meaning = w[targetLang] || w.en;
@@ -563,24 +607,38 @@ export function useMultilingualWords(surahId, translationId = 'en.sahih') {
           if (!cancelled) {
             setWordsMap(localWordsMap);
             setIsLocalData(true);
-            setIsFallback(!WORD_MEANINGS[surahId]?.[1]?.[0]?.[targetLang]); // Check if target lang exists
+            setIsAuthenticated(false);
+            setIsFallback(!WORD_MEANINGS[surahId]?.[1]?.[0]?.[targetLang]);
             setCurrentLang(targetLang);
             setLoading(false);
           }
           return;
         }
 
-        // Fall back to API - only English available from Quran.com
-        const data = await fetchMultilingualWords(surahId, 'en');
+        // Priority 2: Try authenticated API (supports multiple languages)
+        const authResult = await fetchAuthenticatedWords(surahId, targetLang);
+
+        if (!cancelled && authResult.authenticated && authResult.data) {
+          setWordsMap(authResult.data);
+          setIsLocalData(false);
+          setIsAuthenticated(true);
+          setIsFallback(false);
+          setCurrentLang(targetLang);
+          setLoading(false);
+          return;
+        }
+
+        // Priority 3: Fall back to public API (English only)
+        const publicData = await fetchPublicWords(surahId);
 
         if (cancelled) return;
 
-        if (data) {
-          setWordsMap(data);
+        if (publicData) {
+          setWordsMap(publicData);
           setIsLocalData(false);
-          // If user wanted non-English but API only has English, mark as fallback
+          setIsAuthenticated(false);
           setIsFallback(targetLang !== 'en');
-          setCurrentLang('en'); // API only returns English
+          setCurrentLang('en');
         } else {
           setError('Failed to load word meanings');
         }
@@ -606,7 +664,8 @@ export function useMultilingualWords(surahId, translationId = 'en.sahih') {
     language: currentLang,
     userLanguage: userLang,
     isLocalData,
-    isFallback // True if showing English instead of requested language
+    isAuthenticated,
+    isFallback
   };
 }
 

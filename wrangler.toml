@@ -1,0 +1,12 @@
+# Cloudflare Pages Configuration
+name = "w3quran"
+compatibility_date = "2024-01-01"
+
+# Environment variables (set in Cloudflare Dashboard for production)
+# [vars]
+# QURAN_CLIENT_ID = "your-client-id"
+# QURAN_CLIENT_SECRET = "your-client-secret"
+
+# For local development, create a .dev.vars file with:
+# QURAN_CLIENT_ID=your-client-id
+# QURAN_CLIENT_SECRET=your-client-secret
