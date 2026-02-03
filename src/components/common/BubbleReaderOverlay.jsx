@@ -165,8 +165,9 @@ const FloatingFeatureBubble = memo(function FloatingFeatureBubble({
 }) {
   const sizeStyles = {
     small: { width: '280px', height: '350px' },
-    medium: { width: '320px', height: '420px' },
-    large: { width: '360px', height: '480px' },
+    medium: { width: '320px', height: '450px' },
+    large: { width: '360px', height: '550px' },
+    xlarge: { width: '380px', height: '650px' },
   };
 
   if (!isVisible) return null;
@@ -335,7 +336,7 @@ const TafseerFloatingBubble = memo(function TafseerFloatingBubble({
       icon={Icons.BookOpen}
       gradient={['#8B5CF6', '#6366F1', '#4F46E5']}
       position={{ top: '50%', right: '10px', transform: 'translateY(-50%)' }}
-      size="medium"
+      size="xlarge"
     >
       {/* Controls Row - Tafseer Source + Zoom */}
       <div className="mb-3 pb-3 border-b border-white/20">
