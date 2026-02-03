@@ -18,10 +18,15 @@ async function getAccessToken(env) {
     return tokenCache.accessToken;
   }
 
+  // Access environment variables
   const clientId = env.QURAN_CLIENT_ID;
   const clientSecret = env.QURAN_CLIENT_SECRET;
 
+  // Debug: Log available env keys (remove in production)
+  console.log('Available env keys:', Object.keys(env || {}));
+
   if (!clientId || !clientSecret) {
+    console.error('Missing credentials. CLIENT_ID exists:', !!clientId, 'CLIENT_SECRET exists:', !!clientSecret);
     throw new Error('Missing OAuth credentials');
   }
 

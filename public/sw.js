@@ -3,9 +3,9 @@
  * Provides offline support and caching for the Quran application
  */
 
-const CACHE_NAME = 'w3quran-cache-v1';
-const STATIC_CACHE_NAME = 'w3quran-static-v1';
-const API_CACHE_NAME = 'w3quran-api-v1';
+const CACHE_NAME = 'w3quran-cache-v2';
+const STATIC_CACHE_NAME = 'w3quran-static-v2';
+const API_CACHE_NAME = 'w3quran-api-v2';
 
 // Static assets to cache immediately
 const STATIC_ASSETS = [
@@ -224,6 +224,11 @@ self.addEventListener('fetch', (event) => {
 
   // Skip chrome-extension and other non-http(s) requests
   if (!url.startsWith('http')) {
+    return;
+  }
+
+  // Skip internal API requests (Cloudflare Functions) - always fetch fresh
+  if (url.includes('/api/')) {
     return;
   }
 
