@@ -191,6 +191,15 @@ export const getDefaultTafseer = (lang) => {
 
 // Language mapping from translation IDs
 export const TRANSLATION_TO_TAFSEER_LANG = {
+  // Urdu translations - all map to Urdu tafseer
+  'ur.jalandhry': 'ur',
+  'ur.maududi': 'ur',
+  'ur.junagarhi': 'ur',
+  'ur.kanzuliman': 'ur',
+  'ur.qadri': 'ur',
+  'ur.jawadi': 'ur',
+  'ur.ahmedali': 'ur',
+  'ur.najafi': 'ur',
   // English translations
   'en.sahih': 'en',
   'en.yusufali': 'en',
@@ -202,14 +211,10 @@ export const TRANSLATION_TO_TAFSEER_LANG = {
   'en.shakir': 'en',
   'en.sarwar': 'en',
   'en.ahmedali': 'en',
-  // Urdu translations
-  'ur.jalandhry': 'ur',
-  'ur.ahmedali': 'ur',
-  'ur.maududi': 'ur',
   // Arabic translations - use Arabic tafseer
   'ar.jalalayn': 'ar',
   // Other languages with fallback
-  'fr.hamidullah': 'en', // Fallback to English
+  'fr.hamidullah': 'en',
   'de.bubenheim': 'en',
   'id.indonesian': 'id',
   'tr.diyanet': 'tr',

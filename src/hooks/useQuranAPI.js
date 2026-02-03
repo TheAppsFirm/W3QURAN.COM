@@ -10,8 +10,19 @@ import { WORD_MEANINGS, hasLocalWordMeanings, getWordMeanings as getLocalWordMea
 // Al Quran Cloud API Base
 const API_BASE = 'https://api.alquran.cloud/v1';
 
-// Available Translations
+// Available Translations - Organized by Language
 export const TRANSLATIONS = {
+  // === URDU TRANSLATIONS (اردو) ===
+  'ur.jalandhry': { name: 'فتح محمد جالندھری', nameEn: 'Fateh Muhammad Jalandhry', language: 'Urdu', languageNative: 'اردو' },
+  'ur.maududi': { name: 'ابوالاعلیٰ مودودی', nameEn: 'Abul Ala Maududi', language: 'Urdu', languageNative: 'اردو' },
+  'ur.junagarhi': { name: 'محمد جوناگڑھی', nameEn: 'Muhammad Junagarhi', language: 'Urdu', languageNative: 'اردو' },
+  'ur.kanzuliman': { name: 'احمد رضا خان', nameEn: 'Ahmed Raza Khan (Kanz ul Iman)', language: 'Urdu', languageNative: 'اردو' },
+  'ur.qadri': { name: 'طاہر القادری', nameEn: 'Tahir ul Qadri', language: 'Urdu', languageNative: 'اردو' },
+  'ur.jawadi': { name: 'سید زیشان حیدر جوادی', nameEn: 'Syed Zeeshan Haider Jawadi', language: 'Urdu', languageNative: 'اردو' },
+  'ur.ahmedali': { name: 'احمد علی', nameEn: 'Ahmed Ali (Urdu)', language: 'Urdu', languageNative: 'اردو' },
+  'ur.najafi': { name: 'محمد حسین نجفی', nameEn: 'Muhammad Hussain Najafi', language: 'Urdu', languageNative: 'اردو' },
+
+  // === ENGLISH TRANSLATIONS ===
   'en.sahih': { name: 'Saheeh International', language: 'English' },
   'en.yusufali': { name: 'Abdullah Yusuf Ali', language: 'English' },
   'en.pickthall': { name: 'Muhammad Pickthall', language: 'English' },
@@ -22,8 +33,8 @@ export const TRANSLATIONS = {
   'en.shakir': { name: 'Mohammad Habib Shakir', language: 'English' },
   'en.sarwar': { name: 'Muhammad Sarwar', language: 'English' },
   'en.ahmedali': { name: 'Ahmed Ali', language: 'English' },
-  'ur.jalandhry': { name: 'Fateh Muhammad Jalandhry', language: 'Urdu' },
-  'ur.maududi': { name: 'Abul Ala Maududi (Urdu)', language: 'Urdu' },
+
+  // === OTHER LANGUAGES ===
   'fr.hamidullah': { name: 'Muhammad Hamidullah', language: 'French' },
   'de.bubenheim': { name: 'Bubenheim & Elyas', language: 'German' },
   'id.indonesian': { name: 'Indonesian Ministry', language: 'Indonesian' },
@@ -347,6 +358,16 @@ const AUTH_API_ENDPOINT = '/api/quran-words';
 
 // Map our translation IDs to Quran.com word translation language codes
 export const WORD_TRANSLATION_LANGUAGES = {
+  // Urdu translations
+  'ur.jalandhry': 'ur',
+  'ur.maududi': 'ur',
+  'ur.junagarhi': 'ur',
+  'ur.kanzuliman': 'ur',
+  'ur.qadri': 'ur',
+  'ur.jawadi': 'ur',
+  'ur.ahmedali': 'ur',
+  'ur.najafi': 'ur',
+  // English translations
   'en.sahih': 'en',
   'en.yusufali': 'en',
   'en.pickthall': 'en',
@@ -357,8 +378,7 @@ export const WORD_TRANSLATION_LANGUAGES = {
   'en.shakir': 'en',
   'en.sarwar': 'en',
   'en.ahmedali': 'en',
-  'ur.jalandhry': 'ur',
-  'ur.maududi': 'ur',
+  // Other languages
   'fr.hamidullah': 'fr',
   'de.bubenheim': 'de',
   'id.indonesian': 'id',
