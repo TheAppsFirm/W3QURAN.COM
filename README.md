@@ -2,6 +2,8 @@
 
 A beautiful, interactive Quran application built with React, Vite, and Tailwind CSS. Features stunning 3D bubble visualizations for navigating surahs, comprehensive reading tools, word-by-word learning, Tajweed support, and gamification elements.
 
+![w3Quran Screenshot](assets/w3quran-screenshot.png)
+
 ## Features
 
 ### Navigation & Visualization
