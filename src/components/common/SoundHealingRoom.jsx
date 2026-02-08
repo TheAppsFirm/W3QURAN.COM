@@ -2,52 +2,103 @@
  * Quran Sound Healing Room
  * Binaural frequencies + Islamic dhikr for different states
  * Sleep mode, Focus mode, Healing mode with Ruqyah verses
- * Enhanced with Allah dhikr mixed with ambient sounds
+ * Enhanced with real dhikr audio mixed with ambient sounds
  */
 
 import { useState, useEffect, useRef, useCallback, memo } from 'react';
 import { Icons } from './Icons';
 
-// Islamic Dhikr phrases for TTS
-const DHIKR_PHRASES = {
+// Islamic Dhikr audio tracks from Archive.org (free public domain)
+const DHIKR_AUDIO = {
+  // Main dhikr tracks for different modes
+  subhanAllahWalhamdulillah: {
+    url: 'https://archive.org/download/SubhanallahWalhamdulillah/Subhanallah%20Walhamdulillah.mp3',
+    arabic: 'سبحان الله والحمد لله',
+    transliteration: 'SubhanAllah Walhamdulillah',
+    meaning: 'Glory to Allah and All Praise to Allah',
+    duration: 210, // ~3.5 minutes
+  },
+  laIlahaIllallah: {
+    url: 'https://archive.org/download/YaRasoolallahYaHabeeballah2/La%20ilaha%20illallah.mp3',
+    arabic: 'لا إله إلا الله',
+    transliteration: 'La ilaha illallah',
+    meaning: 'There is no god but Allah',
+    duration: 96,
+  },
+  allahu: {
+    url: 'https://archive.org/download/YaRasoolallahYaHabeeballah2/Allahu%20%28Heart%20Touching%20Nasheed%29.mp3',
+    arabic: 'الله',
+    transliteration: 'Allah',
+    meaning: 'Allah - Heart Touching Nasheed',
+    duration: 276,
+  },
+  allahuAkbar: {
+    url: 'https://archive.org/download/allahu-akbar-sound-effect/Allahu%20Akbar%20Sound%20Effect.mp3',
+    arabic: 'الله أكبر',
+    transliteration: 'Allahu Akbar',
+    meaning: 'Allah is the Greatest',
+    duration: 5,
+  },
+  asmaUlHusna: {
+    url: 'https://archive.org/download/asma-ul-husna-99-names-of-allah/Asma-ul-Husna%20%2899%20Names%20of%20Allah%29.mp3',
+    arabic: 'أسماء الله الحسنى',
+    transliteration: 'Asma ul Husna',
+    meaning: '99 Names of Allah',
+    duration: 300,
+  },
+  giveThanksToAllah: {
+    url: 'https://archive.org/download/YaRasoolallahYaHabeeballah2/GiveThanks%20To%20Allah.mp3',
+    arabic: 'الحمد لله',
+    transliteration: 'Alhamdulillah',
+    meaning: 'Give Thanks to Allah',
+    duration: 30,
+  },
+  allahumaSalli: {
+    url: 'https://archive.org/download/YaRasoolallahYaHabeeballah2/Allahumma%20salli%20%27ala.mp3',
+    arabic: 'اللهم صل على',
+    transliteration: 'Allahumma Salli Ala',
+    meaning: 'O Allah send blessings upon (the Prophet)',
+    duration: 156,
+  },
+  assalatoAssalamu: {
+    url: 'https://archive.org/download/YaRasoolallahYaHabeeballah2/Assalato%20assalamu.mp3',
+    arabic: 'الصلاة والسلام',
+    transliteration: 'Assalato Assalamu',
+    meaning: 'Peace and Blessings',
+    duration: 90,
+  },
+};
+
+// Dhikr tracks for each healing mode
+const MODE_DHIKR = {
+  sleep: ['subhanAllahWalhamdulillah', 'laIlahaIllallah', 'allahu'],
+  focus: ['allahuAkbar', 'giveThanksToAllah', 'allahumaSalli'],
+  healing: ['asmaUlHusna', 'subhanAllahWalhamdulillah', 'laIlahaIllallah'],
+  anxiety: ['allahu', 'subhanAllahWalhamdulillah', 'assalatoAssalamu'],
+};
+
+// Dhikr phrases info for display (when audio is playing)
+const DHIKR_DISPLAY = {
   sleep: [
-    { arabic: 'الله', transliteration: 'Allah', meaning: 'Allah' },
-    { arabic: 'سبحان الله', transliteration: 'SubhanAllah', meaning: 'Glory to Allah' },
+    { arabic: 'سبحان الله والحمد لله', transliteration: 'SubhanAllah Walhamdulillah', meaning: 'Glory to Allah and All Praise to Allah' },
     { arabic: 'لا إله إلا الله', transliteration: 'La ilaha illallah', meaning: 'There is no god but Allah' },
+    { arabic: 'الله', transliteration: 'Allah', meaning: 'Remembrance of Allah' },
   ],
   focus: [
     { arabic: 'الله أكبر', transliteration: 'Allahu Akbar', meaning: 'Allah is the Greatest' },
-    { arabic: 'بسم الله', transliteration: 'Bismillah', meaning: 'In the name of Allah' },
-    { arabic: 'الحمد لله', transliteration: 'Alhamdulillah', meaning: 'All praise to Allah' },
+    { arabic: 'الحمد لله', transliteration: 'Alhamdulillah', meaning: 'All Praise to Allah' },
+    { arabic: 'اللهم صل على', transliteration: 'Allahumma Salli Ala', meaning: 'Blessings upon the Prophet' },
   ],
   healing: [
-    { arabic: 'يا شافي', transliteration: 'Ya Shafi', meaning: 'O Healer' },
-    { arabic: 'يا رحمن', transliteration: 'Ya Rahman', meaning: 'O Most Merciful' },
-    { arabic: 'يا سلام', transliteration: 'Ya Salam', meaning: 'O Source of Peace' },
-    { arabic: 'بسم الله الذي لا يضر مع اسمه شيء', transliteration: 'Bismillahilladhi...', meaning: 'In the name of Allah with whose name nothing can harm' },
+    { arabic: 'أسماء الله الحسنى', transliteration: 'Asma ul Husna', meaning: '99 Beautiful Names of Allah' },
+    { arabic: 'سبحان الله والحمد لله', transliteration: 'SubhanAllah Walhamdulillah', meaning: 'Glory and Praise to Allah' },
+    { arabic: 'لا إله إلا الله', transliteration: 'La ilaha illallah', meaning: 'There is no god but Allah' },
   ],
   anxiety: [
-    { arabic: 'حسبي الله', transliteration: 'HasbiAllah', meaning: 'Allah is sufficient for me' },
-    { arabic: 'لا حول ولا قوة إلا بالله', transliteration: 'La hawla wa la quwwata illa billah', meaning: 'There is no power except with Allah' },
-    { arabic: 'توكلت على الله', transliteration: 'Tawakkaltu alallah', meaning: 'I put my trust in Allah' },
-    { arabic: 'يا لطيف', transliteration: 'Ya Latif', meaning: 'O Most Gentle' },
+    { arabic: 'الله', transliteration: 'Allah', meaning: 'Remembrance brings peace to hearts' },
+    { arabic: 'سبحان الله والحمد لله', transliteration: 'SubhanAllah Walhamdulillah', meaning: 'Glory and Praise to Allah' },
+    { arabic: 'الصلاة والسلام', transliteration: 'Assalato Assalamu', meaning: 'Peace and Blessings' },
   ],
-};
-
-// Speak dhikr using browser TTS
-const speakDhikr = (text, rate = 0.7, pitch = 0.9, volume = 0.8) => {
-  if (!('speechSynthesis' in window)) return;
-
-  // Cancel any ongoing speech
-  window.speechSynthesis.cancel();
-
-  const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = 'ar-SA';
-  utterance.rate = rate;
-  utterance.pitch = pitch;
-  utterance.volume = volume;
-
-  window.speechSynthesis.speak(utterance);
 };
 
 // Binaural frequency configurations
@@ -567,6 +618,7 @@ const SoundHealingRoom = memo(function SoundHealingRoom({ isVisible, onClose }) 
 
   const binauralRef = useRef(null);
   const ambientAudioRef = useRef(null);
+  const dhikrAudioRef = useRef(null);
   const timerRef = useRef(null);
   const dhikrIntervalRef = useRef(null);
 
@@ -581,31 +633,45 @@ const SoundHealingRoom = memo(function SoundHealingRoom({ isVisible, onClose }) 
       if (ambientAudioRef.current) {
         ambientAudioRef.current.pause();
       }
+      if (dhikrAudioRef.current) {
+        dhikrAudioRef.current.pause();
+      }
       if (timerRef.current) {
         clearInterval(timerRef.current);
       }
       if (dhikrIntervalRef.current) {
         clearInterval(dhikrIntervalRef.current);
       }
-      // Cancel any ongoing speech
-      if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
-      }
     };
   }, []);
 
-  // Play dhikr periodically
+  // Play dhikr audio
   const playDhikr = useCallback((mode, index) => {
     if (!dhikrEnabled || !mode) return;
 
-    const phrases = DHIKR_PHRASES[mode.id] || DHIKR_PHRASES.sleep;
-    const phrase = phrases[index % phrases.length];
+    // Get dhikr tracks for this mode
+    const modeTracks = MODE_DHIKR[mode.id] || MODE_DHIKR.sleep;
+    const trackKey = modeTracks[index % modeTracks.length];
+    const track = DHIKR_AUDIO[trackKey];
 
-    setCurrentDhikr(phrase);
+    if (!track) return;
 
-    // Speak the dhikr
-    const rate = mode.id === 'sleep' ? 0.6 : 0.7;
-    speakDhikr(phrase.arabic, rate, 0.9, dhikrVolume / 100);
+    // Update display info
+    const displayPhrases = DHIKR_DISPLAY[mode.id] || DHIKR_DISPLAY.sleep;
+    const displayPhrase = displayPhrases[index % displayPhrases.length];
+    setCurrentDhikr(displayPhrase);
+
+    // Stop any currently playing dhikr audio
+    if (dhikrAudioRef.current) {
+      dhikrAudioRef.current.pause();
+    }
+
+    // Create and play new dhikr audio
+    dhikrAudioRef.current = new Audio(track.url);
+    dhikrAudioRef.current.volume = dhikrVolume / 100;
+    dhikrAudioRef.current.play().catch((err) => {
+      console.log('Dhikr audio playback failed:', err);
+    });
   }, [dhikrEnabled, dhikrVolume]);
 
   // Start session
@@ -633,12 +699,13 @@ const SoundHealingRoom = memo(function SoundHealingRoom({ isVisible, onClose }) 
 
     // Play first dhikr immediately
     if (dhikrEnabled) {
-      setTimeout(() => playDhikr(mode, 0), 1000);
+      setTimeout(() => playDhikr(mode, 0), 2000);
     }
 
-    // Start dhikr interval (every 15-20 seconds based on mode)
+    // Start dhikr interval (longer intervals for full audio tracks)
+    // Tracks are 1-5 minutes each, so switch every 2-3 minutes
     let currentIndex = 1;
-    const dhikrInterval = mode.id === 'sleep' ? 20000 : 15000;
+    const dhikrInterval = mode.id === 'sleep' ? 180000 : 120000; // 3 min or 2 min
     dhikrIntervalRef.current = setInterval(() => {
       if (dhikrEnabled) {
         playDhikr(mode, currentIndex);
@@ -672,6 +739,11 @@ const SoundHealingRoom = memo(function SoundHealingRoom({ isVisible, onClose }) 
       ambientAudioRef.current = null;
     }
 
+    if (dhikrAudioRef.current) {
+      dhikrAudioRef.current.pause();
+      dhikrAudioRef.current = null;
+    }
+
     if (timerRef.current) {
       clearInterval(timerRef.current);
       timerRef.current = null;
@@ -681,11 +753,6 @@ const SoundHealingRoom = memo(function SoundHealingRoom({ isVisible, onClose }) 
       clearInterval(dhikrIntervalRef.current);
       dhikrIntervalRef.current = null;
     }
-
-    // Cancel any ongoing speech
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
-    }
   }, []);
 
   // Toggle play/pause
@@ -693,21 +760,23 @@ const SoundHealingRoom = memo(function SoundHealingRoom({ isVisible, onClose }) 
     if (isPlaying) {
       binauralRef.current?.stop();
       ambientAudioRef.current?.pause();
+      dhikrAudioRef.current?.pause();
       if (timerRef.current) clearInterval(timerRef.current);
       if (dhikrIntervalRef.current) clearInterval(dhikrIntervalRef.current);
-      if ('speechSynthesis' in window) window.speechSynthesis.cancel();
     } else {
       const freq = BINAURAL_FREQUENCIES[selectedMode.frequency];
       binauralRef.current?.start(freq.baseFreq, freq.beatFreq, binauralVolume / 100);
       ambientAudioRef.current?.play().catch(() => {});
+      dhikrAudioRef.current?.play().catch(() => {});
 
-      // Resume dhikr interval
+      // Resume dhikr interval (longer intervals for real audio tracks)
       let currentIndex = dhikrIndex;
-      const dhikrInterval = selectedMode.id === 'sleep' ? 20000 : 15000;
+      // Use longer intervals since audio tracks are full nasheeds
+      const dhikrInterval = selectedMode.id === 'sleep' ? 180000 : 120000; // 3 min or 2 min
       dhikrIntervalRef.current = setInterval(() => {
         if (dhikrEnabled) {
-          playDhikr(selectedMode, currentIndex);
           currentIndex++;
+          playDhikr(selectedMode, currentIndex);
           setDhikrIndex(currentIndex);
         }
       }, dhikrInterval);
@@ -736,6 +805,14 @@ const SoundHealingRoom = memo(function SoundHealingRoom({ isVisible, onClose }) 
     setAmbientVolume(value);
     if (ambientAudioRef.current) {
       ambientAudioRef.current.volume = value / 100;
+    }
+  }, []);
+
+  // Update dhikr volume
+  const handleDhikrVolumeChange = useCallback((value) => {
+    setDhikrVolume(value);
+    if (dhikrAudioRef.current) {
+      dhikrAudioRef.current.volume = value / 100;
     }
   }, []);
 
@@ -797,7 +874,7 @@ const SoundHealingRoom = memo(function SoundHealingRoom({ isVisible, onClose }) 
               onStop={stopSession}
               onBinauralVolumeChange={handleBinauralVolumeChange}
               onAmbientVolumeChange={handleAmbientVolumeChange}
-              onDhikrVolumeChange={setDhikrVolume}
+              onDhikrVolumeChange={handleDhikrVolumeChange}
               onDhikrToggle={() => setDhikrEnabled(!dhikrEnabled)}
             />
           ) : (
