@@ -4,9 +4,66 @@
  * Shows dots lighting up globally with reader counts per surah
  */
 
-import { useState, useEffect, useRef, useCallback, memo, useMemo } from 'react';
+import { useState, useEffect, useRef, useCallback, memo } from 'react';
 import { Icons } from './Icons';
 import { SURAHS } from '../../data';
+
+// User ID for tracking (persistent per browser)
+const getUserId = () => {
+  let userId = localStorage.getItem('w3quran_user_id');
+  if (!userId) {
+    userId = 'user_' + Math.random().toString(36).slice(2) + Date.now().toString(36);
+    localStorage.setItem('w3quran_user_id', userId);
+  }
+  return userId;
+};
+
+/**
+ * Track user reading activity - call this when user opens a surah
+ * @param {number} surahId - The surah being read
+ * @returns {Promise<boolean>} - Success status
+ */
+export const trackReadingActivity = async (surahId) => {
+  try {
+    // Get user's location (if permitted)
+    let lat = 21.4225; // Default to Makkah
+    let lng = 39.8262;
+
+    if ('geolocation' in navigator) {
+      try {
+        const position = await new Promise((resolve, reject) => {
+          navigator.geolocation.getCurrentPosition(resolve, reject, {
+            timeout: 5000,
+            maximumAge: 300000, // Cache for 5 minutes
+          });
+        });
+        lat = position.coords.latitude;
+        lng = position.coords.longitude;
+      } catch {
+        // Use default location if permission denied
+        console.log('Geolocation not available, using default location');
+      }
+    }
+
+    const response = await fetch('/api/ummah-pulse', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        surahId,
+        lat,
+        lng,
+        userId: getUserId(),
+        timestamp: Date.now(),
+      }),
+    });
+
+    const data = await response.json();
+    return data.success;
+  } catch (error) {
+    console.log('Failed to track activity:', error.message);
+    return false;
+  }
+};
 
 // Simulated global reading data (in production, this would come from a real-time backend)
 const MAJOR_CITIES = [
@@ -363,23 +420,67 @@ const GlobalUmmahPulse = memo(function GlobalUmmahPulse({ isVisible, onClose }) 
   const [stats, setStats] = useState({ totalReaders: 0, topSurahId: 1, topSurahReaders: 0, activeCountries: 0 });
   const [selectedActivity, setSelectedActivity] = useState(null);
   const [isLive, setIsLive] = useState(true);
+  const [isRealData, setIsRealData] = useState(false);
+  const [connectionStatus, setConnectionStatus] = useState('connecting');
   const intervalRef = useRef(null);
 
-  // Update reading activity
-  const updateActivity = useCallback(() => {
-    const newActivities = generateReadingActivity();
-    setActivities(newActivities);
-    setStats(generateGlobalStats(newActivities));
+  // Fetch real data from API
+  const fetchRealData = useCallback(async () => {
+    try {
+      const response = await fetch('/api/ummah-pulse');
+      if (!response.ok) throw new Error('API error');
+
+      const data = await response.json();
+
+      if (data.success && data.cities && data.cities.length > 0) {
+        // Transform API data to activities format
+        const newActivities = data.cities.map(city => {
+          const recentActivity = city.activities?.[0];
+          return {
+            id: `${city.id}-${Date.now()}`,
+            city: city.name,
+            lat: city.lat,
+            lng: city.lng,
+            readers: city.readers || 1,
+            surahId: recentActivity?.surahId || POPULAR_SURAHS[Math.floor(Math.random() * POPULAR_SURAHS.length)],
+            surahName: recentActivity?.surahName || SURAHS.find(s => s.id === (recentActivity?.surahId || 1))?.name || 'Al-Fatiha',
+            timestamp: city.lastActive || Date.now(),
+            isPrayerTime: false,
+          };
+        });
+
+        setActivities(newActivities);
+        setStats({
+          totalReaders: data.stats?.totalReaders || newActivities.reduce((sum, a) => sum + a.readers, 0),
+          topSurahId: 1,
+          topSurahReaders: 0,
+          activeCountries: data.stats?.activeLocations || newActivities.length,
+        });
+        setIsRealData(!data.simulated);
+        setConnectionStatus(data.simulated ? 'simulated' : 'live');
+        return;
+      }
+
+      throw new Error('No data');
+    } catch (error) {
+      console.log('Falling back to simulated data:', error.message);
+      // Fallback to simulated data
+      const newActivities = generateReadingActivity();
+      setActivities(newActivities);
+      setStats(generateGlobalStats(newActivities));
+      setIsRealData(false);
+      setConnectionStatus('simulated');
+    }
   }, []);
 
   // Initialize and update periodically
   useEffect(() => {
     if (!isVisible) return;
 
-    updateActivity();
+    fetchRealData();
 
     if (isLive) {
-      intervalRef.current = setInterval(updateActivity, 5000); // Update every 5 seconds
+      intervalRef.current = setInterval(fetchRealData, 10000); // Update every 10 seconds
     }
 
     return () => {
@@ -387,7 +488,7 @@ const GlobalUmmahPulse = memo(function GlobalUmmahPulse({ isVisible, onClose }) 
         clearInterval(intervalRef.current);
       }
     };
-  }, [isVisible, isLive, updateActivity]);
+  }, [isVisible, isLive, fetchRealData]);
 
   const handleDotClick = useCallback((activity) => {
     setSelectedActivity(activity);
@@ -422,8 +523,9 @@ const GlobalUmmahPulse = memo(function GlobalUmmahPulse({ isVisible, onClose }) 
               <div>
                 <h2 className="text-2xl font-bold text-white">Global Ummah Pulse</h2>
                 <p className="text-emerald-400 text-sm flex items-center gap-2">
-                  <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
-                  {isLive ? 'Live' : 'Paused'} • {stats.totalReaders.toLocaleString()} reading now
+                  <span className={`w-2 h-2 rounded-full animate-pulse ${isRealData ? 'bg-emerald-400' : 'bg-amber-400'}`} />
+                  {isLive ? (isRealData ? 'Live' : 'Simulated') : 'Paused'} • {stats.totalReaders.toLocaleString()} reading now
+                  {!isRealData && <span className="text-amber-400/70 text-xs">(demo)</span>}
                 </p>
               </div>
             </div>

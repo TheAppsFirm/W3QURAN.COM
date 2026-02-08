@@ -21,6 +21,7 @@ import TimeCapsule from './TimeCapsule';
 import VoiceControl from './VoiceControl';
 import HeartbeatMeditation from './HeartbeatMeditation';
 import FamilyCircle from './FamilyCircle';
+import { trackReadingActivity } from './GlobalUmmahPulse';
 import { PALETTES, SURAHS, fetchTafseer, getTafseersByLanguage, getDefaultTafseer, TRANSLATION_TO_TAFSEER_LANG, getVideosForSurah, generateSearchQuery, SCHOLARS, SURAH_TOPICS, TAFSEER_SOURCES, markAyahRead } from '../../data';
 import { useQuranAPI, useMultilingualWords, TRANSLATIONS, TAJWEED_RULES, POS_LABELS } from '../../hooks/useQuranAPI';
 import { speakText } from '../../hooks/useAudioPlayer';
@@ -1669,6 +1670,13 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
 
   const versesContainerRef = useRef(null);
   const startTime = useRef(Date.now());
+
+  // Track reading activity for Global Ummah Pulse
+  useEffect(() => {
+    if (surah?.id) {
+      trackReadingActivity(surah.id).catch(() => {});
+    }
+  }, [surah?.id]);
 
   const isPlayingRef = useRef(isPlaying);
   const currentAyahRef = useRef(currentAyah);

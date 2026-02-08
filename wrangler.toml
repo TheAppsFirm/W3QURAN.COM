@@ -6,3 +6,11 @@ pages_build_output_dir = "dist"
 # For local development, create a .dev.vars file with:
 # QURAN_CLIENT_ID=your-client-id
 # QURAN_CLIENT_SECRET=your-client-secret
+
+# KV Namespace for Global Ummah Pulse (real-time reader tracking)
+# To create: wrangler kv:namespace create "UMMAH_KV"
+# Then add the ID below
+[[kv_namespaces]]
+binding = "UMMAH_KV"
+id = "YOUR_KV_NAMESPACE_ID"  # Replace after running: wrangler kv:namespace create "UMMAH_KV"
+preview_id = "YOUR_PREVIEW_KV_ID"  # For local dev: wrangler kv:namespace create "UMMAH_KV" --preview
