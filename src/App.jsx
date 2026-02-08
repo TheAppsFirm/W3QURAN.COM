@@ -10,7 +10,7 @@
  */
 
 import { Suspense, useState, useEffect, useMemo, useCallback } from 'react';
-import { ErrorBoundary, LoadingSpinner, BubbleModal, BubbleReaderOverlay, ProgressDashboard, OfflineManager, HifzMode, SearchPanel, DonateModal, WordSearchMap, EmotionalTracker, ScholarVideoSync, PropheticMap, QuranCompanionAI } from './components/common';
+import { ErrorBoundary, LoadingSpinner, BubbleModal, BubbleReaderOverlay, ProgressDashboard, OfflineManager, HifzMode, SearchPanel, DonateModal, WordSearchMap, EmotionalTracker, ScholarVideoSync, PropheticMap, QuranCompanionAI, GlobalUmmahPulse, VerseWeatherSync, SoundHealingRoom } from './components/common';
 import { Header, FloatingMenu, StatsBar } from './components/layout';
 import { SurahBubble, LayoutSelector, ClockLayout, GridLayout, JuzzGroupLayout, AlphabetLayout, RevelationLayout } from './components/bubbles';
 import { AnalyticsPanel } from './components/widgets';
@@ -198,6 +198,9 @@ function QuranBubbleApp() {
   const [showVideoSync, setShowVideoSync] = useState(false);
   const [showPropheticMap, setShowPropheticMap] = useState(false);
   const [showCompanionAI, setShowCompanionAI] = useState(false);
+  const [showGlobalPulse, setShowGlobalPulse] = useState(false);
+  const [showWeatherSync, setShowWeatherSync] = useState(false);
+  const [showSoundHealing, setShowSoundHealing] = useState(false);
 
   // Memoized filtered surahs
   const filtered = useMemo(() => {
@@ -324,6 +327,9 @@ function QuranBubbleApp() {
           onMindMap={() => setShowMindMap(true)}
           onWorldMap={() => setShowPropheticMap(true)}
           onAIGuide={() => setShowCompanionAI(true)}
+          onGlobalPulse={() => setShowGlobalPulse(true)}
+          onWeatherSync={() => setShowWeatherSync(true)}
+          onSoundHealing={() => setShowSoundHealing(true)}
         />
       )}
 
@@ -835,6 +841,32 @@ function QuranBubbleApp() {
             setInitialVerse(ayahNumber);
           }
         }}
+      />
+
+      {/* Global Ummah Pulse */}
+      <GlobalUmmahPulse
+        isVisible={showGlobalPulse}
+        onClose={() => setShowGlobalPulse(false)}
+      />
+
+      {/* Verse Weather Sync */}
+      <VerseWeatherSync
+        isVisible={showWeatherSync}
+        onClose={() => setShowWeatherSync(false)}
+        onNavigateToVerse={(surahId, ayahNumber) => {
+          const surah = SURAHS.find(s => s.id === surahId);
+          if (surah) {
+            setShowWeatherSync(false);
+            setOverlayReaderSurah(surah);
+            setInitialVerse(ayahNumber);
+          }
+        }}
+      />
+
+      {/* Sound Healing Room */}
+      <SoundHealingRoom
+        isVisible={showSoundHealing}
+        onClose={() => setShowSoundHealing(false)}
       />
 
       {/* Animation Styles */}

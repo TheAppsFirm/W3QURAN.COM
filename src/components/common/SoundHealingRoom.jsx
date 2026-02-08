@@ -1,0 +1,716 @@
+/**
+ * Quran Sound Healing Room
+ * Binaural frequencies + specific recitations for different states
+ * Sleep mode, Focus mode, Healing mode with Ruqyah verses
+ */
+
+import { useState, useEffect, useRef, useCallback, memo, useMemo } from 'react';
+import { Icons } from './Icons';
+
+// Binaural frequency configurations
+const BINAURAL_FREQUENCIES = {
+  delta: {
+    name: 'Delta Waves',
+    range: '0.5-4 Hz',
+    description: 'Deep sleep, healing, rejuvenation',
+    baseFreq: 100,
+    beatFreq: 2, // Creates 2Hz delta wave
+    color: '#6366F1',
+  },
+  theta: {
+    name: 'Theta Waves',
+    range: '4-8 Hz',
+    description: 'Deep relaxation, meditation, creativity',
+    baseFreq: 150,
+    beatFreq: 6, // Creates 6Hz theta wave
+    color: '#8B5CF6',
+  },
+  alpha: {
+    name: 'Alpha Waves',
+    range: '8-13 Hz',
+    description: 'Relaxed focus, calm alertness',
+    baseFreq: 200,
+    beatFreq: 10, // Creates 10Hz alpha wave
+    color: '#10B981',
+  },
+  beta: {
+    name: 'Beta Waves',
+    range: '13-30 Hz',
+    description: 'Active thinking, concentration',
+    baseFreq: 250,
+    beatFreq: 18, // Creates 18Hz beta wave
+    color: '#F59E0B',
+  },
+};
+
+// Healing modes with specific configurations
+const HEALING_MODES = {
+  sleep: {
+    id: 'sleep',
+    name: 'Sleep Mode',
+    nameAr: 'نوم هانئ',
+    icon: 'Moon',
+    description: 'Delta waves + soft recitation for peaceful sleep',
+    frequency: 'delta',
+    color: '#6366F1',
+    gradient: 'from-indigo-600 to-purple-700',
+    volume: 0.3,
+    recitationSpeed: 0.8,
+    duration: 30, // minutes
+    verses: [
+      { surah: 2, ayah: 255, name: 'Ayatul Kursi' },
+      { surah: 112, ayah: 1, name: 'Al-Ikhlas' },
+      { surah: 113, ayah: 1, name: 'Al-Falaq' },
+      { surah: 114, ayah: 1, name: 'An-Nas' },
+      { surah: 67, ayah: 1, name: 'Al-Mulk (beginning)' },
+    ],
+    ambientSound: 'night',
+    tips: [
+      'Listen with comfortable volume',
+      'Use headphones for best binaural effect',
+      'Set a timer to auto-stop',
+      'Create a dark, quiet environment',
+    ],
+  },
+  focus: {
+    id: 'focus',
+    name: 'Focus Mode',
+    nameAr: 'تركيز وخشوع',
+    icon: 'Brain',
+    description: 'Alpha waves + measured pace for concentration',
+    frequency: 'alpha',
+    color: '#10B981',
+    gradient: 'from-emerald-500 to-teal-500',
+    volume: 0.4,
+    recitationSpeed: 1.0,
+    duration: 25, // minutes (like Pomodoro)
+    verses: [
+      { surah: 1, ayah: 1, name: 'Al-Fatiha' },
+      { surah: 18, ayah: 1, name: 'Al-Kahf (beginning)' },
+      { surah: 36, ayah: 1, name: 'Ya-Sin (beginning)' },
+      { surah: 55, ayah: 1, name: 'Ar-Rahman (beginning)' },
+    ],
+    ambientSound: 'nature',
+    tips: [
+      'Take breaks every 25 minutes',
+      'Keep water nearby',
+      'Sit in a comfortable position',
+      'Minimize distractions',
+    ],
+  },
+  healing: {
+    id: 'healing',
+    name: 'Healing Mode',
+    nameAr: 'شفاء ورقية',
+    icon: 'Heart',
+    description: 'Theta waves + Ruqyah verses for spiritual healing',
+    frequency: 'theta',
+    color: '#EC4899',
+    gradient: 'from-pink-500 to-rose-500',
+    volume: 0.5,
+    recitationSpeed: 0.9,
+    duration: 20,
+    verses: [
+      { surah: 1, ayah: 1, name: 'Al-Fatiha (7x)' },
+      { surah: 2, ayah: 255, name: 'Ayatul Kursi' },
+      { surah: 2, ayah: 285, name: 'Last 2 verses of Baqarah' },
+      { surah: 112, ayah: 1, name: 'Al-Ikhlas (3x)' },
+      { surah: 113, ayah: 1, name: 'Al-Falaq (3x)' },
+      { surah: 114, ayah: 1, name: 'An-Nas (3x)' },
+      { surah: 10, ayah: 57, name: 'Healing verse' },
+      { surah: 17, ayah: 82, name: 'Shifa verse' },
+    ],
+    ambientSound: 'water',
+    tips: [
+      'Have sincere intention for healing',
+      'Make dua before and after',
+      'Listen with full presence',
+      'Place hand on area of pain if applicable',
+    ],
+  },
+  anxiety: {
+    id: 'anxiety',
+    name: 'Calm Mode',
+    nameAr: 'سكينة وطمأنينة',
+    icon: 'CloudSun',
+    description: 'Theta waves + calming verses for anxiety relief',
+    frequency: 'theta',
+    color: '#06B6D4',
+    gradient: 'from-cyan-500 to-blue-500',
+    volume: 0.4,
+    recitationSpeed: 0.85,
+    duration: 15,
+    verses: [
+      { surah: 94, ayah: 1, name: 'Ash-Sharh (full)' },
+      { surah: 93, ayah: 1, name: 'Ad-Duha (full)' },
+      { surah: 13, ayah: 28, name: 'Hearts find rest' },
+      { surah: 2, ayah: 286, name: 'Allah does not burden' },
+      { surah: 65, ayah: 3, name: 'Tawakkul verse' },
+    ],
+    ambientSound: 'rain',
+    tips: [
+      'Breathe deeply and slowly',
+      'Focus on the meanings',
+      'Remember Allah\'s promise of ease',
+      'Make dhikr alongside',
+    ],
+  },
+};
+
+// Ambient sound options
+const AMBIENT_SOUNDS = {
+  night: {
+    name: 'Night Silence',
+    description: 'Gentle night ambiance',
+    url: 'https://assets.mixkit.co/active_storage/sfx/212/212-preview.mp3',
+  },
+  nature: {
+    name: 'Nature',
+    description: 'Birds and gentle breeze',
+    url: 'https://assets.mixkit.co/active_storage/sfx/2514/2514-preview.mp3',
+  },
+  water: {
+    name: 'Flowing Water',
+    description: 'Gentle stream sounds',
+    url: 'https://assets.mixkit.co/active_storage/sfx/2432/2432-preview.mp3',
+  },
+  rain: {
+    name: 'Light Rain',
+    description: 'Calming rainfall',
+    url: 'https://assets.mixkit.co/active_storage/sfx/2515/2515-preview.mp3',
+  },
+};
+
+// Binaural Beat Generator using Web Audio API
+class BinauralBeatGenerator {
+  constructor() {
+    this.audioContext = null;
+    this.leftOscillator = null;
+    this.rightOscillator = null;
+    this.gainNode = null;
+    this.isPlaying = false;
+  }
+
+  init() {
+    if (!this.audioContext) {
+      this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    return this.audioContext;
+  }
+
+  start(baseFreq, beatFreq, volume = 0.3) {
+    if (this.isPlaying) this.stop();
+
+    this.init();
+
+    // Create gain node
+    this.gainNode = this.audioContext.createGain();
+    this.gainNode.gain.value = volume;
+    this.gainNode.connect(this.audioContext.destination);
+
+    // Create stereo panner for left channel
+    const leftPanner = this.audioContext.createStereoPanner();
+    leftPanner.pan.value = -1;
+    leftPanner.connect(this.gainNode);
+
+    // Create stereo panner for right channel
+    const rightPanner = this.audioContext.createStereoPanner();
+    rightPanner.pan.value = 1;
+    rightPanner.connect(this.gainNode);
+
+    // Create left oscillator
+    this.leftOscillator = this.audioContext.createOscillator();
+    this.leftOscillator.type = 'sine';
+    this.leftOscillator.frequency.value = baseFreq;
+    this.leftOscillator.connect(leftPanner);
+
+    // Create right oscillator with beat frequency difference
+    this.rightOscillator = this.audioContext.createOscillator();
+    this.rightOscillator.type = 'sine';
+    this.rightOscillator.frequency.value = baseFreq + beatFreq;
+    this.rightOscillator.connect(rightPanner);
+
+    // Start oscillators
+    this.leftOscillator.start();
+    this.rightOscillator.start();
+    this.isPlaying = true;
+  }
+
+  setVolume(volume) {
+    if (this.gainNode) {
+      this.gainNode.gain.value = Math.max(0, Math.min(1, volume));
+    }
+  }
+
+  stop() {
+    if (this.leftOscillator) {
+      this.leftOscillator.stop();
+      this.leftOscillator = null;
+    }
+    if (this.rightOscillator) {
+      this.rightOscillator.stop();
+      this.rightOscillator = null;
+    }
+    this.isPlaying = false;
+  }
+
+  isActive() {
+    return this.isPlaying;
+  }
+}
+
+// Frequency Visualizer Component
+const FrequencyVisualizer = memo(function FrequencyVisualizer({ isPlaying, frequency, color }) {
+  const bars = 20;
+
+  return (
+    <div className="flex items-end justify-center gap-1 h-16">
+      {Array.from({ length: bars }).map((_, i) => {
+        const height = isPlaying
+          ? 20 + Math.sin((Date.now() / 200) + i * 0.3) * 20 + Math.random() * 10
+          : 8;
+        return (
+          <div
+            key={i}
+            className="w-1.5 rounded-full transition-all duration-150"
+            style={{
+              height: `${height}px`,
+              backgroundColor: isPlaying ? color : 'rgba(255,255,255,0.2)',
+              opacity: isPlaying ? 0.8 : 0.3,
+            }}
+          />
+        );
+      })}
+    </div>
+  );
+});
+
+// Mode Card Component
+const ModeCard = memo(function ModeCard({ mode, isSelected, onClick }) {
+  const Icon = Icons[mode.icon] || Icons.Heart;
+
+  return (
+    <button
+      onClick={onClick}
+      className={`p-4 rounded-xl border transition-all text-left ${
+        isSelected
+          ? `bg-gradient-to-br ${mode.gradient} border-white/20 scale-105`
+          : 'bg-white/5 border-white/10 hover:bg-white/10'
+      }`}
+    >
+      <div className="flex items-center gap-3 mb-2">
+        <div
+          className={`w-10 h-10 rounded-full flex items-center justify-center ${
+            isSelected ? 'bg-white/20' : `bg-${mode.color}/20`
+          }`}
+          style={{ backgroundColor: isSelected ? 'rgba(255,255,255,0.2)' : `${mode.color}20` }}
+        >
+          <Icon className="w-5 h-5" style={{ color: isSelected ? 'white' : mode.color }} />
+        </div>
+        <div>
+          <h4 className="text-white font-medium">{mode.name}</h4>
+          <p className="text-white/60 text-xs" style={{ fontFamily: "'Scheherazade New', serif" }}>
+            {mode.nameAr}
+          </p>
+        </div>
+      </div>
+      <p className={`text-sm ${isSelected ? 'text-white/80' : 'text-white/50'}`}>
+        {mode.description}
+      </p>
+    </button>
+  );
+});
+
+// Active Session Component
+const ActiveSession = memo(function ActiveSession({
+  mode,
+  isPlaying,
+  timeRemaining,
+  binauralVolume,
+  ambientVolume,
+  onTogglePlay,
+  onStop,
+  onBinauralVolumeChange,
+  onAmbientVolumeChange,
+}) {
+  const Icon = Icons[mode.icon] || Icons.Heart;
+  const frequency = BINAURAL_FREQUENCIES[mode.frequency];
+
+  const formatTime = (seconds) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  return (
+    <div className={`rounded-2xl bg-gradient-to-br ${mode.gradient} p-6 relative overflow-hidden`}>
+      {/* Background animation */}
+      <div className="absolute inset-0 opacity-20">
+        <div
+          className="absolute w-96 h-96 rounded-full blur-3xl"
+          style={{
+            background: `radial-gradient(circle, white 0%, transparent 70%)`,
+            animation: isPlaying ? 'pulse 4s ease-in-out infinite' : 'none',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+          }}
+        />
+      </div>
+
+      <div className="relative">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center">
+              <Icon className="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <h3 className="text-xl font-bold text-white">{mode.name}</h3>
+              <p className="text-white/70 text-sm">{frequency.name} • {frequency.range}</p>
+            </div>
+          </div>
+          <div className="text-right">
+            <p className="text-3xl font-bold text-white">{formatTime(timeRemaining)}</p>
+            <p className="text-white/60 text-xs">remaining</p>
+          </div>
+        </div>
+
+        {/* Visualizer */}
+        <div className="mb-6">
+          <FrequencyVisualizer isPlaying={isPlaying} frequency={mode.frequency} color="white" />
+        </div>
+
+        {/* Volume Controls */}
+        <div className="grid grid-cols-2 gap-4 mb-6">
+          <div>
+            <label className="text-white/70 text-xs mb-2 block">Binaural Volume</label>
+            <input
+              type="range"
+              min="0"
+              max="100"
+              value={binauralVolume}
+              onChange={(e) => onBinauralVolumeChange(parseInt(e.target.value))}
+              className="w-full accent-white"
+            />
+          </div>
+          <div>
+            <label className="text-white/70 text-xs mb-2 block">Ambient Volume</label>
+            <input
+              type="range"
+              min="0"
+              max="100"
+              value={ambientVolume}
+              onChange={(e) => onAmbientVolumeChange(parseInt(e.target.value))}
+              className="w-full accent-white"
+            />
+          </div>
+        </div>
+
+        {/* Controls */}
+        <div className="flex items-center justify-center gap-4">
+          <button
+            onClick={onStop}
+            className="px-6 py-3 rounded-xl bg-white/20 text-white hover:bg-white/30 transition-all"
+          >
+            Stop Session
+          </button>
+          <button
+            onClick={onTogglePlay}
+            className="px-8 py-3 rounded-xl bg-white text-gray-900 font-medium hover:bg-white/90 transition-all flex items-center gap-2"
+          >
+            {isPlaying ? (
+              <>
+                <Icons.Pause className="w-5 h-5" />
+                Pause
+              </>
+            ) : (
+              <>
+                <Icons.Play className="w-5 h-5" />
+                Resume
+              </>
+            )}
+          </button>
+        </div>
+
+        {/* Tips */}
+        <div className="mt-6 p-4 rounded-xl bg-black/20">
+          <h4 className="text-white/80 text-sm font-medium mb-2">Tips for this session:</h4>
+          <ul className="space-y-1">
+            {mode.tips.map((tip, i) => (
+              <li key={i} className="text-white/60 text-xs flex items-start gap-2">
+                <span className="text-white/40">•</span>
+                {tip}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
+  );
+});
+
+// Main Component
+const SoundHealingRoom = memo(function SoundHealingRoom({ isVisible, onClose }) {
+  const [selectedMode, setSelectedMode] = useState(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [timeRemaining, setTimeRemaining] = useState(0);
+  const [binauralVolume, setBinauralVolume] = useState(30);
+  const [ambientVolume, setAmbientVolume] = useState(20);
+
+  const binauralRef = useRef(null);
+  const ambientAudioRef = useRef(null);
+  const timerRef = useRef(null);
+
+  // Initialize binaural generator
+  useEffect(() => {
+    binauralRef.current = new BinauralBeatGenerator();
+
+    return () => {
+      if (binauralRef.current) {
+        binauralRef.current.stop();
+      }
+      if (ambientAudioRef.current) {
+        ambientAudioRef.current.pause();
+      }
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
+    };
+  }, []);
+
+  // Start session
+  const startSession = useCallback((mode) => {
+    setSelectedMode(mode);
+    setTimeRemaining(mode.duration * 60);
+    setIsPlaying(true);
+
+    // Start binaural beats
+    const freq = BINAURAL_FREQUENCIES[mode.frequency];
+    binauralRef.current?.start(freq.baseFreq, freq.beatFreq, binauralVolume / 100);
+
+    // Start ambient sound
+    const ambient = AMBIENT_SOUNDS[mode.ambientSound];
+    if (ambient) {
+      if (ambientAudioRef.current) {
+        ambientAudioRef.current.pause();
+      }
+      ambientAudioRef.current = new Audio(ambient.url);
+      ambientAudioRef.current.loop = true;
+      ambientAudioRef.current.volume = ambientVolume / 100;
+      ambientAudioRef.current.play().catch(() => {});
+    }
+
+    // Start timer
+    timerRef.current = setInterval(() => {
+      setTimeRemaining(prev => {
+        if (prev <= 1) {
+          stopSession();
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+  }, [binauralVolume, ambientVolume]);
+
+  // Stop session
+  const stopSession = useCallback(() => {
+    setIsPlaying(false);
+    setSelectedMode(null);
+
+    binauralRef.current?.stop();
+
+    if (ambientAudioRef.current) {
+      ambientAudioRef.current.pause();
+      ambientAudioRef.current = null;
+    }
+
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
+  }, []);
+
+  // Toggle play/pause
+  const togglePlay = useCallback(() => {
+    if (isPlaying) {
+      binauralRef.current?.stop();
+      ambientAudioRef.current?.pause();
+      if (timerRef.current) clearInterval(timerRef.current);
+    } else {
+      const freq = BINAURAL_FREQUENCIES[selectedMode.frequency];
+      binauralRef.current?.start(freq.baseFreq, freq.beatFreq, binauralVolume / 100);
+      ambientAudioRef.current?.play().catch(() => {});
+
+      timerRef.current = setInterval(() => {
+        setTimeRemaining(prev => {
+          if (prev <= 1) {
+            stopSession();
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    }
+    setIsPlaying(!isPlaying);
+  }, [isPlaying, selectedMode, binauralVolume, stopSession]);
+
+  // Update binaural volume
+  const handleBinauralVolumeChange = useCallback((value) => {
+    setBinauralVolume(value);
+    binauralRef.current?.setVolume(value / 100);
+  }, []);
+
+  // Update ambient volume
+  const handleAmbientVolumeChange = useCallback((value) => {
+    setAmbientVolume(value);
+    if (ambientAudioRef.current) {
+      ambientAudioRef.current.volume = value / 100;
+    }
+  }, []);
+
+  // Cleanup on close
+  useEffect(() => {
+    if (!isVisible) {
+      stopSession();
+    }
+  }, [isVisible, stopSession]);
+
+  if (!isVisible) return null;
+
+  return (
+    <div
+      className="fixed inset-0 z-[99999] flex items-center justify-center p-4"
+      onClick={onClose}
+    >
+      <div className="absolute inset-0 bg-gradient-to-b from-gray-900 via-indigo-950 to-gray-900" />
+
+      <div
+        className="relative bg-black/40 backdrop-blur-lg rounded-3xl overflow-hidden max-w-2xl w-full max-h-[90vh] flex flex-col shadow-2xl border border-white/10"
+        onClick={(e) => e.stopPropagation()}
+        style={{ animation: 'bubblePopIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)' }}
+      >
+        {/* Header */}
+        <div className="flex-shrink-0 p-6 border-b border-white/10">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-pink-500 to-purple-500 flex items-center justify-center">
+                <Icons.Music className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <h2 className="text-xl font-bold text-white">Sound Healing Room</h2>
+                <p className="text-white/60 text-sm">Binaural frequencies + Quran</p>
+              </div>
+            </div>
+            <button
+              onClick={onClose}
+              className="p-2 rounded-full hover:bg-white/10 transition-all"
+            >
+              <Icons.X className="w-6 h-6 text-white/70" />
+            </button>
+          </div>
+        </div>
+
+        {/* Content */}
+        <div className="flex-1 overflow-y-auto p-6">
+          {selectedMode ? (
+            <ActiveSession
+              mode={selectedMode}
+              isPlaying={isPlaying}
+              timeRemaining={timeRemaining}
+              binauralVolume={binauralVolume}
+              ambientVolume={ambientVolume}
+              onTogglePlay={togglePlay}
+              onStop={stopSession}
+              onBinauralVolumeChange={handleBinauralVolumeChange}
+              onAmbientVolumeChange={handleAmbientVolumeChange}
+            />
+          ) : (
+            <>
+              {/* Mode Selection */}
+              <div className="mb-6">
+                <h3 className="text-white font-medium mb-4">Choose Your Healing Mode</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {Object.values(HEALING_MODES).map((mode) => (
+                    <ModeCard
+                      key={mode.id}
+                      mode={mode}
+                      isSelected={false}
+                      onClick={() => startSession(mode)}
+                    />
+                  ))}
+                </div>
+              </div>
+
+              {/* Info Section */}
+              <div className="space-y-4">
+                <div className="p-4 rounded-xl bg-white/5 border border-white/10">
+                  <h4 className="text-white font-medium mb-2 flex items-center gap-2">
+                    <Icons.Info className="w-4 h-4 text-white/60" />
+                    About Binaural Beats
+                  </h4>
+                  <p className="text-white/60 text-sm">
+                    Binaural beats are created when two slightly different frequencies are played in each ear.
+                    Your brain perceives a third tone - the difference between the two frequencies - which can
+                    help induce specific mental states.
+                  </p>
+                </div>
+
+                <div className="p-4 rounded-xl bg-gradient-to-br from-amber-500/10 to-orange-500/10 border border-amber-500/20">
+                  <h4 className="text-amber-400 font-medium mb-2 flex items-center gap-2">
+                    <Icons.Headphones className="w-4 h-4" />
+                    Best Experience
+                  </h4>
+                  <ul className="text-white/60 text-sm space-y-1">
+                    <li>• Use stereo headphones (required for binaural effect)</li>
+                    <li>• Find a quiet, comfortable space</li>
+                    <li>• Start with lower volumes and adjust</li>
+                    <li>• Maintain consistent practice for best results</li>
+                  </ul>
+                </div>
+
+                {/* Frequency Guide */}
+                <div className="p-4 rounded-xl bg-white/5 border border-white/10">
+                  <h4 className="text-white font-medium mb-3">Frequency Guide</h4>
+                  <div className="grid grid-cols-2 gap-2">
+                    {Object.values(BINAURAL_FREQUENCIES).map((freq) => (
+                      <div key={freq.name} className="p-2 rounded-lg bg-white/5">
+                        <div className="flex items-center gap-2 mb-1">
+                          <div
+                            className="w-3 h-3 rounded-full"
+                            style={{ backgroundColor: freq.color }}
+                          />
+                          <span className="text-white text-sm font-medium">{freq.name}</span>
+                        </div>
+                        <p className="text-white/40 text-xs">{freq.range}</p>
+                        <p className="text-white/60 text-xs">{freq.description}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
+        </div>
+
+        {/* Footer */}
+        {!selectedMode && (
+          <div className="flex-shrink-0 p-4 border-t border-white/10 bg-white/5">
+            <p className="text-white/40 text-xs text-center">
+              🎧 Headphones required for binaural beats effect
+            </p>
+          </div>
+        )}
+      </div>
+
+      <style>{`
+        @keyframes pulse {
+          0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.2; }
+          50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.3; }
+        }
+      `}</style>
+    </div>
+  );
+});
+
+export default SoundHealingRoom;

@@ -967,6 +967,87 @@ export const HandsHelpingIcon = (props) => (
   </Icon>
 );
 
+// Global Ummah Pulse Icon
+export const GlobalPulseIcon = (props) => (
+  <Icon {...props}>
+    <circle cx="12" cy="12" r="10" />
+    <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
+    <path d="M2 12h20" />
+    <circle cx="12" cy="12" r="3" fill="currentColor" />
+    <circle cx="12" cy="12" r="5" fill="none" strokeDasharray="2 2" />
+  </Icon>
+);
+
+// Cloud with Sun Icon
+export const CloudSunIcon = (props) => (
+  <Icon {...props}>
+    <path d="M12 2v2" />
+    <path d="m4.93 4.93 1.41 1.41" />
+    <path d="M20 12h2" />
+    <path d="m19.07 4.93-1.41 1.41" />
+    <path d="M15.947 12.65a4 4 0 0 0-5.925-4.128" />
+    <path d="M13 22H7a5 5 0 1 1 4.9-6H13a3 3 0 0 1 0 6Z" />
+  </Icon>
+);
+
+// Cloud Rain Icon
+export const CloudRainIcon = (props) => (
+  <Icon {...props}>
+    <path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242" />
+    <path d="M16 14v6" />
+    <path d="M8 14v6" />
+    <path d="M12 16v6" />
+  </Icon>
+);
+
+// Cloud Lightning Icon
+export const CloudLightningIcon = (props) => (
+  <Icon {...props}>
+    <path d="M6 16.326A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 .5 8.973" />
+    <path d="m13 12-3 5h4l-3 5" />
+  </Icon>
+);
+
+// Snowflake Icon
+export const SnowflakeIcon = (props) => (
+  <Icon {...props}>
+    <line x1="2" x2="22" y1="12" y2="12" />
+    <line x1="12" x2="12" y1="2" y2="22" />
+    <path d="m20 16-4-4 4-4" />
+    <path d="m4 8 4 4-4 4" />
+    <path d="m16 4-4 4-4-4" />
+    <path d="m8 20 4-4 4 4" />
+  </Icon>
+);
+
+// Thermometer Icon
+export const ThermometerIcon = (props) => (
+  <Icon {...props}>
+    <path d="M14 4v10.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0Z" />
+  </Icon>
+);
+
+// Music/Healing Icon
+export const MusicIcon = (props) => (
+  <Icon {...props}>
+    <path d="M9 18V5l12-2v13" />
+    <circle cx="6" cy="18" r="3" />
+    <circle cx="18" cy="16" r="3" />
+  </Icon>
+);
+
+// Waveform Icon
+export const WaveformIcon = (props) => (
+  <Icon {...props}>
+    <path d="M2 12h2" />
+    <path d="M6 8v8" />
+    <path d="M10 4v16" />
+    <path d="M14 6v12" />
+    <path d="M18 8v8" />
+    <path d="M22 12h-2" />
+  </Icon>
+);
+
 // ============================================================================
 // Export all icons as object for dynamic usage
 // ============================================================================
@@ -1089,6 +1170,15 @@ export const Icons = {
   Crown: CrownIcon,
   Gift: GiftIcon,
   HandsHelping: HandsHelpingIcon,
+  // New Features Icons
+  GlobalPulse: GlobalPulseIcon,
+  CloudSun: CloudSunIcon,
+  CloudRain: CloudRainIcon,
+  CloudLightning: CloudLightningIcon,
+  Snowflake: SnowflakeIcon,
+  Thermometer: ThermometerIcon,
+  Music: MusicIcon,
+  Waveform: WaveformIcon,
 };
 
 export default Icons;

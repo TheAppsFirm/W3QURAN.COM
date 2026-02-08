@@ -132,11 +132,14 @@ const StatsBar = memo(function StatsBar({
   showControls = false,
   // Donation modal callback
   onDonate,
-  // New callbacks for Mood, Mind Map, World Map, and AI Guide
+  // New callbacks for all features
   onMood,
   onMindMap,
   onWorldMap,
   onAIGuide,
+  onGlobalPulse,
+  onWeatherSync,
+  onSoundHealing,
 }) {
   const [showLayoutMenu, setShowLayoutMenu] = useState(false);
   const [showZoomMenu, setShowZoomMenu] = useState(false);
@@ -317,6 +320,39 @@ const StatsBar = memo(function StatsBar({
                   color="#14B8A6"
                   color2="#0D9488"
                   onClick={onAIGuide}
+                />
+              )}
+
+              {/* Global Ummah Pulse Bubble Button */}
+              {onGlobalPulse && (
+                <BubbleButton
+                  icon={Icons.GlobalPulse}
+                  label="Ummah"
+                  color="#10B981"
+                  color2="#059669"
+                  onClick={onGlobalPulse}
+                />
+              )}
+
+              {/* Weather Sync Bubble Button */}
+              {onWeatherSync && (
+                <BubbleButton
+                  icon={Icons.CloudSun}
+                  label="Weather"
+                  color="#3B82F6"
+                  color2="#2563EB"
+                  onClick={onWeatherSync}
+                />
+              )}
+
+              {/* Sound Healing Bubble Button */}
+              {onSoundHealing && (
+                <BubbleButton
+                  icon={Icons.Music}
+                  label="Healing"
+                  color="#EC4899"
+                  color2="#DB2777"
+                  onClick={onSoundHealing}
                 />
               )}
             </div>

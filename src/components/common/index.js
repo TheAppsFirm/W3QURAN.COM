@@ -24,3 +24,6 @@ export { default as ScholarVideoSync } from './ScholarVideoSync';
 export { default as WordSearchMap } from './WordSearchMap';
 export { default as PropheticMap } from './PropheticMap';
 export { default as QuranCompanionAI } from './QuranCompanionAI';
+export { default as GlobalUmmahPulse } from './GlobalUmmahPulse';
+export { default as VerseWeatherSync } from './VerseWeatherSync';
+export { default as SoundHealingRoom } from './SoundHealingRoom';
