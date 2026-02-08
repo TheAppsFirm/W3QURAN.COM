@@ -1,11 +1,54 @@
 /**
  * Quran Sound Healing Room
- * Binaural frequencies + specific recitations for different states
+ * Binaural frequencies + Islamic dhikr for different states
  * Sleep mode, Focus mode, Healing mode with Ruqyah verses
+ * Enhanced with Allah dhikr mixed with ambient sounds
  */
 
-import { useState, useEffect, useRef, useCallback, memo, useMemo } from 'react';
+import { useState, useEffect, useRef, useCallback, memo } from 'react';
 import { Icons } from './Icons';
+
+// Islamic Dhikr phrases for TTS
+const DHIKR_PHRASES = {
+  sleep: [
+    { arabic: 'الله', transliteration: 'Allah', meaning: 'Allah' },
+    { arabic: 'سبحان الله', transliteration: 'SubhanAllah', meaning: 'Glory to Allah' },
+    { arabic: 'لا إله إلا الله', transliteration: 'La ilaha illallah', meaning: 'There is no god but Allah' },
+  ],
+  focus: [
+    { arabic: 'الله أكبر', transliteration: 'Allahu Akbar', meaning: 'Allah is the Greatest' },
+    { arabic: 'بسم الله', transliteration: 'Bismillah', meaning: 'In the name of Allah' },
+    { arabic: 'الحمد لله', transliteration: 'Alhamdulillah', meaning: 'All praise to Allah' },
+  ],
+  healing: [
+    { arabic: 'يا شافي', transliteration: 'Ya Shafi', meaning: 'O Healer' },
+    { arabic: 'يا رحمن', transliteration: 'Ya Rahman', meaning: 'O Most Merciful' },
+    { arabic: 'يا سلام', transliteration: 'Ya Salam', meaning: 'O Source of Peace' },
+    { arabic: 'بسم الله الذي لا يضر مع اسمه شيء', transliteration: 'Bismillahilladhi...', meaning: 'In the name of Allah with whose name nothing can harm' },
+  ],
+  anxiety: [
+    { arabic: 'حسبي الله', transliteration: 'HasbiAllah', meaning: 'Allah is sufficient for me' },
+    { arabic: 'لا حول ولا قوة إلا بالله', transliteration: 'La hawla wa la quwwata illa billah', meaning: 'There is no power except with Allah' },
+    { arabic: 'توكلت على الله', transliteration: 'Tawakkaltu alallah', meaning: 'I put my trust in Allah' },
+    { arabic: 'يا لطيف', transliteration: 'Ya Latif', meaning: 'O Most Gentle' },
+  ],
+};
+
+// Speak dhikr using browser TTS
+const speakDhikr = (text, rate = 0.7, pitch = 0.9, volume = 0.8) => {
+  if (!('speechSynthesis' in window)) return;
+
+  // Cancel any ongoing speech
+  window.speechSynthesis.cancel();
+
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = 'ar-SA';
+  utterance.rate = rate;
+  utterance.pitch = pitch;
+  utterance.volume = volume;
+
+  window.speechSynthesis.speak(utterance);
+};
 
 // Binaural frequency configurations
 const BINAURAL_FREQUENCIES = {
@@ -328,10 +371,15 @@ const ActiveSession = memo(function ActiveSession({
   timeRemaining,
   binauralVolume,
   ambientVolume,
+  dhikrVolume,
+  dhikrEnabled,
+  currentDhikr,
   onTogglePlay,
   onStop,
   onBinauralVolumeChange,
   onAmbientVolumeChange,
+  onDhikrVolumeChange,
+  onDhikrToggle,
 }) {
   const Icon = Icons[mode.icon] || Icons.Heart;
   const frequency = BINAURAL_FREQUENCIES[mode.frequency];
@@ -376,15 +424,54 @@ const ActiveSession = memo(function ActiveSession({
           </div>
         </div>
 
+        {/* Current Dhikr Display */}
+        {dhikrEnabled && currentDhikr && (
+          <div className="mb-4 p-4 rounded-xl bg-white/10 text-center"
+               style={{ animation: 'fadeIn 0.5s ease-out' }}>
+            <p className="text-3xl text-white mb-1"
+               style={{
+                 fontFamily: "'Scheherazade New', serif",
+                 animation: isPlaying ? 'dhikrGlow 3s ease-in-out infinite' : 'none'
+               }}>
+              {currentDhikr.arabic}
+            </p>
+            <p className="text-white/70 text-sm">{currentDhikr.transliteration}</p>
+            <p className="text-white/50 text-xs mt-1">{currentDhikr.meaning}</p>
+          </div>
+        )}
+
         {/* Visualizer */}
         <div className="mb-6">
           <FrequencyVisualizer isPlaying={isPlaying} frequency={mode.frequency} color="white" />
         </div>
 
+        {/* Dhikr Toggle */}
+        <div className="mb-4 p-3 rounded-xl bg-black/20 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-full bg-amber-500/20 flex items-center justify-center">
+              <Icons.Volume2 className="w-4 h-4 text-amber-400" />
+            </div>
+            <div>
+              <p className="text-white text-sm font-medium">Islamic Dhikr</p>
+              <p className="text-white/50 text-xs">Allah's names mixed with ambient</p>
+            </div>
+          </div>
+          <button
+            onClick={onDhikrToggle}
+            className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all ${
+              dhikrEnabled
+                ? 'bg-amber-500 text-white'
+                : 'bg-white/10 text-white/60'
+            }`}
+          >
+            {dhikrEnabled ? 'On' : 'Off'}
+          </button>
+        </div>
+
         {/* Volume Controls */}
-        <div className="grid grid-cols-2 gap-4 mb-6">
+        <div className="grid grid-cols-3 gap-3 mb-6">
           <div>
-            <label className="text-white/70 text-xs mb-2 block">Binaural Volume</label>
+            <label className="text-white/70 text-xs mb-2 block">Binaural</label>
             <input
               type="range"
               min="0"
@@ -395,7 +482,7 @@ const ActiveSession = memo(function ActiveSession({
             />
           </div>
           <div>
-            <label className="text-white/70 text-xs mb-2 block">Ambient Volume</label>
+            <label className="text-white/70 text-xs mb-2 block">Ambient</label>
             <input
               type="range"
               min="0"
@@ -403,6 +490,22 @@ const ActiveSession = memo(function ActiveSession({
               value={ambientVolume}
               onChange={(e) => onAmbientVolumeChange(parseInt(e.target.value))}
               className="w-full accent-white"
+            />
+          </div>
+          <div>
+            <label className="text-white/70 text-xs mb-2 block flex items-center gap-1">
+              Dhikr
+              {!dhikrEnabled && <span className="text-white/40">(off)</span>}
+            </label>
+            <input
+              type="range"
+              min="0"
+              max="100"
+              value={dhikrVolume}
+              onChange={(e) => onDhikrVolumeChange(parseInt(e.target.value))}
+              className="w-full accent-amber-400"
+              disabled={!dhikrEnabled}
+              style={{ opacity: dhikrEnabled ? 1 : 0.4 }}
             />
           </div>
         </div>
@@ -457,10 +560,15 @@ const SoundHealingRoom = memo(function SoundHealingRoom({ isVisible, onClose }) 
   const [timeRemaining, setTimeRemaining] = useState(0);
   const [binauralVolume, setBinauralVolume] = useState(30);
   const [ambientVolume, setAmbientVolume] = useState(20);
+  const [dhikrVolume, setDhikrVolume] = useState(70);
+  const [dhikrEnabled, setDhikrEnabled] = useState(true);
+  const [currentDhikr, setCurrentDhikr] = useState(null);
+  const [dhikrIndex, setDhikrIndex] = useState(0);
 
   const binauralRef = useRef(null);
   const ambientAudioRef = useRef(null);
   const timerRef = useRef(null);
+  const dhikrIntervalRef = useRef(null);
 
   // Initialize binaural generator
   useEffect(() => {
@@ -476,14 +584,36 @@ const SoundHealingRoom = memo(function SoundHealingRoom({ isVisible, onClose }) 
       if (timerRef.current) {
         clearInterval(timerRef.current);
       }
+      if (dhikrIntervalRef.current) {
+        clearInterval(dhikrIntervalRef.current);
+      }
+      // Cancel any ongoing speech
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
     };
   }, []);
+
+  // Play dhikr periodically
+  const playDhikr = useCallback((mode, index) => {
+    if (!dhikrEnabled || !mode) return;
+
+    const phrases = DHIKR_PHRASES[mode.id] || DHIKR_PHRASES.sleep;
+    const phrase = phrases[index % phrases.length];
+
+    setCurrentDhikr(phrase);
+
+    // Speak the dhikr
+    const rate = mode.id === 'sleep' ? 0.6 : 0.7;
+    speakDhikr(phrase.arabic, rate, 0.9, dhikrVolume / 100);
+  }, [dhikrEnabled, dhikrVolume]);
 
   // Start session
   const startSession = useCallback((mode) => {
     setSelectedMode(mode);
     setTimeRemaining(mode.duration * 60);
     setIsPlaying(true);
+    setDhikrIndex(0);
 
     // Start binaural beats
     const freq = BINAURAL_FREQUENCIES[mode.frequency];
@@ -501,6 +631,22 @@ const SoundHealingRoom = memo(function SoundHealingRoom({ isVisible, onClose }) 
       ambientAudioRef.current.play().catch(() => {});
     }
 
+    // Play first dhikr immediately
+    if (dhikrEnabled) {
+      setTimeout(() => playDhikr(mode, 0), 1000);
+    }
+
+    // Start dhikr interval (every 15-20 seconds based on mode)
+    let currentIndex = 1;
+    const dhikrInterval = mode.id === 'sleep' ? 20000 : 15000;
+    dhikrIntervalRef.current = setInterval(() => {
+      if (dhikrEnabled) {
+        playDhikr(mode, currentIndex);
+        currentIndex++;
+        setDhikrIndex(currentIndex);
+      }
+    }, dhikrInterval);
+
     // Start timer
     timerRef.current = setInterval(() => {
       setTimeRemaining(prev => {
@@ -511,12 +657,13 @@ const SoundHealingRoom = memo(function SoundHealingRoom({ isVisible, onClose }) 
         return prev - 1;
       });
     }, 1000);
-  }, [binauralVolume, ambientVolume]);
+  }, [binauralVolume, ambientVolume, dhikrEnabled, playDhikr]);
 
   // Stop session
   const stopSession = useCallback(() => {
     setIsPlaying(false);
     setSelectedMode(null);
+    setCurrentDhikr(null);
 
     binauralRef.current?.stop();
 
@@ -529,6 +676,16 @@ const SoundHealingRoom = memo(function SoundHealingRoom({ isVisible, onClose }) 
       clearInterval(timerRef.current);
       timerRef.current = null;
     }
+
+    if (dhikrIntervalRef.current) {
+      clearInterval(dhikrIntervalRef.current);
+      dhikrIntervalRef.current = null;
+    }
+
+    // Cancel any ongoing speech
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+    }
   }, []);
 
   // Toggle play/pause
@@ -537,10 +694,23 @@ const SoundHealingRoom = memo(function SoundHealingRoom({ isVisible, onClose }) 
       binauralRef.current?.stop();
       ambientAudioRef.current?.pause();
       if (timerRef.current) clearInterval(timerRef.current);
+      if (dhikrIntervalRef.current) clearInterval(dhikrIntervalRef.current);
+      if ('speechSynthesis' in window) window.speechSynthesis.cancel();
     } else {
       const freq = BINAURAL_FREQUENCIES[selectedMode.frequency];
       binauralRef.current?.start(freq.baseFreq, freq.beatFreq, binauralVolume / 100);
       ambientAudioRef.current?.play().catch(() => {});
+
+      // Resume dhikr interval
+      let currentIndex = dhikrIndex;
+      const dhikrInterval = selectedMode.id === 'sleep' ? 20000 : 15000;
+      dhikrIntervalRef.current = setInterval(() => {
+        if (dhikrEnabled) {
+          playDhikr(selectedMode, currentIndex);
+          currentIndex++;
+          setDhikrIndex(currentIndex);
+        }
+      }, dhikrInterval);
 
       timerRef.current = setInterval(() => {
         setTimeRemaining(prev => {
@@ -553,7 +723,7 @@ const SoundHealingRoom = memo(function SoundHealingRoom({ isVisible, onClose }) 
       }, 1000);
     }
     setIsPlaying(!isPlaying);
-  }, [isPlaying, selectedMode, binauralVolume, stopSession]);
+  }, [isPlaying, selectedMode, binauralVolume, dhikrEnabled, dhikrIndex, playDhikr, stopSession]);
 
   // Update binaural volume
   const handleBinauralVolumeChange = useCallback((value) => {
@@ -620,10 +790,15 @@ const SoundHealingRoom = memo(function SoundHealingRoom({ isVisible, onClose }) 
               timeRemaining={timeRemaining}
               binauralVolume={binauralVolume}
               ambientVolume={ambientVolume}
+              dhikrVolume={dhikrVolume}
+              dhikrEnabled={dhikrEnabled}
+              currentDhikr={currentDhikr}
               onTogglePlay={togglePlay}
               onStop={stopSession}
               onBinauralVolumeChange={handleBinauralVolumeChange}
               onAmbientVolumeChange={handleAmbientVolumeChange}
+              onDhikrVolumeChange={setDhikrVolume}
+              onDhikrToggle={() => setDhikrEnabled(!dhikrEnabled)}
             />
           ) : (
             <>
@@ -707,6 +882,14 @@ const SoundHealingRoom = memo(function SoundHealingRoom({ isVisible, onClose }) 
         @keyframes pulse {
           0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.2; }
           50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.3; }
+        }
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(-10px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes dhikrGlow {
+          0%, 100% { text-shadow: 0 0 10px rgba(255,255,255,0.3); }
+          50% { text-shadow: 0 0 20px rgba(255,255,255,0.6), 0 0 30px rgba(251,191,36,0.4); }
         }
       `}</style>
     </div>
