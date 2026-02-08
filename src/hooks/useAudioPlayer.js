@@ -280,4 +280,256 @@ export function useAudioPlayer(options = {}) {
   };
 }
 
+// ============================================
+// Translation Audio (Text-to-Speech)
+// ============================================
+
+// Language codes for Web Speech API
+const TTS_LANGUAGES = {
+  'ur': 'ur-PK',    // Urdu
+  'en': 'en-US',    // English
+  'hi': 'hi-IN',    // Hindi
+  'ar': 'ar-SA',    // Arabic
+  'bn': 'bn-BD',    // Bengali
+  'tr': 'tr-TR',    // Turkish
+  'id': 'id-ID',    // Indonesian
+  'fr': 'fr-FR',    // French
+  'de': 'de-DE',    // German
+  'ta': 'ta-IN',    // Tamil
+  'ml': 'ml-IN',    // Malayalam
+  'ru': 'ru-RU',    // Russian
+};
+
+// Get language code from translation ID
+function getLanguageFromTranslation(translationId) {
+  if (!translationId) return 'en';
+  const langCode = translationId.split('.')[0];
+  return langCode || 'en';
+}
+
+/**
+ * Hook for Text-to-Speech translation audio
+ * Uses Web Speech API to read translations aloud
+ */
+export function useTranslationAudio(options = {}) {
+  const {
+    translationId = 'en.sahih',
+    rate = 0.9,        // Speech rate (0.1 to 10)
+    pitch = 1,         // Pitch (0 to 2)
+    volume = 1,        // Volume (0 to 1)
+  } = options;
+
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
+  const [isSupported, setIsSupported] = useState(false);
+  const [availableVoices, setAvailableVoices] = useState([]);
+  const [currentVoice, setCurrentVoice] = useState(null);
+  const utteranceRef = useRef(null);
+
+  // Check if Speech Synthesis is supported
+  useEffect(() => {
+    const supported = 'speechSynthesis' in window;
+    setIsSupported(supported);
+
+    if (supported) {
+      // Load voices
+      const loadVoices = () => {
+        const voices = window.speechSynthesis.getVoices();
+        setAvailableVoices(voices);
+
+        // Find best voice for current language
+        const langCode = getLanguageFromTranslation(translationId);
+        const ttsLang = TTS_LANGUAGES[langCode] || 'en-US';
+
+        // Priority: exact match > language match > any English
+        let voice = voices.find(v => v.lang === ttsLang);
+        if (!voice) {
+          voice = voices.find(v => v.lang.startsWith(langCode));
+        }
+        if (!voice) {
+          voice = voices.find(v => v.lang.startsWith('en'));
+        }
+        setCurrentVoice(voice || null);
+      };
+
+      loadVoices();
+
+      // Voices may load asynchronously
+      if (window.speechSynthesis.onvoiceschanged !== undefined) {
+        window.speechSynthesis.onvoiceschanged = loadVoices;
+      }
+    }
+
+    return () => {
+      if (supported) {
+        window.speechSynthesis.cancel();
+      }
+    };
+  }, [translationId]);
+
+  // Speak translation text
+  const speak = useCallback((text, onEnd = null) => {
+    if (!isSupported || !text) return;
+
+    // Cancel any ongoing speech
+    window.speechSynthesis.cancel();
+
+    const utterance = new SpeechSynthesisUtterance(text);
+    utteranceRef.current = utterance;
+
+    // Set voice if available
+    if (currentVoice) {
+      utterance.voice = currentVoice;
+    }
+
+    // Set language
+    const langCode = getLanguageFromTranslation(translationId);
+    utterance.lang = TTS_LANGUAGES[langCode] || 'en-US';
+
+    // Set speech parameters
+    utterance.rate = rate;
+    utterance.pitch = pitch;
+    utterance.volume = volume;
+
+    // Event handlers
+    utterance.onstart = () => {
+      setIsSpeaking(true);
+      setIsPaused(false);
+    };
+
+    utterance.onend = () => {
+      setIsSpeaking(false);
+      setIsPaused(false);
+      if (onEnd) onEnd();
+    };
+
+    utterance.onerror = (event) => {
+      console.error('Speech synthesis error:', event.error);
+      setIsSpeaking(false);
+      setIsPaused(false);
+    };
+
+    utterance.onpause = () => {
+      setIsPaused(true);
+    };
+
+    utterance.onresume = () => {
+      setIsPaused(false);
+    };
+
+    window.speechSynthesis.speak(utterance);
+  }, [isSupported, currentVoice, translationId, rate, pitch, volume]);
+
+  // Pause speech
+  const pause = useCallback(() => {
+    if (isSupported && isSpeaking) {
+      window.speechSynthesis.pause();
+      setIsPaused(true);
+    }
+  }, [isSupported, isSpeaking]);
+
+  // Resume speech
+  const resume = useCallback(() => {
+    if (isSupported && isPaused) {
+      window.speechSynthesis.resume();
+      setIsPaused(false);
+    }
+  }, [isSupported, isPaused]);
+
+  // Stop speech
+  const stop = useCallback(() => {
+    if (isSupported) {
+      window.speechSynthesis.cancel();
+      setIsSpeaking(false);
+      setIsPaused(false);
+    }
+  }, [isSupported]);
+
+  // Toggle pause/resume
+  const togglePause = useCallback(() => {
+    if (isPaused) {
+      resume();
+    } else {
+      pause();
+    }
+  }, [isPaused, pause, resume]);
+
+  return {
+    speak,
+    pause,
+    resume,
+    stop,
+    togglePause,
+    isSpeaking,
+    isPaused,
+    isSupported,
+    availableVoices,
+    currentVoice,
+    setCurrentVoice,
+  };
+}
+
+/**
+ * Simple function to speak text (no hook needed)
+ * Useful for one-off speech like word pronunciations
+ */
+export function speakText(text, lang = 'en', options = {}) {
+  if (!text) return false;
+
+  // Check if Speech Synthesis is supported
+  if (!('speechSynthesis' in window)) {
+    console.warn('Speech Synthesis not supported in this browser');
+    return false;
+  }
+
+  const { rate = 0.9, pitch = 1, volume = 1 } = options;
+
+  // Cancel any ongoing speech
+  window.speechSynthesis.cancel();
+
+  const utterance = new SpeechSynthesisUtterance(text);
+  const ttsLang = TTS_LANGUAGES[lang] || lang || 'en-US';
+  utterance.lang = ttsLang;
+  utterance.rate = rate;
+  utterance.pitch = pitch;
+  utterance.volume = volume;
+
+  // Function to speak with voice
+  const doSpeak = () => {
+    const voices = window.speechSynthesis.getVoices();
+
+    if (voices.length > 0) {
+      // Try to find a matching voice
+      let voice = voices.find(v => v.lang === ttsLang);
+      if (!voice) {
+        voice = voices.find(v => v.lang.startsWith(lang));
+      }
+      if (!voice) {
+        voice = voices.find(v => v.lang.startsWith('en'));
+      }
+      if (voice) {
+        utterance.voice = voice;
+      }
+    }
+
+    window.speechSynthesis.speak(utterance);
+  };
+
+  // Get voices - they may load asynchronously
+  const voices = window.speechSynthesis.getVoices();
+
+  if (voices.length > 0) {
+    doSpeak();
+  } else {
+    // Wait for voices to load
+    window.speechSynthesis.onvoiceschanged = () => {
+      doSpeak();
+    };
+    // Fallback: try speaking anyway after a short delay
+    setTimeout(doSpeak, 100);
+  }
+
+  return true;
+}
+
 export default useAudioPlayer;

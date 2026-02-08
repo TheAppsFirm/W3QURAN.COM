@@ -34,12 +34,19 @@ export const TRANSLATIONS = {
   'en.sarwar': { name: 'Muhammad Sarwar', language: 'English' },
   'en.ahmedali': { name: 'Ahmed Ali', language: 'English' },
 
+  // === BENGALI TRANSLATIONS (বাংলা) ===
+  'bn.bengali': { name: 'মুহিউদ্দীন খান', nameEn: 'Muhiuddin Khan', language: 'Bengali', languageNative: 'বাংলা' },
+  'bn.hoque': { name: 'জহুরুল হক', nameEn: 'Zohurul Hoque', language: 'Bengali', languageNative: 'বাংলা' },
+
   // === OTHER LANGUAGES ===
   'fr.hamidullah': { name: 'Muhammad Hamidullah', language: 'French' },
   'de.bubenheim': { name: 'Bubenheim & Elyas', language: 'German' },
   'id.indonesian': { name: 'Indonesian Ministry', language: 'Indonesian' },
   'tr.diyanet': { name: 'Diyanet Isleri', language: 'Turkish' },
   'ru.kuliev': { name: 'Elmir Kuliev', language: 'Russian' },
+  'ml.cheriyamundam': { name: 'Cheriyamundam Abdul Hameed', language: 'Malayalam' },
+  'ta.tamil': { name: 'Jan Trust Foundation', language: 'Tamil' },
+  'hi.hindi': { name: 'Suhel Farooq Khan', language: 'Hindi' },
 };
 
 // Tajweed Rules with colors
@@ -356,9 +363,9 @@ const QURAN_COM_API = 'https://api.quran.com/api/v4';
 // Authenticated API endpoint (Cloudflare Function)
 const AUTH_API_ENDPOINT = '/api/quran-words';
 
-// Map our translation IDs to Quran.com word translation language codes
+// Map our translation IDs to word translation language codes
 export const WORD_TRANSLATION_LANGUAGES = {
-  // Urdu translations
+  // Urdu translations (QuranWBW has complete coverage)
   'ur.jalandhry': 'ur',
   'ur.maududi': 'ur',
   'ur.junagarhi': 'ur',
@@ -378,16 +385,192 @@ export const WORD_TRANSLATION_LANGUAGES = {
   'en.shakir': 'en',
   'en.sarwar': 'en',
   'en.ahmedali': 'en',
-  // Other languages
+  // Bengali translations (QuranWBW has complete coverage)
+  'bn.bengali': 'bn',
+  'bn.hoque': 'bn',
+  // Hindi (QuranWBW has complete coverage)
+  'hi.hindi': 'hi',
+  // Other languages with QuranWBW support
   'fr.hamidullah': 'fr',
   'de.bubenheim': 'de',
   'id.indonesian': 'id',
   'tr.diyanet': 'tr',
-  'ru.kuliev': 'ru',
+  'ta.tamil': 'ta',
+  // Fallback to English for unsupported languages
+  'ru.kuliev': 'en',
+  'ml.cheriyamundam': 'en',
 };
 
 // Word meanings cache
 const wordCache = new Map();
+
+// QuranWBW.com Static API (has complete Urdu word-by-word for all 114 surahs)
+const QURANWBW_API = 'https://static.quranwbw.com/data/v4';
+
+// QuranWBW Language IDs
+const QURANWBW_LANG_IDS = {
+  'en': 1,   // English
+  'ur': 2,   // Urdu
+  'hi': 3,   // Hindi
+  'id': 4,   // Indonesian
+  'bn': 5,   // Bengali
+  'tr': 6,   // Turkish
+  'ta': 7,   // Tamil
+  'de': 8,   // German
+  'fr': 9,   // French
+};
+
+/**
+ * Fetch word-by-word translations from QuranWBW.com static API
+ * Has complete coverage for all 114 surahs in multiple languages including Urdu
+ */
+async function fetchQuranWBWWords(surahId, language = 'ur') {
+  const langId = QURANWBW_LANG_IDS[language];
+  if (!langId) return null;
+
+  const cacheKey = `wbw-quranwbw-${language}-v1`;
+
+  // Check if we have cached data for this language
+  if (wordCache.has(cacheKey)) {
+    const cachedData = wordCache.get(cacheKey);
+    return cachedData[surahId] || null;
+  }
+
+  try {
+    // Fetch the full language file (covers all surahs)
+    const url = `${QURANWBW_API}/words-data/translations/${langId}.json`;
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      throw new Error(`QuranWBW API error: ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    // Cache the full language data
+    wordCache.set(cacheKey, data);
+
+    // Return data for requested surah
+    return data[surahId] || null;
+  } catch (error) {
+    console.warn('QuranWBW fetch error:', error);
+    return null;
+  }
+}
+
+/**
+ * Transform QuranWBW word data to our app format
+ * QuranWBW format: { ayahNum: [[word1, word2, ...]] }
+ * Our format: { ayahNum: [{ arabic, meaning, transliteration }] }
+ */
+function transformQuranWBWData(surahData, surahId) {
+  if (!surahData) return {};
+
+  const wordsMap = {};
+
+  Object.entries(surahData).forEach(([ayahNum, ayahData]) => {
+    const verseNum = parseInt(ayahNum);
+    // QuranWBW format: [[word1, word2, word3, ...]]
+    const meanings = ayahData[0] || [];
+
+    wordsMap[verseNum] = meanings.map((meaning, idx) => ({
+      arabic: '', // Will be filled from Arabic data
+      meaning: meaning || '',
+      transliteration: '',
+      position: idx + 1,
+    }));
+  });
+
+  return wordsMap;
+}
+
+/**
+ * Fetch Arabic word data from QuranWBW to combine with translations
+ */
+async function fetchQuranWBWArabic(surahId, fontType = 1) {
+  const cacheKey = `wbw-arabic-${fontType}-v1`;
+
+  if (wordCache.has(cacheKey)) {
+    return wordCache.get(cacheKey)[surahId] || null;
+  }
+
+  try {
+    const url = `${QURANWBW_API}/words-data/arabic/${fontType}.json`;
+    const response = await fetch(url);
+
+    if (!response.ok) return null;
+
+    const data = await response.json();
+    wordCache.set(cacheKey, data);
+    return data[surahId] || null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Fetch transliteration from QuranWBW
+ */
+async function fetchQuranWBWTransliteration(surahId) {
+  const cacheKey = 'wbw-transliteration-v1';
+
+  if (wordCache.has(cacheKey)) {
+    return wordCache.get(cacheKey)[surahId] || null;
+  }
+
+  try {
+    const url = `${QURANWBW_API}/words-data/transliterations/1.json`;
+    const response = await fetch(url);
+
+    if (!response.ok) return null;
+
+    const data = await response.json();
+    wordCache.set(cacheKey, data);
+    return data[surahId] || null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Fetch complete word-by-word data from QuranWBW (Arabic + Translation + Transliteration)
+ */
+async function fetchCompleteQuranWBWData(surahId, language = 'ur') {
+  try {
+    // Fetch all data in parallel
+    const [translationData, arabicData, transliterationData] = await Promise.all([
+      fetchQuranWBWWords(surahId, language),
+      fetchQuranWBWArabic(surahId),
+      fetchQuranWBWTransliteration(surahId)
+    ]);
+
+    if (!translationData) return null;
+
+    const wordsMap = {};
+
+    Object.entries(translationData).forEach(([ayahNum, ayahData]) => {
+      const verseNum = parseInt(ayahNum);
+      const meanings = ayahData[0] || [];
+
+      // Get Arabic words for this verse
+      const arabicWords = arabicData?.[ayahNum]?.[0] || [];
+      // Get transliterations for this verse
+      const transliterations = transliterationData?.[ayahNum]?.[0] || [];
+
+      wordsMap[verseNum] = meanings.map((meaning, idx) => ({
+        arabic: arabicWords[idx] || '',
+        meaning: meaning || '',
+        transliteration: transliterations[idx] || '',
+        position: idx + 1,
+      }));
+    });
+
+    return wordsMap;
+  } catch (error) {
+    console.warn('QuranWBW complete fetch error:', error);
+    return null;
+  }
+}
 
 // Part of speech labels (more user-friendly)
 export const POS_LABELS = {
@@ -641,7 +824,22 @@ export function useMultilingualWords(surahId, translationId = 'en.sahih') {
           return;
         }
 
-        // Priority 2: Try authenticated API (supports multiple languages)
+        // Priority 2: Try QuranWBW API (has complete Urdu, Hindi, Bengali, Turkish, etc.)
+        if (QURANWBW_LANG_IDS[targetLang]) {
+          const wbwData = await fetchCompleteQuranWBWData(surahId, targetLang);
+
+          if (!cancelled && wbwData && Object.keys(wbwData).length > 0) {
+            setWordsMap(wbwData);
+            setIsLocalData(false);
+            setIsAuthenticated(true); // Mark as authenticated source (reliable)
+            setIsFallback(false);
+            setCurrentLang(targetLang);
+            setLoading(false);
+            return;
+          }
+        }
+
+        // Priority 3: Try authenticated API (Quran Foundation - limited language support)
         const authResult = await fetchAuthenticatedWords(surahId, targetLang);
 
         if (!cancelled && authResult.authenticated && authResult.data) {
@@ -654,7 +852,7 @@ export function useMultilingualWords(surahId, translationId = 'en.sahih') {
           return;
         }
 
-        // Priority 3: Fall back to public API (English only)
+        // Priority 4: Fall back to public API (English only)
         const publicData = await fetchPublicWords(surahId);
 
         if (cancelled) return;

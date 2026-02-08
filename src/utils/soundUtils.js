@@ -9,10 +9,18 @@ let audioContext = null;
 
 // Initialize audio context (must be called after user interaction)
 const initAudioContext = () => {
-  if (!audioContext) {
-    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+  try {
+    if (!audioContext) {
+      audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    // Resume if suspended (browser autoplay policy)
+    if (audioContext.state === 'suspended') {
+      audioContext.resume().catch(() => {});
+    }
+    return audioContext;
+  } catch {
+    return null;
   }
-  return audioContext;
 };
 
 // Sound settings (stored in localStorage)
@@ -52,8 +60,7 @@ export const playClickSound = () => {
   try {
     const ctx = initAudioContext();
     if (!ctx || ctx.state === 'suspended') {
-      ctx?.resume();
-      return;
+      return; // Silently skip - audio context not ready
     }
 
     // Create a very short noise burst for a subtle click
@@ -100,8 +107,7 @@ export const playBubbleSound = () => {
   try {
     const ctx = initAudioContext();
     if (!ctx || ctx.state === 'suspended') {
-      ctx?.resume();
-      return;
+      return; // Silently skip - audio context not ready
     }
 
     // Create a very short pop sound
@@ -150,8 +156,7 @@ export const playSoftSound = () => {
   try {
     const ctx = initAudioContext();
     if (!ctx || ctx.state === 'suspended') {
-      ctx?.resume();
-      return;
+      return; // Silently skip - audio context not ready
     }
 
     const bufferSize = ctx.sampleRate * 0.01; // 10ms

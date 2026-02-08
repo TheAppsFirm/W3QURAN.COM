@@ -17,6 +17,7 @@ import AyahConnectionMap from './AyahConnectionMap';
 import ScholarVideoSync from './ScholarVideoSync';
 import { PALETTES, SURAHS, fetchTafseer, getTafseersByLanguage, getDefaultTafseer, TRANSLATION_TO_TAFSEER_LANG, getVideosForSurah, generateSearchQuery, SCHOLARS, SURAH_TOPICS, TAFSEER_SOURCES, markAyahRead } from '../../data';
 import { useQuranAPI, useMultilingualWords, TRANSLATIONS, TAJWEED_RULES, POS_LABELS } from '../../hooks/useQuranAPI';
+import { speakText } from '../../hooks/useAudioPlayer';
 import { useLocalStorage } from '../../hooks';
 import { logReadingSession } from '../../utils/trackingUtils';
 import { shareVerse } from '../../utils/shareUtils';
@@ -1449,8 +1450,67 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
   const [currentAyah, setCurrentAyah] = useState(1);
   const [audioLoading, setAudioLoading] = useState(false);
   const [audioError, setAudioError] = useState(null);
+  const [speakingAyah, setSpeakingAyah] = useState(null); // Track which ayah translation is being spoken
 
   const audioRef = useRef(null);
+
+  // Get language code from translation for TTS
+  const ttsLanguage = useMemo(() => {
+    if (!selectedTranslation) return 'en';
+    return selectedTranslation.split('.')[0] || 'en';
+  }, [selectedTranslation]);
+
+  // TTS Audio ref
+  const ttsAudioRef = useRef(null);
+
+  // Speak translation using our TTS proxy (Google Translate)
+  const speakTranslation = useCallback((ayahNum, translationText) => {
+    if (!translationText) return;
+
+    // If already speaking, stop
+    if (speakingAyah === ayahNum) {
+      if (ttsAudioRef.current) {
+        ttsAudioRef.current.pause();
+        ttsAudioRef.current.currentTime = 0;
+      }
+      setSpeakingAyah(null);
+      return;
+    }
+
+    // Stop any ongoing audio
+    if (ttsAudioRef.current) {
+      ttsAudioRef.current.pause();
+    }
+
+    setSpeakingAyah(ayahNum);
+
+    // Use our Cloudflare proxy for TTS
+    const ttsUrl = `/api/tts?lang=${ttsLanguage}&text=${encodeURIComponent(translationText)}`;
+
+    const audio = new Audio(ttsUrl);
+    ttsAudioRef.current = audio;
+
+    audio.onended = () => {
+      setSpeakingAyah(null);
+    };
+
+    audio.onerror = (e) => {
+      console.error('TTS audio error:', e);
+      setSpeakingAyah(null);
+      // Try browser TTS as fallback
+      if ('speechSynthesis' in window) {
+        const utter = new SpeechSynthesisUtterance(translationText);
+        utter.rate = 0.9;
+        utter.onend = () => setSpeakingAyah(null);
+        window.speechSynthesis.speak(utter);
+      }
+    };
+
+    audio.play().catch((err) => {
+      console.error('TTS play error:', err);
+      setSpeakingAyah(null);
+    });
+  }, [speakingAyah, ttsLanguage]);
   const versesContainerRef = useRef(null);
   const startTime = useRef(Date.now());
 
@@ -2275,10 +2335,19 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
                           )}
 
                           <div className="flex items-center gap-1.5">
-                            <button onClick={() => toggleAyahPlayback(ayahNum)} className={`p-1.5 rounded-full transition-all hover:scale-110 ${isCurrentAyah && isPlaying ? 'bg-white/40' : 'bg-white/15'}`}>
+                            <button onClick={() => toggleAyahPlayback(ayahNum)} className={`p-1.5 rounded-full transition-all hover:scale-110 ${isCurrentAyah && isPlaying ? 'bg-white/40' : 'bg-white/15'}`} title="Play Arabic recitation">
                               {audioLoading && isCurrentAyah ? <Icons.Loader className="w-3 h-3 animate-spin" /> : isCurrentAyah && isPlaying ? <Icons.Pause className="w-3 h-3" /> : <Icons.Play className="w-3 h-3" />}
                             </button>
-                            <button onClick={() => handleShareVerse(verse, ayahNum)} className={`p-1.5 rounded-full transition-all hover:scale-110 ${shareStatus === ayahNum ? 'bg-emerald-500/80' : 'bg-white/15'}`}>
+                            {showTranslation && verse.translation && (
+                              <button
+                                onClick={() => speakTranslation(ayahNum, verse.translation)}
+                                className={`p-1.5 rounded-full transition-all hover:scale-110 ${speakingAyah === ayahNum ? 'bg-cyan-500/80 animate-pulse' : 'bg-white/15'}`}
+                                title="Read translation aloud"
+                              >
+                                {speakingAyah === ayahNum ? <Icons.Volume className="w-3 h-3" /> : <Icons.Headphones className="w-3 h-3" />}
+                              </button>
+                            )}
+                            <button onClick={() => handleShareVerse(verse, ayahNum)} className={`p-1.5 rounded-full transition-all hover:scale-110 ${shareStatus === ayahNum ? 'bg-emerald-500/80' : 'bg-white/15'}`} title="Share verse">
                               {shareStatus === ayahNum ? <Icons.Check className="w-3 h-3" /> : <Icons.Share className="w-3 h-3" />}
                             </button>
                           </div>
