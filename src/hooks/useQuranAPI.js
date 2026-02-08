@@ -426,7 +426,10 @@ const QURANWBW_LANG_IDS = {
  */
 async function fetchQuranWBWWords(surahId, language = 'ur') {
   const langId = QURANWBW_LANG_IDS[language];
-  if (!langId) return null;
+  if (!langId) {
+    console.log(`[WBW] No QuranWBW langId for language: ${language}`);
+    return null;
+  }
 
   const cacheKey = `wbw-quranwbw-${language}-v1`;
 
@@ -439,9 +442,11 @@ async function fetchQuranWBWWords(surahId, language = 'ur') {
   try {
     // Fetch the full language file (covers all surahs)
     const url = `${QURANWBW_API}/words-data/translations/${langId}.json`;
+    console.log(`[WBW] Fetching words for language ${language} (ID: ${langId}):`, url);
     const response = await fetch(url);
 
     if (!response.ok) {
+      console.error(`[WBW] API error for ${language}:`, response.status);
       throw new Error(`QuranWBW API error: ${response.status}`);
     }
 
@@ -824,11 +829,13 @@ export function useMultilingualWords(surahId, translationId = 'en.sahih') {
           return;
         }
 
-        // Priority 2: Try QuranWBW API (has complete Urdu, Hindi, Bengali, Turkish, etc.)
+        // Priority 2: Try QuranWBW API (has complete Urdu, Hindi, Bengali, Turkish, English, etc.)
         if (QURANWBW_LANG_IDS[targetLang]) {
+          console.log(`[WBW] Trying QuranWBW for language: ${targetLang}, surah: ${surahId}`);
           const wbwData = await fetchCompleteQuranWBWData(surahId, targetLang);
 
           if (!cancelled && wbwData && Object.keys(wbwData).length > 0) {
+            console.log(`[WBW] Got QuranWBW data for ${targetLang}, surah ${surahId}:`, Object.keys(wbwData).length, 'verses');
             setWordsMap(wbwData);
             setIsLocalData(false);
             setIsAuthenticated(true); // Mark as authenticated source (reliable)
@@ -836,7 +843,11 @@ export function useMultilingualWords(surahId, translationId = 'en.sahih') {
             setCurrentLang(targetLang);
             setLoading(false);
             return;
+          } else {
+            console.log(`[WBW] No QuranWBW data for ${targetLang}, falling back...`);
           }
+        } else {
+          console.log(`[WBW] No QuranWBW support for language: ${targetLang}`);
         }
 
         // Priority 3: Try authenticated API (Quran Foundation - limited language support)

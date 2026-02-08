@@ -168,7 +168,7 @@ function FloatingMenu({ view, setView, darkMode, onDonate, onMindMap, onMood, on
   // All features available to everyone
   const moreItems = [
     // Innovative features - First row
-    { id: 'mindmap', label: 'Mind Map', icon: Icons.Network, gradient: ['#A855F7', '#7C3AED'], isSpecial: true },
+    { id: 'mindmap', label: 'Explorer', icon: Icons.Search, gradient: ['#A855F7', '#7C3AED'], isSpecial: true },
     { id: 'mood', label: 'Mood', icon: Icons.Activity, gradient: ['#06B6D4', '#0891B2'], isSpecial: true },
     { id: 'videosync', label: 'Video Sync', icon: Icons.Video, gradient: ['#F472B6', '#EC4899'], isSpecial: true },
     // Regular features

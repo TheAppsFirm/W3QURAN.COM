@@ -22,3 +22,5 @@ export { default as EmotionalTracker, MoodEntryForm, MoodSelector } from './Emot
 export { default as AyahConnectionMap } from './AyahConnectionMap';
 export { default as ScholarVideoSync } from './ScholarVideoSync';
 export { default as WordSearchMap } from './WordSearchMap';
+export { default as PropheticMap } from './PropheticMap';
+export { default as QuranCompanionAI } from './QuranCompanionAI';

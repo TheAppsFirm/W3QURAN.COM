@@ -132,9 +132,11 @@ const StatsBar = memo(function StatsBar({
   showControls = false,
   // Donation modal callback
   onDonate,
-  // New callbacks for Mood and Mind Map
+  // New callbacks for Mood, Mind Map, World Map, and AI Guide
   onMood,
   onMindMap,
+  onWorldMap,
+  onAIGuide,
 }) {
   const [showLayoutMenu, setShowLayoutMenu] = useState(false);
   const [showZoomMenu, setShowZoomMenu] = useState(false);
@@ -289,10 +291,32 @@ const StatsBar = memo(function StatsBar({
               {onMindMap && (
                 <BubbleButton
                   icon={Icons.Network}
-                  label="Map"
+                  label="Explorer"
                   color="#A855F7"
                   color2="#7C3AED"
                   onClick={onMindMap}
+                />
+              )}
+
+              {/* World Map Bubble Button */}
+              {onWorldMap && (
+                <BubbleButton
+                  icon={Icons.Globe3D}
+                  label="World Map"
+                  color="#0EA5E9"
+                  color2="#0284C7"
+                  onClick={onWorldMap}
+                />
+              )}
+
+              {/* AI Guide Bubble Button */}
+              {onAIGuide && (
+                <BubbleButton
+                  icon={Icons.HeartHandshake}
+                  label="AI Guide"
+                  color="#14B8A6"
+                  color2="#0D9488"
+                  onClick={onAIGuide}
                 />
               )}
             </div>

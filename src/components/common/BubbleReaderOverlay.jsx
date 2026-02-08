@@ -15,6 +15,12 @@ import VerseArtGenerator from './VerseArtGenerator';
 import EmotionalTracker, { MoodEntryForm } from './EmotionalTracker';
 import AyahConnectionMap from './AyahConnectionMap';
 import ScholarVideoSync from './ScholarVideoSync';
+// Innovative Features
+import LivingVisualization from './LivingVisualization';
+import TimeCapsule from './TimeCapsule';
+import VoiceControl from './VoiceControl';
+import HeartbeatMeditation from './HeartbeatMeditation';
+import FamilyCircle from './FamilyCircle';
 import { PALETTES, SURAHS, fetchTafseer, getTafseersByLanguage, getDefaultTafseer, TRANSLATION_TO_TAFSEER_LANG, getVideosForSurah, generateSearchQuery, SCHOLARS, SURAH_TOPICS, TAFSEER_SOURCES, markAyahRead } from '../../data';
 import { useQuranAPI, useMultilingualWords, TRANSLATIONS, TAJWEED_RULES, POS_LABELS } from '../../hooks/useQuranAPI';
 import { speakText } from '../../hooks/useAudioPlayer';
@@ -1438,6 +1444,12 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
   const [showMoodEntry, setShowMoodEntry] = useState(false);
   const [showConnectionMap, setShowConnectionMap] = useState(false);
   const [showScholarSync, setShowScholarSync] = useState(false);
+  // Innovative Features State
+  const [showLivingVisualization, setShowLivingVisualization] = useState(false);
+  const [showTimeCapsule, setShowTimeCapsule] = useState(false);
+  const [showVoiceControl, setShowVoiceControl] = useState(false);
+  const [showMeditation, setShowMeditation] = useState(false);
+  const [showFamilyCircle, setShowFamilyCircle] = useState(false);
   // Separate state for right (tafseer) and left (other features) panels
   const [showTafseer, setShowTafseer] = useState(false);
   const [leftFeature, setLeftFeature] = useState(null); // 'youtube', 'memorize', 'bookmark', 'share'
@@ -1452,7 +1464,18 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
   const [audioError, setAudioError] = useState(null);
   const [speakingAyah, setSpeakingAyah] = useState(null); // Track which ayah translation is being spoken
 
+  // Translation Audio Playback State
+  const [isPlayingTranslation, setIsPlayingTranslation] = useState(false);
+  const [translationAyah, setTranslationAyah] = useState(1);
+  const [audioMode, setAudioMode] = useState('arabic'); // 'arabic' | 'translation' | 'combined'
+  const [isPlayingCombined, setIsPlayingCombined] = useState(false);
+  const [combinedPhase, setCombinedPhase] = useState('arabic'); // 'arabic' | 'translation' - which phase of combined playback
+
   const audioRef = useRef(null);
+  const translationAudioRef = useRef(null);
+  const isPlayingTranslationRef = useRef(false);
+  const isPlayingCombinedRef = useRef(false);
+  const versesRef = useRef([]);
 
   // Get language code from translation for TTS
   const ttsLanguage = useMemo(() => {
@@ -1511,6 +1534,136 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
       setSpeakingAyah(null);
     });
   }, [speakingAyah, ttsLanguage]);
+
+  // Play full surah translation audio
+  const playTranslationAudio = useCallback((ayahNum, translationText, totalAyahs) => {
+    if (!translationText) {
+      console.log('No translation text for ayah', ayahNum);
+      return;
+    }
+
+    // Stop any existing audio
+    if (translationAudioRef.current) {
+      translationAudioRef.current.pause();
+      translationAudioRef.current = null;
+    }
+
+    const ttsUrl = `/api/tts?lang=${ttsLanguage}&text=${encodeURIComponent(translationText)}`;
+    const audio = new Audio(ttsUrl);
+    translationAudioRef.current = audio;
+
+    const isLast = ayahNum >= totalAyahs;
+
+    audio.onended = () => {
+      console.log('Translation audio ended for ayah', ayahNum, 'isLast:', isLast);
+      // Use ref to get current state (avoids stale closure)
+      if (!isLast && isPlayingTranslationRef.current) {
+        // Auto-advance to next ayah
+        console.log('Advancing to next ayah');
+        setTranslationAyah(prev => prev + 1);
+      } else {
+        // End of surah or stopped
+        console.log('Translation playback complete');
+        setIsPlayingTranslation(false);
+        isPlayingTranslationRef.current = false;
+        setTranslationAyah(1);
+      }
+    };
+
+    audio.onerror = (e) => {
+      console.error('Translation audio error:', e);
+      // On error, try to advance to next verse instead of stopping completely
+      if (!isLast && isPlayingTranslationRef.current) {
+        console.log('Error, but advancing to next ayah');
+        setTranslationAyah(prev => prev + 1);
+      } else {
+        setIsPlayingTranslation(false);
+        isPlayingTranslationRef.current = false;
+      }
+    };
+
+    // Also listen for loadeddata to ensure audio is ready
+    audio.onloadeddata = () => {
+      console.log('Translation audio loaded for ayah', ayahNum);
+    };
+
+    audio.play().catch((err) => {
+      console.error('Translation play error:', err);
+      // On play error, try next verse
+      if (!isLast && isPlayingTranslationRef.current) {
+        setTimeout(() => setTranslationAyah(prev => prev + 1), 500);
+      } else {
+        setIsPlayingTranslation(false);
+        isPlayingTranslationRef.current = false;
+      }
+    });
+  }, [ttsLanguage]);
+
+  // Toggle translation playback
+  const toggleTranslationPlayback = useCallback(() => {
+    if (isPlayingTranslation) {
+      // Stop
+      if (translationAudioRef.current) {
+        translationAudioRef.current.pause();
+        translationAudioRef.current = null;
+      }
+      setIsPlayingTranslation(false);
+      isPlayingTranslationRef.current = false;
+    } else {
+      // Start from current ayah
+      setTranslationAyah(currentAyah);
+      setIsPlayingTranslation(true);
+      isPlayingTranslationRef.current = true;
+      // Stop Arabic recitation if playing
+      if (isPlaying) {
+        setIsPlaying(false);
+      }
+    }
+  }, [isPlayingTranslation, currentAyah, isPlaying]);
+
+  // Toggle combined playback (Arabic + Translation)
+  const toggleCombinedPlayback = useCallback(() => {
+    if (isPlayingCombined) {
+      // Stop combined playback
+      setIsPlayingCombined(false);
+      isPlayingCombinedRef.current = false;
+      setIsPlaying(false);
+      setCombinedPhase('arabic');
+      if (translationAudioRef.current) {
+        translationAudioRef.current.pause();
+        translationAudioRef.current = null;
+      }
+      if (audioRef.current) {
+        audioRef.current.pause();
+      }
+    } else {
+      // Start combined playback from current ayah
+      setIsPlayingCombined(true);
+      isPlayingCombinedRef.current = true;
+      setCombinedPhase('arabic');
+      setIsPlaying(true);
+      // Stop translation-only if playing
+      if (isPlayingTranslation) {
+        setIsPlayingTranslation(false);
+        isPlayingTranslationRef.current = false;
+      }
+    }
+  }, [isPlayingCombined, isPlayingTranslation]);
+
+  // Stop translation when switching surahs
+  useEffect(() => {
+    setIsPlayingTranslation(false);
+    isPlayingTranslationRef.current = false;
+    setIsPlayingCombined(false);
+    isPlayingCombinedRef.current = false;
+    setCombinedPhase('arabic');
+    setTranslationAyah(1);
+    if (translationAudioRef.current) {
+      translationAudioRef.current.pause();
+      translationAudioRef.current = null;
+    }
+  }, [surah?.id]);
+
   const versesContainerRef = useRef(null);
   const startTime = useRef(Date.now());
 
@@ -1529,6 +1682,43 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
   const totalVerses = verses.length || surah?.ayahs || 0;
   const totalVersesRef = useRef(totalVerses);
   useEffect(() => { totalVersesRef.current = totalVerses; }, [totalVerses]);
+
+  // Sync verses ref for use in callbacks
+  useEffect(() => {
+    versesRef.current = verses;
+  }, [verses]);
+
+  // Effect to handle continuous translation playback
+  useEffect(() => {
+    if (!isPlayingTranslation || !verses.length) return;
+
+    const verse = verses.find(v => v.number === translationAyah);
+    if (!verse) {
+      console.log('Verse not found:', translationAyah, 'available:', verses.map(v => v.number));
+      setIsPlayingTranslation(false);
+      isPlayingTranslationRef.current = false;
+      return;
+    }
+
+    // Sync currentAyah with translationAyah so verse gets highlighted and scrolled
+    setCurrentAyah(translationAyah);
+
+    // Pass total verses count so playTranslationAudio can determine if last
+    playTranslationAudio(translationAyah, verse.translation, verses.length);
+
+    // No cleanup here - playTranslationAudio handles stopping previous audio
+    // Cleanup was causing race condition by pausing before new audio could start
+  }, [isPlayingTranslation, translationAyah, verses, playTranslationAudio]);
+
+  // Cleanup translation audio on unmount
+  useEffect(() => {
+    return () => {
+      if (translationAudioRef.current) {
+        translationAudioRef.current.pause();
+        translationAudioRef.current = null;
+      }
+    };
+  }, []);
 
   // Memoize surah navigation to prevent recalculation on every render
   const prevSurah = useMemo(() => surah?.id > 1 ? SURAHS.find(s => s.id === surah.id - 1) : null, [surah?.id]);
@@ -1552,6 +1742,60 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
       delay: i * 0.3,
     })), []);
 
+  // Ref to track audio mode for callbacks
+  const audioModeRef = useRef(audioMode);
+  useEffect(() => { audioModeRef.current = audioMode; }, [audioMode]);
+
+  // Play translation TTS for combined mode (called after Arabic ends)
+  const playCombinedTranslation = useCallback((ayahNum) => {
+    const verse = versesRef.current.find(v => v.number === ayahNum);
+    if (!verse?.translation) {
+      // No translation, move to next verse
+      const total = totalVersesRef.current;
+      if (ayahNum < total) {
+        setCurrentAyah(prev => prev + 1);
+        setCombinedPhase('arabic');
+      } else {
+        setIsPlayingCombined(false);
+        isPlayingCombinedRef.current = false;
+        setIsPlaying(false);
+      }
+      return;
+    }
+
+    setCombinedPhase('translation');
+    const ttsUrl = `/api/tts?lang=${ttsLanguage}&text=${encodeURIComponent(verse.translation)}`;
+    const ttsAudio = new Audio(ttsUrl);
+    translationAudioRef.current = ttsAudio;
+
+    ttsAudio.onended = () => {
+      if (!isPlayingCombinedRef.current) return;
+      const total = totalVersesRef.current;
+      if (ayahNum < total) {
+        setCombinedPhase('arabic');
+        setCurrentAyah(prev => prev + 1);
+      } else {
+        // End of surah
+        setIsPlayingCombined(false);
+        isPlayingCombinedRef.current = false;
+        setIsPlaying(false);
+        setCombinedPhase('arabic');
+      }
+    };
+
+    ttsAudio.onerror = () => {
+      // On error, move to next verse
+      const total = totalVersesRef.current;
+      if (ayahNum < total && isPlayingCombinedRef.current) {
+        setCombinedPhase('arabic');
+        setCurrentAyah(prev => prev + 1);
+      }
+    };
+
+    ttsAudio.volume = 0.8;
+    ttsAudio.play().catch(() => {});
+  }, [ttsLanguage]);
+
   // Audio setup
   useEffect(() => {
     const audio = new Audio();
@@ -1565,6 +1809,15 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
       const repeat = repeatModeRef.current;
       const current = currentAyahRef.current;
       const total = totalVersesRef.current;
+      const mode = audioModeRef.current;
+
+      // Combined mode: play translation after Arabic
+      if (mode === 'combined' && isPlayingCombinedRef.current) {
+        playCombinedTranslation(current);
+        return;
+      }
+
+      // Normal mode
       if (repeat === 'verse') { audio.currentTime = 0; audio.play().catch(() => {}); }
       else if (current < total) { setCurrentAyah(prev => prev + 1); }
       else if (repeat === 'surah') { setCurrentAyah(1); }
@@ -1584,7 +1837,7 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
       audio.pause();
       audio.src = '';
     };
-  }, []);
+  }, [playCombinedTranslation]);
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -1700,6 +1953,21 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
     } else if (featureId === 'scholarsync') {
       // Open scholar video sync
       setShowScholarSync(true);
+    } else if (featureId === 'visualization') {
+      // Open Living Visualization
+      setShowLivingVisualization(true);
+    } else if (featureId === 'timecapsule') {
+      // Open Time Capsule
+      setShowTimeCapsule(true);
+    } else if (featureId === 'voicecontrol') {
+      // Open Voice Control
+      setShowVoiceControl(true);
+    } else if (featureId === 'meditation') {
+      // Open Meditation
+      setShowMeditation(true);
+    } else if (featureId === 'family') {
+      // Open Family Circle
+      setShowFamilyCircle(true);
     } else {
       // Toggle left side features - only one can be active at a time
       setLeftFeature(prev => {
@@ -1913,6 +2181,89 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
         onAyahChange={setCurrentAyah}
       />
 
+      {/* ============================================ */}
+      {/* INNOVATIVE FEATURES */}
+      {/* ============================================ */}
+
+      {/* Living Quran Visualization */}
+      <LivingVisualization
+        isVisible={showLivingVisualization}
+        onClose={() => setShowLivingVisualization(false)}
+        onNavigateToVerse={(surahId, ayahNum) => {
+          if (surahId === surah.id) {
+            setCurrentAyah(ayahNum);
+          } else {
+            const targetSurah = SURAHS.find(s => s.id === surahId);
+            if (targetSurah && onChangeSurah) {
+              onChangeSurah(targetSurah);
+              setTimeout(() => setCurrentAyah(ayahNum), 100);
+            }
+          }
+          setShowLivingVisualization(false);
+        }}
+      />
+
+      {/* Quran Time Capsule */}
+      <TimeCapsule
+        isVisible={showTimeCapsule}
+        onClose={() => setShowTimeCapsule(false)}
+        currentVerseRef={`${surah.id}:${currentAyah}`}
+        onNavigateToVerse={(surahId, ayahNum) => {
+          if (surahId === surah.id) {
+            setCurrentAyah(ayahNum);
+          } else {
+            const targetSurah = SURAHS.find(s => s.id === surahId);
+            if (targetSurah && onChangeSurah) {
+              onChangeSurah(targetSurah);
+              setTimeout(() => setCurrentAyah(ayahNum), 100);
+            }
+          }
+          setShowTimeCapsule(false);
+        }}
+      />
+
+      {/* Voice Control */}
+      <VoiceControl
+        isVisible={showVoiceControl}
+        onClose={() => setShowVoiceControl(false)}
+        onNavigateSurah={(surahId) => {
+          const targetSurah = SURAHS.find(s => s.id === surahId);
+          if (targetSurah) goToSurah(targetSurah);
+          setShowVoiceControl(false);
+        }}
+        onNavigateVerse={(ayahNum) => {
+          if (ayahNum >= 1 && ayahNum <= totalVerses) {
+            setCurrentAyah(ayahNum);
+          }
+        }}
+        onNextVerse={() => setCurrentAyah(prev => prev < totalVerses ? prev + 1 : prev)}
+        onPreviousVerse={() => setCurrentAyah(prev => prev > 1 ? prev - 1 : prev)}
+        onPlay={() => setIsPlaying(true)}
+        onPause={() => setIsPlaying(false)}
+        onStop={() => { setIsPlaying(false); setCurrentAyah(1); }}
+        onShowTafseer={() => setShowTafseer(true)}
+        onBookmark={() => setLeftFeature('bookmark')}
+        onShare={() => setLeftFeature('share')}
+        onGoBack={onClose}
+      />
+
+      {/* Heartbeat Meditation */}
+      <HeartbeatMeditation
+        isVisible={showMeditation}
+        onClose={() => setShowMeditation(false)}
+      />
+
+      {/* Family Quran Circle */}
+      <FamilyCircle
+        isVisible={showFamilyCircle}
+        onClose={() => setShowFamilyCircle(false)}
+        onNavigateToSurah={(surahId) => {
+          const targetSurah = SURAHS.find(s => s.id === surahId);
+          if (targetSurah) goToSurah(targetSurah);
+          setShowFamilyCircle(false);
+        }}
+      />
+
       {/* Top Feature Buttons Bar */}
       <div
         className={`fixed top-4 left-1/2 -translate-x-1/2 z-[60] transition-all duration-500 ${isAnimating ? 'opacity-0 -translate-y-10' : 'opacity-100 translate-y-0'}`}
@@ -1920,15 +2271,28 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
       >
         <div className="flex items-center gap-1.5 sm:gap-2 px-3 py-2 rounded-full bg-black/30 backdrop-blur-xl border border-white/20 max-w-[95vw] overflow-x-auto scrollbar-hide">
           {[
-            { id: 'tafseer', icon: Icons.BookOpen, color: '#8B5CF6', label: 'Tafseer', side: 'right' },
-            { id: 'youtube', icon: Icons.Video, color: '#EF4444', label: 'Videos', side: 'left' },
-            { id: 'memorize', icon: Icons.Brain, color: '#F59E0B', label: 'Memorize', side: 'left' },
-            { id: 'bookmark', icon: Icons.Bookmark, color: '#EC4899', label: 'Bookmark', side: 'left' },
-            { id: 'share', icon: Icons.Share, color: '#10B981', label: 'Share', side: 'left' },
+            { id: 'tafseer', icon: Icons.BookOpen, color: '#8B5CF6', label: 'Tafseer' },
+            { id: 'youtube', icon: Icons.Video, color: '#EF4444', label: 'Videos' },
+            { id: 'memorize', icon: Icons.Brain, color: '#F59E0B', label: 'Memorize' },
+            { id: 'bookmark', icon: Icons.Bookmark, color: '#EC4899', label: 'Bookmark' },
+            { id: 'share', icon: Icons.Share, color: '#10B981', label: 'Share' },
+            // Innovative Features
+            { id: 'visualization', icon: Icons.Sparkle, color: '#6366F1', label: 'Visualize' },
+            { id: 'timecapsule', icon: Icons.Capsule, color: '#F472B6', label: 'Capsule' },
+            { id: 'voicecontrol', icon: Icons.Speech, color: '#22C55E', label: 'Voice' },
+            { id: 'meditation', icon: Icons.Breath, color: '#A855F7', label: 'Meditate' },
+            { id: 'family', icon: Icons.Family, color: '#F59E0B', label: 'Family' },
           ].map((btn) => {
             const Icon = btn.icon;
-            // Tafseer uses showTafseer, others use leftFeature
-            const isActive = btn.id === 'tafseer' ? showTafseer : leftFeature === btn.id;
+            // Determine active state based on feature type
+            let isActive = false;
+            if (btn.id === 'tafseer') isActive = showTafseer;
+            else if (btn.id === 'visualization') isActive = showLivingVisualization;
+            else if (btn.id === 'timecapsule') isActive = showTimeCapsule;
+            else if (btn.id === 'voicecontrol') isActive = showVoiceControl;
+            else if (btn.id === 'meditation') isActive = showMeditation;
+            else if (btn.id === 'family') isActive = showFamilyCircle;
+            else isActive = leftFeature === btn.id;
 
             return (
               <button
@@ -2361,22 +2725,108 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
 
               <div className="flex-shrink-0 pt-1">
                 {audioError && <p className="text-center text-red-300 text-[10px] mb-1">{audioError}</p>}
+
+                {/* Audio Mode Toggle */}
+                <div className="flex items-center justify-center gap-1.5 mb-2">
+                  <button
+                    onClick={() => {
+                      setAudioMode('arabic');
+                      if (isPlayingTranslation) toggleTranslationPlayback();
+                      if (isPlayingCombined) toggleCombinedPlayback();
+                    }}
+                    className={`px-2.5 py-1 rounded-full text-xs font-medium transition-all ${audioMode === 'arabic' ? 'bg-white/30 text-white' : 'bg-white/10 text-white/60'}`}
+                  >
+                    Arabic
+                  </button>
+                  <button
+                    onClick={() => {
+                      setAudioMode('translation');
+                      if (isPlaying) setIsPlaying(false);
+                      if (isPlayingCombined) toggleCombinedPlayback();
+                    }}
+                    className={`px-2.5 py-1 rounded-full text-xs font-medium transition-all ${audioMode === 'translation' ? 'bg-cyan-500/50 text-white' : 'bg-white/10 text-white/60'}`}
+                  >
+                    Translation
+                  </button>
+                  <button
+                    onClick={() => {
+                      setAudioMode('combined');
+                      if (isPlayingTranslation) toggleTranslationPlayback();
+                      if (isPlaying && !isPlayingCombined) setIsPlaying(false);
+                    }}
+                    className={`px-2.5 py-1 rounded-full text-xs font-medium transition-all ${audioMode === 'combined' ? 'bg-gradient-to-r from-amber-500/50 to-cyan-500/50 text-white' : 'bg-white/10 text-white/60'}`}
+                    title="Play Arabic then Translation for each verse"
+                  >
+                    Both
+                  </button>
+                </div>
+
+                {/* Audio Controls */}
                 <div className="flex items-center justify-center gap-3">
-                  <button onClick={goToPrevAyah} disabled={currentAyah <= 1}
-                    className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center hover:bg-white/30 transition-all disabled:opacity-30">
+                  <button
+                    onClick={() => {
+                      if (audioMode === 'translation') {
+                        setTranslationAyah(prev => Math.max(1, prev - 1));
+                      } else {
+                        goToPrevAyah();
+                      }
+                    }}
+                    disabled={audioMode === 'translation' ? translationAyah <= 1 : currentAyah <= 1}
+                    className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center hover:bg-white/30 transition-all disabled:opacity-30"
+                  >
                     <Icons.SkipBack className="w-4 h-4" />
                   </button>
-                  <button onClick={togglePlayPause}
-                    className="w-12 h-12 rounded-full bg-white/30 flex items-center justify-center hover:bg-white/40 transition-all hover:scale-105"
-                    style={{ boxShadow: '0 4px 15px rgba(0,0,0,0.2)' }}>
-                    {audioLoading ? <Icons.Loader className="w-5 h-5 animate-spin" /> : isPlaying ? <Icons.Pause className="w-5 h-5" /> : <Icons.Play className="w-5 h-5 ml-0.5" />}
-                  </button>
-                  <button onClick={goToNextAyah} disabled={currentAyah >= totalVerses}
-                    className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center hover:bg-white/30 transition-all disabled:opacity-30">
+
+                  {audioMode === 'arabic' ? (
+                    <button onClick={togglePlayPause}
+                      className="w-12 h-12 rounded-full bg-white/30 flex items-center justify-center hover:bg-white/40 transition-all hover:scale-105"
+                      style={{ boxShadow: '0 4px 15px rgba(0,0,0,0.2)' }}>
+                      {audioLoading ? <Icons.Loader className="w-5 h-5 animate-spin" /> : isPlaying ? <Icons.Pause className="w-5 h-5" /> : <Icons.Play className="w-5 h-5 ml-0.5" />}
+                    </button>
+                  ) : audioMode === 'translation' ? (
+                    <button onClick={toggleTranslationPlayback}
+                      className={`w-12 h-12 rounded-full flex items-center justify-center hover:scale-105 transition-all ${isPlayingTranslation ? 'bg-cyan-500/60' : 'bg-white/30 hover:bg-white/40'}`}
+                      style={{ boxShadow: '0 4px 15px rgba(0,0,0,0.2)' }}>
+                      {isPlayingTranslation ? <Icons.Pause className="w-5 h-5" /> : <Icons.Headphones className="w-5 h-5" />}
+                    </button>
+                  ) : (
+                    <button onClick={toggleCombinedPlayback}
+                      className={`w-12 h-12 rounded-full flex items-center justify-center hover:scale-105 transition-all ${isPlayingCombined ? 'bg-gradient-to-r from-amber-500/60 to-cyan-500/60' : 'bg-white/30 hover:bg-white/40'}`}
+                      style={{ boxShadow: '0 4px 15px rgba(0,0,0,0.2)' }}>
+                      {isPlayingCombined ? <Icons.Pause className="w-5 h-5" /> : <Icons.Play className="w-5 h-5 ml-0.5" />}
+                    </button>
+                  )}
+
+                  <button
+                    onClick={() => {
+                      if (audioMode === 'translation') {
+                        setTranslationAyah(prev => Math.min(totalVerses, prev + 1));
+                      } else {
+                        goToNextAyah();
+                      }
+                    }}
+                    disabled={audioMode === 'translation' ? translationAyah >= totalVerses : currentAyah >= totalVerses}
+                    className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center hover:bg-white/30 transition-all disabled:opacity-30"
+                  >
                     <Icons.SkipForward className="w-4 h-4" />
                   </button>
                 </div>
-                <div className="text-center mt-0.5 text-xs text-white/70">{currentAyah} / {totalVerses}</div>
+                <div className="text-center mt-0.5 text-xs text-white/70">
+                  {audioMode === 'arabic' ? (
+                    <span>{currentAyah} / {totalVerses}</span>
+                  ) : audioMode === 'translation' ? (
+                    <span className="text-cyan-300">{translationAyah} / {totalVerses} {isPlayingTranslation && '(Playing)'}</span>
+                  ) : (
+                    <span className={isPlayingCombined ? 'text-amber-300' : ''}>
+                      {currentAyah} / {totalVerses}
+                      {isPlayingCombined && (
+                        <span className="ml-1">
+                          ({combinedPhase === 'arabic' ? '🔊 Arabic' : '🗣 Translation'})
+                        </span>
+                      )}
+                    </span>
+                  )}
+                </div>
               </div>
             </div>
           </div>

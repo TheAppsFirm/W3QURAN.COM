@@ -65,6 +65,22 @@ export const VolumeIcon = (props) => (
   </Icon>
 );
 
+export const Volume2Icon = (props) => (
+  <Icon {...props}>
+    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+    <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+    <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+  </Icon>
+);
+
+export const VolumeXIcon = (props) => (
+  <Icon {...props}>
+    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+    <line x1="22" y1="9" x2="16" y2="15" />
+    <line x1="16" y1="9" x2="22" y2="15" />
+  </Icon>
+);
+
 export const SettingsIcon = (props) => (
   <Icon {...props}>
     <circle cx="12" cy="12" r="3" />
@@ -319,6 +335,14 @@ export const SparklesIcon = (props) => (
     <path d="M5 15l1 3 3 1-3 1-1 3-1-3-3-1 3-1 1-3z" />
     <path d="M19 13l.75 2.25L22 16l-2.25.75L19 19l-.75-2.25L16 16l2.25-.75L19 13z" />
   </FilledIcon>
+);
+
+export const LightbulbIcon = (props) => (
+  <Icon {...props}>
+    <path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5" />
+    <path d="M9 18h6" />
+    <path d="M10 22h4" />
+  </Icon>
 );
 
 export const LayersIcon = (props) => (
@@ -758,6 +782,192 @@ export const UsersIcon = (props) => (
 );
 
 // ============================================================================
+// Innovative Features Icons
+// ============================================================================
+
+export const HeartHandshakeIcon = (props) => (
+  <Icon {...props}>
+    <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
+    <path d="M12 5 9.04 7.96a2.17 2.17 0 0 0 0 3.08c.82.82 2.13.85 3 .07l2.07-1.9a2.82 2.82 0 0 1 3.79 0l2.96 2.66" />
+    <path d="m18 15-2-2" />
+    <path d="m15 18-2-2" />
+  </Icon>
+);
+
+export const WindIcon = (props) => (
+  <Icon {...props}>
+    <path d="M17.7 7.7a2.5 2.5 0 1 1 1.8 4.3H2" />
+    <path d="M9.6 4.6A2 2 0 1 1 11 8H2" />
+    <path d="M12.6 19.4A2 2 0 1 0 14 16H2" />
+  </Icon>
+);
+
+export const TimerIcon = (props) => (
+  <Icon {...props}>
+    <line x1="10" x2="14" y1="2" y2="2" />
+    <line x1="12" x2="15" y1="14" y2="11" />
+    <circle cx="12" cy="14" r="8" />
+  </Icon>
+);
+
+export const CapsuleIcon = (props) => (
+  <Icon {...props}>
+    <path d="M10 2v6" />
+    <path d="M14 2v6" />
+    <path d="M8 8h8a4 4 0 0 1 4 4v6a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4v-6a4 4 0 0 1 4-4Z" />
+    <path d="M4 14h16" />
+  </Icon>
+);
+
+export const Globe3DIcon = (props) => (
+  <Icon {...props}>
+    <circle cx="12" cy="12" r="10" />
+    <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
+    <path d="M2 12h20" />
+    <path d="M12 2a10 10 0 0 1 0 20" strokeDasharray="3 3" />
+  </Icon>
+);
+
+export const FamilyIcon = (props) => (
+  <Icon {...props}>
+    <circle cx="12" cy="4" r="2" />
+    <circle cx="6" cy="8" r="2" />
+    <circle cx="18" cy="8" r="2" />
+    <path d="M12 6v8" />
+    <path d="M6 10v6a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-6" />
+    <path d="M9 22v-4" />
+    <path d="M15 22v-4" />
+  </Icon>
+);
+
+export const SpeechIcon = (props) => (
+  <Icon {...props}>
+    <path d="M8.8 20v-4.1l1.9.2a2.3 2.3 0 0 0 2.164-2.1V8.3A5.37 5.37 0 0 0 2 8.2c0 2.8 2.2 5.1 5 5.1h.8" />
+    <path d="M19 8.5a4.5 4.5 0 0 0 0 7" />
+    <path d="M22 6a8 8 0 0 1 0 12" />
+  </Icon>
+);
+
+export const MeditateIcon = (props) => (
+  <Icon {...props}>
+    <circle cx="12" cy="6" r="2" />
+    <path d="M12 8v4" />
+    <path d="m8 12-2 4h12l-2-4" />
+    <path d="M6 16v2a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-2" />
+    <path d="M12 12c-2 0-3.5 1.5-3.5 3.5" />
+    <path d="M12 12c2 0 3.5 1.5 3.5 3.5" />
+  </Icon>
+);
+
+export const JournalIcon = (props) => (
+  <Icon {...props}>
+    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+    <path d="M14 2v6h6" />
+    <path d="M16 13H8" />
+    <path d="M16 17H8" />
+    <path d="M10 9H8" />
+  </Icon>
+);
+
+export const SparkleIcon = (props) => (
+  <Icon {...props}>
+    <path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5L12 3z" />
+  </Icon>
+);
+
+export const MessageIcon = (props) => (
+  <Icon {...props}>
+    <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />
+  </Icon>
+);
+
+export const VoiceWaveIcon = (props) => (
+  <Icon {...props}>
+    <path d="M2 10v4" />
+    <path d="M6 6v12" />
+    <path d="M10 3v18" />
+    <path d="M14 6v12" />
+    <path d="M18 10v4" />
+    <path d="M22 8v8" />
+  </Icon>
+);
+
+export const BreathIcon = (props) => (
+  <Icon {...props}>
+    <circle cx="12" cy="12" r="8" strokeDasharray="4 4" />
+    <circle cx="12" cy="12" r="3" />
+    <path d="M12 4v2" />
+    <path d="M12 18v2" />
+    <path d="M4 12h2" />
+    <path d="M18 12h2" />
+  </Icon>
+);
+
+export const RouteIcon = (props) => (
+  <Icon {...props}>
+    <circle cx="6" cy="19" r="3" />
+    <path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15" />
+    <circle cx="18" cy="5" r="3" />
+  </Icon>
+);
+
+export const MountainIcon = (props) => (
+  <Icon {...props}>
+    <path d="m8 3 4 8 5-5 5 15H2L8 3z" />
+  </Icon>
+);
+
+export const WavesIcon = (props) => (
+  <Icon {...props}>
+    <path d="M2 6c.6.5 1.2 1 2.5 1C7 7 7 5 9.5 5c2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1" />
+    <path d="M2 12c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1" />
+    <path d="M2 18c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1" />
+  </Icon>
+);
+
+export const BabyIcon = (props) => (
+  <Icon {...props}>
+    <path d="M9 12h.01" />
+    <path d="M15 12h.01" />
+    <path d="M10 16c.5.3 1.2.5 2 .5s1.5-.2 2-.5" />
+    <path d="M19 6.3a9 9 0 0 1 1.8 3.9 2 2 0 0 1 0 3.6 9 9 0 0 1-17.6 0 2 2 0 0 1 0-3.6A9 9 0 0 1 12 3c2 0 3.5 1.1 3.5 2.5s-.9 2.5-2 2.5c-.8 0-1.5-.4-1.5-1" />
+  </Icon>
+);
+
+export const StarsIcon = (props) => (
+  <Icon {...props}>
+    <path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5L12 3z" />
+    <path d="M5 15l1 3 3 1-3 1-1 3-1-3-3-1 3-1 1-3z" />
+    <path d="M19 13l.75 2.25L22 16l-2.25.75L19 19l-.75-2.25L16 16l2.25-.75L19 13z" />
+  </Icon>
+);
+
+export const CrownIcon = (props) => (
+  <Icon {...props}>
+    <path d="m2 4 3 12h14l3-12-6 7-4-7-4 7-6-7zm3 16h14" />
+  </Icon>
+);
+
+export const GiftIcon = (props) => (
+  <Icon {...props}>
+    <rect x="3" y="8" width="18" height="4" rx="1" />
+    <path d="M12 8v13" />
+    <path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7" />
+    <path d="M7.5 8a2.5 2.5 0 0 1 0-5A4.8 8 0 0 1 12 8a4.8 8 0 0 1 4.5-5 2.5 2.5 0 0 1 0 5" />
+  </Icon>
+);
+
+export const HandsHelpingIcon = (props) => (
+  <Icon {...props}>
+    <path d="M11 14h2" />
+    <path d="M8.5 8.5c-.83-.15-1.5-.77-1.5-1.5 0-.83.67-1.5 1.5-1.5H13a2 2 0 0 1 0 4h-.5" />
+    <path d="M12 6v6m0 0-3 3m3-3 3 3" />
+    <path d="M3 15h3a2 2 0 0 1 2 2v3" />
+    <path d="M16 17a2 2 0 0 1 2-2h3v5h-8" />
+  </Icon>
+);
+
+// ============================================================================
 // Export all icons as object for dynamic usage
 // ============================================================================
 
@@ -766,6 +976,8 @@ export const Icons = {
   Book: BookIcon,
   Grid: GridIcon,
   Volume: VolumeIcon,
+  Volume2: Volume2Icon,
+  VolumeX: VolumeXIcon,
   Settings: SettingsIcon,
   Heart: HeartIcon,
   HeartFilled: HeartFilledIcon,
@@ -800,6 +1012,7 @@ export const Icons = {
   Star: StarIcon,
   StarFilled: StarFilledIcon,
   Sparkles: SparklesIcon,
+  Lightbulb: LightbulbIcon,
   Layers: LayersIcon,
   HelpCircle: HelpCircleIcon,
   Compass: CompassIcon,
@@ -854,6 +1067,28 @@ export const Icons = {
   Anchor: AnchorIcon,
   Leaf: LeafIcon,
   Users: UsersIcon,
+  // Innovative Features Icons
+  HeartHandshake: HeartHandshakeIcon,
+  Wind: WindIcon,
+  Timer: TimerIcon,
+  Capsule: CapsuleIcon,
+  Globe3D: Globe3DIcon,
+  Family: FamilyIcon,
+  Speech: SpeechIcon,
+  Meditate: MeditateIcon,
+  Journal: JournalIcon,
+  Sparkle: SparkleIcon,
+  Message: MessageIcon,
+  VoiceWave: VoiceWaveIcon,
+  Breath: BreathIcon,
+  Route: RouteIcon,
+  Mountain: MountainIcon,
+  Waves: WavesIcon,
+  Baby: BabyIcon,
+  Stars: StarsIcon,
+  Crown: CrownIcon,
+  Gift: GiftIcon,
+  HandsHelping: HandsHelpingIcon,
 };
 
 export default Icons;

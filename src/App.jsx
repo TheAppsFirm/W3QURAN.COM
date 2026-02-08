@@ -10,7 +10,7 @@
  */
 
 import { Suspense, useState, useEffect, useMemo, useCallback } from 'react';
-import { ErrorBoundary, LoadingSpinner, BubbleModal, BubbleReaderOverlay, ProgressDashboard, OfflineManager, HifzMode, SearchPanel, DonateModal, WordSearchMap, EmotionalTracker, ScholarVideoSync } from './components/common';
+import { ErrorBoundary, LoadingSpinner, BubbleModal, BubbleReaderOverlay, ProgressDashboard, OfflineManager, HifzMode, SearchPanel, DonateModal, WordSearchMap, EmotionalTracker, ScholarVideoSync, PropheticMap, QuranCompanionAI } from './components/common';
 import { Header, FloatingMenu, StatsBar } from './components/layout';
 import { SurahBubble, LayoutSelector, ClockLayout, GridLayout, JuzzGroupLayout, AlphabetLayout, RevelationLayout } from './components/bubbles';
 import { AnalyticsPanel } from './components/widgets';
@@ -196,6 +196,8 @@ function QuranBubbleApp() {
   const [showMindMap, setShowMindMap] = useState(false);
   const [showMoodTracker, setShowMoodTracker] = useState(false);
   const [showVideoSync, setShowVideoSync] = useState(false);
+  const [showPropheticMap, setShowPropheticMap] = useState(false);
+  const [showCompanionAI, setShowCompanionAI] = useState(false);
 
   // Memoized filtered surahs
   const filtered = useMemo(() => {
@@ -320,6 +322,8 @@ function QuranBubbleApp() {
           onDonate={() => setShowDonateModal(true)}
           onMood={() => setShowMoodTracker(true)}
           onMindMap={() => setShowMindMap(true)}
+          onWorldMap={() => setShowPropheticMap(true)}
+          onAIGuide={() => setShowCompanionAI(true)}
         />
       )}
 
@@ -801,6 +805,34 @@ function QuranBubbleApp() {
           if (surah) {
             setShowVideoSync(false);
             setOverlayReaderSurah(surah);
+          }
+        }}
+      />
+
+      {/* Prophetic World Map */}
+      <PropheticMap
+        isVisible={showPropheticMap}
+        onClose={() => setShowPropheticMap(false)}
+        onNavigateToVerse={(surahId, ayahNumber) => {
+          const surah = SURAHS.find(s => s.id === surahId);
+          if (surah) {
+            setShowPropheticMap(false);
+            setOverlayReaderSurah(surah);
+            setInitialVerse(ayahNumber);
+          }
+        }}
+      />
+
+      {/* AI Companion Guide */}
+      <QuranCompanionAI
+        isVisible={showCompanionAI}
+        onClose={() => setShowCompanionAI(false)}
+        onNavigateToVerse={(surahId, ayahNumber) => {
+          const surah = SURAHS.find(s => s.id === surahId);
+          if (surah) {
+            setShowCompanionAI(false);
+            setOverlayReaderSurah(surah);
+            setInitialVerse(ayahNumber);
           }
         }}
       />

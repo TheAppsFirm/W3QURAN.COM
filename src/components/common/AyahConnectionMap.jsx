@@ -1,6 +1,6 @@
 /**
- * Ayah Connection Map - Visual Quran Explorer
- * Interactive Mind Map showing how verses connect across the entire Quran
+ * Quran Explorer - Visual Quran Explorer
+ * Interactive exploration of themes, stories, and verse connections
  * Features:
  * - Interactive mind map/flowchart visualization
  * - Theme-based connections with animated lines
@@ -682,7 +682,7 @@ const AyahConnectionMap = memo(function AyahConnectionMap({
                 <div className="absolute top-0 left-1/4 w-1/2 h-1/3 bg-gradient-to-b from-white/50 to-transparent rounded-full transform scale-x-150" />
               </div>
               <div>
-                <h2 className="text-lg sm:text-xl font-bold text-white">Quran Mind Map</h2>
+                <h2 className="text-lg sm:text-xl font-bold text-white">Quran Explorer</h2>
                 <p className="text-white/60 text-xs sm:text-sm">Visual connections across the Quran</p>
               </div>
             </div>
