@@ -10,7 +10,7 @@
  */
 
 import { Suspense, useState, useEffect, useMemo, useCallback } from 'react';
-import { ErrorBoundary, LoadingSpinner, BubbleModal, BubbleReaderOverlay, ProgressDashboard, OfflineManager, HifzMode, SearchPanel, DonateModal, WordSearchMap, EmotionalTracker, ScholarVideoSync, PropheticMap, QuranCompanionAI, GlobalUmmahPulse, VerseWeatherSync, SoundHealingRoom } from './components/common';
+import { ErrorBoundary, LoadingSpinner, BubbleModal, BubbleReaderOverlay, ProgressDashboard, OfflineManager, HifzMode, SearchPanel, DonateModal, WordSearchMap, EmotionalTracker, ScholarVideoSync, PropheticMap, QuranCompanionAI, GlobalUmmahPulse, VerseWeatherSync, SoundHealingRoom, QuranicBabyNames } from './components/common';
 import { Header, FloatingMenu, StatsBar } from './components/layout';
 import { SurahBubble, LayoutSelector, ClockLayout, GridLayout, JuzzGroupLayout, AlphabetLayout, RevelationLayout } from './components/bubbles';
 import { AnalyticsPanel } from './components/widgets';
@@ -201,6 +201,7 @@ function QuranBubbleApp() {
   const [showGlobalPulse, setShowGlobalPulse] = useState(false);
   const [showWeatherSync, setShowWeatherSync] = useState(false);
   const [showSoundHealing, setShowSoundHealing] = useState(false);
+  const [showBabyNames, setShowBabyNames] = useState(false);
 
   // Memoized filtered surahs
   const filtered = useMemo(() => {
@@ -584,6 +585,7 @@ function QuranBubbleApp() {
         onMindMap={() => setShowMindMap(true)}
         onMood={() => setShowMoodTracker(true)}
         onVideoSync={() => setShowVideoSync(true)}
+        onBabyNames={() => setShowBabyNames(true)}
       />
 
       {/* Bubble Modal */}
@@ -867,6 +869,12 @@ function QuranBubbleApp() {
       <SoundHealingRoom
         isVisible={showSoundHealing}
         onClose={() => setShowSoundHealing(false)}
+      />
+
+      {/* Quranic Baby Names */}
+      <QuranicBabyNames
+        isVisible={showBabyNames}
+        onClose={() => setShowBabyNames(false)}
       />
 
       {/* Animation Styles */}

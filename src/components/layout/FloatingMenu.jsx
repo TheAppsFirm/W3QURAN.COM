@@ -143,7 +143,7 @@ const BubbleMenuItem = ({ item, active, onClick, delay = 0, darkMode }) => {
   );
 };
 
-function FloatingMenu({ view, setView, darkMode, onDonate, onMindMap, onMood, onVideoSync }) {
+function FloatingMenu({ view, setView, darkMode, onDonate, onMindMap, onMood, onVideoSync, onBabyNames }) {
   const [showMore, setShowMore] = useState(false);
   const menuRef = useRef(null);
 
@@ -171,6 +171,7 @@ function FloatingMenu({ view, setView, darkMode, onDonate, onMindMap, onMood, on
     { id: 'mindmap', label: 'Explorer', icon: Icons.Search, gradient: ['#A855F7', '#7C3AED'], isSpecial: true },
     { id: 'mood', label: 'Mood', icon: Icons.Activity, gradient: ['#06B6D4', '#0891B2'], isSpecial: true },
     { id: 'videosync', label: 'Video Sync', icon: Icons.Video, gradient: ['#F472B6', '#EC4899'], isSpecial: true },
+    { id: 'babynames', label: 'Baby Names', icon: Icons.Baby, gradient: ['#F59E0B', '#EA580C'], isSpecial: true },
     // Regular features
     { id: 'daily', label: 'Daily Verse', icon: Icons.Sun, gradient: ['#f59e0b', '#eab308'] },
     { id: 'names', label: '99 Names', icon: Icons.Sparkles, gradient: ['#8b5cf6', '#a855f7'] },
@@ -193,6 +194,8 @@ function FloatingMenu({ view, setView, darkMode, onDonate, onMindMap, onMood, on
       onMood();
     } else if (item.id === 'videosync' && onVideoSync) {
       onVideoSync();
+    } else if (item.id === 'babynames' && onBabyNames) {
+      onBabyNames();
     } else if (item.id === 'listen') {
       setView('listen');
     } else {

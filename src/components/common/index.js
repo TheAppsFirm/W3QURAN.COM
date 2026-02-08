@@ -27,3 +27,4 @@ export { default as QuranCompanionAI } from './QuranCompanionAI';
 export { default as GlobalUmmahPulse, trackReadingActivity } from './GlobalUmmahPulse';
 export { default as VerseWeatherSync } from './VerseWeatherSync';
 export { default as SoundHealingRoom } from './SoundHealingRoom';
+export { default as QuranicBabyNames } from './QuranicBabyNames';
