@@ -243,7 +243,7 @@ const FloatingFeatureBubble = memo(function FloatingFeatureBubble({
         </div>
 
         {/* Content */}
-        <div className="p-4 h-[calc(100%-70px)] overflow-y-auto custom-scrollbar">
+        <div className="p-4 h-[calc(100%-70px)] overflow-y-auto overflow-x-hidden custom-scrollbar">
           {children}
         </div>
       </div>
@@ -446,7 +446,7 @@ const TafseerFloatingBubble = memo(function TafseerFloatingBubble({
       </div>
 
       {/* Tafseer Content - Increased height */}
-      <div className="flex-1 overflow-y-auto" style={{ maxHeight: '380px', minHeight: '200px' }}>
+      <div className="flex-1 overflow-y-auto overflow-x-hidden" style={{ maxHeight: '380px', minHeight: '200px' }}>
         {loading ? (
           <div className="flex flex-col items-center justify-center py-8">
             <Icons.Loader className="w-8 h-8 animate-spin text-white/60 mb-2" />
@@ -471,6 +471,9 @@ const TafseerFloatingBubble = memo(function TafseerFloatingBubble({
               fontFamily: tafseer.direction === 'rtl' ? "'Noto Nastaliq Urdu', 'Scheherazade New', serif" : 'inherit',
               fontSize: currentFontSize.text,
               lineHeight: currentFontSize.lineHeight,
+              wordWrap: 'break-word',
+              overflowWrap: 'break-word',
+              maxWidth: '100%',
             }}
             dangerouslySetInnerHTML={{ __html: sanitizeHTML(tafseer.text) }}
           />
@@ -2564,9 +2567,9 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
                     <p className="text-sm">{error}</p>
                   </div>
                 ) : (
-                  <div className="space-y-3 py-2">
+                  <div className="space-y-3 py-2 overflow-x-hidden">
                     {surah.id !== 9 && surah.id !== 1 && (
-                      <div className="text-center py-2" style={{ fontFamily: "'Scheherazade New', serif", fontSize: fontSizeMap[fontSize].arabic, textShadow: '0 2px 8px rgba(0,0,0,0.3)' }} dir="rtl" lang="ar">
+                      <div className="text-center py-2 overflow-hidden" style={{ fontFamily: "'Scheherazade New', serif", fontSize: fontSizeMap[fontSize].arabic, textShadow: '0 2px 8px rgba(0,0,0,0.3)', wordWrap: 'break-word' }} dir="rtl" lang="ar">
                         بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
                       </div>
                     )}
@@ -2589,7 +2592,7 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
                       return (
                         <div key={ayahNum} data-ayah={ayahNum}
                           onClick={selectionMode ? () => toggleVerseSelection(ayahNum) : undefined}
-                          className={`rounded-2xl p-3 transition-all duration-500 ${isCurrentAyah ? 'bg-white/25' : 'bg-white/10'} ${hideLevel > 0 ? 'ring-2 ring-amber-400/30' : ''} ${isSelected ? 'ring-2 ring-emerald-400/60 bg-emerald-500/20' : ''} ${selectionMode ? 'cursor-pointer hover:bg-white/20' : ''}`}
+                          className={`rounded-2xl p-3 transition-all duration-500 overflow-hidden ${isCurrentAyah ? 'bg-white/25' : 'bg-white/10'} ${hideLevel > 0 ? 'ring-2 ring-amber-400/30' : ''} ${isSelected ? 'ring-2 ring-emerald-400/60 bg-emerald-500/20' : ''} ${selectionMode ? 'cursor-pointer hover:bg-white/20' : ''}`}
                           style={{ transform: isCurrentAyah ? 'scale(1.01)' : 'scale(1)', boxShadow: isCurrentAyah ? '0 0 20px rgba(255,255,255,0.2)' : isSelected ? '0 0 15px rgba(16,185,129,0.3)' : 'none' }}>
 
                           {/* Selection checkbox */}
@@ -2601,7 +2604,7 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
                               <span className="text-xs text-white/60">Verse {ayahNum}</span>
                             </div>
                           )}
-                          <div className="leading-[2.2] mb-2" style={{ fontFamily: "'Scheherazade New', serif", fontSize: fontSizeMap[fontSize].arabic, textShadow: '0 1px 6px rgba(0,0,0,0.3)' }} dir="rtl" lang="ar">
+                          <div className="leading-[2.2] mb-2" style={{ fontFamily: "'Scheherazade New', serif", fontSize: fontSizeMap[fontSize].arabic, textShadow: '0 1px 6px rgba(0,0,0,0.3)', wordWrap: 'break-word', overflowWrap: 'break-word', maxWidth: '100%' }} dir="rtl" lang="ar">
                             {wordByWordMode ? (
                               wordMeanings.length > 0 ? (
                                 wordMeanings.map((wordData, wordIdx) => (
