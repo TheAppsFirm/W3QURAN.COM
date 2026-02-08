@@ -189,21 +189,15 @@ export async function onRequest(context) {
 
   // Check if KV is available
   if (!env.UMMAH_KV) {
-    // Return simulated data if KV not configured
+    // Return empty data if KV not configured (no simulated data on production)
     return new Response(JSON.stringify({
       success: true,
-      simulated: true,
-      message: 'KV not configured. Using simulated data.',
-      cities: Object.entries(CITIES_DATA).slice(0, 10).map(([id, city]) => ({
-        id,
-        ...city,
-        readers: Math.floor(Math.random() * 50) + 1,
-        lastActive: Date.now(),
-      })),
+      error: 'KV not configured',
+      cities: [],
       stats: {
-        totalReaders: Math.floor(Math.random() * 500) + 100,
-        activeLocations: 10,
-        sessionsToday: Math.floor(Math.random() * 1000) + 200,
+        totalReaders: 0,
+        activeLocations: 0,
+        sessionsToday: 0,
       },
       recentActivity: [],
     }), {

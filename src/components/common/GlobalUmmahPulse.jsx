@@ -476,13 +476,25 @@ const GlobalUmmahPulse = memo(function GlobalUmmahPulse({ isVisible, onClose }) 
 
       throw new Error('No data');
     } catch (error) {
-      console.log('Falling back to simulated data:', error.message);
-      // Fallback to simulated data
-      const newActivities = generateReadingActivity();
-      setActivities(newActivities);
-      setStats(generateGlobalStats(newActivities));
-      setIsRealData(false);
-      setConnectionStatus('simulated');
+      console.log('API error:', error.message);
+
+      // Only use simulated data on localhost for development
+      const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+
+      if (isLocalhost) {
+        // Development mode - show simulated data
+        const newActivities = generateReadingActivity();
+        setActivities(newActivities);
+        setStats(generateGlobalStats(newActivities));
+        setIsRealData(false);
+        setConnectionStatus('simulated');
+      } else {
+        // Production - show empty state with real connection
+        setActivities([]);
+        setStats({ totalReaders: 0, topSurahId: 1, topSurahReaders: 0, activeCountries: 0 });
+        setIsRealData(true);
+        setConnectionStatus('live');
+      }
     }
   }, []);
 
