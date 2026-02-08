@@ -13,4 +13,6 @@ pages_build_output_dir = "dist"
 [[kv_namespaces]]
 binding = "UMMAH_KV"
 id = "157b19cc21004f42933884ea1848ccf4"
-preview_id = "UMMAH_KV"
+# For local preview, create with: wrangler kv:namespace create "UMMAH_KV" --preview
+# Then replace this ID with the preview namespace ID
+preview_id = "157b19cc21004f42933884ea1848ccf4"

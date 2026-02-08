@@ -68,6 +68,164 @@ const LAYERS = {
   animals: { id: 'animals', name: 'Animals', icon: 'Heart', color: '#22C55E' },
 };
 
+// Prophet Timeline Data with detailed information
+const PROPHETS_TIMELINE = [
+  {
+    id: 'adam',
+    name: 'Adam',
+    nameAr: 'آدم',
+    periodStart: -4000,
+    periodEnd: -3000,
+    color: '#22C55E',
+    location: 'makkah',
+    coords: [21.4225, 39.8262],
+    story: 'First human and prophet, created by Allah. Built the first Kaaba.',
+    keyEvents: ['Creation from clay', 'Life in Paradise', 'Descended to Earth', 'Built the Kaaba'],
+    verses: ['2:30-37', '7:11-25', '20:115-123'],
+    icon: '🌍'
+  },
+  {
+    id: 'nuh',
+    name: 'Nuh (Noah)',
+    nameAr: 'نوح',
+    periodStart: -3000,
+    periodEnd: -2500,
+    color: '#3B82F6',
+    location: 'ark',
+    coords: [39.4, 44.2],
+    story: 'Preached for 950 years. Built the Ark to save believers from the great flood.',
+    keyEvents: ['950 years of preaching', 'Building the Ark', 'The Great Flood', 'Ark landed on Mt. Judi'],
+    verses: ['11:25-48', '71:1-28', '23:23-30'],
+    icon: '🚢'
+  },
+  {
+    id: 'ibrahim',
+    name: 'Ibrahim (Abraham)',
+    nameAr: 'إبراهيم',
+    periodStart: -2000,
+    periodEnd: -1850,
+    color: '#F59E0B',
+    location: 'makkah',
+    coords: [21.4225, 39.8262],
+    story: 'Father of prophets. Rebuilt the Kaaba with Ismail. Tested with the sacrifice.',
+    keyEvents: ['Destroyed idols', 'Survived the fire', 'Rebuilt the Kaaba', 'Sacrifice of Ismail'],
+    verses: ['2:124-132', '14:35-41', '37:99-113'],
+    icon: '🔥'
+  },
+  {
+    id: 'ismail',
+    name: 'Ismail (Ishmael)',
+    nameAr: 'إسماعيل',
+    periodStart: -1900,
+    periodEnd: -1800,
+    color: '#EC4899',
+    location: 'makkah',
+    coords: [21.4225, 39.8262],
+    story: 'Son of Ibrahim. Helped build the Kaaba. Father of Arab lineage to Prophet Muhammad ﷺ.',
+    keyEvents: ['Left in Makkah as infant', 'Zamzam miracle', 'Built Kaaba with Ibrahim', 'Ancestor of Muhammad ﷺ'],
+    verses: ['2:125-127', '37:102-107', '19:54-55'],
+    icon: '💧'
+  },
+  {
+    id: 'yaqub',
+    name: 'Yaqub (Jacob)',
+    nameAr: 'يعقوب',
+    periodStart: -1800,
+    periodEnd: -1700,
+    color: '#8B5CF6',
+    location: 'canaan',
+    coords: [31.5, 35.2],
+    story: 'Son of Ishaq. Father of 12 sons including Yusuf. Also known as Israel.',
+    keyEvents: ['Father of 12 tribes', 'Grief for Yusuf', 'Reunion in Egypt', 'Named Israel'],
+    verses: ['12:4-18', '12:84-100'],
+    icon: '👨‍👦‍👦'
+  },
+  {
+    id: 'yusuf',
+    name: 'Yusuf (Joseph)',
+    nameAr: 'يوسف',
+    periodStart: -1700,
+    periodEnd: -1600,
+    color: '#06B6D4',
+    location: 'egypt',
+    coords: [30.0444, 31.2357],
+    story: 'Known for his beauty and dream interpretation. Rose from slave to minister of Egypt.',
+    keyEvents: ['Thrown in well', 'Sold as slave', 'Prison and dreams', 'Minister of Egypt'],
+    verses: ['12:1-111'],
+    icon: '⭐'
+  },
+  {
+    id: 'musa',
+    name: 'Musa (Moses)',
+    nameAr: 'موسى',
+    periodStart: -1400,
+    periodEnd: -1280,
+    color: '#DC2626',
+    location: 'sinai',
+    coords: [28.5456, 33.9756],
+    story: 'Spoke directly to Allah. Led Bani Israel out of Egypt. Received the Torah.',
+    keyEvents: ['Basket in Nile', 'Burning bush', 'Parting the sea', 'Mount Sinai revelation'],
+    verses: ['20:9-98', '28:3-43', '7:103-162'],
+    icon: '📜'
+  },
+  {
+    id: 'dawud',
+    name: 'Dawud (David)',
+    nameAr: 'داود',
+    periodStart: -1040,
+    periodEnd: -970,
+    color: '#10B981',
+    location: 'jerusalem',
+    coords: [31.7683, 35.2137],
+    story: 'King and prophet. Defeated Jalut (Goliath). Given the Zabur (Psalms). Beautiful voice.',
+    keyEvents: ['Defeated Goliath', 'King of Israel', 'Given Zabur', 'Iron made soft for him'],
+    verses: ['2:251', '21:78-80', '34:10-11'],
+    icon: '🎵'
+  },
+  {
+    id: 'sulayman',
+    name: 'Sulayman (Solomon)',
+    nameAr: 'سليمان',
+    periodStart: -970,
+    periodEnd: -931,
+    color: '#F472B6',
+    location: 'jerusalem',
+    coords: [31.7683, 35.2137],
+    story: 'Son of Dawud. Commanded jinn, wind, and animals. Built magnificent temple.',
+    keyEvents: ['Understood animals', 'Commanded jinn', 'Queen of Sheba visit', 'Built the temple'],
+    verses: ['27:15-44', '21:81-82', '34:12-14'],
+    icon: '👑'
+  },
+  {
+    id: 'isa',
+    name: 'Isa (Jesus)',
+    nameAr: 'عيسى',
+    periodStart: 1,
+    periodEnd: 33,
+    color: '#A855F7',
+    location: 'jerusalem',
+    coords: [31.7683, 35.2137],
+    story: 'Born miraculously to Maryam. Given the Injeel. Performed miracles. Raised to heaven.',
+    keyEvents: ['Miraculous birth', 'Spoke in cradle', 'Healed the sick', 'Raised to heaven'],
+    verses: ['3:45-55', '5:110-118', '19:16-35'],
+    icon: '✨'
+  },
+  {
+    id: 'muhammad',
+    name: 'Muhammad ﷺ',
+    nameAr: 'محمد ﷺ',
+    periodStart: 570,
+    periodEnd: 632,
+    color: '#10B981',
+    location: 'makkah',
+    coords: [21.4225, 39.8262],
+    story: 'Final Prophet and Messenger. Received the Quran. Established Islam.',
+    keyEvents: ['First revelation', 'Isra & Miraj', 'Hijra to Madinah', 'Conquest of Makkah'],
+    verses: ['33:40', '48:29', '3:144'],
+    icon: '🌙'
+  }
+];
+
 // Custom marker icons with animations
 const createMarkerIcon = (color, size = 28, isSelected = false, iconType = 'default') => {
   const iconHtml = iconType === 'mosque'
@@ -264,60 +422,439 @@ const LayerToggle = memo(({ layer, isActive, onClick, count }) => {
   );
 });
 
-// Timeline Slider with enhanced UI
-const TimelineSlider = memo(({ value, onChange, events }) => {
-  const minYear = -4000;
-  const maxYear = 700;
-  const currentEvent = events.filter(e => e.year <= value).pop();
+// 3D Globe Component using CSS 3D transforms
+const Globe3D = memo(({ locations, onMarkerClick, selectedItem, activeProphet }) => {
+  const [rotation, setRotation] = useState({ x: 23, y: 0 });
+  const [isDragging, setIsDragging] = useState(false);
+  const [autoRotate, setAutoRotate] = useState(true);
+  const lastPosition = useRef({ x: 0, y: 0 });
+  const globeRef = useRef(null);
+
+  // Auto-rotate
+  useEffect(() => {
+    if (!autoRotate || isDragging) return;
+    const interval = setInterval(() => {
+      setRotation(prev => ({ ...prev, y: (prev.y + 0.3) % 360 }));
+    }, 50);
+    return () => clearInterval(interval);
+  }, [autoRotate, isDragging]);
+
+  // Convert lat/lng to 3D position on globe
+  const latLngTo3D = (lat, lng, radius = 160) => {
+    const phi = (90 - lat) * (Math.PI / 180);
+    const theta = (lng + 180) * (Math.PI / 180);
+    const x = -(radius * Math.sin(phi) * Math.cos(theta));
+    const z = radius * Math.sin(phi) * Math.sin(theta);
+    const y = radius * Math.cos(phi);
+    return { x, y, z };
+  };
+
+  // Check if point is visible (front of globe)
+  const isVisible = (lat, lng) => {
+    const { z } = latLngTo3D(lat, lng);
+    const rotatedZ = z * Math.cos(rotation.y * Math.PI / 180) -
+                     latLngTo3D(lat, lng).x * Math.sin(rotation.y * Math.PI / 180);
+    return rotatedZ > -20;
+  };
+
+  const handleMouseDown = (e) => {
+    setIsDragging(true);
+    setAutoRotate(false);
+    lastPosition.current = { x: e.clientX, y: e.clientY };
+  };
+
+  const handleMouseMove = (e) => {
+    if (!isDragging) return;
+    const deltaX = e.clientX - lastPosition.current.x;
+    const deltaY = e.clientY - lastPosition.current.y;
+    setRotation(prev => ({
+      x: Math.max(-60, Math.min(60, prev.x + deltaY * 0.3)),
+      y: prev.y + deltaX * 0.5
+    }));
+    lastPosition.current = { x: e.clientX, y: e.clientY };
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  // Touch handlers
+  const handleTouchStart = (e) => {
+    setIsDragging(true);
+    setAutoRotate(false);
+    const touch = e.touches[0];
+    lastPosition.current = { x: touch.clientX, y: touch.clientY };
+  };
+
+  const handleTouchMove = (e) => {
+    if (!isDragging) return;
+    const touch = e.touches[0];
+    const deltaX = touch.clientX - lastPosition.current.x;
+    const deltaY = touch.clientY - lastPosition.current.y;
+    setRotation(prev => ({
+      x: Math.max(-60, Math.min(60, prev.x + deltaY * 0.3)),
+      y: prev.y + deltaX * 0.5
+    }));
+    lastPosition.current = { x: touch.clientX, y: touch.clientY };
+  };
+
+  // Fly to location
+  const flyToLocation = (coords) => {
+    const targetY = -coords[1];
+    setAutoRotate(false);
+    setRotation({ x: coords[0] * 0.3, y: targetY });
+  };
+
+  // Fly to active prophet
+  useEffect(() => {
+    if (activeProphet) {
+      flyToLocation(activeProphet.coords);
+    }
+  }, [activeProphet]);
 
   return (
-    <div className="absolute bottom-4 left-4 right-4 z-[1000] max-w-2xl mx-auto">
-      <div className="bg-black/90 backdrop-blur-md rounded-2xl p-4 border border-white/20 shadow-xl">
-        <div className="flex items-center justify-between mb-3">
-          <span className="text-white/60 text-xs uppercase tracking-wider">Timeline</span>
-          <span className="text-amber-400 text-lg font-bold">
-            {value < 0 ? `${Math.abs(value)} BCE` : `${value} CE`}
-          </span>
-        </div>
-
-        {/* Timeline markers */}
-        <div className="relative h-2 mb-3">
-          <input
-            type="range"
-            min={minYear}
-            max={maxYear}
-            value={value}
-            onChange={(e) => onChange(parseInt(e.target.value))}
-            className="w-full h-2 bg-white/10 rounded-full appearance-none cursor-pointer
-              [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:h-5
-              [&::-webkit-slider-thumb]:bg-amber-400 [&::-webkit-slider-thumb]:rounded-full
-              [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:shadow-lg"
+    <div className="w-full h-full flex items-center justify-center bg-gradient-to-b from-gray-900 via-slate-900 to-black overflow-hidden">
+      {/* Stars background */}
+      <div className="absolute inset-0 overflow-hidden">
+        {[...Array(100)].map((_, i) => (
+          <div
+            key={i}
+            className="absolute w-1 h-1 bg-white rounded-full animate-pulse"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              opacity: Math.random() * 0.7 + 0.3,
+              animationDelay: `${Math.random() * 3}s`,
+              animationDuration: `${2 + Math.random() * 2}s`
+            }}
           />
-          {/* Event dots */}
-          {events.filter(e => e.year >= minYear && e.year <= maxYear).map((event, i) => (
+        ))}
+      </div>
+
+      {/* Globe container */}
+      <div
+        ref={globeRef}
+        className="relative cursor-grab active:cursor-grabbing select-none"
+        style={{ perspective: '1000px' }}
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+        onMouseLeave={handleMouseUp}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleMouseUp}
+      >
+        {/* Globe sphere */}
+        <div
+          className="relative transition-transform duration-75"
+          style={{
+            width: '320px',
+            height: '320px',
+            transformStyle: 'preserve-3d',
+            transform: `rotateX(${rotation.x}deg) rotateY(${rotation.y}deg)`,
+          }}
+        >
+          {/* Globe surface with gradient */}
+          <div
+            className="absolute inset-0 rounded-full"
+            style={{
+              background: 'radial-gradient(circle at 30% 30%, #1e40af 0%, #1e3a5f 30%, #0f172a 70%, #020617 100%)',
+              boxShadow: `
+                inset -30px -30px 60px rgba(0,0,0,0.8),
+                inset 20px 20px 40px rgba(59,130,246,0.2),
+                0 0 60px rgba(59,130,246,0.3),
+                0 0 120px rgba(59,130,246,0.1)
+              `,
+            }}
+          />
+
+          {/* Continent outlines (simplified) */}
+          <div
+            className="absolute inset-0 rounded-full overflow-hidden"
+            style={{
+              background: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath fill='%23047857' opacity='0.3' d='M20,30 Q30,25 35,35 T40,45 Q35,50 25,48 T20,30'/%3E%3Cpath fill='%23047857' opacity='0.3' d='M55,20 Q65,15 75,25 T80,40 Q75,50 60,45 T55,20'/%3E%3Cpath fill='%23047857' opacity='0.3' d='M45,55 Q55,50 60,60 T55,75 Q45,80 40,70 T45,55'/%3E%3C/svg%3E")`,
+              backgroundSize: 'cover',
+            }}
+          />
+
+          {/* Grid lines */}
+          {[...Array(6)].map((_, i) => (
             <div
-              key={i}
-              className="absolute w-2 h-2 rounded-full -translate-x-1/2 top-0"
+              key={`lat-${i}`}
+              className="absolute rounded-full border border-cyan-500/10"
               style={{
-                left: `${((event.year - minYear) / (maxYear - minYear)) * 100}%`,
-                backgroundColor: event.year <= value ? '#F59E0B' : '#374151',
+                width: `${320 - i * 40}px`,
+                height: `${320 - i * 40}px`,
+                left: `${i * 20}px`,
+                top: `${i * 20}px`,
               }}
-              title={event.label}
             />
           ))}
-        </div>
 
-        {currentEvent && (
-          <div className="flex items-center gap-3 p-2 rounded-lg bg-white/5">
-            <div className="w-8 h-8 rounded-lg bg-amber-500/20 flex items-center justify-center">
-              <Icons.Clock className="w-4 h-4 text-amber-400" />
+          {/* Location markers */}
+          {locations.map(loc => {
+            const { x, y, z } = latLngTo3D(loc.coords[0], loc.coords[1], 162);
+            const visible = isVisible(loc.coords[0], loc.coords[1]);
+            const isActive = activeProphet?.id === loc.prophets?.[0]?.toLowerCase();
+            const isSelected = selectedItem?.id === loc.id;
+
+            return (
+              <div
+                key={loc.id}
+                className={`absolute transition-all duration-300 cursor-pointer ${visible ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+                style={{
+                  left: '50%',
+                  top: '50%',
+                  transform: `translate3d(${x}px, ${-y}px, ${z}px) translate(-50%, -50%)`,
+                  zIndex: z > 0 ? 10 : 1,
+                }}
+                onClick={() => onMarkerClick(loc, 'location')}
+              >
+                <div
+                  className={`relative ${isActive || isSelected ? 'scale-150' : ''} transition-transform`}
+                  style={{
+                    width: '12px',
+                    height: '12px',
+                    background: loc.color || '#F59E0B',
+                    borderRadius: '50%',
+                    boxShadow: `0 0 ${isActive ? '20px' : '8px'} ${loc.color || '#F59E0B'}`,
+                    border: '2px solid white',
+                  }}
+                />
+                {(isActive || isSelected) && (
+                  <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 whitespace-nowrap text-[10px] text-white font-bold bg-black/70 px-2 py-0.5 rounded">
+                    {loc.name}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+
+          {/* Kaaba marker - always prominent */}
+          <div
+            className="absolute transition-all duration-300"
+            style={{
+              left: '50%',
+              top: '50%',
+              transform: `translate3d(${latLngTo3D(21.4225, 39.8262, 165).x}px, ${-latLngTo3D(21.4225, 39.8262, 165).y}px, ${latLngTo3D(21.4225, 39.8262, 165).z}px) translate(-50%, -50%)`,
+              zIndex: 100,
+              opacity: isVisible(21.4225, 39.8262) ? 1 : 0,
+            }}
+          >
+            <div className="relative animate-pulse">
+              <div className="w-4 h-4 bg-amber-400 rounded-sm flex items-center justify-center text-[10px] shadow-lg shadow-amber-400/50">
+                🕋
+              </div>
             </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Controls */}
+      <div className="absolute bottom-4 right-4 flex flex-col gap-2">
+        <button
+          onClick={() => setAutoRotate(!autoRotate)}
+          className={`p-2 rounded-lg backdrop-blur-sm transition-all ${autoRotate ? 'bg-amber-500/30 text-amber-400' : 'bg-white/10 text-white/60'}`}
+          title={autoRotate ? 'Stop rotation' : 'Auto rotate'}
+        >
+          <Icons.Refresh className="w-4 h-4" />
+        </button>
+        <button
+          onClick={() => setRotation({ x: 23, y: 0 })}
+          className="p-2 rounded-lg bg-white/10 text-white/60 hover:bg-white/20 backdrop-blur-sm"
+          title="Reset view"
+        >
+          <Icons.Globe3D className="w-4 h-4" />
+        </button>
+      </div>
+
+      {/* Active prophet indicator */}
+      {activeProphet && (
+        <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-black/80 backdrop-blur-md px-4 py-2 rounded-xl border border-white/20">
+          <div className="flex items-center gap-3">
+            <span className="text-2xl">{activeProphet.icon}</span>
             <div>
-              <div className="text-white font-medium text-sm">{currentEvent.label}</div>
-              <div className="text-white/50 text-xs capitalize">{currentEvent.type}</div>
+              <div className="text-white font-bold">{activeProphet.name}</div>
+              <div className="text-white/50 text-xs">{activeProphet.nameAr}</div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Instructions */}
+      <div className="absolute bottom-4 left-4 text-white/40 text-xs">
+        Drag to rotate • Click markers for details
+      </div>
+    </div>
+  );
+});
+
+// Enhanced Timeline Slider with Prophet Details
+const TimelineSlider = memo(({ value, onChange, events, prophets = [], onProphetClick, onFlyToLocation }) => {
+  const minYear = -4000;
+  const maxYear = 700;
+  const currentEvent = (events || []).filter(e => e.year <= value).pop();
+
+  // Find active prophet(s) for current year
+  const activeProphets = (prophets || []).filter(p => value >= p.periodStart && value <= p.periodEnd);
+  const mainProphet = activeProphets[activeProphets.length - 1]; // Most recent one
+
+  return (
+    <div className="absolute bottom-4 left-4 right-4 z-[1000] max-w-3xl mx-auto">
+      <div className="bg-black/95 backdrop-blur-md rounded-2xl border border-white/20 shadow-2xl overflow-hidden">
+        {/* Prophet Card - Shows when a prophet is active */}
+        {mainProphet && (
+          <div
+            className="p-4 border-b border-white/10 cursor-pointer hover:bg-white/5 transition-colors"
+            onClick={() => onFlyToLocation(mainProphet.coords)}
+            style={{ borderLeft: `4px solid ${mainProphet.color}` }}
+          >
+            <div className="flex items-start gap-4">
+              {/* Prophet Icon */}
+              <div
+                className="w-14 h-14 rounded-xl flex items-center justify-center text-2xl flex-shrink-0"
+                style={{ backgroundColor: `${mainProphet.color}20` }}
+              >
+                {mainProphet.icon}
+              </div>
+
+              {/* Prophet Info */}
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 mb-1">
+                  <h3 className="text-white font-bold text-lg">{mainProphet.name}</h3>
+                  <span className="text-white/40 text-sm" dir="rtl">{mainProphet.nameAr}</span>
+                </div>
+                <p className="text-white/60 text-sm mb-2 line-clamp-2">{mainProphet.story}</p>
+
+                {/* Key Events */}
+                <div className="flex flex-wrap gap-1 mb-2">
+                  {mainProphet.keyEvents.slice(0, 3).map((event, i) => (
+                    <span
+                      key={i}
+                      className="px-2 py-0.5 rounded-full text-[10px] text-white/80"
+                      style={{ backgroundColor: `${mainProphet.color}30` }}
+                    >
+                      {event}
+                    </span>
+                  ))}
+                </div>
+
+                {/* Verses */}
+                <div className="flex items-center gap-2">
+                  <span className="text-white/40 text-xs">Verses:</span>
+                  {mainProphet.verses.slice(0, 2).map((v, i) => (
+                    <button
+                      key={i}
+                      onClick={(e) => { e.stopPropagation(); onProphetClick(mainProphet, v); }}
+                      className="px-2 py-0.5 rounded bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-400 text-xs transition-colors"
+                    >
+                      {v}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Period Badge */}
+              <div className="text-right flex-shrink-0">
+                <div className="text-white/40 text-xs uppercase">Period</div>
+                <div className="text-white text-sm font-mono">
+                  {mainProphet.periodStart < 0 ? `${Math.abs(mainProphet.periodStart)} BCE` : `${mainProphet.periodStart} CE`}
+                </div>
+                <div className="text-white/30 text-xs">to</div>
+                <div className="text-white text-sm font-mono">
+                  {mainProphet.periodEnd < 0 ? `${Math.abs(mainProphet.periodEnd)} BCE` : `${mainProphet.periodEnd} CE`}
+                </div>
+              </div>
             </div>
           </div>
         )}
+
+        {/* Timeline Slider */}
+        <div className="p-4">
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-2">
+              <Icons.Clock className="w-4 h-4 text-amber-400" />
+              <span className="text-white/60 text-xs uppercase tracking-wider">Timeline</span>
+            </div>
+            <span className="text-amber-400 text-xl font-bold font-mono">
+              {value < 0 ? `${Math.abs(value)} BCE` : `${value} CE`}
+            </span>
+          </div>
+
+          {/* Slider with Prophet Markers */}
+          <div className="relative h-8 mb-2">
+            {/* Prophet period backgrounds */}
+            {prophets.map(prophet => {
+              const startPercent = ((prophet.periodStart - minYear) / (maxYear - minYear)) * 100;
+              const endPercent = ((prophet.periodEnd - minYear) / (maxYear - minYear)) * 100;
+              const isActive = value >= prophet.periodStart && value <= prophet.periodEnd;
+              return (
+                <div
+                  key={prophet.id}
+                  className="absolute h-6 top-1 rounded transition-opacity cursor-pointer"
+                  style={{
+                    left: `${Math.max(0, startPercent)}%`,
+                    width: `${Math.min(100 - startPercent, endPercent - startPercent)}%`,
+                    backgroundColor: `${prophet.color}${isActive ? '50' : '20'}`,
+                    borderBottom: isActive ? `2px solid ${prophet.color}` : 'none',
+                  }}
+                  title={prophet.name}
+                  onClick={() => onChange(prophet.periodStart + Math.floor((prophet.periodEnd - prophet.periodStart) / 2))}
+                />
+              );
+            })}
+
+            {/* Slider input */}
+            <input
+              type="range"
+              min={minYear}
+              max={maxYear}
+              value={value}
+              onChange={(e) => onChange(parseInt(e.target.value))}
+              className="absolute w-full h-8 top-0 opacity-0 cursor-pointer z-10"
+            />
+
+            {/* Custom thumb */}
+            <div
+              className="absolute top-1/2 -translate-y-1/2 pointer-events-none"
+              style={{
+                left: `calc(${((value - minYear) / (maxYear - minYear)) * 100}% - 10px)`,
+              }}
+            >
+              <div className="w-5 h-5 bg-amber-400 rounded-full shadow-lg shadow-amber-400/50 border-2 border-white" />
+            </div>
+          </div>
+
+          {/* Era Labels */}
+          <div className="flex justify-between text-[10px] text-white/30">
+            <span>4000 BCE</span>
+            <span>2000 BCE</span>
+            <span>1 CE</span>
+            <span>700 CE</span>
+          </div>
+        </div>
+
+        {/* Prophet Quick Select */}
+        <div className="px-4 pb-3 border-t border-white/10 pt-3">
+          <div className="flex items-center gap-2 overflow-x-auto hide-scrollbar">
+            {prophets.map(prophet => {
+              const isActive = value >= prophet.periodStart && value <= prophet.periodEnd;
+              return (
+                <button
+                  key={prophet.id}
+                  onClick={() => onChange(prophet.periodStart + Math.floor((prophet.periodEnd - prophet.periodStart) / 2))}
+                  className={`flex items-center gap-1.5 px-2 py-1 rounded-lg text-xs whitespace-nowrap transition-all flex-shrink-0 ${
+                    isActive ? 'bg-white/20 text-white' : 'text-white/40 hover:text-white hover:bg-white/10'
+                  }`}
+                  style={isActive ? { borderBottom: `2px solid ${prophet.color}` } : {}}
+                >
+                  <span>{prophet.icon}</span>
+                  <span>{prophet.name.split(' ')[0]}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -582,7 +1119,13 @@ const PropheticMap = memo(function PropheticMap({ isVisible, onClose, onNavigate
   const [userLocation, setUserLocation] = useState(null);
   const [isLocating, setIsLocating] = useState(false);
   const [showQibla, setShowQibla] = useState(false);
+  const [viewMode, setViewMode] = useState('map'); // 'map' or 'globe'
   const mapRef = useRef(null);
+
+  // Get active prophet for current timeline year
+  const activeProphet = useMemo(() => {
+    return PROPHETS_TIMELINE.filter(p => timelineYear >= p.periodStart && timelineYear <= p.periodEnd).pop();
+  }, [timelineYear]);
 
   // Get all data
   const locations = useMemo(() => getAllLocations(), []);
@@ -634,6 +1177,21 @@ const PropheticMap = memo(function PropheticMap({ isVisible, onClose, onNavigate
 
   const qiblaAngle = userLocation ? calculateQibla(userLocation.lat, userLocation.lng) : null;
   const distanceKm = userLocation ? distanceToMakkah(userLocation.lat, userLocation.lng) : null;
+
+  // Handle prophet verse click from timeline
+  const handleProphetVerseClick = useCallback((prophet, verseRef) => {
+    const [surah, ayah] = verseRef.split(':');
+    onNavigateToVerse(parseInt(surah), parseInt(ayah?.split('-')[0] || 1));
+    onClose();
+  }, [onNavigateToVerse, onClose]);
+
+  // Fly to location from timeline
+  const handleFlyToLocation = useCallback((coords) => {
+    if (viewMode === 'map' && mapRef.current) {
+      mapRef.current.flyTo(coords, 8, { duration: 1 });
+    }
+    // Globe handles this internally via activeProphet
+  }, [viewMode]);
 
   // Get journey coordinates
   const getJourneyCoords = (journey) => {
@@ -697,22 +1255,47 @@ const PropheticMap = memo(function PropheticMap({ isVisible, onClose, onNavigate
 
             {/* Right Controls */}
             <div className="flex items-center gap-1">
+              {/* Globe/Map Toggle */}
+              <div className="flex items-center bg-white/10 rounded-lg p-0.5 mr-1">
+                <button
+                  onClick={() => setViewMode('map')}
+                  className={`px-2 py-1 rounded text-xs flex items-center gap-1 transition-all ${
+                    viewMode === 'map' ? 'bg-amber-500 text-black' : 'text-white/60 hover:text-white'
+                  }`}
+                  title="Flat Map"
+                >
+                  <Icons.Map className="w-3 h-3" />
+                  <span className="hidden sm:inline">Map</span>
+                </button>
+                <button
+                  onClick={() => setViewMode('globe')}
+                  className={`px-2 py-1 rounded text-xs flex items-center gap-1 transition-all ${
+                    viewMode === 'globe' ? 'bg-amber-500 text-black' : 'text-white/60 hover:text-white'
+                  }`}
+                  title="3D Globe"
+                >
+                  <Icons.Globe3D className="w-3 h-3" />
+                  <span className="hidden sm:inline">Globe</span>
+                </button>
+              </div>
               <button
                 onClick={() => setShowTimeline(!showTimeline)}
                 className={`p-2 rounded-lg transition-all ${showTimeline ? 'bg-amber-500/20 text-amber-400' : 'text-white/50 hover:text-white'}`}
-                title="Timeline"
+                title="Interactive Timeline"
               >
                 <Icons.Clock className="w-4 h-4" />
               </button>
-              <select
-                value={mapStyle}
-                onChange={(e) => setMapStyle(e.target.value)}
-                className="bg-white/10 text-white text-xs rounded-lg px-2 py-1.5 border border-white/20"
-              >
-                {Object.entries(MAP_STYLES).map(([key, style]) => (
-                  <option key={key} value={key} className="bg-gray-900">{style.name}</option>
-                ))}
-              </select>
+              {viewMode === 'map' && (
+                <select
+                  value={mapStyle}
+                  onChange={(e) => setMapStyle(e.target.value)}
+                  className="bg-white/10 text-white text-xs rounded-lg px-2 py-1.5 border border-white/20"
+                >
+                  {Object.entries(MAP_STYLES).map(([key, style]) => (
+                    <option key={key} value={key} className="bg-gray-900">{style.name}</option>
+                  ))}
+                </select>
+              )}
               <button onClick={onClose} className="p-2 rounded-lg hover:bg-white/10">
                 <Icons.X className="w-4 h-4 text-white/70" />
               </button>
@@ -720,8 +1303,16 @@ const PropheticMap = memo(function PropheticMap({ isVisible, onClose, onNavigate
           </div>
         </div>
 
-        {/* Map */}
+        {/* Map or Globe */}
         <div className="flex-1 relative">
+          {viewMode === 'globe' ? (
+            <Globe3D
+              locations={locations}
+              onMarkerClick={handleMarkerClick}
+              selectedItem={selectedItem}
+              activeProphet={showTimeline ? activeProphet : null}
+            />
+          ) : (
           <MapContainer
             center={defaultCenter}
             zoom={defaultZoom}
@@ -839,19 +1430,22 @@ const PropheticMap = memo(function PropheticMap({ isVisible, onClose, onNavigate
               />
             ))}
           </MapContainer>
+          )}
 
-          {/* Map Controls */}
-          <MapControls
-            onZoomIn={() => mapRef.current?.zoomIn()}
-            onZoomOut={() => mapRef.current?.zoomOut()}
-            onReset={() => mapRef.current?.setView(defaultCenter, defaultZoom)}
-            onLocateUser={handleLocateUser}
-            isLocating={isLocating}
-            coords={mouseCoords}
-          />
+          {/* Map Controls - only show in map mode */}
+          {viewMode === 'map' && (
+            <MapControls
+              onZoomIn={() => mapRef.current?.zoomIn()}
+              onZoomOut={() => mapRef.current?.zoomOut()}
+              onReset={() => mapRef.current?.setView(defaultCenter, defaultZoom)}
+              onLocateUser={handleLocateUser}
+              isLocating={isLocating}
+              coords={mouseCoords}
+            />
+          )}
 
-          {/* Journey Panel */}
-          {activeLayers.includes('journeys') && (
+          {/* Journey Panel - only show in map mode */}
+          {viewMode === 'map' && activeLayers.includes('journeys') && (
             <JourneyPanel
               journeys={journeys}
               activeJourney={activeJourney}
@@ -859,8 +1453,8 @@ const PropheticMap = memo(function PropheticMap({ isVisible, onClose, onNavigate
             />
           )}
 
-          {/* Qibla Compass */}
-          {showQibla && userLocation && qiblaAngle !== null && (
+          {/* Qibla Compass - only in map mode */}
+          {viewMode === 'map' && showQibla && userLocation && qiblaAngle !== null && (
             <QiblaCompass
               userLocation={userLocation}
               qiblaAngle={qiblaAngle}
@@ -874,6 +1468,9 @@ const PropheticMap = memo(function PropheticMap({ isVisible, onClose, onNavigate
               value={timelineYear}
               onChange={setTimelineYear}
               events={timelineEvents}
+              prophets={PROPHETS_TIMELINE}
+              onProphetClick={handleProphetVerseClick}
+              onFlyToLocation={handleFlyToLocation}
             />
           )}
 
