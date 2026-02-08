@@ -3,6 +3,12 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
+  build: {
+    // Target Safari 14+ and other modern browsers
+    target: ['es2020', 'safari14', 'chrome87', 'firefox78', 'edge88'],
+    // Ensure CSS is compatible
+    cssTarget: ['safari14', 'chrome87'],
+  },
   server: {
     proxy: {
       // Proxy TTS requests to Google Translate TTS in development

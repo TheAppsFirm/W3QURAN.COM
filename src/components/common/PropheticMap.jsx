@@ -535,7 +535,10 @@ const Globe3D = memo(({ locations, onMarkerClick, selectedItem, activeProphet })
       <div
         ref={globeRef}
         className="relative cursor-grab active:cursor-grabbing select-none"
-        style={{ perspective: '1000px' }}
+        style={{
+          perspective: '1000px',
+          WebkitPerspective: '1000px',
+        }}
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
@@ -551,6 +554,7 @@ const Globe3D = memo(({ locations, onMarkerClick, selectedItem, activeProphet })
             width: '320px',
             height: '320px',
             transformStyle: 'preserve-3d',
+            WebkitTransformStyle: 'preserve-3d',
             transform: `rotateX(${rotation.x}deg) rotateY(${rotation.y}deg)`,
           }}
         >
