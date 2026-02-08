@@ -4,6 +4,350 @@
  */
 
 // ============================================================================
+// SACRED MOSQUES - The Three Holy Mosques
+// ============================================================================
+
+export const SACRED_MOSQUES = {
+  masjidHaram: {
+    id: 'masjidHaram',
+    name: 'Masjid al-Haram',
+    nameAr: 'المسجد الحرام',
+    coords: [21.4225, 39.8262],
+    color: '#F59E0B',
+    icon: 'Mosque',
+    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Kaaba_at_night.jpg/1280px-Kaaba_at_night.jpg',
+    capacity: '4,000,000+',
+    builtYear: 'Ancient (Rebuilt multiple times)',
+    description: 'The holiest mosque in Islam, home to the Kaaba. All Muslims face this direction in prayer.',
+    facts: [
+      'Contains the Kaaba, built by Ibrahim and Ismail',
+      'Hajj pilgrimage destination for millions',
+      'Black Stone (Hajar al-Aswad) set in corner',
+      'Maqam Ibrahim marks where Ibrahim stood',
+      'Well of Zamzam located within the complex',
+    ],
+    verses: ['2:127', '3:96-97', '22:26'],
+    virtualTourUrl: 'https://www.youtube.com/watch?v=Kaaba_Tour',
+  },
+  masjidNabawi: {
+    id: 'masjidNabawi',
+    name: 'Masjid al-Nabawi',
+    nameAr: 'المسجد النبوي',
+    coords: [24.4672, 39.6111],
+    color: '#10B981',
+    icon: 'Mosque',
+    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Al-Masjid_AL-Nabawi_in_Madinah.jpg/1280px-Al-Masjid_AL-Nabawi_in_Madinah.jpg',
+    capacity: '1,000,000+',
+    builtYear: '622 CE',
+    description: 'The Prophet\'s Mosque in Madinah, second holiest site in Islam. Built by Prophet Muhammad ﷺ.',
+    facts: [
+      'Original mosque built by the Prophet himself',
+      'Contains the Rawdah (Garden of Paradise)',
+      'Prophet\'s tomb behind green dome',
+      'Abu Bakr and Umar buried alongside',
+      'Distinctive green dome added in 1837',
+    ],
+    verses: ['9:108', '62:9'],
+    virtualTourUrl: 'https://www.youtube.com/watch?v=Madinah_Tour',
+  },
+  masjidAqsa: {
+    id: 'masjidAqsa',
+    name: 'Masjid al-Aqsa',
+    nameAr: 'المسجد الأقصى',
+    coords: [31.7761, 35.2358],
+    color: '#3B82F6',
+    icon: 'Mosque',
+    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Jerusalem_Al-Aqsa_Mosque_BW_2010-09-21_06-38-12.JPG/1280px-Jerusalem_Al-Aqsa_Mosque_BW_2010-09-21_06-38-12.JPG',
+    capacity: '500,000+',
+    builtYear: 'Ancient (multiple reconstructions)',
+    description: 'The third holiest mosque in Islam, first Qibla, destination of Isra journey.',
+    facts: [
+      'Destination of the Night Journey (Isra)',
+      'First Qibla before Kaaba',
+      'Dome of the Rock nearby (not the mosque itself)',
+      'Built on Temple Mount / Haram al-Sharif',
+      'Prophet led all prophets in prayer here',
+    ],
+    verses: ['17:1', '2:142-145'],
+    virtualTourUrl: 'https://www.youtube.com/watch?v=AlAqsa_Tour',
+  },
+};
+
+// ============================================================================
+// REVELATION LOCATIONS - Where Surahs/Verses Were Revealed
+// ============================================================================
+
+export const REVELATION_LOCATIONS = {
+  caveHiraFirst: {
+    id: 'caveHiraFirst',
+    name: 'First Revelation - Cave Hira',
+    nameAr: 'أول وحي - غار حراء',
+    coords: [21.4575, 39.8583],
+    color: '#8B5CF6',
+    surah: 96,
+    surahName: 'Al-Alaq',
+    verses: '96:1-5',
+    year: '610 CE',
+    description: 'The first five verses of Surah Al-Alaq were the first revelation. Angel Jibreel commanded "Iqra" (Read).',
+    context: 'Prophet Muhammad ﷺ was meditating in the cave when Jibreel embraced him three times.',
+  },
+  musaFire: {
+    id: 'musaFire',
+    name: 'Burning Bush - Mount Sinai',
+    nameAr: 'النار - جبل الطور',
+    coords: [28.5392, 33.9750],
+    color: '#F59E0B',
+    surah: 20,
+    surahName: 'Ta-Ha',
+    verses: '20:9-14',
+    year: 'Ancient',
+    description: 'Musa saw a fire on the mountain and was called by Allah. He received his mission to confront Pharaoh.',
+    context: 'The Torah was also revealed here during 40 nights.',
+  },
+  madinaSurahs: {
+    id: 'madinaSurahs',
+    name: 'Madani Revelations',
+    nameAr: 'السور المدنية',
+    coords: [24.4672, 39.6111],
+    color: '#10B981',
+    surah: 2,
+    surahName: 'Al-Baqarah (and 27 other surahs)',
+    verses: 'Multiple',
+    year: '622-632 CE',
+    description: '28 surahs were revealed in Madinah, mostly dealing with law, society, and the Muslim community.',
+    context: 'Madani surahs are generally longer and address communal matters, inheritance, warfare, and treaties.',
+  },
+  badrRevelation: {
+    id: 'badrRevelation',
+    name: 'Surah Al-Anfal Revelation',
+    nameAr: 'نزول سورة الأنفال',
+    coords: [23.7833, 38.7833],
+    color: '#EF4444',
+    surah: 8,
+    surahName: 'Al-Anfal',
+    verses: '8:1-75',
+    year: '624 CE',
+    description: 'Revealed after the Battle of Badr, addressing war spoils and the miraculous victory.',
+    context: 'Also mentions the angels sent to help the Muslims.',
+  },
+  hudaybiyah: {
+    id: 'hudaybiyah',
+    name: 'Surah Al-Fath - Hudaybiyah',
+    nameAr: 'سورة الفتح - الحديبية',
+    coords: [21.4500, 39.6000],
+    color: '#06B6D4',
+    surah: 48,
+    surahName: 'Al-Fath',
+    verses: '48:1-29',
+    year: '628 CE',
+    description: 'Revealed on the return from Treaty of Hudaybiyah, calling it a "manifest victory".',
+    context: 'What seemed like a setback was declared a victory by Allah.',
+  },
+  arafat: {
+    id: 'arafat',
+    name: 'Completion of Islam - Arafat',
+    nameAr: 'إكمال الدين - عرفات',
+    coords: [21.3549, 39.9841],
+    color: '#EC4899',
+    surah: 5,
+    surahName: 'Al-Ma\'idah',
+    verses: '5:3',
+    year: '632 CE (Farewell Hajj)',
+    description: '"Today I have perfected your religion for you..." - revealed during the Farewell Pilgrimage.',
+    context: 'This verse made Umar cry, realizing the Prophet\'s mission was complete.',
+  },
+};
+
+// ============================================================================
+// WELL OF ZAMZAM & SPECIAL LOCATIONS
+// ============================================================================
+
+export const SPECIAL_LOCATIONS = {
+  zamzam: {
+    id: 'zamzam',
+    name: 'Well of Zamzam',
+    nameAr: 'بئر زمزم',
+    coords: [21.4225, 39.8264],
+    color: '#06B6D4',
+    icon: 'Droplet',
+    description: 'Miraculous well that gushed for Hajar and baby Ismail. Has never dried in 4000+ years.',
+    story: 'When Ibrahim left Hajar and Ismail in the barren valley, they ran out of water. Hajar ran between Safa and Marwa seven times searching. Angel Jibreel struck the ground and Zamzam gushed forth.',
+    facts: [
+      'Has been flowing for over 4000 years',
+      'Never been treated or chlorinated',
+      'Scientifically unique mineral composition',
+      'Fulfills thirst and provides nourishment',
+      'Running between Safa and Marwa commemorates Hajar',
+    ],
+    verses: ['14:37', '2:158'],
+    prophet: 'Ismail',
+  },
+  safaMarwa: {
+    id: 'safaMarwa',
+    name: 'Safa and Marwa',
+    nameAr: 'الصفا والمروة',
+    coords: [21.4235, 39.8270],
+    color: '#F59E0B',
+    icon: 'Mountain',
+    description: 'Two hills between which Hajar ran searching for water. Now part of Sa\'i ritual in Hajj/Umrah.',
+    story: 'Hajar climbed each hill to look for travelers or water sources, running back and forth seven times until Zamzam appeared.',
+    verses: ['2:158'],
+    prophet: 'Ismail',
+  },
+  mina: {
+    id: 'mina',
+    name: 'Mina - Place of Stoning',
+    nameAr: 'منى',
+    coords: [21.4133, 39.8933],
+    color: '#EF4444',
+    icon: 'Target',
+    description: 'Where pilgrims throw pebbles at the Jamarat, commemorating Ibrahim\'s rejection of Shaytan.',
+    story: 'Shaytan appeared to Ibrahim three times trying to dissuade him from sacrificing Ismail. Ibrahim threw stones at him each time.',
+    verses: ['37:102-107'],
+    prophet: 'Ibrahim',
+  },
+  muzdalifah: {
+    id: 'muzdalifah',
+    name: 'Muzdalifah',
+    nameAr: 'المزدلفة',
+    coords: [21.3833, 39.9167],
+    color: '#10B981',
+    icon: 'Moon',
+    description: 'Open area where pilgrims spend the night of Hajj after leaving Arafat.',
+    story: 'Pilgrims gather pebbles here and spend the night under the stars in remembrance.',
+    verses: ['2:198'],
+    prophet: 'Muhammad',
+  },
+};
+
+// ============================================================================
+// PROPHET GRAVES & TOMBS
+// ============================================================================
+
+export const PROPHET_GRAVES = {
+  muhammad: {
+    id: 'muhammad',
+    name: 'Prophet Muhammad ﷺ',
+    nameAr: 'قبر النبي محمد ﷺ',
+    coords: [24.4672, 39.6111],
+    color: '#10B981',
+    location: 'Masjid al-Nabawi, Madinah',
+    description: 'Buried in the room of Aisha (RA), now enclosed within the Prophet\'s Mosque under the Green Dome.',
+    companions: ['Abu Bakr as-Siddiq', 'Umar ibn al-Khattab'],
+    note: 'Visiting his grave and sending salutations is highly recommended.',
+  },
+  ibrahim: {
+    id: 'ibrahim',
+    name: 'Prophet Ibrahim (Abraham)',
+    nameAr: 'قبر إبراهيم عليه السلام',
+    coords: [31.5242, 35.1108],
+    color: '#F59E0B',
+    location: 'Cave of Machpelah, Hebron (Al-Khalil)',
+    description: 'Believed to be buried in Hebron along with Sarah, Ishaq, and Yaqub.',
+    companions: ['Sarah', 'Ishaq', 'Yaqub', 'Rifqa', 'Leah'],
+    note: 'Known as the "Friend of Allah" (Khalilullah).',
+  },
+  yusuf: {
+    id: 'yusuf',
+    name: 'Prophet Yusuf (Joseph)',
+    nameAr: 'قبر يوسف عليه السلام',
+    coords: [32.2136, 35.2847],
+    color: '#8B5CF6',
+    location: 'Nablus, Palestine (traditional site)',
+    description: 'According to tradition, Yusuf was buried in Egypt and later reburied in Palestine.',
+    companions: [],
+    note: 'Given half of all beauty.',
+  },
+  musa: {
+    id: 'musa',
+    name: 'Prophet Musa (Moses)',
+    nameAr: 'قبر موسى عليه السلام',
+    coords: [31.7625, 35.7311],
+    color: '#3B82F6',
+    location: 'Near Mount Nebo, Jordan (approximate)',
+    description: 'Exact location unknown. Tradition says he passed away near the Holy Land he longed to enter.',
+    companions: [],
+    note: 'Allah spoke to him directly (Kalimullah).',
+  },
+  hud: {
+    id: 'hud',
+    name: 'Prophet Hud',
+    nameAr: 'قبر هود عليه السلام',
+    coords: [15.9500, 48.8000],
+    color: '#DC2626',
+    location: 'Hadramaut, Yemen (traditional site)',
+    description: 'Believed to be in a valley in Hadramaut. A pilgrimage site visited by locals.',
+    companions: [],
+    note: 'Sent to the mighty people of \'Ad.',
+  },
+  salih: {
+    id: 'salih',
+    name: 'Prophet Salih',
+    nameAr: 'قبر صالح عليه السلام',
+    coords: [26.7867, 37.9533],
+    color: '#F97316',
+    location: 'Near Mada\'in Salih, Saudi Arabia',
+    description: 'Traditional site near the ruins of Thamud. Exact location uncertain.',
+    companions: [],
+    note: 'Sent to Thamud with the miraculous she-camel.',
+  },
+  adam: {
+    id: 'adam',
+    name: 'Prophet Adam',
+    nameAr: 'قبر آدم عليه السلام',
+    coords: [7.9519, 80.7514],
+    color: '#6B7280',
+    location: 'Adam\'s Peak, Sri Lanka (one tradition) or Makkah',
+    description: 'Multiple traditions exist. Some say Makkah, others say Sri Lanka where there\'s a footprint.',
+    companions: ['Hawwa (Eve)'],
+    note: 'The first human and first prophet.',
+  },
+};
+
+// ============================================================================
+// CAVES OF THE QURAN
+// ============================================================================
+
+export const QURANIC_CAVES = {
+  hira: {
+    id: 'hira',
+    name: 'Cave of Hira (Ghar Hira)',
+    nameAr: 'غار حراء',
+    coords: [21.4575, 39.8583],
+    color: '#8B5CF6',
+    mountain: 'Jabal al-Nour (Mountain of Light)',
+    description: 'Where Prophet Muhammad ﷺ received the first revelation. He would spend nights in contemplation.',
+    events: ['First Revelation', 'Angel Jibreel\'s first appearance', 'Beginning of Prophethood'],
+    verses: ['96:1-5'],
+    climbTime: '1-2 hours',
+  },
+  thawr: {
+    id: 'thawr',
+    name: 'Cave of Thawr (Ghar Thawr)',
+    nameAr: 'غار ثور',
+    coords: [21.3761, 39.8486],
+    color: '#06B6D4',
+    mountain: 'Jabal Thawr',
+    description: 'Where Prophet Muhammad ﷺ and Abu Bakr hid for three nights during the Hijra. A spider web and dove protected them.',
+    events: ['Hijra hiding', 'Spider web miracle', 'Dove nesting'],
+    verses: ['9:40'],
+    climbTime: '1.5-2 hours',
+  },
+  kahf: {
+    id: 'kahf',
+    name: 'Cave of the Sleepers (Ashab al-Kahf)',
+    nameAr: 'كهف أصحاب الكهف',
+    coords: [30.8000, 35.5000],
+    color: '#10B981',
+    mountain: 'Various traditions (Jordan, Turkey, others)',
+    description: 'Where the young believers fled persecution and slept for 309 years. Their dog guarded the entrance.',
+    events: ['Youth fled to cave', 'Slept for 309 years', 'Woke in different era'],
+    verses: ['18:9-26'],
+    note: 'Multiple sites claim to be the cave. Story more important than location.',
+  },
+};
+
+// ============================================================================
 // SACRED LOCATIONS
 // ============================================================================
 
@@ -932,6 +1276,13 @@ export const getAllAnimals = () => Object.values(QURANIC_ANIMALS);
 export const getAllTradeRoutes = () => Object.values(TRADE_ROUTES);
 export const getTimelineEvents = () => TIMELINE_EVENTS;
 
+// New helper functions
+export const getAllSacredMosques = () => Object.values(SACRED_MOSQUES);
+export const getAllRevelationLocations = () => Object.values(REVELATION_LOCATIONS);
+export const getAllSpecialLocations = () => Object.values(SPECIAL_LOCATIONS);
+export const getAllProphetGraves = () => Object.values(PROPHET_GRAVES);
+export const getAllQuranicCaves = () => Object.values(QURANIC_CAVES);
+
 // Qibla calculation from any point
 export const calculateQibla = (lat, lng) => {
   const kaabaLat = 21.4225 * (Math.PI / 180);
@@ -973,6 +1324,11 @@ export default {
   TRADE_ROUTES,
   PROPHET_JOURNEYS,
   TIMELINE_EVENTS,
+  SACRED_MOSQUES,
+  REVELATION_LOCATIONS,
+  SPECIAL_LOCATIONS,
+  PROPHET_GRAVES,
+  QURANIC_CAVES,
   getAllLocations,
   getLocation,
   getLocationsByCategory,
@@ -984,6 +1340,11 @@ export default {
   getAllAnimals,
   getAllTradeRoutes,
   getTimelineEvents,
+  getAllSacredMosques,
+  getAllRevelationLocations,
+  getAllSpecialLocations,
+  getAllProphetGraves,
+  getAllQuranicCaves,
   calculateQibla,
   distanceToMakkah,
 };
