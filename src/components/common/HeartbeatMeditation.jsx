@@ -1,6 +1,6 @@
 /**
  * Quran Heartbeat Meditation
- * Guided meditation with breathing exercises, Quranic verses, and beautiful sounds
+ * Guided meditation with breathing exercises, Quranic verses, and beautiful dhikr audio
  */
 
 import { useState, useEffect, useRef, useCallback, memo, useMemo } from 'react';
@@ -13,37 +13,78 @@ import {
   getSessionDuration,
 } from '../../data/meditationSessions';
 
-// Beautiful Islamic meditation audio sources
-// Using dhikr and Allah's names only - no Quran recitation
-
-// Use browser TTS for dhikr (more reliable than external URLs)
-const speakDhikr = (text, lang = 'ar-SA') => {
-  if (!('speechSynthesis' in window)) return;
-
-  // Cancel any ongoing speech
-  window.speechSynthesis.cancel();
-
-  const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = lang;
-  utterance.rate = 0.7; // Slow, meditative pace
-  utterance.pitch = 0.9;
-  utterance.volume = 0.8;
-
-  window.speechSynthesis.speak(utterance);
+// Real Islamic dhikr audio from Archive.org (Omar Esa - Allah and His Beloved)
+const DHIKR_AUDIO_TRACKS = {
+  allah: {
+    url: 'https://archive.org/download/OmarEsa-AllahAndHisBeloved/12%20-%20Allahu.mp3',
+    arabic: 'الله',
+    transliteration: 'Allahu',
+    meaning: 'Allah',
+  },
+  yaAllah: {
+    url: 'https://archive.org/download/OmarEsa-AllahAndHisBeloved/15%20-%20Ya%20Allah.mp3',
+    arabic: 'يا الله',
+    transliteration: 'Ya Allah',
+    meaning: 'O Allah',
+  },
+  subhanAllah: {
+    url: 'https://archive.org/download/OmarEsa-AllahAndHisBeloved/14%20-%20Subhanallah.mp3',
+    arabic: 'سبحان الله',
+    transliteration: 'SubhanAllah',
+    meaning: 'Glory to Allah',
+  },
+  alhamdulillah: {
+    url: 'https://archive.org/download/OmarEsa-AllahAndHisBeloved/10%20-%20Alhamdulillah.mp3',
+    arabic: 'الحمد لله',
+    transliteration: 'Alhamdulillah',
+    meaning: 'All Praise to Allah',
+  },
+  allahuAkbar: {
+    url: 'https://archive.org/download/OmarEsa-AllahAndHisBeloved/07%20-%20Allahu%20Akbar.mp3',
+    arabic: 'الله أكبر',
+    transliteration: 'Allahu Akbar',
+    meaning: 'Allah is the Greatest',
+  },
+  dhikr: {
+    url: 'https://archive.org/download/OmarEsa-AllahAndHisBeloved/08%20-%20Dhikr.mp3',
+    arabic: 'ذكر الله',
+    transliteration: 'Dhikr',
+    meaning: 'Remembrance of Allah',
+  },
+  astagfirullah: {
+    url: 'https://archive.org/download/OmarEsa-AllahAndHisBeloved/03%20-%20Astagfirullah.mp3',
+    arabic: 'أستغفر الله',
+    transliteration: 'Astagfirullah',
+    meaning: 'I seek forgiveness from Allah',
+  },
+  subhanAllahWalhamdulillah: {
+    url: 'https://archive.org/download/SubhanallahWalhamdulillah/Subhanallah%20Walhamdulillah.mp3',
+    arabic: 'سبحان الله والحمد لله',
+    transliteration: 'SubhanAllah Walhamdulillah',
+    meaning: 'Glory and Praise to Allah',
+  },
 };
 
-// Local dhikr phrases for TTS (Arabic text for browser speech)
+// Dhikr tracks for different meditation types
+const MEDITATION_DHIKR = {
+  breathing: ['allah', 'yaAllah', 'dhikr'],
+  contemplation: ['subhanAllah', 'alhamdulillah', 'dhikr'],
+  names: ['allah', 'yaAllah', 'astagfirullah'],
+  sleep: ['subhanAllahWalhamdulillah', 'allah', 'yaAllah'],
+};
+
+// Local dhikr phrases for display
 const LOCAL_DHIKR_PHRASES = [
-  'الله', // Allah
-  'الله هو', // Allah Hu
-  'سبحان الله', // SubhanAllah
-  'الحمد لله', // Alhamdulillah
-  'الله أكبر', // Allahu Akbar
-  'لا إله إلا الله', // La ilaha illallah
+  { arabic: 'الله', transliteration: 'Allah', meaning: 'Allah' },
+  { arabic: 'سبحان الله', transliteration: 'SubhanAllah', meaning: 'Glory to Allah' },
+  { arabic: 'الحمد لله', transliteration: 'Alhamdulillah', meaning: 'All Praise to Allah' },
+  { arabic: 'الله أكبر', transliteration: 'Allahu Akbar', meaning: 'Allah is the Greatest' },
+  { arabic: 'لا إله إلا الله', transliteration: 'La ilaha illallah', meaning: 'There is no god but Allah' },
+  { arabic: 'يا الله', transliteration: 'Ya Allah', meaning: 'O Allah' },
 ];
 
 const MEDITATION_AUDIO = {
-  // Peaceful nature sounds for background (more reliable sources)
+  // Peaceful nature sounds for background
   ambient: [
     'https://assets.mixkit.co/active_storage/sfx/2432/2432-preview.mp3', // Gentle stream
     'https://assets.mixkit.co/active_storage/sfx/2514/2514-preview.mp3', // Forest ambience
@@ -264,7 +305,10 @@ const ActiveSession = memo(function ActiveSession({
   const timerRef = useRef(null);
   const startTimeRef = useRef(null);
   const ambientAudioRef = useRef(null);
+  const dhikrAudioRef = useRef(null);
+  const dhikrTrackIndex = useRef(0);
   const lastBreathingPhaseRef = useRef('inhale');
+  const [currentDhikrDisplay, setCurrentDhikrDisplay] = useState(null);
 
   // Stop all audio helper
   const stopAllAudio = useCallback(() => {
@@ -272,9 +316,9 @@ const ActiveSession = memo(function ActiveSession({
       ambientAudioRef.current.pause();
       ambientAudioRef.current = null;
     }
-    // Also cancel any ongoing TTS
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
+    if (dhikrAudioRef.current) {
+      dhikrAudioRef.current.pause();
+      dhikrAudioRef.current = null;
     }
   }, []);
 
@@ -311,24 +355,49 @@ const ActiveSession = memo(function ActiveSession({
     };
   }, [soundEnabled, stopAllAudio]);
 
-  // Play dhikr sound on count using browser TTS
+  // Play dhikr audio track
   const playDhikrSound = useCallback(() => {
     if (!soundEnabled) return;
 
-    // Use browser TTS to speak a dhikr phrase
-    // Cycle through phrases based on count
-    const phrase = LOCAL_DHIKR_PHRASES[dhikrCount % LOCAL_DHIKR_PHRASES.length];
-    speakDhikr(phrase);
-  }, [soundEnabled, dhikrCount]);
+    // Get current phase type for dhikr selection
+    const currentPhase = session.phases[currentPhaseIndex];
+    const phaseType = currentPhase?.type || 'breathing';
+    const dhikrKeys = MEDITATION_DHIKR[phaseType] || MEDITATION_DHIKR.breathing;
 
-  // Speak dhikr on exhale during breathing phases for immersive experience
+    // Cycle through available dhikr tracks
+    const trackKey = dhikrKeys[dhikrTrackIndex.current % dhikrKeys.length];
+    const track = DHIKR_AUDIO_TRACKS[trackKey];
+    dhikrTrackIndex.current++;
+
+    if (!track) return;
+
+    // Update display
+    setCurrentDhikrDisplay({
+      arabic: track.arabic,
+      transliteration: track.transliteration,
+      meaning: track.meaning,
+    });
+
+    // Stop any currently playing dhikr
+    if (dhikrAudioRef.current) {
+      dhikrAudioRef.current.pause();
+    }
+
+    // Play the dhikr track
+    dhikrAudioRef.current = new Audio(track.url);
+    dhikrAudioRef.current.volume = 0.6;
+    dhikrAudioRef.current.play().catch((err) => {
+      console.log('Dhikr audio failed:', err);
+    });
+  }, [soundEnabled, session, currentPhaseIndex]);
+
+  // Play dhikr on exhale during breathing phases
   useEffect(() => {
-    // Only speak when transitioning to exhale phase (not on initial render)
+    // Only play when transitioning to exhale phase (not on initial render)
     if (breathingPhase === 'exhale' && lastBreathingPhaseRef.current === 'hold' && soundEnabled) {
-      // Speak "Allah" or "Allah Hu" on exhale
-      const phrases = ['الله', 'الله هو'];
-      const phrase = phrases[Math.floor(Math.random() * phrases.length)];
-      speakDhikr(phrase);
+      // Update display with a random phrase
+      const displayPhrase = LOCAL_DHIKR_PHRASES[Math.floor(Math.random() * LOCAL_DHIKR_PHRASES.length)];
+      setCurrentDhikrDisplay(displayPhrase);
     }
     lastBreathingPhaseRef.current = breathingPhase;
   }, [breathingPhase, soundEnabled]);
@@ -338,14 +407,14 @@ const ActiveSession = memo(function ActiveSession({
     if (isPaused) {
       // Pause all audio
       if (ambientAudioRef.current) ambientAudioRef.current.pause();
-      // Cancel any ongoing TTS
-      if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
-      }
+      if (dhikrAudioRef.current) dhikrAudioRef.current.pause();
     } else {
-      // Resume only ambient
+      // Resume audio
       if (ambientAudioRef.current) {
         ambientAudioRef.current.play().catch(() => {});
+      }
+      if (dhikrAudioRef.current) {
+        dhikrAudioRef.current.play().catch(() => {});
       }
     }
   }, [isPaused]);
@@ -357,9 +426,9 @@ const ActiveSession = memo(function ActiveSession({
         ambientAudioRef.current.pause();
         ambientAudioRef.current = null;
       }
-      // Cancel any ongoing TTS
-      if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
+      if (dhikrAudioRef.current) {
+        dhikrAudioRef.current.pause();
+        dhikrAudioRef.current = null;
       }
     };
   }, []);
