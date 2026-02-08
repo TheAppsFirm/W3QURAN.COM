@@ -57,6 +57,13 @@ export const trackReadingActivity = async (surahId) => {
       }),
     });
 
+    // Check if response is JSON
+    const contentType = response.headers.get('content-type');
+    if (!contentType || !contentType.includes('application/json')) {
+      console.log('API not available (dev mode)');
+      return false;
+    }
+
     const data = await response.json();
     return data.success;
   } catch (error) {
@@ -429,6 +436,12 @@ const GlobalUmmahPulse = memo(function GlobalUmmahPulse({ isVisible, onClose }) 
     try {
       const response = await fetch('/api/ummah-pulse');
       if (!response.ok) throw new Error('API error');
+
+      // Check if response is JSON (not HTML fallback from dev server)
+      const contentType = response.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        throw new Error('Not JSON response - API not available');
+      }
 
       const data = await response.json();
 
