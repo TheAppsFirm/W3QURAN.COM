@@ -40,6 +40,17 @@ import {
   getAllTreatyLocations,
   getAllQuranicPlants,
   getAllIsraMirajJourney,
+  getAllQuranicMountains,
+  getAllQuranicWaters,
+  getAllBattleLocations,
+  getHijraRoute,
+  getQiblaHistory,
+  getQurayshRoutes,
+  getAllAngelAppearances,
+  getAllDuaLocations,
+  getAllSahabaGraves,
+  getAllWeatherEvents,
+  getAllArchaeologicalSites,
   calculateQibla,
   distanceToMakkah,
 } from '../../data/propheticLocations';
@@ -62,20 +73,37 @@ const MAP_STYLES = {
 
 // Enhanced layer configurations
 const LAYERS = {
+  // Core layers
   locations: { id: 'locations', name: 'Sites', icon: 'MapPin', color: '#F59E0B' },
   mosques: { id: 'mosques', name: 'Mosques', icon: 'Star', color: '#10B981' },
   revelations: { id: 'revelations', name: 'Revelations', icon: 'BookOpen', color: '#8B5CF6' },
   destroyed: { id: 'destroyed', name: 'Destroyed', icon: 'AlertCircle', color: '#DC2626' },
   miracles: { id: 'miracles', name: 'Miracles', icon: 'Sparkles', color: '#EC4899' },
-  graves: { id: 'graves', name: 'Graves', icon: 'Heart', color: '#6B7280' },
+  graves: { id: 'graves', name: 'Prophets', icon: 'Heart', color: '#6B7280' },
   caves: { id: 'caves', name: 'Caves', icon: 'Mountain', color: '#06B6D4' },
   journeys: { id: 'journeys', name: 'Journeys', icon: 'Route', color: '#F472B6' },
   animals: { id: 'animals', name: 'Animals', icon: 'Heart', color: '#22C55E' },
+  // Bani Israel & Islamic history
   baniIsrael: { id: 'baniIsrael', name: 'Bani Israel', icon: 'Users', color: '#3B82F6' },
+  battles: { id: 'battles', name: 'Battles', icon: 'Swords', color: '#EF4444' },
+  hijra: { id: 'hijra', name: 'Hijra', icon: 'Route', color: '#10B981' },
+  sahaba: { id: 'sahaba', name: 'Sahaba', icon: 'Users', color: '#8B5CF6' },
+  // Geographic features
+  mountains: { id: 'mountains', name: 'Mountains', icon: 'Mountain', color: '#92400E' },
+  waters: { id: 'waters', name: 'Waters', icon: 'Waves', color: '#0EA5E9' },
+  // Scientific & Natural
   science: { id: 'science', name: 'Science', icon: 'Lightbulb', color: '#0EA5E9' },
   plants: { id: 'plants', name: 'Plants', icon: 'Leaf', color: '#84CC16' },
+  weather: { id: 'weather', name: 'Weather', icon: 'Cloud', color: '#64748B' },
+  // Spiritual
+  angels: { id: 'angels', name: 'Angels', icon: 'Sparkles', color: '#FBBF24' },
+  duas: { id: 'duas', name: 'Duas', icon: 'Heart', color: '#F472B6' },
+  qibla: { id: 'qibla', name: 'Qibla', icon: 'Compass', color: '#F59E0B' },
+  // Routes & History
   treaties: { id: 'treaties', name: 'Treaties', icon: 'FileText', color: '#A855F7' },
   israMiraj: { id: 'israMiraj', name: 'Isra Miraj', icon: 'Moon', color: '#FCD34D' },
+  tradeRoutes: { id: 'tradeRoutes', name: 'Trade', icon: 'Route', color: '#F97316' },
+  archaeology: { id: 'archaeology', name: 'Ruins', icon: 'Building', color: '#B45309' },
 };
 
 // Prophet Timeline Data with detailed information including family (Islamic sources)
@@ -1715,6 +1743,290 @@ const DetailPanel = memo(({ item, type, onClose, onNavigateToVerse }) => {
             )}
           </>
         );
+      case 'mountain':
+        return (
+          <>
+            <p className="text-white/70 text-sm mb-3">{item.description}</p>
+            {item.elevation && (
+              <div className="p-2 rounded-lg bg-amber-500/15 border border-amber-500/25 mb-2">
+                <span className="text-amber-400 text-xs uppercase">Elevation</span>
+                <p className="text-white font-medium">{item.elevation}</p>
+              </div>
+            )}
+            {item.significance && (
+              <div className="p-2 rounded-lg bg-white/5 mb-2">
+                <span className="text-white/40 text-[10px] uppercase">Significance</span>
+                <p className="text-white/80 text-sm">{item.significance}</p>
+              </div>
+            )}
+            {item.prophets?.length > 0 && (
+              <div className="flex flex-wrap gap-1 mt-2">
+                {item.prophets.map(p => (
+                  <span key={p} className="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 text-xs">{p}</span>
+                ))}
+              </div>
+            )}
+          </>
+        );
+      case 'water':
+        return (
+          <>
+            <p className="text-white/70 text-sm mb-3">{item.description}</p>
+            {item.type && (
+              <div className="p-2 rounded-lg bg-cyan-500/15 border border-cyan-500/25 mb-2">
+                <span className="text-cyan-400 text-xs uppercase">Type</span>
+                <p className="text-white font-medium">{item.type}</p>
+              </div>
+            )}
+            {item.significance && (
+              <div className="p-2 rounded-lg bg-white/5 mb-2">
+                <span className="text-white/40 text-[10px] uppercase">Quranic Significance</span>
+                <p className="text-white/80 text-sm">{item.significance}</p>
+              </div>
+            )}
+            {item.miracles?.length > 0 && (
+              <div className="space-y-1">
+                <span className="text-cyan-400 text-xs uppercase">Miracles:</span>
+                {item.miracles.map((m, i) => (
+                  <div key={i} className="text-white/70 text-xs flex items-start gap-2">
+                    <span className="text-cyan-400 mt-0.5">•</span> {m}
+                  </div>
+                ))}
+              </div>
+            )}
+          </>
+        );
+      case 'battle':
+        return (
+          <>
+            <p className="text-white/70 text-sm mb-3">{item.description}</p>
+            <div className="grid grid-cols-2 gap-2 mb-3">
+              {item.year && (
+                <div className="p-2 rounded-lg bg-white/5">
+                  <span className="text-white/40 text-[10px] uppercase">Year</span>
+                  <p className="text-white text-sm">{item.year}</p>
+                </div>
+              )}
+              {item.outcome && (
+                <div className="p-2 rounded-lg bg-white/5">
+                  <span className="text-white/40 text-[10px] uppercase">Outcome</span>
+                  <p className="text-white text-sm">{item.outcome}</p>
+                </div>
+              )}
+            </div>
+            {item.muslimArmy && (
+              <div className="p-2 rounded-lg bg-green-500/15 border border-green-500/25 mb-2">
+                <span className="text-green-400 text-xs uppercase">Muslim Forces</span>
+                <p className="text-white">{item.muslimArmy}</p>
+              </div>
+            )}
+            {item.enemyArmy && (
+              <div className="p-2 rounded-lg bg-red-500/15 border border-red-500/25 mb-2">
+                <span className="text-red-400 text-xs uppercase">Enemy Forces</span>
+                <p className="text-white">{item.enemyArmy}</p>
+              </div>
+            )}
+            {item.significance && (
+              <div className="p-2 rounded-lg bg-amber-500/15 border border-amber-500/25">
+                <span className="text-amber-400 text-xs uppercase">Significance</span>
+                <p className="text-white/80 text-sm">{item.significance}</p>
+              </div>
+            )}
+          </>
+        );
+      case 'hijra':
+        return (
+          <>
+            <p className="text-white/70 text-sm mb-3">{item.description}</p>
+            {item.daysSpent && (
+              <div className="p-2 rounded-lg bg-emerald-500/15 border border-emerald-500/25 mb-2">
+                <span className="text-emerald-400 text-xs uppercase">Duration</span>
+                <p className="text-white font-medium">{item.daysSpent}</p>
+              </div>
+            )}
+            {item.event && (
+              <div className="p-2 rounded-lg bg-white/5">
+                <span className="text-white/40 text-[10px] uppercase">Event</span>
+                <p className="text-white/80 text-sm">{item.event}</p>
+              </div>
+            )}
+          </>
+        );
+      case 'sahabi':
+        return (
+          <>
+            <p className="text-white/70 text-sm mb-3">{item.description}</p>
+            {item.title && (
+              <div className="p-2 rounded-lg bg-purple-500/15 border border-purple-500/25 mb-2">
+                <span className="text-purple-400 text-xs uppercase">Title</span>
+                <p className="text-white font-medium">{item.title}</p>
+              </div>
+            )}
+            {item.relation && (
+              <div className="p-2 rounded-lg bg-white/5 mb-2">
+                <span className="text-white/40 text-[10px] uppercase">Relation to Prophet ﷺ</span>
+                <p className="text-white/80 text-sm">{item.relation}</p>
+              </div>
+            )}
+            {item.death && (
+              <div className="p-2 rounded-lg bg-white/5 mb-2">
+                <span className="text-white/40 text-[10px] uppercase">Passed Away</span>
+                <p className="text-white text-sm">{item.death}</p>
+              </div>
+            )}
+            {item.achievements?.length > 0 && (
+              <div className="space-y-1 mt-2">
+                <span className="text-purple-400 text-xs uppercase">Achievements:</span>
+                {item.achievements.map((a, i) => (
+                  <div key={i} className="text-white/70 text-xs flex items-start gap-2">
+                    <span className="text-purple-400 mt-0.5">•</span> {a}
+                  </div>
+                ))}
+              </div>
+            )}
+          </>
+        );
+      case 'angel':
+        return (
+          <>
+            <p className="text-white/70 text-sm mb-3">{item.description}</p>
+            {item.angel && (
+              <div className="p-2 rounded-lg bg-amber-500/15 border border-amber-500/25 mb-2">
+                <span className="text-amber-400 text-xs uppercase">Angel</span>
+                <p className="text-white font-medium">{item.angel}</p>
+              </div>
+            )}
+            {item.prophet && (
+              <div className="p-2 rounded-lg bg-white/5 mb-2">
+                <span className="text-white/40 text-[10px] uppercase">Prophet</span>
+                <p className="text-white/80 text-sm">{item.prophet}</p>
+              </div>
+            )}
+            {item.purpose && (
+              <div className="p-2 rounded-lg bg-white/5">
+                <span className="text-white/40 text-[10px] uppercase">Purpose</span>
+                <p className="text-white/80 text-sm">{item.purpose}</p>
+              </div>
+            )}
+          </>
+        );
+      case 'dua':
+        return (
+          <>
+            <p className="text-white/70 text-sm mb-3">{item.description}</p>
+            {item.prophet && (
+              <div className="p-2 rounded-lg bg-pink-500/15 border border-pink-500/25 mb-2">
+                <span className="text-pink-400 text-xs uppercase">Made by</span>
+                <p className="text-white font-medium">{item.prophet}</p>
+              </div>
+            )}
+            {item.duaText && (
+              <div className="p-3 rounded-lg bg-white/5 mb-2">
+                <p className="text-amber-400 text-sm text-center" dir="rtl">{item.duaText}</p>
+              </div>
+            )}
+            {item.context && (
+              <div className="p-2 rounded-lg bg-white/5">
+                <span className="text-white/40 text-[10px] uppercase">Context</span>
+                <p className="text-white/80 text-sm">{item.context}</p>
+              </div>
+            )}
+            {item.answered && (
+              <div className="mt-2 p-2 rounded-lg bg-green-500/15 border border-green-500/25">
+                <span className="text-green-400 text-xs uppercase">How it was answered</span>
+                <p className="text-white/80 text-sm">{item.answered}</p>
+              </div>
+            )}
+          </>
+        );
+      case 'qibla':
+        return (
+          <>
+            <p className="text-white/70 text-sm mb-3">{item.description}</p>
+            {item.period && (
+              <div className="p-2 rounded-lg bg-amber-500/15 border border-amber-500/25 mb-2">
+                <span className="text-amber-400 text-xs uppercase">Period</span>
+                <p className="text-white font-medium">{item.period}</p>
+              </div>
+            )}
+            {item.year && (
+              <div className="p-2 rounded-lg bg-white/5 mb-2">
+                <span className="text-white/40 text-[10px] uppercase">Year of Change</span>
+                <p className="text-white text-sm">{item.year}</p>
+              </div>
+            )}
+            {item.significance && (
+              <div className="p-2 rounded-lg bg-white/5">
+                <span className="text-white/40 text-[10px] uppercase">Significance</span>
+                <p className="text-white/80 text-sm">{item.significance}</p>
+              </div>
+            )}
+          </>
+        );
+      case 'weather':
+        return (
+          <>
+            <p className="text-white/70 text-sm mb-3">{item.description}</p>
+            {item.nation && (
+              <div className="p-2 rounded-lg bg-red-500/15 border border-red-500/25 mb-2">
+                <span className="text-red-400 text-xs uppercase">Nation</span>
+                <p className="text-white font-medium">{item.nation}</p>
+              </div>
+            )}
+            {item.weatherType && (
+              <div className="p-2 rounded-lg bg-gray-500/15 border border-gray-500/25 mb-2">
+                <span className="text-gray-400 text-xs uppercase">Weather Type</span>
+                <p className="text-white font-medium">{item.weatherType}</p>
+              </div>
+            )}
+            {item.duration && (
+              <div className="p-2 rounded-lg bg-white/5 mb-2">
+                <span className="text-white/40 text-[10px] uppercase">Duration</span>
+                <p className="text-white text-sm">{item.duration}</p>
+              </div>
+            )}
+            {item.lesson && (
+              <div className="p-2 rounded-lg bg-amber-500/15 border border-amber-500/25">
+                <span className="text-amber-400 text-xs uppercase">Lesson</span>
+                <p className="text-white/80 text-sm">{item.lesson}</p>
+              </div>
+            )}
+          </>
+        );
+      case 'archaeology':
+        return (
+          <>
+            <p className="text-white/70 text-sm mb-3">{item.description}</p>
+            {item.nation && (
+              <div className="p-2 rounded-lg bg-amber-500/15 border border-amber-500/25 mb-2">
+                <span className="text-amber-400 text-xs uppercase">Ancient Nation</span>
+                <p className="text-white font-medium">{item.nation}</p>
+              </div>
+            )}
+            {item.currentStatus && (
+              <div className="p-2 rounded-lg bg-white/5 mb-2">
+                <span className="text-white/40 text-[10px] uppercase">Current Status</span>
+                <p className="text-white/80 text-sm">{item.currentStatus}</p>
+              </div>
+            )}
+            {item.discovered && (
+              <div className="p-2 rounded-lg bg-white/5 mb-2">
+                <span className="text-white/40 text-[10px] uppercase">Discovered</span>
+                <p className="text-white text-sm">{item.discovered}</p>
+              </div>
+            )}
+            {item.evidence?.length > 0 && (
+              <div className="space-y-1 mt-2">
+                <span className="text-amber-400 text-xs uppercase">Evidence:</span>
+                {item.evidence.map((e, i) => (
+                  <div key={i} className="text-white/70 text-xs flex items-start gap-2">
+                    <span className="text-amber-400 mt-0.5">•</span> {e}
+                  </div>
+                ))}
+              </div>
+            )}
+          </>
+        );
       default:
         return <p className="text-white/70 text-sm">{item.description}</p>;
     }
@@ -1726,7 +2038,11 @@ const DetailPanel = memo(({ item, type, onClose, onNavigateToVerse }) => {
         <div className="flex items-center justify-between p-3 border-b border-white/10">
           <div className="flex items-center gap-2">
             <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: `${item.color || '#F59E0B'}25` }}>
-              {type === 'mosque' ? '🕌' : type === 'grave' ? '⭐' : type === 'cave' ? '🏔️' : type === 'revelation' ? '📖' :
+              {type === 'mosque' ? '🕌' : type === 'grave' || type === 'sahabi' ? '⭐' : type === 'cave' ? '🏔️' :
+               type === 'revelation' ? '📖' : type === 'mountain' ? '⛰️' : type === 'water' ? '🌊' :
+               type === 'battle' ? '⚔️' : type === 'hijra' ? '🛤️' : type === 'angel' ? '✨' :
+               type === 'dua' ? '🤲' : type === 'qibla' ? '🧭' : type === 'weather' ? '🌪️' :
+               type === 'archaeology' ? '🏛️' :
                <Icons.MapPin className="w-5 h-5" style={{ color: item.color || '#F59E0B' }} />}
             </div>
             <div>
@@ -1819,6 +2135,19 @@ const PropheticMap = memo(function PropheticMap({ isVisible, onClose, onNavigate
   const plants = useMemo(() => getAllQuranicPlants(), []);
   const israMirajJourney = useMemo(() => getAllIsraMirajJourney(), []);
 
+  // New geographic and historical layers
+  const quranicMountains = useMemo(() => getAllQuranicMountains(), []);
+  const quranicWaters = useMemo(() => getAllQuranicWaters(), []);
+  const battleLocations = useMemo(() => getAllBattleLocations(), []);
+  const hijraRoute = useMemo(() => getHijraRoute(), []);
+  const qiblaHistory = useMemo(() => getQiblaHistory(), []);
+  const qurayshRoutes = useMemo(() => getQurayshRoutes(), []);
+  const angelAppearances = useMemo(() => getAllAngelAppearances(), []);
+  const duaLocations = useMemo(() => getAllDuaLocations(), []);
+  const sahabaGraves = useMemo(() => getAllSahabaGraves(), []);
+  const weatherEvents = useMemo(() => getAllWeatherEvents(), []);
+  const archaeologicalSites = useMemo(() => getAllArchaeologicalSites(), []);
+
   // Layer counts for panel (after data is defined)
   const layerCounts = useMemo(() => ({
     locations: locations.length,
@@ -1835,7 +2164,19 @@ const PropheticMap = memo(function PropheticMap({ isVisible, onClose, onNavigate
     plants: plants.length,
     treaties: treaties.length,
     israMiraj: israMirajJourney.length,
-  }), [locations, sacredMosques, revelations, destroyedNations, miracles, graves, caves, journeys, animals, baniIsraelJourney, scientificMiracles, plants, treaties, israMirajJourney]);
+    // New layer counts
+    mountains: quranicMountains.length,
+    waters: quranicWaters.length,
+    battles: battleLocations.length,
+    hijra: hijraRoute.waypoints?.length || 0,
+    sahaba: sahabaGraves.length,
+    angels: angelAppearances.length,
+    duas: duaLocations.length,
+    qibla: qiblaHistory ? 3 : 0, // First Qibla, Second Qibla, Change Location
+    tradeRoutes: qurayshRoutes ? 2 : 0, // Winter and Summer routes
+    weather: weatherEvents.length,
+    archaeology: archaeologicalSites.length,
+  }), [locations, sacredMosques, revelations, destroyedNations, miracles, graves, caves, journeys, animals, baniIsraelJourney, scientificMiracles, plants, treaties, israMirajJourney, quranicMountains, quranicWaters, battleLocations, hijraRoute, sahabaGraves, angelAppearances, duaLocations, qiblaHistory, qurayshRoutes, weatherEvents, archaeologicalSites]);
 
   // Get active prophet for current timeline year
   const activeProphet = useMemo(() => {
@@ -2176,6 +2517,210 @@ const PropheticMap = memo(function PropheticMap({ isVisible, onClose, onNavigate
                 eventHandlers={{ click: () => handleMarkerClick(loc, 'israMiraj') }}
               />
             ))}
+
+            {/* Quranic Mountains */}
+            {activeLayers.includes('mountains') && quranicMountains.map(mountain => (
+              <Marker
+                key={mountain.id}
+                position={mountain.coords}
+                icon={createMarkerIcon(mountain.color || '#92400E', 28, selectedItem?.id === mountain.id, 'mountain')}
+                eventHandlers={{ click: () => handleMarkerClick(mountain, 'mountain') }}
+              />
+            ))}
+
+            {/* Quranic Waters (Rivers, Seas) */}
+            {activeLayers.includes('waters') && quranicWaters.map(water => (
+              <CircleMarker
+                key={water.id}
+                center={water.coords}
+                radius={14}
+                pathOptions={{
+                  color: water.color || '#0EA5E9',
+                  fillColor: water.color || '#0EA5E9',
+                  fillOpacity: 0.5,
+                  weight: 2,
+                  dashArray: '4,4'
+                }}
+                eventHandlers={{ click: () => handleMarkerClick(water, 'water') }}
+              />
+            ))}
+
+            {/* Battle Locations */}
+            {activeLayers.includes('battles') && battleLocations.map(battle => (
+              <Marker
+                key={battle.id}
+                position={battle.coords}
+                icon={createMarkerIcon(battle.color || '#EF4444', 30, selectedItem?.id === battle.id, 'battle')}
+                eventHandlers={{ click: () => handleMarkerClick(battle, 'battle') }}
+              />
+            ))}
+
+            {/* Hijra Route Path */}
+            {activeLayers.includes('hijra') && hijraRoute?.waypoints && (
+              <>
+                <Polyline
+                  positions={hijraRoute.waypoints.map(wp => wp.coords)}
+                  pathOptions={{
+                    color: '#10B981',
+                    weight: 4,
+                    opacity: 0.8,
+                    dashArray: '10,10'
+                  }}
+                />
+                {hijraRoute.waypoints.map(waypoint => (
+                  <Marker
+                    key={waypoint.id}
+                    position={waypoint.coords}
+                    icon={createMarkerIcon('#10B981', 24, selectedItem?.id === waypoint.id)}
+                    eventHandlers={{ click: () => handleMarkerClick(waypoint, 'hijra') }}
+                  />
+                ))}
+              </>
+            )}
+
+            {/* Sahaba Graves */}
+            {activeLayers.includes('sahaba') && sahabaGraves.map(sahabi => (
+              <Marker
+                key={sahabi.id}
+                position={sahabi.coords}
+                icon={createMarkerIcon(sahabi.color || '#8B5CF6', 26, selectedItem?.id === sahabi.id, 'grave')}
+                eventHandlers={{ click: () => handleMarkerClick(sahabi, 'sahabi') }}
+              />
+            ))}
+
+            {/* Angel Appearances */}
+            {activeLayers.includes('angels') && angelAppearances.map(angel => (
+              <Marker
+                key={angel.id}
+                position={angel.coords}
+                icon={createMarkerIcon(angel.color || '#FBBF24', 26, selectedItem?.id === angel.id)}
+                eventHandlers={{ click: () => handleMarkerClick(angel, 'angel') }}
+              />
+            ))}
+
+            {/* Dua Locations */}
+            {activeLayers.includes('duas') && duaLocations.map(dua => (
+              <Marker
+                key={dua.id}
+                position={dua.coords}
+                icon={createMarkerIcon(dua.color || '#F472B6', 26, selectedItem?.id === dua.id)}
+                eventHandlers={{ click: () => handleMarkerClick(dua, 'dua') }}
+              />
+            ))}
+
+            {/* Qibla History Locations */}
+            {activeLayers.includes('qibla') && qiblaHistory && (
+              <>
+                {qiblaHistory.firstQibla && (
+                  <Marker
+                    key="first-qibla"
+                    position={qiblaHistory.firstQibla.coords}
+                    icon={createMarkerIcon('#F59E0B', 28, selectedItem?.id === 'first-qibla')}
+                    eventHandlers={{ click: () => handleMarkerClick({ ...qiblaHistory.firstQibla, id: 'first-qibla' }, 'qibla') }}
+                  />
+                )}
+                {qiblaHistory.secondQibla && (
+                  <Marker
+                    key="second-qibla"
+                    position={qiblaHistory.secondQibla.coords}
+                    icon={createMarkerIcon('#10B981', 28, selectedItem?.id === 'second-qibla')}
+                    eventHandlers={{ click: () => handleMarkerClick({ ...qiblaHistory.secondQibla, id: 'second-qibla' }, 'qibla') }}
+                  />
+                )}
+                {qiblaHistory.changeLocation && (
+                  <Marker
+                    key="qibla-change"
+                    position={qiblaHistory.changeLocation.coords}
+                    icon={createMarkerIcon('#8B5CF6', 24, selectedItem?.id === 'qibla-change')}
+                    eventHandlers={{ click: () => handleMarkerClick({ ...qiblaHistory.changeLocation, id: 'qibla-change' }, 'qibla') }}
+                  />
+                )}
+              </>
+            )}
+
+            {/* Quraysh Trade Routes */}
+            {activeLayers.includes('tradeRoutes') && qurayshRoutes && (
+              <>
+                {qurayshRoutes.winterRoute?.waypoints && (
+                  <>
+                    <Polyline
+                      positions={qurayshRoutes.winterRoute.waypoints.map(wp => wp.coords)}
+                      pathOptions={{
+                        color: '#F97316',
+                        weight: 3,
+                        opacity: 0.7,
+                        dashArray: '5,10'
+                      }}
+                    />
+                    {qurayshRoutes.winterRoute.waypoints.map((wp, i) => (
+                      <CircleMarker
+                        key={`winter-${i}`}
+                        center={wp.coords}
+                        radius={6}
+                        pathOptions={{ color: '#F97316', fillColor: '#F97316', fillOpacity: 0.8 }}
+                      >
+                        <Popup>
+                          <div className="text-xs font-medium">{wp.name}</div>
+                          <div className="text-[10px] text-gray-600">Winter Route (Yemen)</div>
+                        </Popup>
+                      </CircleMarker>
+                    ))}
+                  </>
+                )}
+                {qurayshRoutes.summerRoute?.waypoints && (
+                  <>
+                    <Polyline
+                      positions={qurayshRoutes.summerRoute.waypoints.map(wp => wp.coords)}
+                      pathOptions={{
+                        color: '#FBBF24',
+                        weight: 3,
+                        opacity: 0.7,
+                        dashArray: '5,10'
+                      }}
+                    />
+                    {qurayshRoutes.summerRoute.waypoints.map((wp, i) => (
+                      <CircleMarker
+                        key={`summer-${i}`}
+                        center={wp.coords}
+                        radius={6}
+                        pathOptions={{ color: '#FBBF24', fillColor: '#FBBF24', fillOpacity: 0.8 }}
+                      >
+                        <Popup>
+                          <div className="text-xs font-medium">{wp.name}</div>
+                          <div className="text-[10px] text-gray-600">Summer Route (Syria)</div>
+                        </Popup>
+                      </CircleMarker>
+                    ))}
+                  </>
+                )}
+              </>
+            )}
+
+            {/* Weather Events */}
+            {activeLayers.includes('weather') && weatherEvents.map(event => (
+              <CircleMarker
+                key={event.id}
+                center={event.coords}
+                radius={16}
+                pathOptions={{
+                  color: event.color || '#64748B',
+                  fillColor: event.color || '#64748B',
+                  fillOpacity: 0.4,
+                  weight: 2
+                }}
+                eventHandlers={{ click: () => handleMarkerClick(event, 'weather') }}
+              />
+            ))}
+
+            {/* Archaeological Sites */}
+            {activeLayers.includes('archaeology') && archaeologicalSites.map(site => (
+              <Marker
+                key={site.id}
+                position={site.coords}
+                icon={createMarkerIcon(site.color || '#B45309', 26, selectedItem?.id === site.id)}
+                eventHandlers={{ click: () => handleMarkerClick(site, 'archaeology') }}
+              />
+            ))}
           </MapContainer>
 
           {/* Layer Panel */}
@@ -2242,15 +2787,22 @@ const PropheticMap = memo(function PropheticMap({ isVisible, onClose, onNavigate
         {/* Legend */}
         <div className="flex-shrink-0 px-3 py-1.5 border-t border-white/10 bg-black/40">
           <div className="flex items-center justify-between text-[10px]">
-            <div className="flex items-center gap-3 overflow-x-auto hide-scrollbar">
+            <div className="flex items-center gap-2 overflow-x-auto hide-scrollbar">
               {[
                 { color: '#10B981', label: 'Mosques' },
                 { color: '#8B5CF6', label: 'Revelations' },
                 { color: '#F59E0B', label: 'Sites' },
                 { color: '#DC2626', label: 'Destroyed' },
                 { color: '#EC4899', label: 'Miracles' },
-                { color: '#6B7280', label: 'Graves' },
+                { color: '#6B7280', label: 'Prophets' },
                 { color: '#06B6D4', label: 'Caves' },
+                { color: '#92400E', label: 'Mountains' },
+                { color: '#0EA5E9', label: 'Waters' },
+                { color: '#EF4444', label: 'Battles' },
+                { color: '#8B5CF6', label: 'Sahaba' },
+                { color: '#FBBF24', label: 'Angels' },
+                { color: '#F472B6', label: 'Duas' },
+                { color: '#B45309', label: 'Ruins' },
               ].map(item => (
                 <div key={item.label} className="flex items-center gap-1 flex-shrink-0">
                   <div className="w-2 h-2 rounded-full" style={{ backgroundColor: item.color }} />
@@ -2260,10 +2812,10 @@ const PropheticMap = memo(function PropheticMap({ isVisible, onClose, onNavigate
             </div>
             <button
               onClick={handleLocateUser}
-              className="flex items-center gap-1 text-amber-400 hover:text-amber-300 transition-colors"
+              className="flex items-center gap-1 text-amber-400 hover:text-amber-300 transition-colors ml-2"
             >
               <Icons.Compass className="w-3 h-3" />
-              <span>Find Qibla</span>
+              <span>Qibla</span>
             </button>
           </div>
         </div>

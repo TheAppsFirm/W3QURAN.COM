@@ -1719,6 +1719,894 @@ export const calculateQibla = (lat, lng) => {
   return qibla;
 };
 
+// ============================================================================
+// QURANIC MOUNTAINS - Mountains mentioned in Quran
+// ============================================================================
+
+export const QURANIC_MOUNTAINS = {
+  sinai: {
+    id: 'sinai',
+    name: 'Mount Sinai (Tur)',
+    nameAr: 'جبل الطور',
+    coords: [28.5456, 33.9756],
+    color: '#8B4513',
+    icon: 'Mountain',
+    description: 'Where Allah spoke directly to Musa and gave him the Torah. Called "Tur" in Quran.',
+    significance: 'Most sacred mountain - Allah spoke to Musa here',
+    verses: [
+      { ref: '2:63', topic: 'Mountain raised over Bani Israel' },
+      { ref: '19:52', topic: 'Called Musa from right side of mountain' },
+      { ref: '28:29', topic: 'Musa saw fire at the mountain' },
+      { ref: '7:143', topic: 'Mountain crumbled when Allah manifested' },
+      { ref: '95:2', topic: 'Allah swears by Mount Sinai' },
+    ],
+    facts: ['Called "Tur Sina" in Quran', 'Location of burning bush', 'Tablets given here', 'Mountain crumbled from Allah\'s light'],
+  },
+  judi: {
+    id: 'judi',
+    name: 'Mount Judi',
+    nameAr: 'جبل الجودي',
+    coords: [37.3, 42.4],
+    color: '#6B8E23',
+    icon: 'Mountain',
+    description: 'Where Nuh\'s Ark came to rest after the great flood.',
+    significance: 'Landing place of the Ark',
+    verses: [
+      { ref: '11:44', topic: 'Ark rested on Mount Judi' },
+    ],
+    facts: ['Located in southeastern Turkey', 'Ark landed here after flood receded', 'Different from Mount Ararat in Bible'],
+  },
+  safaMarwa: {
+    id: 'safaMarwa',
+    name: 'Safa and Marwa',
+    nameAr: 'الصفا والمروة',
+    coords: [21.4225, 39.8262],
+    color: '#DAA520',
+    icon: 'Mountain',
+    description: 'Two hills between which Hajar ran searching for water for baby Ismail.',
+    significance: 'Sa\'i (walking between them) is pillar of Hajj/Umrah',
+    verses: [
+      { ref: '2:158', topic: 'Safa and Marwa are among symbols of Allah' },
+    ],
+    facts: ['Now enclosed within Masjid al-Haram', 'Hajar ran 7 times between them', 'Zamzam burst forth nearby', 'Sa\'i commemorates her search'],
+  },
+  arafat: {
+    id: 'arafat',
+    name: 'Mount Arafat',
+    nameAr: 'جبل عرفات',
+    coords: [21.3549, 39.9841],
+    color: '#CD853F',
+    icon: 'Mountain',
+    description: 'Where pilgrims stand on 9th Dhul Hijjah. Site of Prophet\'s Farewell Sermon.',
+    significance: 'Standing here is the pillar of Hajj - "Hajj is Arafat"',
+    verses: [
+      { ref: '2:198', topic: 'Remember Allah at al-Mash\'ar al-Haram' },
+    ],
+    facts: ['Farewell Sermon delivered here', 'Hajj invalid without standing here', 'Called "Day of Arafah"', 'Adam and Hawwa reunited here'],
+  },
+  uhud: {
+    id: 'uhud',
+    name: 'Mount Uhud',
+    nameAr: 'جبل أحد',
+    coords: [24.5021, 39.6171],
+    color: '#A0522D',
+    icon: 'Mountain',
+    description: 'Site of Battle of Uhud. Prophet ﷺ said: "Uhud is a mountain that loves us and we love it."',
+    significance: 'Battle site, martyrs buried here including Hamza',
+    verses: [
+      { ref: '3:121', topic: 'Prophet positioned believers for battle' },
+      { ref: '3:152', topic: 'Archers left their positions' },
+    ],
+    facts: ['70 companions martyred here', 'Hamza buried at its foot', 'Archers\' Hill nearby', 'Prophet injured in this battle'],
+  },
+  hira: {
+    id: 'hira',
+    name: 'Jabal al-Noor (Cave Hira)',
+    nameAr: 'جبل النور',
+    coords: [21.4575, 39.8583],
+    color: '#B8860B',
+    icon: 'Mountain',
+    description: 'Mountain containing Cave Hira where first revelation came to Prophet ﷺ.',
+    significance: 'First Quranic revelation (Surah Alaq) came here',
+    verses: [
+      { ref: '96:1', topic: 'Read! First word revealed here' },
+    ],
+    facts: ['Prophet used to meditate here', 'Jibreel appeared here first time', '620 steps to reach cave', 'Cave fits 4-5 people'],
+  },
+  thawr: {
+    id: 'thawr',
+    name: 'Jabal Thawr',
+    nameAr: 'جبل ثور',
+    coords: [21.3767, 39.8486],
+    color: '#8B7355',
+    icon: 'Mountain',
+    description: 'Mountain with cave where Prophet ﷺ and Abu Bakr hid during Hijra.',
+    significance: 'Refuge during migration to Madinah',
+    verses: [
+      { ref: '9:40', topic: 'Two in the cave - Allah is with us' },
+    ],
+    facts: ['Hid here for 3 days', 'Spider web and dove nest protected them', 'South of Makkah', 'Quraysh searched but didn\'t find them'],
+  },
+};
+
+// ============================================================================
+// QURANIC WATERS - Rivers, Seas mentioned in Quran
+// ============================================================================
+
+export const QURANIC_WATERS = {
+  nile: {
+    id: 'nile',
+    name: 'River Nile',
+    nameAr: 'نهر النيل',
+    coords: [30.0444, 31.2357],
+    color: '#1E90FF',
+    icon: 'Waves',
+    type: 'river',
+    description: 'The river where baby Musa was placed in a basket and found by Pharaoh\'s family.',
+    verses: [
+      { ref: '20:39', topic: 'Put him in the chest and into the river' },
+      { ref: '28:7', topic: 'Cast him into the river' },
+    ],
+    facts: ['Musa placed in basket here', 'Pharaoh\'s wife found him', 'Longest river in Africa', 'Sustained ancient Egypt'],
+  },
+  redSea: {
+    id: 'redSea',
+    name: 'Red Sea (Parting)',
+    nameAr: 'البحر الأحمر',
+    coords: [28.2, 33.5],
+    color: '#DC143C',
+    icon: 'Waves',
+    type: 'sea',
+    description: 'Sea that Allah parted for Musa and Bani Israel, then drowned Pharaoh.',
+    verses: [
+      { ref: '26:63', topic: 'Strike the sea - it parted' },
+      { ref: '2:50', topic: 'Parted the sea, saved you, drowned Pharaoh' },
+      { ref: '10:90', topic: 'Pharaoh followed until drowned' },
+    ],
+    facts: ['Parted into 12 paths for 12 tribes', 'Pharaoh and army drowned', 'Pharaoh\'s body preserved as sign', 'Crossing point debated'],
+  },
+  twoSeas: {
+    id: 'twoSeas',
+    name: 'Meeting of Two Seas',
+    nameAr: 'مجمع البحرين',
+    coords: [26.0667, 50.5577],
+    color: '#00CED1',
+    icon: 'Waves',
+    type: 'sea',
+    description: 'Where Musa met Khidr. Two seas that meet but don\'t mix - mentioned as sign of Allah.',
+    verses: [
+      { ref: '18:60', topic: 'Musa: I will not stop until I reach junction of two seas' },
+      { ref: '55:19-20', topic: 'Two seas meeting, barrier between them' },
+      { ref: '25:53', topic: 'Two seas - fresh and salty - barrier between' },
+    ],
+    facts: ['Scientific miracle - different density waters', 'Musa met Khidr here', 'Possibly Strait of Hormuz', 'Fresh and salt water don\'t mix'],
+  },
+  zamzam: {
+    id: 'zamzam',
+    name: 'Well of Zamzam',
+    nameAr: 'بئر زمزم',
+    coords: [21.4225, 39.8265],
+    color: '#4169E1',
+    icon: 'Waves',
+    type: 'well',
+    description: 'Miraculous well that sprang for baby Ismail when Hajar searched for water.',
+    verses: [
+      { ref: '14:37', topic: 'Ibrahim left family in barren valley' },
+    ],
+    facts: ['Flowing for 4000+ years', 'Never dried up', 'Healing properties', 'Ismail kicked and water appeared', 'Most consumed water in world during Hajj'],
+  },
+  euphrates: {
+    id: 'euphrates',
+    name: 'Euphrates River',
+    nameAr: 'نهر الفرات',
+    coords: [31.0, 47.5],
+    color: '#4682B4',
+    icon: 'Waves',
+    type: 'river',
+    description: 'One of rivers of Paradise according to hadith. Flows through Iraq.',
+    facts: ['River of Paradise (hadith)', 'Will reveal mountain of gold (end times)', 'Cradle of civilization', 'Ibrahim\'s homeland nearby'],
+  },
+};
+
+// ============================================================================
+// BATTLE LOCATIONS - Battles mentioned in Quran
+// ============================================================================
+
+export const BATTLE_LOCATIONS = {
+  badr: {
+    id: 'badr',
+    name: 'Battle of Badr',
+    nameAr: 'غزوة بدر',
+    coords: [23.7833, 38.7833],
+    color: '#DC2626',
+    icon: 'Swords',
+    date: '17 Ramadan 2 AH (624 CE)',
+    description: 'First major battle of Islam. 313 Muslims defeated 1000 Quraysh. Called "Yawm al-Furqan" (Day of Criterion).',
+    muslims: 313,
+    enemies: 1000,
+    outcome: 'Decisive Muslim victory',
+    verses: [
+      { ref: '3:123', topic: 'Allah helped you at Badr when you were weak' },
+      { ref: '8:5-19', topic: 'Detailed account of battle' },
+      { ref: '8:9', topic: '1000 angels sent to help' },
+      { ref: '8:17', topic: 'You did not throw when you threw, but Allah threw' },
+      { ref: '8:42', topic: 'Day the two armies met' },
+    ],
+    facts: ['70 enemies killed, 70 captured', 'Abu Jahl killed', 'Angels fought alongside Muslims', 'Called Day of Criterion (Furqan)'],
+  },
+  uhud: {
+    id: 'uhud',
+    name: 'Battle of Uhud',
+    nameAr: 'غزوة أحد',
+    coords: [24.5021, 39.6171],
+    color: '#F97316',
+    icon: 'Swords',
+    date: '7 Shawwal 3 AH (625 CE)',
+    description: 'Second major battle. Muslims initially winning but archers left posts. 70 martyrs including Hamza.',
+    muslims: 700,
+    enemies: 3000,
+    outcome: 'Tactical defeat, strategic draw',
+    verses: [
+      { ref: '3:121-128', topic: 'Prophet positioning troops' },
+      { ref: '3:140', topic: 'Days of varying fortune' },
+      { ref: '3:152', topic: 'You lost courage and disobeyed' },
+      { ref: '3:165', topic: 'When disaster struck - from yourselves' },
+    ],
+    facts: ['Hamza martyred', 'Prophet injured', '70 companions martyred', 'Lesson about obedience'],
+  },
+  khandaq: {
+    id: 'khandaq',
+    name: 'Battle of the Trench',
+    nameAr: 'غزوة الخندق',
+    coords: [24.4750, 39.6100],
+    color: '#7C3AED',
+    icon: 'Swords',
+    date: '5 AH (627 CE)',
+    description: 'Confederates of 10,000 besieged Madinah. Salman suggested digging trench. Won without major fighting.',
+    muslims: 3000,
+    enemies: 10000,
+    outcome: 'Muslim victory, siege broken',
+    verses: [
+      { ref: '33:9-27', topic: 'Detailed account of siege' },
+      { ref: '33:10', topic: 'Eyes rolled, hearts reached throats' },
+      { ref: '33:25', topic: 'Allah repelled disbelievers with no gain' },
+      { ref: '33:26', topic: 'Banu Qurayza brought down from fortresses' },
+    ],
+    facts: ['Trench idea from Salman al-Farsi', 'Lasted about a month', 'Wind and cold helped Muslims', 'Nu\'aym ibn Mas\'ud caused confusion'],
+  },
+  hunayn: {
+    id: 'hunayn',
+    name: 'Battle of Hunayn',
+    nameAr: 'غزوة حنين',
+    coords: [21.4833, 40.1833],
+    color: '#059669',
+    icon: 'Swords',
+    date: '8 AH (630 CE)',
+    description: 'After conquest of Makkah. Initially Muslims fled due to ambush but regrouped and won.',
+    muslims: 12000,
+    enemies: 20000,
+    outcome: 'Muslim victory',
+    verses: [
+      { ref: '9:25', topic: 'Allah helped you at Hunayn' },
+      { ref: '9:26', topic: 'Numbers didn\'t help, then Allah sent tranquility' },
+    ],
+    facts: ['Large number didn\'t guarantee victory', 'Hawazin and Thaqif tribes', 'Abundant war spoils', 'Lesson about reliance on Allah not numbers'],
+  },
+  tabuk: {
+    id: 'tabuk',
+    name: 'Expedition of Tabuk',
+    nameAr: 'غزوة تبوك',
+    coords: [28.3838, 36.5550],
+    color: '#0891B2',
+    icon: 'Swords',
+    date: '9 AH (630 CE)',
+    description: 'Last expedition of Prophet ﷺ. March to Roman frontier. No battle occurred.',
+    muslims: 30000,
+    outcome: 'No battle - show of strength',
+    verses: [
+      { ref: '9:38-42', topic: 'Rebuke of those who stayed behind' },
+      { ref: '9:81-82', topic: 'Hypocrites rejoiced at staying behind' },
+      { ref: '9:117-118', topic: 'Three who were left behind, then forgiven' },
+    ],
+    facts: ['Longest expedition - 700km', 'Called "Army of Hardship"', 'Tested faith during harvest', 'Three companions boycotted then forgiven'],
+  },
+};
+
+// ============================================================================
+// HIJRA ROUTE - Prophet's Migration Path
+// ============================================================================
+
+export const HIJRA_ROUTE = {
+  id: 'hijra',
+  name: 'The Hijra (Migration)',
+  nameAr: 'الهجرة النبوية',
+  color: '#10B981',
+  date: '622 CE (1 AH)',
+  description: 'The migration of Prophet ﷺ from Makkah to Madinah, marking the start of Islamic calendar.',
+  waypoints: [
+    { id: 'start', name: 'House of Prophet ﷺ', coords: [21.4225, 39.8262], description: 'Left at night while Quraysh planned to kill him', day: 'Night 1' },
+    { id: 'abuBakr', name: 'Abu Bakr\'s House', coords: [21.4230, 39.8260], description: 'Met Abu Bakr, left through back window', day: 'Night 1' },
+    { id: 'thawr', name: 'Cave Thawr', coords: [21.3767, 39.8486], description: 'Hid for 3 days. Spider web and dove protected them', day: 'Days 1-3', verse: '9:40' },
+    { id: 'coastal', name: 'Coastal Route', coords: [22.5, 39.2], description: 'Took unusual coastal route to avoid Quraysh', day: 'Days 4-8' },
+    { id: 'quba', name: 'Quba', coords: [24.4392, 39.6172], description: 'First mosque built here. Stayed 14 days', day: 'Day 9+', verse: '9:108' },
+    { id: 'madinah', name: 'Madinah', coords: [24.4672, 39.6111], description: 'Arrived to great welcome. Camel chose mosque site', day: 'Final' },
+  ],
+  totalDistance: '450 km',
+  duration: '~2 weeks',
+  verses: [
+    { ref: '9:40', topic: 'Second of two, in the cave' },
+    { ref: '8:30', topic: 'Plot to kill him' },
+    { ref: '9:108', topic: 'Mosque founded on piety (Quba)' },
+  ],
+  facts: [
+    'Ali slept in Prophet\'s bed as decoy',
+    'Quraysh offered 100 camels reward',
+    'Suraqa ibn Malik nearly caught them',
+    'Abdullah ibn Ariqat (non-Muslim) was guide',
+    'Islamic calendar starts from Hijra',
+  ],
+};
+
+// ============================================================================
+// QIBLA HISTORY - Change of prayer direction
+// ============================================================================
+
+export const QIBLA_HISTORY = {
+  firstQibla: {
+    id: 'firstQibla',
+    name: 'First Qibla - Jerusalem',
+    nameAr: 'القبلة الأولى',
+    coords: [31.7683, 35.2137],
+    color: '#8B5CF6',
+    icon: 'Compass',
+    period: 'Before 2 AH',
+    duration: '16-17 months in Madinah',
+    description: 'Muslims prayed toward Masjid al-Aqsa in Jerusalem initially.',
+    verses: [
+      { ref: '2:142', topic: 'Foolish will ask why changed Qibla' },
+      { ref: '2:143', topic: 'Made you middle nation, test of who follows Messenger' },
+    ],
+  },
+  secondQibla: {
+    id: 'secondQibla',
+    name: 'Final Qibla - Kaaba',
+    nameAr: 'القبلة - الكعبة',
+    coords: [21.4225, 39.8262],
+    color: '#F59E0B',
+    icon: 'Compass',
+    period: 'From 2 AH onwards',
+    description: 'Qibla changed to Kaaba in Makkah while Prophet was praying in Masjid al-Qiblatayn.',
+    verses: [
+      { ref: '2:144', topic: 'Turn your face toward al-Masjid al-Haram' },
+      { ref: '2:149', topic: 'Wherever you are, turn faces toward it' },
+      { ref: '2:150', topic: 'Turn your face toward al-Masjid al-Haram' },
+    ],
+  },
+  changeLocation: {
+    id: 'qiblatayn',
+    name: 'Masjid al-Qiblatayn',
+    nameAr: 'مسجد القبلتين',
+    coords: [24.4806, 39.5750],
+    color: '#EC4899',
+    icon: 'Mosque',
+    description: 'Mosque where Qibla changed during prayer. Prayed part toward Jerusalem, part toward Makkah.',
+    facts: ['Only mosque where Prophet prayed both Qiblas', 'Named "Mosque of Two Qiblas"', 'Changed in Rajab 2 AH', 'Companions turned mid-prayer'],
+  },
+};
+
+// ============================================================================
+// QURAYSH TRADE ROUTES - Surah Quraysh
+// ============================================================================
+
+export const QURAYSH_ROUTES = {
+  winterRoute: {
+    id: 'winterRoute',
+    name: 'Winter Journey to Yemen',
+    nameAr: 'رحلة الشتاء',
+    color: '#F97316',
+    icon: 'Route',
+    destination: 'Yemen',
+    description: 'Annual winter trade journey to Yemen for spices, leather, and other goods.',
+    waypoints: [
+      { name: 'Makkah', coords: [21.4225, 39.8262] },
+      { name: 'Taif', coords: [21.2703, 40.4159] },
+      { name: 'Najran', coords: [17.5167, 44.2167] },
+      { name: 'Sana\'a (Yemen)', coords: [15.3694, 44.1910] },
+    ],
+    verses: [
+      { ref: '106:1-2', topic: 'For the accustomed security of Quraysh - their journeys of winter and summer' },
+    ],
+    goods: ['Spices', 'Leather', 'Incense', 'Textiles from India'],
+  },
+  summerRoute: {
+    id: 'summerRoute',
+    name: 'Summer Journey to Syria',
+    nameAr: 'رحلة الصيف',
+    color: '#3B82F6',
+    icon: 'Route',
+    destination: 'Syria (Sham)',
+    description: 'Annual summer trade journey to Syria for various goods and trade with Romans.',
+    waypoints: [
+      { name: 'Makkah', coords: [21.4225, 39.8262] },
+      { name: 'Madinah', coords: [24.4672, 39.6111] },
+      { name: 'Tabuk', coords: [28.3838, 36.5550] },
+      { name: 'Petra', coords: [30.3285, 35.4444] },
+      { name: 'Bosra (Syria)', coords: [32.5167, 36.4833] },
+      { name: 'Damascus', coords: [33.5138, 36.2765] },
+    ],
+    verses: [
+      { ref: '106:2', topic: 'Journeys of winter and summer' },
+      { ref: '106:3-4', topic: 'So worship Lord of this House who fed them and made them safe' },
+    ],
+    goods: ['Olive oil', 'Dried fruits', 'Weapons', 'Byzantine goods'],
+    facts: ['Prophet ﷺ traveled with Abu Talib as youth', 'Met monk Bahira at Bosra', 'Khadijah\'s caravan to Syria'],
+  },
+};
+
+// ============================================================================
+// ANGEL APPEARANCES - Where angels appeared
+// ============================================================================
+
+export const ANGEL_APPEARANCES = {
+  hiiraRevelation: {
+    id: 'hiraRevelation',
+    name: 'Jibreel in Cave Hira',
+    nameAr: 'جبريل في غار حراء',
+    coords: [21.4575, 39.8583],
+    color: '#FBBF24',
+    icon: 'Sparkles',
+    angel: 'Jibreel (Gabriel)',
+    description: 'First appearance of Jibreel to Prophet ﷺ with first revelation.',
+    event: 'First Quranic revelation',
+    verses: [
+      { ref: '96:1-5', topic: 'Read! First words revealed' },
+      { ref: '53:4-10', topic: 'Taught by one intense in strength' },
+    ],
+    facts: ['Prophet was 40 years old', 'Jibreel squeezed him three times', 'Khadijah comforted him', 'Waraqah confirmed prophethood'],
+  },
+  maryamAnnunciation: {
+    id: 'maryamAnnunciation',
+    name: 'Jibreel to Maryam',
+    nameAr: 'جبريل إلى مريم',
+    coords: [32.7022, 35.2978],
+    color: '#A855F7',
+    icon: 'Sparkles',
+    angel: 'Jibreel (Gabriel)',
+    description: 'Jibreel appeared to Maryam to announce birth of Isa.',
+    event: 'Annunciation of Isa\'s birth',
+    verses: [
+      { ref: '19:17', topic: 'We sent Our Spirit, appeared as perfect man' },
+      { ref: '19:19', topic: 'I am messenger to give you pure boy' },
+      { ref: '3:45', topic: 'Angels said: Allah gives glad tidings of a Word' },
+    ],
+    location: 'Eastern place (possibly Nazareth)',
+  },
+  ibrahimGuests: {
+    id: 'ibrahimGuests',
+    name: 'Angels Visit Ibrahim',
+    nameAr: 'الملائكة عند إبراهيم',
+    coords: [31.5247, 35.0954],
+    color: '#10B981',
+    icon: 'Sparkles',
+    angel: 'Multiple angels',
+    description: 'Angels in human form visited Ibrahim, gave news of Ishaq, then went to destroy people of Lut.',
+    event: 'Good news and warning',
+    verses: [
+      { ref: '11:69-76', topic: 'Guests of Ibrahim, news of son, going to Lut\'s people' },
+      { ref: '15:51-60', topic: 'Honored guests, don\'t be afraid' },
+      { ref: '51:24-34', topic: 'Story of Ibrahim\'s honored guests' },
+    ],
+    facts: ['Brought news of Ishaq', 'Sarah laughed at news', 'Heading to destroy Lut\'s people', 'Ibrahim tried to defend them'],
+  },
+  badrAngels: {
+    id: 'badrAngels',
+    name: 'Angels at Badr',
+    nameAr: 'الملائكة في بدر',
+    coords: [23.7833, 38.7833],
+    color: '#DC2626',
+    icon: 'Sparkles',
+    angel: '1000-5000 angels',
+    description: '1000 (then 3000, then 5000) angels sent to help Muslims at Battle of Badr.',
+    event: 'Battle of Badr',
+    verses: [
+      { ref: '8:9', topic: 'I will reinforce you with 1000 angels' },
+      { ref: '3:123-125', topic: '3000 angels, if you are patient 5000' },
+      { ref: '8:12', topic: 'Strike above necks, strike fingertips' },
+    ],
+    facts: ['Angels wore white turbans', 'Jibreel led them', 'Enemies saw extra fighters', 'Companions witnessed angel marks on enemies'],
+  },
+};
+
+// ============================================================================
+// FAMOUS DUA LOCATIONS - Where prophets made significant duas
+// ============================================================================
+
+export const DUA_LOCATIONS = {
+  ibrahimKaaba: {
+    id: 'ibrahimKaaba',
+    name: 'Ibrahim\'s Duas at Kaaba',
+    nameAr: 'دعاء إبراهيم عند الكعبة',
+    coords: [21.4225, 39.8262],
+    color: '#F59E0B',
+    icon: 'Heart',
+    prophet: 'Ibrahim',
+    description: 'Ibrahim made beautiful duas while building the Kaaba - for Makkah, descendants, and the Ummah.',
+    duas: [
+      { ref: '2:126', dua: 'Make this city secure, provide fruits to its people' },
+      { ref: '2:127', dua: 'Our Lord, accept from us. You are Hearing, Knowing' },
+      { ref: '2:128', dua: 'Make us Muslims, and from our descendants a Muslim nation' },
+      { ref: '2:129', dua: 'Send among them a Messenger from themselves' },
+      { ref: '14:35', dua: 'Make this city secure and keep me and my sons from idols' },
+      { ref: '14:37', dua: 'Make hearts incline toward them, provide them fruits' },
+      { ref: '14:40', dua: 'Make me establisher of prayer, and my descendants' },
+    ],
+  },
+  yunusWhale: {
+    id: 'yunusWhale',
+    name: 'Yunus in the Whale',
+    nameAr: 'دعاء يونس',
+    coords: [36.8, 42.5],
+    color: '#0EA5E9',
+    icon: 'Heart',
+    prophet: 'Yunus',
+    description: 'Yunus\'s dua from inside the whale - the most powerful dua for distress.',
+    location: 'Inside the whale (sea location approximate)',
+    duas: [
+      { ref: '21:87', dua: 'La ilaha illa anta, subhanaka, inni kuntu min al-zalimin (No deity except You; glorified are You. Indeed, I was of the wrongdoers)' },
+    ],
+    facts: ['Called "Dua of Distress"', 'Darkness upon darkness', 'Fish glorified Allah with him', 'Answered by Allah'],
+  },
+  zakariyaMihrab: {
+    id: 'zakariyaMihrab',
+    name: 'Zakariya\'s Dua in Mihrab',
+    nameAr: 'دعاء زكريا',
+    coords: [31.7683, 35.2137],
+    color: '#8B5CF6',
+    icon: 'Heart',
+    prophet: 'Zakariya',
+    description: 'Zakariya prayed for a son in his old age, was granted Yahya.',
+    location: 'Mihrab (prayer chamber) in Jerusalem',
+    duas: [
+      { ref: '19:4-6', dua: 'My Lord, my bones have weakened... give me an heir' },
+      { ref: '3:38', dua: 'My Lord, grant me righteous offspring' },
+      { ref: '21:89', dua: 'My Lord, do not leave me alone [with no heir]' },
+    ],
+    facts: ['Was over 90 years old', 'Wife was barren', 'Granted Yahya', 'Given sign of not speaking 3 days'],
+  },
+  musaFear: {
+    id: 'musaFear',
+    name: 'Musa\'s Dua When Afraid',
+    nameAr: 'دعاء موسى',
+    coords: [31.5, 34.5],
+    color: '#DC2626',
+    icon: 'Heart',
+    prophet: 'Musa',
+    description: 'When Musa fled Egypt fearing Pharaoh, he made this dua.',
+    location: 'Fleeing toward Madyan',
+    duas: [
+      { ref: '28:21', dua: 'Rabbi najjini min al-qawm al-zalimin (My Lord, save me from the wrongdoing people)' },
+      { ref: '28:24', dua: 'Rabbi inni lima anzalta ilayya min khayrin faqir (My Lord, I am in need of whatever good You send down to me)' },
+      { ref: '20:25-28', dua: 'My Lord, expand my chest, ease my task, untie knot from tongue' },
+    ],
+    facts: ['Made after accidentally killing Egyptian', 'Helped Shuayb\'s daughters after this dua', 'Married Shuayb\'s daughter'],
+  },
+  adamRepentance: {
+    id: 'adamRepentance',
+    name: 'Adam\'s Repentance',
+    nameAr: 'توبة آدم',
+    coords: [21.4225, 39.8262],
+    color: '#22C55E',
+    icon: 'Heart',
+    prophet: 'Adam',
+    description: 'The dua Adam and Hawwa made seeking forgiveness after eating from the tree.',
+    duas: [
+      { ref: '7:23', dua: 'Rabbana zalamna anfusana wa in lam taghfir lana wa tarhamna lanakunanna min al-khasirin (Our Lord, we have wronged ourselves, and if You do not forgive us and have mercy, we will be among the losers)' },
+    ],
+    facts: ['First dua of repentance', 'Words taught by Allah', 'Forgiveness granted', 'Descended to earth after'],
+  },
+};
+
+// ============================================================================
+// SAHABA GRAVES - Companions' burial locations
+// ============================================================================
+
+export const SAHABA_GRAVES = {
+  khadijah: {
+    id: 'khadijah',
+    name: 'Khadijah bint Khuwaylid',
+    nameAr: 'خديجة بنت خويلد',
+    coords: [21.4273, 39.8261],
+    color: '#EC4899',
+    icon: 'Heart',
+    title: 'Mother of Believers',
+    relation: 'First wife of Prophet ﷺ',
+    death: '619 CE (before Hijra)',
+    location: 'Jannat al-Mualla, Makkah',
+    description: 'First believer, first wife, supported Prophet ﷺ with wealth and comfort.',
+    facts: ['First to believe', 'Supported Islam with her wealth', 'Mother of Fatimah', 'Prophet never forgot her', 'Year of her death called "Year of Sorrow"'],
+  },
+  hamza: {
+    id: 'hamza',
+    name: 'Hamza ibn Abdul-Muttalib',
+    nameAr: 'حمزة بن عبد المطلب',
+    coords: [24.5021, 39.6200],
+    color: '#DC2626',
+    icon: 'Swords',
+    title: 'Lion of Allah, Master of Martyrs',
+    relation: 'Uncle of Prophet ﷺ',
+    death: '625 CE (Battle of Uhud)',
+    location: 'Foot of Mount Uhud, Madinah',
+    description: 'Strongest warrior of early Islam, martyred at Uhud.',
+    facts: ['Called "Lion of Allah"', 'Killed by Wahshi', 'Body mutilated by Hind', 'Prophet wept over him', '70 martyrs buried with him'],
+  },
+  abuBakr: {
+    id: 'abuBakr',
+    name: 'Abu Bakr as-Siddiq',
+    nameAr: 'أبو بكر الصديق',
+    coords: [24.4673, 39.6112],
+    color: '#10B981',
+    icon: 'Star',
+    title: 'As-Siddiq (The Truthful), First Caliph',
+    relation: 'Best friend, father-in-law',
+    death: '634 CE',
+    location: 'Next to Prophet ﷺ in Masjid an-Nabawi',
+    description: 'First adult male to accept Islam, first Caliph, companion in Hijra.',
+    facts: ['Buried next to Prophet ﷺ', 'Companion in cave during Hijra', 'Father of Aisha', 'Compiled the Quran', 'Caliph for 2 years'],
+  },
+  umar: {
+    id: 'umar',
+    name: 'Umar ibn al-Khattab',
+    nameAr: 'عمر بن الخطاب',
+    coords: [24.4673, 39.6113],
+    color: '#F59E0B',
+    icon: 'Star',
+    title: 'Al-Farooq (The Distinguisher), Second Caliph',
+    relation: 'Father-in-law of Prophet ﷺ',
+    death: '644 CE',
+    location: 'Next to Prophet ﷺ and Abu Bakr',
+    description: 'Second Caliph, expanded Islamic empire, known for justice.',
+    facts: ['Buried next to Prophet ﷺ and Abu Bakr', 'Islam strengthened by his conversion', 'Conquered Jerusalem', 'Father of Hafsa', 'Martyred by Abu Lulu'],
+  },
+  uthman: {
+    id: 'uthman',
+    name: 'Uthman ibn Affan',
+    nameAr: 'عثمان بن عفان',
+    coords: [24.4678, 39.6150],
+    color: '#8B5CF6',
+    icon: 'Star',
+    title: 'Dhun-Nurayn (Possessor of Two Lights), Third Caliph',
+    relation: 'Son-in-law (married 2 daughters of Prophet ﷺ)',
+    death: '656 CE',
+    location: 'Jannat al-Baqi, Madinah',
+    description: 'Third Caliph, compiled standard Quran, married two daughters of Prophet ﷺ.',
+    facts: ['Married Ruqayyah then Umm Kulthum', 'Standardized the Quran', 'Known for modesty', 'Very wealthy, gave for Islam', 'Martyred while reading Quran'],
+  },
+  ali: {
+    id: 'ali',
+    name: 'Ali ibn Abi Talib',
+    nameAr: 'علي بن أبي طالب',
+    coords: [32.0, 44.3667],
+    color: '#22C55E',
+    icon: 'Star',
+    title: 'Asadullah (Lion of Allah), Fourth Caliph',
+    relation: 'Cousin and son-in-law',
+    death: '661 CE',
+    location: 'Najaf, Iraq',
+    description: 'Fourth Caliph, first child to accept Islam, married to Fatimah.',
+    facts: ['First child to believe', 'Slept in Prophet\'s bed during Hijra', 'Father of Hasan and Husayn', 'Gate of knowledge (hadith)', 'Martyred by Ibn Muljam'],
+  },
+  fatimah: {
+    id: 'fatimah',
+    name: 'Fatimah al-Zahra',
+    nameAr: 'فاطمة الزهراء',
+    coords: [24.4673, 39.6111],
+    color: '#EC4899',
+    icon: 'Heart',
+    title: 'Leader of Women of Paradise',
+    relation: 'Daughter of Prophet ﷺ',
+    death: '632 CE (6 months after Prophet ﷺ)',
+    location: 'Madinah (exact location debated - Baqi or in home)',
+    description: 'Youngest daughter, mother of Hasan and Husayn, most beloved to Prophet ﷺ.',
+    facts: ['Called "part of me" by Prophet ﷺ', 'Mother of Hasan and Husayn', 'Resembled Prophet most', 'Leader of women of Paradise', 'Prophet\'s lineage through her'],
+  },
+  bilal: {
+    id: 'bilal',
+    name: 'Bilal ibn Rabah',
+    nameAr: 'بلال بن رباح',
+    coords: [33.5138, 36.2765],
+    color: '#6366F1',
+    icon: 'Music',
+    title: 'First Muazzin',
+    relation: 'Companion, freed slave',
+    death: '640 CE',
+    location: 'Damascus, Syria (Bab al-Saghir cemetery)',
+    description: 'First person to call Adhan, former slave who was tortured for Islam.',
+    facts: ['Tortured by Umayyah - said "Ahad, Ahad"', 'Freed by Abu Bakr', 'First muazzin ever', 'Couldn\'t give adhan after Prophet died', 'Died in Damascus'],
+  },
+};
+
+// ============================================================================
+// WEATHER EVENTS - Divine weather/natural events in Quran
+// ============================================================================
+
+export const WEATHER_EVENTS = {
+  adStorm: {
+    id: 'adStorm',
+    name: 'Storm of \'Ad',
+    nameAr: 'ريح عاد',
+    coords: [17.0, 53.0],
+    color: '#6B7280',
+    icon: 'Wind',
+    type: 'wind',
+    description: 'Violent wind that destroyed the people of \'Ad for 7 nights and 8 days.',
+    verses: [
+      { ref: '69:6-7', topic: 'Destroyed by screaming violent wind, 7 nights 8 days' },
+      { ref: '41:16', topic: 'Sent against them screaming wind' },
+      { ref: '54:19', topic: 'Sent against them wind on day of ill omen' },
+      { ref: '46:24-25', topic: 'Cloud advancing, wind with painful punishment' },
+    ],
+    facts: ['Lasted 7 nights and 8 days', 'Only Hud and believers survived', 'Bodies thrown like hollow palm trunks', 'Thought it was rain cloud'],
+  },
+  thamudQuake: {
+    id: 'thamudQuake',
+    name: 'Blast of Thamud',
+    nameAr: 'صيحة ثمود',
+    coords: [26.7833, 37.9333],
+    color: '#EF4444',
+    icon: 'AlertTriangle',
+    type: 'earthquake/blast',
+    description: 'Mighty blast/earthquake that destroyed Thamud after they killed the she-camel.',
+    verses: [
+      { ref: '7:78', topic: 'Earthquake seized them, fell in their homes' },
+      { ref: '11:67', topic: 'Blast seized wrongdoers, fell in homes' },
+      { ref: '54:31', topic: 'Single blast, became like dry fence builder' },
+      { ref: '41:17', topic: 'Thunderbolt of humiliation seized them' },
+    ],
+    facts: ['Struck on day 4 as warned', 'She-camel killed on day 1', 'Only Salih and believers survived', 'Madain Saleh ruins remain'],
+  },
+  lutRain: {
+    id: 'lutRain',
+    name: 'Rain of Stones on Lut\'s People',
+    nameAr: 'حجارة قوم لوط',
+    coords: [31.1, 35.5],
+    color: '#78350F',
+    icon: 'Cloud',
+    type: 'stones',
+    description: 'City overturned and rained upon with marked stones of baked clay.',
+    verses: [
+      { ref: '11:82', topic: 'Turned upside down, rained marked stones' },
+      { ref: '15:74', topic: 'Made highest lowest, rained stones of baked clay' },
+      { ref: '54:34', topic: 'Sent storm of stones, except Lut\'s family' },
+    ],
+    facts: ['Cities turned upside down', 'Stones marked for each person', 'Dead Sea region today', 'Lut\'s wife looked back and perished'],
+  },
+  floodOfIram: {
+    id: 'floodOfIram',
+    name: 'Flood of Iram',
+    nameAr: 'سيل العرم',
+    coords: [15.4, 45.0],
+    color: '#0369A1',
+    icon: 'Waves',
+    type: 'flood',
+    description: 'Great flood that destroyed the dam of Ma\'rib and the civilization of Saba (Sheba).',
+    verses: [
+      { ref: '34:16', topic: 'Sent flood of dam, replaced gardens with bitter fruit' },
+    ],
+    facts: ['Ma\'rib Dam collapse', 'Ended Sabaean civilization', 'Gardens replaced with thorns', 'Caused mass migration'],
+  },
+  khandaqWind: {
+    id: 'khandaqWind',
+    name: 'Wind at Khandaq',
+    nameAr: 'ريح الخندق',
+    coords: [24.4750, 39.6100],
+    color: '#0891B2',
+    icon: 'Wind',
+    type: 'wind',
+    description: 'Allah sent wind and unseen forces against confederates besieging Madinah.',
+    verses: [
+      { ref: '33:9', topic: 'Sent wind and forces you did not see' },
+    ],
+    facts: ['Confederate siege broken', 'Tents blown away', 'Fires extinguished', 'Army of 10,000 retreated'],
+  },
+};
+
+// ============================================================================
+// ARCHAEOLOGICAL SITES - Where Quranic history can be seen today
+// ============================================================================
+
+export const ARCHAEOLOGICAL_SITES = {
+  madainSaleh: {
+    id: 'madainSaleh',
+    name: 'Madain Saleh (Al-Hijr)',
+    nameAr: 'مدائن صالح',
+    coords: [26.7833, 37.9333],
+    color: '#B45309',
+    icon: 'Building',
+    nation: 'Thamud',
+    description: 'Rock-carved dwellings of Thamud. UNESCO World Heritage Site. Prophet ﷺ passed quickly and forbade drinking its water.',
+    verses: [
+      { ref: '15:80-84', topic: 'People of Al-Hijr denied messengers, carved houses in mountains' },
+      { ref: '89:9', topic: 'Thamud who carved rocks in the valley' },
+    ],
+    facts: ['Well-preserved tombs', 'Prophet forbade camping here', 'Second largest Nabataean site', 'Carved from sandstone mountains'],
+    status: 'UNESCO World Heritage Site',
+  },
+  deadSea: {
+    id: 'deadSea',
+    name: 'Dead Sea Region',
+    nameAr: 'البحر الميت',
+    coords: [31.5, 35.5],
+    color: '#1E3A5F',
+    icon: 'Waves',
+    nation: 'People of Lut',
+    description: 'Lowest point on Earth. Believed to be where cities of Lut\'s people were destroyed.',
+    verses: [
+      { ref: '37:137', topic: 'You pass by them morning and evening' },
+    ],
+    facts: ['Lowest point on Earth (-430m)', 'High salt content', 'Sodom and Gomorrah region', 'Archaeological sites nearby', 'Nothing lives in it - sign of destruction'],
+  },
+  pyramids: {
+    id: 'pyramids',
+    name: 'Pyramids of Egypt',
+    nameAr: 'أهرامات مصر',
+    coords: [29.9792, 31.1342],
+    color: '#D97706',
+    icon: 'Building',
+    nation: 'Pharaohs',
+    description: 'Ancient structures from time of Pharaohs. Quran mentions Pharaoh\'s construction projects.',
+    verses: [
+      { ref: '28:38', topic: 'Pharaoh said: Build me a tower' },
+      { ref: '40:36', topic: 'Haman, build me a tower to reach the ways' },
+    ],
+    facts: ['Built by ancient Egyptians', 'Pharaoh\'s era', 'Mentioned in context of Firaun', 'Signs of ancient power'],
+  },
+  petra: {
+    id: 'petra',
+    name: 'Petra (Possibly Thamud)',
+    nameAr: 'البتراء',
+    coords: [30.3285, 35.4444],
+    color: '#DC2626',
+    icon: 'Building',
+    nation: 'Possibly related to Thamud/Nabataeans',
+    description: 'Ancient rock-carved city. Some scholars link to Thamud, though primarily Nabataean.',
+    verses: [
+      { ref: '89:9', topic: 'Who carved out rocks in the valley' },
+    ],
+    facts: ['UNESCO World Heritage Site', 'Rock-carved facades', 'Trade route city', 'Similar construction to Madain Saleh'],
+    status: 'UNESCO World Heritage Site',
+  },
+  babylonRuins: {
+    id: 'babylonRuins',
+    name: 'Babylon Ruins',
+    nameAr: 'آثار بابل',
+    coords: [32.5425, 44.4239],
+    color: '#7C3AED',
+    icon: 'Building',
+    nation: 'Babylon - Nimrod\'s kingdom',
+    description: 'Ancient city where Ibrahim was thrown into fire. Center of ancient civilization.',
+    verses: [
+      { ref: '21:68-69', topic: 'Burn him! Fire became cool and safe' },
+    ],
+    facts: ['Ibrahim\'s birthplace', 'Thrown into fire here', 'Nimrod\'s kingdom', 'Ancient Mesopotamia'],
+  },
+};
+
+// ============================================================================
+// HELPER FUNCTIONS FOR NEW DATA
+// ============================================================================
+
+export const getAllQuranicMountains = () => Object.values(QURANIC_MOUNTAINS);
+export const getAllQuranicWaters = () => Object.values(QURANIC_WATERS);
+export const getAllBattleLocations = () => Object.values(BATTLE_LOCATIONS);
+export const getHijraRoute = () => HIJRA_ROUTE;
+export const getQiblaHistory = () => QIBLA_HISTORY; // Return object for property access
+export const getQurayshRoutes = () => QURAYSH_ROUTES; // Return object for property access
+export const getAllAngelAppearances = () => Object.values(ANGEL_APPEARANCES);
+export const getAllDuaLocations = () => Object.values(DUA_LOCATIONS);
+export const getAllSahabaGraves = () => Object.values(SAHABA_GRAVES);
+export const getAllWeatherEvents = () => Object.values(WEATHER_EVENTS);
+export const getAllArchaeologicalSites = () => Object.values(ARCHAEOLOGICAL_SITES);
+
 // Distance to Makkah
 export const distanceToMakkah = (lat, lng) => {
   const R = 6371; // Earth's radius in km
@@ -1754,6 +2642,17 @@ export default {
   TREATY_LOCATIONS,
   QURANIC_PLANTS,
   ISRA_MIRAJ_JOURNEY,
+  QURANIC_MOUNTAINS,
+  QURANIC_WATERS,
+  BATTLE_LOCATIONS,
+  HIJRA_ROUTE,
+  QIBLA_HISTORY,
+  QURAYSH_ROUTES,
+  ANGEL_APPEARANCES,
+  DUA_LOCATIONS,
+  SAHABA_GRAVES,
+  WEATHER_EVENTS,
+  ARCHAEOLOGICAL_SITES,
   getAllLocations,
   getLocation,
   getLocationsByCategory,
@@ -1775,6 +2674,17 @@ export default {
   getAllTreatyLocations,
   getAllQuranicPlants,
   getAllIsraMirajJourney,
+  getAllQuranicMountains,
+  getAllQuranicWaters,
+  getAllBattleLocations,
+  getHijraRoute,
+  getQiblaHistory,
+  getQurayshRoutes,
+  getAllAngelAppearances,
+  getAllDuaLocations,
+  getAllSahabaGraves,
+  getAllWeatherEvents,
+  getAllArchaeologicalSites,
   calculateQibla,
   distanceToMakkah,
 };

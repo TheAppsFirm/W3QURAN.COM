@@ -1198,6 +1198,51 @@ export const FileTextIcon = (props) => (
   </Icon>
 );
 
+// Swords icon for battles
+export const SwordsIcon = (props) => (
+  <Icon {...props}>
+    <path d="M14.5 17.5L3 6V3h3l11.5 11.5" />
+    <path d="M13 19l6-6" />
+    <path d="M16 16l4 4" />
+    <path d="M19 21l2-2" />
+    <path d="M9.5 6.5L21 18v3h-3L6.5 9.5" />
+    <path d="M11 5L5 11" />
+    <path d="M8 8L4 4" />
+    <path d="M5 3L3 5" />
+  </Icon>
+);
+
+// Building icon for archaeology
+export const BuildingIcon = (props) => (
+  <Icon {...props}>
+    <rect x="4" y="2" width="16" height="20" rx="2" ry="2" />
+    <path d="M9 22v-4h6v4" />
+    <path d="M8 6h.01" />
+    <path d="M16 6h.01" />
+    <path d="M12 6h.01" />
+    <path d="M12 10h.01" />
+    <path d="M12 14h.01" />
+    <path d="M16 10h.01" />
+    <path d="M16 14h.01" />
+    <path d="M8 10h.01" />
+    <path d="M8 14h.01" />
+  </Icon>
+);
+
+// AlertTriangle icon for weather warnings
+export const AlertTriangleIcon = (props) => (
+  <Icon {...props}>
+    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+    <line x1="12" y1="9" x2="12" y2="13" />
+    <line x1="12" y1="17" x2="12.01" y2="17" />
+  </Icon>
+);
+
+// Add new icons to Icons object
+Icons.Swords = SwordsIcon;
+Icons.Building = BuildingIcon;
+Icons.AlertTriangle = AlertTriangleIcon;
+
 // Map icon for PropheticMap
 export const MapIcon = (props) => (
   <Icon {...props}>
