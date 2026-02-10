@@ -96,6 +96,12 @@ const PROPHETS_TIMELINE = [
       sons: ['Habil (Abel)', 'Qabil (Cain)', 'Shith (Seth)'],
       note: 'Father of all humanity. Shith continued the prophetic lineage.'
     },
+    age: 960,
+    height: '60 cubits (90 feet / 27m)',
+    miracles: ['Taught names of all things', 'Angels prostrated to him', 'Created from clay'],
+    scripture: 'Suhuf (Scrolls) - 10 scrolls revealed',
+    burial: 'Cave of Abu Qubays, Makkah (or India according to some narrations)',
+    uniqueFacts: ['First human created', 'Lived in Jannah before Earth', 'Spoke all languages', 'All humans are his children'],
     keyEvents: ['Creation from clay', 'Life in Paradise', 'Descended to Earth', 'Built the Kaaba'],
     verses: ['2:30-37', '7:11-25', '20:115-123'],
     icon: '🌍'
@@ -116,6 +122,12 @@ const PROPHETS_TIMELINE = [
       sons: ['Sam (Shem)', 'Ham', 'Yafith (Japheth)', 'Yam/Kan\'an (drowned)'],
       note: 'Sam\'s lineage led to Ibrahim. One son rejected faith and drowned.'
     },
+    age: 950,
+    ageNote: 'Preached for 950 years (Quran 29:14), lived longer',
+    miracles: ['Built the Ark by revelation', 'The Great Flood', 'Ark landed safely on Mt. Judi'],
+    scripture: 'Suhuf (Scrolls)',
+    burial: 'Masjid al-Nabi Nuh in Karak, Jordan (or Najaf, Iraq)',
+    uniqueFacts: ['First Rasul (Messenger)', 'Longest preaching mission', 'Only 80 believers saved', 'Second father of humanity'],
     keyEvents: ['950 years of dawah', 'Building the Ark', 'The Great Flood', 'Ark landed on Mt. Judi'],
     verses: ['11:25-48', '71:1-28', '23:23-30'],
     icon: '🚢'
@@ -137,6 +149,11 @@ const PROPHETS_TIMELINE = [
       sons: ['Ismail (from Hajar)', 'Ishaq (from Sarah)'],
       note: 'From Ismail: Arab prophets including Muhammad ﷺ. From Ishaq: Israelite prophets.'
     },
+    age: 175,
+    miracles: ['Fire became cool and peaceful', 'Stars, moon, sun argument', 'Birds brought back to life (2:260)', 'Zamzam spring for his family'],
+    scripture: 'Suhuf (Scrolls) - 10 scrolls revealed',
+    burial: 'Cave of Machpelah, Hebron (Al-Khalil), Palestine',
+    uniqueFacts: ['Called Khalilullah (Friend of Allah)', 'Father of all prophets after him', 'Built/rebuilt the Kaaba', 'Originated the Hajj rituals', 'Most mentioned prophet after Musa'],
     keyEvents: ['Destroyed idols', 'Survived the fire', 'Rebuilt the Kaaba', 'Sacrifice of Ismail'],
     verses: ['2:124-132', '14:35-41', '37:99-113'],
     icon: '🔥'
@@ -158,6 +175,10 @@ const PROPHETS_TIMELINE = [
       sons: ['12 sons including Kedar (Qaydar)'],
       note: 'Direct ancestor of Prophet Muhammad ﷺ through Kedar (Qaydar).'
     },
+    age: 137,
+    miracles: ['Zamzam spring burst from his feet', 'Ram substituted for his sacrifice'],
+    burial: 'Al-Hijr (Hateem) inside Masjid al-Haram, Makkah',
+    uniqueFacts: ['Ancestor of Prophet Muhammad ﷺ', 'Learned Arabic from Jurhum tribe', 'Called "Truthful in Promise" (19:54)', 'First to ride horses according to hadith'],
     keyEvents: ['Left in Makkah valley', 'Zamzam miracle', 'Built Kaaba with Ibrahim', 'Ancestor of Muhammad ﷺ'],
     verses: ['2:125-127', '37:102-107', '19:54-55'],
     icon: '💧'
@@ -180,6 +201,10 @@ const PROPHETS_TIMELINE = [
       sons: ['Yusuf', 'Binyamin (Benjamin)', 'Yahuda (Judah)', 'Lawi (Levi)', 'and 8 others'],
       note: 'His 12 sons became the 12 tribes of Israel (Bani Israel).'
     },
+    age: 147,
+    miracles: ['Sight restored when Yusuf\'s shirt was placed on his eyes'],
+    burial: 'Cave of Machpelah, Hebron (Al-Khalil), Palestine',
+    uniqueFacts: ['Given title "Israel" (Servant of God)', 'Blind for years from crying for Yusuf', 'All 12 sons became leaders of tribes', 'Moved entire family to Egypt'],
     keyEvents: ['Father of 12 tribes', 'Grief for Yusuf', 'Reunion in Egypt', 'Named Israel'],
     verses: ['12:4-18', '12:84-100', '19:49'],
     icon: '👨‍👦‍👦'
@@ -203,6 +228,10 @@ const PROPHETS_TIMELINE = [
       sons: ['Ephraim', 'Manasseh'],
       note: 'Given half of all beauty. His story is called "Ahsan al-Qasas" (Best of Stories).'
     },
+    age: 110,
+    miracles: ['True dream interpretation', 'Survived the well', 'Protected from Zulaykha\'s temptation'],
+    burial: 'Initially Egypt, later moved to Hebron, Palestine',
+    uniqueFacts: ['Given half of all human beauty', 'His story is only Surah that tells complete story', 'Became Aziz (treasurer/minister) of Egypt', 'Forgave brothers who betrayed him', 'His shirt healed Yaqub\'s blindness'],
     keyEvents: ['Thrown in well', 'Sold as slave', 'Prison and dreams', 'Aziz of Egypt'],
     verses: ['12:1-111'],
     icon: '⭐'
@@ -226,6 +255,11 @@ const PROPHETS_TIMELINE = [
       wife: 'Safura (Zipporah), daughter of Shuayb',
       note: 'Most mentioned prophet in the Quran (136 times).'
     },
+    age: 120,
+    miracles: ['Staff turned to serpent', 'Hand glowed white', 'Parted the Red Sea', '9 signs to Pharaoh', 'Water from rock', 'Manna and Salwa', 'Mountain raised over Bani Israel'],
+    scripture: 'Torah (Tawrat)',
+    burial: 'Near Mt. Nebo, Jordan (exact location known only to Allah)',
+    uniqueFacts: ['Spoke directly to Allah without intermediary', 'Most mentioned prophet (136 times)', 'Led 600,000+ Israelites out of Egypt', 'Met Muhammad ﷺ during Isra & Miraj', 'Advised reducing prayers from 50 to 5'],
     keyEvents: ['Basket in Nile', 'Burning bush', 'Parting the sea', 'Torah at Sinai'],
     verses: ['20:9-98', '28:3-43', '7:103-162'],
     icon: '📜'
@@ -246,6 +280,12 @@ const PROPHETS_TIMELINE = [
       sons: ['Sulayman (Solomon) - also a prophet', 'and others'],
       note: 'Given beautiful voice. Iron made soft in his hands to make armor.'
     },
+    age: 70,
+    prophethood: '40 years as king',
+    miracles: ['Iron made soft in his hands', 'Mountains and birds did tasbeeh with him', 'Beautiful voice that enchanted all', 'Killed Goliath with slingshot as youth'],
+    scripture: 'Zabur (Psalms)',
+    burial: 'Mount Zion, Jerusalem',
+    uniqueFacts: ['First prophet-king', 'Made chain-mail armor', 'Fasted every other day', 'Prayed 1/3 of night', 'Best form of worship according to hadith'],
     keyEvents: ['Defeated Goliath', 'King of Israel', 'Given Zabur', 'Iron made soft'],
     verses: ['2:251', '21:78-80', '34:10-11', '38:17-26'],
     icon: '🎵'
@@ -265,6 +305,11 @@ const PROPHETS_TIMELINE = [
       father: 'Dawud (David)',
       note: 'Given greatest kingdom ever. No one after him will have such dominion (Quran 38:35).'
     },
+    age: 52,
+    prophethood: '40 years as king',
+    miracles: ['Commanded jinn and wind', 'Understood speech of all animals', 'Ants, birds, jinn served him', 'Wind travelled month\'s journey in morning/evening', 'Copper flowed like water'],
+    burial: 'Jerusalem',
+    uniqueFacts: ['Greatest kingdom ever given', 'Commanded jinn to build structures', 'Queen of Sheba (Bilqis) accepted Islam', 'Died leaning on staff, jinn didn\'t know', 'Throne moved in blink of eye'],
     keyEvents: ['Understood animals', 'Commanded jinn', 'Queen of Sheba visit', 'Built the temple'],
     verses: ['27:15-44', '21:81-82', '34:12-14', '38:30-40'],
     icon: '👑'
@@ -288,6 +333,12 @@ const PROPHETS_TIMELINE = [
       cousin: 'Yahya/John (prophet)',
       note: 'Born without father by Allah\'s command "Kun" (Be). Will return before Day of Judgment.'
     },
+    age: 33,
+    ageNote: 'Raised to heaven at ~33, will return',
+    miracles: ['Born without father', 'Spoke in cradle', 'Made birds from clay', 'Healed blind and lepers', 'Raised the dead', 'Table of food from heaven (Al-Ma\'idah)'],
+    scripture: 'Injeel (Gospel)',
+    burial: 'Not dead - raised alive to heaven, will return',
+    uniqueFacts: ['Created without father', 'Called "Word of Allah" and "Spirit from Him"', 'Will return before Day of Judgment', 'Will kill Dajjal (Anti-Christ)', 'Will pray behind Mahdi', 'Only prophet raised alive'],
     keyEvents: ['Miraculous birth', 'Spoke in cradle', 'Healed the sick', 'Raised to heaven'],
     verses: ['3:45-55', '5:110-118', '19:16-35', '4:157-158'],
     icon: '✨'
@@ -312,6 +363,13 @@ const PROPHETS_TIMELINE = [
       children: ['Qasim', 'Abdullah', 'Ibrahim (sons)', 'Zainab', 'Ruqayyah', 'Umm Kulthum', 'Fatimah (daughters)'],
       note: 'Lineage: Muhammad ﷺ → ... → Adnan → ... → Kedar → Ismail → Ibrahim'
     },
+    age: 63,
+    prophethood: '23 years (13 in Makkah, 10 in Madinah)',
+    miracles: ['Quran (greatest miracle)', 'Isra & Miraj', 'Moon splitting', 'Water flowing from fingers', 'Food multiplication', 'Prophecies fulfilled'],
+    scripture: 'Quran (Final Testament)',
+    burial: 'Masjid an-Nabawi, Madinah (in Aisha\'s room)',
+    uniqueFacts: ['Final prophet for all mankind', 'Quran preserved letter-by-letter', 'Most influential person in history', 'Mentioned by name 4 times in Quran', 'Called "Mercy to all worlds" (21:107)', 'Leader of all prophets on Day of Judgment'],
+    companions: 'Over 100,000 Sahaba at Farewell Pilgrimage',
     keyEvents: ['First revelation (610 CE)', 'Isra & Miraj', 'Hijra to Madinah (622 CE)', 'Conquest of Makkah (630 CE)'],
     verses: ['33:40', '48:29', '3:144', '21:107'],
     icon: '🌙'
@@ -606,7 +664,8 @@ const LayerPanel = memo(({ layers, activeLayers, toggleLayer, counts, isOpen, se
 const TimelineSlider = memo(({ value, onChange, events, prophets = [], onProphetClick, onFlyToLocation }) => {
   const minYear = -4000;
   const maxYear = 700;
-  const [isExpanded, setIsExpanded] = useState(false); // Start collapsed
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [showFamilyTree, setShowFamilyTree] = useState(false);
 
   // Find active prophet(s) for current year
   const activeProphets = (prophets || []).filter(p => value >= p.periodStart && value <= p.periodEnd);
@@ -616,8 +675,8 @@ const TimelineSlider = memo(({ value, onChange, events, prophets = [], onProphet
   const formatYear = (year) => year < 0 ? `${Math.abs(year)} BCE` : `${year} CE`;
 
   return (
-    <div className="flex-shrink-0 mx-3 mb-2">
-      <div className="bg-gray-950 rounded-xl border border-gray-700 shadow-2xl overflow-hidden max-w-5xl mx-auto">
+    <div className="absolute bottom-3 left-3 right-3 z-[1000] max-w-5xl mx-auto">
+      <div className="bg-gray-950/95 backdrop-blur-sm rounded-xl border border-gray-700 shadow-2xl overflow-hidden">
 
         {/* Compact Header with Prophet Selector */}
         <div className="p-3 bg-gray-900/80">
@@ -722,78 +781,277 @@ const TimelineSlider = memo(({ value, onChange, events, prophets = [], onProphet
 
         {/* Expanded Content - Prophet Details */}
         {isExpanded && mainProphet && (
-          <div className="p-3 bg-gray-900/90 border-t border-gray-700 max-h-[35vh] overflow-y-auto custom-scrollbar">
-            {/* Two Column Layout */}
-            <div className="flex gap-3">
-              {/* Left - Icon & Basic Info */}
-              <div className="flex-shrink-0">
+          <div className="p-3 bg-gray-900/90 border-t border-gray-700 max-h-[45vh] overflow-y-auto custom-scrollbar">
+            {/* Header with Family Tree Button */}
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-3">
                 <div
-                  className="w-14 h-14 rounded-xl flex items-center justify-center text-2xl cursor-pointer hover:scale-105 transition-transform"
+                  className="w-12 h-12 rounded-xl flex items-center justify-center text-xl cursor-pointer hover:scale-105 transition-transform shadow-lg"
                   style={{ backgroundColor: mainProphet.color }}
                   onClick={() => onFlyToLocation(mainProphet.coords)}
                 >
                   {mainProphet.icon}
                 </div>
-              </div>
-
-              {/* Right - Details */}
-              <div className="flex-1 min-w-0">
-                {/* Name & Title */}
-                <div className="flex items-center gap-2 flex-wrap mb-1">
-                  <h3 className="text-white font-bold text-base">{mainProphet.name}</h3>
-                  <span className="text-gray-400 text-sm" dir="rtl">{mainProphet.nameAr}</span>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <h3 className="text-white font-bold text-base">{mainProphet.name}</h3>
+                    <span className="text-gray-400 text-sm" dir="rtl">{mainProphet.nameAr}</span>
+                  </div>
+                  <p className="text-amber-400 text-xs italic">"{mainProphet.title}"</p>
                 </div>
-                {mainProphet.title && (
-                  <p className="text-amber-400 text-xs italic mb-2">"{mainProphet.title}"</p>
-                )}
-                <p className="text-gray-300 text-xs mb-2 leading-relaxed">{mainProphet.story}</p>
+              </div>
+              <button
+                onClick={() => setShowFamilyTree(!showFamilyTree)}
+                className={`flex items-center gap-2 px-3 py-2 rounded-xl text-xs transition-all ${
+                  showFamilyTree
+                    ? 'bg-purple-500/30 border border-purple-400 text-purple-300'
+                    : 'bg-purple-500/20 hover:bg-purple-500/30 border border-purple-500/50 text-purple-400'
+                }`}
+              >
+                <span>🌳</span>
+                <span className="hidden sm:inline">{showFamilyTree ? 'Hide Tree' : 'Family Tree'}</span>
+              </button>
+            </div>
 
-                {/* Family - Compact Grid */}
-                {mainProphet.family && (
-                  <div className="mb-2 p-2 rounded-lg bg-gray-800/50 border border-gray-700">
-                    <p className="text-amber-400 text-[10px] font-bold uppercase mb-1">👨‍👩‍👧‍👦 Family</p>
-                    <div className="grid grid-cols-2 gap-x-3 gap-y-0.5 text-[11px]">
-                      {mainProphet.family.father && (
-                        <div><span className="text-gray-500">Father:</span> <span className="text-white">{mainProphet.family.father}</span></div>
-                      )}
-                      {mainProphet.family.mother && (
-                        <div><span className="text-gray-500">Mother:</span> <span className="text-white">{mainProphet.family.mother}</span></div>
-                      )}
-                      {mainProphet.family.wife && (
-                        <div className="col-span-2"><span className="text-gray-500">Wife:</span> <span className="text-white">{mainProphet.family.wife}</span></div>
-                      )}
-                      {mainProphet.family.wives && (
-                        <div className="col-span-2"><span className="text-gray-500">Wives:</span> <span className="text-white">{mainProphet.family.wives.join(', ')}</span></div>
-                      )}
-                      {mainProphet.family.sons && (
-                        <div className="col-span-2"><span className="text-gray-500">Sons:</span> <span className="text-white">{Array.isArray(mainProphet.family.sons) ? mainProphet.family.sons.join(', ') : mainProphet.family.sons}</span></div>
-                      )}
-                      {mainProphet.family.brother && (
-                        <div><span className="text-gray-500">Brother:</span> <span className="text-white">{mainProphet.family.brother}</span></div>
-                      )}
+            {/* Family Tree Mind Map */}
+            {showFamilyTree && (
+              <div className="mb-4 p-4 rounded-xl bg-gradient-to-br from-purple-900/40 to-indigo-900/40 border border-purple-500/30">
+                <h4 className="text-purple-300 text-xs font-bold uppercase mb-3 flex items-center gap-2">
+                  🌳 Prophetic Family Lineage
+                </h4>
+                <div className="relative">
+                  {/* Main Lineage Tree */}
+                  <div className="flex flex-col items-center">
+                    {/* Adam - Root */}
+                    <div className="flex flex-col items-center">
+                      <div className="px-3 py-1.5 rounded-lg bg-green-500/30 border border-green-400 text-green-300 text-xs font-medium">
+                        🌍 Adam
+                      </div>
+                      <div className="w-0.5 h-4 bg-gray-600"></div>
+                      <div className="text-gray-500 text-[10px]">↓ many generations</div>
+                      <div className="w-0.5 h-4 bg-gray-600"></div>
                     </div>
-                    {mainProphet.family.note && (
-                      <p className="text-amber-300/70 text-[10px] mt-1 italic">📌 {mainProphet.family.note}</p>
+
+                    {/* Nuh */}
+                    <div className="flex flex-col items-center">
+                      <div className="px-3 py-1.5 rounded-lg bg-blue-500/30 border border-blue-400 text-blue-300 text-xs font-medium">
+                        🚢 Nuh
+                      </div>
+                      <div className="w-0.5 h-4 bg-gray-600"></div>
+                      <div className="text-gray-500 text-[10px]">↓ Sam (Shem)</div>
+                      <div className="w-0.5 h-4 bg-gray-600"></div>
+                    </div>
+
+                    {/* Ibrahim */}
+                    <div className="flex flex-col items-center">
+                      <div className="px-3 py-1.5 rounded-lg bg-amber-500/30 border border-amber-400 text-amber-300 text-xs font-medium">
+                        🔥 Ibrahim (Khalilullah)
+                      </div>
+                      <div className="w-0.5 h-3 bg-gray-600"></div>
+                      {/* Split to Ismail and Ishaq */}
+                      <div className="flex items-start gap-8">
+                        {/* Ismail Branch */}
+                        <div className="flex flex-col items-center">
+                          <div className="w-16 h-0.5 bg-gray-600 absolute" style={{marginLeft: '-4rem', marginTop: '-0.5rem'}}></div>
+                          <div className="w-0.5 h-3 bg-gray-600"></div>
+                          <div className="px-2.5 py-1 rounded-lg bg-pink-500/30 border border-pink-400 text-pink-300 text-[11px] font-medium">
+                            💧 Ismail
+                          </div>
+                          <div className="w-0.5 h-2 bg-gray-600"></div>
+                          <div className="text-gray-500 text-[9px]">↓ Kedar</div>
+                          <div className="text-gray-500 text-[9px]">↓ generations</div>
+                          <div className="w-0.5 h-2 bg-gray-600"></div>
+                          <div className="px-2.5 py-1 rounded-lg bg-emerald-500/40 border-2 border-emerald-400 text-emerald-300 text-[11px] font-bold shadow-lg shadow-emerald-500/20">
+                            🌙 Muhammad ﷺ
+                          </div>
+                        </div>
+
+                        {/* Ishaq Branch */}
+                        <div className="flex flex-col items-center">
+                          <div className="w-0.5 h-3 bg-gray-600"></div>
+                          <div className="px-2.5 py-1 rounded-lg bg-purple-500/30 border border-purple-400 text-purple-300 text-[11px] font-medium">
+                            Ishaq
+                          </div>
+                          <div className="w-0.5 h-2 bg-gray-600"></div>
+                          <div className="px-2.5 py-1 rounded-lg bg-violet-500/30 border border-violet-400 text-violet-300 text-[11px] font-medium">
+                            👨‍👦‍👦 Yaqub (Israel)
+                          </div>
+                          <div className="w-0.5 h-2 bg-gray-600"></div>
+                          <div className="text-gray-500 text-[9px]">12 sons → 12 Tribes</div>
+                          <div className="w-0.5 h-2 bg-gray-600"></div>
+                          <div className="flex gap-3">
+                            <div className="flex flex-col items-center">
+                              <div className="px-2 py-0.5 rounded bg-cyan-500/30 border border-cyan-400 text-cyan-300 text-[10px]">
+                                ⭐ Yusuf
+                              </div>
+                            </div>
+                            <div className="flex flex-col items-center">
+                              <div className="px-2 py-0.5 rounded bg-gray-600 text-gray-300 text-[10px]">
+                                Lawi → Imran
+                              </div>
+                              <div className="w-0.5 h-2 bg-gray-600"></div>
+                              <div className="flex gap-2">
+                                <div className="px-2 py-0.5 rounded bg-red-500/30 border border-red-400 text-red-300 text-[10px]">
+                                  📜 Musa
+                                </div>
+                                <div className="px-2 py-0.5 rounded bg-red-500/20 text-red-300 text-[10px]">
+                                  Harun
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="w-0.5 h-2 bg-gray-600 mt-2"></div>
+                          <div className="flex gap-2">
+                            <div className="px-2 py-0.5 rounded bg-green-500/30 border border-green-400 text-green-300 text-[10px]">
+                              🎵 Dawud
+                            </div>
+                            <div className="text-gray-500">→</div>
+                            <div className="px-2 py-0.5 rounded bg-pink-500/30 border border-pink-400 text-pink-300 text-[10px]">
+                              👑 Sulayman
+                            </div>
+                          </div>
+                          <div className="w-0.5 h-2 bg-gray-600 mt-2"></div>
+                          <div className="flex gap-2 items-center">
+                            <div className="px-2 py-0.5 rounded bg-gray-600 text-gray-300 text-[10px]">
+                              Imran
+                            </div>
+                            <div className="text-gray-500">→</div>
+                            <div className="px-2 py-0.5 rounded bg-purple-500/30 border border-purple-400 text-purple-300 text-[10px]">
+                              ✨ Isa
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Legend */}
+                  <div className="mt-4 pt-3 border-t border-gray-700 flex flex-wrap gap-2 justify-center text-[9px] text-gray-500">
+                    <span>🟢 Rasul (Messenger with Book)</span>
+                    <span>•</span>
+                    <span>Lines show direct lineage</span>
+                    <span>•</span>
+                    <span>Based on Quran & authentic sources</span>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Quick Stats Row */}
+            <div className="grid grid-cols-4 gap-2 mb-3">
+              {mainProphet.age && (
+                <div className="text-center p-2 rounded-lg bg-gray-800/50 border border-gray-700">
+                  <div className="text-lg font-bold text-white">{mainProphet.age}</div>
+                  <div className="text-[9px] text-gray-400 uppercase">Years Lived</div>
+                </div>
+              )}
+              {mainProphet.prophethood && (
+                <div className="text-center p-2 rounded-lg bg-gray-800/50 border border-gray-700">
+                  <div className="text-sm font-bold text-amber-400">{mainProphet.prophethood}</div>
+                  <div className="text-[9px] text-gray-400 uppercase">Prophethood</div>
+                </div>
+              )}
+              {mainProphet.scripture && (
+                <div className="text-center p-2 rounded-lg bg-emerald-900/30 border border-emerald-700">
+                  <div className="text-sm font-bold text-emerald-400">📖</div>
+                  <div className="text-[9px] text-emerald-300">{mainProphet.scripture.split(' ')[0]}</div>
+                </div>
+              )}
+              {mainProphet.companions && (
+                <div className="text-center p-2 rounded-lg bg-blue-900/30 border border-blue-700">
+                  <div className="text-sm font-bold text-blue-400">100K+</div>
+                  <div className="text-[9px] text-blue-300">Companions</div>
+                </div>
+              )}
+            </div>
+
+            {/* Story */}
+            <p className="text-gray-300 text-xs mb-3 leading-relaxed">{mainProphet.story}</p>
+
+            {/* Two Column Info Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
+              {/* Miracles */}
+              {mainProphet.miracles && (
+                <div className="p-2.5 rounded-lg bg-gradient-to-br from-amber-900/30 to-orange-900/30 border border-amber-700/50">
+                  <p className="text-amber-400 text-[10px] font-bold uppercase mb-1.5">✨ Miracles</p>
+                  <ul className="space-y-0.5">
+                    {mainProphet.miracles.slice(0, 4).map((m, i) => (
+                      <li key={i} className="text-[11px] text-amber-200/80 flex items-start gap-1">
+                        <span className="text-amber-500 mt-0.5">•</span>
+                        <span>{m}</span>
+                      </li>
+                    ))}
+                    {mainProphet.miracles.length > 4 && (
+                      <li className="text-[10px] text-amber-500/70">+{mainProphet.miracles.length - 4} more</li>
+                    )}
+                  </ul>
+                </div>
+              )}
+
+              {/* Family */}
+              {mainProphet.family && (
+                <div className="p-2.5 rounded-lg bg-gradient-to-br from-blue-900/30 to-indigo-900/30 border border-blue-700/50">
+                  <p className="text-blue-400 text-[10px] font-bold uppercase mb-1.5">👨‍👩‍👧‍👦 Family</p>
+                  <div className="space-y-0.5 text-[11px]">
+                    {mainProphet.family.father && (
+                      <div><span className="text-gray-500">Father:</span> <span className="text-blue-200">{mainProphet.family.father}</span></div>
+                    )}
+                    {mainProphet.family.mother && (
+                      <div><span className="text-gray-500">Mother:</span> <span className="text-blue-200">{mainProphet.family.mother}</span></div>
+                    )}
+                    {mainProphet.family.wife && (
+                      <div><span className="text-gray-500">Wife:</span> <span className="text-blue-200">{mainProphet.family.wife}</span></div>
+                    )}
+                    {mainProphet.family.wives && (
+                      <div><span className="text-gray-500">Wives:</span> <span className="text-blue-200">{mainProphet.family.wives.slice(0, 2).join(', ')}</span></div>
+                    )}
+                    {mainProphet.family.sons && (
+                      <div><span className="text-gray-500">Sons:</span> <span className="text-blue-200">{Array.isArray(mainProphet.family.sons) ? mainProphet.family.sons.slice(0, 2).join(', ') : mainProphet.family.sons}</span></div>
                     )}
                   </div>
-                )}
+                </div>
+              )}
+            </div>
 
-                {/* Events & Verses Row */}
+            {/* Unique Facts */}
+            {mainProphet.uniqueFacts && (
+              <div className="p-2.5 rounded-lg bg-gradient-to-br from-purple-900/30 to-pink-900/30 border border-purple-700/50 mb-3">
+                <p className="text-purple-400 text-[10px] font-bold uppercase mb-1.5">💎 Unique Facts</p>
                 <div className="flex flex-wrap gap-1.5">
-                  {mainProphet.keyEvents.slice(0, 3).map((event, i) => (
-                    <span key={i} className="px-2 py-0.5 rounded text-[10px] text-white bg-gray-700">{event}</span>
-                  ))}
-                  {mainProphet.verses.slice(0, 2).map((v, i) => (
-                    <button
-                      key={i}
-                      onClick={(e) => { e.stopPropagation(); onProphetClick(mainProphet, v); }}
-                      className="px-2 py-0.5 rounded bg-emerald-600 hover:bg-emerald-500 text-white text-[10px] font-medium"
-                    >
-                      📖 {v}
-                    </button>
+                  {mainProphet.uniqueFacts.slice(0, 4).map((fact, i) => (
+                    <span key={i} className="px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 text-[10px] border border-purple-500/30">
+                      {fact}
+                    </span>
                   ))}
                 </div>
               </div>
+            )}
+
+            {/* Burial Location */}
+            {mainProphet.burial && (
+              <div className="flex items-center gap-2 p-2 rounded-lg bg-gray-800/50 border border-gray-700 mb-3">
+                <span className="text-gray-400">⚰️</span>
+                <div className="text-[11px]">
+                  <span className="text-gray-500">Burial: </span>
+                  <span className="text-gray-300">{mainProphet.burial}</span>
+                </div>
+              </div>
+            )}
+
+            {/* Events & Verses Row */}
+            <div className="flex flex-wrap gap-1.5">
+              {mainProphet.keyEvents.map((event, i) => (
+                <span key={i} className="px-2 py-0.5 rounded text-[10px] text-white bg-gray-700">{event}</span>
+              ))}
+              {mainProphet.verses.map((v, i) => (
+                <button
+                  key={i}
+                  onClick={(e) => { e.stopPropagation(); onProphetClick(mainProphet, v); }}
+                  className="px-2 py-0.5 rounded bg-emerald-600 hover:bg-emerald-500 text-white text-[10px] font-medium transition-colors"
+                >
+                  📖 {v}
+                </button>
+              ))}
             </div>
           </div>
         )}
@@ -1227,8 +1485,8 @@ const PropheticMap = memo(function PropheticMap({ isVisible, onClose, onNavigate
           </div>
         </div>
 
-        {/* Map Container - Takes remaining space */}
-        <div className="flex-1 relative overflow-hidden">
+        {/* Map Container */}
+        <div className="flex-1 relative">
           <MapContainer
             center={defaultCenter}
             zoom={defaultZoom}
@@ -1478,6 +1736,18 @@ const PropheticMap = memo(function PropheticMap({ isVisible, onClose, onNavigate
             />
           )}
 
+          {/* Timeline Slider - Overlay on map */}
+          {showTimeline && (
+            <TimelineSlider
+              value={timelineYear}
+              onChange={setTimelineYear}
+              events={timelineEvents}
+              prophets={PROPHETS_TIMELINE}
+              onProphetClick={handleProphetVerseClick}
+              onFlyToLocation={handleFlyToLocation}
+            />
+          )}
+
           {/* Detail Panel */}
           {!showTimeline && selectedItem && (
             <DetailPanel
@@ -1488,18 +1758,6 @@ const PropheticMap = memo(function PropheticMap({ isVisible, onClose, onNavigate
             />
           )}
         </div>
-
-        {/* Timeline Slider - Outside map as flex sibling */}
-        {showTimeline && (
-          <TimelineSlider
-            value={timelineYear}
-            onChange={setTimelineYear}
-            events={timelineEvents}
-            prophets={PROPHETS_TIMELINE}
-            onProphetClick={handleProphetVerseClick}
-            onFlyToLocation={handleFlyToLocation}
-          />
-        )}
 
         {/* Legend */}
         <div className="flex-shrink-0 px-3 py-1.5 border-t border-white/10 bg-black/40">
