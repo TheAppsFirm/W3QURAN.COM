@@ -7,7 +7,7 @@
  * - Revelation Order
  */
 
-import { useState, useMemo, memo } from 'react';
+import { useState, useMemo, memo, useEffect, useCallback } from 'react';
 import { PALETTES } from '../../data';
 import { Icons } from '../common/Icons';
 import { playThrottledHoverSound, playClickSound } from '../../utils/soundUtils';
@@ -50,7 +50,7 @@ export const LayoutSelector = memo(function LayoutSelector({ currentLayout, onLa
   ];
 
   return (
-    <div className={`flex items-center gap-1 p-1 rounded-2xl ${darkMode ? 'bg-gray-800/80' : 'bg-white/80'} backdrop-blur-xl shadow-lg`}>
+    <div className={`flex items-center gap-1 p-1 rounded-2xl ${darkMode ? 'bg-gray-800/80' : 'bg-white/80'} backdrop-blur-xl shadow-lg overflow-x-auto hide-scrollbar`}>
       {layouts.map((layout) => {
         const Icon = Icons[layout.icon] || Icons.Grid;
         const isActive = currentLayout === layout.id;
@@ -902,7 +902,7 @@ export const RevelationLayout = memo(function RevelationLayout({
   );
 });
 
-// Book Layout - Classic Quran book experience with page turning
+// Book Layout - Elegant Quran Book Experience
 export const BookLayout = memo(function BookLayout({
   surahs,
   onSurahClick,
@@ -913,163 +913,186 @@ export const BookLayout = memo(function BookLayout({
   const [currentPage, setCurrentPage] = useState(0);
   const [isFlipping, setIsFlipping] = useState(false);
   const [flipDirection, setFlipDirection] = useState('next');
+  const [hoveredSurah, setHoveredSurah] = useState(null);
 
-  // Surahs per page (6 on each side = 12 per spread)
-  const surahsPerPage = 12;
+  // 8 surahs per page spread (4 per side)
+  const surahsPerPage = 8;
   const totalPages = Math.ceil(surahs.length / surahsPerPage);
 
-  // Get surahs for current spread
   const currentSurahs = useMemo(() => {
     const start = currentPage * surahsPerPage;
     return surahs.slice(start, start + surahsPerPage);
-  }, [surahs, currentPage]);
+  }, [surahs, currentPage, surahsPerPage]);
 
-  const leftPageSurahs = currentSurahs.slice(0, 6);
-  const rightPageSurahs = currentSurahs.slice(6, 12);
+  const leftPageSurahs = currentSurahs.slice(0, 4);
+  const rightPageSurahs = currentSurahs.slice(4, 8);
 
-  const goToNextPage = () => {
+  const goToNextPage = useCallback(() => {
     if (currentPage < totalPages - 1 && !isFlipping) {
       setFlipDirection('next');
       setIsFlipping(true);
       setTimeout(() => {
         setCurrentPage(prev => prev + 1);
         setIsFlipping(false);
-      }, 600);
+      }, 800);
     }
-  };
+  }, [currentPage, totalPages, isFlipping]);
 
-  const goToPrevPage = () => {
+  const goToPrevPage = useCallback(() => {
     if (currentPage > 0 && !isFlipping) {
       setFlipDirection('prev');
       setIsFlipping(true);
       setTimeout(() => {
         setCurrentPage(prev => prev - 1);
         setIsFlipping(false);
-      }, 600);
+      }, 800);
     }
-  };
+  }, [currentPage, isFlipping]);
 
-  // Book Surah Card Component
-  const SurahCard = ({ surah, index, isRightPage }) => {
+  // Simple clickable Surah Card
+  const SurahCard = ({ surah }) => {
     const palette = PALETTES[(surah.id - 1) % 10];
-    const [hovered, setHovered] = useState(false);
+    const isHovered = hoveredSurah === surah.id;
+
+    const handleClick = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      playClickSound();
+      onSurahClick(surah, { x: e.clientX, y: e.clientY });
+    };
 
     return (
       <div
-        className="relative cursor-pointer group"
-        style={{
-          animationDelay: `${index * 0.05}s`,
-        }}
+        role="button"
+        tabIndex={0}
+        onClick={handleClick}
+        onKeyDown={(e) => e.key === 'Enter' && handleClick(e)}
         onMouseEnter={() => {
-          setHovered(true);
+          setHoveredSurah(surah.id);
           playThrottledHoverSound();
         }}
-        onMouseLeave={() => setHovered(false)}
-        onClick={(e) => {
-          playClickSound();
-          onSurahClick(surah, { x: e.clientX, y: e.clientY });
+        onMouseLeave={() => setHoveredSurah(null)}
+        className="cursor-pointer select-none"
+        style={{
+          padding: 12,
+          borderRadius: 12,
+          background: isHovered
+            ? `linear-gradient(135deg, ${palette.colors[0]}25, ${palette.colors[1]}15)`
+            : darkMode
+              ? 'rgba(40,35,60,0.9)'
+              : 'rgba(255,250,240,0.95)',
+          border: `2px solid ${isHovered ? palette.colors[0] : darkMode ? 'rgba(255,215,0,0.2)' : 'rgba(180,140,70,0.3)'}`,
+          boxShadow: isHovered
+            ? `0 8px 25px ${palette.colors[0]}40`
+            : '0 4px 15px rgba(0,0,0,0.1)',
+          transform: isHovered ? 'translateY(-4px) scale(1.02)' : 'none',
+          transition: 'all 0.3s ease',
         }}
       >
-        {/* Card Container */}
+        {/* Surah Number */}
         <div
-          className={`relative p-3 rounded-lg transition-all duration-300 ${
-            hovered ? 'scale-105 shadow-xl' : 'shadow-md'
-          }`}
+          className="mx-auto mb-2 flex items-center justify-center rounded-full"
           style={{
-            background: hovered
-              ? `linear-gradient(135deg, ${palette.colors[0]}30, ${palette.colors[1]}20)`
-              : darkMode
-              ? 'rgba(255,255,255,0.05)'
-              : 'rgba(139, 90, 43, 0.08)',
-            border: hovered
-              ? `2px solid ${palette.colors[0]}60`
-              : '1px solid rgba(139, 90, 43, 0.2)',
+            width: 36,
+            height: 36,
+            background: `linear-gradient(135deg, ${palette.colors[0]}, ${palette.colors[1]})`,
+            boxShadow: `0 3px 10px ${palette.colors[0]}50`,
           }}
         >
-          {/* Surah Number Badge */}
-          <div
-            className="absolute -top-2 flex items-center justify-center rounded-full shadow-lg"
-            style={{
-              width: 28 * zoom,
-              height: 28 * zoom,
-              background: `linear-gradient(135deg, ${palette.colors[0]}, ${palette.colors[1]})`,
-              left: isRightPage ? 'auto' : -8,
-              right: isRightPage ? -8 : 'auto',
-            }}
-          >
-            <span className="text-white font-bold" style={{ fontSize: 11 * zoom }}>
-              {surah.id}
-            </span>
-          </div>
+          <span className="text-white font-bold text-sm">{surah.id}</span>
+        </div>
 
-          {/* Arabic Name */}
-          <div
-            className={`text-center mb-1 ${darkMode ? 'text-amber-200' : 'text-amber-900'}`}
-            style={{
-              fontFamily: "'Scheherazade New', 'Amiri', serif",
-              fontSize: 22 * zoom * contentZoom,
-              fontWeight: 'bold',
-              textShadow: hovered ? `0 0 20px ${palette.colors[0]}50` : 'none',
-            }}
-            dir="rtl"
-          >
-            {surah.arabic}
-          </div>
+        {/* Arabic Name */}
+        <div
+          className="text-center mb-1"
+          style={{
+            fontFamily: "'Scheherazade New', serif",
+            fontSize: 20 * zoom,
+            fontWeight: 'bold',
+            color: isHovered ? palette.colors[0] : darkMode ? '#F5DEB3' : '#5D4037',
+          }}
+          dir="rtl"
+        >
+          {surah.arabic}
+        </div>
 
-          {/* English Name */}
-          <div
-            className={`text-center text-sm ${darkMode ? 'text-gray-400' : 'text-amber-800/70'}`}
-            style={{ fontSize: 12 * zoom * contentZoom }}
-          >
-            {surah.name}
-          </div>
+        {/* English Name */}
+        <div
+          className="text-center text-xs"
+          style={{ color: darkMode ? 'rgba(255,255,255,0.7)' : 'rgba(100,80,60,0.8)' }}
+        >
+          {surah.name}
+        </div>
 
-          {/* Verses Count */}
-          <div
-            className={`text-center text-xs mt-1 ${darkMode ? 'text-gray-500' : 'text-amber-700/50'}`}
-            style={{ fontSize: 10 * zoom }}
-          >
-            {surah.ayahs} Verses • {surah.type}
-          </div>
-
-          {/* Decorative Corner */}
-          <div
-            className="absolute bottom-1 opacity-30"
-            style={{
-              left: isRightPage ? 'auto' : 4,
-              right: isRightPage ? 4 : 'auto',
-              color: palette.colors[0],
-            }}
-          >
-            ❧
-          </div>
+        {/* Ayah count */}
+        <div
+          className="text-center text-xs mt-1"
+          style={{ color: darkMode ? 'rgba(255,215,0,0.5)' : 'rgba(139,90,43,0.6)' }}
+        >
+          {surah.ayahs} verses
         </div>
       </div>
     );
   };
 
-  return (
-    <div className="flex flex-col items-center justify-center min-h-[70vh] p-4">
-      {/* Book Container */}
+  // Page component
+  const BookPage = ({ pageSurahs, isLeft }) => (
+    <div
+      style={{
+        width: Math.min(340, window.innerWidth * 0.4) * zoom,
+        minHeight: 520 * zoom,
+        padding: '20px 16px',
+        background: darkMode
+          ? `linear-gradient(${isLeft ? '135deg' : '225deg'}, #1a1a2e 0%, #252540 100%)`
+          : `linear-gradient(${isLeft ? '135deg' : '225deg'}, #FFF9F0 0%, #FFF5E6 100%)`,
+        borderRadius: isLeft ? '8px 0 0 8px' : '0 8px 8px 0',
+        boxShadow: isLeft
+          ? 'inset -15px 0 30px rgba(0,0,0,0.1), -5px 5px 20px rgba(0,0,0,0.15)'
+          : 'inset 15px 0 30px rgba(0,0,0,0.1), 5px 5px 20px rgba(0,0,0,0.15)',
+        border: `1px solid ${darkMode ? 'rgba(139,92,246,0.2)' : 'rgba(180,140,70,0.3)'}`,
+        borderRight: isLeft ? 'none' : undefined,
+        borderLeft: !isLeft ? 'none' : undefined,
+      }}
+    >
+      {/* Page Header */}
       <div
-        className="relative"
-        style={{
-          perspective: '2000px',
-          perspectiveOrigin: '50% 50%',
-        }}
+        className="text-center mb-4 pb-2"
+        style={{ borderBottom: `1px solid ${darkMode ? 'rgba(255,215,0,0.2)' : 'rgba(180,140,70,0.2)'}` }}
       >
-        {/* Book Shadow */}
-        <div
-          className="absolute -bottom-4 left-1/2 -translate-x-1/2 rounded-full opacity-30"
-          style={{
-            width: '90%',
-            height: 30,
-            background: 'radial-gradient(ellipse, rgba(0,0,0,0.4) 0%, transparent 70%)',
-            filter: 'blur(10px)',
-          }}
-        />
+        <span style={{ color: darkMode ? 'rgba(255,215,0,0.6)' : 'rgba(139,90,43,0.6)', fontSize: 12 }}>
+          {isLeft ? 'بِسْمِ اللَّهِ' : `Page ${currentPage + 1}`}
+        </span>
+      </div>
 
-        {/* Book */}
+      {/* Surah Grid - 2 columns, 2 rows */}
+      <div className="grid grid-cols-2 gap-3">
+        {pageSurahs.map((surah) => (
+          <SurahCard key={surah.id} surah={surah} />
+        ))}
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="relative min-h-[80vh] w-full flex flex-col items-center pt-8 pb-16 px-4">
+      {/* Header */}
+      <div className="text-center mb-8">
+        <div
+          className="text-4xl mb-2"
+          style={{
+            fontFamily: "'Scheherazade New', serif",
+            color: darkMode ? '#FFD700' : '#8B4513',
+          }}
+        >
+          القرآن الكريم
+        </div>
+        <div style={{ color: darkMode ? 'rgba(255,215,0,0.5)' : 'rgba(139,90,43,0.5)', fontSize: 12, letterSpacing: '0.2em' }}>
+          THE NOBLE QURAN
+        </div>
+      </div>
+
+      {/* Book Container */}
+      <div style={{ perspective: '1500px' }}>
         <div
           className="relative flex"
           style={{
@@ -1077,255 +1100,86 @@ export const BookLayout = memo(function BookLayout({
             transform: 'rotateX(5deg)',
           }}
         >
-          {/* Book Spine */}
-          <div
-            className="absolute left-1/2 -translate-x-1/2 h-full z-20"
-            style={{
-              width: 30,
-              background: darkMode
-                ? 'linear-gradient(90deg, #1a1a2e 0%, #2d2d44 50%, #1a1a2e 100%)'
-                : 'linear-gradient(90deg, #5d4037 0%, #8d6e63 50%, #5d4037 100%)',
-              boxShadow: 'inset 0 0 20px rgba(0,0,0,0.5)',
-              borderRadius: '2px',
-            }}
-          >
-            {/* Spine Decorations */}
-            <div className="absolute top-4 left-1/2 -translate-x-1/2 w-4 h-1 rounded-full bg-amber-400/50" />
-            <div className="absolute top-8 left-1/2 -translate-x-1/2 w-3 h-3 rounded-full border border-amber-400/50" />
-            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 w-4 h-1 rounded-full bg-amber-400/50" />
-            {/* Spine Text */}
+          {/* Flipping Page Overlay */}
+          {isFlipping && (
             <div
-              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-amber-300/60 font-bold"
+              className="absolute z-50"
               style={{
-                writingMode: 'vertical-rl',
-                textOrientation: 'mixed',
-                fontSize: 10,
-                letterSpacing: 2,
+                width: Math.min(340, window.innerWidth * 0.4) * zoom,
+                height: 520 * zoom,
+                left: flipDirection === 'next' ? '50%' : 0,
+                marginLeft: flipDirection === 'next' ? 12 : 0,
+                background: darkMode
+                  ? 'linear-gradient(90deg, #1a1a2e, #252540)'
+                  : 'linear-gradient(90deg, #FFF9F0, #FFF5E6)',
+                borderRadius: 8,
+                transformOrigin: flipDirection === 'next' ? 'left center' : 'right center',
+                transformStyle: 'preserve-3d',
+                animation: `${flipDirection === 'next' ? 'bookPageTurnNext' : 'bookPageTurnPrev'} 0.8s ease-in-out forwards`,
+                boxShadow: '0 10px 40px rgba(0,0,0,0.3)',
               }}
-            >
-              القرآن
-            </div>
-          </div>
+            />
+          )}
 
           {/* Left Page */}
+          <BookPage pageSurahs={leftPageSurahs} isLeft={true} />
+
+          {/* Spine */}
           <div
-            className={`relative overflow-hidden transition-transform duration-500 ${
-              isFlipping && flipDirection === 'prev' ? 'book-page-flip-left' : ''
-            }`}
             style={{
-              width: Math.min(380, window.innerWidth * 0.4) * zoom,
-              minHeight: 500 * zoom,
+              width: 24,
               background: darkMode
-                ? 'linear-gradient(135deg, #1e1e2f 0%, #2a2a3d 100%)'
-                : 'linear-gradient(135deg, #fdf6e3 0%, #f5e6c8 50%, #efe0b9 100%)',
-              borderRadius: '4px 0 0 4px',
-              boxShadow: darkMode
-                ? 'inset -10px 0 30px rgba(0,0,0,0.3), -5px 5px 20px rgba(0,0,0,0.3)'
-                : 'inset -10px 0 30px rgba(139, 90, 43, 0.15), -5px 5px 20px rgba(0,0,0,0.15)',
-              borderRight: darkMode ? '1px solid #333' : '1px solid rgba(139, 90, 43, 0.3)',
-              transformOrigin: 'right center',
+                ? 'linear-gradient(90deg, #3d3d60, #4a4a70, #3d3d60)'
+                : 'linear-gradient(90deg, #8B5A2B, #A0724A, #8B5A2B)',
+              boxShadow: 'inset 0 0 15px rgba(0,0,0,0.4)',
             }}
-          >
-            {/* Paper Texture Overlay */}
-            <div
-              className="absolute inset-0 pointer-events-none opacity-30"
-              style={{
-                backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)' opacity='0.4'/%3E%3C/svg%3E")`,
-              }}
-            />
-
-            {/* Page Content */}
-            <div className="relative p-4 pt-6">
-              {/* Page Header */}
-              <div className={`text-center mb-4 pb-2 border-b ${darkMode ? 'border-gray-700' : 'border-amber-200'}`}>
-                <div className={`text-lg font-bold ${darkMode ? 'text-amber-400' : 'text-amber-800'}`}>
-                  بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
-                </div>
-              </div>
-
-              {/* Surahs Grid */}
-              <div className="grid grid-cols-2 gap-3">
-                {leftPageSurahs.map((surah, index) => (
-                  <SurahCard key={surah.id} surah={surah} index={index} isRightPage={false} />
-                ))}
-              </div>
-
-              {/* Page Number */}
-              <div className={`absolute bottom-3 left-4 text-sm ${darkMode ? 'text-gray-600' : 'text-amber-700/50'}`}>
-                {currentPage * 2 + 1}
-              </div>
-
-              {/* Corner Decoration */}
-              <div className={`absolute bottom-2 right-2 text-2xl opacity-20 ${darkMode ? 'text-amber-400' : 'text-amber-800'}`}>
-                ﴿
-              </div>
-            </div>
-
-            {/* Bookmark Ribbon */}
-            {currentPage === 0 && (
-              <div
-                className="absolute top-0 right-8 w-6 h-20 z-30"
-                style={{
-                  background: 'linear-gradient(180deg, #dc2626 0%, #b91c1c 100%)',
-                  clipPath: 'polygon(0 0, 100% 0, 100% 100%, 50% 85%, 0 100%)',
-                  boxShadow: '2px 2px 5px rgba(0,0,0,0.3)',
-                }}
-              />
-            )}
-          </div>
+          />
 
           {/* Right Page */}
-          <div
-            className={`relative overflow-hidden transition-transform duration-500 ${
-              isFlipping && flipDirection === 'next' ? 'book-page-flip-right' : ''
-            }`}
-            style={{
-              width: Math.min(380, window.innerWidth * 0.4) * zoom,
-              minHeight: 500 * zoom,
-              background: darkMode
-                ? 'linear-gradient(225deg, #1e1e2f 0%, #2a2a3d 100%)'
-                : 'linear-gradient(225deg, #fdf6e3 0%, #f5e6c8 50%, #efe0b9 100%)',
-              borderRadius: '0 4px 4px 0',
-              boxShadow: darkMode
-                ? 'inset 10px 0 30px rgba(0,0,0,0.3), 5px 5px 20px rgba(0,0,0,0.3)'
-                : 'inset 10px 0 30px rgba(139, 90, 43, 0.15), 5px 5px 20px rgba(0,0,0,0.15)',
-              borderLeft: darkMode ? '1px solid #333' : '1px solid rgba(139, 90, 43, 0.3)',
-              transformOrigin: 'left center',
-            }}
-          >
-            {/* Paper Texture */}
-            <div
-              className="absolute inset-0 pointer-events-none opacity-30"
-              style={{
-                backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)' opacity='0.4'/%3E%3C/svg%3E")`,
-              }}
-            />
-
-            {/* Page Content */}
-            <div className="relative p-4 pt-6">
-              {/* Page Header Decoration */}
-              <div className={`text-center mb-4 pb-2 border-b ${darkMode ? 'border-gray-700' : 'border-amber-200'}`}>
-                <div className={`text-sm ${darkMode ? 'text-gray-500' : 'text-amber-700/60'}`}>
-                  ❦ Page {currentPage + 1} of {totalPages} ❦
-                </div>
-              </div>
-
-              {/* Surahs Grid */}
-              <div className="grid grid-cols-2 gap-3">
-                {rightPageSurahs.map((surah, index) => (
-                  <SurahCard key={surah.id} surah={surah} index={index + 6} isRightPage={true} />
-                ))}
-              </div>
-
-              {/* Page Number */}
-              <div className={`absolute bottom-3 right-4 text-sm ${darkMode ? 'text-gray-600' : 'text-amber-700/50'}`}>
-                {currentPage * 2 + 2}
-              </div>
-
-              {/* Corner Decoration */}
-              <div className={`absolute bottom-2 left-2 text-2xl opacity-20 ${darkMode ? 'text-amber-400' : 'text-amber-800'}`}>
-                ﴾
-              </div>
-            </div>
-
-            {/* Golden Bookmark */}
-            {currentPage === totalPages - 1 && (
-              <div
-                className="absolute top-0 left-8 w-6 h-16 z-30"
-                style={{
-                  background: 'linear-gradient(180deg, #d4af37 0%, #b8860b 100%)',
-                  clipPath: 'polygon(0 0, 100% 0, 100% 100%, 50% 85%, 0 100%)',
-                  boxShadow: '-2px 2px 5px rgba(0,0,0,0.3)',
-                }}
-              />
-            )}
-          </div>
+          <BookPage pageSurahs={rightPageSurahs} isLeft={false} />
         </div>
       </div>
 
-      {/* Navigation Controls */}
-      <div className="flex items-center gap-6 mt-8">
-        {/* Previous Button */}
+      {/* Navigation */}
+      <div className="flex items-center gap-6 mt-10">
         <button
           onClick={goToPrevPage}
           disabled={currentPage === 0 || isFlipping}
-          className={`group flex items-center gap-2 px-5 py-3 rounded-xl transition-all duration-300 ${
-            currentPage === 0 || isFlipping
-              ? 'opacity-40 cursor-not-allowed'
-              : 'hover:scale-105 hover:shadow-lg'
-          } ${
-            darkMode
-              ? 'bg-gray-800 text-amber-400 hover:bg-gray-700'
-              : 'bg-amber-100 text-amber-800 hover:bg-amber-200'
-          }`}
+          className="flex items-center gap-2 px-5 py-2.5 rounded-full transition-all"
           style={{
-            boxShadow: currentPage > 0 ? '0 4px 15px rgba(0,0,0,0.2)' : 'none',
+            opacity: currentPage === 0 ? 0.4 : 1,
+            background: darkMode ? 'rgba(139,92,246,0.2)' : 'rgba(180,140,70,0.2)',
+            border: `1px solid ${darkMode ? 'rgba(139,92,246,0.4)' : 'rgba(180,140,70,0.4)'}`,
+            color: darkMode ? '#A78BFA' : '#8B5A2B',
           }}
         >
-          <Icons.ChevronLeft className="w-5 h-5 transition-transform group-hover:-translate-x-1" />
-          <span className="font-medium">Previous</span>
+          <Icons.ChevronLeft className="w-5 h-5" />
+          <span>Previous</span>
         </button>
 
-        {/* Page Indicator */}
-        <div className={`flex items-center gap-2 px-4 py-2 rounded-lg ${darkMode ? 'bg-gray-800' : 'bg-amber-50'}`}>
-          {Array.from({ length: Math.min(totalPages, 10) }, (_, i) => {
-            const pageIndex = totalPages > 10
-              ? Math.floor(i * (totalPages - 1) / 9)
-              : i;
-            return (
-              <button
-                key={i}
-                onClick={() => {
-                  if (!isFlipping && pageIndex !== currentPage) {
-                    setFlipDirection(pageIndex > currentPage ? 'next' : 'prev');
-                    setIsFlipping(true);
-                    setTimeout(() => {
-                      setCurrentPage(pageIndex);
-                      setIsFlipping(false);
-                    }, 400);
-                  }
-                }}
-                className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
-                  pageIndex === currentPage
-                    ? darkMode
-                      ? 'bg-amber-400 scale-125'
-                      : 'bg-amber-600 scale-125'
-                    : darkMode
-                    ? 'bg-gray-600 hover:bg-gray-500'
-                    : 'bg-amber-300 hover:bg-amber-400'
-                }`}
-              />
-            );
-          })}
+        <div style={{ color: darkMode ? 'rgba(255,215,0,0.6)' : 'rgba(139,90,43,0.6)' }}>
+          {currentPage + 1} / {totalPages}
         </div>
 
-        {/* Next Button */}
         <button
           onClick={goToNextPage}
           disabled={currentPage >= totalPages - 1 || isFlipping}
-          className={`group flex items-center gap-2 px-5 py-3 rounded-xl transition-all duration-300 ${
-            currentPage >= totalPages - 1 || isFlipping
-              ? 'opacity-40 cursor-not-allowed'
-              : 'hover:scale-105 hover:shadow-lg'
-          } ${
-            darkMode
-              ? 'bg-gray-800 text-amber-400 hover:bg-gray-700'
-              : 'bg-amber-100 text-amber-800 hover:bg-amber-200'
-          }`}
+          className="flex items-center gap-2 px-5 py-2.5 rounded-full transition-all"
           style={{
-            boxShadow: currentPage < totalPages - 1 ? '0 4px 15px rgba(0,0,0,0.2)' : 'none',
+            opacity: currentPage >= totalPages - 1 ? 0.4 : 1,
+            background: darkMode ? 'rgba(139,92,246,0.2)' : 'rgba(180,140,70,0.2)',
+            border: `1px solid ${darkMode ? 'rgba(139,92,246,0.4)' : 'rgba(180,140,70,0.4)'}`,
+            color: darkMode ? '#A78BFA' : '#8B5A2B',
           }}
         >
-          <span className="font-medium">Next</span>
-          <Icons.ChevronRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+          <span>Next</span>
+          <Icons.ChevronRight className="w-5 h-5" />
         </button>
       </div>
 
-      {/* Page Info */}
-      <div className={`mt-4 text-center ${darkMode ? 'text-gray-500' : 'text-amber-700/60'}`}>
-        <p className="text-sm">
-          Showing Surahs {currentPage * surahsPerPage + 1} - {Math.min((currentPage + 1) * surahsPerPage, surahs.length)} of {surahs.length}
-        </p>
+      {/* Surah Range */}
+      <div className="mt-4" style={{ color: darkMode ? 'rgba(255,215,0,0.4)' : 'rgba(139,90,43,0.4)', fontSize: 13 }}>
+        Surahs {currentPage * surahsPerPage + 1} - {Math.min((currentPage + 1) * surahsPerPage, surahs.length)} of {surahs.length}
       </div>
     </div>
   );

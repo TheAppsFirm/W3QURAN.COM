@@ -156,6 +156,7 @@ const StatsBar = memo(function StatsBar({
     { id: 'juzz', icon: '📚', label: 'Juzz' },
     { id: 'alphabet', icon: 'ا', label: 'Arabic' },
     { id: 'revelation', icon: '📜', label: 'Revelation' },
+    { id: 'book', icon: '📖', label: 'Book' },
   ];
 
   const currentLayout = layouts.find(l => l.id === surahLayout) || layouts[0];
