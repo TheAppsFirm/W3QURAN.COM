@@ -90,20 +90,41 @@ const PROPHETS_TIMELINE = [
     color: '#22C55E',
     location: 'makkah',
     coords: [21.4225, 39.8262],
-    story: 'First human and prophet, created by Allah from clay. Taught the names of all things. Built the first Kaaba.',
+    story: 'First human and prophet, created by Allah from clay. Taught the names of all things. Built the first Kaaba with angels.',
     family: {
-      wife: 'Hawwa (Eve)',
-      sons: ['Habil (Abel)', 'Qabil (Cain)', 'Shith (Seth)'],
-      note: 'Father of all humanity. Shith continued the prophetic lineage.'
+      wife: 'Hawwa (Eve) حواء - created from his rib',
+      children: 'Had many children born in pairs (twins). Notable: Habil (Abel), Qabil (Cain), Shith (Seth)',
+      descendants: 'All of humanity descends from him',
+      note: 'Shith (Seth) continued the prophetic lineage to Nuh.'
     },
     age: 960,
-    height: '60 cubits (90 feet / 27m)',
-    miracles: ['Taught names of all things', 'Angels prostrated to him', 'Created from clay'],
-    scripture: 'Suhuf (Scrolls) - 10 scrolls revealed',
-    burial: 'Cave of Abu Qubays, Makkah (or India according to some narrations)',
-    uniqueFacts: ['First human created', 'Lived in Jannah before Earth', 'Spoke all languages', 'All humans are his children'],
-    keyEvents: ['Creation from clay', 'Life in Paradise', 'Descended to Earth', 'Built the Kaaba'],
-    verses: ['2:30-37', '7:11-25', '20:115-123'],
+    height: '60 cubits tall (approx. 90 feet / 27 meters)',
+    createdOn: 'Friday - best day of the week',
+    miracles: ['Taught names of all things by Allah', 'Angels prostrated to him by Allah\'s command', 'Created directly by Allah\'s hands from clay', 'Lived in Jannah before Earth'],
+    scripture: 'Suhuf (Scrolls) - received revelation',
+    burial: 'Mount Abu Qubays near Makkah (some say India where he descended)',
+    uniqueFacts: [
+      'First human ever created',
+      'First prophet of Allah',
+      'Spoke all languages',
+      'Taught agriculture and civilization',
+      'Repented and was forgiven - first to seek tawbah',
+      'Created on Friday, entered Jannah on Friday, expelled on Friday'
+    ],
+    keyEvents: ['Creation from clay', 'Life in Jannah', 'Descended to Earth', 'Built the Kaaba', 'Taught his children'],
+    verses: [
+      { ref: '2:30', topic: 'Allah announces creation of Adam as Khalifa' },
+      { ref: '2:31', topic: 'Adam taught names of all things' },
+      { ref: '2:34', topic: 'Angels prostrate to Adam, Iblis refuses' },
+      { ref: '2:35', topic: 'Adam & Hawwa in Jannah, forbidden tree' },
+      { ref: '2:37', topic: 'Adam receives words of repentance' },
+      { ref: '7:11', topic: 'Creation and command to prostrate' },
+      { ref: '7:19', topic: 'Warning about the tree' },
+      { ref: '7:23', topic: 'Adam\'s dua for forgiveness' },
+      { ref: '20:115', topic: 'Adam forgot, had no firm resolve' },
+      { ref: '20:121', topic: 'Ate from tree, became exposed' },
+      { ref: '20:122', topic: 'Adam chosen and guided' },
+    ],
     icon: '🌍'
   },
   {
@@ -116,20 +137,46 @@ const PROPHETS_TIMELINE = [
     color: '#3B82F6',
     location: 'ark',
     coords: [39.4, 44.2],
-    story: 'First Rasul (Messenger). Preached for 950 years. Built the Ark to save believers from the great flood.',
+    story: 'First Rasul (Messenger with Shariah). Preached for 950 years. Built the Ark by Allah\'s command to save believers from the great flood.',
     family: {
-      father: 'Lamech (Lamak)',
-      sons: ['Sam (Shem)', 'Ham', 'Yafith (Japheth)', 'Yam/Kan\'an (drowned)'],
-      note: 'Sam\'s lineage led to Ibrahim. One son rejected faith and drowned.'
+      wife: 'Waghila (also called Amzura) - she was a disbeliever and drowned',
+      sons: [
+        'Sam (Shem) - ancestor of Semitic peoples including Arabs',
+        'Ham - ancestor of Africans',
+        'Yafith (Japheth) - ancestor of Europeans and Turks',
+        'Yam (Kan\'an) - disbelieved and drowned in flood'
+      ],
+      father: 'Lamak (Lamech) ibn Mattushalakh (Methuselah)',
+      note: 'His wife was among the disbelievers (Quran 66:10). Only believing family members were saved.'
     },
     age: 950,
-    ageNote: 'Preached for 950 years (Quran 29:14), lived longer',
-    miracles: ['Built the Ark by revelation', 'The Great Flood', 'Ark landed safely on Mt. Judi'],
+    ageNote: 'Preached for 950 years (Quran 29:14). Total lifespan was longer.',
+    miracles: ['Built the Ark by divine guidance', 'The Great Flood covered entire earth', 'Ark safely landed on Mt. Judi', 'Pairs of all animals gathered miraculously'],
     scripture: 'Suhuf (Scrolls)',
-    burial: 'Masjid al-Nabi Nuh in Karak, Jordan (or Najaf, Iraq)',
-    uniqueFacts: ['First Rasul (Messenger)', 'Longest preaching mission', 'Only 80 believers saved', 'Second father of humanity'],
+    burial: 'Masjid al-Nabi Nuh in Karak, Jordan (or Najaf, Iraq, or Makkah)',
+    uniqueFacts: [
+      'First Rasul (Messenger with new law)',
+      'Longest preaching mission in history - 950 years',
+      'Only about 80 believers saved',
+      'Called "Second father of humanity"',
+      'One of the 5 Ulul Azm (Prophets of Strong Will)',
+      'His son drowned despite being prophet\'s son'
+    ],
     keyEvents: ['950 years of dawah', 'Building the Ark', 'The Great Flood', 'Ark landed on Mt. Judi'],
-    verses: ['11:25-48', '71:1-28', '23:23-30'],
+    verses: [
+      { ref: '11:25', topic: 'Nuh sent as warner' },
+      { ref: '11:36', topic: 'Revealed: none will believe except who already did' },
+      { ref: '11:37', topic: 'Command to build the Ark' },
+      { ref: '11:40', topic: 'Flood begins, pairs board the Ark' },
+      { ref: '11:42', topic: 'Nuh calls his disbelieving son' },
+      { ref: '11:43', topic: 'Son refuses, drowns' },
+      { ref: '11:44', topic: 'Flood ends, Ark lands on Judi' },
+      { ref: '71:1', topic: 'Nuh sent to warn his people' },
+      { ref: '71:5', topic: 'He called them day and night' },
+      { ref: '71:26', topic: 'His dua against disbelievers' },
+      { ref: '29:14', topic: '950 years among his people' },
+      { ref: '23:27', topic: 'Command to build Ark' },
+    ],
     icon: '🚢'
   },
   {
@@ -142,20 +189,58 @@ const PROPHETS_TIMELINE = [
     color: '#F59E0B',
     location: 'makkah',
     coords: [21.4225, 39.8262],
-    story: 'Father of Prophets. Destroyed idols, survived fire. Rebuilt the Kaaba with Ismail. Tested with sacrifice.',
+    story: 'Father of Prophets. Destroyed idols, survived fire. Rebuilt the Kaaba with Ismail. Tested with sacrifice of his son.',
     family: {
-      father: 'Azar (Terah)',
-      wives: ['Sarah', 'Hajar (Hagar)'],
-      sons: ['Ismail (from Hajar)', 'Ishaq (from Sarah)'],
-      note: 'From Ismail: Arab prophets including Muhammad ﷺ. From Ishaq: Israelite prophets.'
+      wives: [
+        'Sarah (سارة) - princess, mother of Ishaq, from Harran',
+        'Hajar (هاجر / Hagar) - Egyptian, mother of Ismail, given by Egyptian king',
+        'Qantura (قنطورا) - married after Sarah\'s death',
+        'Hajun - married after Sarah\'s death'
+      ],
+      children: [
+        'Ismail (from Hajar) - ancestor of Prophet Muhammad ﷺ',
+        'Ishaq (from Sarah) - ancestor of Yaqub and Bani Israel prophets',
+        'Madyan, Zimran, Yaqshan, Shuah, etc. (from later wives)'
+      ],
+      father: 'Azar (آزر) / Terah - was an idol maker',
+      grandchildren: 'Yaqub (Jacob) and Esau from Ishaq',
+      note: 'From Ismail: Arab prophets → Muhammad ﷺ. From Ishaq: Israelite prophets.'
     },
     age: 175,
-    miracles: ['Fire became cool and peaceful', 'Stars, moon, sun argument', 'Birds brought back to life (2:260)', 'Zamzam spring for his family'],
-    scripture: 'Suhuf (Scrolls) - 10 scrolls revealed',
-    burial: 'Cave of Machpelah, Hebron (Al-Khalil), Palestine',
-    uniqueFacts: ['Called Khalilullah (Friend of Allah)', 'Father of all prophets after him', 'Built/rebuilt the Kaaba', 'Originated the Hajj rituals', 'Most mentioned prophet after Musa'],
-    keyEvents: ['Destroyed idols', 'Survived the fire', 'Rebuilt the Kaaba', 'Sacrifice of Ismail'],
-    verses: ['2:124-132', '14:35-41', '37:99-113'],
+    birthplace: 'Babylon (Ur), Iraq',
+    miracles: [
+      'Fire became cool and peaceful (Quran 21:69)',
+      'Birds came back to life after being cut (Quran 2:260)',
+      'Stars, moon, sun argument with his people',
+      'Zamzam spring burst for his family',
+      'Ram sent from heaven for sacrifice'
+    ],
+    scripture: 'Suhuf (Scrolls) - 10 scrolls revealed to him',
+    burial: 'Cave of Machpelah, Hebron (Al-Khalil), Palestine - Masjid al-Ibrahimi',
+    uniqueFacts: [
+      'Called Khalilullah - only one with this title',
+      'Father of all prophets after him',
+      'Built/rebuilt the Kaaba with Ismail',
+      'Originated Hajj rituals we follow today',
+      'One of the 5 Ulul Azm prophets',
+      'Mentioned 69 times in Quran - 2nd most',
+      'First to be circumcised at age 80'
+    ],
+    keyEvents: ['Destroyed idols', 'Survived the fire', 'Rebuilt the Kaaba', 'Sacrifice of Ismail', 'Established Hajj'],
+    verses: [
+      { ref: '2:124', topic: 'Ibrahim made leader of mankind' },
+      { ref: '2:125', topic: 'Kaaba made place of safety' },
+      { ref: '2:127', topic: 'Ibrahim & Ismail raise foundations of Kaaba' },
+      { ref: '2:260', topic: 'Birds brought back to life' },
+      { ref: '6:76', topic: 'Stars, moon, sun - seeking Allah' },
+      { ref: '14:37', topic: 'Dua for Makkah and descendants' },
+      { ref: '21:51', topic: 'Given guidance from youth' },
+      { ref: '21:58', topic: 'Smashed the idols' },
+      { ref: '21:68', topic: 'Thrown into fire' },
+      { ref: '21:69', topic: 'Fire became cool and safe' },
+      { ref: '37:102', topic: 'Dream to sacrifice son' },
+      { ref: '37:107', topic: 'Ram substituted for sacrifice' },
+    ],
     icon: '🔥'
   },
   {
@@ -168,72 +253,147 @@ const PROPHETS_TIMELINE = [
     color: '#EC4899',
     location: 'makkah',
     coords: [21.4225, 39.8262],
-    story: 'Son of Ibrahim and Hajar. Left as infant in Makkah. Zamzam miracle. Built Kaaba with his father.',
+    story: 'Firstborn son of Ibrahim and Hajar. Left as infant in Makkah valley. Zamzam miracle. Built Kaaba with his father.',
     family: {
-      father: 'Ibrahim',
-      mother: 'Hajar (Hagar)',
-      sons: ['12 sons including Kedar (Qaydar)'],
-      note: 'Direct ancestor of Prophet Muhammad ﷺ through Kedar (Qaydar).'
+      father: 'Ibrahim (Khalilullah)',
+      mother: 'Hajar (Hagar) - Egyptian princess',
+      wives: [
+        'Ra\'la bint Mudad - from Jurhum tribe (divorced on Ibrahim\'s advice)',
+        'Sayyida bint Mudad - from Jurhum tribe (kept on Ibrahim\'s advice)'
+      ],
+      sons: '12 sons including Kedar (Qaydar), Nebaioth (Nabat), Adbeel, Mibsam, Mishma, Dumah, Massa, Hadar, Tema, Jetur, Naphish, Kedemah',
+      halfBrother: 'Ishaq (Isaac)',
+      note: 'Kedar (Qaydar) is the direct ancestor of Prophet Muhammad ﷺ.'
     },
     age: 137,
-    miracles: ['Zamzam spring burst from his feet', 'Ram substituted for his sacrifice'],
-    burial: 'Al-Hijr (Hateem) inside Masjid al-Haram, Makkah',
-    uniqueFacts: ['Ancestor of Prophet Muhammad ﷺ', 'Learned Arabic from Jurhum tribe', 'Called "Truthful in Promise" (19:54)', 'First to ride horses according to hadith'],
-    keyEvents: ['Left in Makkah valley', 'Zamzam miracle', 'Built Kaaba with Ibrahim', 'Ancestor of Muhammad ﷺ'],
-    verses: ['2:125-127', '37:102-107', '19:54-55'],
+    miracles: ['Zamzam spring burst from under his feet as baby', 'Ram substituted for his sacrifice from heaven'],
+    burial: 'Al-Hijr (Hateem) area inside Masjid al-Haram, Makkah - next to his mother Hajar',
+    uniqueFacts: [
+      'Direct ancestor of Prophet Muhammad ﷺ',
+      'Learned pure Arabic from Jurhum tribe',
+      'Called "Sadiq al-Wa\'d" - Truthful in Promise (Quran 19:54)',
+      'First to ride horses according to hadith',
+      'Helped build the Kaaba with his father',
+      'Submitted willingly to be sacrificed'
+    ],
+    keyEvents: ['Left in Makkah valley', 'Zamzam miracle', 'Built Kaaba with Ibrahim', 'Sacrifice test', 'Ancestor of Muhammad ﷺ'],
+    verses: [
+      { ref: '2:125', topic: 'Maqam Ibrahim - his standing place' },
+      { ref: '2:127', topic: 'Raised Kaaba foundations with Ibrahim' },
+      { ref: '14:37', topic: 'Ibrahim\'s dua for barren valley' },
+      { ref: '19:54', topic: 'True to his promise (Sadiq al-Wa\'d)' },
+      { ref: '19:55', topic: 'Commanded family to pray and give zakat' },
+      { ref: '37:102', topic: 'Submitted to be sacrificed' },
+      { ref: '37:103', topic: 'Both submitted, laid on forehead' },
+      { ref: '37:107', topic: 'Ransomed with great sacrifice (ram)' },
+    ],
     icon: '💧'
   },
   {
     id: 'yaqub',
     name: 'Yaqub',
     nameAr: 'يعقوب',
-    title: 'Israel (Servant of Allah)',
+    title: 'Israel (Chosen Servant of Allah)',
     periodStart: -1800,
     periodEnd: -1700,
     color: '#8B5CF6',
     location: 'canaan',
     coords: [31.5, 35.2],
-    story: 'Son of Ishaq, grandson of Ibrahim. Father of 12 sons who became the 12 tribes of Bani Israel.',
+    story: 'Son of Ishaq, grandson of Ibrahim. Father of 12 sons who became the 12 tribes of Bani Israel (Children of Israel).',
     family: {
       father: 'Ishaq (Isaac)',
       mother: 'Rifqah (Rebecca)',
-      grandfather: 'Ibrahim',
-      sons: ['Yusuf', 'Binyamin (Benjamin)', 'Yahuda (Judah)', 'Lawi (Levi)', 'and 8 others'],
-      note: 'His 12 sons became the 12 tribes of Israel (Bani Israel).'
+      grandfather: 'Ibrahim (Khalilullah)',
+      grandmother: 'Sarah',
+      wives: [
+        'Leah (Lia) - elder daughter of Laban, mother of 6 sons',
+        'Rachel (Rahil) - younger daughter of Laban, mother of Yusuf & Binyamin',
+        'Zilpah - Leah\'s maidservant',
+        'Bilhah - Rachel\'s maidservant'
+      ],
+      sons: [
+        'From Leah: Reuben, Simeon, Levi, Judah (Yahuda), Issachar, Zebulun',
+        'From Rachel: Yusuf (Joseph), Binyamin (Benjamin)',
+        'From Bilhah: Dan, Naphtali',
+        'From Zilpah: Gad, Asher'
+      ],
+      daughter: 'Dinah',
+      note: 'His 12 sons became the 12 tribes of Bani Israel.'
     },
     age: 147,
-    miracles: ['Sight restored when Yusuf\'s shirt was placed on his eyes'],
-    burial: 'Cave of Machpelah, Hebron (Al-Khalil), Palestine',
-    uniqueFacts: ['Given title "Israel" (Servant of God)', 'Blind for years from crying for Yusuf', 'All 12 sons became leaders of tribes', 'Moved entire family to Egypt'],
+    miracles: ['Sight restored when Yusuf\'s shirt placed on his eyes (Quran 12:96)'],
+    burial: 'Cave of Machpelah, Hebron (Al-Khalil), Palestine - with Ibrahim and Ishaq',
+    uniqueFacts: [
+      'Given title "Israel" (عبد الله - Servant of God)',
+      'Became blind from crying for Yusuf for years',
+      'All 12 sons became leaders of tribes',
+      'Moved entire family (70 people) to Egypt',
+      'Asked to be buried in Canaan, not Egypt'
+    ],
     keyEvents: ['Father of 12 tribes', 'Grief for Yusuf', 'Reunion in Egypt', 'Named Israel'],
-    verses: ['12:4-18', '12:84-100', '19:49'],
+    verses: [
+      { ref: '12:4', topic: 'Yusuf tells dream to Yaqub' },
+      { ref: '12:5', topic: 'Yaqub warns about brothers\' jealousy' },
+      { ref: '12:18', topic: 'Brothers bring false news' },
+      { ref: '12:83', topic: 'Beautiful patience (Sabr Jameel)' },
+      { ref: '12:84', topic: 'Eyes turned white from grief' },
+      { ref: '12:86', topic: 'Complains only to Allah' },
+      { ref: '12:93', topic: 'Shirt to restore his sight' },
+      { ref: '12:96', topic: 'Sight restored when shirt placed' },
+      { ref: '12:100', topic: 'Reunited with Yusuf in Egypt' },
+      { ref: '19:49', topic: 'Blessed with Ishaq and Yaqub' },
+      { ref: '2:132', topic: 'Advised sons before death' },
+    ],
     icon: '👨‍👦‍👦'
   },
   {
     id: 'yusuf',
     name: 'Yusuf',
     nameAr: 'يوسف',
-    title: 'As-Siddiq (The Truthful)',
+    title: 'As-Siddiq (The Truthful One)',
     periodStart: -1700,
     periodEnd: -1600,
     color: '#06B6D4',
     location: 'egypt',
     coords: [30.0444, 31.2357],
-    story: 'Known for exceptional beauty and dream interpretation. Rose from slave to Aziz (Minister) of Egypt.',
+    story: 'Known for exceptional beauty and dream interpretation. Rose from slave and prisoner to Aziz (Minister) of Egypt.',
     family: {
-      father: 'Yaqub (Jacob)',
-      mother: 'Rahil (Rachel)',
-      fullBrother: 'Binyamin (Benjamin)',
-      halfBrothers: '10 half-brothers',
-      sons: ['Ephraim', 'Manasseh'],
-      note: 'Given half of all beauty. His story is called "Ahsan al-Qasas" (Best of Stories).'
+      father: 'Yaqub (Jacob/Israel)',
+      mother: 'Rahil (Rachel) - died giving birth to Binyamin',
+      fullBrother: 'Binyamin (Benjamin) - only full brother, same mother',
+      halfBrothers: '10 half-brothers from other mothers',
+      wife: 'Asenath bint Potiphera (some say Zulaykha after she became Muslim)',
+      sons: ['Ephraim (Afra\'im)', 'Manasseh (Manassa)'],
+      note: 'His story is called "Ahsan al-Qasas" (Best of Stories) - Quran 12:3'
     },
     age: 110,
-    miracles: ['True dream interpretation', 'Survived the well', 'Protected from Zulaykha\'s temptation'],
-    burial: 'Initially Egypt, later moved to Hebron, Palestine',
-    uniqueFacts: ['Given half of all human beauty', 'His story is only Surah that tells complete story', 'Became Aziz (treasurer/minister) of Egypt', 'Forgave brothers who betrayed him', 'His shirt healed Yaqub\'s blindness'],
-    keyEvents: ['Thrown in well', 'Sold as slave', 'Prison and dreams', 'Aziz of Egypt'],
-    verses: ['12:1-111'],
+    miracles: ['True dream interpretation', 'Survived being thrown in well', 'Protected from Zulaykha\'s temptation', 'His shirt healed his father\'s blindness'],
+    burial: 'Initially Egypt. Musa later took his remains to be buried in Hebron, Palestine',
+    uniqueFacts: [
+      'Given half of all human beauty',
+      'Surah Yusuf is only surah telling complete story',
+      'Became Aziz (Finance Minister) of Egypt',
+      'Forgave brothers who tried to kill him',
+      'Lived to see great-grandchildren',
+      'His beauty caused women to cut their hands (12:31)'
+    ],
+    keyEvents: ['Thrown in well', 'Sold as slave', 'Zulaykha\'s test', 'Prison and dreams', 'Aziz of Egypt', 'Reunited with family'],
+    verses: [
+      { ref: '12:3', topic: 'Best of stories (Ahsan al-Qasas)' },
+      { ref: '12:4', topic: 'Dream of 11 stars, sun, moon' },
+      { ref: '12:15', topic: 'Thrown into well' },
+      { ref: '12:20', topic: 'Sold for cheap price' },
+      { ref: '12:23', topic: 'Woman tried to seduce him' },
+      { ref: '12:24', topic: 'Saw proof of his Lord, protected' },
+      { ref: '12:31', topic: 'Women cut hands seeing his beauty' },
+      { ref: '12:33', topic: 'Chose prison over sin' },
+      { ref: '12:37', topic: 'Interpreted dreams in prison' },
+      { ref: '12:43', topic: 'King\'s dream interpretation' },
+      { ref: '12:55', topic: 'Made in charge of storehouses' },
+      { ref: '12:90', topic: 'Revealed identity to brothers' },
+      { ref: '12:92', topic: 'Forgave his brothers' },
+      { ref: '12:100', topic: 'Family prostrated, dream fulfilled' },
+    ],
     icon: '⭐'
   },
   {
@@ -246,22 +406,57 @@ const PROPHETS_TIMELINE = [
     color: '#DC2626',
     location: 'sinai',
     coords: [28.5456, 33.9756],
-    story: 'Spoke directly to Allah at Mount Sinai. Led Bani Israel out of Egypt. Received the Torah.',
+    story: 'Spoke directly to Allah at Mount Sinai. Led Bani Israel out of Egypt. Received the Torah (Tawrat).',
     family: {
-      father: 'Imran',
+      father: 'Imran (Amram)',
       mother: 'Yukabid (Jochebed)',
-      brother: 'Harun (Aaron) - also a prophet',
-      sister: 'Maryam (Miriam)',
-      wife: 'Safura (Zipporah), daughter of Shuayb',
-      note: 'Most mentioned prophet in the Quran (136 times).'
+      brother: 'Harun (Aaron) - also a prophet, 3 years older',
+      sister: 'Maryam (Miriam) - saved him as baby',
+      wife: 'Safura (Zipporah) - daughter of Prophet Shuayb',
+      fosterMother: 'Asiya bint Muzahim - wife of Pharaoh, one of best women of paradise',
+      sons: 'Gershom and Eliezer (from Safura)',
+      note: 'Most mentioned prophet in the Quran (136 times by name).'
     },
     age: 120,
-    miracles: ['Staff turned to serpent', 'Hand glowed white', 'Parted the Red Sea', '9 signs to Pharaoh', 'Water from rock', 'Manna and Salwa', 'Mountain raised over Bani Israel'],
-    scripture: 'Torah (Tawrat)',
-    burial: 'Near Mt. Nebo, Jordan (exact location known only to Allah)',
-    uniqueFacts: ['Spoke directly to Allah without intermediary', 'Most mentioned prophet (136 times)', 'Led 600,000+ Israelites out of Egypt', 'Met Muhammad ﷺ during Isra & Miraj', 'Advised reducing prayers from 50 to 5'],
-    keyEvents: ['Basket in Nile', 'Burning bush', 'Parting the sea', 'Torah at Sinai'],
-    verses: ['20:9-98', '28:3-43', '7:103-162'],
+    miracles: [
+      'Staff turned to giant serpent',
+      'Hand glowed radiantly white',
+      'Parted the Red Sea',
+      '9 signs sent to Pharaoh',
+      'Water gushed from rock (12 springs)',
+      'Manna and Salwa (quails) from sky',
+      'Mountain raised over Bani Israel'
+    ],
+    scripture: 'Torah (Tawrat) - received on Mt. Sinai',
+    burial: 'Near Mt. Nebo, Jordan - exact location hidden by Allah, angels buried him',
+    uniqueFacts: [
+      'Spoke directly to Allah (Kalimullah)',
+      'Most mentioned prophet - 136 times',
+      'Led 600,000+ Israelites out of Egypt',
+      'Met Prophet Muhammad ﷺ during Isra & Miraj',
+      'Advised reducing prayers from 50 to 5',
+      'One of the 5 Ulul Azm prophets',
+      'Had speech impediment, asked Harun to help'
+    ],
+    keyEvents: ['Basket in Nile', 'Raised in Pharaoh\'s palace', 'Fled to Madyan', 'Burning bush', 'Confronted Pharaoh', 'Parted the sea', 'Torah at Sinai', '40 years in wilderness'],
+    verses: [
+      { ref: '20:9', topic: 'Story of Musa begins' },
+      { ref: '20:12', topic: 'Sacred valley of Tuwa' },
+      { ref: '20:17', topic: 'What is in your hand, Musa?' },
+      { ref: '20:20', topic: 'Staff becomes serpent' },
+      { ref: '20:22', topic: 'Hand glows white' },
+      { ref: '28:7', topic: 'Mother inspired to put him in river' },
+      { ref: '28:9', topic: 'Pharaoh\'s wife saves him' },
+      { ref: '28:15', topic: 'Accidentally kills Egyptian' },
+      { ref: '28:25', topic: 'Meets Shuayb\'s daughters' },
+      { ref: '7:107', topic: 'Staff becomes serpent' },
+      { ref: '7:117', topic: 'Defeats Pharaoh\'s magicians' },
+      { ref: '7:133', topic: 'Nine signs sent to Pharaoh' },
+      { ref: '26:63', topic: 'Strikes sea, it parts' },
+      { ref: '7:142', topic: '40 nights on Mount Sinai' },
+      { ref: '7:145', topic: 'Given tablets (Torah)' },
+      { ref: '2:60', topic: '12 springs from rock' },
+    ],
     icon: '📜'
   },
   {
@@ -274,44 +469,103 @@ const PROPHETS_TIMELINE = [
     color: '#10B981',
     location: 'jerusalem',
     coords: [31.7683, 35.2137],
-    story: 'King and prophet. Defeated Jalut (Goliath). Given the Zabur (Psalms). Mountains and birds glorified Allah with him.',
+    story: 'Prophet and king. Defeated Jalut (Goliath). Given the Zabur (Psalms). Mountains and birds glorified Allah with him.',
     family: {
       tribe: 'Tribe of Yahuda (Judah)',
-      sons: ['Sulayman (Solomon) - also a prophet', 'and others'],
-      note: 'Given beautiful voice. Iron made soft in his hands to make armor.'
+      father: 'Yesse (Isa)',
+      wives: 'Multiple wives (traditional sources mention several)',
+      sons: ['Sulayman (Solomon) - prophet and successor', 'Absalom', 'Amnon', 'Adonijah', 'and others - 19 sons mentioned in sources'],
+      daughters: 'Multiple daughters including Tamar',
+      note: 'Sulayman inherited his kingdom and prophethood.'
     },
     age: 70,
-    prophethood: '40 years as king',
-    miracles: ['Iron made soft in his hands', 'Mountains and birds did tasbeeh with him', 'Beautiful voice that enchanted all', 'Killed Goliath with slingshot as youth'],
-    scripture: 'Zabur (Psalms)',
+    prophethood: '40 years as king of Israel',
+    miracles: [
+      'Iron made soft/moldable in his hands',
+      'Mountains and birds did tasbeeh with him',
+      'Voice so beautiful all creation listened',
+      'Killed giant Goliath as young shepherd',
+      'Given wisdom to judge'
+    ],
+    scripture: 'Zabur (Psalms) - 150 psalms of praise',
     burial: 'Mount Zion, Jerusalem',
-    uniqueFacts: ['First prophet-king', 'Made chain-mail armor', 'Fasted every other day', 'Prayed 1/3 of night', 'Best form of worship according to hadith'],
-    keyEvents: ['Defeated Goliath', 'King of Israel', 'Given Zabur', 'Iron made soft'],
-    verses: ['2:251', '21:78-80', '34:10-11', '38:17-26'],
+    uniqueFacts: [
+      'First prophet-king combining both roles',
+      'Invented chain-mail armor',
+      'Fasted every other day (best fasting)',
+      'Prayed 1/3 of night (best prayer pattern)',
+      'His worship pattern praised by Prophet ﷺ',
+      'Ate only from his own hand\'s labor'
+    ],
+    keyEvents: ['Defeated Goliath', 'Became King of Israel', 'Given Zabur', 'Iron made soft', 'Established Jerusalem as capital'],
+    verses: [
+      { ref: '2:251', topic: 'Killed Goliath (Jalut)' },
+      { ref: '21:78', topic: 'Judged case of sheep in field' },
+      { ref: '21:79', topic: 'Mountains and birds glorified with him' },
+      { ref: '21:80', topic: 'Taught to make armor' },
+      { ref: '27:15', topic: 'Given knowledge with Sulayman' },
+      { ref: '34:10', topic: 'Mountains echo with him' },
+      { ref: '34:11', topic: 'Iron made soft, make armor' },
+      { ref: '38:17', topic: 'Dawud was a man of strength' },
+      { ref: '38:18', topic: 'Mountains glorified at evening and sunrise' },
+      { ref: '38:20', topic: 'Strengthened his kingdom' },
+      { ref: '38:26', topic: 'Made successor on earth' },
+    ],
     icon: '🎵'
   },
   {
     id: 'sulayman',
     name: 'Sulayman',
     nameAr: 'سليمان',
-    title: 'Prophet-King with Greatest Dominion',
+    title: 'Prophet-King with Greatest Kingdom',
     periodStart: -970,
     periodEnd: -931,
     color: '#F472B6',
     location: 'jerusalem',
     coords: [31.7683, 35.2137],
-    story: 'Son of Dawud. Given kingdom over jinn, wind, and animals. Understood language of all creatures.',
+    story: 'Son of Dawud. Given kingdom over jinn, wind, animals, and birds. Understood language of all creatures.',
     family: {
-      father: 'Dawud (David)',
-      note: 'Given greatest kingdom ever. No one after him will have such dominion (Quran 38:35).'
+      father: 'Dawud (David) - prophet and king',
+      mother: 'Bath-sheba (Bathsheba)',
+      wives: 'Had many wives including the Queen of Sheba (Bilqis) who accepted Islam',
+      son: 'Rehoboam (Rahab\'am) - succeeded him but kingdom split',
+      note: 'Asked Allah for kingdom that none after him would have (Quran 38:35).'
     },
     age: 52,
     prophethood: '40 years as king',
-    miracles: ['Commanded jinn and wind', 'Understood speech of all animals', 'Ants, birds, jinn served him', 'Wind travelled month\'s journey in morning/evening', 'Copper flowed like water'],
+    miracles: [
+      'Commanded jinn to work for him',
+      'Wind traveled a month\'s journey in morning and evening',
+      'Understood speech of all animals',
+      'Ants, birds, jinn all served him',
+      'Copper/brass flowed like water',
+      'Throne of Bilqis transported instantly'
+    ],
     burial: 'Jerusalem',
-    uniqueFacts: ['Greatest kingdom ever given', 'Commanded jinn to build structures', 'Queen of Sheba (Bilqis) accepted Islam', 'Died leaning on staff, jinn didn\'t know', 'Throne moved in blink of eye'],
-    keyEvents: ['Understood animals', 'Commanded jinn', 'Queen of Sheba visit', 'Built the temple'],
-    verses: ['27:15-44', '21:81-82', '34:12-14', '38:30-40'],
+    uniqueFacts: [
+      'Given greatest kingdom ever - none will match',
+      'Jinn built palaces, statues, pools for him',
+      'Queen of Sheba (Bilqis) accepted Islam',
+      'Died leaning on his staff - jinn kept working',
+      'His death revealed by worm eating staff',
+      'Army included jinn, humans, and birds'
+    ],
+    keyEvents: ['Inherited kingdom from Dawud', 'Understood all creatures', 'Commanded jinn', 'Queen of Sheba visit', 'Built Al-Aqsa/Temple', 'Death while standing'],
+    verses: [
+      { ref: '27:16', topic: 'Inherited Dawud, taught bird speech' },
+      { ref: '27:17', topic: 'Armies of jinn, men, birds' },
+      { ref: '27:18', topic: 'Ant warns others of his army' },
+      { ref: '27:20', topic: 'Inspects the birds, hoopoe missing' },
+      { ref: '27:22', topic: 'Hoopoe brings news of Sheba' },
+      { ref: '27:38', topic: 'Who will bring her throne?' },
+      { ref: '27:40', topic: 'Throne brought in blink of eye' },
+      { ref: '27:44', topic: 'Queen enters palace, accepts Islam' },
+      { ref: '21:81', topic: 'Wind subjected to him' },
+      { ref: '34:12', topic: 'Wind traveled month\'s journey' },
+      { ref: '34:13', topic: 'Jinn made palaces, statues, pools' },
+      { ref: '34:14', topic: 'Death while standing, worm revealed it' },
+      { ref: '38:35', topic: 'Kingdom like none after him' },
+    ],
     icon: '👑'
   },
   {
@@ -324,23 +578,59 @@ const PROPHETS_TIMELINE = [
     color: '#A855F7',
     location: 'jerusalem',
     coords: [31.7683, 35.2137],
-    story: 'Born miraculously to Maryam without father. Given the Injeel (Gospel). Performed miracles. Raised alive to heaven.',
+    story: 'Born miraculously to Maryam without father. Given the Injeel (Gospel). Performed many miracles. Raised alive to heaven.',
     family: {
-      mother: 'Maryam bint Imran (Mary)',
-      maternal_grandfather: 'Imran',
-      maternal_grandmother: 'Hannah',
-      uncle: 'Zakariya (prophet)',
-      cousin: 'Yahya/John (prophet)',
-      note: 'Born without father by Allah\'s command "Kun" (Be). Will return before Day of Judgment.'
+      mother: 'Maryam bint Imran (Mary) - virgin, best woman of her time',
+      maternalGrandfather: 'Imran',
+      maternalGrandmother: 'Hannah',
+      uncle: 'Zakariya - prophet who raised Maryam',
+      cousin: 'Yahya (John the Baptist) - prophet, son of Zakariya',
+      father: 'None - created by Allah\'s command "Kun" (Be)',
+      wife: 'None - never married',
+      children: 'None',
+      note: 'Born without father. Like Adam who was created without parents. Will return before Day of Judgment.'
     },
     age: 33,
-    ageNote: 'Raised to heaven at ~33, will return',
-    miracles: ['Born without father', 'Spoke in cradle', 'Made birds from clay', 'Healed blind and lepers', 'Raised the dead', 'Table of food from heaven (Al-Ma\'idah)'],
-    scripture: 'Injeel (Gospel)',
-    burial: 'Not dead - raised alive to heaven, will return',
-    uniqueFacts: ['Created without father', 'Called "Word of Allah" and "Spirit from Him"', 'Will return before Day of Judgment', 'Will kill Dajjal (Anti-Christ)', 'Will pray behind Mahdi', 'Only prophet raised alive'],
-    keyEvents: ['Miraculous birth', 'Spoke in cradle', 'Healed the sick', 'Raised to heaven'],
-    verses: ['3:45-55', '5:110-118', '19:16-35', '4:157-158'],
+    ageNote: 'Raised to heaven at approximately 33 years. Will return and live, then die.',
+    miracles: [
+      'Born without father',
+      'Spoke in cradle defending his mother',
+      'Made birds from clay and gave them life',
+      'Healed born-blind and lepers',
+      'Raised the dead by Allah\'s permission',
+      'Table of food descended from heaven (Ma\'idah)',
+      'Knew what people ate and stored at home'
+    ],
+    scripture: 'Injeel (Gospel) - original scripture from Allah',
+    burial: 'Not dead - raised alive to heaven. Will return, live, die, and be buried next to Prophet Muhammad ﷺ in Madinah.',
+    uniqueFacts: [
+      'Created without father (like Adam without parents)',
+      'Called "Kalimatullah" - Word of Allah',
+      'Called "Ruhullah" - Spirit from Allah',
+      'Will return before Day of Judgment',
+      'Will kill Dajjal (Anti-Christ)',
+      'Will pray behind Imam Mahdi',
+      'Only prophet raised alive to heaven',
+      'Will live 40 years after returning'
+    ],
+    keyEvents: ['Miraculous birth', 'Spoke in cradle', 'Given Injeel', 'Performed miracles', 'Raised to heaven', 'Will return'],
+    verses: [
+      { ref: '3:45', topic: 'Glad tidings of Isa, the Messiah' },
+      { ref: '3:46', topic: 'Will speak in cradle' },
+      { ref: '3:47', topic: 'Created without father - "Be" and it is' },
+      { ref: '3:49', topic: 'Birds from clay, heals blind/lepers' },
+      { ref: '3:55', topic: 'Raised to Allah' },
+      { ref: '5:110', topic: 'All miracles listed' },
+      { ref: '5:112', topic: 'Disciples ask for table from heaven' },
+      { ref: '5:116', topic: 'Did you tell people to worship you?' },
+      { ref: '19:16', topic: 'Maryam withdraws to eastern place' },
+      { ref: '19:19', topic: 'Angel announces pure boy' },
+      { ref: '19:22', topic: 'Gives birth under palm tree' },
+      { ref: '19:30', topic: 'Speaks in cradle: I am servant of Allah' },
+      { ref: '4:157', topic: 'They did not kill him, nor crucify' },
+      { ref: '4:158', topic: 'Allah raised him to Himself' },
+      { ref: '43:61', topic: 'Sign of the Hour (return)' },
+    ],
     icon: '✨'
   },
   {
@@ -353,25 +643,86 @@ const PROPHETS_TIMELINE = [
     color: '#10B981',
     location: 'makkah',
     coords: [21.4225, 39.8262],
-    story: 'Final Prophet and Messenger to all mankind. Received the Quran over 23 years. Established Islam.',
+    story: 'Final Prophet and Messenger to all mankind and jinn. Received the Quran over 23 years. Established Islam as complete way of life.',
     family: {
-      father: 'Abdullah ibn Abd al-Muttalib (died before birth)',
+      father: 'Abdullah ibn Abd al-Muttalib (died before his birth)',
       mother: 'Aminah bint Wahb (died when he was 6)',
-      grandfather: 'Abd al-Muttalib (raised him)',
-      uncle: 'Abu Talib (protected him)',
-      wives: ['Khadijah', 'Aisha', 'and others - Mothers of Believers'],
-      children: ['Qasim', 'Abdullah', 'Ibrahim (sons)', 'Zainab', 'Ruqayyah', 'Umm Kulthum', 'Fatimah (daughters)'],
-      note: 'Lineage: Muhammad ﷺ → ... → Adnan → ... → Kedar → Ismail → Ibrahim'
+      grandfather: 'Abd al-Muttalib (raised him, died when he was 8)',
+      uncle: 'Abu Talib (protected him until death)',
+      fosterMother: 'Halimah al-Sa\'diyah',
+      wives: [
+        '1. Khadijah bint Khuwaylid (40) - first wife, 25 years together, mother of most children',
+        '2. Sawda bint Zam\'a - married after Khadijah\'s death',
+        '3. Aisha bint Abu Bakr - daughter of Abu Bakr',
+        '4. Hafsa bint Umar - daughter of Umar',
+        '5. Zaynab bint Khuzayma - "Mother of the Poor"',
+        '6. Umm Salama (Hind bint Abi Umayya)',
+        '7. Zaynab bint Jahsh - cousin',
+        '8. Juwayriyya bint al-Harith',
+        '9. Safiyya bint Huyayy - from Jewish tribe',
+        '10. Umm Habiba (Ramla bint Abi Sufyan)',
+        '11. Maymuna bint al-Harith - last wife'
+      ],
+      children: [
+        'Sons: Qasim, Abdullah (Tahir/Tayyib), Ibrahim - all died young',
+        'Daughters: Zainab, Ruqayyah, Umm Kulthum, Fatimah al-Zahra'
+      ],
+      grandchildren: 'Hasan and Husayn (from Fatimah & Ali) - leaders of youth in Paradise',
+      note: 'All wives are "Mothers of Believers" (Ummahat al-Mu\'minin)'
     },
     age: 63,
+    birthDate: '12 Rabi\' al-Awwal (April 22, 571 CE) - Year of the Elephant',
+    deathDate: '12 Rabi\' al-Awwal 11 AH (June 8, 632 CE)',
     prophethood: '23 years (13 in Makkah, 10 in Madinah)',
-    miracles: ['Quran (greatest miracle)', 'Isra & Miraj', 'Moon splitting', 'Water flowing from fingers', 'Food multiplication', 'Prophecies fulfilled'],
-    scripture: 'Quran (Final Testament)',
-    burial: 'Masjid an-Nabawi, Madinah (in Aisha\'s room)',
-    uniqueFacts: ['Final prophet for all mankind', 'Quran preserved letter-by-letter', 'Most influential person in history', 'Mentioned by name 4 times in Quran', 'Called "Mercy to all worlds" (21:107)', 'Leader of all prophets on Day of Judgment'],
-    companions: 'Over 100,000 Sahaba at Farewell Pilgrimage',
-    keyEvents: ['First revelation (610 CE)', 'Isra & Miraj', 'Hijra to Madinah (622 CE)', 'Conquest of Makkah (630 CE)'],
-    verses: ['33:40', '48:29', '3:144', '21:107'],
+    miracles: [
+      'The Quran - greatest and lasting miracle',
+      'Isra & Mi\'raj - night journey to Jerusalem and heavens',
+      'Splitting of the moon',
+      'Water flowing from between his fingers',
+      'Food multiplication for armies',
+      'Tree trunk crying when he left it',
+      'Prophecies that came true',
+      'Stones and trees greeting him'
+    ],
+    scripture: 'Quran - Final Testament, preserved letter-by-letter',
+    burial: 'Masjid an-Nabawi, Madinah - in the room of Aisha (رضي الله عنها)',
+    uniqueFacts: [
+      'Final prophet for all mankind and jinn',
+      'Quran preserved perfectly to this day',
+      'Named in previous scriptures',
+      'Mentioned by name 4 times in Quran (Muhammad & Ahmad)',
+      'Called "Mercy to all worlds" (Rahmatan lil-\'Alamin) 21:107',
+      'Leader of all prophets on Day of Judgment',
+      'Will intercede for humanity',
+      'One of the 5 Ulul Azm prophets',
+      'Given Jawami\' al-Kalim - concise speech'
+    ],
+    companions: 'Over 100,000 Sahaba attended Farewell Pilgrimage',
+    keyEvents: [
+      'Birth - Year of Elephant (571 CE)',
+      'First revelation in Cave Hira (610 CE)',
+      'Isra & Mi\'raj (621 CE)',
+      'Hijra to Madinah (622 CE)',
+      'Battle of Badr (624 CE)',
+      'Conquest of Makkah (630 CE)',
+      'Farewell Pilgrimage (632 CE)',
+      'Passed away (632 CE)'
+    ],
+    verses: [
+      { ref: '33:40', topic: 'Seal of the Prophets' },
+      { ref: '21:107', topic: 'Sent as mercy to all worlds' },
+      { ref: '33:21', topic: 'Beautiful example in the Messenger' },
+      { ref: '68:4', topic: 'On exalted character' },
+      { ref: '3:144', topic: 'Muhammad is only a messenger' },
+      { ref: '48:29', topic: 'Muhammad is Messenger of Allah' },
+      { ref: '17:1', topic: 'Isra - night journey to Al-Aqsa' },
+      { ref: '53:1', topic: 'By the star - Mi\'raj begins' },
+      { ref: '53:9', topic: 'Two bow lengths or nearer (to Allah)' },
+      { ref: '94:1', topic: 'Did We not expand your chest?' },
+      { ref: '108:1', topic: 'Given Al-Kawthar (abundance)' },
+      { ref: '9:128', topic: 'Messenger from among yourselves' },
+      { ref: '47:2', topic: 'Revealed to Muhammad' },
+    ],
     icon: '🌙'
   }
 ];
@@ -1038,20 +1389,34 @@ const TimelineSlider = memo(({ value, onChange, events, prophets = [], onProphet
               </div>
             )}
 
-            {/* Events & Verses Row */}
-            <div className="flex flex-wrap gap-1.5">
+            {/* Key Events */}
+            <div className="flex flex-wrap gap-1.5 mb-3">
               {mainProphet.keyEvents.map((event, i) => (
                 <span key={i} className="px-2 py-0.5 rounded text-[10px] text-white bg-gray-700">{event}</span>
               ))}
-              {mainProphet.verses.map((v, i) => (
-                <button
-                  key={i}
-                  onClick={(e) => { e.stopPropagation(); onProphetClick(mainProphet, v); }}
-                  className="px-2 py-0.5 rounded bg-emerald-600 hover:bg-emerald-500 text-white text-[10px] font-medium transition-colors"
-                >
-                  📖 {v}
-                </button>
-              ))}
+            </div>
+
+            {/* Quranic Verses with Topics */}
+            <div className="p-2.5 rounded-lg bg-gradient-to-br from-emerald-900/30 to-teal-900/30 border border-emerald-700/50">
+              <p className="text-emerald-400 text-[10px] font-bold uppercase mb-2">📖 Quranic Verses</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 max-h-32 overflow-y-auto custom-scrollbar">
+                {mainProphet.verses.map((v, i) => {
+                  const verseRef = typeof v === 'object' ? v.ref : v;
+                  const topic = typeof v === 'object' ? v.topic : '';
+                  return (
+                    <button
+                      key={i}
+                      onClick={(e) => { e.stopPropagation(); onProphetClick(mainProphet, verseRef); }}
+                      className="flex items-start gap-2 p-1.5 rounded-lg bg-emerald-800/30 hover:bg-emerald-700/40 border border-emerald-600/30 text-left transition-colors group"
+                    >
+                      <span className="text-emerald-400 font-bold text-[11px] flex-shrink-0 mt-0.5">{verseRef}</span>
+                      {topic && (
+                        <span className="text-emerald-200/80 text-[10px] leading-tight line-clamp-2">{topic}</span>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
           </div>
         )}
