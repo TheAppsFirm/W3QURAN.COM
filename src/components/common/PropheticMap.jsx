@@ -68,160 +68,242 @@ const LAYERS = {
   animals: { id: 'animals', name: 'Animals', icon: 'Heart', color: '#22C55E' },
 };
 
-// Prophet Timeline Data with detailed information
+// Prophet Timeline Data with detailed information including family (Islamic sources)
 const PROPHETS_TIMELINE = [
   {
     id: 'adam',
     name: 'Adam',
     nameAr: 'آدم',
+    title: 'Abu al-Bashar (Father of Humanity)',
     periodStart: -4000,
     periodEnd: -3000,
     color: '#22C55E',
     location: 'makkah',
     coords: [21.4225, 39.8262],
-    story: 'First human and prophet, created by Allah. Built the first Kaaba.',
+    story: 'First human and prophet, created by Allah from clay. Taught the names of all things. Built the first Kaaba.',
+    family: {
+      wife: 'Hawwa (Eve)',
+      sons: ['Habil (Abel)', 'Qabil (Cain)', 'Shith (Seth)'],
+      note: 'Father of all humanity. Shith continued the prophetic lineage.'
+    },
     keyEvents: ['Creation from clay', 'Life in Paradise', 'Descended to Earth', 'Built the Kaaba'],
     verses: ['2:30-37', '7:11-25', '20:115-123'],
     icon: '🌍'
   },
   {
     id: 'nuh',
-    name: 'Nuh (Noah)',
+    name: 'Nuh',
     nameAr: 'نوح',
+    title: 'Shaykh al-Anbiya (Elder of Prophets)',
     periodStart: -3000,
     periodEnd: -2500,
     color: '#3B82F6',
     location: 'ark',
     coords: [39.4, 44.2],
-    story: 'Preached for 950 years. Built the Ark to save believers from the great flood.',
-    keyEvents: ['950 years of preaching', 'Building the Ark', 'The Great Flood', 'Ark landed on Mt. Judi'],
+    story: 'First Rasul (Messenger). Preached for 950 years. Built the Ark to save believers from the great flood.',
+    family: {
+      father: 'Lamech (Lamak)',
+      sons: ['Sam (Shem)', 'Ham', 'Yafith (Japheth)', 'Yam/Kan\'an (drowned)'],
+      note: 'Sam\'s lineage led to Ibrahim. One son rejected faith and drowned.'
+    },
+    keyEvents: ['950 years of dawah', 'Building the Ark', 'The Great Flood', 'Ark landed on Mt. Judi'],
     verses: ['11:25-48', '71:1-28', '23:23-30'],
     icon: '🚢'
   },
   {
     id: 'ibrahim',
-    name: 'Ibrahim (Abraham)',
+    name: 'Ibrahim',
     nameAr: 'إبراهيم',
+    title: 'Khalilullah (Friend of Allah)',
     periodStart: -2000,
     periodEnd: -1850,
     color: '#F59E0B',
     location: 'makkah',
     coords: [21.4225, 39.8262],
-    story: 'Father of prophets. Rebuilt the Kaaba with Ismail. Tested with the sacrifice.',
+    story: 'Father of Prophets. Destroyed idols, survived fire. Rebuilt the Kaaba with Ismail. Tested with sacrifice.',
+    family: {
+      father: 'Azar (Terah)',
+      wives: ['Sarah', 'Hajar (Hagar)'],
+      sons: ['Ismail (from Hajar)', 'Ishaq (from Sarah)'],
+      note: 'From Ismail: Arab prophets including Muhammad ﷺ. From Ishaq: Israelite prophets.'
+    },
     keyEvents: ['Destroyed idols', 'Survived the fire', 'Rebuilt the Kaaba', 'Sacrifice of Ismail'],
     verses: ['2:124-132', '14:35-41', '37:99-113'],
     icon: '🔥'
   },
   {
     id: 'ismail',
-    name: 'Ismail (Ishmael)',
+    name: 'Ismail',
     nameAr: 'إسماعيل',
+    title: 'Dhabihullah (Sacrifice of Allah)',
     periodStart: -1900,
     periodEnd: -1800,
     color: '#EC4899',
     location: 'makkah',
     coords: [21.4225, 39.8262],
-    story: 'Son of Ibrahim. Helped build the Kaaba. Father of Arab lineage to Prophet Muhammad ﷺ.',
-    keyEvents: ['Left in Makkah as infant', 'Zamzam miracle', 'Built Kaaba with Ibrahim', 'Ancestor of Muhammad ﷺ'],
+    story: 'Son of Ibrahim and Hajar. Left as infant in Makkah. Zamzam miracle. Built Kaaba with his father.',
+    family: {
+      father: 'Ibrahim',
+      mother: 'Hajar (Hagar)',
+      sons: ['12 sons including Kedar (Qaydar)'],
+      note: 'Direct ancestor of Prophet Muhammad ﷺ through Kedar (Qaydar).'
+    },
+    keyEvents: ['Left in Makkah valley', 'Zamzam miracle', 'Built Kaaba with Ibrahim', 'Ancestor of Muhammad ﷺ'],
     verses: ['2:125-127', '37:102-107', '19:54-55'],
     icon: '💧'
   },
   {
     id: 'yaqub',
-    name: 'Yaqub (Jacob)',
+    name: 'Yaqub',
     nameAr: 'يعقوب',
+    title: 'Israel (Servant of Allah)',
     periodStart: -1800,
     periodEnd: -1700,
     color: '#8B5CF6',
     location: 'canaan',
     coords: [31.5, 35.2],
-    story: 'Son of Ishaq. Father of 12 sons including Yusuf. Also known as Israel.',
+    story: 'Son of Ishaq, grandson of Ibrahim. Father of 12 sons who became the 12 tribes of Bani Israel.',
+    family: {
+      father: 'Ishaq (Isaac)',
+      mother: 'Rifqah (Rebecca)',
+      grandfather: 'Ibrahim',
+      sons: ['Yusuf', 'Binyamin (Benjamin)', 'Yahuda (Judah)', 'Lawi (Levi)', 'and 8 others'],
+      note: 'His 12 sons became the 12 tribes of Israel (Bani Israel).'
+    },
     keyEvents: ['Father of 12 tribes', 'Grief for Yusuf', 'Reunion in Egypt', 'Named Israel'],
-    verses: ['12:4-18', '12:84-100'],
+    verses: ['12:4-18', '12:84-100', '19:49'],
     icon: '👨‍👦‍👦'
   },
   {
     id: 'yusuf',
-    name: 'Yusuf (Joseph)',
+    name: 'Yusuf',
     nameAr: 'يوسف',
+    title: 'As-Siddiq (The Truthful)',
     periodStart: -1700,
     periodEnd: -1600,
     color: '#06B6D4',
     location: 'egypt',
     coords: [30.0444, 31.2357],
-    story: 'Known for his beauty and dream interpretation. Rose from slave to minister of Egypt.',
-    keyEvents: ['Thrown in well', 'Sold as slave', 'Prison and dreams', 'Minister of Egypt'],
+    story: 'Known for exceptional beauty and dream interpretation. Rose from slave to Aziz (Minister) of Egypt.',
+    family: {
+      father: 'Yaqub (Jacob)',
+      mother: 'Rahil (Rachel)',
+      fullBrother: 'Binyamin (Benjamin)',
+      halfBrothers: '10 half-brothers',
+      sons: ['Ephraim', 'Manasseh'],
+      note: 'Given half of all beauty. His story is called "Ahsan al-Qasas" (Best of Stories).'
+    },
+    keyEvents: ['Thrown in well', 'Sold as slave', 'Prison and dreams', 'Aziz of Egypt'],
     verses: ['12:1-111'],
     icon: '⭐'
   },
   {
     id: 'musa',
-    name: 'Musa (Moses)',
+    name: 'Musa',
     nameAr: 'موسى',
+    title: 'Kalimullah (One who spoke to Allah)',
     periodStart: -1400,
     periodEnd: -1280,
     color: '#DC2626',
     location: 'sinai',
     coords: [28.5456, 33.9756],
-    story: 'Spoke directly to Allah. Led Bani Israel out of Egypt. Received the Torah.',
-    keyEvents: ['Basket in Nile', 'Burning bush', 'Parting the sea', 'Mount Sinai revelation'],
+    story: 'Spoke directly to Allah at Mount Sinai. Led Bani Israel out of Egypt. Received the Torah.',
+    family: {
+      father: 'Imran',
+      mother: 'Yukabid (Jochebed)',
+      brother: 'Harun (Aaron) - also a prophet',
+      sister: 'Maryam (Miriam)',
+      wife: 'Safura (Zipporah), daughter of Shuayb',
+      note: 'Most mentioned prophet in the Quran (136 times).'
+    },
+    keyEvents: ['Basket in Nile', 'Burning bush', 'Parting the sea', 'Torah at Sinai'],
     verses: ['20:9-98', '28:3-43', '7:103-162'],
     icon: '📜'
   },
   {
     id: 'dawud',
-    name: 'Dawud (David)',
+    name: 'Dawud',
     nameAr: 'داود',
+    title: 'Prophet-King of Israel',
     periodStart: -1040,
     periodEnd: -970,
     color: '#10B981',
     location: 'jerusalem',
     coords: [31.7683, 35.2137],
-    story: 'King and prophet. Defeated Jalut (Goliath). Given the Zabur (Psalms). Beautiful voice.',
-    keyEvents: ['Defeated Goliath', 'King of Israel', 'Given Zabur', 'Iron made soft for him'],
-    verses: ['2:251', '21:78-80', '34:10-11'],
+    story: 'King and prophet. Defeated Jalut (Goliath). Given the Zabur (Psalms). Mountains and birds glorified Allah with him.',
+    family: {
+      tribe: 'Tribe of Yahuda (Judah)',
+      sons: ['Sulayman (Solomon) - also a prophet', 'and others'],
+      note: 'Given beautiful voice. Iron made soft in his hands to make armor.'
+    },
+    keyEvents: ['Defeated Goliath', 'King of Israel', 'Given Zabur', 'Iron made soft'],
+    verses: ['2:251', '21:78-80', '34:10-11', '38:17-26'],
     icon: '🎵'
   },
   {
     id: 'sulayman',
-    name: 'Sulayman (Solomon)',
+    name: 'Sulayman',
     nameAr: 'سليمان',
+    title: 'Prophet-King with Greatest Dominion',
     periodStart: -970,
     periodEnd: -931,
     color: '#F472B6',
     location: 'jerusalem',
     coords: [31.7683, 35.2137],
-    story: 'Son of Dawud. Commanded jinn, wind, and animals. Built magnificent temple.',
+    story: 'Son of Dawud. Given kingdom over jinn, wind, and animals. Understood language of all creatures.',
+    family: {
+      father: 'Dawud (David)',
+      note: 'Given greatest kingdom ever. No one after him will have such dominion (Quran 38:35).'
+    },
     keyEvents: ['Understood animals', 'Commanded jinn', 'Queen of Sheba visit', 'Built the temple'],
-    verses: ['27:15-44', '21:81-82', '34:12-14'],
+    verses: ['27:15-44', '21:81-82', '34:12-14', '38:30-40'],
     icon: '👑'
   },
   {
     id: 'isa',
-    name: 'Isa (Jesus)',
+    name: 'Isa',
     nameAr: 'عيسى',
+    title: 'Ruhullah & Al-Masih (Spirit of Allah & The Messiah)',
     periodStart: 1,
     periodEnd: 33,
     color: '#A855F7',
     location: 'jerusalem',
     coords: [31.7683, 35.2137],
-    story: 'Born miraculously to Maryam. Given the Injeel. Performed miracles. Raised to heaven.',
+    story: 'Born miraculously to Maryam without father. Given the Injeel (Gospel). Performed miracles. Raised alive to heaven.',
+    family: {
+      mother: 'Maryam bint Imran (Mary)',
+      maternal_grandfather: 'Imran',
+      maternal_grandmother: 'Hannah',
+      uncle: 'Zakariya (prophet)',
+      cousin: 'Yahya/John (prophet)',
+      note: 'Born without father by Allah\'s command "Kun" (Be). Will return before Day of Judgment.'
+    },
     keyEvents: ['Miraculous birth', 'Spoke in cradle', 'Healed the sick', 'Raised to heaven'],
-    verses: ['3:45-55', '5:110-118', '19:16-35'],
+    verses: ['3:45-55', '5:110-118', '19:16-35', '4:157-158'],
     icon: '✨'
   },
   {
     id: 'muhammad',
     name: 'Muhammad ﷺ',
     nameAr: 'محمد ﷺ',
+    title: 'Khatam an-Nabiyyin (Seal of Prophets)',
     periodStart: 570,
     periodEnd: 632,
     color: '#10B981',
     location: 'makkah',
     coords: [21.4225, 39.8262],
-    story: 'Final Prophet and Messenger. Received the Quran. Established Islam.',
-    keyEvents: ['First revelation', 'Isra & Miraj', 'Hijra to Madinah', 'Conquest of Makkah'],
-    verses: ['33:40', '48:29', '3:144'],
+    story: 'Final Prophet and Messenger to all mankind. Received the Quran over 23 years. Established Islam.',
+    family: {
+      father: 'Abdullah ibn Abd al-Muttalib (died before birth)',
+      mother: 'Aminah bint Wahb (died when he was 6)',
+      grandfather: 'Abd al-Muttalib (raised him)',
+      uncle: 'Abu Talib (protected him)',
+      wives: ['Khadijah', 'Aisha', 'and others - Mothers of Believers'],
+      children: ['Qasim', 'Abdullah', 'Ibrahim (sons)', 'Zainab', 'Ruqayyah', 'Umm Kulthum', 'Fatimah (daughters)'],
+      note: 'Lineage: Muhammad ﷺ → ... → Adnan → ... → Kedar → Ismail → Ibrahim'
+    },
+    keyEvents: ['First revelation (610 CE)', 'Isra & Miraj', 'Hijra to Madinah (622 CE)', 'Conquest of Makkah (630 CE)'],
+    verses: ['33:40', '48:29', '3:144', '21:107'],
     icon: '🌙'
   }
 ];
@@ -563,16 +645,12 @@ const TimelineSlider = memo(({ value, onChange, events, prophets = [], onProphet
           </button>
         </div>
 
-        {/* Prophet Grid Selector - Larger buttons with full names */}
+        {/* Prophet Grid Selector - Full names visible */}
         <div className="p-4 bg-gray-900/50 border-b border-gray-800">
           <p className="text-gray-500 text-xs uppercase tracking-wider mb-3 px-1">Select Prophet</p>
-          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-11 gap-3">
+          <div className="flex flex-wrap justify-center gap-2 sm:gap-3">
             {prophets.map(prophet => {
               const isActive = value >= prophet.periodStart && value <= prophet.periodEnd;
-              // Extract short name for display
-              const shortName = prophet.name.includes('(')
-                ? prophet.name.split('(')[1].replace(')', '')
-                : prophet.name.split(' ')[0];
               return (
                 <button
                   key={prophet.id}
@@ -580,18 +658,18 @@ const TimelineSlider = memo(({ value, onChange, events, prophets = [], onProphet
                     onChange(prophet.periodStart + Math.floor((prophet.periodEnd - prophet.periodStart) / 2));
                     onFlyToLocation(prophet.coords);
                   }}
-                  className={`flex flex-col items-center p-3 rounded-xl transition-all ${
+                  className={`flex flex-col items-center px-3 py-2.5 sm:px-4 sm:py-3 rounded-xl transition-all min-w-[70px] sm:min-w-[85px] ${
                     isActive
-                      ? 'bg-amber-500 text-black shadow-lg shadow-amber-500/30 scale-105'
+                      ? 'bg-amber-500 text-black shadow-lg shadow-amber-500/30 scale-105 ring-2 ring-amber-300'
                       : 'bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white border border-gray-700'
                   }`}
                 >
-                  <span className="text-2xl mb-1.5">{prophet.icon}</span>
-                  <span className={`text-xs font-semibold text-center leading-tight ${isActive ? 'text-black' : ''}`}>
-                    {shortName}
+                  <span className="text-xl sm:text-2xl mb-1">{prophet.icon}</span>
+                  <span className={`text-[11px] sm:text-xs font-bold text-center whitespace-nowrap ${isActive ? 'text-black' : 'text-white'}`}>
+                    {prophet.name.replace(' ﷺ', '')}
                   </span>
-                  <span className={`text-[10px] mt-0.5 ${isActive ? 'text-black/70' : 'text-gray-500'}`} dir="rtl">
-                    {prophet.nameAr}
+                  <span className={`text-[10px] sm:text-[11px] mt-0.5 font-medium ${isActive ? 'text-black/70' : 'text-gray-500'}`} dir="rtl">
+                    {prophet.nameAr.replace(' ﷺ', '')}
                   </span>
                 </button>
               );
@@ -602,54 +680,143 @@ const TimelineSlider = memo(({ value, onChange, events, prophets = [], onProphet
         {/* Expanded Content */}
         {isExpanded && (
           <>
-            {/* Prophet Card - Solid background */}
+            {/* Prophet Card - Full details with family info */}
             {mainProphet && (
               <div
-                className="p-4 bg-gray-900 cursor-pointer hover:bg-gray-800 transition-colors border-b border-gray-700"
-                onClick={() => onFlyToLocation(mainProphet.coords)}
+                className="p-4 bg-gray-900 border-b border-gray-700 max-h-[45vh] overflow-y-auto custom-scrollbar"
               >
-                <div className="flex items-start gap-4">
+                {/* Header Row */}
+                <div className="flex items-start gap-4 mb-4">
                   {/* Prophet Icon */}
                   <div
-                    className="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl flex-shrink-0"
+                    className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl flex items-center justify-center text-3xl sm:text-4xl flex-shrink-0 cursor-pointer hover:scale-105 transition-transform"
                     style={{ backgroundColor: mainProphet.color }}
+                    onClick={() => onFlyToLocation(mainProphet.coords)}
                   >
                     {mainProphet.icon}
                   </div>
 
-                  {/* Prophet Info */}
+                  {/* Prophet Name & Title */}
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-2 flex-wrap">
-                      <h3 className="text-white font-bold text-lg">{mainProphet.name}</h3>
-                      <span className="text-gray-400 text-sm" dir="rtl">{mainProphet.nameAr}</span>
+                    <div className="flex items-center gap-2 flex-wrap mb-1">
+                      <h3 className="text-white font-bold text-xl">{mainProphet.name}</h3>
+                      <span className="text-gray-400 text-base" dir="rtl">{mainProphet.nameAr}</span>
+                    </div>
+                    {mainProphet.title && (
+                      <p className="text-amber-400 text-sm font-medium mb-2 italic">"{mainProphet.title}"</p>
+                    )}
+                    <div className="flex items-center gap-2 flex-wrap">
                       <span className="px-2 py-1 rounded-lg text-xs font-bold bg-gray-700 text-amber-400">
                         {formatYear(mainProphet.periodStart)} - {formatYear(mainProphet.periodEnd)}
                       </span>
+                      <button
+                        onClick={() => onFlyToLocation(mainProphet.coords)}
+                        className="px-2 py-1 rounded-lg text-xs font-medium bg-blue-600 hover:bg-blue-500 text-white flex items-center gap-1"
+                      >
+                        <Icons.MapPin className="w-3 h-3" /> View on Map
+                      </button>
                     </div>
-                    <p className="text-gray-300 text-sm mb-3">{mainProphet.story}</p>
+                  </div>
+                </div>
 
-                    {/* Key Events */}
-                    <div className="flex flex-wrap gap-2 mb-3">
-                      {mainProphet.keyEvents.map((event, i) => (
-                        <span key={i} className="px-3 py-1 rounded-lg text-xs text-white bg-gray-700 border border-gray-600">
-                          {event}
-                        </span>
-                      ))}
-                    </div>
+                {/* Story */}
+                <p className="text-gray-300 text-sm mb-4 leading-relaxed">{mainProphet.story}</p>
 
-                    {/* Verses */}
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <span className="text-gray-500 text-xs font-medium">📖 Quran:</span>
-                      {mainProphet.verses.map((v, i) => (
-                        <button
-                          key={i}
-                          onClick={(e) => { e.stopPropagation(); onProphetClick(mainProphet, v); }}
-                          className="px-3 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition-colors"
-                        >
-                          {v}
-                        </button>
-                      ))}
+                {/* Family Information */}
+                {mainProphet.family && (
+                  <div className="mb-4 p-3 rounded-xl bg-gray-800/50 border border-gray-700">
+                    <h4 className="text-amber-400 text-xs font-bold uppercase tracking-wider mb-2 flex items-center gap-2">
+                      <span>👨‍👩‍👧‍👦</span> Family (Islamic Sources)
+                    </h4>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                      {mainProphet.family.father && (
+                        <div className="flex items-start gap-2">
+                          <span className="text-gray-500 min-w-[60px]">Father:</span>
+                          <span className="text-white">{mainProphet.family.father}</span>
+                        </div>
+                      )}
+                      {mainProphet.family.mother && (
+                        <div className="flex items-start gap-2">
+                          <span className="text-gray-500 min-w-[60px]">Mother:</span>
+                          <span className="text-white">{mainProphet.family.mother}</span>
+                        </div>
+                      )}
+                      {mainProphet.family.wife && (
+                        <div className="flex items-start gap-2">
+                          <span className="text-gray-500 min-w-[60px]">Wife:</span>
+                          <span className="text-white">{mainProphet.family.wife}</span>
+                        </div>
+                      )}
+                      {mainProphet.family.wives && (
+                        <div className="flex items-start gap-2 sm:col-span-2">
+                          <span className="text-gray-500 min-w-[60px]">Wives:</span>
+                          <span className="text-white">{mainProphet.family.wives.join(', ')}</span>
+                        </div>
+                      )}
+                      {mainProphet.family.sons && (
+                        <div className="flex items-start gap-2 sm:col-span-2">
+                          <span className="text-gray-500 min-w-[60px]">Sons:</span>
+                          <span className="text-white">{Array.isArray(mainProphet.family.sons) ? mainProphet.family.sons.join(', ') : mainProphet.family.sons}</span>
+                        </div>
+                      )}
+                      {mainProphet.family.children && (
+                        <div className="flex items-start gap-2 sm:col-span-2">
+                          <span className="text-gray-500 min-w-[60px]">Children:</span>
+                          <span className="text-white">{mainProphet.family.children.join(', ')}</span>
+                        </div>
+                      )}
+                      {mainProphet.family.brother && (
+                        <div className="flex items-start gap-2">
+                          <span className="text-gray-500 min-w-[60px]">Brother:</span>
+                          <span className="text-white">{mainProphet.family.brother}</span>
+                        </div>
+                      )}
+                      {mainProphet.family.sister && (
+                        <div className="flex items-start gap-2">
+                          <span className="text-gray-500 min-w-[60px]">Sister:</span>
+                          <span className="text-white">{mainProphet.family.sister}</span>
+                        </div>
+                      )}
+                      {mainProphet.family.grandfather && (
+                        <div className="flex items-start gap-2">
+                          <span className="text-gray-500 min-w-[60px]">Grandfather:</span>
+                          <span className="text-white">{mainProphet.family.grandfather}</span>
+                        </div>
+                      )}
                     </div>
+                    {mainProphet.family.note && (
+                      <p className="text-amber-300/80 text-[11px] mt-2 italic border-t border-gray-700 pt-2">
+                        📌 {mainProphet.family.note}
+                      </p>
+                    )}
+                  </div>
+                )}
+
+                {/* Key Events */}
+                <div className="mb-4">
+                  <h4 className="text-gray-500 text-xs font-bold uppercase tracking-wider mb-2">Key Events</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {mainProphet.keyEvents.map((event, i) => (
+                      <span key={i} className="px-3 py-1.5 rounded-lg text-xs text-white bg-gray-700 border border-gray-600">
+                        {event}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Quran Verses */}
+                <div>
+                  <h4 className="text-gray-500 text-xs font-bold uppercase tracking-wider mb-2">📖 References in Quran</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {mainProphet.verses.map((v, i) => (
+                      <button
+                        key={i}
+                        onClick={(e) => { e.stopPropagation(); onProphetClick(mainProphet, v); }}
+                        className="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition-colors"
+                      >
+                        Surah {v}
+                      </button>
+                    ))}
                   </div>
                 </div>
               </div>
