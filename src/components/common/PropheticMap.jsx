@@ -697,7 +697,8 @@ const PROPHETS_TIMELINE = [
       'One of the 5 Ulul Azm prophets',
       'Given Jawami\' al-Kalim - concise speech'
     ],
-    companions: 'Over 100,000 Sahaba attended Farewell Pilgrimage',
+    companions: '100,000+ Sahaba (direct companions)',
+    ummah: '2+ billion Muslims today (largest Ummah ever)',
     keyEvents: [
       'Birth - Year of Elephant (571 CE)',
       'First revelation in Cave Hira (610 CE)',
@@ -1311,7 +1312,13 @@ const TimelineSlider = memo(({ value, onChange, events, prophets = [], onProphet
               {mainProphet.companions && (
                 <div className="text-center p-2 rounded-lg bg-blue-900/30 border border-blue-700">
                   <div className="text-sm font-bold text-blue-400">100K+</div>
-                  <div className="text-[9px] text-blue-300">Companions</div>
+                  <div className="text-[9px] text-blue-300">Sahaba</div>
+                </div>
+              )}
+              {mainProphet.ummah && (
+                <div className="text-center p-2 rounded-lg bg-green-900/30 border border-green-700">
+                  <div className="text-sm font-bold text-green-400">2B+</div>
+                  <div className="text-[9px] text-green-300">Ummah</div>
                 </div>
               )}
             </div>
