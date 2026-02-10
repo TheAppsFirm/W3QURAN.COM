@@ -592,11 +592,11 @@ const LayerPanel = memo(({ layers, activeLayers, toggleLayer, counts, isOpen, se
   );
 });
 
-// Clean Timeline Slider with Prophet Details - Solid background, easy to read
+// Compact Timeline Slider with Prophet Details
 const TimelineSlider = memo(({ value, onChange, events, prophets = [], onProphetClick, onFlyToLocation }) => {
   const minYear = -4000;
   const maxYear = 700;
-  const [isExpanded, setIsExpanded] = useState(true);
+  const [isExpanded, setIsExpanded] = useState(false); // Start collapsed
 
   // Find active prophet(s) for current year
   const activeProphets = (prophets || []).filter(p => value >= p.periodStart && value <= p.periodEnd);
@@ -606,49 +606,13 @@ const TimelineSlider = memo(({ value, onChange, events, prophets = [], onProphet
   const formatYear = (year) => year < 0 ? `${Math.abs(year)} BCE` : `${year} CE`;
 
   return (
-    <div className="absolute bottom-4 left-4 right-4 z-[1000] max-w-4xl mx-auto">
-      {/* Solid dark background - NO glass effect for better readability */}
-      <div className="bg-gray-950 rounded-2xl border border-gray-700 shadow-2xl overflow-hidden">
+    <div className="absolute bottom-3 left-3 right-3 z-[1000] max-w-5xl mx-auto">
+      <div className="bg-gray-950/95 backdrop-blur-sm rounded-xl border border-gray-700 shadow-2xl overflow-hidden">
 
-        {/* Header */}
-        <div className="flex items-center justify-between p-4 bg-gray-900 border-b border-gray-700">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-xl bg-amber-500 flex items-center justify-center">
-              <Icons.Clock className="w-6 h-6 text-white" />
-            </div>
-            <div>
-              <h3 className="text-white font-bold text-base">Prophetic Timeline</h3>
-              <p className="text-amber-400 text-sm font-bold">{formatYear(value)}</p>
-            </div>
-          </div>
-
-          {/* Active Prophet Badge */}
-          {mainProphet && (
-            <button
-              onClick={() => onFlyToLocation(mainProphet.coords)}
-              className="flex items-center gap-3 px-4 py-2 rounded-xl bg-gray-800 hover:bg-gray-700 transition-colors border border-gray-600"
-            >
-              <span className="text-2xl">{mainProphet.icon}</span>
-              <div className="text-left">
-                <p className="text-white font-bold text-sm">{mainProphet.name}</p>
-                <p className="text-gray-400 text-xs">{mainProphet.nameAr}</p>
-              </div>
-              <Icons.MapPin className="w-5 h-5 text-amber-400" />
-            </button>
-          )}
-
-          <button
-            onClick={() => setIsExpanded(!isExpanded)}
-            className="p-2 rounded-lg bg-gray-800 hover:bg-gray-700 transition-colors"
-          >
-            <Icons.ChevronDown className={`w-5 h-5 text-gray-400 transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
-          </button>
-        </div>
-
-        {/* Prophet Grid Selector - Full names visible */}
-        <div className="p-4 bg-gray-900/50 border-b border-gray-800">
-          <p className="text-gray-500 text-xs uppercase tracking-wider mb-3 px-1">Select Prophet</p>
-          <div className="flex flex-wrap justify-center gap-2 sm:gap-3">
+        {/* Compact Header with Prophet Selector */}
+        <div className="p-3 bg-gray-900/80">
+          {/* Prophet Row - Horizontal scroll on mobile, flex wrap on desktop */}
+          <div className="flex items-center gap-2 overflow-x-auto hide-scrollbar pb-1">
             {prophets.map(prophet => {
               const isActive = value >= prophet.periodStart && value <= prophet.periodEnd;
               return (
@@ -658,231 +622,164 @@ const TimelineSlider = memo(({ value, onChange, events, prophets = [], onProphet
                     onChange(prophet.periodStart + Math.floor((prophet.periodEnd - prophet.periodStart) / 2));
                     onFlyToLocation(prophet.coords);
                   }}
-                  className={`flex flex-col items-center px-3 py-2.5 sm:px-4 sm:py-3 rounded-xl transition-all min-w-[70px] sm:min-w-[85px] ${
+                  className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg transition-all flex-shrink-0 ${
                     isActive
-                      ? 'bg-amber-500 text-black shadow-lg shadow-amber-500/30 scale-105 ring-2 ring-amber-300'
-                      : 'bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white border border-gray-700'
+                      ? 'bg-amber-500 text-black shadow-md'
+                      : 'bg-gray-800/80 text-gray-400 hover:bg-gray-700 hover:text-white'
                   }`}
                 >
-                  <span className="text-xl sm:text-2xl mb-1">{prophet.icon}</span>
-                  <span className={`text-[11px] sm:text-xs font-bold text-center whitespace-nowrap ${isActive ? 'text-black' : 'text-white'}`}>
-                    {prophet.name.replace(' ﷺ', '')}
-                  </span>
-                  <span className={`text-[10px] sm:text-[11px] mt-0.5 font-medium ${isActive ? 'text-black/70' : 'text-gray-500'}`} dir="rtl">
-                    {prophet.nameAr.replace(' ﷺ', '')}
+                  <span className="text-base">{prophet.icon}</span>
+                  <span className={`text-xs font-semibold whitespace-nowrap ${isActive ? 'text-black' : ''}`}>
+                    {prophet.name === 'Muhammad ﷺ' ? 'Muhammad ﷺ' : prophet.name}
                   </span>
                 </button>
               );
             })}
           </div>
+
+          {/* Timeline Bar */}
+          <div className="relative h-8 mt-2">
+            {/* Background track */}
+            <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-2 bg-gray-800 rounded-full" />
+
+            {/* Prophet period segments */}
+            {prophets.map(prophet => {
+              const startPercent = ((prophet.periodStart - minYear) / (maxYear - minYear)) * 100;
+              const endPercent = ((prophet.periodEnd - minYear) / (maxYear - minYear)) * 100;
+              const isActive = value >= prophet.periodStart && value <= prophet.periodEnd;
+
+              return (
+                <div
+                  key={prophet.id}
+                  className="absolute top-1/2 -translate-y-1/2 h-3 rounded-full cursor-pointer transition-all hover:h-4"
+                  style={{
+                    left: `${Math.max(0, startPercent)}%`,
+                    width: `${Math.min(100 - startPercent, endPercent - startPercent)}%`,
+                    backgroundColor: isActive ? prophet.color : `${prophet.color}50`,
+                    boxShadow: isActive ? `0 0 8px ${prophet.color}` : 'none',
+                  }}
+                  title={prophet.name}
+                  onClick={() => {
+                    onChange(prophet.periodStart + Math.floor((prophet.periodEnd - prophet.periodStart) / 2));
+                    onFlyToLocation(prophet.coords);
+                  }}
+                />
+              );
+            })}
+
+            {/* Slider input */}
+            <input
+              type="range"
+              min={minYear}
+              max={maxYear}
+              value={value}
+              onChange={(e) => onChange(parseInt(e.target.value))}
+              className="absolute inset-0 w-full opacity-0 cursor-pointer z-10"
+            />
+
+            {/* Custom thumb */}
+            <div
+              className="absolute top-1/2 -translate-y-1/2 pointer-events-none"
+              style={{ left: `calc(${((value - minYear) / (maxYear - minYear)) * 100}%)` }}
+            >
+              <div className="w-4 h-4 -ml-2 bg-white rounded-full shadow-lg border-2 border-amber-400" />
+            </div>
+          </div>
+
+          {/* Year labels and expand button */}
+          <div className="flex items-center justify-between mt-1">
+            <span className="text-[10px] text-gray-500">4000 BCE</span>
+            {mainProphet && (
+              <button
+                onClick={() => setIsExpanded(!isExpanded)}
+                className="flex items-center gap-2 px-2 py-1 rounded-lg bg-gray-800 hover:bg-gray-700 text-xs"
+              >
+                <span className="text-base">{mainProphet.icon}</span>
+                <span className="text-white font-medium">{mainProphet.name}</span>
+                <span className="text-amber-400">{formatYear(value)}</span>
+                <Icons.ChevronDown className={`w-3 h-3 text-gray-400 transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
+              </button>
+            )}
+            <span className="text-[10px] text-gray-500">700 CE</span>
+          </div>
         </div>
 
-        {/* Expanded Content */}
-        {isExpanded && (
-          <>
-            {/* Prophet Card - Full details with family info */}
-            {mainProphet && (
-              <div
-                className="p-4 bg-gray-900 border-b border-gray-700 max-h-[45vh] overflow-y-auto custom-scrollbar"
-              >
-                {/* Header Row */}
-                <div className="flex items-start gap-4 mb-4">
-                  {/* Prophet Icon */}
-                  <div
-                    className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl flex items-center justify-center text-3xl sm:text-4xl flex-shrink-0 cursor-pointer hover:scale-105 transition-transform"
-                    style={{ backgroundColor: mainProphet.color }}
-                    onClick={() => onFlyToLocation(mainProphet.coords)}
-                  >
-                    {mainProphet.icon}
-                  </div>
-
-                  {/* Prophet Name & Title */}
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 flex-wrap mb-1">
-                      <h3 className="text-white font-bold text-xl">{mainProphet.name}</h3>
-                      <span className="text-gray-400 text-base" dir="rtl">{mainProphet.nameAr}</span>
-                    </div>
-                    {mainProphet.title && (
-                      <p className="text-amber-400 text-sm font-medium mb-2 italic">"{mainProphet.title}"</p>
-                    )}
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <span className="px-2 py-1 rounded-lg text-xs font-bold bg-gray-700 text-amber-400">
-                        {formatYear(mainProphet.periodStart)} - {formatYear(mainProphet.periodEnd)}
-                      </span>
-                      <button
-                        onClick={() => onFlyToLocation(mainProphet.coords)}
-                        className="px-2 py-1 rounded-lg text-xs font-medium bg-blue-600 hover:bg-blue-500 text-white flex items-center gap-1"
-                      >
-                        <Icons.MapPin className="w-3 h-3" /> View on Map
-                      </button>
-                    </div>
-                  </div>
+        {/* Expanded Content - Prophet Details */}
+        {isExpanded && mainProphet && (
+          <div className="p-3 bg-gray-900/90 border-t border-gray-700 max-h-[35vh] overflow-y-auto custom-scrollbar">
+            {/* Two Column Layout */}
+            <div className="flex gap-3">
+              {/* Left - Icon & Basic Info */}
+              <div className="flex-shrink-0">
+                <div
+                  className="w-14 h-14 rounded-xl flex items-center justify-center text-2xl cursor-pointer hover:scale-105 transition-transform"
+                  style={{ backgroundColor: mainProphet.color }}
+                  onClick={() => onFlyToLocation(mainProphet.coords)}
+                >
+                  {mainProphet.icon}
                 </div>
+              </div>
 
-                {/* Story */}
-                <p className="text-gray-300 text-sm mb-4 leading-relaxed">{mainProphet.story}</p>
+              {/* Right - Details */}
+              <div className="flex-1 min-w-0">
+                {/* Name & Title */}
+                <div className="flex items-center gap-2 flex-wrap mb-1">
+                  <h3 className="text-white font-bold text-base">{mainProphet.name}</h3>
+                  <span className="text-gray-400 text-sm" dir="rtl">{mainProphet.nameAr}</span>
+                </div>
+                {mainProphet.title && (
+                  <p className="text-amber-400 text-xs italic mb-2">"{mainProphet.title}"</p>
+                )}
+                <p className="text-gray-300 text-xs mb-2 leading-relaxed">{mainProphet.story}</p>
 
-                {/* Family Information */}
+                {/* Family - Compact Grid */}
                 {mainProphet.family && (
-                  <div className="mb-4 p-3 rounded-xl bg-gray-800/50 border border-gray-700">
-                    <h4 className="text-amber-400 text-xs font-bold uppercase tracking-wider mb-2 flex items-center gap-2">
-                      <span>👨‍👩‍👧‍👦</span> Family (Islamic Sources)
-                    </h4>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                  <div className="mb-2 p-2 rounded-lg bg-gray-800/50 border border-gray-700">
+                    <p className="text-amber-400 text-[10px] font-bold uppercase mb-1">👨‍👩‍👧‍👦 Family</p>
+                    <div className="grid grid-cols-2 gap-x-3 gap-y-0.5 text-[11px]">
                       {mainProphet.family.father && (
-                        <div className="flex items-start gap-2">
-                          <span className="text-gray-500 min-w-[60px]">Father:</span>
-                          <span className="text-white">{mainProphet.family.father}</span>
-                        </div>
+                        <div><span className="text-gray-500">Father:</span> <span className="text-white">{mainProphet.family.father}</span></div>
                       )}
                       {mainProphet.family.mother && (
-                        <div className="flex items-start gap-2">
-                          <span className="text-gray-500 min-w-[60px]">Mother:</span>
-                          <span className="text-white">{mainProphet.family.mother}</span>
-                        </div>
+                        <div><span className="text-gray-500">Mother:</span> <span className="text-white">{mainProphet.family.mother}</span></div>
                       )}
                       {mainProphet.family.wife && (
-                        <div className="flex items-start gap-2">
-                          <span className="text-gray-500 min-w-[60px]">Wife:</span>
-                          <span className="text-white">{mainProphet.family.wife}</span>
-                        </div>
+                        <div className="col-span-2"><span className="text-gray-500">Wife:</span> <span className="text-white">{mainProphet.family.wife}</span></div>
                       )}
                       {mainProphet.family.wives && (
-                        <div className="flex items-start gap-2 sm:col-span-2">
-                          <span className="text-gray-500 min-w-[60px]">Wives:</span>
-                          <span className="text-white">{mainProphet.family.wives.join(', ')}</span>
-                        </div>
+                        <div className="col-span-2"><span className="text-gray-500">Wives:</span> <span className="text-white">{mainProphet.family.wives.join(', ')}</span></div>
                       )}
                       {mainProphet.family.sons && (
-                        <div className="flex items-start gap-2 sm:col-span-2">
-                          <span className="text-gray-500 min-w-[60px]">Sons:</span>
-                          <span className="text-white">{Array.isArray(mainProphet.family.sons) ? mainProphet.family.sons.join(', ') : mainProphet.family.sons}</span>
-                        </div>
-                      )}
-                      {mainProphet.family.children && (
-                        <div className="flex items-start gap-2 sm:col-span-2">
-                          <span className="text-gray-500 min-w-[60px]">Children:</span>
-                          <span className="text-white">{mainProphet.family.children.join(', ')}</span>
-                        </div>
+                        <div className="col-span-2"><span className="text-gray-500">Sons:</span> <span className="text-white">{Array.isArray(mainProphet.family.sons) ? mainProphet.family.sons.join(', ') : mainProphet.family.sons}</span></div>
                       )}
                       {mainProphet.family.brother && (
-                        <div className="flex items-start gap-2">
-                          <span className="text-gray-500 min-w-[60px]">Brother:</span>
-                          <span className="text-white">{mainProphet.family.brother}</span>
-                        </div>
-                      )}
-                      {mainProphet.family.sister && (
-                        <div className="flex items-start gap-2">
-                          <span className="text-gray-500 min-w-[60px]">Sister:</span>
-                          <span className="text-white">{mainProphet.family.sister}</span>
-                        </div>
-                      )}
-                      {mainProphet.family.grandfather && (
-                        <div className="flex items-start gap-2">
-                          <span className="text-gray-500 min-w-[60px]">Grandfather:</span>
-                          <span className="text-white">{mainProphet.family.grandfather}</span>
-                        </div>
+                        <div><span className="text-gray-500">Brother:</span> <span className="text-white">{mainProphet.family.brother}</span></div>
                       )}
                     </div>
                     {mainProphet.family.note && (
-                      <p className="text-amber-300/80 text-[11px] mt-2 italic border-t border-gray-700 pt-2">
-                        📌 {mainProphet.family.note}
-                      </p>
+                      <p className="text-amber-300/70 text-[10px] mt-1 italic">📌 {mainProphet.family.note}</p>
                     )}
                   </div>
                 )}
 
-                {/* Key Events */}
-                <div className="mb-4">
-                  <h4 className="text-gray-500 text-xs font-bold uppercase tracking-wider mb-2">Key Events</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {mainProphet.keyEvents.map((event, i) => (
-                      <span key={i} className="px-3 py-1.5 rounded-lg text-xs text-white bg-gray-700 border border-gray-600">
-                        {event}
-                      </span>
-                    ))}
-                  </div>
+                {/* Events & Verses Row */}
+                <div className="flex flex-wrap gap-1.5">
+                  {mainProphet.keyEvents.slice(0, 3).map((event, i) => (
+                    <span key={i} className="px-2 py-0.5 rounded text-[10px] text-white bg-gray-700">{event}</span>
+                  ))}
+                  {mainProphet.verses.slice(0, 2).map((v, i) => (
+                    <button
+                      key={i}
+                      onClick={(e) => { e.stopPropagation(); onProphetClick(mainProphet, v); }}
+                      className="px-2 py-0.5 rounded bg-emerald-600 hover:bg-emerald-500 text-white text-[10px] font-medium"
+                    >
+                      📖 {v}
+                    </button>
+                  ))}
                 </div>
-
-                {/* Quran Verses */}
-                <div>
-                  <h4 className="text-gray-500 text-xs font-bold uppercase tracking-wider mb-2">📖 References in Quran</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {mainProphet.verses.map((v, i) => (
-                      <button
-                        key={i}
-                        onClick={(e) => { e.stopPropagation(); onProphetClick(mainProphet, v); }}
-                        className="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition-colors"
-                      >
-                        Surah {v}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Visual Timeline - Cleaner */}
-            <div className="p-4 bg-gray-950">
-              <div className="relative h-14 mb-2">
-                {/* Background track */}
-                <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-3 bg-gray-800 rounded-full" />
-
-                {/* Prophet period segments */}
-                {prophets.map(prophet => {
-                  const startPercent = ((prophet.periodStart - minYear) / (maxYear - minYear)) * 100;
-                  const endPercent = ((prophet.periodEnd - minYear) / (maxYear - minYear)) * 100;
-                  const isActive = value >= prophet.periodStart && value <= prophet.periodEnd;
-
-                  return (
-                    <div
-                      key={prophet.id}
-                      className="absolute top-1/2 -translate-y-1/2 h-4 rounded-full cursor-pointer transition-all hover:h-5"
-                      style={{
-                        left: `${Math.max(0, startPercent)}%`,
-                        width: `${Math.min(100 - startPercent, endPercent - startPercent)}%`,
-                        backgroundColor: isActive ? prophet.color : `${prophet.color}60`,
-                        boxShadow: isActive ? `0 0 12px ${prophet.color}80` : 'none',
-                      }}
-                      title={prophet.name}
-                      onClick={() => {
-                        onChange(prophet.periodStart + Math.floor((prophet.periodEnd - prophet.periodStart) / 2));
-                        onFlyToLocation(prophet.coords);
-                      }}
-                    />
-                  );
-                })}
-
-                {/* Slider input (invisible but interactive) */}
-                <input
-                  type="range"
-                  min={minYear}
-                  max={maxYear}
-                  value={value}
-                  onChange={(e) => onChange(parseInt(e.target.value))}
-                  className="absolute inset-0 w-full opacity-0 cursor-pointer z-10"
-                />
-
-                {/* Custom thumb */}
-                <div
-                  className="absolute top-1/2 -translate-y-1/2 pointer-events-none transition-all"
-                  style={{ left: `calc(${((value - minYear) / (maxYear - minYear)) * 100}%)` }}
-                >
-                  <div className="w-6 h-6 -ml-3 bg-white rounded-full shadow-xl border-4 border-amber-400 relative">
-                    <div className="absolute inset-0 rounded-full animate-ping bg-amber-400/50" />
-                  </div>
-                </div>
-              </div>
-
-              {/* Era Labels */}
-              <div className="flex justify-between text-[10px] text-white/40 px-1">
-                <span>4000 BCE</span>
-                <span>2000 BCE</span>
-                <span>Year 1</span>
-                <span>700 CE</span>
               </div>
             </div>
-          </>
+          </div>
         )}
       </div>
     </div>
