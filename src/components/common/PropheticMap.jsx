@@ -692,12 +692,18 @@ const TimelineSlider = memo(({ value, onChange, events, prophets = [], onProphet
             {mainProphet && (
               <button
                 onClick={() => setIsExpanded(!isExpanded)}
-                className="flex items-center gap-2 px-2 py-1 rounded-lg bg-gray-800 hover:bg-gray-700 text-xs"
+                className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs transition-all ${
+                  isExpanded
+                    ? 'bg-amber-500/20 border border-amber-500/50'
+                    : 'bg-gray-800 hover:bg-amber-500/20 border border-gray-700 hover:border-amber-500/50 animate-pulse'
+                }`}
               >
                 <span className="text-base">{mainProphet.icon}</span>
-                <span className="text-white font-medium">{mainProphet.name}</span>
-                <span className="text-amber-400">{formatYear(value)}</span>
-                <Icons.ChevronDown className={`w-3 h-3 text-gray-400 transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
+                <div className="text-left">
+                  <span className="text-white font-medium block">{mainProphet.name}</span>
+                  <span className="text-amber-400 text-[10px]">{isExpanded ? 'Click to collapse' : 'Tap for family & details ↓'}</span>
+                </div>
+                <Icons.ChevronDown className={`w-4 h-4 text-amber-400 transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
               </button>
             )}
             <span className="text-[10px] text-gray-500">700 CE</span>
