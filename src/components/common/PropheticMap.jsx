@@ -1157,6 +1157,15 @@ const PropheticMap = memo(function PropheticMap({ isVisible, onClose, onNavigate
     }
   }, []);
 
+  // Invalidate map size when timeline visibility changes
+  useEffect(() => {
+    if (mapRef.current) {
+      setTimeout(() => {
+        mapRef.current.invalidateSize();
+      }, 350); // Wait for CSS transition to complete
+    }
+  }, [showTimeline]);
+
   // Get journey coordinates
   const getJourneyCoords = (journey) => {
     return journey.waypoints.map(wp => {
@@ -1226,8 +1235,11 @@ const PropheticMap = memo(function PropheticMap({ isVisible, onClose, onNavigate
           </div>
         </div>
 
-        {/* Map */}
-        <div className="flex-1 relative">
+        {/* Map - Shrink when timeline visible so content isn't hidden */}
+        <div
+          className="flex-1 relative transition-all duration-300"
+          style={{ marginBottom: showTimeline ? '140px' : '0' }}
+        >
           <MapContainer
             center={defaultCenter}
             zoom={defaultZoom}
