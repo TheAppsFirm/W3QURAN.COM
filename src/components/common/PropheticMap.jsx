@@ -1347,20 +1347,17 @@ const TimelineSlider = memo(({ value, onChange, events, prophets = [], onProphet
 
             {/* Two Column Info Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
-              {/* Miracles */}
+              {/* Miracles - show ALL */}
               {mainProphet.miracles && (
                 <div className="p-2.5 rounded-lg bg-gradient-to-br from-amber-900/30 to-orange-900/30 border border-amber-700/50">
-                  <p className="text-amber-400 text-[10px] font-bold uppercase mb-1.5">✨ Miracles</p>
-                  <ul className="space-y-0.5">
-                    {mainProphet.miracles.slice(0, 4).map((m, i) => (
+                  <p className="text-amber-400 text-[10px] font-bold uppercase mb-1.5">✨ Miracles ({mainProphet.miracles.length})</p>
+                  <ul className="space-y-0.5 max-h-32 overflow-y-auto custom-scrollbar">
+                    {mainProphet.miracles.map((m, i) => (
                       <li key={i} className="text-[11px] text-amber-200/80 flex items-start gap-1">
                         <span className="text-amber-500 mt-0.5">•</span>
                         <span>{m}</span>
                       </li>
                     ))}
-                    {mainProphet.miracles.length > 4 && (
-                      <li className="text-[10px] text-amber-500/70">+{mainProphet.miracles.length - 4} more</li>
-                    )}
                   </ul>
                 </div>
               )}
@@ -1369,7 +1366,7 @@ const TimelineSlider = memo(({ value, onChange, events, prophets = [], onProphet
               {mainProphet.family && (
                 <div className="p-2.5 rounded-lg bg-gradient-to-br from-blue-900/30 to-indigo-900/30 border border-blue-700/50">
                   <p className="text-blue-400 text-[10px] font-bold uppercase mb-1.5">👨‍👩‍👧‍👦 Family</p>
-                  <div className="space-y-1 text-[11px] max-h-40 overflow-y-auto custom-scrollbar">
+                  <div className="space-y-1 text-[11px] max-h-60 overflow-y-auto custom-scrollbar">
                     {mainProphet.family.father && (
                       <div><span className="text-gray-500">Father:</span> <span className="text-blue-200">{mainProphet.family.father}</span></div>
                     )}
@@ -1379,16 +1376,16 @@ const TimelineSlider = memo(({ value, onChange, events, prophets = [], onProphet
                     {mainProphet.family.wife && (
                       <div><span className="text-gray-500">Wife:</span> <span className="text-blue-200">{mainProphet.family.wife}</span></div>
                     )}
-                    {/* Wives - handle both string array and object array */}
+                    {/* Wives - handle both string array and object array - show ALL */}
                     {mainProphet.family.wives && mainProphet.family.wives.length > 0 && (
                       <div className="mt-1">
                         <span className="text-gray-500 block mb-1">Wives ({mainProphet.family.wives.length}):</span>
                         <div className="grid gap-1">
-                          {mainProphet.family.wives.slice(0, 4).map((wife, i) => (
+                          {mainProphet.family.wives.map((wife, i) => (
                             <div key={i} className="text-[10px] bg-blue-900/30 rounded px-1.5 py-0.5">
                               {typeof wife === 'object' ? (
                                 <>
-                                  <span className="text-blue-300 font-medium">{wife.name}</span>
+                                  <span className="text-blue-300 font-medium">{i + 1}. {wife.name}</span>
                                   {wife.nameAr && <span className="text-blue-400 mr-1" dir="rtl"> ({wife.nameAr})</span>}
                                   {wife.year && <span className="text-gray-500"> • {wife.year}</span>}
                                   {wife.note && <div className="text-gray-400 text-[9px] mt-0.5">{wife.note}</div>}
@@ -1398,24 +1395,22 @@ const TimelineSlider = memo(({ value, onChange, events, prophets = [], onProphet
                               )}
                             </div>
                           ))}
-                          {mainProphet.family.wives.length > 4 && (
-                            <div className="text-[9px] text-blue-400">+{mainProphet.family.wives.length - 4} more wives</div>
-                          )}
                         </div>
                       </div>
                     )}
-                    {/* Children - handle both string array and object array */}
+                    {/* Children - handle both string array and object array - show ALL */}
                     {mainProphet.family.children && mainProphet.family.children.length > 0 && (
                       <div className="mt-1">
-                        <span className="text-gray-500 block mb-1">Children:</span>
+                        <span className="text-gray-500 block mb-1">Children ({mainProphet.family.children.length}):</span>
                         <div className="grid gap-0.5">
-                          {mainProphet.family.children.slice(0, 4).map((child, i) => (
-                            <div key={i} className="text-[10px]">
+                          {mainProphet.family.children.map((child, i) => (
+                            <div key={i} className="text-[10px] bg-green-900/20 rounded px-1.5 py-0.5">
                               {typeof child === 'object' ? (
-                                <span className="text-blue-200">
-                                  <span className="font-medium">{child.name}</span>
+                                <>
+                                  <span className="text-green-300 font-medium">{child.name}</span>
                                   {child.mother && <span className="text-gray-500"> (from {child.mother})</span>}
-                                </span>
+                                  {child.note && <div className="text-gray-400 text-[9px]">{child.note}</div>}
+                                </>
                               ) : (
                                 <span className="text-blue-200">{child}</span>
                               )}
@@ -1427,14 +1422,21 @@ const TimelineSlider = memo(({ value, onChange, events, prophets = [], onProphet
                     {mainProphet.family.sons && !mainProphet.family.children && (
                       <div><span className="text-gray-500">Sons:</span> <span className="text-blue-200">{Array.isArray(mainProphet.family.sons) ? mainProphet.family.sons.slice(0, 2).join(', ') : mainProphet.family.sons}</span></div>
                     )}
+                    {/* Grandchildren - show ALL */}
                     {mainProphet.family.grandchildren && (
                       <div className="mt-1">
-                        <span className="text-gray-500">Grandchildren: </span>
-                        <span className="text-blue-200">
-                          {Array.isArray(mainProphet.family.grandchildren)
-                            ? mainProphet.family.grandchildren.slice(0, 2).join(', ')
-                            : mainProphet.family.grandchildren}
-                        </span>
+                        <span className="text-gray-500 block mb-1">Grandchildren:</span>
+                        {Array.isArray(mainProphet.family.grandchildren) ? (
+                          <div className="grid gap-0.5">
+                            {mainProphet.family.grandchildren.map((gc, i) => (
+                              <div key={i} className="text-[10px] text-purple-300 bg-purple-900/20 rounded px-1.5 py-0.5">
+                                {gc}
+                              </div>
+                            ))}
+                          </div>
+                        ) : (
+                          <span className="text-blue-200">{mainProphet.family.grandchildren}</span>
+                        )}
                       </div>
                     )}
                   </div>
@@ -1442,12 +1444,12 @@ const TimelineSlider = memo(({ value, onChange, events, prophets = [], onProphet
               )}
             </div>
 
-            {/* Unique Facts */}
+            {/* Unique Facts - show ALL */}
             {mainProphet.uniqueFacts && (
               <div className="p-2.5 rounded-lg bg-gradient-to-br from-purple-900/30 to-pink-900/30 border border-purple-700/50 mb-3">
                 <p className="text-purple-400 text-[10px] font-bold uppercase mb-1.5">💎 Unique Facts</p>
                 <div className="flex flex-wrap gap-1.5">
-                  {mainProphet.uniqueFacts.slice(0, 4).map((fact, i) => (
+                  {mainProphet.uniqueFacts.map((fact, i) => (
                     <span key={i} className="px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 text-[10px] border border-purple-500/30">
                       {fact}
                     </span>
