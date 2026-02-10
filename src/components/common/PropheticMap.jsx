@@ -1376,67 +1376,102 @@ const TimelineSlider = memo(({ value, onChange, events, prophets = [], onProphet
                     {mainProphet.family.wife && (
                       <div><span className="text-gray-500">Wife:</span> <span className="text-blue-200">{mainProphet.family.wife}</span></div>
                     )}
-                    {/* Wives - handle both string array and object array - show ALL */}
-                    {mainProphet.family.wives && mainProphet.family.wives.length > 0 && (
+                    {/* Wives - handle string, string array, and object array */}
+                    {mainProphet.family.wives && (
                       <div className="mt-1">
-                        <span className="text-gray-500 block mb-1">Wives ({mainProphet.family.wives.length}):</span>
-                        <div className="grid gap-1">
-                          {mainProphet.family.wives.map((wife, i) => (
-                            <div key={i} className="text-[10px] bg-blue-900/30 rounded px-1.5 py-0.5">
-                              {typeof wife === 'object' ? (
-                                <>
-                                  <span className="text-blue-300 font-medium">{i + 1}. {wife.name}</span>
-                                  {wife.nameAr && <span className="text-blue-400 mr-1" dir="rtl"> ({wife.nameAr})</span>}
-                                  {wife.year && <span className="text-gray-500"> • {wife.year}</span>}
-                                  {wife.note && <div className="text-gray-400 text-[9px] mt-0.5">{wife.note}</div>}
-                                </>
-                              ) : (
-                                <span className="text-blue-200">{wife}</span>
-                              )}
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                    {/* Children - handle both string array and object array - show ALL */}
-                    {mainProphet.family.children && mainProphet.family.children.length > 0 && (
-                      <div className="mt-1">
-                        <span className="text-gray-500 block mb-1">Children ({mainProphet.family.children.length}):</span>
-                        <div className="grid gap-0.5">
-                          {mainProphet.family.children.map((child, i) => (
-                            <div key={i} className="text-[10px] bg-green-900/20 rounded px-1.5 py-0.5">
-                              {typeof child === 'object' ? (
-                                <>
-                                  <span className="text-green-300 font-medium">{child.name}</span>
-                                  {child.mother && <span className="text-gray-500"> (from {child.mother})</span>}
-                                  {child.note && <div className="text-gray-400 text-[9px]">{child.note}</div>}
-                                </>
-                              ) : (
-                                <span className="text-blue-200">{child}</span>
-                              )}
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                    {mainProphet.family.sons && !mainProphet.family.children && (
-                      <div><span className="text-gray-500">Sons:</span> <span className="text-blue-200">{Array.isArray(mainProphet.family.sons) ? mainProphet.family.sons.slice(0, 2).join(', ') : mainProphet.family.sons}</span></div>
-                    )}
-                    {/* Grandchildren - show ALL */}
-                    {mainProphet.family.grandchildren && (
-                      <div className="mt-1">
-                        <span className="text-gray-500 block mb-1">Grandchildren:</span>
-                        {Array.isArray(mainProphet.family.grandchildren) ? (
-                          <div className="grid gap-0.5">
-                            {mainProphet.family.grandchildren.map((gc, i) => (
-                              <div key={i} className="text-[10px] text-purple-300 bg-purple-900/20 rounded px-1.5 py-0.5">
-                                {gc}
+                        <span className="text-gray-500 block mb-1">Wives{Array.isArray(mainProphet.family.wives) ? ` (${mainProphet.family.wives.length})` : ''}:</span>
+                        {typeof mainProphet.family.wives === 'string' ? (
+                          <div className="text-[10px] text-blue-200">{mainProphet.family.wives}</div>
+                        ) : Array.isArray(mainProphet.family.wives) ? (
+                          <div className="grid gap-1">
+                            {mainProphet.family.wives.map((wife, i) => (
+                              <div key={i} className="text-[10px] bg-blue-900/30 rounded px-1.5 py-0.5">
+                                {typeof wife === 'object' ? (
+                                  <>
+                                    <span className="text-blue-300 font-medium">{i + 1}. {wife.name}</span>
+                                    {wife.nameAr && <span className="text-blue-400 mr-1" dir="rtl"> ({wife.nameAr})</span>}
+                                    {wife.year && <span className="text-gray-500"> • {wife.year}</span>}
+                                    {wife.note && <div className="text-gray-400 text-[9px] mt-0.5">{wife.note}</div>}
+                                  </>
+                                ) : (
+                                  <span className="text-blue-200">{i + 1}. {wife}</span>
+                                )}
                               </div>
                             ))}
                           </div>
-                        ) : (
-                          <span className="text-blue-200">{mainProphet.family.grandchildren}</span>
-                        )}
+                        ) : null}
+                      </div>
+                    )}
+                    {/* Children - handle string, string array, and object array */}
+                    {mainProphet.family.children && (
+                      <div className="mt-1">
+                        <span className="text-gray-500 block mb-1">Children{Array.isArray(mainProphet.family.children) ? ` (${mainProphet.family.children.length})` : ''}:</span>
+                        {typeof mainProphet.family.children === 'string' ? (
+                          <div className="text-[10px] text-green-200">{mainProphet.family.children}</div>
+                        ) : Array.isArray(mainProphet.family.children) ? (
+                          <div className="grid gap-0.5">
+                            {mainProphet.family.children.map((child, i) => (
+                              <div key={i} className="text-[10px] bg-green-900/20 rounded px-1.5 py-0.5">
+                                {typeof child === 'object' ? (
+                                  <>
+                                    <span className="text-green-300 font-medium">{child.name}</span>
+                                    {child.mother && <span className="text-gray-500"> (from {child.mother})</span>}
+                                    {child.note && <div className="text-gray-400 text-[9px]">{child.note}</div>}
+                                  </>
+                                ) : (
+                                  <span className="text-green-200">{child}</span>
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                        ) : null}
+                      </div>
+                    )}
+                    {/* Sons - show if no children field, handle string and array */}
+                    {mainProphet.family.sons && !mainProphet.family.children && (
+                      <div className="mt-1">
+                        <span className="text-gray-500 block mb-1">Sons:</span>
+                        {typeof mainProphet.family.sons === 'string' ? (
+                          <div className="text-[10px] text-blue-200">{mainProphet.family.sons}</div>
+                        ) : Array.isArray(mainProphet.family.sons) ? (
+                          <div className="grid gap-0.5">
+                            {mainProphet.family.sons.map((son, i) => (
+                              <div key={i} className="text-[10px] text-blue-200 bg-blue-900/20 rounded px-1.5 py-0.5">{son}</div>
+                            ))}
+                          </div>
+                        ) : null}
+                      </div>
+                    )}
+                    {/* Grandchildren - handle string and array */}
+                    {mainProphet.family.grandchildren && (
+                      <div className="mt-1">
+                        <span className="text-gray-500 block mb-1">Grandchildren:</span>
+                        {typeof mainProphet.family.grandchildren === 'string' ? (
+                          <div className="text-[10px] text-purple-200">{mainProphet.family.grandchildren}</div>
+                        ) : Array.isArray(mainProphet.family.grandchildren) ? (
+                          <div className="grid gap-0.5">
+                            {mainProphet.family.grandchildren.map((gc, i) => (
+                              <div key={i} className="text-[10px] text-purple-300 bg-purple-900/20 rounded px-1.5 py-0.5">
+                                {typeof gc === 'object' ? gc.name : gc}
+                              </div>
+                            ))}
+                          </div>
+                        ) : null}
+                      </div>
+                    )}
+                    {/* Uncles - handle string and array */}
+                    {mainProphet.family.uncles && (
+                      <div className="mt-1">
+                        <span className="text-gray-500 block mb-1">Uncles:</span>
+                        {typeof mainProphet.family.uncles === 'string' ? (
+                          <div className="text-[10px] text-blue-200">{mainProphet.family.uncles}</div>
+                        ) : Array.isArray(mainProphet.family.uncles) ? (
+                          <div className="grid gap-0.5">
+                            {mainProphet.family.uncles.map((uncle, i) => (
+                              <div key={i} className="text-[10px] text-blue-200 bg-blue-900/20 rounded px-1.5 py-0.5">{uncle}</div>
+                            ))}
+                          </div>
+                        ) : null}
                       </div>
                     )}
                   </div>
