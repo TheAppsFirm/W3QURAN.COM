@@ -563,12 +563,16 @@ const TimelineSlider = memo(({ value, onChange, events, prophets = [], onProphet
           </button>
         </div>
 
-        {/* Prophet Grid Selector - NO horizontal scroll, uses grid */}
-        <div className="p-3 bg-gray-900/50 border-b border-gray-800">
-          <p className="text-gray-500 text-xs uppercase tracking-wider mb-2 px-1">Select Prophet</p>
-          <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-11 gap-2">
+        {/* Prophet Grid Selector - Larger buttons with full names */}
+        <div className="p-4 bg-gray-900/50 border-b border-gray-800">
+          <p className="text-gray-500 text-xs uppercase tracking-wider mb-3 px-1">Select Prophet</p>
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-11 gap-3">
             {prophets.map(prophet => {
               const isActive = value >= prophet.periodStart && value <= prophet.periodEnd;
+              // Extract short name for display
+              const shortName = prophet.name.includes('(')
+                ? prophet.name.split('(')[1].replace(')', '')
+                : prophet.name.split(' ')[0];
               return (
                 <button
                   key={prophet.id}
@@ -576,15 +580,18 @@ const TimelineSlider = memo(({ value, onChange, events, prophets = [], onProphet
                     onChange(prophet.periodStart + Math.floor((prophet.periodEnd - prophet.periodStart) / 2));
                     onFlyToLocation(prophet.coords);
                   }}
-                  className={`flex flex-col items-center p-2 rounded-xl transition-all ${
+                  className={`flex flex-col items-center p-3 rounded-xl transition-all ${
                     isActive
-                      ? 'bg-amber-500 text-black shadow-lg scale-105'
-                      : 'bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white'
+                      ? 'bg-amber-500 text-black shadow-lg shadow-amber-500/30 scale-105'
+                      : 'bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white border border-gray-700'
                   }`}
                 >
-                  <span className="text-xl mb-1">{prophet.icon}</span>
-                  <span className="text-[10px] font-medium truncate w-full text-center">
-                    {prophet.name.split(' ')[0].replace('(', '').replace(')', '')}
+                  <span className="text-2xl mb-1.5">{prophet.icon}</span>
+                  <span className={`text-xs font-semibold text-center leading-tight ${isActive ? 'text-black' : ''}`}>
+                    {shortName}
+                  </span>
+                  <span className={`text-[10px] mt-0.5 ${isActive ? 'text-black/70' : 'text-gray-500'}`} dir="rtl">
+                    {prophet.nameAr}
                   </span>
                 </button>
               );
