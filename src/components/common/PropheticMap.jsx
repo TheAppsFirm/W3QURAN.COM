@@ -616,8 +616,8 @@ const TimelineSlider = memo(({ value, onChange, events, prophets = [], onProphet
   const formatYear = (year) => year < 0 ? `${Math.abs(year)} BCE` : `${year} CE`;
 
   return (
-    <div className="absolute bottom-3 left-3 right-3 z-[1000] max-w-5xl mx-auto">
-      <div className="bg-gray-950/95 backdrop-blur-sm rounded-xl border border-gray-700 shadow-2xl overflow-hidden">
+    <div className="flex-shrink-0 mx-3 mb-2">
+      <div className="bg-gray-950 rounded-xl border border-gray-700 shadow-2xl overflow-hidden max-w-5xl mx-auto">
 
         {/* Compact Header with Prophet Selector */}
         <div className="p-3 bg-gray-900/80">
@@ -1157,14 +1157,6 @@ const PropheticMap = memo(function PropheticMap({ isVisible, onClose, onNavigate
     }
   }, []);
 
-  // Invalidate map size when timeline visibility changes
-  useEffect(() => {
-    if (mapRef.current) {
-      setTimeout(() => {
-        mapRef.current.invalidateSize();
-      }, 350); // Wait for CSS transition to complete
-    }
-  }, [showTimeline]);
 
   // Get journey coordinates
   const getJourneyCoords = (journey) => {
@@ -1235,11 +1227,8 @@ const PropheticMap = memo(function PropheticMap({ isVisible, onClose, onNavigate
           </div>
         </div>
 
-        {/* Map - Shrink when timeline visible so content isn't hidden */}
-        <div
-          className="flex-1 relative transition-all duration-300"
-          style={{ marginBottom: showTimeline ? '140px' : '0' }}
-        >
+        {/* Map Container - Takes remaining space */}
+        <div className="flex-1 relative overflow-hidden">
           <MapContainer
             center={defaultCenter}
             zoom={defaultZoom}
@@ -1489,18 +1478,6 @@ const PropheticMap = memo(function PropheticMap({ isVisible, onClose, onNavigate
             />
           )}
 
-          {/* Timeline Slider */}
-          {showTimeline && (
-            <TimelineSlider
-              value={timelineYear}
-              onChange={setTimelineYear}
-              events={timelineEvents}
-              prophets={PROPHETS_TIMELINE}
-              onProphetClick={handleProphetVerseClick}
-              onFlyToLocation={handleFlyToLocation}
-            />
-          )}
-
           {/* Detail Panel */}
           {!showTimeline && selectedItem && (
             <DetailPanel
@@ -1511,6 +1488,18 @@ const PropheticMap = memo(function PropheticMap({ isVisible, onClose, onNavigate
             />
           )}
         </div>
+
+        {/* Timeline Slider - Outside map as flex sibling */}
+        {showTimeline && (
+          <TimelineSlider
+            value={timelineYear}
+            onChange={setTimelineYear}
+            events={timelineEvents}
+            prophets={PROPHETS_TIMELINE}
+            onProphetClick={handleProphetVerseClick}
+            onFlyToLocation={handleFlyToLocation}
+          />
+        )}
 
         {/* Legend */}
         <div className="flex-shrink-0 px-3 py-1.5 border-t border-white/10 bg-black/40">
