@@ -226,29 +226,54 @@ const PROPHETS_TIMELINE = [
   }
 ];
 
-// Custom marker icons with animations
-const createMarkerIcon = (color, size = 28, isSelected = false, iconType = 'default') => {
-  const iconHtml = iconType === 'mosque'
-    ? `<div style="font-size: ${size * 0.5}px; text-align: center; line-height: ${size}px;">🕌</div>`
-    : iconType === 'grave'
-    ? `<div style="font-size: ${size * 0.5}px; text-align: center; line-height: ${size}px;">⭐</div>`
-    : iconType === 'cave'
-    ? `<div style="font-size: ${size * 0.5}px; text-align: center; line-height: ${size}px;">🏔️</div>`
-    : iconType === 'revelation'
-    ? `<div style="font-size: ${size * 0.5}px; text-align: center; line-height: ${size}px;">📖</div>`
-    : `<div style="width: ${size*0.4}px; height: ${size*0.4}px; background: white; border-radius: 50%; margin: ${size*0.3}px auto; opacity: 0.9;"></div>`;
+// Custom marker icons with labels
+const createMarkerIcon = (color, size = 28, isSelected = false, iconType = 'default', label = '') => {
+  const icons = {
+    mosque: '🕌',
+    grave: '⭐',
+    cave: '🏔️',
+    revelation: '📖',
+    miracle: '✨',
+    destroyed: '⚠️',
+    animal: '🐪',
+    default: '📍'
+  };
+
+  const icon = icons[iconType] || icons.default;
+  const showLabel = isSelected && label;
 
   return L.divIcon({
-    html: `<div style="
-      width: ${size}px; height: ${size}px;
-      background: ${color}; border-radius: 50%;
-      border: 3px solid white;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.4), 0 0 ${isSelected ? '20px' : '10px'} ${color}80;
-      ${isSelected ? 'animation: markerPulse 1.5s infinite;' : ''}
-      display: flex; align-items: center; justify-content: center;
-    ">${iconHtml}</div>`,
+    html: `
+      <div style="position: relative; display: flex; flex-direction: column; align-items: center;">
+        <div style="
+          width: ${size}px; height: ${size}px;
+          background: ${color}; border-radius: 50%;
+          border: 3px solid white;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.4), 0 0 ${isSelected ? '25px' : '12px'} ${color}90;
+          ${isSelected ? 'animation: markerPulse 1.5s infinite; transform: scale(1.2);' : ''}
+          display: flex; align-items: center; justify-content: center;
+          font-size: ${size * 0.5}px;
+          transition: transform 0.2s ease;
+        ">${icon}</div>
+        ${showLabel ? `
+          <div style="
+            position: absolute;
+            top: ${size + 4}px;
+            background: rgba(0,0,0,0.85);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            white-space: nowrap;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            border: 1px solid ${color}50;
+          ">${label}</div>
+        ` : ''}
+      </div>
+    `,
     className: 'custom-marker',
-    iconSize: [size, size],
+    iconSize: [size, size + (showLabel ? 30 : 0)],
     iconAnchor: [size/2, size/2],
   });
 };
@@ -404,21 +429,84 @@ const MapEventHandler = memo(({ onCoordsChange, onMapRef }) => {
   return null;
 });
 
-// Layer Toggle Button
-const LayerToggle = memo(({ layer, isActive, onClick, count }) => {
-  const Icon = Icons[layer.icon] || Icons.MapPin;
+// Collapsible Layer Panel
+const LayerPanel = memo(({ layers, activeLayers, toggleLayer, counts, isOpen, setIsOpen }) => {
   return (
-    <button
-      onClick={onClick}
-      className={`flex items-center gap-1.5 px-2 py-1 rounded-lg transition-all text-[11px] ${
-        isActive ? 'bg-white/20 text-white' : 'text-white/40 hover:text-white hover:bg-white/10'
-      }`}
-      style={isActive ? { borderBottom: `2px solid ${layer.color}` } : {}}
-    >
-      <Icon className="w-3 h-3" style={{ color: isActive ? layer.color : undefined }} />
-      <span className="hidden sm:inline">{layer.name}</span>
-      {count > 0 && <span className="text-[9px] opacity-60">({count})</span>}
-    </button>
+    <div className="absolute top-4 left-4 z-[1000]">
+      {/* Toggle Button */}
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="flex items-center gap-2 px-3 py-2 bg-black/90 backdrop-blur-md rounded-xl border border-white/20 text-white shadow-lg hover:bg-black/95 transition-all"
+      >
+        <Icons.Layers className="w-4 h-4 text-amber-400" />
+        <span className="text-sm font-medium">Layers</span>
+        <span className="text-xs bg-amber-500/20 text-amber-400 px-1.5 py-0.5 rounded-full">
+          {activeLayers.length}
+        </span>
+        <Icons.ChevronDown className={`w-4 h-4 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+      </button>
+
+      {/* Panel */}
+      {isOpen && (
+        <div className="mt-2 bg-black/95 backdrop-blur-md rounded-xl border border-white/20 shadow-2xl overflow-hidden w-56">
+          <div className="p-2 border-b border-white/10">
+            <p className="text-white/50 text-xs uppercase tracking-wider">Toggle Layers</p>
+          </div>
+          <div className="p-2 space-y-1 max-h-[60vh] overflow-y-auto custom-scrollbar">
+            {Object.values(layers).map(layer => {
+              const Icon = Icons[layer.icon] || Icons.MapPin;
+              const isActive = activeLayers.includes(layer.id);
+              const count = counts[layer.id] || 0;
+
+              return (
+                <button
+                  key={layer.id}
+                  onClick={() => toggleLayer(layer.id)}
+                  className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all ${
+                    isActive
+                      ? 'bg-white/15 text-white'
+                      : 'text-white/50 hover:text-white hover:bg-white/5'
+                  }`}
+                >
+                  <div
+                    className="w-8 h-8 rounded-lg flex items-center justify-center"
+                    style={{ backgroundColor: isActive ? `${layer.color}30` : 'rgba(255,255,255,0.05)' }}
+                  >
+                    <Icon className="w-4 h-4" style={{ color: isActive ? layer.color : undefined }} />
+                  </div>
+                  <div className="flex-1 text-left">
+                    <p className="text-sm font-medium">{layer.name}</p>
+                    <p className="text-[10px] text-white/40">{count} locations</p>
+                  </div>
+                  <div
+                    className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${
+                      isActive ? 'border-amber-400 bg-amber-400' : 'border-white/30'
+                    }`}
+                  >
+                    {isActive && <Icons.Check className="w-3 h-3 text-black" />}
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+          {/* Quick actions */}
+          <div className="p-2 border-t border-white/10 flex gap-2">
+            <button
+              onClick={() => Object.keys(layers).forEach(id => !activeLayers.includes(id) && toggleLayer(id))}
+              className="flex-1 text-xs py-1.5 rounded-lg bg-white/10 text-white/70 hover:bg-white/20"
+            >
+              Select All
+            </button>
+            <button
+              onClick={() => activeLayers.forEach(id => toggleLayer(id))}
+              className="flex-1 text-xs py-1.5 rounded-lg bg-white/10 text-white/70 hover:bg-white/20"
+            >
+              Clear All
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
   );
 });
 
@@ -697,168 +785,214 @@ const Globe3D = memo(({ locations, onMarkerClick, selectedItem, activeProphet })
 const TimelineSlider = memo(({ value, onChange, events, prophets = [], onProphetClick, onFlyToLocation }) => {
   const minYear = -4000;
   const maxYear = 700;
-  const currentEvent = (events || []).filter(e => e.year <= value).pop();
+  const [isExpanded, setIsExpanded] = useState(true);
 
   // Find active prophet(s) for current year
   const activeProphets = (prophets || []).filter(p => value >= p.periodStart && value <= p.periodEnd);
-  const mainProphet = activeProphets[activeProphets.length - 1]; // Most recent one
+  const mainProphet = activeProphets[activeProphets.length - 1];
+
+  // Format year display
+  const formatYear = (year) => year < 0 ? `${Math.abs(year)} BCE` : `${year} CE`;
 
   return (
-    <div className="absolute bottom-4 left-4 right-4 z-[1000] max-w-3xl mx-auto">
-      <div className="bg-black/95 backdrop-blur-md rounded-2xl border border-white/20 shadow-2xl overflow-hidden">
-        {/* Prophet Card - Shows when a prophet is active */}
-        {mainProphet && (
-          <div
-            className="p-4 border-b border-white/10 cursor-pointer hover:bg-white/5 transition-colors"
-            onClick={() => onFlyToLocation(mainProphet.coords)}
-            style={{ borderLeft: `4px solid ${mainProphet.color}` }}
-          >
-            <div className="flex items-start gap-4">
-              {/* Prophet Icon */}
-              <div
-                className="w-14 h-14 rounded-xl flex items-center justify-center text-2xl flex-shrink-0"
-                style={{ backgroundColor: `${mainProphet.color}20` }}
-              >
-                {mainProphet.icon}
-              </div>
+    <div className="absolute bottom-4 left-4 right-4 z-[1000] max-w-4xl mx-auto">
+      <div className="bg-gradient-to-b from-gray-900/98 to-black/98 backdrop-blur-xl rounded-2xl border border-white/15 shadow-2xl overflow-hidden">
 
-              {/* Prophet Info */}
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 mb-1">
-                  <h3 className="text-white font-bold text-lg">{mainProphet.name}</h3>
-                  <span className="text-white/40 text-sm" dir="rtl">{mainProphet.nameAr}</span>
-                </div>
-                <p className="text-white/60 text-sm mb-2 line-clamp-2">{mainProphet.story}</p>
-
-                {/* Key Events */}
-                <div className="flex flex-wrap gap-1 mb-2">
-                  {mainProphet.keyEvents.slice(0, 3).map((event, i) => (
-                    <span
-                      key={i}
-                      className="px-2 py-0.5 rounded-full text-[10px] text-white/80"
-                      style={{ backgroundColor: `${mainProphet.color}30` }}
-                    >
-                      {event}
-                    </span>
-                  ))}
-                </div>
-
-                {/* Verses */}
-                <div className="flex items-center gap-2">
-                  <span className="text-white/40 text-xs">Verses:</span>
-                  {mainProphet.verses.slice(0, 2).map((v, i) => (
-                    <button
-                      key={i}
-                      onClick={(e) => { e.stopPropagation(); onProphetClick(mainProphet, v); }}
-                      className="px-2 py-0.5 rounded bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-400 text-xs transition-colors"
-                    >
-                      {v}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Period Badge */}
-              <div className="text-right flex-shrink-0">
-                <div className="text-white/40 text-xs uppercase">Period</div>
-                <div className="text-white text-sm font-mono">
-                  {mainProphet.periodStart < 0 ? `${Math.abs(mainProphet.periodStart)} BCE` : `${mainProphet.periodStart} CE`}
-                </div>
-                <div className="text-white/30 text-xs">to</div>
-                <div className="text-white text-sm font-mono">
-                  {mainProphet.periodEnd < 0 ? `${Math.abs(mainProphet.periodEnd)} BCE` : `${mainProphet.periodEnd} CE`}
-                </div>
-              </div>
+        {/* Compact Header - Always visible */}
+        <div className="flex items-center justify-between p-3 border-b border-white/10">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center shadow-lg">
+              <Icons.Clock className="w-5 h-5 text-white" />
+            </div>
+            <div>
+              <h3 className="text-white font-bold text-sm">Prophetic Timeline</h3>
+              <p className="text-amber-400 text-xs font-mono">{formatYear(value)}</p>
             </div>
           </div>
-        )}
 
-        {/* Timeline Slider */}
-        <div className="p-4">
-          <div className="flex items-center justify-between mb-3">
-            <div className="flex items-center gap-2">
-              <Icons.Clock className="w-4 h-4 text-amber-400" />
-              <span className="text-white/60 text-xs uppercase tracking-wider">Timeline</span>
-            </div>
-            <span className="text-amber-400 text-xl font-bold font-mono">
-              {value < 0 ? `${Math.abs(value)} BCE` : `${value} CE`}
-            </span>
-          </div>
-
-          {/* Slider with Prophet Markers */}
-          <div className="relative h-8 mb-2">
-            {/* Prophet period backgrounds */}
-            {prophets.map(prophet => {
-              const startPercent = ((prophet.periodStart - minYear) / (maxYear - minYear)) * 100;
-              const endPercent = ((prophet.periodEnd - minYear) / (maxYear - minYear)) * 100;
-              const isActive = value >= prophet.periodStart && value <= prophet.periodEnd;
-              return (
-                <div
-                  key={prophet.id}
-                  className="absolute h-6 top-1 rounded transition-opacity cursor-pointer"
-                  style={{
-                    left: `${Math.max(0, startPercent)}%`,
-                    width: `${Math.min(100 - startPercent, endPercent - startPercent)}%`,
-                    backgroundColor: `${prophet.color}${isActive ? '50' : '20'}`,
-                    borderBottom: isActive ? `2px solid ${prophet.color}` : 'none',
-                  }}
-                  title={prophet.name}
-                  onClick={() => onChange(prophet.periodStart + Math.floor((prophet.periodEnd - prophet.periodStart) / 2))}
-                />
-              );
-            })}
-
-            {/* Slider input */}
-            <input
-              type="range"
-              min={minYear}
-              max={maxYear}
-              value={value}
-              onChange={(e) => onChange(parseInt(e.target.value))}
-              className="absolute w-full h-8 top-0 opacity-0 cursor-pointer z-10"
-            />
-
-            {/* Custom thumb */}
-            <div
-              className="absolute top-1/2 -translate-y-1/2 pointer-events-none"
-              style={{
-                left: `calc(${((value - minYear) / (maxYear - minYear)) * 100}% - 10px)`,
-              }}
+          {/* Active Prophet Mini Preview */}
+          {mainProphet && (
+            <button
+              onClick={() => onFlyToLocation(mainProphet.coords)}
+              className="flex items-center gap-2 px-3 py-1.5 rounded-lg hover:bg-white/10 transition-colors"
+              style={{ backgroundColor: `${mainProphet.color}20` }}
             >
-              <div className="w-5 h-5 bg-amber-400 rounded-full shadow-lg shadow-amber-400/50 border-2 border-white" />
-            </div>
-          </div>
+              <span className="text-xl">{mainProphet.icon}</span>
+              <div className="text-left hidden sm:block">
+                <p className="text-white text-xs font-medium">{mainProphet.name}</p>
+                <p className="text-white/50 text-[10px]" dir="rtl">{mainProphet.nameAr}</p>
+              </div>
+              <Icons.MapPin className="w-4 h-4 text-white/50" />
+            </button>
+          )}
 
-          {/* Era Labels */}
-          <div className="flex justify-between text-[10px] text-white/30">
-            <span>4000 BCE</span>
-            <span>2000 BCE</span>
-            <span>1 CE</span>
-            <span>700 CE</span>
-          </div>
+          <button
+            onClick={() => setIsExpanded(!isExpanded)}
+            className="p-2 rounded-lg hover:bg-white/10 transition-colors"
+          >
+            <Icons.ChevronDown className={`w-5 h-5 text-white/50 transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
+          </button>
         </div>
 
-        {/* Prophet Quick Select */}
-        <div className="px-4 pb-3 border-t border-white/10 pt-3">
-          <div className="flex items-center gap-2 overflow-x-auto hide-scrollbar">
+        {/* Prophet Quick Select - Horizontal scroll */}
+        <div className="px-3 py-2 border-b border-white/5 bg-white/5">
+          <div className="flex items-center gap-1.5 overflow-x-auto hide-scrollbar pb-1">
             {prophets.map(prophet => {
               const isActive = value >= prophet.periodStart && value <= prophet.periodEnd;
               return (
                 <button
                   key={prophet.id}
-                  onClick={() => onChange(prophet.periodStart + Math.floor((prophet.periodEnd - prophet.periodStart) / 2))}
-                  className={`flex items-center gap-1.5 px-2 py-1 rounded-lg text-xs whitespace-nowrap transition-all flex-shrink-0 ${
-                    isActive ? 'bg-white/20 text-white' : 'text-white/40 hover:text-white hover:bg-white/10'
+                  onClick={() => {
+                    onChange(prophet.periodStart + Math.floor((prophet.periodEnd - prophet.periodStart) / 2));
+                    onFlyToLocation(prophet.coords);
+                  }}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs whitespace-nowrap transition-all flex-shrink-0 border ${
+                    isActive
+                      ? 'bg-white/20 text-white border-white/30 shadow-lg'
+                      : 'text-white/50 hover:text-white hover:bg-white/10 border-transparent'
                   }`}
-                  style={isActive ? { borderBottom: `2px solid ${prophet.color}` } : {}}
+                  style={isActive ? {
+                    backgroundColor: `${prophet.color}30`,
+                    borderColor: `${prophet.color}50`,
+                    boxShadow: `0 0 20px ${prophet.color}30`
+                  } : {}}
                 >
-                  <span>{prophet.icon}</span>
-                  <span>{prophet.name.split(' ')[0]}</span>
+                  <span className="text-base">{prophet.icon}</span>
+                  <span className="font-medium">{prophet.name.split(' ')[0]}</span>
                 </button>
               );
             })}
           </div>
         </div>
+
+        {/* Expanded Content */}
+        {isExpanded && (
+          <>
+            {/* Prophet Card */}
+            {mainProphet && (
+              <div
+                className="p-4 border-b border-white/10 cursor-pointer hover:bg-white/5 transition-colors"
+                onClick={() => onFlyToLocation(mainProphet.coords)}
+              >
+                <div className="flex items-start gap-4">
+                  {/* Prophet Icon */}
+                  <div
+                    className="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl flex-shrink-0 shadow-lg"
+                    style={{
+                      backgroundColor: `${mainProphet.color}25`,
+                      border: `2px solid ${mainProphet.color}40`
+                    }}
+                  >
+                    {mainProphet.icon}
+                  </div>
+
+                  {/* Prophet Info */}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-1 flex-wrap">
+                      <h3 className="text-white font-bold text-lg">{mainProphet.name}</h3>
+                      <span className="text-white/40 text-sm font-arabic" dir="rtl">{mainProphet.nameAr}</span>
+                      <span
+                        className="px-2 py-0.5 rounded-full text-[10px] font-medium"
+                        style={{ backgroundColor: `${mainProphet.color}30`, color: mainProphet.color }}
+                      >
+                        {formatYear(mainProphet.periodStart)} - {formatYear(mainProphet.periodEnd)}
+                      </span>
+                    </div>
+                    <p className="text-white/60 text-sm mb-3 line-clamp-2">{mainProphet.story}</p>
+
+                    {/* Key Events */}
+                    <div className="flex flex-wrap gap-1.5 mb-3">
+                      {mainProphet.keyEvents.map((event, i) => (
+                        <span
+                          key={i}
+                          className="px-2.5 py-1 rounded-lg text-[11px] text-white/90 bg-white/10 border border-white/10"
+                        >
+                          {event}
+                        </span>
+                      ))}
+                    </div>
+
+                    {/* Verses */}
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className="text-white/40 text-xs">📖 Read in Quran:</span>
+                      {mainProphet.verses.map((v, i) => (
+                        <button
+                          key={i}
+                          onClick={(e) => { e.stopPropagation(); onProphetClick(mainProphet, v); }}
+                          className="px-2.5 py-1 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 text-xs font-medium transition-colors border border-emerald-500/30"
+                        >
+                          Surah {v}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Visual Timeline */}
+            <div className="p-4">
+              {/* Timeline Track */}
+              <div className="relative h-12 mb-2">
+                {/* Background track */}
+                <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-2 bg-white/10 rounded-full" />
+
+                {/* Prophet period segments */}
+                {prophets.map(prophet => {
+                  const startPercent = ((prophet.periodStart - minYear) / (maxYear - minYear)) * 100;
+                  const endPercent = ((prophet.periodEnd - minYear) / (maxYear - minYear)) * 100;
+                  const isActive = value >= prophet.periodStart && value <= prophet.periodEnd;
+
+                  return (
+                    <div
+                      key={prophet.id}
+                      className="absolute top-1/2 -translate-y-1/2 h-3 rounded-full cursor-pointer transition-all hover:h-4"
+                      style={{
+                        left: `${Math.max(0, startPercent)}%`,
+                        width: `${Math.min(100 - startPercent, endPercent - startPercent)}%`,
+                        backgroundColor: isActive ? prophet.color : `${prophet.color}60`,
+                        boxShadow: isActive ? `0 0 12px ${prophet.color}80` : 'none',
+                      }}
+                      title={prophet.name}
+                      onClick={() => {
+                        onChange(prophet.periodStart + Math.floor((prophet.periodEnd - prophet.periodStart) / 2));
+                        onFlyToLocation(prophet.coords);
+                      }}
+                    />
+                  );
+                })}
+
+                {/* Slider input (invisible but interactive) */}
+                <input
+                  type="range"
+                  min={minYear}
+                  max={maxYear}
+                  value={value}
+                  onChange={(e) => onChange(parseInt(e.target.value))}
+                  className="absolute inset-0 w-full opacity-0 cursor-pointer z-10"
+                />
+
+                {/* Custom thumb */}
+                <div
+                  className="absolute top-1/2 -translate-y-1/2 pointer-events-none transition-all"
+                  style={{ left: `calc(${((value - minYear) / (maxYear - minYear)) * 100}%)` }}
+                >
+                  <div className="w-6 h-6 -ml-3 bg-white rounded-full shadow-xl border-4 border-amber-400 relative">
+                    <div className="absolute inset-0 rounded-full animate-ping bg-amber-400/50" />
+                  </div>
+                </div>
+              </div>
+
+              {/* Era Labels */}
+              <div className="flex justify-between text-[10px] text-white/40 px-1">
+                <span>4000 BCE</span>
+                <span>2000 BCE</span>
+                <span>Year 1</span>
+                <span>700 CE</span>
+              </div>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
@@ -1124,14 +1258,10 @@ const PropheticMap = memo(function PropheticMap({ isVisible, onClose, onNavigate
   const [isLocating, setIsLocating] = useState(false);
   const [showQibla, setShowQibla] = useState(false);
   const [viewMode, setViewMode] = useState('map'); // 'map' or 'globe'
+  const [layerPanelOpen, setLayerPanelOpen] = useState(false);
   const mapRef = useRef(null);
 
-  // Get active prophet for current timeline year
-  const activeProphet = useMemo(() => {
-    return PROPHETS_TIMELINE.filter(p => timelineYear >= p.periodStart && timelineYear <= p.periodEnd).pop();
-  }, [timelineYear]);
-
-  // Get all data
+  // Get all data first
   const locations = useMemo(() => getAllLocations(), []);
   const destroyedNations = useMemo(() => getAllDestroyedNations(), []);
   const miracles = useMemo(() => getAllMiracles(), []);
@@ -1142,6 +1272,24 @@ const PropheticMap = memo(function PropheticMap({ isVisible, onClose, onNavigate
   const revelations = useMemo(() => getAllRevelationLocations(), []);
   const graves = useMemo(() => getAllProphetGraves(), []);
   const caves = useMemo(() => getAllQuranicCaves(), []);
+
+  // Layer counts for panel (after data is defined)
+  const layerCounts = useMemo(() => ({
+    locations: locations.length,
+    mosques: sacredMosques.length,
+    revelations: revelations.length,
+    destroyed: destroyedNations.length,
+    miracles: miracles.length,
+    graves: graves.length,
+    caves: caves.length,
+    journeys: journeys.length,
+    animals: animals.length,
+  }), [locations, sacredMosques, revelations, destroyedNations, miracles, graves, caves, journeys, animals]);
+
+  // Get active prophet for current timeline year
+  const activeProphet = useMemo(() => {
+    return PROPHETS_TIMELINE.filter(p => timelineYear >= p.periodStart && timelineYear <= p.periodEnd).pop();
+  }, [timelineYear]);
 
   const defaultCenter = [26, 42];
   const defaultZoom = 4;
@@ -1216,92 +1364,81 @@ const PropheticMap = memo(function PropheticMap({ isVisible, onClose, onNavigate
         className="relative bg-gray-900 rounded-2xl overflow-hidden w-full h-full md:w-[96%] md:h-[94%] md:max-w-7xl md:m-auto md:mt-[1.5%] flex flex-col shadow-2xl border border-white/10"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Header */}
-        <div className="flex-shrink-0 px-3 py-2 border-b border-white/10 bg-black/40">
-          <div className="flex items-center justify-between gap-2">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center">
-                <Icons.Globe3D className="w-4 h-4 text-white" />
+        {/* Header - Simplified */}
+        <div className="flex-shrink-0 px-4 py-3 border-b border-white/10 bg-gradient-to-r from-black/60 to-black/40">
+          <div className="flex items-center justify-between">
+            {/* Left: Title */}
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center shadow-lg">
+                <Icons.Globe3D className="w-5 h-5 text-white" />
               </div>
-              <div className="hidden sm:block">
-                <h2 className="text-sm font-bold text-white">Quranic World Map</h2>
-                <p className="text-white/50 text-[10px]">
-                  {locations.length + sacredMosques.length + Object.keys(destroyedNations).length + graves.length + caves.length} locations
+              <div>
+                <h2 className="text-base font-bold text-white">Quranic World Map</h2>
+                <p className="text-white/50 text-xs">
+                  {activeLayers.length} layers • {Object.values(layerCounts).reduce((a, b) => a + b, 0)} locations
                 </p>
               </div>
             </div>
 
-            {/* Layer Toggles - Scrollable on mobile */}
-            <div className="flex items-center gap-1 overflow-x-auto flex-1 justify-center px-2 hide-scrollbar">
-              {Object.values(LAYERS).map(layer => {
-                let count = 0;
-                if (layer.id === 'locations') count = locations.length;
-                else if (layer.id === 'mosques') count = sacredMosques.length;
-                else if (layer.id === 'revelations') count = revelations.length;
-                else if (layer.id === 'destroyed') count = destroyedNations.length;
-                else if (layer.id === 'miracles') count = miracles.length;
-                else if (layer.id === 'graves') count = graves.length;
-                else if (layer.id === 'caves') count = caves.length;
-                else if (layer.id === 'journeys') count = journeys.length;
-                else if (layer.id === 'animals') count = animals.length;
-
-                return (
-                  <LayerToggle
-                    key={layer.id}
-                    layer={layer}
-                    isActive={activeLayers.includes(layer.id)}
-                    onClick={() => toggleLayer(layer.id)}
-                    count={count}
-                  />
-                );
-              })}
-            </div>
-
-            {/* Right Controls */}
-            <div className="flex items-center gap-1">
-              {/* Globe/Map Toggle */}
-              <div className="flex items-center bg-white/10 rounded-lg p-0.5 mr-1">
+            {/* Center: View Mode Toggle */}
+            <div className="flex items-center gap-2">
+              <div className="flex items-center bg-white/10 rounded-xl p-1 border border-white/10">
                 <button
                   onClick={() => setViewMode('map')}
-                  className={`px-2 py-1 rounded text-xs flex items-center gap-1 transition-all ${
-                    viewMode === 'map' ? 'bg-amber-500 text-black' : 'text-white/60 hover:text-white'
+                  className={`px-4 py-2 rounded-lg text-sm flex items-center gap-2 transition-all ${
+                    viewMode === 'map'
+                      ? 'bg-amber-500 text-black font-medium shadow-lg'
+                      : 'text-white/60 hover:text-white hover:bg-white/10'
                   }`}
-                  title="Flat Map"
                 >
-                  <Icons.Map className="w-3 h-3" />
-                  <span className="hidden sm:inline">Map</span>
+                  <Icons.Map className="w-4 h-4" />
+                  <span>Map</span>
                 </button>
                 <button
                   onClick={() => setViewMode('globe')}
-                  className={`px-2 py-1 rounded text-xs flex items-center gap-1 transition-all ${
-                    viewMode === 'globe' ? 'bg-amber-500 text-black' : 'text-white/60 hover:text-white'
+                  className={`px-4 py-2 rounded-lg text-sm flex items-center gap-2 transition-all ${
+                    viewMode === 'globe'
+                      ? 'bg-amber-500 text-black font-medium shadow-lg'
+                      : 'text-white/60 hover:text-white hover:bg-white/10'
                   }`}
-                  title="3D Globe"
                 >
-                  <Icons.Globe3D className="w-3 h-3" />
-                  <span className="hidden sm:inline">Globe</span>
+                  <Icons.Globe3D className="w-4 h-4" />
+                  <span>Globe</span>
                 </button>
               </div>
+            </div>
+
+            {/* Right: Controls */}
+            <div className="flex items-center gap-2">
               <button
                 onClick={() => setShowTimeline(!showTimeline)}
-                className={`p-2 rounded-lg transition-all ${showTimeline ? 'bg-amber-500/20 text-amber-400' : 'text-white/50 hover:text-white'}`}
-                title="Interactive Timeline"
+                className={`flex items-center gap-2 px-3 py-2 rounded-xl transition-all ${
+                  showTimeline
+                    ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30'
+                    : 'text-white/60 hover:text-white hover:bg-white/10 border border-transparent'
+                }`}
               >
                 <Icons.Clock className="w-4 h-4" />
+                <span className="text-sm hidden sm:inline">Timeline</span>
               </button>
+
               {viewMode === 'map' && (
                 <select
                   value={mapStyle}
                   onChange={(e) => setMapStyle(e.target.value)}
-                  className="bg-white/10 text-white text-xs rounded-lg px-2 py-1.5 border border-white/20"
+                  className="bg-white/10 text-white text-sm rounded-xl px-3 py-2 border border-white/20 cursor-pointer"
                 >
                   {Object.entries(MAP_STYLES).map(([key, style]) => (
                     <option key={key} value={key} className="bg-gray-900">{style.name}</option>
                   ))}
                 </select>
               )}
-              <button onClick={onClose} className="p-2 rounded-lg hover:bg-white/10">
-                <Icons.X className="w-4 h-4 text-white/70" />
+
+              <button
+                onClick={onClose}
+                className="p-2 rounded-xl hover:bg-white/10 transition-colors"
+              >
+                <Icons.X className="w-5 h-5 text-white/70" />
               </button>
             </div>
           </div>
@@ -1435,6 +1572,16 @@ const PropheticMap = memo(function PropheticMap({ isVisible, onClose, onNavigate
             ))}
           </MapContainer>
           )}
+
+          {/* Layer Panel */}
+          <LayerPanel
+            layers={LAYERS}
+            activeLayers={activeLayers}
+            toggleLayer={toggleLayer}
+            counts={layerCounts}
+            isOpen={layerPanelOpen}
+            setIsOpen={setLayerPanelOpen}
+          />
 
           {/* Map Controls - only show in map mode */}
           {viewMode === 'map' && (
