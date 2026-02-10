@@ -645,30 +645,49 @@ const PROPHETS_TIMELINE = [
     coords: [21.4225, 39.8262],
     story: 'Final Prophet and Messenger to all mankind and jinn. Received the Quran over 23 years. Established Islam as complete way of life.',
     family: {
-      father: 'Abdullah ibn Abd al-Muttalib (died before his birth)',
-      mother: 'Aminah bint Wahb (died when he was 6)',
-      grandfather: 'Abd al-Muttalib (raised him, died when he was 8)',
-      uncle: 'Abu Talib (protected him until death)',
-      fosterMother: 'Halimah al-Sa\'diyah',
+      father: 'Abdullah ibn Abd al-Muttalib (عبد الله) - died 6 months before his birth in Madinah, age 25',
+      mother: 'Aminah bint Wahb (آمنة بنت وهب) - died when he was 6 at Abwa, returning from Madinah',
+      grandfather: 'Abd al-Muttalib (عبد المطلب) - chief of Quraysh, raised him, died when he was 8',
+      grandmother: 'Fatimah bint Amr (paternal), Barrah bint Abd al-Uzza (maternal)',
+      uncles: [
+        'Abu Talib - protected him for 40+ years until death',
+        'Hamza (حمزة) - Lion of Allah, martyred at Uhud',
+        'Abbas (العباس) - ancestor of Abbasid dynasty',
+        'Abu Lahab - enemy, mentioned in Surah Masad'
+      ],
+      aunts: ['Safiyyah bint Abd al-Muttalib - mother of Zubayr ibn al-Awwam'],
+      fosterMother: 'Halimah al-Sa\'diyah (حليمة السعدية) - nursed him in the desert',
+      fosterSiblings: 'Abdullah, Anisa, Hudhafa (Shayma) - children of Halimah',
       wives: [
-        '1. Khadijah bint Khuwaylid (40) - first wife, 25 years together, mother of most children',
-        '2. Sawda bint Zam\'a - married after Khadijah\'s death',
-        '3. Aisha bint Abu Bakr - daughter of Abu Bakr',
-        '4. Hafsa bint Umar - daughter of Umar',
-        '5. Zaynab bint Khuzayma - "Mother of the Poor"',
-        '6. Umm Salama (Hind bint Abi Umayya)',
-        '7. Zaynab bint Jahsh - cousin',
-        '8. Juwayriyya bint al-Harith',
-        '9. Safiyya bint Huyayy - from Jewish tribe',
-        '10. Umm Habiba (Ramla bint Abi Sufyan)',
-        '11. Maymuna bint al-Harith - last wife'
+        { name: 'Khadijah bint Khuwaylid', nameAr: 'خديجة بنت خويلد', year: '595 CE', age: 40, note: 'First wife, 25 years together, mother of all children except Ibrahim. First to believe. Died 619 CE.' },
+        { name: 'Sawda bint Zam\'a', nameAr: 'سودة بنت زمعة', year: '620 CE', note: 'Married after Khadijah\'s death. Cared for his household and children.' },
+        { name: 'Aisha bint Abu Bakr', nameAr: 'عائشة بنت أبي بكر', year: '623 CE', note: 'Daughter of Abu Bakr. Greatest woman scholar. Narrated 2,210 hadiths.' },
+        { name: 'Hafsa bint Umar', nameAr: 'حفصة بنت عمر', year: '625 CE', note: 'Daughter of Umar. Keeper of the original Quran manuscript.' },
+        { name: 'Zaynab bint Khuzayma', nameAr: 'زينب بنت خزيمة', year: '625 CE', note: 'Called "Mother of the Poor" (Umm al-Masakin). Died 2-3 months after marriage.' },
+        { name: 'Umm Salama (Hind)', nameAr: 'أم سلمة (هند)', year: '626 CE', note: 'Widow of Abu Salama. Known for wisdom. Last wife to die (680 CE).' },
+        { name: 'Zaynab bint Jahsh', nameAr: 'زينب بنت جحش', year: '627 CE', note: 'His cousin. Marriage commanded by Allah (33:37). Known for charity.' },
+        { name: 'Juwayriyya bint al-Harith', nameAr: 'جويرية بنت الحارث', year: '627 CE', note: 'Daughter of chief of Banu Mustaliq. Her marriage freed 100 families.' },
+        { name: 'Safiyya bint Huyayy', nameAr: 'صفية بنت حيي', year: '628 CE', note: 'Daughter of Jewish chief. Descended from Prophet Harun.' },
+        { name: 'Umm Habiba (Ramla)', nameAr: 'أم حبيبة (رملة)', year: '628 CE', note: 'Daughter of Abu Sufyan. Married in Abyssinia by proxy.' },
+        { name: 'Maymuna bint al-Harith', nameAr: 'ميمونة بنت الحارث', year: '629 CE', note: 'Last wife. Aunt of Khalid ibn al-Walid and Ibn Abbas.' }
       ],
       children: [
-        'Sons: Qasim, Abdullah (Tahir/Tayyib), Ibrahim - all died young',
-        'Daughters: Zainab, Ruqayyah, Umm Kulthum, Fatimah al-Zahra'
+        { name: 'Qasim', mother: 'Khadijah', note: 'First son, died in infancy. Prophet called "Abu Qasim"' },
+        { name: 'Zainab', mother: 'Khadijah', note: 'Eldest daughter. Married Abu al-As. Died 629 CE.' },
+        { name: 'Ruqayyah', mother: 'Khadijah', note: 'Married Uthman. Died during Badr. Called "Dhat al-Hijratayn"' },
+        { name: 'Umm Kulthum', mother: 'Khadijah', note: 'Married Uthman after Ruqayyah. Died 630 CE.' },
+        { name: 'Fatimah al-Zahra', mother: 'Khadijah', note: 'Leader of women of Paradise. Married Ali. Mother of Hasan & Husayn.' },
+        { name: 'Abdullah (al-Tahir/al-Tayyib)', mother: 'Khadijah', note: 'Died in infancy' },
+        { name: 'Ibrahim', mother: 'Maria al-Qibtiyya', note: 'Born 630 CE, died 632 CE at 18 months. Solar eclipse at his death.' }
       ],
-      grandchildren: 'Hasan and Husayn (from Fatimah & Ali) - leaders of youth in Paradise',
-      note: 'All wives are "Mothers of Believers" (Ummahat al-Mu\'minin)'
+      grandchildren: [
+        'Hasan ibn Ali - "Leader of youth of Paradise"',
+        'Husayn ibn Ali - "Leader of youth of Paradise", martyred at Karbala',
+        'Zaynab bint Ali - heroine of Karbala',
+        'Umm Kulthum bint Ali',
+        'Umama bint Zainab - Prophet loved her dearly'
+      ],
+      note: 'All wives are "Mothers of Believers" (Ummahat al-Mu\'minin) - Muslims cannot marry them after him (33:53)'
     },
     age: 63,
     birthDate: '12 Rabi\' al-Awwal (April 22, 571 CE) - Year of the Elephant',
@@ -1350,7 +1369,7 @@ const TimelineSlider = memo(({ value, onChange, events, prophets = [], onProphet
               {mainProphet.family && (
                 <div className="p-2.5 rounded-lg bg-gradient-to-br from-blue-900/30 to-indigo-900/30 border border-blue-700/50">
                   <p className="text-blue-400 text-[10px] font-bold uppercase mb-1.5">👨‍👩‍👧‍👦 Family</p>
-                  <div className="space-y-0.5 text-[11px]">
+                  <div className="space-y-1 text-[11px] max-h-40 overflow-y-auto custom-scrollbar">
                     {mainProphet.family.father && (
                       <div><span className="text-gray-500">Father:</span> <span className="text-blue-200">{mainProphet.family.father}</span></div>
                     )}
@@ -1360,11 +1379,63 @@ const TimelineSlider = memo(({ value, onChange, events, prophets = [], onProphet
                     {mainProphet.family.wife && (
                       <div><span className="text-gray-500">Wife:</span> <span className="text-blue-200">{mainProphet.family.wife}</span></div>
                     )}
-                    {mainProphet.family.wives && (
-                      <div><span className="text-gray-500">Wives:</span> <span className="text-blue-200">{mainProphet.family.wives.slice(0, 2).join(', ')}</span></div>
+                    {/* Wives - handle both string array and object array */}
+                    {mainProphet.family.wives && mainProphet.family.wives.length > 0 && (
+                      <div className="mt-1">
+                        <span className="text-gray-500 block mb-1">Wives ({mainProphet.family.wives.length}):</span>
+                        <div className="grid gap-1">
+                          {mainProphet.family.wives.slice(0, 4).map((wife, i) => (
+                            <div key={i} className="text-[10px] bg-blue-900/30 rounded px-1.5 py-0.5">
+                              {typeof wife === 'object' ? (
+                                <>
+                                  <span className="text-blue-300 font-medium">{wife.name}</span>
+                                  {wife.nameAr && <span className="text-blue-400 mr-1" dir="rtl"> ({wife.nameAr})</span>}
+                                  {wife.year && <span className="text-gray-500"> • {wife.year}</span>}
+                                  {wife.note && <div className="text-gray-400 text-[9px] mt-0.5">{wife.note}</div>}
+                                </>
+                              ) : (
+                                <span className="text-blue-200">{wife}</span>
+                              )}
+                            </div>
+                          ))}
+                          {mainProphet.family.wives.length > 4 && (
+                            <div className="text-[9px] text-blue-400">+{mainProphet.family.wives.length - 4} more wives</div>
+                          )}
+                        </div>
+                      </div>
                     )}
-                    {mainProphet.family.sons && (
+                    {/* Children - handle both string array and object array */}
+                    {mainProphet.family.children && mainProphet.family.children.length > 0 && (
+                      <div className="mt-1">
+                        <span className="text-gray-500 block mb-1">Children:</span>
+                        <div className="grid gap-0.5">
+                          {mainProphet.family.children.slice(0, 4).map((child, i) => (
+                            <div key={i} className="text-[10px]">
+                              {typeof child === 'object' ? (
+                                <span className="text-blue-200">
+                                  <span className="font-medium">{child.name}</span>
+                                  {child.mother && <span className="text-gray-500"> (from {child.mother})</span>}
+                                </span>
+                              ) : (
+                                <span className="text-blue-200">{child}</span>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                    {mainProphet.family.sons && !mainProphet.family.children && (
                       <div><span className="text-gray-500">Sons:</span> <span className="text-blue-200">{Array.isArray(mainProphet.family.sons) ? mainProphet.family.sons.slice(0, 2).join(', ') : mainProphet.family.sons}</span></div>
+                    )}
+                    {mainProphet.family.grandchildren && (
+                      <div className="mt-1">
+                        <span className="text-gray-500">Grandchildren: </span>
+                        <span className="text-blue-200">
+                          {Array.isArray(mainProphet.family.grandchildren)
+                            ? mainProphet.family.grandchildren.slice(0, 2).join(', ')
+                            : mainProphet.family.grandchildren}
+                        </span>
+                      </div>
                     )}
                   </div>
                 </div>

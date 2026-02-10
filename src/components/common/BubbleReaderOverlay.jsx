@@ -1427,7 +1427,7 @@ const SharePanel = memo(function SharePanel({ surahId, surahName, ayahNumber, ve
 // MAIN COMPONENT
 // ============================================
 
-const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, darkMode, onChangeSurah }) {
+const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, darkMode, onChangeSurah, initialVerse = 1 }) {
   const [fontSize, setFontSize] = useLocalStorage('reader_fontsize', 'medium');
   const [selectedReciter, setSelectedReciter] = useLocalStorage('reader_reciter', 'ar.alafasy');
   const [selectedTranslation, setSelectedTranslation] = useLocalStorage('reader_translation', 'ur.jalandhry');
@@ -1698,6 +1698,24 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
   useEffect(() => {
     versesRef.current = verses;
   }, [verses]);
+
+  // Scroll to initial verse when verses load (for navigation from timeline/map)
+  useEffect(() => {
+    if (initialVerse > 1 && verses.length > 0 && versesContainerRef.current) {
+      // Set current ayah to the initial verse
+      setCurrentAyah(initialVerse);
+      // Scroll to the verse after a short delay to ensure DOM is ready
+      setTimeout(() => {
+        const ayahElement = versesContainerRef.current?.querySelector(`[data-ayah="${initialVerse}"]`);
+        if (ayahElement) {
+          ayahElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          // Highlight the verse briefly
+          ayahElement.classList.add('ring-2', 'ring-amber-400');
+          setTimeout(() => ayahElement.classList.remove('ring-2', 'ring-amber-400'), 2000);
+        }
+      }, 300);
+    }
+  }, [initialVerse, verses.length]);
 
   // Effect to handle continuous translation playback
   useEffect(() => {

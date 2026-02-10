@@ -186,6 +186,7 @@ function QuranBubbleApp() {
   const [bookmarks, setBookmarks] = useLocalStorage('bookmarks', {});
   const [readingProgress, setReadingProgress] = useLocalStorage('readingProgress', {});
   const [overlayReaderSurah, setOverlayReaderSurah] = useState(null);
+  const [initialVerse, setInitialVerse] = useState(1); // For navigating to specific verse
   // Default layout is spiral
   const [surahLayout, setSurahLayout] = useLocalStorage('surahLayout', 'spiral');
   const [showProgressDashboard, setShowProgressDashboard] = useState(false);
@@ -606,9 +607,16 @@ function QuranBubbleApp() {
       {overlayReaderSurah && (
         <BubbleReaderOverlay
           surah={overlayReaderSurah}
-          onClose={handleCloseOverlayReader}
-          onChangeSurah={handleChangeSurah}
+          onClose={() => {
+            handleCloseOverlayReader();
+            setInitialVerse(1); // Reset initial verse on close
+          }}
+          onChangeSurah={(surah) => {
+            handleChangeSurah(surah);
+            setInitialVerse(1); // Reset when changing surah
+          }}
           darkMode={darkMode}
+          initialVerse={initialVerse}
         />
       )}
 
