@@ -35,6 +35,11 @@ import {
   getAllSpecialLocations,
   getAllProphetGraves,
   getAllQuranicCaves,
+  getAllBaniIsraelJourney,
+  getAllScientificMiracles,
+  getAllTreatyLocations,
+  getAllQuranicPlants,
+  getAllIsraMirajJourney,
   calculateQibla,
   distanceToMakkah,
 } from '../../data/propheticLocations';
@@ -66,6 +71,11 @@ const LAYERS = {
   caves: { id: 'caves', name: 'Caves', icon: 'Mountain', color: '#06B6D4' },
   journeys: { id: 'journeys', name: 'Journeys', icon: 'Route', color: '#F472B6' },
   animals: { id: 'animals', name: 'Animals', icon: 'Heart', color: '#22C55E' },
+  baniIsrael: { id: 'baniIsrael', name: 'Bani Israel', icon: 'Users', color: '#3B82F6' },
+  science: { id: 'science', name: 'Science', icon: 'Lightbulb', color: '#0EA5E9' },
+  plants: { id: 'plants', name: 'Plants', icon: 'Leaf', color: '#84CC16' },
+  treaties: { id: 'treaties', name: 'Treaties', icon: 'FileText', color: '#A855F7' },
+  israMiraj: { id: 'israMiraj', name: 'Isra Miraj', icon: 'Moon', color: '#FCD34D' },
 };
 
 // Prophet Timeline Data with detailed information including family (Islamic sources)
@@ -1065,6 +1075,11 @@ const PropheticMap = memo(function PropheticMap({ isVisible, onClose, onNavigate
   const revelations = useMemo(() => getAllRevelationLocations(), []);
   const graves = useMemo(() => getAllProphetGraves(), []);
   const caves = useMemo(() => getAllQuranicCaves(), []);
+  const baniIsraelJourney = useMemo(() => getAllBaniIsraelJourney(), []);
+  const scientificMiracles = useMemo(() => getAllScientificMiracles(), []);
+  const treaties = useMemo(() => getAllTreatyLocations(), []);
+  const plants = useMemo(() => getAllQuranicPlants(), []);
+  const israMirajJourney = useMemo(() => getAllIsraMirajJourney(), []);
 
   // Layer counts for panel (after data is defined)
   const layerCounts = useMemo(() => ({
@@ -1077,7 +1092,12 @@ const PropheticMap = memo(function PropheticMap({ isVisible, onClose, onNavigate
     caves: caves.length,
     journeys: journeys.length,
     animals: animals.length,
-  }), [locations, sacredMosques, revelations, destroyedNations, miracles, graves, caves, journeys, animals]);
+    baniIsrael: baniIsraelJourney.length,
+    science: scientificMiracles.length,
+    plants: plants.length,
+    treaties: treaties.length,
+    israMiraj: israMirajJourney.length,
+  }), [locations, sacredMosques, revelations, destroyedNations, miracles, graves, caves, journeys, animals, baniIsraelJourney, scientificMiracles, plants, treaties, israMirajJourney]);
 
   // Get active prophet for current timeline year
   const activeProphet = useMemo(() => {
@@ -1227,6 +1247,48 @@ const PropheticMap = memo(function PropheticMap({ isVisible, onClose, onNavigate
               />
             )}
 
+            {/* Active Prophet Location Pin (from Timeline) */}
+            {showTimeline && activeProphet && (
+              <Marker
+                position={activeProphet.coords}
+                icon={L.divIcon({
+                  html: `
+                    <div style="position: relative; display: flex; flex-direction: column; align-items: center;">
+                      <div style="
+                        width: 44px; height: 44px;
+                        background: ${activeProphet.color};
+                        border-radius: 50%;
+                        border: 4px solid white;
+                        box-shadow: 0 4px 20px rgba(0,0,0,0.5), 0 0 30px ${activeProphet.color};
+                        display: flex; align-items: center; justify-content: center;
+                        font-size: 22px;
+                        animation: markerPulse 1.5s infinite;
+                      ">${activeProphet.icon}</div>
+                      <div style="
+                        position: absolute;
+                        top: 50px;
+                        background: ${activeProphet.color};
+                        color: white;
+                        padding: 6px 12px;
+                        border-radius: 8px;
+                        font-size: 12px;
+                        font-weight: bold;
+                        white-space: nowrap;
+                        box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+                        text-align: center;
+                      ">
+                        <div>${activeProphet.name}</div>
+                        <div style="font-size: 10px; opacity: 0.8;">${activeProphet.nameAr}</div>
+                      </div>
+                    </div>
+                  `,
+                  className: 'prophet-timeline-marker',
+                  iconSize: [44, 90],
+                  iconAnchor: [22, 22],
+                })}
+              />
+            )}
+
             {/* Prophet Journeys with Animation */}
             {activeLayers.includes('journeys') && journeys.map(journey => {
               const coords = getJourneyCoords(journey);
@@ -1322,6 +1384,57 @@ const PropheticMap = memo(function PropheticMap({ isVisible, onClose, onNavigate
                 radius={10}
                 pathOptions={{ color: animal.color, fillColor: animal.color, fillOpacity: 0.6 }}
                 eventHandlers={{ click: () => handleMarkerClick(animal, 'animal') }}
+              />
+            ))}
+
+            {/* Bani Israel Journey */}
+            {activeLayers.includes('baniIsrael') && baniIsraelJourney.map(loc => (
+              <Marker
+                key={loc.id}
+                position={loc.coords}
+                icon={createMarkerIcon(loc.color, 26, selectedItem?.id === loc.id)}
+                eventHandlers={{ click: () => handleMarkerClick(loc, 'baniIsrael') }}
+              />
+            ))}
+
+            {/* Scientific Miracles */}
+            {activeLayers.includes('science') && scientificMiracles.map(loc => (
+              <Marker
+                key={loc.id}
+                position={loc.coords}
+                icon={createMarkerIcon(loc.color, 26, selectedItem?.id === loc.id)}
+                eventHandlers={{ click: () => handleMarkerClick(loc, 'science') }}
+              />
+            ))}
+
+            {/* Quranic Plants */}
+            {activeLayers.includes('plants') && plants.map(plant => (
+              <CircleMarker
+                key={plant.id}
+                center={plant.coords}
+                radius={12}
+                pathOptions={{ color: plant.color, fillColor: plant.color, fillOpacity: 0.7 }}
+                eventHandlers={{ click: () => handleMarkerClick(plant, 'plant') }}
+              />
+            ))}
+
+            {/* Treaty Locations */}
+            {activeLayers.includes('treaties') && treaties.map(treaty => (
+              <Marker
+                key={treaty.id}
+                position={treaty.coords}
+                icon={createMarkerIcon(treaty.color, 26, selectedItem?.id === treaty.id)}
+                eventHandlers={{ click: () => handleMarkerClick(treaty, 'treaty') }}
+              />
+            ))}
+
+            {/* Isra & Mi'raj Journey */}
+            {activeLayers.includes('israMiraj') && israMirajJourney.map(loc => (
+              <Marker
+                key={loc.id}
+                position={loc.coords}
+                icon={createMarkerIcon(loc.color, 28, selectedItem?.id === loc.id)}
+                eventHandlers={{ click: () => handleMarkerClick(loc, 'israMiraj') }}
               />
             ))}
           </MapContainer>

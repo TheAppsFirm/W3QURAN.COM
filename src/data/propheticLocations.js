@@ -1087,6 +1087,419 @@ export const QURANIC_ANIMALS = {
 };
 
 // ============================================================================
+// BANI ISRAEL JOURNEY - Exodus Locations
+// ============================================================================
+
+export const BANI_ISRAEL_JOURNEY = {
+  twelveSpnings: {
+    id: 'twelveSpnings',
+    name: '12 Springs of Musa',
+    nameAr: 'اثنتا عشرة عينا',
+    coords: [28.8000, 34.5000],
+    color: '#06B6D4',
+    description: 'Where Musa struck the rock and 12 springs gushed forth, one for each tribe.',
+    verses: ['2:60', '7:160'],
+    prophet: 'Musa',
+    event: 'Each tribe knew their drinking place.',
+  },
+  mountainRaised: {
+    id: 'mountainRaised',
+    name: 'Mountain Raised Over Them',
+    nameAr: 'رفع الجبل فوقهم',
+    coords: [28.5500, 33.9500],
+    color: '#8B5CF6',
+    description: 'Allah raised Mount Tur over Bani Israel as they hesitated to accept the covenant.',
+    verses: ['2:63', '2:93', '4:154', '7:171'],
+    prophet: 'Musa',
+    event: 'They thought it would fall on them - a warning to hold firmly to the Torah.',
+  },
+  goldenCalf: {
+    id: 'goldenCalf',
+    name: 'Golden Calf Worship',
+    nameAr: 'عبادة العجل',
+    coords: [28.6000, 34.0000],
+    color: '#F59E0B',
+    description: 'Where Bani Israel worshipped the golden calf while Musa was on the mountain.',
+    verses: ['2:51-54', '7:148-153', '20:83-98'],
+    prophet: 'Musa',
+    event: 'Samiri made the calf from their jewelry. Musa burned it and scattered it in the sea.',
+  },
+  fortyYears: {
+    id: 'fortyYears',
+    name: '40 Years Wandering',
+    nameAr: 'التيه أربعين سنة',
+    coords: [29.5000, 34.5000],
+    color: '#EF4444',
+    description: 'The wilderness where Bani Israel wandered for 40 years as punishment for refusing to enter the Holy Land.',
+    verses: ['5:26'],
+    prophet: 'Musa',
+    event: 'They said "Go you and your Lord and fight" - so Allah forbade them the land for 40 years.',
+  },
+  mannaSalwa: {
+    id: 'mannaSalwa',
+    name: 'Manna and Quail Descended',
+    nameAr: 'نزول المن والسلوى',
+    coords: [29.0000, 34.2000],
+    color: '#10B981',
+    description: 'Where Allah sent down Manna (sweet substance) and Salwa (quail) as food.',
+    verses: ['2:57', '7:160', '20:80'],
+    prophet: 'Musa',
+    event: 'Heavenly provision in the desert - but they complained wanting variety.',
+  },
+};
+
+// ============================================================================
+// SCIENTIFIC MIRACLES - Quran & Science Locations
+// ============================================================================
+
+export const SCIENTIFIC_MIRACLES = {
+  twoSeasBarrier: {
+    id: 'twoSeasBarrier',
+    name: 'Barrier Between Two Seas',
+    nameAr: 'البرزخ بين البحرين',
+    coords: [35.9000, -5.5000],
+    color: '#0EA5E9',
+    description: 'The meeting point of Mediterranean and Atlantic where waters don\'t mix - a barrier (barzakh).',
+    verses: ['55:19-20', '25:53', '27:61'],
+    scientificNote: 'Modern oceanography confirms different densities and salinities prevent mixing.',
+    fact: 'This was unknown until 20th century oceanographic studies.',
+  },
+  lowestPoint: {
+    id: 'lowestPoint',
+    name: 'Lowest Point on Earth',
+    nameAr: 'أدنى الأرض',
+    coords: [31.5000, 35.5000],
+    color: '#DC2626',
+    description: 'The Dead Sea area - lowest land point on Earth, where the Romans defeated the Persians.',
+    verses: ['30:2-4'],
+    scientificNote: 'At 430m below sea level, this is Earth\'s lowest elevation on land.',
+    fact: 'The Quran predicted the Roman victory "in the lowest land" - both meanings true.',
+  },
+  mountainsPegs: {
+    id: 'mountainsPegs',
+    name: 'Mountains as Pegs',
+    nameAr: 'الجبال أوتادا',
+    coords: [27.9881, 86.9250],
+    color: '#6B7280',
+    description: 'Mountains have deep roots like pegs/stakes that stabilize the Earth\'s crust.',
+    verses: ['78:7', '21:31', '16:15', '31:10'],
+    scientificNote: 'Isostasy - mountains have roots extending deep into the mantle.',
+    fact: 'The Himalayas have roots 3x deeper than their height.',
+  },
+  ironSentDown: {
+    id: 'ironSentDown',
+    name: 'Iron Sent Down',
+    nameAr: 'أنزلنا الحديد',
+    coords: [19.4326, -99.1332],
+    color: '#374151',
+    description: 'Iron was "sent down" - it came from supernovae explosions in space.',
+    verses: ['57:25'],
+    scientificNote: 'Iron cannot form in our sun. It requires supernovae to create.',
+    fact: 'Meteor Crater, Arizona and all iron on Earth came from space.',
+  },
+  expandingUniverse: {
+    id: 'expandingUniverse',
+    name: 'Expanding Universe',
+    nameAr: 'توسع الكون',
+    coords: [0, 0],
+    color: '#8B5CF6',
+    description: 'The universe is continuously expanding - "And the heaven We constructed with strength, and indeed, We are [its] expander."',
+    verses: ['51:47'],
+    scientificNote: 'Hubble discovered this in 1929. The Quran mentioned it 1400 years ago.',
+    fact: 'The universe expands at about 73 km/s per megaparsec.',
+  },
+  embryology: {
+    id: 'embryology',
+    name: 'Stages of Embryo',
+    nameAr: 'مراحل الجنين',
+    coords: [21.4225, 39.8262],
+    color: '#EC4899',
+    description: 'The Quran describes embryonic development stages with remarkable accuracy.',
+    verses: ['23:12-14', '22:5', '39:6'],
+    scientificNote: 'Nutfah (drop), Alaqah (clinging clot), Mudghah (chewed lump) - accurate descriptions.',
+    fact: 'These stages were unknown until microscopes in the 20th century.',
+  },
+  frontalLobe: {
+    id: 'frontalLobe',
+    name: 'Frontal Lobe - Lying & Sin',
+    nameAr: 'الناصية الكاذبة',
+    coords: [21.4225, 39.8262],
+    color: '#F97316',
+    description: '"A lying, sinful forelock (nasiyah)" - the prefrontal cortex controls decision-making.',
+    verses: ['96:15-16'],
+    scientificNote: 'The prefrontal cortex is responsible for lying, planning, and motivation.',
+    fact: 'Neuroscience discovered this function in the 20th century.',
+  },
+  waterCycle: {
+    id: 'waterCycle',
+    name: 'Water Cycle',
+    nameAr: 'دورة المياه',
+    coords: [25.0000, 45.0000],
+    color: '#06B6D4',
+    description: 'The Quran describes evaporation, cloud formation, and rain returning to earth.',
+    verses: ['39:21', '30:48', '23:18', '15:22'],
+    scientificNote: 'The complete hydrological cycle described accurately.',
+    fact: 'Bernard Palissy only described this in 1580 CE.',
+  },
+};
+
+// ============================================================================
+// HISTORICAL TREATIES & COVENANTS
+// ============================================================================
+
+export const TREATY_LOCATIONS = {
+  hudaybiyahTreaty: {
+    id: 'hudaybiyahTreaty',
+    name: 'Treaty of Hudaybiyah',
+    nameAr: 'صلح الحديبية',
+    coords: [21.4500, 39.6000],
+    color: '#10B981',
+    year: '628 CE',
+    description: 'A 10-year peace treaty that seemed unfavorable but Allah called it a "manifest victory".',
+    verses: ['48:1-29'],
+    significance: 'Allowed peaceful spread of Islam and led to Conquest of Makkah 2 years later.',
+  },
+  aqabaFirst: {
+    id: 'aqabaFirst',
+    name: 'First Pledge of Aqaba',
+    nameAr: 'بيعة العقبة الأولى',
+    coords: [21.4300, 39.8200],
+    color: '#8B5CF6',
+    year: '621 CE',
+    description: '12 men from Yathrib (Madinah) pledged allegiance to the Prophet.',
+    verses: [],
+    significance: 'First acceptance of Islam by Madinans, paving way for Hijra.',
+  },
+  aqabaSecond: {
+    id: 'aqabaSecond',
+    name: 'Second Pledge of Aqaba',
+    nameAr: 'بيعة العقبة الثانية',
+    coords: [21.4300, 39.8200],
+    color: '#A855F7',
+    year: '622 CE',
+    description: '73 men and 2 women pledged to protect the Prophet as they protect their families.',
+    verses: [],
+    significance: 'Invitation for Prophet to migrate to Madinah - Hijra began.',
+  },
+  ghadirKhumm: {
+    id: 'ghadirKhumm',
+    name: 'Ghadir Khumm',
+    nameAr: 'غدير خم',
+    coords: [22.8000, 39.2000],
+    color: '#F59E0B',
+    year: '632 CE',
+    description: 'Location where Prophet gave his last major sermon on return from Farewell Hajj.',
+    verses: ['5:67'],
+    significance: 'Important sermon about following Quran and Ahlul Bayt.',
+  },
+  madinahConstitution: {
+    id: 'madinahConstitution',
+    name: 'Constitution of Madinah',
+    nameAr: 'صحيفة المدينة',
+    coords: [24.4672, 39.6111],
+    color: '#3B82F6',
+    year: '622 CE',
+    description: 'First written constitution establishing rights of Muslims, Jews, and others in Madinah.',
+    verses: [],
+    significance: 'Revolutionary document of religious tolerance and civic rights.',
+  },
+};
+
+// ============================================================================
+// QURANIC PLANTS & NATURE
+// ============================================================================
+
+export const QURANIC_PLANTS = {
+  olive: {
+    id: 'olive',
+    name: 'Olive Tree (Zaytun)',
+    nameAr: 'شجرة الزيتون',
+    coords: [31.9000, 35.2000],
+    color: '#84CC16',
+    description: 'Blessed tree mentioned with figs. Olive oil is light upon light.',
+    verses: ['95:1', '24:35', '6:99', '6:141'],
+    benefit: 'Neither of the East nor West - its oil lights without fire touching it.',
+  },
+  fig: {
+    id: 'fig',
+    name: 'Fig Tree (Teen)',
+    nameAr: 'شجرة التين',
+    coords: [32.0000, 35.0000],
+    color: '#65A30D',
+    description: 'Allah swears by the fig in Surah At-Teen.',
+    verses: ['95:1'],
+    benefit: 'Paired with olive and Mount Sinai as sacred symbols.',
+  },
+  datePalm: {
+    id: 'datePalm',
+    name: 'Date Palm (Nakhlah)',
+    nameAr: 'شجرة النخل',
+    coords: [24.4672, 39.6111],
+    color: '#A16207',
+    description: 'Maryam shook the palm for fresh dates. The Prophet loved dates.',
+    verses: ['19:25', '6:99', '55:68', '36:34'],
+    benefit: 'Break fast with dates - the Sunnah way.',
+  },
+  pomegranate: {
+    id: 'pomegranate',
+    name: 'Pomegranate (Rumman)',
+    nameAr: 'الرمان',
+    coords: [36.0000, 37.0000],
+    color: '#DC2626',
+    description: 'Fruit of Paradise, mentioned among Allah\'s signs.',
+    verses: ['6:99', '6:141', '55:68'],
+    benefit: 'One of the fruits of Jannah.',
+  },
+  grape: {
+    id: 'grape',
+    name: 'Grapes (Inab)',
+    nameAr: 'العنب',
+    coords: [33.0000, 36.0000],
+    color: '#7C3AED',
+    description: 'Among the fruits Allah provides, mentioned multiple times.',
+    verses: ['6:99', '16:67', '17:91', '23:19'],
+    benefit: 'Used for both eating and drink (non-alcoholic in Paradise).',
+  },
+  loteTree: {
+    id: 'loteTree',
+    name: 'Lote Tree (Sidra)',
+    nameAr: 'سدرة المنتهى',
+    coords: [21.4225, 39.8262],
+    color: '#059669',
+    description: 'Sidrat al-Muntaha - the Lote Tree at the boundary, where Jibreel stopped.',
+    verses: ['53:14-16'],
+    benefit: 'The farthest point reached during Mi\'raj, near Jannah.',
+  },
+  garlic: {
+    id: 'garlic',
+    name: 'Garlic, Onions, Lentils',
+    nameAr: 'الثوم والبصل والعدس',
+    coords: [26.8206, 30.8025],
+    color: '#78716C',
+    description: 'Foods Bani Israel complained about wanting instead of Manna.',
+    verses: ['2:61'],
+    benefit: 'They preferred earthly food over heavenly provision.',
+  },
+};
+
+// ============================================================================
+// ISRA & MI\'RAJ JOURNEY POINTS
+// ============================================================================
+
+export const ISRA_MIRAJ_JOURNEY = {
+  masjidHaram: {
+    id: 'israStart',
+    name: 'Start - Masjid al-Haram',
+    nameAr: 'البداية - المسجد الحرام',
+    coords: [21.4225, 39.8262],
+    color: '#F59E0B',
+    description: 'The Night Journey began here. Jibreel came with Buraq.',
+    verses: ['17:1'],
+    sequence: 1,
+  },
+  buraqWall: {
+    id: 'buraqWall',
+    name: 'Buraq Wall - Jerusalem',
+    nameAr: 'حائط البراق',
+    coords: [31.7767, 35.2345],
+    color: '#3B82F6',
+    description: 'Where Buraq was tied. The Prophet led all prophets in prayer.',
+    verses: ['17:1'],
+    sequence: 2,
+  },
+  firstHeaven: {
+    id: 'firstHeaven',
+    name: 'First Heaven - Adam',
+    nameAr: 'السماء الأولى - آدم',
+    coords: [31.7800, 35.2400],
+    color: '#22C55E',
+    description: 'Met Prophet Adam who greeted him as son and prophet.',
+    verses: [],
+    sequence: 3,
+  },
+  secondHeaven: {
+    id: 'secondHeaven',
+    name: 'Second Heaven - Isa & Yahya',
+    nameAr: 'السماء الثانية',
+    coords: [31.7820, 35.2420],
+    color: '#06B6D4',
+    description: 'Met Prophets Isa (Jesus) and Yahya (John) - cousins.',
+    verses: [],
+    sequence: 4,
+  },
+  thirdHeaven: {
+    id: 'thirdHeaven',
+    name: 'Third Heaven - Yusuf',
+    nameAr: 'السماء الثالثة - يوسف',
+    coords: [31.7840, 35.2440],
+    color: '#8B5CF6',
+    description: 'Met Prophet Yusuf, given half of all beauty.',
+    verses: [],
+    sequence: 5,
+  },
+  fourthHeaven: {
+    id: 'fourthHeaven',
+    name: 'Fourth Heaven - Idris',
+    nameAr: 'السماء الرابعة - إدريس',
+    coords: [31.7860, 35.2460],
+    color: '#EC4899',
+    description: 'Met Prophet Idris, raised to a high station.',
+    verses: ['19:56-57'],
+    sequence: 6,
+  },
+  fifthHeaven: {
+    id: 'fifthHeaven',
+    name: 'Fifth Heaven - Harun',
+    nameAr: 'السماء الخامسة - هارون',
+    coords: [31.7880, 35.2480],
+    color: '#F97316',
+    description: 'Met Prophet Harun (Aaron), brother of Musa.',
+    verses: [],
+    sequence: 7,
+  },
+  sixthHeaven: {
+    id: 'sixthHeaven',
+    name: 'Sixth Heaven - Musa',
+    nameAr: 'السماء السادسة - موسى',
+    coords: [31.7900, 35.2500],
+    color: '#EF4444',
+    description: 'Met Prophet Musa who wept that more of Muhammad\'s ummah would enter Paradise than his.',
+    verses: [],
+    sequence: 8,
+  },
+  seventhHeaven: {
+    id: 'seventhHeaven',
+    name: 'Seventh Heaven - Ibrahim',
+    nameAr: 'السماء السابعة - إبراهيم',
+    coords: [31.7920, 35.2520],
+    color: '#F59E0B',
+    description: 'Met Prophet Ibrahim, leaning against Bayt al-Ma\'mur (Heavenly Kaaba).',
+    verses: [],
+    sequence: 9,
+  },
+  sidratulMuntaha: {
+    id: 'sidratulMuntaha',
+    name: 'Sidrat al-Muntaha',
+    nameAr: 'سدرة المنتهى',
+    coords: [31.7950, 35.2550],
+    color: '#10B981',
+    description: 'The Lote Tree at the boundary - Jibreel could go no further.',
+    verses: ['53:14-16'],
+    sequence: 10,
+  },
+  divinePresence: {
+    id: 'divinePresence',
+    name: 'Divine Audience',
+    nameAr: 'المناجاة',
+    coords: [31.8000, 35.2600],
+    color: '#FFFFFF',
+    description: 'Muhammad ﷺ received command of 5 daily prayers (originally 50, reduced by Musa\'s advice).',
+    verses: ['53:8-18'],
+    sequence: 11,
+  },
+};
+
+// ============================================================================
 // TRADE ROUTES
 // ============================================================================
 
@@ -1283,6 +1696,13 @@ export const getAllSpecialLocations = () => Object.values(SPECIAL_LOCATIONS);
 export const getAllProphetGraves = () => Object.values(PROPHET_GRAVES);
 export const getAllQuranicCaves = () => Object.values(QURANIC_CAVES);
 
+// New data exports
+export const getAllBaniIsraelJourney = () => Object.values(BANI_ISRAEL_JOURNEY);
+export const getAllScientificMiracles = () => Object.values(SCIENTIFIC_MIRACLES);
+export const getAllTreatyLocations = () => Object.values(TREATY_LOCATIONS);
+export const getAllQuranicPlants = () => Object.values(QURANIC_PLANTS);
+export const getAllIsraMirajJourney = () => Object.values(ISRA_MIRAJ_JOURNEY);
+
 // Qibla calculation from any point
 export const calculateQibla = (lat, lng) => {
   const kaabaLat = 21.4225 * (Math.PI / 180);
@@ -1329,6 +1749,11 @@ export default {
   SPECIAL_LOCATIONS,
   PROPHET_GRAVES,
   QURANIC_CAVES,
+  BANI_ISRAEL_JOURNEY,
+  SCIENTIFIC_MIRACLES,
+  TREATY_LOCATIONS,
+  QURANIC_PLANTS,
+  ISRA_MIRAJ_JOURNEY,
   getAllLocations,
   getLocation,
   getLocationsByCategory,
@@ -1345,6 +1770,11 @@ export default {
   getAllSpecialLocations,
   getAllProphetGraves,
   getAllQuranicCaves,
+  getAllBaniIsraelJourney,
+  getAllScientificMiracles,
+  getAllTreatyLocations,
+  getAllQuranicPlants,
+  getAllIsraMirajJourney,
   calculateQibla,
   distanceToMakkah,
 };
