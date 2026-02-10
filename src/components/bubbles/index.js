@@ -15,4 +15,5 @@ export {
   JuzzGroupLayout,
   AlphabetLayout,
   RevelationLayout,
+  BookLayout,
 } from './BubbleLayouts';

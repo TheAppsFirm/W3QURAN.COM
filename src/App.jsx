@@ -12,7 +12,7 @@
 import { Suspense, useState, useEffect, useMemo, useCallback } from 'react';
 import { ErrorBoundary, LoadingSpinner, BubbleModal, BubbleReaderOverlay, ProgressDashboard, OfflineManager, HifzMode, SearchPanel, DonateModal, WordSearchMap, EmotionalTracker, ScholarVideoSync, PropheticMap, QuranCompanionAI, GlobalUmmahPulse, VerseWeatherSync, SoundHealingRoom, QuranicBabyNames } from './components/common';
 import { Header, FloatingMenu, StatsBar } from './components/layout';
-import { SurahBubble, LayoutSelector, ClockLayout, GridLayout, JuzzGroupLayout, AlphabetLayout, RevelationLayout } from './components/bubbles';
+import { SurahBubble, LayoutSelector, ClockLayout, GridLayout, JuzzGroupLayout, AlphabetLayout, RevelationLayout, BookLayout } from './components/bubbles';
 import { AnalyticsPanel } from './components/widgets';
 import {
   NamesOfAllahView,
@@ -527,6 +527,17 @@ function QuranBubbleApp() {
               {/* Revelation Order Layout */}
               {surahLayout === 'revelation' && (
                 <RevelationLayout
+                  surahs={filtered}
+                  onSurahClick={handleSelectSurah}
+                  zoom={zoom}
+                  contentZoom={contentZoom}
+                  darkMode={darkMode}
+                />
+              )}
+
+              {/* Book Layout */}
+              {surahLayout === 'book' && (
+                <BookLayout
                   surahs={filtered}
                   onSurahClick={handleSelectSurah}
                   zoom={zoom}
