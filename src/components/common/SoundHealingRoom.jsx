@@ -8,16 +8,18 @@
 import { useState, useEffect, useRef, useCallback, memo } from 'react';
 import { Icons } from './Icons';
 
-// Islamic Dhikr audio tracks from Archive.org (free public domain)
+// Islamic Dhikr audio tracks - Soft, peaceful nasheeds for meditation
+// Using calming, melodic recitations (NOT aggressive sound effects)
 const DHIKR_AUDIO = {
-  // Main dhikr tracks for different modes
+  // Soft SubhanAllah Walhamdulillah - very peaceful
   subhanAllahWalhamdulillah: {
     url: 'https://archive.org/download/SubhanallahWalhamdulillah/Subhanallah%20Walhamdulillah.mp3',
     arabic: 'سبحان الله والحمد لله',
     transliteration: 'SubhanAllah Walhamdulillah',
     meaning: 'Glory to Allah and All Praise to Allah',
-    duration: 210, // ~3.5 minutes
+    duration: 210,
   },
+  // Melodic La ilaha illallah
   laIlahaIllallah: {
     url: 'https://archive.org/download/YaRasoolallahYaHabeeballah2/La%20ilaha%20illallah.mp3',
     arabic: 'لا إله إلا الله',
@@ -25,41 +27,39 @@ const DHIKR_AUDIO = {
     meaning: 'There is no god but Allah',
     duration: 96,
   },
+  // Heart touching soft Allah dhikr
   allahu: {
     url: 'https://archive.org/download/YaRasoolallahYaHabeeballah2/Allahu%20%28Heart%20Touching%20Nasheed%29.mp3',
     arabic: 'الله',
     transliteration: 'Allah',
-    meaning: 'Allah - Heart Touching Nasheed',
+    meaning: 'Heart Touching Remembrance',
     duration: 276,
   },
-  allahuAkbar: {
-    url: 'https://archive.org/download/allahu-akbar-sound-effect/Allahu%20Akbar%20Sound%20Effect.mp3',
-    arabic: 'الله أكبر',
-    transliteration: 'Allahu Akbar',
-    meaning: 'Allah is the Greatest',
-    duration: 5,
-  },
+  // 99 Names of Allah - Beautiful melodic recitation
   asmaUlHusna: {
     url: 'https://archive.org/download/asma-ul-husna-99-names-of-allah/Asma-ul-Husna%20%2899%20Names%20of%20Allah%29.mp3',
     arabic: 'أسماء الله الحسنى',
     transliteration: 'Asma ul Husna',
-    meaning: '99 Names of Allah',
+    meaning: '99 Beautiful Names of Allah',
     duration: 300,
   },
+  // Soft Alhamdulillah nasheed
   giveThanksToAllah: {
     url: 'https://archive.org/download/YaRasoolallahYaHabeeballah2/GiveThanks%20To%20Allah.mp3',
     arabic: 'الحمد لله',
     transliteration: 'Alhamdulillah',
-    meaning: 'Give Thanks to Allah',
+    meaning: 'All Praise and Thanks to Allah',
     duration: 30,
   },
+  // Soft Durood/Salawat
   allahumaSalli: {
     url: 'https://archive.org/download/YaRasoolallahYaHabeeballah2/Allahumma%20salli%20%27ala.mp3',
     arabic: 'اللهم صل على',
     transliteration: 'Allahumma Salli Ala',
-    meaning: 'O Allah send blessings upon (the Prophet)',
+    meaning: 'O Allah send blessings upon the Prophet ﷺ',
     duration: 156,
   },
+  // Peaceful Salaam
   assalatoAssalamu: {
     url: 'https://archive.org/download/YaRasoolallahYaHabeeballah2/Assalato%20assalamu.mp3',
     arabic: 'الصلاة والسلام',
@@ -67,14 +67,22 @@ const DHIKR_AUDIO = {
     meaning: 'Peace and Blessings',
     duration: 90,
   },
+  // Ya Rahman - Soft and calming
+  yaRahman: {
+    url: 'https://archive.org/download/YaRasoolallahYaHabeeballah2/Ya%20Rahman.mp3',
+    arabic: 'يا رحمن',
+    transliteration: 'Ya Rahman',
+    meaning: 'O Most Merciful',
+    duration: 180,
+  },
 };
 
-// Dhikr tracks for each healing mode
+// Dhikr tracks for each healing mode - All soft and peaceful
 const MODE_DHIKR = {
   sleep: ['subhanAllahWalhamdulillah', 'laIlahaIllallah', 'allahu'],
-  focus: ['allahuAkbar', 'giveThanksToAllah', 'allahumaSalli'],
+  focus: ['asmaUlHusna', 'giveThanksToAllah', 'allahumaSalli'], // Removed aggressive sound, using soft 99 names
   healing: ['asmaUlHusna', 'subhanAllahWalhamdulillah', 'laIlahaIllallah'],
-  anxiety: ['allahu', 'subhanAllahWalhamdulillah', 'assalatoAssalamu'],
+  anxiety: ['yaRahman', 'allahu', 'assalatoAssalamu'], // Ya Rahman for anxiety relief
 };
 
 // Dhikr phrases info for display (when audio is playing)
@@ -82,12 +90,12 @@ const DHIKR_DISPLAY = {
   sleep: [
     { arabic: 'سبحان الله والحمد لله', transliteration: 'SubhanAllah Walhamdulillah', meaning: 'Glory to Allah and All Praise to Allah' },
     { arabic: 'لا إله إلا الله', transliteration: 'La ilaha illallah', meaning: 'There is no god but Allah' },
-    { arabic: 'الله', transliteration: 'Allah', meaning: 'Remembrance of Allah' },
+    { arabic: 'الله', transliteration: 'Allah', meaning: 'Peaceful Remembrance of Allah' },
   ],
   focus: [
-    { arabic: 'الله أكبر', transliteration: 'Allahu Akbar', meaning: 'Allah is the Greatest' },
+    { arabic: 'أسماء الله الحسنى', transliteration: 'Asma ul Husna', meaning: '99 Beautiful Names of Allah' },
     { arabic: 'الحمد لله', transliteration: 'Alhamdulillah', meaning: 'All Praise to Allah' },
-    { arabic: 'اللهم صل على', transliteration: 'Allahumma Salli Ala', meaning: 'Blessings upon the Prophet' },
+    { arabic: 'اللهم صل على', transliteration: 'Allahumma Salli Ala', meaning: 'Blessings upon the Prophet ﷺ' },
   ],
   healing: [
     { arabic: 'أسماء الله الحسنى', transliteration: 'Asma ul Husna', meaning: '99 Beautiful Names of Allah' },
@@ -95,8 +103,8 @@ const DHIKR_DISPLAY = {
     { arabic: 'لا إله إلا الله', transliteration: 'La ilaha illallah', meaning: 'There is no god but Allah' },
   ],
   anxiety: [
-    { arabic: 'الله', transliteration: 'Allah', meaning: 'Remembrance brings peace to hearts' },
-    { arabic: 'سبحان الله والحمد لله', transliteration: 'SubhanAllah Walhamdulillah', meaning: 'Glory and Praise to Allah' },
+    { arabic: 'يا رحمن', transliteration: 'Ya Rahman', meaning: 'O Most Merciful - brings peace to hearts' },
+    { arabic: 'الله', transliteration: 'Allah', meaning: 'Gentle Remembrance of Allah' },
     { arabic: 'الصلاة والسلام', transliteration: 'Assalato Assalamu', meaning: 'Peace and Blessings' },
   ],
 };

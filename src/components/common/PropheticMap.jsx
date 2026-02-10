@@ -1401,9 +1401,10 @@ const PropheticMap = memo(function PropheticMap({ isVisible, onClose, onNavigate
                       ? 'bg-amber-500 text-black font-medium shadow-lg'
                       : 'text-white/60 hover:text-white hover:bg-white/10'
                   }`}
+                  title="Interactive 3D Earth View"
                 >
                   <Icons.Globe3D className="w-4 h-4" />
-                  <span>Globe</span>
+                  <span>3D View</span>
                 </button>
               </div>
             </div>

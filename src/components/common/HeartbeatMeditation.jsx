@@ -13,19 +13,20 @@ import {
   getSessionDuration,
 } from '../../data/meditationSessions';
 
-// Real Islamic dhikr audio from Archive.org (Omar Esa - Allah and His Beloved)
+// Soft, peaceful Islamic dhikr audio - melodic nasheeds for meditation
+// All tracks are gentle and calming, suitable for meditation and relaxation
 const DHIKR_AUDIO_TRACKS = {
   allah: {
     url: 'https://archive.org/download/OmarEsa-AllahAndHisBeloved/12%20-%20Allahu.mp3',
     arabic: 'الله',
     transliteration: 'Allahu',
-    meaning: 'Allah',
+    meaning: 'Gentle Remembrance of Allah',
   },
   yaAllah: {
     url: 'https://archive.org/download/OmarEsa-AllahAndHisBeloved/15%20-%20Ya%20Allah.mp3',
     arabic: 'يا الله',
     transliteration: 'Ya Allah',
-    meaning: 'O Allah',
+    meaning: 'O Allah - Calling upon the Most Merciful',
   },
   subhanAllah: {
     url: 'https://archive.org/download/OmarEsa-AllahAndHisBeloved/14%20-%20Subhanallah.mp3',
@@ -37,19 +38,13 @@ const DHIKR_AUDIO_TRACKS = {
     url: 'https://archive.org/download/OmarEsa-AllahAndHisBeloved/10%20-%20Alhamdulillah.mp3',
     arabic: 'الحمد لله',
     transliteration: 'Alhamdulillah',
-    meaning: 'All Praise to Allah',
-  },
-  allahuAkbar: {
-    url: 'https://archive.org/download/OmarEsa-AllahAndHisBeloved/07%20-%20Allahu%20Akbar.mp3',
-    arabic: 'الله أكبر',
-    transliteration: 'Allahu Akbar',
-    meaning: 'Allah is the Greatest',
+    meaning: 'All Praise and Thanks to Allah',
   },
   dhikr: {
     url: 'https://archive.org/download/OmarEsa-AllahAndHisBeloved/08%20-%20Dhikr.mp3',
     arabic: 'ذكر الله',
     transliteration: 'Dhikr',
-    meaning: 'Remembrance of Allah',
+    meaning: 'Peaceful Remembrance of Allah',
   },
   astagfirullah: {
     url: 'https://archive.org/download/OmarEsa-AllahAndHisBeloved/03%20-%20Astagfirullah.mp3',
@@ -63,6 +58,12 @@ const DHIKR_AUDIO_TRACKS = {
     transliteration: 'SubhanAllah Walhamdulillah',
     meaning: 'Glory and Praise to Allah',
   },
+  yaRahman: {
+    url: 'https://archive.org/download/YaRasoolallahYaHabeeballah2/Ya%20Rahman.mp3',
+    arabic: 'يا رحمن',
+    transliteration: 'Ya Rahman',
+    meaning: 'O Most Merciful',
+  },
 };
 
 // Dhikr tracks for different meditation types
@@ -73,14 +74,15 @@ const MEDITATION_DHIKR = {
   sleep: ['subhanAllahWalhamdulillah', 'allah', 'yaAllah'],
 };
 
-// Local dhikr phrases for display
+// Local dhikr phrases for display - Soft, peaceful phrases for meditation
 const LOCAL_DHIKR_PHRASES = [
   { arabic: 'الله', transliteration: 'Allah', meaning: 'Allah' },
   { arabic: 'سبحان الله', transliteration: 'SubhanAllah', meaning: 'Glory to Allah' },
   { arabic: 'الحمد لله', transliteration: 'Alhamdulillah', meaning: 'All Praise to Allah' },
-  { arabic: 'الله أكبر', transliteration: 'Allahu Akbar', meaning: 'Allah is the Greatest' },
   { arabic: 'لا إله إلا الله', transliteration: 'La ilaha illallah', meaning: 'There is no god but Allah' },
   { arabic: 'يا الله', transliteration: 'Ya Allah', meaning: 'O Allah' },
+  { arabic: 'يا رحمن', transliteration: 'Ya Rahman', meaning: 'O Most Merciful' },
+  { arabic: 'أستغفر الله', transliteration: 'Astagfirullah', meaning: 'I seek forgiveness from Allah' },
 ];
 
 const MEDITATION_AUDIO = {
