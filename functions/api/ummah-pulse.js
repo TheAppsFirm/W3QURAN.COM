@@ -115,65 +115,71 @@ async function trackPresence(env, data) {
  * Track page visit (called when user visits the site)
  */
 async function trackVisitor(env, data) {
-  const { userId, userAgent, referrer, lat, lng } = data;
-  const timestamp = Date.now();
-  const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+  try {
+    const { userId, userAgent, referrer, lat, lng } = data;
+    const timestamp = Date.now();
+    const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
 
-  // Also track presence
-  await trackPresence(env, { userId, lat, lng, status: 'browsing', page: 'home' });
+    // Also track presence
+    await trackPresence(env, { userId, lat, lng, status: 'browsing', page: 'home' });
 
-  // Create visitor record
-  const visitor = {
-    odUserId: (userId || '').slice(-8) || 'anonymous',
-    timestamp,
-    userAgent: userAgent?.substring(0, 200) || 'unknown',
-    referrer: referrer?.substring(0, 200) || 'direct',
-    type: 'pageview',
-  };
+    // Create visitor record
+    const visitor = {
+      odUserId: (userId || '').slice(-8) || 'anonymous',
+      timestamp,
+      userAgent: userAgent?.substring(0, 200) || 'unknown',
+      referrer: referrer?.substring(0, 200) || 'direct',
+      type: 'pageview',
+    };
 
-  // Store visitor log (persists for 30 days)
-  const visitorKey = `visitor:${today}:${timestamp}:${(userId || '').slice(-8) || Math.random().toString(36).slice(2, 8)}`;
-  await env.UMMAH_KV.put(visitorKey, JSON.stringify(visitor), {
-    expirationTtl: 2592000, // 30 days
-  });
+    // Store visitor log (persists for 30 days)
+    const visitorKey = `visitor:${today}:${timestamp}:${(userId || '').slice(-8) || Math.random().toString(36).slice(2, 8)}`;
+    await env.UMMAH_KV.put(visitorKey, JSON.stringify(visitor), {
+      expirationTtl: 2592000, // 30 days
+    });
 
-  // Update daily visitor count
-  const dailyKey = `visitors:${today}`;
-  const dailyData = await env.UMMAH_KV.get(dailyKey, 'json') || { count: 0, unique: [] };
-  dailyData.count += 1;
-  if (userId && !dailyData.unique.includes(userId)) {
-    dailyData.unique.push(userId);
-    // Keep only last 1000 unique IDs to save space
-    if (dailyData.unique.length > 1000) {
-      dailyData.unique = dailyData.unique.slice(-1000);
+    // Update daily visitor count
+    const dailyKey = `visitors:${today}`;
+    const dailyData = await env.UMMAH_KV.get(dailyKey, 'json') || { count: 0, unique: [] };
+    dailyData.count += 1;
+    if (userId && !dailyData.unique.includes(userId)) {
+      dailyData.unique.push(userId);
+      // Keep only last 1000 unique IDs to save space
+      if (dailyData.unique.length > 1000) {
+        dailyData.unique = dailyData.unique.slice(-1000);
+      }
     }
-  }
-  await env.UMMAH_KV.put(dailyKey, JSON.stringify(dailyData), {
-    expirationTtl: 2592000, // 30 days
-  });
+    await env.UMMAH_KV.put(dailyKey, JSON.stringify(dailyData), {
+      expirationTtl: 2592000, // 30 days
+    });
 
-  // Update all-time visitor stats
-  const allTimeKey = 'stats:alltime';
-  const allTime = await env.UMMAH_KV.get(allTimeKey, 'json') || { totalVisits: 0, uniqueVisitors: 0 };
-  allTime.totalVisits += 1;
-  if (userId && !dailyData.unique.includes(userId)) {
-    allTime.uniqueVisitors += 1;
-  }
-  await env.UMMAH_KV.put(allTimeKey, JSON.stringify(allTime));
+    // Update all-time visitor stats
+    const allTimeKey = 'stats:alltime';
+    const allTime = await env.UMMAH_KV.get(allTimeKey, 'json') || { totalVisits: 0, uniqueVisitors: 0 };
+    allTime.totalVisits += 1;
+    if (userId && !dailyData.unique.includes(userId)) {
+      allTime.uniqueVisitors += 1;
+    }
+    await env.UMMAH_KV.put(allTimeKey, JSON.stringify(allTime));
 
-  return { success: true, visitor };
+    return { success: true, visitor };
+  } catch (error) {
+    console.error('[trackVisitor] Error:', error);
+    return { success: false, error: 'trackVisitor failed', details: error.message };
+  }
 }
 
 /**
  * Track reading activity
  */
 async function trackActivity(env, data) {
-  const { lat, lng, surahId, userId } = data;
-  const timestamp = Date.now();
-  const today = new Date().toISOString().split('T')[0];
-  const city = getCityFromCoords(lat, lng);
+  try {
+    const { lat, lng, surahId, userId } = data;
+    const timestamp = Date.now();
+    const today = new Date().toISOString().split('T')[0];
+    const city = getCityFromCoords(lat, lng);
 
-  if (!city) return { success: false };
+    if (!city) return { success: false, error: 'Could not determine city' };
 
   // Also update presence to 'reading' status
   await trackPresence(env, { userId, lat, lng, status: 'reading', surahId, page: `surah-${surahId}` });
@@ -226,13 +232,17 @@ async function trackActivity(env, data) {
   // Update daily reading stats
   const dailyReadKey = `readings:${today}`;
   const dailyRead = await env.UMMAH_KV.get(dailyReadKey, 'json') || { count: 0, surahs: {} };
-  dailyRead.count += 1;
-  dailyRead.surahs[surahId] = (dailyRead.surahs[surahId] || 0) + 1;
-  await env.UMMAH_KV.put(dailyReadKey, JSON.stringify(dailyRead), {
-    expirationTtl: 2592000,
-  });
+    dailyRead.count += 1;
+    dailyRead.surahs[surahId] = (dailyRead.surahs[surahId] || 0) + 1;
+    await env.UMMAH_KV.put(dailyReadKey, JSON.stringify(dailyRead), {
+      expirationTtl: 2592000,
+    });
 
-  return { success: true, activity };
+    return { success: true, activity };
+  } catch (error) {
+    console.error('[trackActivity] Error:', error);
+    return { success: false, error: 'trackActivity failed', details: error.message };
+  }
 }
 
 /**
