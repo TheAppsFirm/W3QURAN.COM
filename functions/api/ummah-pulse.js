@@ -75,7 +75,9 @@ async function trackPresence(env, data) {
   const { userId, lat, lng, status, surahId, page } = data;
   const timestamp = Date.now();
 
-  if (!userId) return { success: false, error: 'No userId' };
+  if (!userId) return { success: false, error: 'No userId provided' };
+
+  console.log('[trackPresence] userId:', userId, 'status:', status);
 
   const city = getCityFromCoords(lat || 21.4225, lng || 39.8262);
 
@@ -94,13 +96,19 @@ async function trackPresence(env, data) {
     lastSeen: timestamp,
   };
 
-  // Store presence with 45 second TTL (heartbeat every 30 seconds)
+  // Store presence with 60 second TTL (heartbeat every 30 seconds)
   const presenceKey = `presence:${userId}`;
-  await env.UMMAH_KV.put(presenceKey, JSON.stringify(presence), {
-    expirationTtl: 45,
-  });
+  try {
+    await env.UMMAH_KV.put(presenceKey, JSON.stringify(presence), {
+      expirationTtl: 60,
+    });
+    console.log('[trackPresence] Stored:', presenceKey);
+  } catch (kvError) {
+    console.error('[trackPresence] KV Error:', kvError);
+    return { success: false, error: 'KV storage failed', details: kvError.message };
+  }
 
-  return { success: true, presence };
+  return { success: true, presence, stored: presenceKey };
 }
 
 /**
@@ -238,6 +246,8 @@ async function getActiveReaders(env) {
 
   // Get all live presence data
   const presenceList = await env.UMMAH_KV.list({ prefix: 'presence:' });
+  console.log('[getActiveReaders] Presence keys found:', presenceList.keys.length);
+
   for (const key of presenceList.keys.slice(0, 100)) {
     const presence = await env.UMMAH_KV.get(key.name, 'json');
     if (presence) {
@@ -387,6 +397,7 @@ export async function onRequest(context) {
   try {
     if (request.method === 'POST') {
       const data = await request.json();
+      console.log('[POST] type:', data.type, 'userId:', data.userId?.slice(-8));
 
       // Handle different tracking types
       if (data.type === 'visit') {
