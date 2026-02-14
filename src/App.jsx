@@ -656,7 +656,7 @@ function QuranBubbleApp() {
           surahId = parseInt(surahMatch[1], 10);
         }
 
-        await fetch('/api/ummah-pulse', {
+        const response = await fetch('/api/ummah-pulse', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -669,8 +669,10 @@ function QuranBubbleApp() {
             page: path || '/',
           }),
         });
+        const result = await response.json();
+        console.log('[Heartbeat]', status, result);
       } catch (error) {
-        // Silently fail
+        console.log('[Heartbeat] Error:', error.message);
       }
     };
 

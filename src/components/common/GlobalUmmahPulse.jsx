@@ -368,6 +368,7 @@ const GlobalUmmahPulse = memo(function GlobalUmmahPulse({ isVisible, onClose }) 
       if (!response.ok) throw new Error('API error');
 
       const data = await response.json();
+      console.log('[Ummah Pulse] API Response:', data);
 
       if (data.success) {
         // Set cities (grouped by location)
