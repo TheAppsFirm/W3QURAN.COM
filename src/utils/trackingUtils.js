@@ -1,9 +1,83 @@
 /**
  * Tracking Utilities
  * Track user activity and reading progress
+ * Includes Google Analytics & Google Ads conversion tracking
  */
 
 const STORAGE_KEY = 'quran_activity_log';
+
+// ============================================
+// Google Analytics & Ads Tracking
+// ============================================
+
+/**
+ * Track a Google Ads conversion event
+ * @param {string} eventName - The conversion event name (e.g., 'ads_conversion_Contact_Us_1')
+ * @param {Object} params - Optional event parameters
+ */
+export function trackAdsConversion(eventName, params = {}) {
+  if (typeof window !== 'undefined' && window.gtag) {
+    window.gtag('event', eventName, params);
+  }
+}
+
+/**
+ * Track a custom Google Analytics event
+ * @param {string} eventName - Event name
+ * @param {Object} params - Event parameters
+ */
+export function trackEvent(eventName, params = {}) {
+  if (typeof window !== 'undefined' && window.gtag) {
+    window.gtag('event', eventName, params);
+  }
+}
+
+/**
+ * Helper for tracking conversions with callback (useful for links/navigation)
+ * @param {string} url - URL to navigate to after tracking
+ * @param {string} eventName - The conversion event name
+ * @param {Object} params - Optional event parameters
+ */
+export function gtagSendEvent(url, eventName = 'ads_conversion_Contact_Us_1', params = {}) {
+  const callback = function () {
+    if (typeof url === 'string') {
+      window.location = url;
+    }
+  };
+
+  if (typeof window !== 'undefined' && window.gtag) {
+    window.gtag('event', eventName, {
+      ...params,
+      event_callback: callback,
+    });
+  } else {
+    // Fallback if gtag not available
+    callback();
+  }
+  return false;
+}
+
+/**
+ * Track surah completion for analytics
+ * @param {number} surahId - Surah ID
+ * @param {string} surahName - Surah name
+ */
+export function trackSurahCompletion(surahId, surahName) {
+  trackEvent('surah_completed', {
+    surah_id: surahId,
+    surah_name: surahName,
+  });
+}
+
+/**
+ * Track feature usage
+ * @param {string} featureName - Name of the feature used
+ */
+export function trackFeatureUsage(featureName) {
+  trackEvent('feature_used', {
+    feature_name: featureName,
+  });
+}
 const WEEKLY_KEY = 'quran_weekly_activity';
 
 /**
@@ -240,4 +314,10 @@ export default {
   getUniqueSurahsRead,
   getTodayStats,
   getRecentActivity,
+  // Google Ads & Analytics
+  trackAdsConversion,
+  trackEvent,
+  gtagSendEvent,
+  trackSurahCompletion,
+  trackFeatureUsage,
 };

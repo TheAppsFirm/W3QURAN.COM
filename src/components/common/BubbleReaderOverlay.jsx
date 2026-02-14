@@ -26,7 +26,7 @@ import { PALETTES, SURAHS, fetchTafseer, getTafseersByLanguage, getDefaultTafsee
 import { useQuranAPI, useMultilingualWords, TRANSLATIONS, TAJWEED_RULES, POS_LABELS } from '../../hooks/useQuranAPI';
 import { speakText, getTranslationAudioSource, getTranslationAudioUrl, getAvailableTranslationAudio, TRANSLATION_RECITERS } from '../../hooks/useAudioPlayer';
 import { useLocalStorage } from '../../hooks';
-import { logReadingSession } from '../../utils/trackingUtils';
+import { logReadingSession, trackSurahCompletion, trackFeatureUsage } from '../../utils/trackingUtils';
 import { shareVerse } from '../../utils/shareUtils';
 
 // Simple HTML sanitizer to prevent XSS attacks in tafseer content
@@ -2550,6 +2550,9 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
     if (duration >= 1) {
       const surahsReadCount = parseInt(localStorage.getItem('w3quran_surahs_read_count') || '0', 10) + 1;
       localStorage.setItem('w3quran_surahs_read_count', surahsReadCount.toString());
+
+      // Track surah completion in Google Analytics
+      trackSurahCompletion(surah.id, surah.name);
 
       // Show mood prompt every 30 surahs
       if (surahsReadCount % 30 === 0) {
