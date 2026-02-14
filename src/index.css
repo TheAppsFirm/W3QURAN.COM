@@ -791,6 +791,72 @@ body {
   html {
     font-size: 14px;
   }
+
+  /* Smaller verse text on mobile */
+  .verse-arabic {
+    font-size: 1.5rem !important;
+    line-height: 2 !important;
+  }
+
+  /* Compact feature bubbles on mobile */
+  .feature-bubble {
+    padding: 8px !important;
+    border-radius: 16px !important;
+  }
+
+  /* Stack items vertically on mobile */
+  .flex-row-mobile-stack {
+    flex-direction: column;
+  }
+
+  /* Mobile grid adjustments */
+  .grid-mobile-1 {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Smaller icons on mobile */
+  .icon-mobile-sm {
+    width: 16px !important;
+    height: 16px !important;
+  }
+
+  /* Better modal close buttons */
+  .modal-close-btn {
+    position: fixed !important;
+    top: 10px !important;
+    right: 10px !important;
+    z-index: 99999999 !important;
+  }
+
+  /* Improve floating buttons positioning on mobile */
+  .floating-buttons {
+    right: 8px !important;
+    bottom: 100px !important;
+  }
+
+  /* Overflow scroll improvements */
+  .overflow-scroll-mobile {
+    -webkit-overflow-scrolling: touch;
+    overflow-scrolling: touch;
+  }
+}
+
+/* Extra small screen specific fixes */
+@media (max-width: 400px) {
+  /* Even smaller padding */
+  .p-mobile-compact {
+    padding: 4px !important;
+  }
+
+  /* Hide secondary text */
+  .hide-xs {
+    display: none !important;
+  }
+
+  /* Reduce gap on very small screens */
+  .gap-mobile-sm {
+    gap: 4px !important;
+  }
 }
 
 /* Prevent text selection on interactive elements */

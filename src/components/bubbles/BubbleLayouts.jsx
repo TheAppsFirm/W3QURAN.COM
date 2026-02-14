@@ -322,12 +322,17 @@ export const ClockLayout = memo(function ClockLayout({
     return [ring1, ring2, ring3, ring4];
   }, [surahs]);
 
-  const containerSize = 1200 * zoom;
+  // Responsive container size - smaller on mobile
+  const isMobileScreen = window.innerWidth < 768;
+  const baseSize = isMobileScreen ? Math.min(window.innerWidth * 2, 800) : 1200;
+  const containerSize = baseSize * zoom;
   const centerX = containerSize / 2;
   const centerY = containerSize / 2;
 
-  const ringRadii = [130, 240, 370, 510].map(r => r * zoom);
-  const bubbleSizes = [75, 65, 55, 48].map(s => s * zoom);
+  // Responsive ring radii and bubble sizes
+  const scaleFactor = isMobileScreen ? 0.65 : 1;
+  const ringRadii = [130, 240, 370, 510].map(r => r * zoom * scaleFactor);
+  const bubbleSizes = [75, 65, 55, 48].map(s => Math.max(s * zoom * scaleFactor, isMobileScreen ? 40 : 48));
 
   return (
     <div
@@ -412,13 +417,16 @@ export const GridLayout = memo(function GridLayout({
   contentZoom = 1,
   darkMode,
 }) {
+  // Responsive sizing
+  const isMobile = window.innerWidth < 640;
+  const isTablet = window.innerWidth < 1024;
   const columns = Math.ceil(Math.sqrt(surahs.length) * 1.2);
-  const bubbleSize = 80 * zoom;
-  const gap = 20 * zoom;
+  const bubbleSize = isMobile ? 65 * zoom : (isTablet ? 75 * zoom : 80 * zoom);
+  const gap = isMobile ? 12 * zoom : 20 * zoom;
 
   return (
     <div
-      className="flex flex-wrap flex-row-reverse justify-center gap-4 p-8"
+      className="flex flex-wrap flex-row-reverse justify-center gap-2 sm:gap-3 md:gap-4 p-4 sm:p-6 md:p-8"
       dir="rtl"
       style={{ maxWidth: (bubbleSize + gap) * columns + 100 }}
     >
@@ -547,7 +555,7 @@ export const JuzzGroupLayout = memo(function JuzzGroupLayout({
   ];
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-3 sm:p-4 md:p-6 space-y-4 sm:space-y-6">
       {Object.entries(juzzGroups).map(([juzz, surahList]) => {
         if (surahList.length === 0) return null;
 
@@ -590,9 +598,10 @@ export const JuzzGroupLayout = memo(function JuzzGroupLayout({
             </div>
 
             {/* Surahs Grid - Using StyledBubble */}
-            <div className="flex flex-wrap gap-4 ml-4">
+            <div className="flex flex-wrap gap-2 sm:gap-3 md:gap-4 ml-2 sm:ml-4">
               {surahList.map((surah, index) => {
-                const size = 70 * zoom;
+                const isMobile = window.innerWidth < 640;
+                const size = isMobile ? 55 * zoom : 70 * zoom;
 
                 return (
                   <div
@@ -657,7 +666,7 @@ export const AlphabetLayout = memo(function AlphabetLayout({
   };
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-3 sm:p-4 md:p-6 space-y-4 sm:space-y-6">
       {Object.entries(alphabetGroups).map(([letter, surahList]) => {
         if (surahList.length === 0) return null;
 
@@ -693,10 +702,11 @@ export const AlphabetLayout = memo(function AlphabetLayout({
             </div>
 
             {/* Surahs - RTL flow */}
-            <div className="flex flex-wrap gap-3 pr-4">
+            <div className="flex flex-wrap gap-2 sm:gap-3 pr-2 sm:pr-4">
               {surahList.map((surah, index) => {
                 const palette = PALETTES[(surah.id - 1) % 10];
-                const size = 70 * zoom;
+                const isMobileScreen = window.innerWidth < 640;
+                const size = isMobileScreen ? 55 * zoom : 70 * zoom;
 
                 return (
                   <div
@@ -758,7 +768,7 @@ export const RevelationLayout = memo(function RevelationLayout({
   const madaniSurahs = sortedSurahs.filter(s => s.type === 'Madani');
 
   return (
-    <div className="p-6 space-y-8">
+    <div className="p-3 sm:p-4 md:p-6 space-y-6 sm:space-y-8">
       {/* Makki Period */}
       <div>
         <div
@@ -781,10 +791,11 @@ export const RevelationLayout = memo(function RevelationLayout({
           </div>
         </div>
 
-        <div className="flex flex-wrap gap-3">
+        <div className="flex flex-wrap gap-2 sm:gap-3">
           {makkiSurahs.map((surah, index) => {
             const palette = PALETTES[(surah.id - 1) % 10];
-            const size = 60 * zoom;
+            const isMobileView = window.innerWidth < 640;
+            const size = isMobileView ? 50 * zoom : 60 * zoom;
 
             return (
               <div
@@ -851,10 +862,11 @@ export const RevelationLayout = memo(function RevelationLayout({
           </div>
         </div>
 
-        <div className="flex flex-wrap gap-3">
+        <div className="flex flex-wrap gap-2 sm:gap-3">
           {madaniSurahs.map((surah, index) => {
             const palette = PALETTES[(surah.id - 1) % 10];
-            const size = 60 * zoom;
+            const isMobileView = window.innerWidth < 640;
+            const size = isMobileView ? 50 * zoom : 60 * zoom;
 
             return (
               <div
@@ -915,8 +927,9 @@ export const BookLayout = memo(function BookLayout({
   const [flipDirection, setFlipDirection] = useState('next');
   const [hoveredSurah, setHoveredSurah] = useState(null);
 
-  // 8 surahs per page spread (4 per side)
-  const surahsPerPage = 8;
+  // Responsive: 4 surahs per page on mobile, 8 on desktop
+  const isMobileView = window.innerWidth < 640;
+  const surahsPerPage = isMobileView ? 4 : 8;
   const totalPages = Math.ceil(surahs.length / surahsPerPage);
 
   const currentSurahs = useMemo(() => {
@@ -1035,37 +1048,44 @@ export const BookLayout = memo(function BookLayout({
     );
   };
 
+  // Check if mobile
+  const isMobile = window.innerWidth < 640;
+
   // Page component
-  const BookPage = ({ pageSurahs, isLeft }) => (
+  const BookPage = ({ pageSurahs, isLeft, isSinglePage = false }) => (
     <div
       style={{
-        width: Math.min(340, window.innerWidth * 0.4) * zoom,
-        minHeight: 520 * zoom,
-        padding: '20px 16px',
+        width: isMobile
+          ? Math.min(320, window.innerWidth - 32)
+          : Math.min(340, window.innerWidth * 0.4) * zoom,
+        minHeight: isMobile ? 'auto' : 520 * zoom,
+        padding: isMobile ? '16px 12px' : '20px 16px',
         background: darkMode
           ? `linear-gradient(${isLeft ? '135deg' : '225deg'}, #1a1a2e 0%, #252540 100%)`
           : `linear-gradient(${isLeft ? '135deg' : '225deg'}, #FFF9F0 0%, #FFF5E6 100%)`,
-        borderRadius: isLeft ? '8px 0 0 8px' : '0 8px 8px 0',
-        boxShadow: isLeft
-          ? 'inset -15px 0 30px rgba(0,0,0,0.1), -5px 5px 20px rgba(0,0,0,0.15)'
-          : 'inset 15px 0 30px rgba(0,0,0,0.1), 5px 5px 20px rgba(0,0,0,0.15)',
+        borderRadius: isSinglePage ? '8px' : (isLeft ? '8px 0 0 8px' : '0 8px 8px 0'),
+        boxShadow: isSinglePage
+          ? '0 5px 30px rgba(0,0,0,0.2)'
+          : isLeft
+            ? 'inset -15px 0 30px rgba(0,0,0,0.1), -5px 5px 20px rgba(0,0,0,0.15)'
+            : 'inset 15px 0 30px rgba(0,0,0,0.1), 5px 5px 20px rgba(0,0,0,0.15)',
         border: `1px solid ${darkMode ? 'rgba(139,92,246,0.2)' : 'rgba(180,140,70,0.3)'}`,
-        borderRight: isLeft ? 'none' : undefined,
-        borderLeft: !isLeft ? 'none' : undefined,
+        borderRight: isSinglePage ? undefined : (isLeft ? 'none' : undefined),
+        borderLeft: isSinglePage ? undefined : (!isLeft ? 'none' : undefined),
       }}
     >
       {/* Page Header */}
       <div
-        className="text-center mb-4 pb-2"
+        className="text-center mb-3 sm:mb-4 pb-2"
         style={{ borderBottom: `1px solid ${darkMode ? 'rgba(255,215,0,0.2)' : 'rgba(180,140,70,0.2)'}` }}
       >
-        <span style={{ color: darkMode ? 'rgba(255,215,0,0.6)' : 'rgba(139,90,43,0.6)', fontSize: 12 }}>
+        <span style={{ color: darkMode ? 'rgba(255,215,0,0.6)' : 'rgba(139,90,43,0.6)', fontSize: isMobile ? 11 : 12 }}>
           {isLeft ? 'بِسْمِ اللَّهِ' : `Page ${currentPage + 1}`}
         </span>
       </div>
 
-      {/* Surah Grid - 2 columns, 2 rows */}
-      <div className="grid grid-cols-2 gap-3">
+      {/* Surah Grid - 2 columns on mobile, 2x2 on desktop */}
+      <div className={`grid ${isMobile ? 'grid-cols-2 gap-2' : 'grid-cols-2 gap-3'}`}>
         {pageSurahs.map((surah) => (
           <SurahCard key={surah.id} surah={surah} />
         ))}
@@ -1074,11 +1094,11 @@ export const BookLayout = memo(function BookLayout({
   );
 
   return (
-    <div className="relative min-h-[80vh] w-full flex flex-col items-center pt-8 pb-16 px-4">
+    <div className="relative min-h-[70vh] sm:min-h-[80vh] w-full flex flex-col items-center pt-4 sm:pt-8 pb-16 px-2 sm:px-4">
       {/* Header */}
-      <div className="text-center mb-8">
+      <div className="text-center mb-4 sm:mb-8">
         <div
-          className="text-4xl mb-2"
+          className="text-2xl sm:text-4xl mb-1 sm:mb-2"
           style={{
             fontFamily: "'Scheherazade New', serif",
             color: darkMode ? '#FFD700' : '#8B4513',
@@ -1086,66 +1106,74 @@ export const BookLayout = memo(function BookLayout({
         >
           القرآن الكريم
         </div>
-        <div style={{ color: darkMode ? 'rgba(255,215,0,0.5)' : 'rgba(139,90,43,0.5)', fontSize: 12, letterSpacing: '0.2em' }}>
+        <div style={{ color: darkMode ? 'rgba(255,215,0,0.5)' : 'rgba(139,90,43,0.5)', fontSize: isMobile ? 10 : 12, letterSpacing: '0.2em' }}>
           THE NOBLE QURAN
         </div>
       </div>
 
-      {/* Book Container */}
-      <div style={{ perspective: '1500px' }}>
-        <div
-          className="relative flex"
-          style={{
-            transformStyle: 'preserve-3d',
-            transform: 'rotateX(5deg)',
-          }}
-        >
-          {/* Flipping Page Overlay */}
-          {isFlipping && (
+      {/* Book Container - Single page on mobile, dual pages on desktop */}
+      {isMobile ? (
+        // Mobile: Single page view
+        <div className="w-full flex justify-center">
+          <BookPage pageSurahs={currentSurahs.slice(0, 4)} isLeft={true} isSinglePage={true} />
+        </div>
+      ) : (
+        // Desktop: Dual page view
+        <div style={{ perspective: '1500px' }}>
+          <div
+            className="relative flex"
+            style={{
+              transformStyle: 'preserve-3d',
+              transform: 'rotateX(5deg)',
+            }}
+          >
+            {/* Flipping Page Overlay */}
+            {isFlipping && (
+              <div
+                className="absolute z-50"
+                style={{
+                  width: Math.min(340, window.innerWidth * 0.4) * zoom,
+                  height: 520 * zoom,
+                  left: flipDirection === 'next' ? '50%' : 0,
+                  marginLeft: flipDirection === 'next' ? 12 : 0,
+                  background: darkMode
+                    ? 'linear-gradient(90deg, #1a1a2e, #252540)'
+                    : 'linear-gradient(90deg, #FFF9F0, #FFF5E6)',
+                  borderRadius: 8,
+                  transformOrigin: flipDirection === 'next' ? 'left center' : 'right center',
+                  transformStyle: 'preserve-3d',
+                  animation: `${flipDirection === 'next' ? 'bookPageTurnNext' : 'bookPageTurnPrev'} 0.8s ease-in-out forwards`,
+                  boxShadow: '0 10px 40px rgba(0,0,0,0.3)',
+                }}
+              />
+            )}
+
+            {/* Left Page */}
+            <BookPage pageSurahs={leftPageSurahs} isLeft={true} />
+
+            {/* Spine */}
             <div
-              className="absolute z-50"
               style={{
-                width: Math.min(340, window.innerWidth * 0.4) * zoom,
-                height: 520 * zoom,
-                left: flipDirection === 'next' ? '50%' : 0,
-                marginLeft: flipDirection === 'next' ? 12 : 0,
+                width: 24,
                 background: darkMode
-                  ? 'linear-gradient(90deg, #1a1a2e, #252540)'
-                  : 'linear-gradient(90deg, #FFF9F0, #FFF5E6)',
-                borderRadius: 8,
-                transformOrigin: flipDirection === 'next' ? 'left center' : 'right center',
-                transformStyle: 'preserve-3d',
-                animation: `${flipDirection === 'next' ? 'bookPageTurnNext' : 'bookPageTurnPrev'} 0.8s ease-in-out forwards`,
-                boxShadow: '0 10px 40px rgba(0,0,0,0.3)',
+                  ? 'linear-gradient(90deg, #3d3d60, #4a4a70, #3d3d60)'
+                  : 'linear-gradient(90deg, #8B5A2B, #A0724A, #8B5A2B)',
+                boxShadow: 'inset 0 0 15px rgba(0,0,0,0.4)',
               }}
             />
-          )}
 
-          {/* Left Page */}
-          <BookPage pageSurahs={leftPageSurahs} isLeft={true} />
-
-          {/* Spine */}
-          <div
-            style={{
-              width: 24,
-              background: darkMode
-                ? 'linear-gradient(90deg, #3d3d60, #4a4a70, #3d3d60)'
-                : 'linear-gradient(90deg, #8B5A2B, #A0724A, #8B5A2B)',
-              boxShadow: 'inset 0 0 15px rgba(0,0,0,0.4)',
-            }}
-          />
-
-          {/* Right Page */}
-          <BookPage pageSurahs={rightPageSurahs} isLeft={false} />
+            {/* Right Page */}
+            <BookPage pageSurahs={rightPageSurahs} isLeft={false} />
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Navigation */}
-      <div className="flex items-center gap-6 mt-10">
+      <div className="flex items-center gap-3 sm:gap-6 mt-6 sm:mt-10">
         <button
           onClick={goToPrevPage}
           disabled={currentPage === 0 || isFlipping}
-          className="flex items-center gap-2 px-5 py-2.5 rounded-full transition-all"
+          className="flex items-center gap-1 sm:gap-2 px-3 sm:px-5 py-2 sm:py-2.5 rounded-full transition-all text-sm sm:text-base"
           style={{
             opacity: currentPage === 0 ? 0.4 : 1,
             background: darkMode ? 'rgba(139,92,246,0.2)' : 'rgba(180,140,70,0.2)',
@@ -1153,18 +1181,18 @@ export const BookLayout = memo(function BookLayout({
             color: darkMode ? '#A78BFA' : '#8B5A2B',
           }}
         >
-          <Icons.ChevronLeft className="w-5 h-5" />
-          <span>Previous</span>
+          <Icons.ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
+          <span className="hidden sm:inline">Previous</span>
         </button>
 
-        <div style={{ color: darkMode ? 'rgba(255,215,0,0.6)' : 'rgba(139,90,43,0.6)' }}>
+        <div className="text-sm sm:text-base" style={{ color: darkMode ? 'rgba(255,215,0,0.6)' : 'rgba(139,90,43,0.6)' }}>
           {currentPage + 1} / {totalPages}
         </div>
 
         <button
           onClick={goToNextPage}
           disabled={currentPage >= totalPages - 1 || isFlipping}
-          className="flex items-center gap-2 px-5 py-2.5 rounded-full transition-all"
+          className="flex items-center gap-1 sm:gap-2 px-3 sm:px-5 py-2 sm:py-2.5 rounded-full transition-all text-sm sm:text-base"
           style={{
             opacity: currentPage >= totalPages - 1 ? 0.4 : 1,
             background: darkMode ? 'rgba(139,92,246,0.2)' : 'rgba(180,140,70,0.2)',
@@ -1172,8 +1200,8 @@ export const BookLayout = memo(function BookLayout({
             color: darkMode ? '#A78BFA' : '#8B5A2B',
           }}
         >
-          <span>Next</span>
-          <Icons.ChevronRight className="w-5 h-5" />
+          <span className="hidden sm:inline">Next</span>
+          <Icons.ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
         </button>
       </div>
 

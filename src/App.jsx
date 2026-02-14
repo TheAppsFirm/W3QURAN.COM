@@ -9,7 +9,7 @@
  * - Dependency Inversion: Depends on abstractions (context, hooks)
  */
 
-import { Suspense, useState, useEffect, useMemo, useCallback } from 'react';
+import React, { Suspense, useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { ErrorBoundary, LoadingSpinner, BubbleModal, BubbleReaderOverlay, ProgressDashboard, OfflineManager, HifzMode, SearchPanel, DonateModal, WordSearchMap, EmotionalTracker, ScholarVideoSync, PropheticMap, QuranCompanionAI, GlobalUmmahPulse, VerseWeatherSync, SoundHealingRoom, QuranicBabyNames } from './components/common';
 import { Header, FloatingMenu, StatsBar } from './components/layout';
 import { SurahBubble, LayoutSelector, ClockLayout, GridLayout, JuzzGroupLayout, AlphabetLayout, RevelationLayout, BookLayout } from './components/bubbles';
@@ -161,6 +161,69 @@ const AmbientParticles = ({ darkMode }) => (
 );
 
 /**
+ * URL Route mapping
+ */
+const ROUTE_CONFIG = {
+  // Main views
+  '/': { view: 'surahs' },
+  '/listen': { view: 'listen' },
+  '/donate': { view: 'donate' },
+  '/settings': { view: 'settings' },
+  '/names-of-allah': { view: 'names' },
+  '/quiz': { view: 'quiz' },
+  '/prayer-times': { view: 'prayer' },
+  '/statistics': { view: 'stats' },
+  '/daily-verse': { view: 'daily' },
+  '/privacy': { view: 'privacy' },
+  '/terms': { view: 'terms' },
+  // Modals/Features
+  '/search': { modal: 'search' },
+  '/progress': { modal: 'progress' },
+  '/offline': { modal: 'offline' },
+  '/memorize': { modal: 'hifz' },
+  '/mind-map': { modal: 'mindMap' },
+  '/mood': { modal: 'mood' },
+  '/video-sync': { modal: 'videoSync' },
+  '/prophetic-map': { modal: 'propheticMap' },
+  '/ai-guide': { modal: 'companionAI' },
+  '/ummah-pulse': { modal: 'globalPulse' },
+  '/weather-verse': { modal: 'weatherSync' },
+  '/sound-healing': { modal: 'soundHealing' },
+  '/baby-names': { modal: 'babyNames' },
+};
+
+// Reverse mapping for state to URL
+const VIEW_TO_ROUTE = {
+  surahs: '/',
+  listen: '/listen',
+  donate: '/donate',
+  settings: '/settings',
+  names: '/names-of-allah',
+  quiz: '/quiz',
+  prayer: '/prayer-times',
+  stats: '/statistics',
+  daily: '/daily-verse',
+  privacy: '/privacy',
+  terms: '/terms',
+};
+
+const MODAL_TO_ROUTE = {
+  search: '/search',
+  progress: '/progress',
+  offline: '/offline',
+  hifz: '/memorize',
+  mindMap: '/mind-map',
+  mood: '/mood',
+  videoSync: '/video-sync',
+  propheticMap: '/prophetic-map',
+  companionAI: '/ai-guide',
+  globalPulse: '/ummah-pulse',
+  weatherSync: '/weather-verse',
+  soundHealing: '/sound-healing',
+  babyNames: '/baby-names',
+};
+
+/**
  * Main App Component
  */
 function QuranBubbleApp() {
@@ -187,6 +250,7 @@ function QuranBubbleApp() {
   const [readingProgress, setReadingProgress] = useLocalStorage('readingProgress', {});
   const [overlayReaderSurah, setOverlayReaderSurah] = useState(null);
   const [initialVerse, setInitialVerse] = useState(1); // For navigating to specific verse
+  const [initialPanel, setInitialPanel] = useState(null); // For opening specific panel (tafseer, etc.)
   // Default layout is spiral
   const [surahLayout, setSurahLayout] = useLocalStorage('surahLayout', 'spiral');
   const [showProgressDashboard, setShowProgressDashboard] = useState(false);
@@ -203,6 +267,430 @@ function QuranBubbleApp() {
   const [showWeatherSync, setShowWeatherSync] = useState(false);
   const [showSoundHealing, setShowSoundHealing] = useState(false);
   const [showBabyNames, setShowBabyNames] = useState(false);
+
+  // Track if we're handling a popstate event (browser back/forward)
+  const isPopstateRef = useRef(false);
+
+  // Helper to update URL without triggering navigation
+  const updateURL = useCallback((path, replace = false) => {
+    if (isPopstateRef.current) return; // Don't update URL during popstate handling
+    if (window.location.pathname !== path) {
+      if (replace) {
+        window.history.replaceState({ path }, '', path);
+      } else {
+        window.history.pushState({ path }, '', path);
+      }
+    }
+  }, []);
+
+  // Close all modals helper
+  const closeAllModals = useCallback(() => {
+    setShowSearchPanel(false);
+    setShowProgressDashboard(false);
+    setShowOfflineManager(false);
+    setShowHifzMode(false);
+    setShowDonateModal(false);
+    setShowMindMap(false);
+    setShowMoodTracker(false);
+    setShowVideoSync(false);
+    setShowPropheticMap(false);
+    setShowCompanionAI(false);
+    setShowGlobalPulse(false);
+    setShowWeatherSync(false);
+    setShowSoundHealing(false);
+    setShowBabyNames(false);
+    setOverlayReaderSurah(null);
+    setInitialVerse(1);
+    setInitialPanel(null);
+  }, []);
+
+  // Parse URL and set initial state
+  useEffect(() => {
+    const parseURL = () => {
+      const path = window.location.pathname;
+      const searchParams = new URLSearchParams(window.location.search);
+      const panel = searchParams.get('panel'); // e.g., tafseer, settings
+
+      // Check for surah route: /surah/:id or /surah/:id/:ayah
+      const surahMatch = path.match(/^\/surah\/(\d+)(?:\/(\d+))?$/);
+      if (surahMatch) {
+        const surahId = parseInt(surahMatch[1], 10);
+        const ayahNum = surahMatch[2] ? parseInt(surahMatch[2], 10) : 1;
+        const surah = SURAHS.find(s => s.id === surahId);
+        if (surah) {
+          setOverlayReaderSurah(surah);
+          setInitialVerse(ayahNum);
+          setInitialPanel(panel); // Pass panel to reader
+          setView('surahs');
+          return;
+        }
+      }
+
+      // Check route config
+      const config = ROUTE_CONFIG[path];
+      if (config) {
+        if (config.view) {
+          setView(config.view);
+        } else if (config.modal) {
+          setView('surahs'); // Modals open over surahs view
+          switch (config.modal) {
+            case 'search': setShowSearchPanel(true); break;
+            case 'progress': setShowProgressDashboard(true); break;
+            case 'offline': setShowOfflineManager(true); break;
+            case 'hifz': setShowHifzMode(true); break;
+            case 'mindMap': setShowMindMap(true); break;
+            case 'mood': setShowMoodTracker(true); break;
+            case 'videoSync': setShowVideoSync(true); break;
+            case 'propheticMap': setShowPropheticMap(true); break;
+            case 'companionAI': setShowCompanionAI(true); break;
+            case 'globalPulse': setShowGlobalPulse(true); break;
+            case 'weatherSync': setShowWeatherSync(true); break;
+            case 'soundHealing': setShowSoundHealing(true); break;
+            case 'babyNames': setShowBabyNames(true); break;
+          }
+        }
+      } else {
+        // Default to home
+        setView('surahs');
+      }
+    };
+
+    parseURL();
+
+    // Handle browser back/forward
+    const handlePopstate = () => {
+      isPopstateRef.current = true;
+      closeAllModals();
+      parseURL();
+      // Reset flag after a short delay
+      setTimeout(() => {
+        isPopstateRef.current = false;
+      }, 100);
+    };
+
+    window.addEventListener('popstate', handlePopstate);
+    return () => window.removeEventListener('popstate', handlePopstate);
+  }, [closeAllModals]);
+
+  // Update URL when view changes
+  useEffect(() => {
+    const route = VIEW_TO_ROUTE[view];
+    if (route && !overlayReaderSurah) {
+      updateURL(route);
+    }
+  }, [view, overlayReaderSurah, updateURL]);
+
+  // Update URL when surah reader opens
+  useEffect(() => {
+    if (overlayReaderSurah) {
+      const path = initialVerse > 1
+        ? `/surah/${overlayReaderSurah.id}/${initialVerse}`
+        : `/surah/${overlayReaderSurah.id}`;
+      updateURL(path);
+    }
+  }, [overlayReaderSurah, initialVerse, updateURL]);
+
+  // Update URL when modals open
+  useEffect(() => {
+    if (showSearchPanel) updateURL(MODAL_TO_ROUTE.search);
+  }, [showSearchPanel, updateURL]);
+
+  useEffect(() => {
+    if (showProgressDashboard) updateURL(MODAL_TO_ROUTE.progress);
+  }, [showProgressDashboard, updateURL]);
+
+  useEffect(() => {
+    if (showOfflineManager) updateURL(MODAL_TO_ROUTE.offline);
+  }, [showOfflineManager, updateURL]);
+
+  useEffect(() => {
+    if (showHifzMode) updateURL(MODAL_TO_ROUTE.hifz);
+  }, [showHifzMode, updateURL]);
+
+  useEffect(() => {
+    if (showMindMap) updateURL(MODAL_TO_ROUTE.mindMap);
+  }, [showMindMap, updateURL]);
+
+  useEffect(() => {
+    if (showMoodTracker) updateURL(MODAL_TO_ROUTE.mood);
+  }, [showMoodTracker, updateURL]);
+
+  useEffect(() => {
+    if (showVideoSync) updateURL(MODAL_TO_ROUTE.videoSync);
+  }, [showVideoSync, updateURL]);
+
+  useEffect(() => {
+    if (showPropheticMap) updateURL(MODAL_TO_ROUTE.propheticMap);
+  }, [showPropheticMap, updateURL]);
+
+  useEffect(() => {
+    if (showCompanionAI) updateURL(MODAL_TO_ROUTE.companionAI);
+  }, [showCompanionAI, updateURL]);
+
+  useEffect(() => {
+    if (showGlobalPulse) updateURL(MODAL_TO_ROUTE.globalPulse);
+  }, [showGlobalPulse, updateURL]);
+
+  useEffect(() => {
+    if (showWeatherSync) updateURL(MODAL_TO_ROUTE.weatherSync);
+  }, [showWeatherSync, updateURL]);
+
+  useEffect(() => {
+    if (showSoundHealing) updateURL(MODAL_TO_ROUTE.soundHealing);
+  }, [showSoundHealing, updateURL]);
+
+  useEffect(() => {
+    if (showBabyNames) updateURL(MODAL_TO_ROUTE.babyNames);
+  }, [showBabyNames, updateURL]);
+
+  // Update page title based on current state
+  useEffect(() => {
+    let title = 'w3Quran - The Holy Quran';
+
+    if (overlayReaderSurah) {
+      title = `${overlayReaderSurah.name} (${overlayReaderSurah.arabic}) - w3Quran`;
+    } else if (showSearchPanel) {
+      title = 'Search - w3Quran';
+    } else if (showProgressDashboard) {
+      title = 'Progress - w3Quran';
+    } else if (showHifzMode) {
+      title = 'Memorization (Hifz) - w3Quran';
+    } else if (showMindMap) {
+      title = 'Word Search Map - w3Quran';
+    } else if (showMoodTracker) {
+      title = 'Mood Tracker - w3Quran';
+    } else if (showVideoSync) {
+      title = 'Scholar Videos - w3Quran';
+    } else if (showPropheticMap) {
+      title = 'Prophetic World Map - w3Quran';
+    } else if (showCompanionAI) {
+      title = 'AI Companion - w3Quran';
+    } else if (showGlobalPulse) {
+      title = 'Global Ummah Pulse - w3Quran';
+    } else if (showWeatherSync) {
+      title = 'Weather Verses - w3Quran';
+    } else if (showSoundHealing) {
+      title = 'Sound Healing - w3Quran';
+    } else if (showBabyNames) {
+      title = 'Quranic Baby Names - w3Quran';
+    } else {
+      switch (view) {
+        case 'listen': title = 'Listen - w3Quran'; break;
+        case 'donate': title = 'Donate - w3Quran'; break;
+        case 'settings': title = 'Settings - w3Quran'; break;
+        case 'names': title = '99 Names of Allah - w3Quran'; break;
+        case 'quiz': title = 'Quiz - w3Quran'; break;
+        case 'prayer': title = 'Prayer Times - w3Quran'; break;
+        case 'stats': title = 'Statistics - w3Quran'; break;
+        case 'daily': title = 'Daily Verse - w3Quran'; break;
+        case 'privacy': title = 'Privacy Policy - w3Quran'; break;
+        case 'terms': title = 'Terms of Service - w3Quran'; break;
+        default: title = 'w3Quran - The Holy Quran';
+      }
+    }
+
+    document.title = title;
+  }, [
+    view, overlayReaderSurah, showSearchPanel, showProgressDashboard,
+    showHifzMode, showMindMap, showMoodTracker, showVideoSync,
+    showPropheticMap, showCompanionAI, showGlobalPulse, showWeatherSync,
+    showSoundHealing, showBabyNames
+  ]);
+
+  // Navigate back helper - closes modals and navigates to previous route
+  const navigateBack = useCallback(() => {
+    const anyModalOpen = showSearchPanel || showProgressDashboard || showOfflineManager ||
+      showHifzMode || showMindMap || showMoodTracker || showVideoSync ||
+      showPropheticMap || showCompanionAI || showGlobalPulse || showWeatherSync ||
+      showSoundHealing || showBabyNames || overlayReaderSurah;
+
+    if (anyModalOpen) {
+      closeAllModals();
+      updateURL('/');
+    }
+  }, [
+    showSearchPanel, showProgressDashboard, showOfflineManager, showHifzMode,
+    showMindMap, showMoodTracker, showVideoSync, showPropheticMap, showCompanionAI,
+    showGlobalPulse, showWeatherSync, showSoundHealing, showBabyNames, overlayReaderSurah,
+    closeAllModals, updateURL
+  ]);
+
+  // Modal close handlers that also update URL
+  const handleCloseSearch = useCallback(() => {
+    setShowSearchPanel(false);
+    updateURL('/');
+  }, [updateURL]);
+
+  const handleCloseProgress = useCallback(() => {
+    setShowProgressDashboard(false);
+    updateURL('/');
+  }, [updateURL]);
+
+  const handleCloseOffline = useCallback(() => {
+    setShowOfflineManager(false);
+    updateURL('/');
+  }, [updateURL]);
+
+  const handleCloseHifz = useCallback(() => {
+    setShowHifzMode(false);
+    updateURL('/');
+  }, [updateURL]);
+
+  const handleCloseMindMap = useCallback(() => {
+    setShowMindMap(false);
+    updateURL('/');
+  }, [updateURL]);
+
+  const handleCloseMood = useCallback(() => {
+    setShowMoodTracker(false);
+    updateURL('/');
+  }, [updateURL]);
+
+  const handleCloseVideoSync = useCallback(() => {
+    setShowVideoSync(false);
+    updateURL('/');
+  }, [updateURL]);
+
+  const handleClosePropheticMap = useCallback(() => {
+    setShowPropheticMap(false);
+    updateURL('/');
+  }, [updateURL]);
+
+  const handleCloseCompanionAI = useCallback(() => {
+    setShowCompanionAI(false);
+    updateURL('/');
+  }, [updateURL]);
+
+  const handleCloseGlobalPulse = useCallback(() => {
+    setShowGlobalPulse(false);
+    updateURL('/');
+  }, [updateURL]);
+
+  const handleCloseWeatherSync = useCallback(() => {
+    setShowWeatherSync(false);
+    updateURL('/');
+  }, [updateURL]);
+
+  const handleCloseSoundHealing = useCallback(() => {
+    setShowSoundHealing(false);
+    updateURL('/');
+  }, [updateURL]);
+
+  const handleCloseBabyNames = useCallback(() => {
+    setShowBabyNames(false);
+    updateURL('/');
+  }, [updateURL]);
+
+  const handleCloseDonate = useCallback(() => {
+    setShowDonateModal(false);
+  }, []);
+
+  // Track visitor on page load and send heartbeat every 30 seconds
+  useEffect(() => {
+    let heartbeatInterval = null;
+    let userLocation = { lat: null, lng: null };
+
+    // Get user ID
+    let userId = localStorage.getItem('w3quran_user_id');
+    if (!userId) {
+      userId = 'user_' + Math.random().toString(36).slice(2) + Date.now().toString(36);
+      localStorage.setItem('w3quran_user_id', userId);
+    }
+
+    // Try to get user's location
+    const getLocation = () => {
+      if ('geolocation' in navigator) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            userLocation = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude,
+            };
+          },
+          () => {
+            // Use default if permission denied
+            userLocation = { lat: null, lng: null };
+          },
+          { timeout: 5000, maximumAge: 300000 }
+        );
+      }
+    };
+
+    // Track initial visit
+    const trackVisitor = async () => {
+      // Skip API calls in development mode (API only exists in production)
+      if (import.meta.env.DEV) return;
+
+      try {
+        await fetch('/api/ummah-pulse', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            type: 'visit',
+            userId,
+            userAgent: navigator.userAgent,
+            referrer: document.referrer || 'direct',
+            lat: userLocation.lat,
+            lng: userLocation.lng,
+          }),
+        });
+      } catch (error) {
+        // Silently fail
+      }
+    };
+
+    // Send heartbeat to show real-time presence
+    const sendHeartbeat = async () => {
+      // Skip API calls in development mode (API only exists in production)
+      if (import.meta.env.DEV) return;
+
+      try {
+        // Determine status from current path
+        const path = window.location.pathname;
+        let status = 'browsing';
+        let surahId = null;
+
+        const surahMatch = path.match(/^\/surah\/(\d+)/);
+        if (surahMatch) {
+          status = 'reading';
+          surahId = parseInt(surahMatch[1], 10);
+        }
+
+        await fetch('/api/ummah-pulse', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            type: 'heartbeat',
+            userId,
+            lat: userLocation.lat,
+            lng: userLocation.lng,
+            status,
+            surahId,
+            page: path || '/',
+          }),
+        });
+      } catch (error) {
+        // Silently fail
+      }
+    };
+
+    // Initialize
+    getLocation();
+    setTimeout(() => {
+      trackVisitor();
+      sendHeartbeat();
+    }, 1000); // Wait for location
+
+    // Send heartbeat every 30 seconds
+    heartbeatInterval = setInterval(sendHeartbeat, 30000);
+
+    // Cleanup
+    return () => {
+      if (heartbeatInterval) {
+        clearInterval(heartbeatInterval);
+      }
+    };
+  }, []);
 
   // Memoized filtered surahs
   const filtered = useMemo(() => {
@@ -254,29 +742,35 @@ function QuranBubbleApp() {
   const handleReadSurah = useCallback((surah) => {
     // Use overlay reader instead of full page navigation
     setOverlayReaderSurah(surah);
+    setInitialVerse(1);
     setSelected(null);
+    updateURL(`/surah/${surah.id}`);
     setPoints((p) => p + 10);
     // Update reading progress
     setReadingProgress((prev) => ({
       ...prev,
       [surah.id]: { lastRead: Date.now(), ayahsRead: (prev[surah.id]?.ayahsRead || 0) + 1 },
     }));
-  }, [setPoints, setReadingProgress]);
+  }, [setPoints, setReadingProgress, updateURL]);
 
   // Handle closing the reader overlay
   const handleCloseOverlayReader = useCallback(() => {
     setOverlayReaderSurah(null);
-  }, []);
+    setInitialVerse(1);
+    updateURL('/');
+  }, [updateURL]);
 
   // Handle changing surah (from next/prev buttons in reader)
   const handleChangeSurah = useCallback((newSurah) => {
     setOverlayReaderSurah(newSurah);
+    setInitialVerse(1);
+    updateURL(`/surah/${newSurah.id}`);
     // Update reading progress
     setReadingProgress((prev) => ({
       ...prev,
       [newSurah.id]: { lastRead: Date.now(), ayahsRead: (prev[newSurah.id]?.ayahsRead || 0) + 1 },
     }));
-  }, [setReadingProgress]);
+  }, [setReadingProgress, updateURL]);
 
   const handleUpgrade = useCallback(() => setLevel('pro'), [setLevel]);
 
@@ -346,10 +840,10 @@ function QuranBubbleApp() {
                 <div
                   className="relative"
                   style={{
-                    width: Math.max(1400 * zoom, 1400),
-                    height: Math.max(1400 * zoom, 1400),
+                    width: Math.min(Math.max(1400 * zoom, 1400), window.innerWidth < 768 ? window.innerWidth * 2.5 : Math.max(1400 * zoom, 1400)),
+                    height: Math.min(Math.max(1400 * zoom, 1400), window.innerWidth < 768 ? window.innerWidth * 2.5 : Math.max(1400 * zoom, 1400)),
                     margin: '0 auto',
-                    marginTop: '2rem',
+                    marginTop: window.innerWidth < 768 ? '1rem' : '2rem',
                   }}
                 >
                   {/* Beautiful Quran Word in Clock Shape - Center */}
@@ -618,22 +1112,27 @@ function QuranBubbleApp() {
       {overlayReaderSurah && (
         <BubbleReaderOverlay
           surah={overlayReaderSurah}
-          onClose={() => {
-            handleCloseOverlayReader();
-            setInitialVerse(1); // Reset initial verse on close
-          }}
+          onClose={handleCloseOverlayReader}
           onChangeSurah={(surah) => {
             handleChangeSurah(surah);
             setInitialVerse(1); // Reset when changing surah
+            setInitialPanel(null); // Reset panel when changing surah
           }}
           darkMode={darkMode}
           initialVerse={initialVerse}
+          initialPanel={initialPanel}
+          onPanelChange={(panel) => {
+            // Update URL when panel changes
+            const basePath = `/surah/${overlayReaderSurah.id}${initialVerse > 1 ? `/${initialVerse}` : ''}`;
+            const url = panel ? `${basePath}?panel=${panel}` : basePath;
+            updateURL(url);
+          }}
         />
       )}
 
       {/* Floating Bubble Buttons - Feature Access - Vertical Stack on Right Side */}
       {view === 'surahs' && (
-        <div className="fixed right-3 sm:right-4 z-40 flex flex-col gap-3" style={{ bottom: '100px' }}>
+        <div className="fixed right-2 sm:right-4 z-40 flex flex-col gap-2 sm:gap-3 bottom-24 sm:bottom-28 md:bottom-[100px]">
           {/* Search Button */}
           <button
             onClick={() => setShowSearchPanel(true)}
@@ -758,7 +1257,7 @@ function QuranBubbleApp() {
       {/* Progress Dashboard */}
       {showProgressDashboard && (
         <ProgressDashboard
-          onClose={() => setShowProgressDashboard(false)}
+          onClose={handleCloseProgress}
           onNavigateToSurah={(surah) => {
             setShowProgressDashboard(false);
             setOverlayReaderSurah(surah);
@@ -769,24 +1268,25 @@ function QuranBubbleApp() {
       {/* Offline Manager */}
       {showOfflineManager && (
         <OfflineManager
-          onClose={() => setShowOfflineManager(false)}
+          onClose={handleCloseOffline}
         />
       )}
 
       {/* Hifz Mode */}
       {showHifzMode && (
         <HifzMode
-          onClose={() => setShowHifzMode(false)}
+          onClose={handleCloseHifz}
         />
       )}
 
       {/* Search Panel */}
       {showSearchPanel && (
         <SearchPanel
-          onClose={() => setShowSearchPanel(false)}
+          onClose={handleCloseSearch}
           onSelectResult={(surah, ayahNumber) => {
             setShowSearchPanel(false);
             setOverlayReaderSurah(surah);
+            setInitialVerse(ayahNumber || 1);
           }}
         />
       )}
@@ -794,18 +1294,19 @@ function QuranBubbleApp() {
       {/* Donate Modal */}
       <DonateModal
         isOpen={showDonateModal}
-        onClose={() => setShowDonateModal(false)}
+        onClose={handleCloseDonate}
       />
 
       {/* Word Search Mind Map */}
       <WordSearchMap
         isVisible={showMindMap}
-        onClose={() => setShowMindMap(false)}
+        onClose={handleCloseMindMap}
         onNavigateToVerse={(surahId, ayahNumber) => {
           const surah = SURAHS.find(s => s.id === surahId);
           if (surah) {
             setShowMindMap(false);
             setOverlayReaderSurah(surah);
+            setInitialVerse(ayahNumber || 1);
           }
         }}
       />
@@ -813,7 +1314,7 @@ function QuranBubbleApp() {
       {/* Mood Tracker */}
       <EmotionalTracker
         isVisible={showMoodTracker}
-        onClose={() => setShowMoodTracker(false)}
+        onClose={handleCloseMood}
         onNavigateToSurah={(surahId) => {
           const surah = SURAHS.find(s => s.id === surahId);
           if (surah) {
@@ -826,7 +1327,7 @@ function QuranBubbleApp() {
       {/* Video Sync - Standalone mode */}
       <ScholarVideoSync
         isVisible={showVideoSync}
-        onClose={() => setShowVideoSync(false)}
+        onClose={handleCloseVideoSync}
         onNavigateToSurah={(surahId) => {
           const surah = SURAHS.find(s => s.id === surahId);
           if (surah) {
@@ -839,7 +1340,7 @@ function QuranBubbleApp() {
       {/* Prophetic World Map */}
       <PropheticMap
         isVisible={showPropheticMap}
-        onClose={() => setShowPropheticMap(false)}
+        onClose={handleClosePropheticMap}
         onNavigateToVerse={(surahId, ayahNumber) => {
           const surah = SURAHS.find(s => s.id === surahId);
           if (surah) {
@@ -853,7 +1354,7 @@ function QuranBubbleApp() {
       {/* AI Companion Guide */}
       <QuranCompanionAI
         isVisible={showCompanionAI}
-        onClose={() => setShowCompanionAI(false)}
+        onClose={handleCloseCompanionAI}
         onNavigateToVerse={(surahId, ayahNumber) => {
           const surah = SURAHS.find(s => s.id === surahId);
           if (surah) {
@@ -867,13 +1368,13 @@ function QuranBubbleApp() {
       {/* Global Ummah Pulse */}
       <GlobalUmmahPulse
         isVisible={showGlobalPulse}
-        onClose={() => setShowGlobalPulse(false)}
+        onClose={handleCloseGlobalPulse}
       />
 
       {/* Verse Weather Sync */}
       <VerseWeatherSync
         isVisible={showWeatherSync}
-        onClose={() => setShowWeatherSync(false)}
+        onClose={handleCloseWeatherSync}
         onNavigateToVerse={(surahId, ayahNumber) => {
           const surah = SURAHS.find(s => s.id === surahId);
           if (surah) {
@@ -887,13 +1388,13 @@ function QuranBubbleApp() {
       {/* Sound Healing Room */}
       <SoundHealingRoom
         isVisible={showSoundHealing}
-        onClose={() => setShowSoundHealing(false)}
+        onClose={handleCloseSoundHealing}
       />
 
       {/* Quranic Baby Names */}
       <QuranicBabyNames
         isVisible={showBabyNames}
-        onClose={() => setShowBabyNames(false)}
+        onClose={handleCloseBabyNames}
       />
 
       {/* Animation Styles */}

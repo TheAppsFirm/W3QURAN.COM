@@ -27,7 +27,21 @@ export {
 export { useQuranVerses, getAllSurahsInfo, getVerse } from './useQuranVerses';
 
 // Audio player hook
-export { useAudioPlayer, getAudioUrl, RECITERS } from './useAudioPlayer';
+export {
+  useAudioPlayer,
+  getAudioUrl,
+  RECITERS,
+  // Translation audio
+  useTranslationAudioPlayer,
+  getTranslationAudioUrl,
+  getTranslationAudioSource,
+  getAvailableTranslationAudio,
+  TRANSLATION_RECITERS,
+  TRANSLATION_TO_AUDIO_MAP,
+  // TTS
+  useTranslationAudio,
+  speakText,
+} from './useAudioPlayer';
 
 // Quran Cloud API hook (Tajweed, Word-by-Word, Translations)
 export {

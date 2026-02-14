@@ -215,7 +215,7 @@ const BubbleModal = memo(function BubbleModal({
             />
           ))}
 
-          {/* Close Button - Inside top area */}
+          {/* Close Button - Inside top area with spacing */}
           <button
             ref={closeButtonRef}
             onClick={(e) => {
@@ -224,8 +224,8 @@ const BubbleModal = memo(function BubbleModal({
             }}
             className="absolute w-8 h-8 rounded-full bg-white/30 backdrop-blur-sm flex items-center justify-center hover:bg-white/50 hover:scale-110 transition-all z-20 text-white"
             style={{
-              top: '15%',
-              right: '18%',
+              top: '14%',
+              right: '14%',
             }}
             aria-label="Close"
           >
@@ -236,8 +236,8 @@ const BubbleModal = memo(function BubbleModal({
           <div
             className="absolute w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold text-white"
             style={{
-              top: '15%',
-              left: '18%',
+              top: '14%',
+              left: '14%',
               background: 'rgba(255,255,255,0.25)',
               backdropFilter: 'blur(10px)',
             }}
@@ -250,7 +250,7 @@ const BubbleModal = memo(function BubbleModal({
             className="absolute flex flex-col items-center justify-center text-white text-center"
             style={{
               // Keep content in the center 70% of the bubble to avoid edges
-              top: '18%',
+              top: '20%',
               left: '15%',
               right: '15%',
               bottom: '15%',

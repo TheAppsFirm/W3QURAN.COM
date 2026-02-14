@@ -16,12 +16,16 @@ const BubbleMenuItem = ({ item, active, onClick, delay = 0, darkMode }) => {
     return null;
   }
 
+  // Check if mobile
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 640;
+  const bubbleSize = isMobile ? 44 : 52;
+
   return (
     <button
       onClick={onClick}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className="relative flex flex-col items-center gap-1 transition-all duration-300"
+      className="relative flex flex-col items-center gap-0.5 sm:gap-1 transition-all duration-300"
       style={{
         animation: `bubblePopIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) ${delay}ms both`,
       }}
@@ -32,8 +36,8 @@ const BubbleMenuItem = ({ item, active, onClick, delay = 0, darkMode }) => {
       <div
         className="relative transition-all duration-300"
         style={{
-          width: 52,
-          height: 52,
+          width: bubbleSize,
+          height: bubbleSize,
           transform: `scale(${active || isHovered ? 1.15 : 1})`,
         }}
       >
@@ -131,7 +135,7 @@ const BubbleMenuItem = ({ item, active, onClick, delay = 0, darkMode }) => {
 
       {/* Label */}
       <span
-        className="text-[10px] font-semibold whitespace-nowrap transition-all duration-300"
+        className="text-[9px] sm:text-[10px] font-semibold whitespace-nowrap transition-all duration-300 max-w-[50px] sm:max-w-none truncate"
         style={{
           color: active ? item.gradient[0] : darkMode ? '#94a3b8' : '#64748b',
           textShadow: active ? `0 0 10px ${item.gradient[0]}50` : 'none',
@@ -212,8 +216,8 @@ function FloatingMenu({ view, setView, darkMode, onDonate, onMindMap, onMood, on
       {/* More Menu Popup - Bubble style grid */}
       {showMore && (
         <div
-          className="fixed left-1/2 -translate-x-1/2 z-[55]"
-          style={{ bottom: '100px' }}
+          className="fixed left-1/2 -translate-x-1/2 z-[55] w-[95vw] sm:w-auto max-w-[400px]"
+          style={{ bottom: '90px' }}
         >
           <div
             className="relative p-4 sm:p-5 rounded-3xl shadow-2xl backdrop-blur-xl border overflow-hidden"
@@ -241,12 +245,12 @@ function FloatingMenu({ view, setView, darkMode, onDonate, onMindMap, onMood, on
 
             {/* Special features row - Mind Map, Mood, Video Sync (filtered by mode) */}
             {moreItems.filter(i => i.isSpecial).length > 0 && (
-            <div className="relative mb-4 pb-4 border-b border-white/10">
-              <p className="text-[10px] font-semibold uppercase tracking-wider mb-3 text-center"
+            <div className="relative mb-3 sm:mb-4 pb-3 sm:pb-4 border-b border-white/10">
+              <p className="text-[9px] sm:text-[10px] font-semibold uppercase tracking-wider mb-2 sm:mb-3 text-center"
                 style={{ color: darkMode ? '#94a3b8' : '#64748b' }}>
                 {specialFeaturesLabel}
               </p>
-              <div className="flex justify-center gap-4 sm:gap-6">
+              <div className="flex justify-center gap-2 sm:gap-4 flex-wrap">
                 {moreItems.filter(i => i.isSpecial).map((item, idx) => (
                   <BubbleMenuItem
                     key={item.id}
@@ -262,7 +266,7 @@ function FloatingMenu({ view, setView, darkMode, onDonate, onMindMap, onMood, on
             )}
 
             {/* Regular features grid */}
-            <div className="relative grid grid-cols-4 sm:grid-cols-4 gap-3 sm:gap-4">
+            <div className="relative grid grid-cols-3 sm:grid-cols-4 gap-2 sm:gap-4">
               {moreItems.filter(i => !i.isSpecial).map((item, idx) => (
                 <BubbleMenuItem
                   key={item.id}

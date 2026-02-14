@@ -137,9 +137,9 @@ const Header = memo(function Header({ filters, setFilters, showAnalytics, setSho
             )}
           </div>
 
-          {/* Filter Pills */}
+          {/* Filter Pills - Hidden on mobile, shown on tablet+ */}
           {filterConfigs.map((f, idx) => (
-            <div key={f.id} className="relative" onClick={(e) => e.stopPropagation()}>
+            <div key={f.id} className="relative hidden md:block" onClick={(e) => e.stopPropagation()}>
               <button
                 ref={(el) => buttonRefs.current[f.id] = el}
                 onClick={() => setOpen(open === f.id ? null : f.id)}
@@ -166,7 +166,7 @@ const Header = memo(function Header({ filters, setFilters, showAnalytics, setSho
           {/* Topics Button */}
           <button
             onClick={() => setShowTopics(!showTopics)}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-white font-medium transition-all duration-300 border ${
+            className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-2xl text-white font-medium transition-all duration-300 border ${
               filters.topic || showTopics
                 ? 'bg-gradient-to-r from-amber-500/80 to-orange-500/80 border-amber-400/50 shadow-lg shadow-amber-500/30'
                 : 'bg-white/10 hover:bg-white/20 border-white/20 hover:border-white/40'
@@ -174,7 +174,7 @@ const Header = memo(function Header({ filters, setFilters, showAnalytics, setSho
             style={{ backdropFilter: 'blur(10px)' }}
           >
             <Icons.Tag className="w-4 h-4" />
-            <span className="text-sm">Topics</span>
+            <span className="text-xs sm:text-sm hidden xs:inline">Topics</span>
             {filters.topic && (
               <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
             )}
@@ -183,7 +183,7 @@ const Header = memo(function Header({ filters, setFilters, showAnalytics, setSho
           {/* Analytics Button */}
           <button
             onClick={() => setShowAnalytics(!showAnalytics)}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-white font-medium transition-all duration-300 border ${
+            className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-2xl text-white font-medium transition-all duration-300 border ${
               showAnalytics
                 ? 'bg-gradient-to-r from-emerald-500/80 to-teal-500/80 border-emerald-400/50 shadow-lg shadow-emerald-500/30'
                 : 'bg-white/10 hover:bg-white/20 border-white/20 hover:border-white/40'
@@ -191,7 +191,7 @@ const Header = memo(function Header({ filters, setFilters, showAnalytics, setSho
             style={{ backdropFilter: 'blur(10px)' }}
           >
             <Icons.BarChart className="w-4 h-4" />
-            <span className="text-sm hidden sm:inline">Analytics</span>
+            <span className="text-xs sm:text-sm hidden sm:inline">Analytics</span>
           </button>
 
           {/* Clear Filters - Only show when filters active */}
