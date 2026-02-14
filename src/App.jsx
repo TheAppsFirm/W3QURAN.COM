@@ -669,10 +669,14 @@ function QuranBubbleApp() {
             page: path || '/',
           }),
         });
-        const result = await response.json();
-        console.log('[Heartbeat]', status, result);
+        // Only parse JSON if response is valid JSON
+        const contentType = response.headers.get('content-type');
+        if (contentType && contentType.includes('application/json')) {
+          const result = await response.json();
+          console.log('[Heartbeat]', status, result);
+        }
       } catch (error) {
-        console.log('[Heartbeat] Error:', error.message);
+        // Silently fail - don't break the app
       }
     };
 
