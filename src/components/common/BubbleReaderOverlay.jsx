@@ -401,7 +401,7 @@ const TafseerFloatingBubble = memo(function TafseerFloatingBubble({
         <div className="flex items-center justify-end gap-1">
           <div className="flex items-center gap-1 bg-white/10 rounded-full px-2 py-1">
             <button
-              onClick={() => setTextZoom(Math.max(0.8, textZoom - 0.1))}
+              onClick={() => setTextZoom(Math.round(Math.max(0.8, textZoom - 0.1) * 10) / 10)}
               className="w-6 h-6 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center text-white transition-all"
               title="Decrease text size"
             >
@@ -409,7 +409,7 @@ const TafseerFloatingBubble = memo(function TafseerFloatingBubble({
             </button>
             <span className="text-[10px] text-white/70 w-8 text-center">{Math.round(textZoom * 100)}%</span>
             <button
-              onClick={() => setTextZoom(Math.min(1.4, textZoom + 0.1))}
+              onClick={() => setTextZoom(Math.round(Math.min(1.4, textZoom + 0.1) * 10) / 10)}
               className="w-6 h-6 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center text-white transition-all"
               title="Increase text size"
             >
@@ -1458,6 +1458,7 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
   const [selectedWordData, setSelectedWordData] = useState(null);
   const [wordAudioError, setWordAudioError] = useState(null);
   const [wordAudioPlaying, setWordAudioPlaying] = useState(false);
+  const wordAudioRef = useRef(null); // Ref to track and stop previous word audio
   const [showArtGenerator, setShowArtGenerator] = useState(false);
   const [showEmotionalTracker, setShowEmotionalTracker] = useState(false);
   const [showMoodEntry, setShowMoodEntry] = useState(false);
@@ -1625,72 +1626,44 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
   // TTS Audio ref
   const ttsAudioRef = useRef(null);
 
-  // Google Cloud TTS API configuration
-  const GOOGLE_TTS_API_KEY = 'REMOVED_API_KEY';
-  // Google Cloud TTS voice configuration - all male Chirp3-HD voices (most natural)
-  const GOOGLE_TTS_VOICES = {
-    ur: { languageCode: 'ur-IN', name: 'ur-IN-Chirp3-HD-Orus' },  // Male Urdu HD voice
-    hi: { languageCode: 'hi-IN', name: 'hi-IN-Chirp3-HD-Orus' },  // Male Hindi HD voice
-    en: { languageCode: 'en-US', name: 'en-US-Chirp3-HD-Charon' },  // Male English HD voice
-    ar: { languageCode: 'ar-XA', name: 'ar-XA-Chirp3-HD-Charon' },  // Male Arabic HD voice
-  };
-
-  // Google Cloud TTS helper function
+  // TTS helper function - uses server-side proxy for security
+  // API key is stored server-side in Cloudflare environment variables
   const playGoogleCloudTTS = useCallback(async (text, langCode = 'ur') => {
-    const voiceConfig = GOOGLE_TTS_VOICES[langCode] || GOOGLE_TTS_VOICES.ur;
-    console.log('[GoogleTTS] Calling API with voice:', voiceConfig, 'text length:', text?.length);
+    console.log('[TTS] Calling proxy with lang:', langCode, 'text length:', text?.length);
 
     try {
-      // Use proxy in dev mode to avoid CORS, direct API in production
-      const apiUrl = import.meta.env.DEV
-        ? `/api/google-tts/v1/text:synthesize?key=${GOOGLE_TTS_API_KEY}`
-        : `https://texttospeech.googleapis.com/v1/text:synthesize?key=${GOOGLE_TTS_API_KEY}`;
+      // Use server-side proxy - API key is stored securely on server
+      const response = await fetch(`/api/tts?text=${encodeURIComponent(text)}&lang=${langCode}`);
 
-      const response = await fetch(
-        apiUrl,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            input: { text },
-            voice: voiceConfig,
-            audioConfig: { audioEncoding: 'MP3', speakingRate: 0.9 }
-          })
-        }
-      );
-
-      console.log('[GoogleTTS] API response status:', response.status, response.statusText);
+      console.log('[TTS] Proxy response status:', response.status);
 
       if (!response.ok) {
-        const errorText = await response.text();
-        console.error('[GoogleTTS] API error:', response.status, errorText);
+        // Check if we should fallback to browser TTS
+        const contentType = response.headers.get('content-type');
+        if (contentType?.includes('application/json')) {
+          const errorData = await response.json();
+          if (errorData.useBrowserTTS) {
+            console.log('[TTS] Server suggests browser TTS fallback');
+            return null;
+          }
+        }
+        console.error('[TTS] Proxy error:', response.status);
         return null;
       }
 
-      const responseText = await response.text();
-      console.log('[GoogleTTS] Raw response length:', responseText.length);
-
-      if (!responseText) {
-        console.error('[GoogleTTS] Empty response');
+      // Response is audio/mpeg - convert to data URL
+      const audioBlob = await response.blob();
+      if (audioBlob.size < 100) {
+        console.error('[TTS] Audio too small, likely error');
         return null;
       }
 
-      const data = JSON.parse(responseText);
-      console.log('[GoogleTTS] Response data keys:', Object.keys(data));
-
-      if (!data.audioContent) {
-        console.error('[GoogleTTS] No audio content in response');
-        return null;
-      }
-
-      // Use data URL directly (more reliable than blob)
-      console.log('[GoogleTTS] Got audio content, length:', data.audioContent.length);
-      const audioUrl = `data:audio/mpeg;base64,${data.audioContent}`;
-      console.log('[GoogleTTS] Created data URL, length:', audioUrl.length);
+      const audioUrl = URL.createObjectURL(audioBlob);
+      console.log('[TTS] Got audio, size:', audioBlob.size);
 
       return audioUrl;
     } catch (error) {
-      console.error('[GoogleTTS] Error:', error);
+      console.error('[TTS] Error:', error);
       return null;
     }
   }, []);
@@ -2084,19 +2057,36 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
 
   // Scroll to initial verse when verses load (for navigation from timeline/map)
   useEffect(() => {
-    if (initialVerse > 1 && verses.length > 0 && versesContainerRef.current) {
+    // Bounds check: ensure initialVerse is valid
+    const targetVerse = Math.min(Math.max(1, initialVerse), verses.length || 1);
+
+    if (targetVerse > 1 && verses.length > 0 && versesContainerRef.current) {
       // Set current ayah to the initial verse
-      setCurrentAyah(initialVerse);
+      setCurrentAyah(targetVerse);
+
       // Scroll to the verse after a short delay to ensure DOM is ready
-      setTimeout(() => {
-        const ayahElement = versesContainerRef.current?.querySelector(`[data-ayah="${initialVerse}"]`);
+      const scrollTimer = setTimeout(() => {
+        const ayahElement = versesContainerRef.current?.querySelector(`[data-ayah="${targetVerse}"]`);
         if (ayahElement) {
           ayahElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
           // Highlight the verse briefly
           ayahElement.classList.add('ring-2', 'ring-amber-400');
-          setTimeout(() => ayahElement.classList.remove('ring-2', 'ring-amber-400'), 2000);
         }
       }, 300);
+
+      // Remove highlight after 2 seconds
+      const highlightTimer = setTimeout(() => {
+        const ayahElement = versesContainerRef.current?.querySelector(`[data-ayah="${targetVerse}"]`);
+        if (ayahElement) {
+          ayahElement.classList.remove('ring-2', 'ring-amber-400');
+        }
+      }, 2300);
+
+      // Cleanup timers on unmount
+      return () => {
+        clearTimeout(scrollTimer);
+        clearTimeout(highlightTimer);
+      };
     }
   }, [initialVerse, verses.length]);
 
@@ -2505,7 +2495,7 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
     document.addEventListener('keydown', handleKeyDown);
     document.body.style.overflow = 'hidden';
     return () => { clearTimeout(timer); document.removeEventListener('keydown', handleKeyDown); document.body.style.overflow = ''; };
-  }, [currentAyah, totalVerses, selectedWordData, leftFeature, showTafseer]);
+  }, [currentAyah, totalVerses, selectedWordData, leftFeature, showTafseer, handleClose]);
 
   // Handle initial panel from URL
   useEffect(() => {
@@ -2542,6 +2532,12 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
   }, [showTafseer, leftFeature, showSettings, showEmotionalTracker, showConnectionMap, showScholarSync, onPanelChange]);
 
   const handleClose = useCallback(() => {
+    // Guard against undefined surah
+    if (!surah?.id) {
+      onClose();
+      return;
+    }
+
     const duration = Math.round((Date.now() - startTime.current) / 60000);
     logReadingSession(surah.id, verses.length > 0 ? 1 : 0, duration);
     if (audioRef.current) { audioRef.current.pause(); audioRef.current.src = ''; }
@@ -3299,10 +3295,19 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
                                 <button
                                   onClick={(e) => {
                                     e.stopPropagation();
-                                    if (!selectedWordData.audioUrl || wordAudioPlaying) return;
+                                    if (!selectedWordData.audioUrl) return;
+
+                                    // Stop any previous word audio
+                                    if (wordAudioRef.current) {
+                                      wordAudioRef.current.pause();
+                                      wordAudioRef.current.src = '';
+                                      wordAudioRef.current = null;
+                                    }
+
                                     setWordAudioError(null);
                                     setWordAudioPlaying(true);
                                     const audio = new Audio(selectedWordData.audioUrl);
+                                    wordAudioRef.current = audio; // Store ref
 
                                     // Set timeout for slow loading
                                     const timeout = setTimeout(() => {
@@ -3313,17 +3318,20 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
                                     audio.onended = () => {
                                       setWordAudioPlaying(false);
                                       setWordAudioError(null);
+                                      wordAudioRef.current = null;
                                     };
                                     audio.onerror = () => {
                                       clearTimeout(timeout);
                                       setWordAudioPlaying(false);
                                       setWordAudioError('Failed to load audio');
+                                      wordAudioRef.current = null;
                                       setTimeout(() => setWordAudioError(null), 3000);
                                     };
                                     audio.play().catch(() => {
                                       clearTimeout(timeout);
                                       setWordAudioPlaying(false);
                                       setWordAudioError('Playback failed');
+                                      wordAudioRef.current = null;
                                       setTimeout(() => setWordAudioError(null), 3000);
                                     });
                                   }}

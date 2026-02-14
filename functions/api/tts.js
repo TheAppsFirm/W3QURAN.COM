@@ -1,11 +1,19 @@
 /**
  * Cloudflare Pages Function - TTS Proxy
- * Multiple TTS sources with fallback
+ * Supports Google Cloud TTS (high quality) and Google Translate TTS (fallback)
  */
 
-// Language code mapping for different TTS providers
+// Google Cloud TTS voices - Chirp3-HD (highest quality male voices)
+const GOOGLE_CLOUD_VOICES = {
+  ur: { languageCode: 'ur-IN', name: 'ur-IN-Chirp3-HD-Orus' },
+  hi: { languageCode: 'hi-IN', name: 'hi-IN-Chirp3-HD-Orus' },
+  en: { languageCode: 'en-US', name: 'en-US-Chirp3-HD-Charon' },
+  ar: { languageCode: 'ar-XA', name: 'ar-XA-Chirp3-HD-Charon' },
+};
+
+// Language code mapping for fallback TTS providers
 const LANG_MAPPING = {
-  'ur': 'ur-PK',  // Urdu
+  'ur': 'ur-PK',
   'en': 'en-US',
   'hi': 'hi-IN',
   'ar': 'ar-SA',
@@ -17,7 +25,7 @@ const LANG_MAPPING = {
 };
 
 export async function onRequest(context) {
-  const { request } = context;
+  const { request, env } = context;
 
   // Handle CORS preflight
   if (request.method === 'OPTIONS') {
@@ -48,14 +56,47 @@ export async function onRequest(context) {
       });
     }
 
-    // Truncate text if too long (Google has limits)
-    const truncatedText = text.length > 200 ? text.substring(0, 200) : text;
+    // Truncate text if too long (Google Cloud TTS limit is ~5000 chars, but we keep it reasonable)
+    const truncatedText = text.length > 500 ? text.substring(0, 500) : text;
 
     // Try multiple TTS sources
     let audioData = null;
     let error = null;
 
-    // Source 1: Google Translate TTS (with tw-ob client)
+    // Source 1: Google Cloud TTS (highest quality) - requires API key in env
+    const apiKey = env.GOOGLE_TTS_API_KEY;
+    if (apiKey && GOOGLE_CLOUD_VOICES[lang]) {
+      try {
+        const voiceConfig = GOOGLE_CLOUD_VOICES[lang];
+        const response = await fetch(`https://texttospeech.googleapis.com/v1/text:synthesize?key=${apiKey}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            input: { text: truncatedText },
+            voice: voiceConfig,
+            audioConfig: { audioEncoding: 'MP3', speakingRate: 0.95 },
+          }),
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          if (data.audioContent) {
+            // Convert base64 to ArrayBuffer
+            const binaryString = atob(data.audioContent);
+            const bytes = new Uint8Array(binaryString.length);
+            for (let i = 0; i < binaryString.length; i++) {
+              bytes[i] = binaryString.charCodeAt(i);
+            }
+            audioData = bytes.buffer;
+          }
+        }
+      } catch (e) {
+        console.error('[Google Cloud TTS] Error:', e.message);
+        error = e;
+      }
+    }
+
+    // Source 2: Google Translate TTS (with tw-ob client) - free fallback
     try {
       const ttsUrl1 = `https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=${lang}&q=${encodeURIComponent(truncatedText)}`;
       const response1 = await fetch(ttsUrl1, {
@@ -75,7 +116,7 @@ export async function onRequest(context) {
       error = e;
     }
 
-    // Source 2: Google Translate TTS (with gtx client)
+    // Source 3: Google Translate TTS (with gtx client)
     if (!audioData) {
       try {
         const ttsUrl2 = `https://translate.google.com/translate_tts?ie=UTF-8&client=gtx&tl=${lang}&q=${encodeURIComponent(truncatedText)}`;
@@ -96,7 +137,7 @@ export async function onRequest(context) {
       }
     }
 
-    // Source 3: VoiceRSS free tier (as final fallback for common languages)
+    // Source 4: VoiceRSS free tier (as final fallback for common languages)
     if (!audioData && ['en', 'ur', 'hi', 'ar'].includes(lang)) {
       try {
         // VoiceRSS has a free tier with limited requests
