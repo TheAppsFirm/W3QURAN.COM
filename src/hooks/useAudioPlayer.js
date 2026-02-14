@@ -29,6 +29,233 @@ export const RECITERS = {
   'ar.minshawi': { name: 'Mohamed Siddiq Al-Minshawi', country: 'Egypt' },
 };
 
+// ============================================
+// Translation Audio Sources (Urdu, etc.)
+// ============================================
+
+// Translation audio CDN sources
+// Using EveryAyah.com which has complete coverage (all 114 surahs)
+const TRANSLATION_AUDIO_SOURCES = {
+  // === URDU ===
+  'ur.khan': {
+    type: 'everyayah', // Uses SSSAAA.mp3 format (surah-ayah)
+    baseUrl: 'https://everyayah.com/data/translations/urdu_shamshad_ali_khan_46kbps',
+  },
+  'ur.farhat': {
+    type: 'everyayah',
+    baseUrl: 'https://everyayah.com/data/translations/urdu_farhat_hashmi',
+  },
+  // Note: ur.kanzuliman uses Google Cloud TTS (no pre-recorded audio)
+  // === ENGLISH ===
+  'en.walk': {
+    type: 'everyayah',
+    baseUrl: 'https://everyayah.com/data/English/Sahih_Intnl_Ibrahim_Walk_192kbps',
+  },
+  // === PERSIAN (FARSI) ===
+  'fa.hedayatfar': {
+    type: 'everyayah',
+    baseUrl: 'https://everyayah.com/data/translations/Fooladvand_Hedayatfar_40Kbps',
+  },
+  'fa.kabiri': {
+    type: 'everyayah',
+    baseUrl: 'https://everyayah.com/data/translations/Makarem_Kabiri_16Kbps',
+  },
+  // === AZERBAIJANI ===
+  'az.balayev': {
+    type: 'everyayah',
+    baseUrl: 'https://everyayah.com/data/translations/azerbaijani/balayev',
+  },
+  // === BOSNIAN ===
+  'bs.korkut': {
+    type: 'everyayah',
+    baseUrl: 'https://everyayah.com/data/translations/besim_korkut_ajet_po_ajet',
+  },
+};
+
+// Translation audio reciters/narrators
+export const TRANSLATION_RECITERS = {
+  // === URDU ===
+  'ur.khan': {
+    name: 'Shamshad Ali Khan',
+    nameNative: 'شمشاد علی خان',
+    language: 'Urdu',
+    languageNative: 'اردو',
+    translation: 'Fateh Muhammad Jalandhry',
+    translationNative: 'فتح محمد جالندھری',
+    translationShort: 'جالندھری',
+    country: 'Pakistan',
+    style: 'sentence', // Full sentence translation
+    styleLabel: 'جملہ', // Urdu label for "Sentence"
+    matchesTranslations: ['ur.jalandhry'], // Only matches Jalandhry text
+  },
+  'ur.farhat': {
+    name: 'Dr. Farhat Hashmi',
+    nameNative: 'ڈاکٹر فرحت ہاشمی',
+    language: 'Urdu',
+    languageNative: 'اردو',
+    translation: 'Word-by-Word (Lafzi)',
+    translationNative: 'لفظی ترجمہ',
+    translationShort: 'لفظی',
+    country: 'Pakistan',
+    style: 'word-by-word', // Word-by-word style - matches any translation in WBW mode
+    styleLabel: 'لفظی', // Urdu label for "Word-by-word"
+    matchesTranslations: [], // Word-by-word matches display mode, not translation text
+  },
+  'ur.kanzuliman': {
+    name: 'Google Cloud TTS',
+    nameNative: 'گوگل کلاؤڈ ٹی ٹی ایس',
+    language: 'Urdu',
+    languageNative: 'اردو',
+    translation: 'Kanz ul Iman',
+    translationNative: 'کنز الایمان',
+    translationShort: 'کنزالایمان',
+    country: 'Pakistan',
+    style: 'sentence',
+    styleLabel: 'جملہ',
+    matchesTranslations: ['ur.kanzuliman'], // Matches Kanz ul Iman translation
+    source: 'tts', // Uses Google Cloud TTS (Chirp3-HD male voice)
+  },
+  // === ENGLISH ===
+  'en.walk': {
+    name: 'Ibrahim Walk',
+    nameNative: 'Ibrahim Walk',
+    language: 'English',
+    languageNative: 'English',
+    translation: 'Sahih International',
+    translationNative: 'Sahih International',
+    translationShort: 'Sahih Intl',
+    country: 'USA',
+    style: 'sentence',
+    styleLabel: 'Sentence',
+    matchesTranslations: ['en.sahih'], // Only matches Sahih International text
+  },
+  // === PERSIAN (FARSI) ===
+  'fa.hedayatfar': {
+    name: 'Hedayatfar',
+    nameNative: 'هدایت فر',
+    language: 'Persian',
+    languageNative: 'فارسی',
+    translation: 'Fooladvand',
+    translationNative: 'فولادوند',
+    translationShort: 'فولادوند',
+    country: 'Iran',
+    style: 'sentence',
+    styleLabel: 'جمله',
+    matchesTranslations: ['fa.fooladvand'],
+  },
+  'fa.kabiri': {
+    name: 'Kabiri',
+    nameNative: 'کبیری',
+    language: 'Persian',
+    languageNative: 'فارسی',
+    translation: 'Makarem',
+    translationNative: 'مکارم',
+    translationShort: 'مکارم',
+    country: 'Iran',
+    style: 'sentence',
+    styleLabel: 'جمله',
+    matchesTranslations: ['fa.makarem'],
+  },
+  // === AZERBAIJANI ===
+  'az.balayev': {
+    name: 'Balayev',
+    nameNative: 'Balayev',
+    language: 'Azerbaijani',
+    languageNative: 'Azərbaycan',
+    translation: 'Balayev',
+    translationNative: 'Balayev',
+    translationShort: 'Balayev',
+    country: 'Azerbaijan',
+    style: 'sentence',
+    styleLabel: 'Cümlə',
+    matchesTranslations: ['az.balayev'],
+  },
+  // === BOSNIAN ===
+  'bs.korkut': {
+    name: 'Besim Korkut',
+    nameNative: 'Besim Korkut',
+    language: 'Bosnian',
+    languageNative: 'Bosanski',
+    translation: 'Besim Korkut',
+    translationNative: 'Besim Korkut',
+    translationShort: 'Korkut',
+    country: 'Bosnia',
+    style: 'sentence',
+    styleLabel: 'Rečenica',
+    matchesTranslations: ['bs.korkut'],
+  },
+};
+
+// Map translation IDs to their TRUE MATCHING audio source only
+// Only includes translations where the audio narrator reads that exact translation
+export const TRANSLATION_TO_AUDIO_MAP = {
+  // === URDU ===
+  // Shamshad Ali Khan reads Jalandhry translation - TRUE MATCH (EveryAyah verse-by-verse)
+  'ur.jalandhry': 'ur.khan',
+  // Kanz ul Iman - uses Google Cloud TTS (Chirp3-HD male Urdu voice)
+  'ur.kanzuliman': 'ur.kanzuliman',
+  // Other Urdu translations (maududi, junagarhi, qadri, jawadi, ahmedali, najafi)
+  // automatically fall back to Google Cloud TTS
+
+  // === ENGLISH ===
+  // Ibrahim Walk reads Sahih International - TRUE MATCH
+  'en.sahih': 'en.walk',
+  // Other English translations - NO MATCH, will use TTS
+
+  // === PERSIAN ===
+  'fa.fooladvand': 'fa.hedayatfar',
+  'fa.makarem': 'fa.kabiri',
+
+  // === AZERBAIJANI ===
+  'az.balayev': 'az.balayev',
+
+  // === BOSNIAN ===
+  'bs.korkut': 'bs.korkut',
+};
+
+// Get all available audio sources for a language
+export function getAvailableTranslationAudio(language = 'ur') {
+  return Object.entries(TRANSLATION_RECITERS)
+    .filter(([id]) => id.startsWith(language))
+    .map(([id, info]) => ({ id, ...info }));
+}
+
+// Get audio source for a translation (returns null if no matching audio)
+export function getTranslationAudioSource(translationId) {
+  const audioId = TRANSLATION_TO_AUDIO_MAP[translationId];
+  if (audioId && TRANSLATION_AUDIO_SOURCES[audioId]) {
+    return {
+      audioId,
+      ...TRANSLATION_AUDIO_SOURCES[audioId],
+      reciter: TRANSLATION_RECITERS[audioId],
+    };
+  }
+  return null;
+}
+
+/**
+ * Get translation audio URL for a specific verse
+ * @param {number} surahId - Surah number (1-114)
+ * @param {number} ayahNum - Ayah number
+ * @param {string} audioId - Translation audio identifier (e.g., 'ur.khan')
+ * @returns {string} - Audio URL
+ */
+export function getTranslationAudioUrl(surahId, ayahNum, audioId = 'ur.khan') {
+  const source = TRANSLATION_AUDIO_SOURCES[audioId];
+  if (!source) return null;
+
+  if (source.type === 'everyayah') {
+    // EveryAyah format: SSSAAA.mp3 (3-digit surah, 3-digit ayah)
+    const surahStr = String(surahId).padStart(3, '0');
+    const ayahStr = String(ayahNum).padStart(3, '0');
+    return `${source.baseUrl}/${surahStr}${ayahStr}.mp3`;
+  }
+
+  // Default: global ayah number format
+  const globalAyah = getGlobalAyahNumber(surahId, ayahNum);
+  return `${source.baseUrl}/${globalAyah}.mp3`;
+}
+
 // Verse counts per surah (index 0 is unused, index 1 = Al-Fatiha with 7 verses, etc.)
 const VERSE_COUNTS = [
   0, 7, 286, 200, 176, 120, 165, 206, 75, 129, 109, 123, 111, 43, 52, 99, 128,
@@ -277,6 +504,332 @@ export function useAudioPlayer(options = {}) {
     prevAyah,
     stop,
     setCurrentAyah,
+  };
+}
+
+// ============================================
+// Translation Audio Player Hook
+// ============================================
+
+/**
+ * Hook for playing translation audio (API audio with TTS fallback)
+ * Priority: 1) API audio (ur.khan for Jalandhry) 2) TTS fallback
+ */
+export function useTranslationAudioPlayer(options = {}) {
+  const {
+    surahId = 1,
+    totalVerses = 7,
+    translationId = 'ur.jalandhry',
+    onVerseChange = null,
+    getTranslationText = null, // Function to get translation text for TTS fallback
+  } = options;
+
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentAyah, setCurrentAyah] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [isTTSMode, setIsTTSMode] = useState(false);
+  const [audioSource, setAudioSource] = useState(null); // 'api' or 'tts'
+
+  const audioRef = useRef(null);
+  const isPlayingRef = useRef(false);
+  const currentUrlRef = useRef('');
+  const ttsUtteranceRef = useRef(null);
+
+  // Check if we have API audio for this translation
+  const apiAudioSource = useMemo(() => {
+    return getTranslationAudioSource(translationId);
+  }, [translationId]);
+
+  // Keep ref in sync with state
+  useEffect(() => {
+    isPlayingRef.current = isPlaying;
+  }, [isPlaying]);
+
+  // Initialize audio element
+  useEffect(() => {
+    const audio = new Audio();
+    audio.preload = 'auto';
+    audioRef.current = audio;
+
+    const handleCanPlay = () => {
+      setIsLoading(false);
+      setError(null);
+      setAudioSource('api');
+      setIsTTSMode(false);
+    };
+
+    const handleLoadStart = () => {
+      setIsLoading(true);
+    };
+
+    const handleError = () => {
+      // API audio failed - try TTS fallback
+      console.log('[TranslationAudio] API audio failed, falling back to TTS');
+      setIsTTSMode(true);
+      setAudioSource('tts');
+      setIsLoading(false);
+
+      // If we were trying to play, use TTS instead
+      if (isPlayingRef.current && getTranslationText) {
+        const text = getTranslationText(currentAyah);
+        if (text) {
+          playWithTTS(text);
+        } else {
+          setError('Translation text not available');
+          setIsPlaying(false);
+        }
+      }
+    };
+
+    const handleEnded = () => {
+      // Move to next ayah if available
+      setCurrentAyah((prev) => {
+        if (prev < totalVerses) {
+          return prev + 1;
+        } else {
+          setIsPlaying(false);
+          return 1;
+        }
+      });
+    };
+
+    audio.addEventListener('canplay', handleCanPlay);
+    audio.addEventListener('loadstart', handleLoadStart);
+    audio.addEventListener('error', handleError);
+    audio.addEventListener('ended', handleEnded);
+
+    return () => {
+      audio.removeEventListener('canplay', handleCanPlay);
+      audio.removeEventListener('loadstart', handleLoadStart);
+      audio.removeEventListener('error', handleError);
+      audio.removeEventListener('ended', handleEnded);
+      audio.pause();
+      audio.src = '';
+      audioRef.current = null;
+      // Also cancel any TTS
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+    };
+  }, [totalVerses, getTranslationText]);
+
+  // Reset when surah or translation changes
+  useEffect(() => {
+    setError(null);
+    setCurrentAyah((prev) => (prev > totalVerses ? 1 : prev));
+    setIsPlaying(false);
+    setIsTTSMode(!apiAudioSource); // If no API audio, default to TTS mode
+    setAudioSource(apiAudioSource ? null : 'tts');
+  }, [surahId, totalVerses, translationId, apiAudioSource]);
+
+  // Play translation using TTS
+  const playWithTTS = useCallback((text) => {
+    if (!('speechSynthesis' in window) || !text) {
+      setError('TTS not supported');
+      setIsPlaying(false);
+      return;
+    }
+
+    // Cancel any ongoing speech
+    window.speechSynthesis.cancel();
+
+    const utterance = new SpeechSynthesisUtterance(text);
+    ttsUtteranceRef.current = utterance;
+
+    // Set language based on translation
+    const langCode = translationId.split('.')[0];
+    const ttsLangMap = {
+      'ur': 'ur-PK',
+      'en': 'en-US',
+      'hi': 'hi-IN',
+      'bn': 'bn-BD',
+      'ar': 'ar-SA',
+      'tr': 'tr-TR',
+      'id': 'id-ID',
+      'fr': 'fr-FR',
+      'de': 'de-DE',
+    };
+    utterance.lang = ttsLangMap[langCode] || 'ur-PK';
+    utterance.rate = 0.9;
+    utterance.pitch = 1;
+    utterance.volume = 1;
+
+    // Try to find a matching voice
+    const voices = window.speechSynthesis.getVoices();
+    const matchingVoice = voices.find(v => v.lang === utterance.lang) ||
+                          voices.find(v => v.lang.startsWith(langCode));
+    if (matchingVoice) {
+      utterance.voice = matchingVoice;
+    }
+
+    utterance.onstart = () => {
+      setIsLoading(false);
+      setAudioSource('tts');
+    };
+
+    utterance.onend = () => {
+      // Move to next ayah
+      setCurrentAyah((prev) => {
+        if (prev < totalVerses) {
+          return prev + 1;
+        } else {
+          setIsPlaying(false);
+          return 1;
+        }
+      });
+    };
+
+    utterance.onerror = (event) => {
+      console.error('TTS error:', event.error);
+      setError('TTS playback failed');
+      setIsPlaying(false);
+    };
+
+    window.speechSynthesis.speak(utterance);
+  }, [translationId, totalVerses]);
+
+  // Load and play audio when source changes
+  useEffect(() => {
+    if (!surahId || !isPlaying) return;
+
+    // Notify parent of verse change
+    if (onVerseChange) {
+      onVerseChange(currentAyah);
+    }
+
+    // If we have API audio and not in TTS mode, try API first
+    if (apiAudioSource && !isTTSMode) {
+      const audio = audioRef.current;
+      if (!audio) return;
+
+      const url = getTranslationAudioUrl(surahId, currentAyah, apiAudioSource.audioId);
+      if (!url) {
+        setIsTTSMode(true);
+        return;
+      }
+
+      // Only reload if URL changed
+      if (currentUrlRef.current !== url) {
+        currentUrlRef.current = url;
+        audio.pause();
+        audio.src = url;
+        audio.load();
+      }
+
+      // Play
+      const playPromise = audio.play();
+      if (playPromise !== undefined) {
+        playPromise.catch((err) => {
+          if (err.name !== 'AbortError') {
+            console.error('API audio playback error:', err);
+            // Fall back to TTS
+            setIsTTSMode(true);
+          }
+        });
+      }
+    } else {
+      // Use TTS
+      if (getTranslationText) {
+        const text = getTranslationText(currentAyah);
+        if (text) {
+          setIsLoading(true);
+          playWithTTS(text);
+        } else {
+          setError('Translation text not available');
+          setIsPlaying(false);
+        }
+      } else {
+        setError('No translation text provider');
+        setIsPlaying(false);
+      }
+    }
+  }, [surahId, currentAyah, isPlaying, apiAudioSource, isTTSMode, onVerseChange, getTranslationText, playWithTTS]);
+
+  // Handle play state changes for API audio
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio || isTTSMode) return;
+
+    if (isPlaying) {
+      if (audio.readyState >= 3) {
+        audio.play().catch(() => {});
+      }
+    } else {
+      audio.pause();
+    }
+  }, [isPlaying, isTTSMode]);
+
+  // Handle pause/stop for TTS
+  useEffect(() => {
+    if (!isPlaying && isTTSMode && 'speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+    }
+  }, [isPlaying, isTTSMode]);
+
+  // Toggle play/pause
+  const togglePlay = useCallback(() => {
+    setError(null);
+    setIsPlaying((prev) => !prev);
+  }, []);
+
+  // Play specific ayah
+  const playAyah = useCallback((ayahNum) => {
+    setError(null);
+    setCurrentAyah(ayahNum);
+    setIsPlaying(true);
+  }, []);
+
+  // Skip to next ayah
+  const nextAyah = useCallback(() => {
+    if (currentAyah < totalVerses) {
+      if (isTTSMode && 'speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+      setCurrentAyah((prev) => prev + 1);
+    }
+  }, [currentAyah, totalVerses, isTTSMode]);
+
+  // Skip to previous ayah
+  const prevAyah = useCallback(() => {
+    if (currentAyah > 1) {
+      if (isTTSMode && 'speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+      setCurrentAyah((prev) => prev - 1);
+    }
+  }, [currentAyah, isTTSMode]);
+
+  // Stop playback
+  const stop = useCallback(() => {
+    const audio = audioRef.current;
+    if (audio) {
+      audio.pause();
+      audio.currentTime = 0;
+    }
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+    }
+    setIsPlaying(false);
+    setCurrentAyah(1);
+  }, []);
+
+  return {
+    isPlaying,
+    isLoading,
+    error,
+    currentAyah,
+    togglePlay,
+    playAyah,
+    nextAyah,
+    prevAyah,
+    stop,
+    setCurrentAyah,
+    // Translation-specific
+    isTTSMode,
+    audioSource, // 'api' | 'tts' | null
+    hasApiAudio: !!apiAudioSource,
+    reciterInfo: apiAudioSource?.reciter || null,
   };
 }
 

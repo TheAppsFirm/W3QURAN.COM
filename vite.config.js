@@ -33,6 +33,12 @@ export default defineConfig({
           });
         },
       },
+      // Proxy for Google Cloud TTS API in development
+      '/api/google-tts': {
+        target: 'https://texttospeech.googleapis.com',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/google-tts/, ''),
+      },
       // Proxy for quran-words API in development
       '/api/quran-words': {
         target: 'https://api.quran.com',
