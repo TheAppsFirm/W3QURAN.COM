@@ -67,6 +67,7 @@ export async function onRequest(context) {
     const apiKey = env.GOOGLE_TTS_API_KEY;
     if (apiKey && GOOGLE_CLOUD_VOICES[lang]) {
       try {
+        console.log('[TTS] Trying Google Cloud TTS for lang:', lang);
         const voiceConfig = GOOGLE_CLOUD_VOICES[lang];
         const response = await fetch(`https://texttospeech.googleapis.com/v1/text:synthesize?key=${apiKey}`, {
           method: 'POST',
@@ -78,6 +79,8 @@ export async function onRequest(context) {
           }),
         });
 
+        console.log('[TTS] Google Cloud response status:', response.status);
+
         if (response.ok) {
           const data = await response.json();
           if (data.audioContent) {
@@ -88,32 +91,42 @@ export async function onRequest(context) {
               bytes[i] = binaryString.charCodeAt(i);
             }
             audioData = bytes.buffer;
+            console.log('[TTS] Google Cloud TTS success, audio size:', audioData.byteLength);
           }
+        } else {
+          const errorText = await response.text();
+          console.error('[TTS] Google Cloud TTS failed:', response.status, errorText);
         }
       } catch (e) {
         console.error('[Google Cloud TTS] Error:', e.message);
         error = e;
       }
+    } else {
+      console.log('[TTS] Skipping Google Cloud TTS - apiKey:', !!apiKey, 'voiceAvailable:', !!GOOGLE_CLOUD_VOICES[lang]);
     }
 
     // Source 2: Google Translate TTS (with tw-ob client) - free fallback
-    try {
-      const ttsUrl1 = `https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=${lang}&q=${encodeURIComponent(truncatedText)}`;
-      const response1 = await fetch(ttsUrl1, {
-        headers: {
-          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-          'Referer': 'https://translate.google.com/',
-          'Accept': 'audio/mpeg, audio/*',
-        },
-      });
-      if (response1.ok) {
-        const data = await response1.arrayBuffer();
-        if (data.byteLength > 100) { // Valid audio should be > 100 bytes
-          audioData = data;
+    if (!audioData) {
+      try {
+        console.log('[TTS] Trying Google Translate TTS (tw-ob)');
+        const ttsUrl1 = `https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=${lang}&q=${encodeURIComponent(truncatedText)}`;
+        const response1 = await fetch(ttsUrl1, {
+          headers: {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Referer': 'https://translate.google.com/',
+            'Accept': 'audio/mpeg, audio/*',
+          },
+        });
+        if (response1.ok) {
+          const data = await response1.arrayBuffer();
+          if (data.byteLength > 100) { // Valid audio should be > 100 bytes
+            audioData = data;
+            console.log('[TTS] Google Translate (tw-ob) success');
+          }
         }
+      } catch (e) {
+        error = e;
       }
-    } catch (e) {
-      error = e;
     }
 
     // Source 3: Google Translate TTS (with gtx client)
