@@ -85,18 +85,38 @@ export async function onRequest(context) {
           break;
         }
 
-        // Update subscription record
-        await env.DB.prepare(`
-          UPDATE subscriptions
-          SET stripe_customer_id = ?,
-              stripe_subscription_id = ?,
-              plan = 'monthly',
-              status = 'active',
-              current_period_end = datetime('now', '+1 month')
-          WHERE user_id = ?
-        `).bind(customerId, subscriptionId, userId).run();
+        // Determine plan from the subscription
+        let plan = 'monthly';
+        if (subscriptionId) {
+          // Fetch subscription details to get the price
+          const subResponse = await fetch(`https://api.stripe.com/v1/subscriptions/${subscriptionId}`, {
+            headers: { 'Authorization': `Bearer ${env.STRIPE_SECRET_KEY}` },
+          });
+          if (subResponse.ok) {
+            const subData = await subResponse.json();
+            const priceId = subData.items?.data?.[0]?.price?.id;
+            if (priceId === env.STRIPE_PRICE_YEARLY) {
+              plan = 'yearly';
+            }
+          }
+        }
 
-        console.log('[Stripe Webhook] Subscription activated for user:', userId);
+        // Generate subscription ID if not exists
+        const subId = `sub_${userId}_${Date.now()}`;
+
+        // Upsert subscription record (INSERT or UPDATE if exists)
+        await env.DB.prepare(`
+          INSERT INTO subscriptions (id, user_id, stripe_customer_id, stripe_subscription_id, plan, status, current_period_end, created_at)
+          VALUES (?, ?, ?, ?, ?, 'active', datetime('now', '+1 month'), datetime('now'))
+          ON CONFLICT(user_id) DO UPDATE SET
+            stripe_customer_id = excluded.stripe_customer_id,
+            stripe_subscription_id = excluded.stripe_subscription_id,
+            plan = excluded.plan,
+            status = 'active',
+            current_period_end = datetime('now', '+1 month')
+        `).bind(subId, userId, customerId, subscriptionId, plan).run();
+
+        console.log('[Stripe Webhook] Subscription activated for user:', userId, 'plan:', plan);
         break;
       }
 

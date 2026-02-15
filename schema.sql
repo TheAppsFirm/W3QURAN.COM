@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS users (
 -- Subscriptions table
 CREATE TABLE IF NOT EXISTS subscriptions (
   id TEXT PRIMARY KEY,
-  user_id TEXT NOT NULL,
+  user_id TEXT NOT NULL UNIQUE,
   stripe_customer_id TEXT,
   stripe_subscription_id TEXT,
   plan TEXT DEFAULT 'free',
