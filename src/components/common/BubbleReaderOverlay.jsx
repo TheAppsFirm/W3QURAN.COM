@@ -3659,6 +3659,8 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
           setUpgradeFeature('treebank');
           setShowUpgradePrompt(true);
         }}
+        translationId={selectedTranslation}
+        verseTranslation={treebankAyah ? verses[treebankAyah - 1]?.translation : null}
       />
 
       {/* Premium Upgrade Prompt Modal */}

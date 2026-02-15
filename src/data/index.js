@@ -167,6 +167,10 @@ export {
   hasTreebankData,
   getAyahTreebank,
   canAccessTreebank,
+  // Quranic Ontology
+  QURAN_ONTOLOGY,
+  getSurahOntology,
+  hasOntology,
 } from './treebankData';
 
 // Kanz ul Iman Audio data file kept for reference (now uses Google Cloud TTS instead)
