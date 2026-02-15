@@ -55,6 +55,19 @@ function SettingsView({ darkMode, setDarkMode, onNavigate }) {
   return (
     <div className={`h-full overflow-auto p-6 ${darkMode ? 'text-white' : ''}`}>
       <div className="max-w-lg mx-auto">
+        {/* Back Button */}
+        <button
+          onClick={() => onNavigate && onNavigate('surahs')}
+          className={`flex items-center gap-2 mb-6 px-4 py-2 rounded-xl transition-all ${
+            darkMode
+              ? 'text-gray-300 hover:bg-gray-800 hover:text-white'
+              : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+          }`}
+        >
+          <Icons.ChevronLeft className="w-5 h-5" />
+          <span className="font-medium">Back to Home</span>
+        </button>
+
         <h2 className={`text-3xl font-bold mb-2 text-center ${darkMode ? 'text-white' : 'text-gray-800'}`}>
           Settings
         </h2>
