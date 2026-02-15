@@ -104,17 +104,20 @@ export async function onRequest(context) {
         // Generate subscription ID if not exists
         const subId = `sub_${userId}_${Date.now()}`;
 
+        // Calculate period end based on plan
+        const periodEnd = plan === 'yearly' ? '+1 year' : '+1 month';
+
         // Upsert subscription record (INSERT or UPDATE if exists)
         await env.DB.prepare(`
           INSERT INTO subscriptions (id, user_id, stripe_customer_id, stripe_subscription_id, plan, status, current_period_end, created_at)
-          VALUES (?, ?, ?, ?, ?, 'active', datetime('now', '+1 month'), datetime('now'))
+          VALUES (?, ?, ?, ?, ?, 'active', datetime('now', ?), datetime('now'))
           ON CONFLICT(user_id) DO UPDATE SET
             stripe_customer_id = excluded.stripe_customer_id,
             stripe_subscription_id = excluded.stripe_subscription_id,
             plan = excluded.plan,
             status = 'active',
-            current_period_end = datetime('now', '+1 month')
-        `).bind(subId, userId, customerId, subscriptionId, plan).run();
+            current_period_end = datetime('now', ?)
+        `).bind(subId, userId, customerId, subscriptionId, plan, periodEnd, periodEnd).run();
 
         console.log('[Stripe Webhook] Subscription activated for user:', userId, 'plan:', plan);
         break;
