@@ -4,9 +4,11 @@
  */
 
 // Google Cloud TTS voices - Chirp3-HD (highest quality male voices)
+// Male voices: Achird, Algenib, Charon, Enceladus, Fenrir, Orus, Puck, etc.
+// Female voices: Aoede, Kore, Leda, Zephyr, etc.
 const GOOGLE_CLOUD_VOICES = {
-  ur: { languageCode: 'ur-IN', name: 'ur-IN-Chirp3-HD-Orus' },
-  hi: { languageCode: 'hi-IN', name: 'hi-IN-Chirp3-HD-Orus' },
+  ur: { languageCode: 'ur-IN', name: 'ur-IN-Chirp3-HD-Puck' },
+  hi: { languageCode: 'hi-IN', name: 'hi-IN-Chirp3-HD-Puck' },
   en: { languageCode: 'en-US', name: 'en-US-Chirp3-HD-Charon' },
   ar: { languageCode: 'ar-XA', name: 'ar-XA-Chirp3-HD-Charon' },
 };
@@ -67,8 +69,8 @@ export async function onRequest(context) {
     const apiKey = env.GOOGLE_TTS_API_KEY;
     if (apiKey && GOOGLE_CLOUD_VOICES[lang]) {
       try {
-        console.log('[TTS] Trying Google Cloud TTS for lang:', lang);
         const voiceConfig = GOOGLE_CLOUD_VOICES[lang];
+        console.log('[TTS] Trying Google Cloud TTS for lang:', lang, 'voice:', voiceConfig.name);
         const response = await fetch(`https://texttospeech.googleapis.com/v1/text:synthesize?key=${apiKey}`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -91,7 +93,7 @@ export async function onRequest(context) {
               bytes[i] = binaryString.charCodeAt(i);
             }
             audioData = bytes.buffer;
-            console.log('[TTS] Google Cloud TTS success, audio size:', audioData.byteLength);
+            console.log('[TTS] Google Cloud TTS success, voice:', voiceConfig.name, 'audio size:', audioData.byteLength);
           }
         } else {
           const errorText = await response.text();
