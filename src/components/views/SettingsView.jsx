@@ -167,7 +167,7 @@ function SettingsView({ darkMode, setDarkMode, onNavigate }) {
                       disabled={upgradeLoading}
                       className="flex-1 py-2 px-4 bg-gradient-to-r from-purple-500 to-violet-500 text-white font-medium rounded-xl hover:shadow-lg hover:shadow-purple-500/30 transition-all disabled:opacity-50"
                     >
-                      {upgradeLoading === 'monthly' ? 'Loading...' : '$4.99/mo'}
+                      {upgradeLoading === 'monthly' ? 'Loading...' : '$5/mo'}
                     </button>
                     <button
                       onClick={async () => {
@@ -190,7 +190,7 @@ function SettingsView({ darkMode, setDarkMode, onNavigate }) {
                       disabled={upgradeLoading}
                       className="flex-1 py-2 px-4 bg-gradient-to-r from-amber-400 to-orange-500 text-white font-medium rounded-xl hover:shadow-lg hover:shadow-amber-500/30 transition-all disabled:opacity-50"
                     >
-                      {upgradeLoading === 'yearly' ? 'Loading...' : '$29.99/yr'}
+                      {upgradeLoading === 'yearly' ? 'Loading...' : '$30/yr'}
                     </button>
                   </div>
                   <p className={`text-xs text-center ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>

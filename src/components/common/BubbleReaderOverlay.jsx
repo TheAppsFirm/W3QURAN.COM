@@ -1732,11 +1732,9 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
         setSpeakingAyah(null);
       });
     } else {
-      // Fallback to browser TTS (free for all users)
-      console.log('[TTS] Using browser TTS fallback');
-      speakText(translationText, ttsLanguage, { rate: 0.9 });
-      // Browser TTS doesn't have proper end detection, so we estimate
-      setTimeout(() => setSpeakingAyah(null), Math.max(3000, translationText.length * 80));
+      // No audio available (non-premium user on non-Fatiha surah)
+      // Upgrade prompt already shown by playGoogleCloudTTS
+      setSpeakingAyah(null);
     }
   }, [speakingAyah, ttsLanguage, playGoogleCloudTTS]);
 
@@ -3597,11 +3595,19 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
       {showUpgradePrompt && (
         <div
           className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm"
-          onClick={() => setShowUpgradePrompt(false)}
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setShowUpgradePrompt(false);
+          }}
+          onMouseDown={(e) => e.stopPropagation()}
+          onTouchStart={(e) => e.stopPropagation()}
         >
           <div
             className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-3xl p-6 max-w-sm mx-4 border border-white/20 shadow-2xl"
             onClick={(e) => e.stopPropagation()}
+            onMouseDown={(e) => e.stopPropagation()}
+            onTouchStart={(e) => e.stopPropagation()}
             style={{ animation: 'bubblePopIn 0.3s ease-out' }}
           >
             {/* Premium Star Icon */}
@@ -3631,34 +3637,45 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
             </div>
 
             {/* Buttons */}
-            <div className="flex gap-3">
-              <button
-                onClick={() => setShowUpgradePrompt(false)}
-                className="flex-1 py-2.5 px-4 rounded-xl bg-white/10 text-white font-medium hover:bg-white/20 transition-all"
-              >
-                Use Browser Voice
-              </button>
+            <div className="flex flex-col gap-3">
               {isAuthenticated ? (
                 <button
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
                     setShowUpgradePrompt(false);
-                    window.location.href = '/settings';
+                    // Use setTimeout to prevent background interaction
+                    setTimeout(() => {
+                      window.location.href = '/settings';
+                    }, 100);
                   }}
-                  className="flex-1 py-2.5 px-4 rounded-xl bg-gradient-to-r from-amber-400 to-orange-500 text-white font-medium hover:shadow-lg hover:shadow-amber-500/30 transition-all"
+                  className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-amber-400 to-orange-500 text-white font-bold hover:shadow-lg hover:shadow-amber-500/30 transition-all"
                 >
-                  Upgrade Now
+                  ✨ Upgrade to Premium
                 </button>
               ) : (
                 <button
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
                     setShowUpgradePrompt(false);
-                    login();
+                    setTimeout(() => login(), 100);
                   }}
-                  className="flex-1 py-2.5 px-4 rounded-xl bg-gradient-to-r from-purple-500 to-violet-500 text-white font-medium hover:shadow-lg transition-all"
+                  className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-purple-500 to-violet-500 text-white font-bold hover:shadow-lg transition-all"
                 >
-                  Sign In
+                  Sign In to Upgrade
                 </button>
               )}
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setShowUpgradePrompt(false);
+                }}
+                className="w-full py-2 text-gray-400 text-sm hover:text-white transition-all"
+              >
+                Maybe Later
+              </button>
             </div>
           </div>
         </div>
