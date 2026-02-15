@@ -3,11 +3,15 @@
  * Single Responsibility: Manage app settings with localStorage persistence
  */
 
+import { useState } from 'react';
 import { Icons } from '../common/Icons';
 import { useLocalStorage } from '../../hooks';
 import { isSoundEnabled, setSoundEnabled } from '../../utils/soundUtils';
+import { useAuth } from '../../contexts/AuthContext';
 
 function SettingsView({ darkMode, setDarkMode, onNavigate }) {
+  const { user, subscription, isPremium } = useAuth();
+  const [upgradeLoading, setUpgradeLoading] = useState(null);
   // All settings persisted to localStorage
   const [notifications, setNotifications] = useLocalStorage('settings_notifications', true);
   const [autoPlayAudio, setAutoPlayAudio] = useLocalStorage('settings_autoplay', false);
@@ -57,6 +61,137 @@ function SettingsView({ darkMode, setDarkMode, onNavigate }) {
         <p className={`text-center mb-8 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
           Customize your experience
         </p>
+
+        {/* Subscription Section - Only show when logged in */}
+        {user && (
+          <div className="mb-6">
+            <h3 className={`text-sm font-semibold uppercase tracking-wider mb-3 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+              Subscription
+            </h3>
+
+            <div className={`rounded-2xl p-4 shadow-lg border ${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}>
+              {/* Current Plan */}
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center ${isPremium ? 'bg-gradient-to-r from-amber-400 to-orange-500' : 'bg-gray-500/20'}`}>
+                    {isPremium ? (
+                      <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                      </svg>
+                    ) : (
+                      <Icons.User className={`w-5 h-5 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`} />
+                    )}
+                  </div>
+                  <div>
+                    <span className={`font-bold block ${darkMode ? 'text-white' : 'text-gray-800'}`}>
+                      {isPremium ? 'Premium Plan' : 'Free Plan'}
+                    </span>
+                    <span className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                      {isPremium ? 'All features unlocked' : 'Basic features'}
+                    </span>
+                  </div>
+                </div>
+                {isPremium && (
+                  <span className="px-3 py-1 bg-gradient-to-r from-amber-400/20 to-orange-500/20 text-amber-400 text-xs font-medium rounded-full">
+                    Active
+                  </span>
+                )}
+              </div>
+
+              {/* Upgrade Options - Show if not premium */}
+              {!isPremium && (
+                <div className="space-y-3 pt-3 border-t border-gray-200 dark:border-gray-700">
+                  <p className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                    Unlock premium features:
+                  </p>
+                  <ul className={`text-xs space-y-1 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                    <li className="flex items-center gap-2">
+                      <Icons.Check className="w-3 h-3 text-emerald-500" /> HD Male Voice TTS
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <Icons.Check className="w-3 h-3 text-emerald-500" /> Cloud Sync Across Devices
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <Icons.Check className="w-3 h-3 text-emerald-500" /> Ad-Free Experience
+                    </li>
+                  </ul>
+
+                  <div className="flex gap-2 pt-2">
+                    <button
+                      onClick={async () => {
+                        setUpgradeLoading('monthly');
+                        try {
+                          const res = await fetch('/api/stripe/checkout', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ priceId: 'price_1T12VWCnbCeWpM4XWRkPjxJb' }),
+                          });
+                          const data = await res.json();
+                          if (data.url) window.location.href = data.url;
+                          else alert(data.error || 'Failed to start checkout');
+                        } catch (e) {
+                          alert('Error: ' + e.message);
+                        }
+                        setUpgradeLoading(null);
+                      }}
+                      disabled={upgradeLoading}
+                      className="flex-1 py-2 px-4 bg-gradient-to-r from-purple-500 to-violet-500 text-white font-medium rounded-xl hover:shadow-lg hover:shadow-purple-500/30 transition-all disabled:opacity-50"
+                    >
+                      {upgradeLoading === 'monthly' ? 'Loading...' : '$4.99/mo'}
+                    </button>
+                    <button
+                      onClick={async () => {
+                        setUpgradeLoading('yearly');
+                        try {
+                          const res = await fetch('/api/stripe/checkout', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ priceId: 'price_1T12VxCnbCeWpM4Xg2ttTsm5' }),
+                          });
+                          const data = await res.json();
+                          if (data.url) window.location.href = data.url;
+                          else alert(data.error || 'Failed to start checkout');
+                        } catch (e) {
+                          alert('Error: ' + e.message);
+                        }
+                        setUpgradeLoading(null);
+                      }}
+                      disabled={upgradeLoading}
+                      className="flex-1 py-2 px-4 bg-gradient-to-r from-amber-400 to-orange-500 text-white font-medium rounded-xl hover:shadow-lg hover:shadow-amber-500/30 transition-all disabled:opacity-50"
+                    >
+                      {upgradeLoading === 'yearly' ? 'Loading...' : '$29.99/yr'}
+                    </button>
+                  </div>
+                  <p className={`text-xs text-center ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>
+                    Yearly saves 50%
+                  </p>
+                </div>
+              )}
+
+              {/* Manage Subscription - Show if premium */}
+              {isPremium && (
+                <div className="pt-3 border-t border-gray-200 dark:border-gray-700">
+                  <button
+                    onClick={async () => {
+                      try {
+                        const res = await fetch('/api/stripe/portal', { method: 'POST' });
+                        const data = await res.json();
+                        if (data.url) window.location.href = data.url;
+                      } catch (e) {
+                        alert('Error: ' + e.message);
+                      }
+                    }}
+                    className={`w-full py-2 px-4 rounded-xl font-medium transition-all ${
+                      darkMode ? 'bg-gray-700 text-white hover:bg-gray-600' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    }`}
+                  >
+                    Manage Subscription
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
 
         {/* Appearance Section */}
         <div className="mb-6">

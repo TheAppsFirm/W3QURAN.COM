@@ -802,6 +802,7 @@ function QuranBubbleApp() {
           setFilters={setFilters}
           showAnalytics={showAnalytics}
           setShowAnalytics={setShowAnalytics}
+          onSettingsClick={() => setView('settings')}
         />
       )}
 
