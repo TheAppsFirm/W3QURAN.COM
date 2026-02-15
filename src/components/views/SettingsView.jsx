@@ -9,9 +9,18 @@ import { useLocalStorage } from '../../hooks';
 import { isSoundEnabled, setSoundEnabled } from '../../utils/soundUtils';
 import { useAuth } from '../../contexts/AuthContext';
 
+// Stripe Price IDs - from Cloudflare environment
+const STRIPE_PRICES = {
+  monthly: 'price_1T12VWCnbCeWpM4XWRkPjxJb',
+  yearly: 'price_1T12VxCnbCeWpM4Xg2ttTsm5',
+};
+
 function SettingsView({ darkMode, setDarkMode, onNavigate }) {
   const { user, subscription, isPremium } = useAuth();
   const [upgradeLoading, setUpgradeLoading] = useState(null);
+  const [upgradeError, setUpgradeError] = useState(null);
+  const [syncStatus, setSyncStatus] = useState(null); // 'syncing' | 'success' | 'error'
+  const [lastSynced, setLastSynced] = useLocalStorage('last_synced', null);
   // All settings persisted to localStorage
   const [notifications, setNotifications] = useLocalStorage('settings_notifications', true);
   const [autoPlayAudio, setAutoPlayAudio] = useLocalStorage('settings_autoplay', false);
@@ -129,21 +138,29 @@ function SettingsView({ darkMode, setDarkMode, onNavigate }) {
                     </li>
                   </ul>
 
+                  {/* Error Message */}
+                  {upgradeError && (
+                    <div className="mb-3 p-3 bg-red-500/20 border border-red-500/30 rounded-xl">
+                      <p className="text-red-400 text-sm text-center">{upgradeError}</p>
+                    </div>
+                  )}
+
                   <div className="flex gap-2 pt-2">
                     <button
                       onClick={async () => {
                         setUpgradeLoading('monthly');
+                        setUpgradeError(null);
                         try {
                           const res = await fetch('/api/stripe/checkout', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ priceId: 'price_1T12VWCnbCeWpM4XWRkPjxJb' }),
+                            body: JSON.stringify({ priceId: STRIPE_PRICES.monthly }),
                           });
                           const data = await res.json();
                           if (data.url) window.location.href = data.url;
-                          else alert(data.error || 'Failed to start checkout');
+                          else setUpgradeError(data.error || 'Failed to start checkout');
                         } catch (e) {
-                          alert('Error: ' + e.message);
+                          setUpgradeError('Network error. Please try again.');
                         }
                         setUpgradeLoading(null);
                       }}
@@ -155,17 +172,18 @@ function SettingsView({ darkMode, setDarkMode, onNavigate }) {
                     <button
                       onClick={async () => {
                         setUpgradeLoading('yearly');
+                        setUpgradeError(null);
                         try {
                           const res = await fetch('/api/stripe/checkout', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ priceId: 'price_1T12VxCnbCeWpM4Xg2ttTsm5' }),
+                            body: JSON.stringify({ priceId: STRIPE_PRICES.yearly }),
                           });
                           const data = await res.json();
                           if (data.url) window.location.href = data.url;
-                          else alert(data.error || 'Failed to start checkout');
+                          else setUpgradeError(data.error || 'Failed to start checkout');
                         } catch (e) {
-                          alert('Error: ' + e.message);
+                          setUpgradeError('Network error. Please try again.');
                         }
                         setUpgradeLoading(null);
                       }}
@@ -186,12 +204,14 @@ function SettingsView({ darkMode, setDarkMode, onNavigate }) {
                 <div className="pt-3 border-t border-gray-200 dark:border-gray-700">
                   <button
                     onClick={async () => {
+                      setUpgradeError(null);
                       try {
                         const res = await fetch('/api/stripe/portal', { method: 'POST' });
                         const data = await res.json();
                         if (data.url) window.location.href = data.url;
+                        else setUpgradeError(data.error || 'Failed to open portal');
                       } catch (e) {
-                        alert('Error: ' + e.message);
+                        setUpgradeError('Network error. Please try again.');
                       }
                     }}
                     className={`w-full py-2 px-4 rounded-xl font-medium transition-all ${
@@ -200,6 +220,101 @@ function SettingsView({ darkMode, setDarkMode, onNavigate }) {
                   >
                     Manage Subscription
                   </button>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Cloud Sync Section - Premium Only */}
+        {user && (
+          <div className="mb-6">
+            <h3 className={`text-sm font-semibold uppercase tracking-wider mb-3 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+              Cloud Sync
+            </h3>
+
+            <div className={`rounded-2xl p-4 shadow-lg border ${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}>
+              {isPremium ? (
+                <>
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-gradient-to-r from-cyan-400 to-blue-500 flex items-center justify-center">
+                        <Icons.Cloud className="w-5 h-5 text-white" />
+                      </div>
+                      <div>
+                        <span className={`font-bold block ${darkMode ? 'text-white' : 'text-gray-800'}`}>
+                          Sync Your Data
+                        </span>
+                        <span className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                          {lastSynced ? `Last synced: ${new Date(lastSynced).toLocaleString()}` : 'Never synced'}
+                        </span>
+                      </div>
+                    </div>
+                    {syncStatus === 'success' && (
+                      <span className="text-emerald-400 text-xs">Synced!</span>
+                    )}
+                  </div>
+
+                  {syncStatus === 'error' && (
+                    <div className="mb-3 p-2 bg-red-500/20 border border-red-500/30 rounded-lg">
+                      <p className="text-red-400 text-xs text-center">Sync failed. Please try again.</p>
+                    </div>
+                  )}
+
+                  <button
+                    onClick={async () => {
+                      setSyncStatus('syncing');
+                      try {
+                        // Gather local data to sync
+                        const bookmarks = localStorage.getItem('bookmarks');
+                        const progress = localStorage.getItem('readingProgress');
+
+                        // Upload bookmarks
+                        if (bookmarks) {
+                          await fetch('/api/user/sync', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ dataType: 'bookmarks', data: JSON.parse(bookmarks) }),
+                          });
+                        }
+
+                        // Upload progress
+                        if (progress) {
+                          await fetch('/api/user/sync', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ dataType: 'progress', data: JSON.parse(progress) }),
+                          });
+                        }
+
+                        setLastSynced(Date.now());
+                        setSyncStatus('success');
+                        setTimeout(() => setSyncStatus(null), 3000);
+                      } catch (e) {
+                        setSyncStatus('error');
+                      }
+                    }}
+                    disabled={syncStatus === 'syncing'}
+                    className={`w-full py-2 px-4 rounded-xl font-medium transition-all ${
+                      syncStatus === 'syncing'
+                        ? 'bg-gray-500 text-white cursor-wait'
+                        : 'bg-gradient-to-r from-cyan-500 to-blue-500 text-white hover:shadow-lg hover:shadow-cyan-500/30'
+                    }`}
+                  >
+                    {syncStatus === 'syncing' ? 'Syncing...' : 'Sync Now'}
+                  </button>
+                </>
+              ) : (
+                <div className="text-center py-2">
+                  <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-gray-500/20 flex items-center justify-center">
+                    <Icons.Lock className="w-6 h-6 text-gray-400" />
+                  </div>
+                  <p className={`font-medium mb-1 ${darkMode ? 'text-white' : 'text-gray-800'}`}>
+                    Cloud Sync is Premium
+                  </p>
+                  <p className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                    Upgrade to sync bookmarks and progress across devices
+                  </p>
                 </div>
               )}
             </div>
