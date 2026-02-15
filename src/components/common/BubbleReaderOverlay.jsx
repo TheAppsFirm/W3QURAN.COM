@@ -2478,6 +2478,9 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
     } else { audio.pause(); }
   }, [isPlaying, currentAyah, selectedReciter]);
 
+  // Ref to always have latest handleClose (defined below)
+  const handleCloseRef = useRef(null);
+
   useEffect(() => {
     setIsAnimating(true);
     const timer = setTimeout(() => setIsAnimating(false), 50);
@@ -2486,7 +2489,7 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
         if (selectedWordData) setSelectedWordData(null);
         else if (leftFeature) setLeftFeature(null);
         else if (showTafseer) setShowTafseer(false);
-        else handleClose();
+        else if (handleCloseRef.current) handleCloseRef.current();
       }
       if (e.key === ' ' && !e.target.matches('input, textarea, select')) { e.preventDefault(); setIsPlaying(prev => !prev); }
       if (e.key === 'ArrowRight') currentAyah < totalVerses && setCurrentAyah(prev => prev + 1);
@@ -2495,7 +2498,7 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
     document.addEventListener('keydown', handleKeyDown);
     document.body.style.overflow = 'hidden';
     return () => { clearTimeout(timer); document.removeEventListener('keydown', handleKeyDown); document.body.style.overflow = ''; };
-  }, [currentAyah, totalVerses, selectedWordData, leftFeature, showTafseer, handleClose]);
+  }, [currentAyah, totalVerses, selectedWordData, leftFeature, showTafseer]);
 
   // Handle initial panel from URL
   useEffect(() => {
@@ -2560,6 +2563,11 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
       onClose();
     }
   }, [surah, verses.length, onClose]);
+
+  // Keep ref updated with latest handleClose
+  useEffect(() => {
+    handleCloseRef.current = handleClose;
+  }, [handleClose]);
 
   const toggleAyahPlayback = useCallback((ayahNum) => {
     if (currentAyah === ayahNum && isPlaying) setIsPlaying(false);
