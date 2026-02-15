@@ -1648,7 +1648,7 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
       console.log('[TTS] HD TTS requires premium. Surah:', surah?.id);
       setUpgradeFeature('hd-tts');
       setShowUpgradePrompt(true);
-      return null; // Will fallback to browser TTS
+      return { blocked: true }; // Premium required - don't advance ayah
     }
 
     try {
@@ -1712,28 +1712,31 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
 
     // Use Google Cloud TTS API
     console.log('[GoogleTTS] Speaking ayah:', ayahNum, 'lang:', ttsLanguage);
-    const audioUrl = await playGoogleCloudTTS(translationText, ttsLanguage);
+    const result = await playGoogleCloudTTS(translationText, ttsLanguage);
 
-    if (audioUrl) {
-      const audio = new Audio(audioUrl);
+    // Check if blocked by premium gate
+    if (result?.blocked) {
+      console.log('[TTS] Blocked by premium gate');
+      setSpeakingAyah(null);
+      return;
+    }
+
+    if (result && typeof result === 'string') {
+      const audio = new Audio(result);
       ttsAudioRef.current = audio;
 
       audio.onended = () => {
-        // Data URLs don't need revoking
         setSpeakingAyah(null);
       };
       audio.onerror = () => {
-        // Data URLs don't need revoking
         setSpeakingAyah(null);
       };
 
       audio.play().catch(() => {
-        // Data URLs don't need revoking
         setSpeakingAyah(null);
       });
     } else {
-      // No audio available (non-premium user on non-Fatiha surah)
-      // Upgrade prompt already shown by playGoogleCloudTTS
+      // No audio available (API error)
       setSpeakingAyah(null);
     }
   }, [speakingAyah, ttsLanguage, playGoogleCloudTTS]);
@@ -1753,9 +1756,17 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
     const isLast = ayahNum >= totalAyahs;
 
     try {
-      const audioUrl = await playGoogleCloudTTS(truncatedText, ttsLanguage);
+      const result = await playGoogleCloudTTS(truncatedText, ttsLanguage);
 
-      if (!audioUrl) {
+      // Check if blocked by premium gate - stop playback, don't advance
+      if (result?.blocked) {
+        console.log('[GoogleTTS] Blocked by premium gate - stopping playback');
+        setIsPlayingTranslation(false);
+        isPlayingTranslationRef.current = false;
+        return;
+      }
+
+      if (!result || typeof result !== 'string') {
         console.error('[GoogleTTS] Failed to get audio URL, advancing...');
         if (!isLast && isPlayingTranslationRef.current) {
           setTimeout(() => setTranslationAyah(prev => prev + 1), 300);
@@ -1767,10 +1778,10 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
         return;
       }
 
-      const audio = new Audio(audioUrl);
+      const audio = new Audio(result);
       audio._playbackId = playbackId;
       audio._isTTS = true;
-      audio._audioUrl = audioUrl;
+      audio._audioUrl = result;
       translationAudioRef.current = audio;
 
       audio.onended = () => {
@@ -2261,10 +2272,19 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
 
       try {
         console.log('[Combined-TTS] Calling playGoogleCloudTTS...');
-        const audioUrl = await playGoogleCloudTTS(truncatedText, ttsLanguage);
-        console.log('[Combined-TTS] Got audio URL:', audioUrl ? 'YES (data URL)' : 'NO');
+        const result = await playGoogleCloudTTS(truncatedText, ttsLanguage);
+        console.log('[Combined-TTS] Got result:', result?.blocked ? 'BLOCKED' : (result ? 'YES (data URL)' : 'NO'));
 
-        if (!audioUrl) {
+        // Check if blocked by premium gate - stop playback, don't advance
+        if (result?.blocked) {
+          console.log('[Combined-TTS] Blocked by premium gate - stopping combined playback');
+          setIsPlayingCombined(false);
+          isPlayingCombinedRef.current = false;
+          setCombinedPhase(null);
+          return;
+        }
+
+        if (!result || typeof result !== 'string') {
           console.error('[Combined-TTS] Google TTS failed to get audio URL');
           if (isPlayingCombinedRef.current) {
             console.log('[Combined-TTS] Skipping to next ayah due to failure');
@@ -2275,9 +2295,9 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
         }
 
         console.log('[Combined-TTS] Creating Audio object...');
-        const ttsAudio = new Audio(audioUrl);
+        const ttsAudio = new Audio(result);
         ttsAudio._playbackId = playbackId;
-        ttsAudio._audioUrl = audioUrl;
+        ttsAudio._audioUrl = result;
         ttsAudio._ayahNum = ayahNum; // Store for debugging
         translationAudioRef.current = ttsAudio;
 
