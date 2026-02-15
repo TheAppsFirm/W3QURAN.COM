@@ -28,6 +28,7 @@ import { speakText, getTranslationAudioSource, getTranslationAudioUrl, getAvaila
 import { useLocalStorage } from '../../hooks';
 import { logReadingSession, trackSurahCompletion, trackFeatureUsage } from '../../utils/trackingUtils';
 import { shareVerse } from '../../utils/shareUtils';
+import { useAuth } from '../../contexts/AuthContext';
 
 // Simple HTML sanitizer to prevent XSS attacks in tafseer content
 const sanitizeHTML = (html) => {
@@ -1443,6 +1444,16 @@ const SharePanel = memo(function SharePanel({ surahId, surahName, ayahNumber, ve
 // ============================================
 
 const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, darkMode, onChangeSurah, initialVerse = 1, initialPanel = null, onPanelChange }) {
+  // Auth state for premium features
+  const { isPremium, isAuthenticated, login } = useAuth();
+
+  // Premium feature: HD TTS is free for Surah Al-Fatiha (trial), requires premium for others
+  const canUseHDTTS = isPremium || surah?.id === 1;
+
+  // State for showing upgrade prompt
+  const [showUpgradePrompt, setShowUpgradePrompt] = useState(false);
+  const [upgradeFeature, setUpgradeFeature] = useState(null);
+
   const [fontSize, setFontSize] = useLocalStorage('reader_fontsize', 'medium');
   const [selectedReciter, setSelectedReciter] = useLocalStorage('reader_reciter', 'ar.alafasy');
   const [selectedTranslation, setSelectedTranslation] = useLocalStorage('reader_translation', 'ur.jalandhry');
@@ -1628,8 +1639,17 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
 
   // TTS helper function - uses server-side proxy for security
   // API key is stored server-side in Cloudflare environment variables
+  // Premium feature: HD TTS requires premium OR Surah Al-Fatiha (free trial)
   const playGoogleCloudTTS = useCallback(async (text, langCode = 'ur') => {
     console.log('[TTS] Calling proxy with lang:', langCode, 'text length:', text?.length);
+
+    // Check premium access - HD TTS is free for Fatiha, premium for others
+    if (!canUseHDTTS) {
+      console.log('[TTS] HD TTS requires premium. Surah:', surah?.id);
+      setUpgradeFeature('hd-tts');
+      setShowUpgradePrompt(true);
+      return null; // Will fallback to browser TTS
+    }
 
     try {
       // Use server-side proxy - API key is stored securely on server
@@ -1666,7 +1686,7 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
       console.error('[TTS] Error:', error);
       return null;
     }
-  }, []);
+  }, [canUseHDTTS, surah?.id]);
 
   // Speak translation using Google Cloud TTS API (single verse tap)
   const speakTranslation = useCallback(async (ayahNum, translationText) => {
@@ -1712,7 +1732,11 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
         setSpeakingAyah(null);
       });
     } else {
-      setSpeakingAyah(null);
+      // Fallback to browser TTS (free for all users)
+      console.log('[TTS] Using browser TTS fallback');
+      speakText(translationText, ttsLanguage, { rate: 0.9 });
+      // Browser TTS doesn't have proper end detection, so we estimate
+      setTimeout(() => setSpeakingAyah(null), Math.max(3000, translationText.length * 80));
     }
   }, [speakingAyah, ttsLanguage, playGoogleCloudTTS]);
 
@@ -3568,6 +3592,77 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
           </div>
         </div>
       </div>
+
+      {/* Premium Upgrade Prompt Modal */}
+      {showUpgradePrompt && (
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm"
+          onClick={() => setShowUpgradePrompt(false)}
+        >
+          <div
+            className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-3xl p-6 max-w-sm mx-4 border border-white/20 shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+            style={{ animation: 'bubblePopIn 0.3s ease-out' }}
+          >
+            {/* Premium Star Icon */}
+            <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-r from-amber-400 to-orange-500 flex items-center justify-center shadow-lg shadow-amber-500/30">
+              <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+              </svg>
+            </div>
+
+            {/* Title */}
+            <h3 className="text-xl font-bold text-white text-center mb-2">
+              {upgradeFeature === 'hd-tts' ? 'HD Voice is Premium' : 'Premium Feature'}
+            </h3>
+
+            {/* Description */}
+            <p className="text-gray-300 text-center text-sm mb-4">
+              {upgradeFeature === 'hd-tts'
+                ? 'Get crystal-clear HD text-to-speech with natural male voices in Urdu, Arabic, and more.'
+                : 'This feature is available for premium members.'}
+            </p>
+
+            {/* Free Trial Note */}
+            <div className="bg-emerald-500/20 border border-emerald-500/30 rounded-xl px-4 py-2 mb-4">
+              <p className="text-emerald-400 text-xs text-center">
+                💡 Try HD TTS free on <strong>Surah Al-Fatiha</strong>!
+              </p>
+            </div>
+
+            {/* Buttons */}
+            <div className="flex gap-3">
+              <button
+                onClick={() => setShowUpgradePrompt(false)}
+                className="flex-1 py-2.5 px-4 rounded-xl bg-white/10 text-white font-medium hover:bg-white/20 transition-all"
+              >
+                Use Browser Voice
+              </button>
+              {isAuthenticated ? (
+                <button
+                  onClick={() => {
+                    setShowUpgradePrompt(false);
+                    window.location.href = '/settings';
+                  }}
+                  className="flex-1 py-2.5 px-4 rounded-xl bg-gradient-to-r from-amber-400 to-orange-500 text-white font-medium hover:shadow-lg hover:shadow-amber-500/30 transition-all"
+                >
+                  Upgrade Now
+                </button>
+              ) : (
+                <button
+                  onClick={() => {
+                    setShowUpgradePrompt(false);
+                    login();
+                  }}
+                  className="flex-1 py-2.5 px-4 rounded-xl bg-gradient-to-r from-purple-500 to-violet-500 text-white font-medium hover:shadow-lg transition-all"
+                >
+                  Sign In
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
       <style>{`
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
