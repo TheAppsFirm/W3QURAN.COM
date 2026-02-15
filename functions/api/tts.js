@@ -77,7 +77,10 @@ export async function onRequest(context) {
           body: JSON.stringify({
             input: { text: truncatedText },
             voice: voiceConfig,
-            audioConfig: { audioEncoding: 'MP3', speakingRate: 0.95 },
+            audioConfig: {
+              audioEncoding: 'MP3',
+              // Note: Chirp3-HD ignores speakingRate/pitch - uses natural LLM pacing
+            },
           }),
         });
 

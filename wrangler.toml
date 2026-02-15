@@ -6,6 +6,18 @@ pages_build_output_dir = "dist"
 # For local development, create a .dev.vars file with:
 # QURAN_CLIENT_ID=your-client-id
 # QURAN_CLIENT_SECRET=your-client-secret
+# GOOGLE_CLIENT_ID=your-google-oauth-client-id
+# GOOGLE_CLIENT_SECRET=your-google-oauth-client-secret
+# STRIPE_SECRET_KEY=sk_test_xxx
+# STRIPE_WEBHOOK_SECRET=whsec_xxx
+
+# D1 Database for user accounts and subscriptions
+# To create: wrangler d1 create w3quran-db
+# Then run: wrangler d1 execute w3quran-db --file=./schema.sql
+[[d1_databases]]
+binding = "DB"
+database_name = "w3quran-db"
+database_id = "YOUR_D1_DATABASE_ID"
 
 # KV Namespace for Global Ummah Pulse (real-time reader tracking)
 # To create: wrangler kv:namespace create "UMMAH_KV"

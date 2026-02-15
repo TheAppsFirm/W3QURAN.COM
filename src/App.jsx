@@ -28,6 +28,7 @@ import {
 } from './components/views';
 import { SURAHS, MAX_AYAHS } from './data';
 import { useLocalStorage } from './hooks';
+import { AuthProvider } from './contexts/AuthContext';
 
 // CSS Styles - Font imports and utility classes (animations defined in index.css)
 const AnimationStyles = () => (
@@ -1414,10 +1415,12 @@ function QuranBubbleApp() {
  */
 export default function App() {
   return (
-    <ErrorBoundary>
-      <Suspense fallback={<LoadingSpinner message="Loading Quran App..." />}>
-        <QuranBubbleApp />
-      </Suspense>
-    </ErrorBoundary>
+    <AuthProvider>
+      <ErrorBoundary>
+        <Suspense fallback={<LoadingSpinner message="Loading Quran App..." />}>
+          <QuranBubbleApp />
+        </Suspense>
+      </ErrorBoundary>
+    </AuthProvider>
   );
 }
