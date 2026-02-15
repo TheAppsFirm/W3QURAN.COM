@@ -26,6 +26,54 @@ const LANG_MAPPING = {
   'de': 'de-DE',
 };
 
+/**
+ * Check if user has premium access (server-side verification)
+ */
+async function checkPremiumAccess(request, env) {
+  // Get session token from cookie
+  const cookieHeader = request.headers.get('Cookie') || '';
+  const cookies = Object.fromEntries(
+    cookieHeader.split(';').map(c => {
+      const [key, ...val] = c.trim().split('=');
+      return [key, val.join('=')];
+    })
+  );
+
+  const sessionToken = cookies['w3quran_session'];
+  if (!sessionToken) {
+    return { isPremium: false, isAdmin: false };
+  }
+
+  try {
+    // Check session and subscription in database
+    const result = await env.DB.prepare(`
+      SELECT u.email, s.plan
+      FROM sessions sess
+      JOIN users u ON sess.user_id = u.id
+      LEFT JOIN subscriptions s ON u.id = s.user_id
+      WHERE sess.token = ? AND sess.expires_at > datetime('now')
+      LIMIT 1
+    `).bind(sessionToken).first();
+
+    if (!result) {
+      return { isPremium: false, isAdmin: false };
+    }
+
+    // Check admin emails from environment
+    const adminEmails = (env.ADMIN_EMAILS || '').split(',').map(e => e.trim().toLowerCase()).filter(Boolean);
+    const isAdmin = adminEmails.includes(result.email?.toLowerCase());
+    const hasPaidPlan = ['monthly', 'yearly', 'lifetime'].includes(result.plan);
+
+    return {
+      isPremium: hasPaidPlan || isAdmin,
+      isAdmin,
+    };
+  } catch (error) {
+    console.error('[TTS] Premium check error:', error);
+    return { isPremium: false, isAdmin: false };
+  }
+}
+
 export async function onRequest(context) {
   const { request, env } = context;
 
@@ -50,6 +98,28 @@ export async function onRequest(context) {
     const url = new URL(request.url);
     const text = url.searchParams.get('text');
     const lang = url.searchParams.get('lang') || 'en';
+    const surahId = parseInt(url.searchParams.get('surah') || '0', 10);
+
+    // SERVER-SIDE PREMIUM CHECK - This cannot be bypassed from frontend
+    // Surah Al-Fatiha (id=1) is free for everyone as trial
+    const isFreeTrialSurah = surahId === 1;
+
+    if (!isFreeTrialSurah) {
+      const { isPremium } = await checkPremiumAccess(request, env);
+      if (!isPremium) {
+        return new Response(JSON.stringify({
+          error: 'Premium required',
+          code: 'PREMIUM_REQUIRED',
+          message: 'HD TTS is a premium feature. Surah Al-Fatiha is free for trial.',
+        }), {
+          status: 403,
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+          },
+        });
+      }
+    }
 
     if (!text) {
       return new Response(JSON.stringify({ error: 'Missing text parameter' }), {

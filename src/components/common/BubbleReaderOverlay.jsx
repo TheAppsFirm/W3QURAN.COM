@@ -1653,15 +1653,22 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
 
     try {
       // Use server-side proxy - API key is stored securely on server
-      const response = await fetch(`/api/tts?text=${encodeURIComponent(text)}&lang=${langCode}`);
+      // Pass surah ID for server-side premium verification
+      const response = await fetch(`/api/tts?text=${encodeURIComponent(text)}&lang=${langCode}&surah=${surah?.id || 0}`);
 
       console.log('[TTS] Proxy response status:', response.status);
 
       if (!response.ok) {
-        // Check if we should fallback to browser TTS
         const contentType = response.headers.get('content-type');
         if (contentType?.includes('application/json')) {
           const errorData = await response.json();
+          // Handle server-side premium check rejection
+          if (errorData.code === 'PREMIUM_REQUIRED') {
+            console.log('[TTS] Server rejected - premium required');
+            setUpgradeFeature('hd-tts');
+            setShowUpgradePrompt(true);
+            return { blocked: true };
+          }
           if (errorData.useBrowserTTS) {
             console.log('[TTS] Server suggests browser TTS fallback');
             return null;
