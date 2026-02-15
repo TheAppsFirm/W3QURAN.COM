@@ -158,4 +158,15 @@ export {
   getAllStories,
 } from './ayahConnections';
 
+// Quranic Arabic Treebank (Grammar Analysis)
+export {
+  POS_TAGS,
+  GRAMMAR_ROLES,
+  CASES,
+  TREEBANK_DATA,
+  hasTreebankData,
+  getAyahTreebank,
+  canAccessTreebank,
+} from './treebankData';
+
 // Kanz ul Iman Audio data file kept for reference (now uses Google Cloud TTS instead)

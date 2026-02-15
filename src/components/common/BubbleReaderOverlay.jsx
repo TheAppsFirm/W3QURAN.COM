@@ -22,6 +22,8 @@ import VoiceControl from './VoiceControl';
 import HeartbeatMeditation from './HeartbeatMeditation';
 import FamilyCircle from './FamilyCircle';
 import { trackReadingActivity } from './GlobalUmmahPulse';
+import { TreebankOverlay } from './TreebankAnalysis';
+import { hasTreebankData, canAccessTreebank } from '../../data/treebankData';
 import { PALETTES, SURAHS, fetchTafseer, getTafseersByLanguage, getDefaultTafseer, TRANSLATION_TO_TAFSEER_LANG, getVideosForSurah, generateSearchQuery, SCHOLARS, SURAH_TOPICS, TAFSEER_SOURCES, markAyahRead } from '../../data';
 import { useQuranAPI, useMultilingualWords, TRANSLATIONS, TAJWEED_RULES, POS_LABELS } from '../../hooks/useQuranAPI';
 import { speakText, getTranslationAudioSource, getTranslationAudioUrl, getAvailableTranslationAudio, TRANSLATION_RECITERS } from '../../hooks/useAudioPlayer';
@@ -1453,6 +1455,10 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
   // State for showing upgrade prompt
   const [showUpgradePrompt, setShowUpgradePrompt] = useState(false);
   const [upgradeFeature, setUpgradeFeature] = useState(null);
+
+  // State for Treebank Grammar Analysis
+  const [showTreebank, setShowTreebank] = useState(false);
+  const [treebankAyah, setTreebankAyah] = useState(null);
 
   const [fontSize, setFontSize] = useLocalStorage('reader_fontsize', 'medium');
   const [selectedReciter, setSelectedReciter] = useLocalStorage('reader_reciter', 'ar.alafasy');
@@ -3445,6 +3451,26 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
                             <button onClick={() => handleShareVerse(verse, ayahNum)} className={`p-1.5 rounded-full transition-all hover:scale-110 ${shareStatus === ayahNum ? 'bg-emerald-500/80' : 'bg-white/15'}`} title="Share verse">
                               {shareStatus === ayahNum ? <Icons.Check className="w-3 h-3" /> : <Icons.Share className="w-3 h-3" />}
                             </button>
+                            {/* Grammar Analysis Button */}
+                            {hasTreebankData(surah?.id) && (
+                              <button
+                                onClick={() => {
+                                  setTreebankAyah(ayahNum);
+                                  setShowTreebank(true);
+                                }}
+                                className={`p-1.5 rounded-full transition-all hover:scale-110 relative ${
+                                  canAccessTreebank(surah?.id, isPremium) ? 'bg-purple-500/30 hover:bg-purple-500/50' : 'bg-white/15'
+                                }`}
+                                title="Grammar Analysis"
+                              >
+                                <Icons.BookOpen className="w-3 h-3 text-purple-300" />
+                                {!canAccessTreebank(surah?.id, isPremium) && (
+                                  <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-amber-500 rounded-full flex items-center justify-center">
+                                    <Icons.Lock className="w-1.5 h-1.5 text-white" />
+                                  </span>
+                                )}
+                              </button>
+                            )}
                           </div>
                         </div>
                       );
@@ -3617,6 +3643,23 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
           </div>
         </div>
       </div>
+
+      {/* Treebank Grammar Analysis Overlay */}
+      <TreebankOverlay
+        surahId={surah?.id}
+        ayahNum={treebankAyah}
+        isVisible={showTreebank}
+        onClose={() => {
+          setShowTreebank(false);
+          setTreebankAyah(null);
+        }}
+        isPremium={isPremium}
+        onUpgrade={() => {
+          setShowTreebank(false);
+          setUpgradeFeature('treebank');
+          setShowUpgradePrompt(true);
+        }}
+      />
 
       {/* Premium Upgrade Prompt Modal */}
       {showUpgradePrompt && (

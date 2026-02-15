@@ -28,3 +28,4 @@ export { default as GlobalUmmahPulse, trackReadingActivity } from './GlobalUmmah
 export { default as VerseWeatherSync } from './VerseWeatherSync';
 export { default as SoundHealingRoom } from './SoundHealingRoom';
 export { default as QuranicBabyNames } from './QuranicBabyNames';
+export { TreebankOverlay, GrammarButton } from './TreebankAnalysis';
