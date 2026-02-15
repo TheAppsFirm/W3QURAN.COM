@@ -2,11 +2,6 @@ import React, { createContext, useContext, useState, useEffect, useCallback } fr
 
 const AuthContext = createContext(null);
 
-// Admin emails get free premium access for testing
-const ADMIN_EMAILS = [
-  'ziadevtmc@gmail.com',
-];
-
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -72,8 +67,8 @@ export function AuthProvider({ children }) {
     logout,
     refreshUser,
     isAuthenticated: !!user,
-    isPremium: user?.subscription?.isPremium || ADMIN_EMAILS.includes(user?.email) || false,
-    isAdmin: ADMIN_EMAILS.includes(user?.email) || false,
+    isPremium: user?.subscription?.isPremium || false,
+    isAdmin: user?.isAdmin || false,
   };
 
   return (

@@ -54,6 +54,11 @@ export async function onRequest(context) {
       });
     }
 
+    // Check if user is admin (from environment variable)
+    const adminEmails = (env.ADMIN_EMAILS || '').split(',').map(e => e.trim().toLowerCase()).filter(Boolean);
+    const isAdmin = adminEmails.includes(result.email?.toLowerCase());
+    const hasPaidPlan = ['monthly', 'yearly', 'lifetime'].includes(result.plan);
+
     // Return user data
     const user = {
       id: result.id,
@@ -61,11 +66,12 @@ export async function onRequest(context) {
       name: result.name,
       picture: result.picture,
       createdAt: result.created_at,
+      isAdmin,
       subscription: {
         plan: result.plan || 'free',
         status: result.subscription_status || 'active',
         currentPeriodEnd: result.current_period_end,
-        isPremium: ['monthly', 'yearly', 'lifetime'].includes(result.plan),
+        isPremium: hasPaidPlan || isAdmin, // Admins get premium for free
       },
     };
 
