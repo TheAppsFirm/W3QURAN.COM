@@ -7,8 +7,10 @@ import { useState, useEffect, useRef, memo } from 'react';
 import { Icons } from '../common/Icons';
 import { Logo } from '../common/Logo';
 import { FAQ_TOPICS } from '../../data';
+import { useAuth } from '../../contexts/AuthContext';
+import { LoginButton, UserMenu } from '../auth';
 
-const Header = memo(function Header({ filters, setFilters, showAnalytics, setShowAnalytics }) {
+const Header = memo(function Header({ filters, setFilters, showAnalytics, setShowAnalytics, onSettingsClick }) {
   const [open, setOpen] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [showTopics, setShowTopics] = useState(false);
@@ -16,6 +18,7 @@ const Header = memo(function Header({ filters, setFilters, showAnalytics, setSho
   const [dropdownPos, setDropdownPos] = useState({ top: 0, left: 0 });
   const debounceTimer = useRef(null);
   const buttonRefs = useRef({});
+  const { user, loading: authLoading } = useAuth();
 
   // Debounced search
   useEffect(() => {
@@ -205,6 +208,17 @@ const Header = memo(function Header({ filters, setFilters, showAnalytics, setSho
               <span className="text-xs">Clear</span>
             </button>
           )}
+
+          {/* Auth - Login/User Menu */}
+          <div className="ml-2">
+            {authLoading ? (
+              <div className="w-8 h-8 rounded-full bg-white/20 animate-pulse" />
+            ) : user ? (
+              <UserMenu onSettingsClick={onSettingsClick} />
+            ) : (
+              <LoginButton compact />
+            )}
+          </div>
         </div>
 
         {/* Topic Tags Panel - Animated */}
