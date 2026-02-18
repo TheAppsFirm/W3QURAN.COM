@@ -423,16 +423,25 @@ export const GridLayout = memo(function GridLayout({
   // Responsive sizing using hooks
   const isMobile = useIsMobile();
   const isTablet = useIsTablet();
-  const columns = Math.ceil(Math.sqrt(surahs.length) * 1.2);
   const bubbleSize = isMobile ? 65 * zoom : (isTablet ? 75 * zoom : 80 * zoom);
-  const gap = isMobile ? 12 * zoom : 20 * zoom;
+  const gap = isMobile ? 8 : (isTablet ? 12 : 16);
+
+  // Calculate columns based on screen size
+  const gridColumns = isMobile ? 'repeat(auto-fill, minmax(70px, 1fr))' :
+                      isTablet ? 'repeat(auto-fill, minmax(85px, 1fr))' :
+                      'repeat(auto-fill, minmax(95px, 1fr))';
 
   return (
     <div
-      className="flex flex-wrap gap-2 sm:gap-3 md:gap-4 p-4 sm:p-6 md:p-8 pb-32 sm:pb-36 w-full"
+      dir="rtl"
       style={{
+        display: 'grid',
+        gridTemplateColumns: gridColumns,
+        gap: `${gap}px`,
+        padding: isMobile ? '16px' : '24px',
+        paddingBottom: isMobile ? '140px' : '160px', // Extra space for floating menu
+        width: '100%',
         direction: 'rtl',
-        justifyContent: 'flex-start',
       }}
     >
       {surahs.map((surah, index) => {
