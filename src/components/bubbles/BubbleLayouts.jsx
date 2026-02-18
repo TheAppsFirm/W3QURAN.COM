@@ -429,9 +429,11 @@ export const GridLayout = memo(function GridLayout({
 
   return (
     <div
-      className="flex flex-wrap justify-start gap-2 sm:gap-3 md:gap-4 p-4 sm:p-6 md:p-8 mx-auto"
-      dir="rtl"
-      style={{ maxWidth: (bubbleSize + gap) * columns + 100 }}
+      className="flex flex-wrap gap-2 sm:gap-3 md:gap-4 p-4 sm:p-6 md:p-8 w-full"
+      style={{
+        direction: 'rtl',
+        justifyContent: 'flex-start',
+      }}
     >
       {surahs.map((surah, index) => {
         const palette = PALETTES[(surah.id - 1) % 10];
