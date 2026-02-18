@@ -3183,8 +3183,9 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
           ))}
 
           <button onClick={handleCloseClick}
-            className="absolute w-9 h-9 rounded-full bg-white/30 backdrop-blur-sm flex items-center justify-center hover:bg-white/50 hover:scale-110 transition-all z-20 text-white"
-            style={{ top: '3%', right: '46%' }}>
+            className="absolute w-10 h-10 sm:w-9 sm:h-9 rounded-full bg-red-500/80 sm:bg-white/30 backdrop-blur-sm flex items-center justify-center hover:bg-red-600/90 sm:hover:bg-white/50 hover:scale-110 transition-all z-[70] text-white shadow-lg"
+            style={{ top: '16px', right: '16px' }}
+            aria-label="Close">
             <Icons.X className="w-5 h-5" />
           </button>
 
