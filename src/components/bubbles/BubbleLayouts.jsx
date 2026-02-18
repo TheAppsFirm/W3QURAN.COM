@@ -1112,13 +1112,13 @@ export const BookLayout = memo(function BookLayout({
         >
           القرآن الكريم
         </div>
-        <div style={{ color: darkMode ? 'rgba(255,215,0,0.5)' : 'rgba(139,90,43,0.5)', fontSize: isMobile ? 10 : 12, letterSpacing: '0.2em' }}>
+        <div style={{ color: darkMode ? 'rgba(255,215,0,0.5)' : 'rgba(139,90,43,0.5)', fontSize: isMobileView ? 10 : 12, letterSpacing: '0.2em' }}>
           THE NOBLE QURAN
         </div>
       </div>
 
       {/* Book Container - Single page on mobile, dual pages on desktop */}
-      {isMobile ? (
+      {isMobileView ? (
         // Mobile: Single page view
         <div className="w-full flex justify-center">
           <BookPage pageSurahs={currentSurahs.slice(0, 4)} isLeft={true} isSinglePage={true} />
