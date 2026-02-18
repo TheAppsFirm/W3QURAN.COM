@@ -8,18 +8,41 @@ import { useState, useEffect, useRef, useCallback, memo } from 'react';
 import { Icons } from './Icons';
 import { PALETTES, FAQ_TOPICS } from '../../data';
 import { shareVerse } from '../../utils/shareUtils';
+import { useAuth } from '../../contexts/AuthContext';
+
+// Rotating donation verses - short versions
+const DONATION_VERSES = [
+  { arabic: 'مَّثَلُ الَّذِينَ يُنفِقُونَ أَمْوَالَهُمْ فِي سَبِيلِ اللَّهِ', urdu: 'جو اپنا مال اللہ کی راہ میں خرچ کرتے ہیں', en: 'Those who spend in Allah\'s way', ref: '2:261' },
+  { arabic: 'وَأَقْرَضُوا اللَّهَ قَرْضًا حَسَنًا', urdu: 'اور اللہ کو قرض حسنہ دیا', en: 'And lend to Allah a goodly loan', ref: '57:18' },
+  { arabic: 'وَمَا تُنفِقُوا مِنْ خَيْرٍ يُوَفَّ إِلَيْكُمْ', urdu: 'جو بھی نیکی خرچ کرو گے پورا ملے گا', en: 'Whatever good you spend will be repaid', ref: '2:272' },
+];
 
 const BubbleModal = memo(function BubbleModal({
   surah,
   onClose,
   onRead,
+  onDonate,
+  onUpgrade,
   darkMode,
   originPosition,
 }) {
+  const { isAuthenticated, login } = useAuth();
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [shareStatus, setShareStatus] = useState(null);
   const [isAnimating, setIsAnimating] = useState(true);
   const closeButtonRef = useRef(null);
+  const [verseIndex] = useState(() => Math.floor(Math.random() * DONATION_VERSES.length));
+
+  // Handle upgrade - login first if not authenticated
+  const handleUpgrade = useCallback(() => {
+    if (!isAuthenticated) {
+      // Store pending action to redirect after login
+      localStorage.setItem('pendingUpgrade', 'true');
+      login();
+    } else {
+      onUpgrade?.();
+    }
+  }, [isAuthenticated, login, onUpgrade]);
 
   // Check if bookmarked
   useEffect(() => {
@@ -87,7 +110,7 @@ const BubbleModal = memo(function BubbleModal({
 
   return (
     <div
-      className="fixed inset-0 flex items-center justify-center p-4"
+      className="fixed inset-0 flex flex-col items-center justify-center p-4"
       style={{ zIndex: 9999999 }}
       onClick={onClose}
       role="dialog"
@@ -380,6 +403,62 @@ const BubbleModal = memo(function BubbleModal({
         </div>
       </div>
 
+      {/* Donation Banner - Under the bubble */}
+      {(onDonate || onUpgrade) && (
+        <div
+          className="mt-4 px-4 py-3 rounded-2xl max-w-sm mx-auto text-center"
+          onClick={(e) => e.stopPropagation()}
+          style={{
+            background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.95) 0%, rgba(5, 150, 105, 0.95) 100%)',
+            backdropFilter: 'blur(20px)',
+            boxShadow: '0 4px 20px rgba(16, 185, 129, 0.3)',
+            animation: 'slideUp 0.5s ease-out 0.3s both',
+          }}
+        >
+          {/* Verse text */}
+          <p className="text-white text-sm leading-relaxed mb-1" style={{ fontFamily: "'Scheherazade New', serif" }} dir="rtl">
+            {DONATION_VERSES[verseIndex].arabic}
+          </p>
+          <p className="text-white/90 text-xs mb-0.5" style={{ fontFamily: "'Noto Nastaliq Urdu', serif" }} dir="rtl">
+            {DONATION_VERSES[verseIndex].urdu}
+          </p>
+          <p className="text-white/70 text-[11px] mb-3">
+            {DONATION_VERSES[verseIndex].en} • {DONATION_VERSES[verseIndex].ref}
+          </p>
+          {/* Action buttons */}
+          <div className="flex items-center justify-center gap-2">
+            {/* Donate button */}
+            {onDonate && (
+              <button
+                onClick={onDonate}
+                className="px-4 py-1.5 rounded-full text-xs font-semibold transition-all hover:scale-105 active:scale-95 flex items-center gap-1.5"
+                style={{
+                  background: 'white',
+                  color: '#059669',
+                }}
+              >
+                <Icons.Heart className="w-3.5 h-3.5" />
+                Donate
+              </button>
+            )}
+            {/* Upgrade button */}
+            {onUpgrade && (
+              <button
+                onClick={handleUpgrade}
+                className="px-4 py-1.5 rounded-full text-xs font-semibold transition-all hover:scale-105 active:scale-95 flex items-center gap-1.5 border border-white/50"
+                style={{
+                  background: 'rgba(255,255,255,0.15)',
+                  color: 'white',
+                }}
+              >
+                <Icons.Star className="w-3.5 h-3.5" />
+                Premium
+              </button>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* Animations & Custom Scrollbar */}
       <style>{`
         @keyframes spin {
@@ -401,6 +480,10 @@ const BubbleModal = memo(function BubbleModal({
         @keyframes shimmerWave {
           0% { transform: translateX(-100%); }
           100% { transform: translateX(100%); }
+        }
+        @keyframes slideUp {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
         }
         .scrollbar-thin::-webkit-scrollbar {
           width: 4px;

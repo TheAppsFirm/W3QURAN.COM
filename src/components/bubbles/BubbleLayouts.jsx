@@ -450,7 +450,7 @@ export const GridLayout = memo(function GridLayout({
         return (
           <div
             key={surah.id}
-            className="bubble-item cursor-pointer"
+            className="bubble-item cursor-pointer relative"
             style={{
               width: bubbleSize,
               height: bubbleSize + 20,

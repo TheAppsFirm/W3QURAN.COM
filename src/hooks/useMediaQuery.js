@@ -5,7 +5,7 @@
  * using the matchMedia API for optimal performance.
  */
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 
 // Centralized breakpoint constants (matches Tailwind)
 export const BREAKPOINTS = {
@@ -19,13 +19,11 @@ export const BREAKPOINTS = {
  * @returns {boolean} - Whether the query matches
  */
 export function useMediaQuery(query) {
-  // SSR safety - default to false on server
-  const getMatches = useCallback(() => {
+  // SSR safety - default to false on server, then update on client
+  const [matches, setMatches] = useState(() => {
     if (typeof window === 'undefined') return false;
     return window.matchMedia(query).matches;
-  }, [query]);
-
-  const [matches, setMatches] = useState(getMatches);
+  });
 
   useEffect(() => {
     if (typeof window === 'undefined') return;

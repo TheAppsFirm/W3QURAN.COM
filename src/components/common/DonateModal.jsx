@@ -20,9 +20,15 @@ const DONATION_CONFIG = {
 };
 
 const DonateModal = memo(function DonateModal({ isOpen, onClose }) {
-  const [copiedJazzcash, setCopiedJazzcash] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   if (!isOpen) return null;
+
+  const copyNumber = () => {
+    navigator.clipboard.writeText(DONATION_CONFIG.jazzcash.number);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   return (
     <div
@@ -91,36 +97,35 @@ const DonateModal = memo(function DonateModal({ isOpen, onClose }) {
                 </div>
                 <div className="flex-1">
                   <div className="text-white font-semibold">JazzCash</div>
-                  <div className="text-white/60 text-sm">Mobile Money Transfer</div>
+                  <div className="text-white/60 text-sm">Scan QR Code to Pay</div>
                 </div>
               </div>
 
-              {/* JazzCash Details */}
-              <div className="bg-white/10 rounded-xl p-3 space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-white/70 text-sm">Account:</span>
-                  <span className="text-white font-medium">{DONATION_CONFIG.jazzcash.accountName}</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-white/70 text-sm">Number:</span>
-                  <div className="flex items-center gap-2">
-                    <span className="text-white font-mono font-medium">{DONATION_CONFIG.jazzcash.number}</span>
-                    <button
-                      onClick={() => {
-                        navigator.clipboard.writeText(DONATION_CONFIG.jazzcash.number);
-                        setCopiedJazzcash(true);
-                        setTimeout(() => setCopiedJazzcash(false), 2000);
-                      }}
-                      className="p-1.5 rounded-lg bg-white/20 hover:bg-white/30 transition-all"
-                      title="Copy number"
-                    >
-                      {copiedJazzcash ? (
-                        <Icons.CheckCircle className="w-4 h-4 text-green-300" />
-                      ) : (
-                        <Icons.Copy className="w-4 h-4 text-white" />
-                      )}
-                    </button>
-                  </div>
+              {/* JazzCash QR Code */}
+              <div className="bg-white rounded-xl p-3 text-center">
+                <p className="text-gray-700 font-medium text-sm mb-2">
+                  {DONATION_CONFIG.jazzcash.accountName}
+                </p>
+                <img
+                  src="/jazzcash-qr.jpeg"
+                  alt="JazzCash QR Code"
+                  className="w-40 h-40 mx-auto object-contain"
+                />
+                <p className="text-gray-500 text-xs mt-2">Scan with JazzCash App</p>
+                {/* Number with copy button */}
+                <div className="mt-2 pt-2 border-t border-gray-200 flex items-center justify-center gap-2">
+                  <span className="text-gray-600 text-sm font-mono">{DONATION_CONFIG.jazzcash.number}</span>
+                  <button
+                    onClick={copyNumber}
+                    className="p-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 transition-all"
+                    title="Copy number"
+                  >
+                    {copied ? (
+                      <Icons.CheckCircle className="w-4 h-4 text-green-500" />
+                    ) : (
+                      <Icons.Copy className="w-4 h-4 text-gray-500" />
+                    )}
+                  </button>
                 </div>
               </div>
             </div>

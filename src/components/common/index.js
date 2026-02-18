@@ -16,6 +16,7 @@ export { default as OfflineManager } from './OfflineManager';
 export { default as HifzMode } from './HifzMode';
 export { default as SearchPanel } from './SearchPanel';
 export { default as DonateModal } from './DonateModal';
+export { default as DonationBanner } from './DonationBanner';
 export { Logo, LogoIcon, LogoFull } from './Logo';
 export { default as VerseArtGenerator } from './VerseArtGenerator';
 export { default as EmotionalTracker, MoodEntryForm, MoodSelector } from './EmotionalTracker';

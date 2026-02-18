@@ -28,7 +28,7 @@ import {
 } from './components/views';
 import { SURAHS, MAX_AYAHS } from './data';
 import { useLocalStorage, isMobileDevice, BREAKPOINTS } from './hooks';
-import { AuthProvider } from './contexts/AuthContext';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
 
 // CSS Styles - Font imports and utility classes (animations defined in index.css)
 const AnimationStyles = () => (
@@ -228,6 +228,9 @@ const MODAL_TO_ROUTE = {
  * Main App Component
  */
 function QuranBubbleApp() {
+  // Auth state
+  const { isAuthenticated } = useAuth();
+
   // State management using custom hooks for persistence
   const [view, setView] = useState('surahs');
   const [level, setLevel] = useLocalStorage('level', 'starter');
@@ -314,6 +317,17 @@ function QuranBubbleApp() {
     setInitialVerse(1);
     setInitialPanel(null);
   }, []);
+
+  // Check for pending upgrade after login
+  useEffect(() => {
+    if (isAuthenticated) {
+      const pendingUpgrade = localStorage.getItem('pendingUpgrade');
+      if (pendingUpgrade === 'true') {
+        localStorage.removeItem('pendingUpgrade');
+        setView('settings');
+      }
+    }
+  }, [isAuthenticated]);
 
   // Parse URL and set initial state
   useEffect(() => {
@@ -1121,6 +1135,12 @@ function QuranBubbleApp() {
             setClickPosition(null);
           }}
           onRead={handleReadSurah}
+          onDonate={() => setShowDonateModal(true)}
+          onUpgrade={() => {
+            setSelected(null);
+            setClickPosition(null);
+            setView('settings');
+          }}
           darkMode={darkMode}
           originPosition={clickPosition}
         />
