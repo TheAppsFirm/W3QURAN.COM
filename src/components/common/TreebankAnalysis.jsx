@@ -9,6 +9,7 @@
 
 import React, { useState, useCallback, useEffect, memo } from 'react';
 import { Icons } from './Icons';
+// All treebank data now loaded from new modular system
 import {
   POS_TAGS,
   GRAMMAR_ROLES,
@@ -22,11 +23,10 @@ import {
   getLanguageFromTranslation,
   getLabel,
   getFeatureKey,
-  // Ontology
-  QURAN_ONTOLOGY,
-  getSurahOntology,
-  hasOntology,
-} from '../../data/treebankData';
+  loadSurahTreebank,
+  loadSurahOntology,
+  hasOntologyData,
+} from '../../data/treebank/index';
 import {
   TAFSEER_SOURCES,
   getTafseersByLanguage,
@@ -74,7 +74,9 @@ const POSBadge = memo(function POSBadge({ pos, size = 'sm', lang = 'en' }) {
  * Word Card - Inline word display with POS tag
  */
 const WordCard = memo(function WordCard({ word, isSelected, onClick, showDetails = true, lang = 'en' }) {
-  const primaryColor = POS_TAGS[word.pos[0]]?.color || '#888';
+  // Handle both pos array format and posTag string format
+  const posArray = Array.isArray(word.pos) ? word.pos : (word.posTag ? [word.posTag] : ['N']);
+  const primaryColor = POS_TAGS[posArray[0]]?.color || '#888';
 
   // For RTL languages (ur, hi, bn, ar), hide Latin transliteration
   // For Latin-based languages (en, tr, id), show transliteration
@@ -100,7 +102,7 @@ const WordCard = memo(function WordCard({ word, isSelected, onClick, showDetails
 
       {/* POS Tags */}
       <div className="flex gap-0.5 mb-1">
-        {word.pos.map((p, i) => (
+        {posArray.map((p, i) => (
           <POSBadge key={i} pos={p} size="xs" lang={lang} />
         ))}
       </div>
@@ -302,7 +304,7 @@ const AdvancedWordAnalysis = memo(function AdvancedWordAnalysis({ word, lang = '
             {word.tajweedTips.rules?.map((rule, i) => (
               <div key={i} className="p-2 bg-cyan-500/10 rounded-lg">
                 <span className="text-cyan-300 text-sm font-medium block">{getText(rule.rule)}</span>
-                <p className="text-white/70 text-xs mt-1">{getText(rule.explanation)}</p>
+                <p className="text-white/70 text-xs mt-1">{getText(rule.description || rule.explanation)}</p>
               </div>
             ))}
           </div>
@@ -466,7 +468,9 @@ const LetterBreakdown = memo(function LetterBreakdown({ arabicWord, lang = 'en' 
 const WordDetailPanel = memo(function WordDetailPanel({ word, onClose, lang = 'en' }) {
   if (!word) return null;
 
-  const primaryTag = POS_TAGS[word.pos[0]];
+  // Handle both pos array format and posTag string format
+  const posArray = Array.isArray(word.pos) ? word.pos : (word.posTag ? [word.posTag] : ['N']);
+  const primaryTag = POS_TAGS[posArray[0]];
   const caseInfo = word.case ? CASES[word.case] : null;
   const roleInfo = word.grammarRole ? GRAMMAR_ROLES[word.grammarRole] : null;
   const labels = UI_LABELS[lang] || UI_LABELS.en;
@@ -628,8 +632,9 @@ const DependencyTree = memo(function DependencyTree({ words, structure, lang = '
   const spacing = viewBoxWidth / (totalWords + 1);
 
   words.forEach((word, index) => {
-    // RTL: reverse the position
-    wordPositions[word.id] = {
+    // RTL: reverse the position - handle missing word.id
+    const wordId = word.id || `word-${index}`;
+    wordPositions[wordId] = {
       x: viewBoxWidth - (spacing * (index + 1)),
       y: 22, // Moved up to give room for Arabic text below
     };
@@ -736,16 +741,19 @@ const DependencyTree = memo(function DependencyTree({ words, structure, lang = '
           })}
 
           {/* Word markers with Arabic text */}
-          {words.map((word) => {
-            const pos = wordPositions[word.id];
-            const color = POS_TAGS[word.pos[0]]?.color || '#888';
+          {words.map((word, wordIndex) => {
+            const wordId = word.id || `word-${wordIndex}`;
+            const pos = wordPositions[wordId];
+            if (!pos) return null;
+            const posArray = Array.isArray(word.pos) ? word.pos : (word.posTag ? [word.posTag] : ['N']);
+            const color = POS_TAGS[posArray[0]]?.color || '#888';
 
             // For non-Latin languages, translate POS labels
             const showLocalizedLabel = ['ur', 'hi', 'bn', 'ar'].includes(lang);
-            let displayPosLabel = word.posLabel;
-            if (showLocalizedLabel) {
+            let displayPosLabel = word.posLabel || word.pos?.join?.('+') || word.posTag || '';
+            if (showLocalizedLabel && displayPosLabel) {
               // Handle compound labels like "P+N" by translating each part
-              displayPosLabel = word.posLabel.split('+').map(p => {
+              displayPosLabel = displayPosLabel.split('+').map(p => {
                 const tag = POS_TAGS[p.trim()];
                 return tag ? getLabel(tag, lang) : p;
               }).join('+');
@@ -757,7 +765,7 @@ const DependencyTree = memo(function DependencyTree({ words, structure, lang = '
             const transSize = totalWords > 6 ? 2.5 : 3;
 
             return (
-              <g key={word.id}>
+              <g key={wordId}>
                 {/* POS Label above */}
                 <text
                   x={pos.x}
@@ -933,9 +941,20 @@ const getOntologyText = (obj, lang) => {
 
 /**
  * Concept Card Component - Shows a single concept
+ * Updated to handle both old and new ontology data structures
  */
 const ConceptCard = memo(function ConceptCard({ concept, categoryColor, lang, labels, onConceptClick }) {
   const [expanded, setExpanded] = useState(false);
+
+  // Handle both old and new structures
+  const conceptTerm = concept.term || concept.transliteration || '';
+  const conceptMeaning = typeof concept.meaning === 'string'
+    ? concept.meaning
+    : getOntologyText(concept.meaning, lang);
+  // Handle ayahs as array (new) or single ayah (old)
+  const ayahDisplay = concept.ayahs
+    ? (concept.ayahs.length > 1 ? `${concept.ayahs[0]}-${concept.ayahs[concept.ayahs.length - 1]}` : concept.ayahs[0])
+    : concept.ayah;
 
   return (
     <div
@@ -948,16 +967,18 @@ const ConceptCard = memo(function ConceptCard({ concept, categoryColor, lang, la
           <p className="text-2xl font-arabic text-white mb-1" dir="rtl">
             {concept.arabic}
           </p>
-          <p className="text-sm text-white/70">
-            {concept.transliteration}
-          </p>
+          {conceptTerm && (
+            <p className="text-sm text-white/70">
+              {conceptTerm}
+            </p>
+          )}
           <p className="text-sm mt-1" style={{ color: categoryColor }}>
-            {getOntologyText(concept.meaning, lang)}
+            {conceptMeaning}
           </p>
         </div>
-        {concept.ayah && (
+        {ayahDisplay && (
           <span className="text-xs bg-white/10 px-2 py-1 rounded-full text-white/60">
-            {labels.ayah} {concept.ayah}
+            {labels.ayah} {ayahDisplay}
           </span>
         )}
       </div>
@@ -967,7 +988,7 @@ const ConceptCard = memo(function ConceptCard({ concept, categoryColor, lang, la
         <div className="mt-3 pt-3 border-t border-white/10 space-y-2">
           {/* Details */}
           {concept.details && (
-            <p className={`text-sm text-white/80 leading-relaxed ${lang === 'ur' ? 'text-right' : ''}`} dir={lang === 'ur' ? 'rtl' : 'ltr'}>
+            <p className={`text-sm text-white/80 leading-relaxed ${lang === 'ur' || lang === 'ar' ? 'text-right' : ''}`} dir={lang === 'ur' || lang === 'ar' ? 'rtl' : 'ltr'}>
               {getOntologyText(concept.details, lang)}
             </p>
           )}
@@ -996,7 +1017,7 @@ const ConceptCard = memo(function ConceptCard({ concept, categoryColor, lang, la
             <div className="mt-2">
               <p className="text-xs text-white/50 mb-1">{labels.seeAlso}:</p>
               <div className="flex flex-wrap gap-1">
-                {(concept.whoAreThey[lang] || concept.whoAreThey.en).map((item, i) => (
+                {(concept.whoAreThey[lang] || concept.whoAreThey.en || []).map((item, i) => (
                   <span key={i} className="text-xs bg-white/10 px-2 py-0.5 rounded text-white/70">
                     {item}
                   </span>
@@ -1022,12 +1043,27 @@ const ConceptCard = memo(function ConceptCard({ concept, categoryColor, lang, la
   );
 });
 
+// Default colors for categories (used when new data doesn't have colors)
+const CATEGORY_COLORS = [
+  '#F59E0B', '#8B5CF6', '#10B981', '#EF4444', '#3B82F6',
+  '#EC4899', '#06B6D4', '#14B8A6', '#F97316', '#6366F1'
+];
+
 /**
  * Category Section Component
+ * Updated to handle both old and new ontology data structures
  */
-const CategorySection = memo(function CategorySection({ category, lang, labels }) {
+const CategorySection = memo(function CategorySection({ category, categoryKey, categoryIndex = 0, lang, labels }) {
   const [isOpen, setIsOpen] = useState(true);
+
+  // Handle both old (category.icon) and new (no icon) structures
   const IconComponent = Icons[category.icon] || Icons.Star;
+  // Use category color or assign based on index
+  const color = category.color || CATEGORY_COLORS[categoryIndex % CATEGORY_COLORS.length];
+  // Get category label - handle both old ({label: {en, ur}}) and new ({name, nameAr}) structures
+  const categoryLabel = category.label
+    ? getOntologyText(category.label, lang)
+    : (lang === 'ar' ? category.nameAr : category.name) || categoryKey;
 
   return (
     <div className="mb-4">
@@ -1035,17 +1071,17 @@ const CategorySection = memo(function CategorySection({ category, lang, labels }
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="w-full flex items-center gap-3 p-3 rounded-xl transition-all hover:bg-white/5"
-        style={{ backgroundColor: `${category.color}15` }}
+        style={{ backgroundColor: `${color}15` }}
       >
         <div
           className="w-10 h-10 rounded-xl flex items-center justify-center"
-          style={{ backgroundColor: `${category.color}30` }}
+          style={{ backgroundColor: `${color}30` }}
         >
-          <IconComponent className="w-5 h-5" style={{ color: category.color }} />
+          <IconComponent className="w-5 h-5" style={{ color: color }} />
         </div>
-        <div className="flex-1 text-left" dir={lang === 'ur' ? 'rtl' : 'ltr'}>
+        <div className="flex-1 text-left" dir={lang === 'ur' || lang === 'ar' ? 'rtl' : 'ltr'}>
           <h4 className="text-white font-medium">
-            {getOntologyText(category.label, lang)}
+            {categoryLabel}
           </h4>
           <p className="text-xs text-white/50">
             {category.concepts?.length || 0} concepts
@@ -1059,11 +1095,11 @@ const CategorySection = memo(function CategorySection({ category, lang, labels }
       {/* Category Concepts */}
       {isOpen && category.concepts && (
         <div className="mt-2 grid gap-2">
-          {category.concepts.map((concept) => (
+          {category.concepts.map((concept, idx) => (
             <ConceptCard
-              key={concept.id}
+              key={concept.id || concept.term || idx}
               concept={concept}
-              categoryColor={category.color}
+              categoryColor={color}
               lang={lang}
               labels={labels}
             />
@@ -1076,6 +1112,7 @@ const CategorySection = memo(function CategorySection({ category, lang, labels }
 
 /**
  * Relationship Card Component
+ * Updated to handle both old and new ontology data structures
  */
 const RelationshipCard = memo(function RelationshipCard({ relationship, lang }) {
   const typeColors = {
@@ -1084,22 +1121,49 @@ const RelationshipCard = memo(function RelationshipCard({ relationship, lang }) 
     'contrast': '#EF4444',
     'implies': '#F59E0B',
     'context': '#3B82F6',
+    'complementary': '#8B5CF6',
+    'causation': '#10B981',
+    'motivation': '#F59E0B',
+    'prerequisite': '#3B82F6',
+    'consequence': '#06B6D4',
+    'definition': '#EC4899',
+    'order': '#14B8A6',
+    'reward': '#22C55E',
+    'proof': '#EAB308',
+    'evidence': '#F97316',
   };
+
+  // Handle both old ({from: {en, ar}}) and new ({from: "string"}) structures
+  const fromText = typeof relationship.from === 'string'
+    ? relationship.from
+    : getOntologyText(relationship.from, lang);
+  const toText = typeof relationship.to === 'string'
+    ? relationship.to
+    : getOntologyText(relationship.to, lang);
+  const descText = typeof relationship.description === 'string'
+    ? relationship.description
+    : getOntologyText(relationship.description, lang);
+  // Use type as label if no label field (new structure)
+  const labelText = relationship.label
+    ? getOntologyText(relationship.label, lang)
+    : relationship.type;
+
+  const typeColor = typeColors[relationship.type] || '#888';
 
   return (
     <div className="bg-white/5 rounded-xl p-3 border border-white/10">
-      <div className="flex items-center gap-2 mb-2 flex-wrap" dir={lang === 'ur' ? 'rtl' : 'ltr'}>
-        <span className="text-lg font-arabic text-white">{getOntologyText(relationship.from, lang)}</span>
+      <div className="flex items-center gap-2 mb-2 flex-wrap" dir={lang === 'ur' || lang === 'ar' ? 'rtl' : 'ltr'}>
+        <span className="text-lg font-arabic text-white">{fromText}</span>
         <span
           className="px-2 py-0.5 rounded-full text-xs font-medium"
-          style={{ backgroundColor: `${typeColors[relationship.type]}30`, color: typeColors[relationship.type] }}
+          style={{ backgroundColor: `${typeColor}30`, color: typeColor }}
         >
-          {getOntologyText(relationship.label, lang)}
+          {labelText}
         </span>
-        <span className="text-lg font-arabic text-white">{getOntologyText(relationship.to, lang)}</span>
+        <span className="text-lg font-arabic text-white">{toText}</span>
       </div>
-      <p className={`text-sm text-white/70 ${lang === 'ur' ? 'text-right' : ''}`} dir={lang === 'ur' ? 'rtl' : 'ltr'}>
-        {getOntologyText(relationship.description, lang)}
+      <p className={`text-sm text-white/70 ${lang === 'ur' || lang === 'ar' ? 'text-right' : ''}`} dir={lang === 'ur' || lang === 'ar' ? 'rtl' : 'ltr'}>
+        {descText}
       </p>
     </div>
   );
@@ -1107,58 +1171,111 @@ const RelationshipCard = memo(function RelationshipCard({ relationship, lang }) 
 
 /**
  * Thematic Flow Component
+ * Updated to handle both old and new ontology data structures
  */
 const ThematicFlow = memo(function ThematicFlow({ flow, lang }) {
   return (
     <div className="space-y-3">
-      {flow.stages.map((stage, index) => (
-        <div key={index} className="flex gap-3">
-          {/* Stage number */}
-          <div className="flex flex-col items-center">
-            <div className="w-8 h-8 rounded-full bg-purple-500/30 flex items-center justify-center text-purple-300 text-sm font-medium">
-              {index + 1}
-            </div>
-            {index < flow.stages.length - 1 && (
-              <div className="w-0.5 flex-1 bg-purple-500/20 my-1" />
-            )}
-          </div>
+      {flow.stages.map((stage, index) => {
+        // Handle both old ({ayahs: [1,2]}) and new ({ayahs: [1,2,3,4,5,6]}) or old ayah format
+        const ayahsArray = stage.ayahs || [];
+        const ayahDisplay = ayahsArray.length > 1
+          ? `Ayah ${ayahsArray[0]}-${ayahsArray[ayahsArray.length - 1]}`
+          : `Ayah ${ayahsArray[0] || '?'}`;
+        // Handle both old ({theme: {en, ur}}) and new ({name: "string"}) structures
+        const stageTitle = stage.name || getOntologyText(stage.theme, lang);
+        const stageDesc = typeof stage.description === 'string'
+          ? stage.description
+          : getOntologyText(stage.description, lang);
 
-          {/* Stage content */}
-          <div className="flex-1 pb-4">
-            <div className="flex items-center gap-2 mb-1">
-              <span className="text-xs bg-purple-500/20 text-purple-300 px-2 py-0.5 rounded">
-                {stage.ayahs.length > 1 ? `Ayah ${stage.ayahs[0]}-${stage.ayahs[stage.ayahs.length-1]}` : `Ayah ${stage.ayahs[0]}`}
-              </span>
+        return (
+          <div key={index} className="flex gap-3">
+            {/* Stage number */}
+            <div className="flex flex-col items-center">
+              <div className="w-8 h-8 rounded-full bg-purple-500/30 flex items-center justify-center text-purple-300 text-sm font-medium">
+                {index + 1}
+              </div>
+              {index < flow.stages.length - 1 && (
+                <div className="w-0.5 flex-1 bg-purple-500/20 my-1" />
+              )}
             </div>
-            <h5 className="text-white font-medium mb-1">
-              {getOntologyText(stage.theme, lang)}
-            </h5>
-            <p className={`text-sm text-white/60 ${lang === 'ur' ? 'text-right' : ''}`} dir={lang === 'ur' ? 'rtl' : 'ltr'}>
-              {getOntologyText(stage.description, lang)}
-            </p>
+
+            {/* Stage content */}
+            <div className="flex-1 pb-4">
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-xs bg-purple-500/20 text-purple-300 px-2 py-0.5 rounded">
+                  {ayahDisplay}
+                </span>
+              </div>
+              <h5 className="text-white font-medium mb-1">
+                {stageTitle}
+              </h5>
+              <p className={`text-sm text-white/60 ${lang === 'ur' || lang === 'ar' ? 'text-right' : ''}`} dir={lang === 'ur' || lang === 'ar' ? 'rtl' : 'ltr'}>
+                {stageDesc}
+              </p>
+            </div>
           </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 });
 
 /**
  * Cross Reference Card
+ * Updated to handle both old crossReferences and new connectionToOtherSurahs structures
  */
 const CrossReferenceCard = memo(function CrossReferenceCard({ reference, lang, labels }) {
+  // Handle new connectionToOtherSurahs structure
+  if (reference.surah !== undefined && reference.name) {
+    const typeColors = {
+      'direct_answer': '#10B981',
+      'thematic_expansion': '#8B5CF6',
+      'direct_reference': '#F59E0B',
+      'historical_connection': '#3B82F6',
+      'thematic_parallel': '#06B6D4',
+      'complementary': '#EC4899',
+      'sequential_relationship': '#14B8A6',
+      'thematic_series': '#6366F1',
+    };
+    const color = typeColors[reference.type] || '#888';
+
+    return (
+      <div className="bg-white/5 rounded-xl p-3 border border-white/10">
+        <div className="flex items-center gap-2 mb-2 flex-wrap">
+          <span className="text-xs bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded">
+            Surah {reference.surah}
+          </span>
+          <span className="text-sm text-white font-medium">{reference.name}</span>
+          <span
+            className="text-xs px-2 py-0.5 rounded-full"
+            style={{ backgroundColor: `${color}30`, color }}
+          >
+            {reference.type?.replace(/_/g, ' ')}
+          </span>
+        </div>
+        <p className={`text-sm text-white/70 ${lang === 'ur' || lang === 'ar' ? 'text-right' : ''}`} dir={lang === 'ur' || lang === 'ar' ? 'rtl' : 'ltr'}>
+          {reference.relationship}
+        </p>
+      </div>
+    );
+  }
+
+  // Handle old crossReferences structure
   return (
     <div className="bg-white/5 rounded-xl p-3 border border-white/10">
       <div className="flex items-center gap-2 mb-2">
         <span className="text-xs bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded">
-          {reference.reference.surah}:{reference.reference.ayah}
+          {reference.reference?.surah}:{reference.reference?.ayah}
         </span>
         <span className="text-sm text-white/50">{reference.concept}</span>
       </div>
-      <p className="text-lg font-arabic text-white/90 mb-2" dir="rtl">
-        {reference.text}
-      </p>
-      <p className={`text-sm text-white/60 ${lang === 'ur' ? 'text-right' : ''}`} dir={lang === 'ur' ? 'rtl' : 'ltr'}>
+      {reference.text && (
+        <p className="text-lg font-arabic text-white/90 mb-2" dir="rtl">
+          {reference.text}
+        </p>
+      )}
+      <p className={`text-sm text-white/60 ${lang === 'ur' || lang === 'ar' ? 'text-right' : ''}`} dir={lang === 'ur' || lang === 'ar' ? 'rtl' : 'ltr'}>
         {getOntologyText(reference.explanation, lang)}
       </p>
     </div>
@@ -1167,20 +1284,59 @@ const CrossReferenceCard = memo(function CrossReferenceCard({ reference, lang, l
 
 /**
  * OntologyView Component - Main Ontology Display
+ * Now loads from new treebank/ontology files asynchronously
  */
 export const OntologyView = memo(function OntologyView({ surahId, lang = 'en', isVisible, onClose }) {
   const [activeTab, setActiveTab] = useState('categories');
-
-  const ontology = QURAN_ONTOLOGY[surahId];
+  const [ontology, setOntology] = useState(null);
+  const [loading, setLoading] = useState(true);
   const labels = ONTOLOGY_LABELS[lang] || ONTOLOGY_LABELS.en;
 
-  if (!isVisible || !ontology) return null;
+  // Load ontology data when surah changes or becomes visible
+  useEffect(() => {
+    if (isVisible && surahId) {
+      setLoading(true);
+      loadSurahOntology(surahId)
+        .then(data => {
+          setOntology(data);
+          setLoading(false);
+        })
+        .catch(err => {
+          console.error('Failed to load ontology:', err);
+          setOntology(null);
+          setLoading(false);
+        });
+    }
+  }, [surahId, isVisible]);
+
+  if (!isVisible) return null;
+
+  // Loading state
+  if (loading) {
+    return (
+      <div
+        className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm"
+        onClick={onClose}
+      >
+        <div className="bg-gray-900/95 rounded-2xl p-8 flex flex-col items-center gap-4">
+          <div className="w-10 h-10 border-3 border-purple-500/30 border-t-purple-500 rounded-full animate-spin" />
+          <p className="text-white/70">Loading ontology...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!ontology) return null;
+
+  // Check if new data has insights section
+  const hasInsights = ontology.uniqueInsight || ontology.historicalContext || ontology.linguisticFeatures;
 
   const tabs = [
     { id: 'categories', label: labels.categories, icon: Icons.Grid },
     { id: 'relationships', label: labels.relationships, icon: Icons.Link },
     { id: 'flow', label: labels.thematicFlow, icon: Icons.ChevronRight },
     { id: 'references', label: labels.crossReferences, icon: Icons.BookOpen },
+    ...(hasInsights ? [{ id: 'insights', label: lang === 'ur' ? 'بصیرت' : 'Insights', icon: Icons.Lightbulb }] : []),
   ];
 
   return (
@@ -1204,7 +1360,7 @@ export const OntologyView = memo(function OntologyView({ surahId, lang = 'en', i
                 {labels.title}
               </h2>
               <p className="text-purple-300/80 text-sm mt-1">
-                {labels.subtitle} • {getOntologyText(ontology.name, lang)}
+                {labels.subtitle} • {ontology.surahName || ontology.surahNameArabic}
               </p>
             </div>
             <button
@@ -1261,10 +1417,12 @@ export const OntologyView = memo(function OntologyView({ surahId, lang = 'en', i
           {/* Categories Tab */}
           {activeTab === 'categories' && ontology.categories && (
             <div>
-              {Object.values(ontology.categories).map((category) => (
+              {Object.entries(ontology.categories).map(([key, category], index) => (
                 <CategorySection
-                  key={category.id}
+                  key={category.id || key}
                   category={category}
+                  categoryKey={key}
+                  categoryIndex={index}
                   lang={lang}
                   labels={labels}
                 />
@@ -1288,21 +1446,154 @@ export const OntologyView = memo(function OntologyView({ surahId, lang = 'en', i
           {activeTab === 'flow' && ontology.thematicFlow && (
             <div>
               <h4 className="text-white font-medium mb-4">
-                {getOntologyText(ontology.thematicFlow.label, lang)}
+                {ontology.thematicFlow.title || getOntologyText(ontology.thematicFlow.label, lang)}
               </h4>
               <ThematicFlow flow={ontology.thematicFlow} lang={lang} />
             </div>
           )}
 
-          {/* Cross References Tab */}
-          {activeTab === 'references' && ontology.crossReferences && (
+          {/* Cross References Tab - handles both old crossReferences and new connectionToOtherSurahs */}
+          {activeTab === 'references' && (ontology.crossReferences || ontology.connectionToOtherSurahs) && (
             <div className="space-y-3">
               <p className="text-sm text-white/50 mb-4">
-                {lang === 'ur' ? 'قرآن کی دیگر آیات میں یہ مفاہیم' : 'These concepts in other Quranic verses'}
+                {lang === 'ur' ? 'قرآن کی دیگر آیات میں یہ مفاہیم' : 'Connections to other Surahs in the Quran'}
               </p>
-              {ontology.crossReferences.map((ref, index) => (
+              {/* New structure: connectionToOtherSurahs.connections */}
+              {ontology.connectionToOtherSurahs?.connections?.map((ref, index) => (
                 <CrossReferenceCard key={index} reference={ref} lang={lang} labels={labels} />
               ))}
+              {/* Old structure: crossReferences array */}
+              {ontology.crossReferences?.map((ref, index) => (
+                <CrossReferenceCard key={index} reference={ref} lang={lang} labels={labels} />
+              ))}
+            </div>
+          )}
+
+          {/* Insights Tab - New scholarly content */}
+          {activeTab === 'insights' && hasInsights && (
+            <div className="space-y-6">
+              {/* Unique Insight */}
+              {ontology.uniqueInsight && (
+                <div className="bg-gradient-to-r from-amber-500/10 to-orange-500/10 rounded-2xl p-4 border border-amber-500/20">
+                  <div className="flex items-center gap-2 mb-3">
+                    <Icons.Star className="w-5 h-5 text-amber-400" />
+                    <h4 className="text-amber-300 font-medium">{ontology.uniqueInsight.title}</h4>
+                  </div>
+                  {ontology.uniqueInsight.arabicTerm && (
+                    <p className="text-xl font-arabic text-white/90 mb-3 text-center p-2 bg-black/20 rounded-lg" dir="rtl">
+                      {ontology.uniqueInsight.arabicTerm}
+                    </p>
+                  )}
+                  <p className={`text-white/80 text-sm leading-relaxed ${lang === 'ur' || lang === 'ar' ? 'text-right' : ''}`} dir={lang === 'ur' || lang === 'ar' ? 'rtl' : 'ltr'}>
+                    {ontology.uniqueInsight.insight}
+                  </p>
+                  {ontology.uniqueInsight.rootMeaning && (
+                    <div className="mt-3 pt-3 border-t border-amber-500/20">
+                      <span className="text-amber-400/70 text-xs">Root: </span>
+                      <span className="text-white/70 text-sm">{ontology.uniqueInsight.rootMeaning}</span>
+                    </div>
+                  )}
+                  {ontology.uniqueInsight.keyAyah && (
+                    <div className="mt-2">
+                      <span className="text-xs bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded">
+                        Key Ayah: {ontology.uniqueInsight.keyAyah}
+                      </span>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Historical Context */}
+              {ontology.historicalContext && (
+                <div className="bg-gradient-to-r from-blue-500/10 to-cyan-500/10 rounded-2xl p-4 border border-blue-500/20">
+                  <div className="flex items-center gap-2 mb-3">
+                    <Icons.Clock className="w-5 h-5 text-blue-400" />
+                    <h4 className="text-blue-300 font-medium">
+                      {lang === 'ur' ? 'تاریخی پس منظر' : 'Historical Context'}
+                    </h4>
+                  </div>
+                  {ontology.historicalContext.revelationPeriod && (
+                    <div className="mb-3 p-2 bg-blue-500/10 rounded-lg">
+                      <span className="text-blue-400 text-xs font-medium">
+                        {lang === 'ur' ? 'دور نزول: ' : 'Period: '}
+                      </span>
+                      <span className="text-white/80 text-sm">{ontology.historicalContext.revelationPeriod}</span>
+                    </div>
+                  )}
+                  {ontology.historicalContext.occasion && (
+                    <div className="mb-3">
+                      <span className="text-blue-400 text-xs font-medium block mb-1">
+                        {lang === 'ur' ? 'شان نزول:' : 'Occasion of Revelation:'}
+                      </span>
+                      <p className={`text-white/80 text-sm leading-relaxed ${lang === 'ur' || lang === 'ar' ? 'text-right' : ''}`} dir={lang === 'ur' || lang === 'ar' ? 'rtl' : 'ltr'}>
+                        {ontology.historicalContext.occasion}
+                      </p>
+                    </div>
+                  )}
+                  {ontology.historicalContext.note && (
+                    <p className={`text-white/60 text-xs italic leading-relaxed ${lang === 'ur' || lang === 'ar' ? 'text-right' : ''}`} dir={lang === 'ur' || lang === 'ar' ? 'rtl' : 'ltr'}>
+                      📝 {ontology.historicalContext.note}
+                    </p>
+                  )}
+                </div>
+              )}
+
+              {/* Linguistic Features */}
+              {ontology.linguisticFeatures?.features && (
+                <div className="bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-2xl p-4 border border-purple-500/20">
+                  <div className="flex items-center gap-2 mb-3">
+                    <Icons.Edit className="w-5 h-5 text-purple-400" />
+                    <h4 className="text-purple-300 font-medium">
+                      {lang === 'ur' ? 'لسانی خصوصیات' : 'Linguistic Features'}
+                    </h4>
+                  </div>
+                  <div className="space-y-3">
+                    {ontology.linguisticFeatures.features.map((feature, idx) => (
+                      <div key={idx} className="p-3 bg-white/5 rounded-xl border border-purple-500/10">
+                        <div className="flex items-start justify-between gap-2 mb-1">
+                          <span className="text-purple-300 font-medium text-sm">{feature.name}</span>
+                          {feature.ayah && (
+                            <span className="text-xs bg-purple-500/20 text-purple-300 px-2 py-0.5 rounded">
+                              Ayah {feature.ayah}
+                            </span>
+                          )}
+                        </div>
+                        {feature.description && (
+                          <p className="text-white/60 text-xs font-arabic mb-1" dir="rtl">{feature.description}</p>
+                        )}
+                        {feature.example && (
+                          <p className="text-white/70 text-sm">{feature.example}</p>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Scientific References (if available) */}
+              {ontology.scientificReferences?.notes && (
+                <div className="bg-gradient-to-r from-emerald-500/10 to-teal-500/10 rounded-2xl p-4 border border-emerald-500/20">
+                  <div className="flex items-center gap-2 mb-3">
+                    <Icons.Zap className="w-5 h-5 text-emerald-400" />
+                    <h4 className="text-emerald-300 font-medium">
+                      {lang === 'ur' ? 'سائنسی حوالے' : 'Scientific References'}
+                    </h4>
+                  </div>
+                  <div className="space-y-3">
+                    {ontology.scientificReferences.notes.map((note, idx) => (
+                      <div key={idx} className="p-3 bg-white/5 rounded-xl">
+                        <span className="text-emerald-300 font-medium text-sm block mb-1">{note.topic}</span>
+                        <p className="text-white/70 text-sm">{note.observation}</p>
+                        {note.ayah && (
+                          <span className="text-xs bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded mt-2 inline-block">
+                            Ayah {note.ayah}
+                          </span>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </div>
@@ -1332,10 +1623,28 @@ export function TreebankOverlay({
   const [tafseerLoading, setTafseerLoading] = useState(false);
   const [localVerseTranslation, setLocalVerseTranslation] = useState(verseTranslation);
   const [showOntology, setShowOntology] = useState(false);
+  const [treebankLoading, setTreebankLoading] = useState(true);
+  const [treebankLoaded, setTreebankLoaded] = useState(false);
 
   // Get user's language from translation ID
   const lang = getLanguageFromTranslation(localTranslationId);
   const labels = UI_LABELS[lang] || UI_LABELS.en;
+
+  // Load treebank data asynchronously when surah changes or becomes visible
+  useEffect(() => {
+    if (isVisible && surahId) {
+      setTreebankLoading(true);
+      loadSurahTreebank(surahId)
+        .then(() => {
+          setTreebankLoaded(true);
+          setTreebankLoading(false);
+        })
+        .catch(err => {
+          console.error('Failed to load treebank data:', err);
+          setTreebankLoading(false);
+        });
+    }
+  }, [isVisible, surahId]);
 
   // Get ALL translations grouped by language for better UX
   const allTranslations = Object.entries(TRANSLATIONS).map(([id, info]) => ({ id, ...info }));
@@ -1391,7 +1700,8 @@ export function TreebankOverlay({
     }
   }, [surahId, ayahNum, onTranslationChange, verseTranslation]);
 
-  const treebankData = getAyahTreebank(surahId, ayahNum, lang);
+  // Get treebank data after it's loaded (depends on treebankLoaded to refresh when data arrives)
+  const treebankData = treebankLoaded ? getAyahTreebank(surahId, ayahNum, lang) : null;
   const canAccess = canAccessTreebank(surahId, isPremium);
 
   // Use the verse translation from API (user's selected translation) if available
@@ -1407,6 +1717,27 @@ export function TreebankOverlay({
   }, [onClose]);
 
   if (!isVisible) return null;
+
+  // Show loading state while treebank data is being fetched
+  if (treebankLoading) {
+    return (
+      <div
+        className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 backdrop-blur-sm p-4"
+        onClick={handleClose}
+      >
+        <div
+          className="bg-gray-900/95 backdrop-blur-xl rounded-3xl border border-white/20 shadow-2xl p-8 max-w-sm text-center"
+          onClick={e => e.stopPropagation()}
+        >
+          <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 flex items-center justify-center animate-pulse">
+            <Icons.BookOpen className="w-8 h-8 text-white" />
+          </div>
+          <h3 className="text-xl font-bold text-white mb-2">{labels.loading}</h3>
+          <p className="text-white/60 text-sm">{labels.grammarAnalysis}</p>
+        </div>
+      </div>
+    );
+  }
 
   // Premium gate
   if (!canAccess) {
@@ -1450,8 +1781,21 @@ export function TreebankOverlay({
     );
   }
 
-  // No data available
+  // No treebank data - show ontology directly if available
   if (!treebankData) {
+    // Check if ontology exists - show OntologyView directly
+    if (hasOntologyData(surahId)) {
+      return (
+        <OntologyView
+          surahId={surahId}
+          lang={lang}
+          isVisible={isVisible}
+          onClose={handleClose}
+        />
+      );
+    }
+
+    // No treebank AND no ontology - show coming soon
     return (
       <div
         className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 backdrop-blur-sm p-4"
@@ -1499,7 +1843,7 @@ export function TreebankOverlay({
             </div>
             <div className="flex items-center gap-2">
               {/* Ontology Button */}
-              {hasOntology(surahId) && (
+              {hasOntologyData(surahId) && (
                 <button
                   onClick={() => setShowOntology(true)}
                   className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-500/20 to-orange-500/20 border border-amber-500/30 hover:from-amber-500/30 hover:to-orange-500/30 transition-all"
@@ -1590,9 +1934,9 @@ export function TreebankOverlay({
 
             {/* Words Row - RTL */}
             <div className="flex flex-wrap justify-center gap-2 mb-2" dir="rtl">
-              {treebankData.words.map((word) => (
+              {treebankData.words.map((word, idx) => (
                 <WordCard
-                  key={word.id}
+                  key={word.id || `word-${idx}`}
                   word={word}
                   isSelected={selectedWord?.id === word.id}
                   onClick={handleWordClick}

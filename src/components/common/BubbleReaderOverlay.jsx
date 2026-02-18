@@ -24,6 +24,7 @@ import FamilyCircle from './FamilyCircle';
 import { trackReadingActivity } from './GlobalUmmahPulse';
 import { TreebankOverlay } from './TreebankAnalysis';
 import { hasTreebankData, canAccessTreebank } from '../../data/treebankData';
+import { hasOntologyData } from '../../data/treebank/index';
 import { PALETTES, SURAHS, fetchTafseer, getTafseersByLanguage, getDefaultTafseer, TRANSLATION_TO_TAFSEER_LANG, getVideosForSurah, generateSearchQuery, SCHOLARS, SURAH_TOPICS, TAFSEER_SOURCES, markAyahRead } from '../../data';
 import { useQuranAPI, useMultilingualWords, TRANSLATIONS, TAJWEED_RULES, POS_LABELS } from '../../hooks/useQuranAPI';
 import { speakText, getTranslationAudioSource, getTranslationAudioUrl, getAvailableTranslationAudio, TRANSLATION_RECITERS } from '../../hooks/useAudioPlayer';
@@ -3451,8 +3452,8 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
                             <button onClick={() => handleShareVerse(verse, ayahNum)} className={`p-1.5 rounded-full transition-all hover:scale-110 ${shareStatus === ayahNum ? 'bg-emerald-500/80' : 'bg-white/15'}`} title="Share verse">
                               {shareStatus === ayahNum ? <Icons.Check className="w-3 h-3" /> : <Icons.Share className="w-3 h-3" />}
                             </button>
-                            {/* Grammar Analysis Button */}
-                            {hasTreebankData(surah?.id) && (
+                            {/* Grammar Analysis & Ontology Button - shows for surahs with treebank OR ontology data */}
+                            {(hasTreebankData(surah?.id) || hasOntologyData(surah?.id)) && (
                               <button
                                 onClick={() => {
                                   setTreebankAyah(ayahNum);
@@ -3461,10 +3462,10 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
                                 className={`p-1.5 rounded-full transition-all hover:scale-110 relative ${
                                   canAccessTreebank(surah?.id, isPremium) ? 'bg-purple-500/30 hover:bg-purple-500/50' : 'bg-white/15'
                                 }`}
-                                title="Grammar Analysis"
+                                title={hasTreebankData(surah?.id) ? "Grammar & Concept Analysis" : "Concept Analysis"}
                               >
                                 <Icons.BookOpen className="w-3 h-3 text-purple-300" />
-                                {!canAccessTreebank(surah?.id, isPremium) && (
+                                {!canAccessTreebank(surah?.id, isPremium) && hasTreebankData(surah?.id) && (
                                   <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-amber-500 rounded-full flex items-center justify-center">
                                     <Icons.Lock className="w-1.5 h-1.5 text-white" />
                                   </span>
