@@ -3182,21 +3182,25 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
               style={{ width: p.size, height: p.size, left: `${p.left}%`, top: `${p.top}%`, background: 'rgba(255,255,255,0.8)', boxShadow: '0 0 8px rgba(255,255,255,0.8)', animation: `floatParticle ${p.duration}s ease-in-out infinite`, animationDelay: `${p.delay}s` }} />
           ))}
 
-          {/* Close button - positioned top-right inside circle */}
-          <button onClick={handleCloseClick}
-            className="absolute w-9 h-9 sm:w-9 sm:h-9 rounded-full bg-red-500/90 sm:bg-white/30 backdrop-blur-sm flex items-center justify-center hover:bg-red-600 sm:hover:bg-white/50 hover:scale-110 transition-all z-[70] text-white shadow-lg border-2 border-white/30"
-            style={{ top: '4%', right: '38%' }}
-            aria-label="Close">
-            <Icons.X className="w-4 h-4 sm:w-5 sm:h-5" />
-          </button>
+          {/* Top header with surah number and close button */}
+          <div className="absolute z-[70] flex items-center justify-between"
+            style={{ top: '6%', left: '25%', right: '25%' }}>
+            {/* Surah number badge - left side */}
+            <div className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold text-white"
+              style={{ background: 'rgba(255,255,255,0.25)', backdropFilter: 'blur(10px)' }}>
+              {surah.id}
+            </div>
 
-          {/* Surah number badge - positioned top-left inside circle */}
-          <div className="absolute w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-sm font-bold text-white z-20"
-            style={{ top: '4%', left: '38%', background: 'rgba(255,255,255,0.25)', backdropFilter: 'blur(10px)' }}>
-            {surah.id}
+            {/* Close button - right side */}
+            <button onClick={handleCloseClick}
+              className="w-10 h-10 rounded-full backdrop-blur-sm flex items-center justify-center hover:bg-white/40 hover:scale-110 transition-all text-white"
+              style={{ background: 'rgba(255,255,255,0.25)', backdropFilter: 'blur(10px)' }}
+              aria-label="Close">
+              <Icons.X className="w-5 h-5" />
+            </button>
           </div>
 
-          <div className="absolute flex text-white overflow-hidden" style={{ top: '12%', left: '4%', right: '4%', bottom: '5%' }}>
+          <div className="absolute flex text-white overflow-hidden" style={{ top: '14%', left: '4%', right: '4%', bottom: '5%' }}>
             <div className="flex-1 flex flex-col min-w-0">
               <div className="text-center flex-shrink-0 mb-1">
                 <div className="text-xl sm:text-2xl mb-0.5" style={{ fontFamily: "'Scheherazade New', serif", textShadow: '0 2px 12px rgba(0,0,0,0.4)' }} lang="ar" dir="rtl">{surah.arabic}</div>
