@@ -3182,15 +3182,17 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
               style={{ width: p.size, height: p.size, left: `${p.left}%`, top: `${p.top}%`, background: 'rgba(255,255,255,0.8)', boxShadow: '0 0 8px rgba(255,255,255,0.8)', animation: `floatParticle ${p.duration}s ease-in-out infinite`, animationDelay: `${p.delay}s` }} />
           ))}
 
+          {/* Close button - positioned top-right inside circle */}
           <button onClick={handleCloseClick}
-            className="absolute w-10 h-10 sm:w-9 sm:h-9 rounded-full bg-red-500/80 sm:bg-white/30 backdrop-blur-sm flex items-center justify-center hover:bg-red-600/90 sm:hover:bg-white/50 hover:scale-110 transition-all z-[70] text-white shadow-lg"
-            style={{ top: '16px', right: '16px' }}
+            className="absolute w-9 h-9 sm:w-9 sm:h-9 rounded-full bg-red-500/90 sm:bg-white/30 backdrop-blur-sm flex items-center justify-center hover:bg-red-600 sm:hover:bg-white/50 hover:scale-110 transition-all z-[70] text-white shadow-lg border-2 border-white/30"
+            style={{ top: '4%', right: '38%' }}
             aria-label="Close">
-            <Icons.X className="w-5 h-5" />
+            <Icons.X className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
 
-          <div className="absolute w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold text-white z-20"
-            style={{ top: '3%', left: '46%', background: 'rgba(255,255,255,0.25)', backdropFilter: 'blur(10px)' }}>
+          {/* Surah number badge - positioned top-left inside circle */}
+          <div className="absolute w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-sm font-bold text-white z-20"
+            style={{ top: '4%', left: '38%', background: 'rgba(255,255,255,0.25)', backdropFilter: 'blur(10px)' }}>
             {surah.id}
           </div>
 
