@@ -429,7 +429,7 @@ export const GridLayout = memo(function GridLayout({
 
   return (
     <div
-      className="flex flex-wrap gap-2 sm:gap-3 md:gap-4 p-4 sm:p-6 md:p-8 w-full"
+      className="flex flex-wrap gap-2 sm:gap-3 md:gap-4 p-4 sm:p-6 md:p-8 pb-32 sm:pb-36 w-full"
       style={{
         direction: 'rtl',
         justifyContent: 'flex-start',
