@@ -429,7 +429,7 @@ export const GridLayout = memo(function GridLayout({
 
   return (
     <div
-      className="flex flex-wrap flex-row-reverse justify-center gap-2 sm:gap-3 md:gap-4 p-4 sm:p-6 md:p-8"
+      className="flex flex-wrap justify-start gap-2 sm:gap-3 md:gap-4 p-4 sm:p-6 md:p-8 mx-auto"
       dir="rtl"
       style={{ maxWidth: (bubbleSize + gap) * columns + 100 }}
     >
