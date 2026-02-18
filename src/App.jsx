@@ -27,7 +27,7 @@ import {
   TermsOfServiceView,
 } from './components/views';
 import { SURAHS, MAX_AYAHS } from './data';
-import { useLocalStorage } from './hooks';
+import { useLocalStorage, isMobileDevice, BREAKPOINTS } from './hooks';
 import { AuthProvider } from './contexts/AuthContext';
 
 // CSS Styles - Font imports and utility classes (animations defined in index.css)
@@ -252,8 +252,18 @@ function QuranBubbleApp() {
   const [overlayReaderSurah, setOverlayReaderSurah] = useState(null);
   const [initialVerse, setInitialVerse] = useState(1); // For navigating to specific verse
   const [initialPanel, setInitialPanel] = useState(null); // For opening specific panel (tafseer, etc.)
-  // Default layout is spiral
-  const [surahLayout, setSurahLayout] = useLocalStorage('surahLayout', 'spiral');
+  // Smart layout default: grid for mobile, spiral for desktop
+  // User's saved preference takes priority (handled by useLocalStorage)
+  const getDefaultLayout = () => {
+    // Check if user already has a saved preference
+    const stored = localStorage.getItem('surahLayout');
+    if (stored) {
+      try { return JSON.parse(stored); } catch { return stored; }
+    }
+    // First-time visitor: mobile=grid, desktop=spiral
+    return isMobileDevice() ? 'grid' : 'spiral';
+  };
+  const [surahLayout, setSurahLayout] = useLocalStorage('surahLayout', getDefaultLayout());
   const [showProgressDashboard, setShowProgressDashboard] = useState(false);
   const [showOfflineManager, setShowOfflineManager] = useState(false);
   const [showHifzMode, setShowHifzMode] = useState(false);

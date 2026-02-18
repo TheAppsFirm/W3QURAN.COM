@@ -5,6 +5,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { Icons } from '../common/Icons';
+import { useIsMobile } from '../../hooks';
 
 // Bubble Menu Item Component
 const BubbleMenuItem = ({ item, active, onClick, delay = 0, darkMode }) => {
@@ -16,8 +17,8 @@ const BubbleMenuItem = ({ item, active, onClick, delay = 0, darkMode }) => {
     return null;
   }
 
-  // Check if mobile
-  const isMobile = typeof window !== 'undefined' && window.innerWidth < 640;
+  // Check if mobile using reactive hook
+  const isMobile = useIsMobile();
   const bubbleSize = isMobile ? 44 : 52;
 
   return (

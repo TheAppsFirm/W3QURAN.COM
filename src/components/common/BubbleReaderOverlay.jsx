@@ -28,7 +28,7 @@ import { hasOntologyData } from '../../data/treebank/index';
 import { PALETTES, SURAHS, fetchTafseer, getTafseersByLanguage, getDefaultTafseer, TRANSLATION_TO_TAFSEER_LANG, getVideosForSurah, generateSearchQuery, SCHOLARS, SURAH_TOPICS, TAFSEER_SOURCES, markAyahRead } from '../../data';
 import { useQuranAPI, useMultilingualWords, TRANSLATIONS, TAJWEED_RULES, POS_LABELS } from '../../hooks/useQuranAPI';
 import { speakText, getTranslationAudioSource, getTranslationAudioUrl, getAvailableTranslationAudio, TRANSLATION_RECITERS } from '../../hooks/useAudioPlayer';
-import { useLocalStorage } from '../../hooks';
+import { useLocalStorage, useIsMobile } from '../../hooks';
 import { logReadingSession, trackSurahCompletion, trackFeatureUsage } from '../../utils/trackingUtils';
 import { shareVerse } from '../../utils/shareUtils';
 import { useAuth } from '../../contexts/AuthContext';
@@ -175,8 +175,8 @@ const FloatingFeatureBubble = memo(function FloatingFeatureBubble({
   position = { top: '15%', left: '80px' },
   size = 'medium' // small, medium, large
 }) {
-  // Check if mobile
-  const isMobile = typeof window !== 'undefined' && window.innerWidth < 640;
+  // Check if mobile using reactive hook
+  const isMobile = useIsMobile();
 
   // Mobile-responsive sizes
   const sizeStyles = isMobile ? {

@@ -59,3 +59,19 @@ export {
   WORD_TRANSLATION_LANGUAGES,
   POS_LABELS,
 } from './useQuranAPI';
+
+// Media query hooks for responsive design
+export {
+  useMediaQuery,
+  useIsMobile,
+  useIsTablet,
+  useIsDesktop,
+  useBreakpoint,
+  useIsLandscape,
+  useIsPortrait,
+  usePrefersReducedMotion,
+  isMobileDevice,
+  isTabletDevice,
+  isDesktopDevice,
+  BREAKPOINTS,
+} from './useMediaQuery';

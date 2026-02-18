@@ -11,6 +11,7 @@ import { useState, useMemo, memo, useEffect, useCallback } from 'react';
 import { PALETTES } from '../../data';
 import { Icons } from '../common/Icons';
 import { playThrottledHoverSound, playClickSound } from '../../utils/soundUtils';
+import { useIsMobile, useIsTablet, BREAKPOINTS } from '../../hooks';
 
 // Arabic alphabet for sorting
 const ARABIC_ALPHABET = [
@@ -312,6 +313,9 @@ export const ClockLayout = memo(function ClockLayout({
   contentZoom = 1,
   darkMode,
 }) {
+  // Responsive mobile detection using hook
+  const isMobileScreen = useIsMobile();
+
   const rings = useMemo(() => {
     // Distribute surahs into concentric rings
     const ring1 = surahs.slice(0, 12);   // Inner ring - 12 surahs
@@ -323,8 +327,7 @@ export const ClockLayout = memo(function ClockLayout({
   }, [surahs]);
 
   // Responsive container size - smaller on mobile
-  const isMobileScreen = window.innerWidth < 768;
-  const baseSize = isMobileScreen ? Math.min(window.innerWidth * 2, 800) : 1200;
+  const baseSize = isMobileScreen ? Math.min(typeof window !== 'undefined' ? window.innerWidth * 2 : 800, 800) : 1200;
   const containerSize = baseSize * zoom;
   const centerX = containerSize / 2;
   const centerY = containerSize / 2;
@@ -417,9 +420,9 @@ export const GridLayout = memo(function GridLayout({
   contentZoom = 1,
   darkMode,
 }) {
-  // Responsive sizing
-  const isMobile = window.innerWidth < 640;
-  const isTablet = window.innerWidth < 1024;
+  // Responsive sizing using hooks
+  const isMobile = useIsMobile();
+  const isTablet = useIsTablet();
   const columns = Math.ceil(Math.sqrt(surahs.length) * 1.2);
   const bubbleSize = isMobile ? 65 * zoom : (isTablet ? 75 * zoom : 80 * zoom);
   const gap = isMobile ? 12 * zoom : 20 * zoom;
@@ -522,6 +525,9 @@ export const JuzzGroupLayout = memo(function JuzzGroupLayout({
   contentZoom = 1,
   darkMode,
 }) {
+  // Responsive detection using hook
+  const isMobile = useIsMobile();
+
   // Group surahs by Juzz
   const juzzGroups = useMemo(() => {
     const groups = {};
@@ -600,7 +606,6 @@ export const JuzzGroupLayout = memo(function JuzzGroupLayout({
             {/* Surahs Grid - Using StyledBubble */}
             <div className="flex flex-wrap gap-2 sm:gap-3 md:gap-4 ml-2 sm:ml-4">
               {surahList.map((surah, index) => {
-                const isMobile = window.innerWidth < 640;
                 const size = isMobile ? 55 * zoom : 70 * zoom;
 
                 return (
@@ -637,6 +642,9 @@ export const AlphabetLayout = memo(function AlphabetLayout({
   contentZoom = 1,
   darkMode,
 }) {
+  // Responsive detection using hook
+  const isMobileScreen = useIsMobile();
+
   // Group surahs by first Arabic letter
   const alphabetGroups = useMemo(() => {
     const groups = {};
@@ -705,7 +713,6 @@ export const AlphabetLayout = memo(function AlphabetLayout({
             <div className="flex flex-wrap gap-2 sm:gap-3 pr-2 sm:pr-4">
               {surahList.map((surah, index) => {
                 const palette = PALETTES[(surah.id - 1) % 10];
-                const isMobileScreen = window.innerWidth < 640;
                 const size = isMobileScreen ? 55 * zoom : 70 * zoom;
 
                 return (
@@ -758,6 +765,9 @@ export const RevelationLayout = memo(function RevelationLayout({
   contentZoom = 1,
   darkMode,
 }) {
+  // Responsive detection using hook
+  const isMobileView = useIsMobile();
+
   // Sort by chronological order
   const sortedSurahs = useMemo(() => {
     return [...surahs].sort((a, b) => a.chronOrder - b.chronOrder);
@@ -794,7 +804,6 @@ export const RevelationLayout = memo(function RevelationLayout({
         <div className="flex flex-wrap gap-2 sm:gap-3">
           {makkiSurahs.map((surah, index) => {
             const palette = PALETTES[(surah.id - 1) % 10];
-            const isMobileView = window.innerWidth < 640;
             const size = isMobileView ? 50 * zoom : 60 * zoom;
 
             return (
@@ -865,7 +874,6 @@ export const RevelationLayout = memo(function RevelationLayout({
         <div className="flex flex-wrap gap-2 sm:gap-3">
           {madaniSurahs.map((surah, index) => {
             const palette = PALETTES[(surah.id - 1) % 10];
-            const isMobileView = window.innerWidth < 640;
             const size = isMobileView ? 50 * zoom : 60 * zoom;
 
             return (
@@ -927,8 +935,8 @@ export const BookLayout = memo(function BookLayout({
   const [flipDirection, setFlipDirection] = useState('next');
   const [hoveredSurah, setHoveredSurah] = useState(null);
 
-  // Responsive: 4 surahs per page on mobile, 8 on desktop
-  const isMobileView = window.innerWidth < 640;
+  // Responsive detection using hook
+  const isMobileView = useIsMobile();
   const surahsPerPage = isMobileView ? 4 : 8;
   const totalPages = Math.ceil(surahs.length / surahsPerPage);
 
@@ -1048,18 +1056,16 @@ export const BookLayout = memo(function BookLayout({
     );
   };
 
-  // Check if mobile
-  const isMobile = window.innerWidth < 640;
+  // Use isMobileView from hook at component level (already defined above)
+  const pageWidth = isMobileView ? 'min(320px, calc(100vw - 32px))' : `min(340px, 40vw)`;
 
   // Page component
   const BookPage = ({ pageSurahs, isLeft, isSinglePage = false }) => (
     <div
       style={{
-        width: isMobile
-          ? Math.min(320, window.innerWidth - 32)
-          : Math.min(340, window.innerWidth * 0.4) * zoom,
-        minHeight: isMobile ? 'auto' : 520 * zoom,
-        padding: isMobile ? '16px 12px' : '20px 16px',
+        width: pageWidth,
+        minHeight: isMobileView ? 'auto' : 520 * zoom,
+        padding: isMobileView ? '16px 12px' : '20px 16px',
         background: darkMode
           ? `linear-gradient(${isLeft ? '135deg' : '225deg'}, #1a1a2e 0%, #252540 100%)`
           : `linear-gradient(${isLeft ? '135deg' : '225deg'}, #FFF9F0 0%, #FFF5E6 100%)`,
@@ -1079,13 +1085,13 @@ export const BookLayout = memo(function BookLayout({
         className="text-center mb-3 sm:mb-4 pb-2"
         style={{ borderBottom: `1px solid ${darkMode ? 'rgba(255,215,0,0.2)' : 'rgba(180,140,70,0.2)'}` }}
       >
-        <span style={{ color: darkMode ? 'rgba(255,215,0,0.6)' : 'rgba(139,90,43,0.6)', fontSize: isMobile ? 11 : 12 }}>
+        <span style={{ color: darkMode ? 'rgba(255,215,0,0.6)' : 'rgba(139,90,43,0.6)', fontSize: isMobileView ? 11 : 12 }}>
           {isLeft ? 'بِسْمِ اللَّهِ' : `Page ${currentPage + 1}`}
         </span>
       </div>
 
       {/* Surah Grid - 2 columns on mobile, 2x2 on desktop */}
-      <div className={`grid ${isMobile ? 'grid-cols-2 gap-2' : 'grid-cols-2 gap-3'}`}>
+      <div className={`grid ${isMobileView ? 'grid-cols-2 gap-2' : 'grid-cols-2 gap-3'}`}>
         {pageSurahs.map((surah) => (
           <SurahCard key={surah.id} surah={surah} />
         ))}
@@ -1132,7 +1138,7 @@ export const BookLayout = memo(function BookLayout({
               <div
                 className="absolute z-50"
                 style={{
-                  width: Math.min(340, window.innerWidth * 0.4) * zoom,
+                  width: pageWidth,
                   height: 520 * zoom,
                   left: flipDirection === 'next' ? '50%' : 0,
                   marginLeft: flipDirection === 'next' ? 12 : 0,

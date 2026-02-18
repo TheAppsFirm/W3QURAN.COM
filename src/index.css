@@ -859,6 +859,45 @@ body {
   }
 }
 
+/* Landscape phone handling */
+@media (orientation: landscape) and (max-height: 500px) {
+  /* Reduce vertical space in landscape mode */
+  .reader-container {
+    height: 100vh;
+    max-height: 100vh;
+  }
+
+  /* Compact header in landscape */
+  .landscape-compact-header {
+    padding-top: 4px !important;
+    padding-bottom: 4px !important;
+  }
+
+  /* Hide non-essential UI in landscape */
+  .hide-landscape {
+    display: none !important;
+  }
+}
+
+/* Grid layout mobile optimizations */
+.grid-mobile-optimized {
+  gap: 8px;
+  padding: 12px;
+}
+
+@media (max-width: 640px) {
+  .grid-mobile-optimized {
+    gap: 6px;
+    padding: 8px;
+  }
+}
+
+/* Touch-friendly minimum sizes */
+.touch-target-min {
+  min-width: 44px;
+  min-height: 44px;
+}
+
 /* Prevent text selection on interactive elements */
 .no-select {
   -webkit-user-select: none;
