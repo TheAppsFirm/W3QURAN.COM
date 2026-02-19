@@ -8,8 +8,10 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { Icons } from './Icons';
 import { useAuth } from '../../hooks';
 
-// Speech recognition setup
-const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+// Speech recognition setup (SSR-safe)
+const SpeechRecognition = typeof window !== 'undefined'
+  ? (window.SpeechRecognition || window.webkitSpeechRecognition)
+  : null;
 
 // Language options
 const LANGUAGES = [

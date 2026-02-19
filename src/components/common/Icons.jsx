@@ -1048,6 +1048,37 @@ export const WaveformIcon = (props) => (
   </Icon>
 );
 
+// Send icon
+export const SendIcon = (props) => (
+  <Icon {...props}>
+    <path d="M22 2L11 13" />
+    <path d="M22 2l-7 20-4-9-9-4 20-7z" />
+  </Icon>
+);
+
+// Dollar sign icon
+export const DollarSignIcon = (props) => (
+  <Icon {...props}>
+    <line x1="12" y1="1" x2="12" y2="23" />
+    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+  </Icon>
+);
+
+// Credit card icon
+export const CreditCardIcon = (props) => (
+  <Icon {...props}>
+    <rect x="1" y="4" width="22" height="16" rx="2" ry="2" />
+    <line x1="1" y1="10" x2="23" y2="10" />
+  </Icon>
+);
+
+// Shield icon (for admin)
+export const ShieldIcon = (props) => (
+  <Icon {...props}>
+    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+  </Icon>
+);
+
 // ============================================================================
 // Export all icons as object for dynamic usage
 // ============================================================================
@@ -1179,6 +1210,11 @@ export const Icons = {
   Thermometer: ThermometerIcon,
   Music: MusicIcon,
   Waveform: WaveformIcon,
+  // Talk to Quran & Admin icons
+  Send: SendIcon,
+  DollarSign: DollarSignIcon,
+  CreditCard: CreditCardIcon,
+  Shield: ShieldIcon,
 };
 
 // Missing icons for FloatingMenu

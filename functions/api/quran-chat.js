@@ -96,6 +96,12 @@ async function checkMonthlyReset(env, userId, credits) {
   const today = new Date().toISOString().split('T')[0];
   const resetDate = credits.credits_reset_date;
 
+  // Only reset for users with monthly allowance (paid subscribers)
+  // Free users keep their purchased credits
+  if (credits.credits_monthly_allowance <= 0) {
+    return credits;
+  }
+
   // Check if we need to reset (new month or no reset date)
   if (!resetDate || resetDate < today) {
     // Calculate next reset date (1st of next month)
@@ -103,7 +109,7 @@ async function checkMonthlyReset(env, userId, credits) {
     const nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
     const nextResetDate = nextMonth.toISOString().split('T')[0];
 
-    // Reset monthly credits
+    // Reset monthly credits (add monthly allowance, don't overwrite purchased credits)
     await env.DB.prepare(`
       UPDATE user_credits
       SET credits_balance = credits_monthly_allowance,
@@ -204,7 +210,15 @@ async function generateTTS(env, text) {
     }
 
     const audioBuffer = await response.arrayBuffer();
-    const base64Audio = btoa(String.fromCharCode(...new Uint8Array(audioBuffer)));
+    // Convert to base64 safely (avoid stack overflow with large buffers)
+    const uint8Array = new Uint8Array(audioBuffer);
+    let binary = '';
+    const chunkSize = 8192;
+    for (let i = 0; i < uint8Array.length; i += chunkSize) {
+      const chunk = uint8Array.subarray(i, i + chunkSize);
+      binary += String.fromCharCode.apply(null, chunk);
+    }
+    const base64Audio = btoa(binary);
     return `data:audio/mpeg;base64,${base64Audio}`;
   } catch (error) {
     console.error('[TTS] Error:', error);
