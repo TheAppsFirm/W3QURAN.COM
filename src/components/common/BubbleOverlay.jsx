@@ -185,27 +185,27 @@ const BubbleOverlay = memo(function BubbleOverlay({
             />
           ))}
 
-          {/* Close Button - Top Right - PROMINENT - Mobile friendly */}
+          {/* Close Button - Top Right - Positioned inside circular area */}
           <button
             onClick={(e) => {
               e.stopPropagation();
               onClose();
             }}
-            className="absolute w-12 h-12 sm:w-12 sm:h-12 rounded-full flex items-center justify-center hover:scale-110 active:scale-90 transition-all z-50 text-white group touch-target"
+            className="absolute w-11 h-11 sm:w-12 sm:h-12 rounded-full flex items-center justify-center hover:scale-110 active:scale-90 transition-all z-50 text-white group touch-target"
             style={{
-              top: '3%',
-              right: '3%',
+              top: '8%',
+              right: '12%',
               background: 'linear-gradient(135deg, rgba(239,68,68,0.95), rgba(220,38,38,0.95))',
               boxShadow: '0 4px 20px rgba(239,68,68,0.5), 0 0 0 3px rgba(255,255,255,0.3), inset 0 2px 0 rgba(255,255,255,0.3)',
               border: '2px solid rgba(255,255,255,0.4)',
-              minWidth: '48px',
-              minHeight: '48px',
+              minWidth: '44px',
+              minHeight: '44px',
             }}
             aria-label="Close dialog"
           >
             {/* Glass highlight */}
             <div className="absolute top-1 left-2 right-2 h-1/3 rounded-full bg-gradient-to-b from-white/40 to-transparent" />
-            <Icons.X className="w-6 h-6 relative z-10 group-hover:rotate-90 transition-transform duration-300" />
+            <Icons.X className="w-5 h-5 sm:w-6 sm:h-6 relative z-10 group-hover:rotate-90 transition-transform duration-300" />
           </button>
 
           {/* Content Container - Centered with better spacing */}

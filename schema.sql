@@ -166,3 +166,58 @@ CREATE INDEX IF NOT EXISTS idx_transactions_created ON credit_transactions(creat
 CREATE INDEX IF NOT EXISTS idx_conversations_user ON quran_conversations(user_id);
 CREATE INDEX IF NOT EXISTS idx_conversations_created ON quran_conversations(created_at);
 CREATE INDEX IF NOT EXISTS idx_free_daily_user_date ON free_daily_usage(user_id, usage_date);
+
+-- ============================================
+-- APPLICATION LOGGING TABLES (Comprehensive tracking)
+-- ============================================
+
+-- Main app logs table (stores all client-side logs)
+CREATE TABLE IF NOT EXISTS app_logs (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id TEXT,
+  session_id TEXT, -- Groups logs from same browser session
+  log_level TEXT NOT NULL DEFAULT 'info', -- debug, info, warn, error, critical
+  log_type TEXT NOT NULL DEFAULT 'general', -- error, performance, action, navigation, audio, api, memory, feature, crash, etc.
+  message TEXT,
+  browser TEXT, -- chrome, safari, firefox, edge
+  os TEXT, -- windows, macos, linux, android, ios
+  device TEXT, -- desktop, mobile, tablet
+  memory_used_mb INTEGER, -- JS heap used
+  memory_percent INTEGER, -- Heap usage percentage
+  page_url TEXT,
+  surah_id INTEGER,
+  ayah_num INTEGER,
+  extra_data TEXT, -- JSON for additional context
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+-- Indexes for efficient querying
+CREATE INDEX IF NOT EXISTS idx_app_logs_level ON app_logs(log_level);
+CREATE INDEX IF NOT EXISTS idx_app_logs_type ON app_logs(log_type);
+CREATE INDEX IF NOT EXISTS idx_app_logs_created ON app_logs(created_at);
+CREATE INDEX IF NOT EXISTS idx_app_logs_surah ON app_logs(surah_id);
+CREATE INDEX IF NOT EXISTS idx_app_logs_session ON app_logs(session_id);
+CREATE INDEX IF NOT EXISTS idx_app_logs_browser ON app_logs(browser);
+CREATE INDEX IF NOT EXISTS idx_app_logs_os ON app_logs(os);
+CREATE INDEX IF NOT EXISTS idx_app_logs_user ON app_logs(user_id);
+
+-- Legacy error logs table (for backwards compatibility)
+CREATE TABLE IF NOT EXISTS error_logs (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id TEXT,
+  error_type TEXT NOT NULL,
+  error_message TEXT,
+  stack_trace TEXT,
+  user_agent TEXT,
+  page_url TEXT,
+  surah_id INTEGER,
+  ayah_num INTEGER,
+  additional_data TEXT,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+-- Indexes for error logs
+CREATE INDEX IF NOT EXISTS idx_error_logs_type ON error_logs(error_type);
+CREATE INDEX IF NOT EXISTS idx_error_logs_created ON error_logs(created_at);

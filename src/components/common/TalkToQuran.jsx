@@ -7,11 +7,26 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { Icons } from './Icons';
 import { useAuth } from '../../contexts/AuthContext';
 import { useLocale } from '../../context';
+import logger from '../../utils/logger';
 
 // Speech APIs (SSR-safe)
 const SpeechRecognition = typeof window !== 'undefined'
   ? (window.SpeechRecognition || window.webkitSpeechRecognition)
   : null;
+
+// Detect mobile devices where speech recognition may be unreliable
+const isIOS = typeof navigator !== 'undefined' && /iPad|iPhone|iPod/.test(navigator.userAgent);
+const isAndroid = typeof navigator !== 'undefined' && /Android/i.test(navigator.userAgent);
+const isSafari = typeof navigator !== 'undefined' && /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+const isMobile = typeof window !== 'undefined' && (window.innerWidth < 768 || isIOS || isAndroid);
+
+// Determine if we should use Whisper API fallback
+// iOS Safari doesn't support Web Speech API at all
+// Some Android browsers may also not support it
+const useWhisperFallback = isIOS || (isSafari && !SpeechRecognition) || (!SpeechRecognition && isMobile);
+
+// For text input default - only show on iOS where nothing works without Whisper
+const speechMayNotWork = false; // We now have Whisper fallback, so voice always works
 
 const SPEECH_LANG_MAP = { en: 'en-US', ur: 'ur-PK', ar: 'ar-SA' };
 
@@ -180,7 +195,7 @@ const QuranBubble = ({ status, isPlaying, onClick, hasAccess, isAuthenticated })
             <div className="text-center">
               <div className="text-4xl mb-1">📖</div>
               <div className="text-white/80 text-xs font-medium">
-                {!isAuthenticated ? 'Tap to Sign In' : !hasAccess ? 'Tap to Upgrade' : 'Tap to Talk'}
+                {!isAuthenticated ? 'Tap to Sign In' : !hasAccess ? 'Tap to Upgrade' : showTextInput ? 'Type Below' : 'Tap to Talk'}
               </div>
             </div>
           )}
@@ -353,9 +368,11 @@ export default function TalkToQuran({ isVisible, onClose, onNavigate }) {
   const [error, setError] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [textInput, setTextInput] = useState('');
-  const [showTextInput, setShowTextInput] = useState(false);
+  const [showTextInput, setShowTextInput] = useState(speechMayNotWork || !SpeechRecognition);
   const [followUpQuestions, setFollowUpQuestions] = useState([]);
   const [upgradeLoading, setUpgradeLoading] = useState(false);
+  const [isRecording, setIsRecording] = useState(false); // For Whisper fallback recording
+  const [recordingTime, setRecordingTime] = useState(0); // Recording duration display
 
   const recognitionRef = useRef(null);
   const messagesEndRef = useRef(null);
@@ -366,6 +383,9 @@ export default function TalkToQuran({ isVisible, onClose, onNavigate }) {
   const streamingIntervalRef = useRef(null);
   const currentTranscriptRef = useRef(''); // Track latest transcript for silence detection
   const isSendingRef = useRef(false); // Prevent race conditions
+  const mediaRecorderRef = useRef(null); // For Whisper fallback
+  const audioChunksRef = useRef([]); // Store recorded audio chunks
+  const recordingTimerRef = useRef(null); // Timer for recording duration
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -395,10 +415,13 @@ export default function TalkToQuran({ isVisible, onClose, onNavigate }) {
 
   const startListening = useCallback(() => {
     if (!SpeechRecognition) {
-      setError('Voice not supported');
+      logger.talkToQuran.error('Voice not supported', 'web_speech');
+      setShowTextInput(true);
+      setError('Voice not supported on this browser. Please type your question below.');
       return;
     }
 
+    logger.talkToQuran.start('web_speech');
     setLiveTranscript('');
     setError(null);
     lastTranscriptRef.current = '';
@@ -456,7 +479,22 @@ export default function TalkToQuran({ isVisible, onClose, onNavigate }) {
         clearTimeout(silenceTimerRef.current);
         silenceTimerRef.current = null;
       }
-      if (e.error !== 'aborted' && e.error !== 'no-speech') setError('Mic error');
+      if (e.error !== 'aborted' && e.error !== 'no-speech') {
+        // Auto-switch to text input on mic error
+        setShowTextInput(true);
+        // Provide device-specific error messages
+        let errorMsg = 'Mic error. Try typing instead.';
+        if (isIOS) {
+          errorMsg = 'Voice not supported on iOS. Please type below.';
+        } else if (isAndroid && e.error === 'not-allowed') {
+          errorMsg = 'Mic permission denied. Please allow microphone access or type below.';
+        } else if (e.error === 'not-allowed') {
+          errorMsg = 'Mic permission denied. Please allow access or type your question.';
+        } else if (e.error === 'network') {
+          errorMsg = 'Network error. Please check connection or type your question.';
+        }
+        setError(errorMsg);
+      }
       if (!isSendingRef.current) {
         setStatus('idle');
       }
@@ -493,11 +531,180 @@ export default function TalkToQuran({ isVisible, onClose, onNavigate }) {
     currentTranscriptRef.current = '';
   }, [liveTranscript]);
 
-  const cancelListening = useCallback(() => {
-    recognitionRef.current?.stop();
+  // ===== WHISPER FALLBACK FUNCTIONS =====
+  // Used on iOS and devices where Web Speech API doesn't work
+
+  const startRecording = useCallback(async () => {
+    try {
+      logger.talkToQuran.start('whisper_recording');
+      setError(null);
+      audioChunksRef.current = [];
+      setRecordingTime(0);
+
+      // Request microphone access
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: {
+          echoCancellation: true,
+          noiseSuppression: true,
+          sampleRate: 16000,
+        }
+      });
+
+      // Create MediaRecorder with best available format
+      const mimeType = MediaRecorder.isTypeSupported('audio/webm;codecs=opus')
+        ? 'audio/webm;codecs=opus'
+        : MediaRecorder.isTypeSupported('audio/webm')
+          ? 'audio/webm'
+          : 'audio/mp4';
+
+      const mediaRecorder = new MediaRecorder(stream, { mimeType });
+      mediaRecorderRef.current = mediaRecorder;
+
+      mediaRecorder.ondataavailable = (e) => {
+        if (e.data.size > 0) {
+          audioChunksRef.current.push(e.data);
+        }
+      };
+
+      mediaRecorder.onstop = async () => {
+        // Stop all tracks
+        stream.getTracks().forEach(track => track.stop());
+
+        // Clear recording timer
+        if (recordingTimerRef.current) {
+          clearInterval(recordingTimerRef.current);
+          recordingTimerRef.current = null;
+        }
+
+        // Create blob from chunks
+        const audioBlob = new Blob(audioChunksRef.current, { type: mimeType });
+
+        // Don't send if too short (less than 0.5 seconds of data)
+        if (audioBlob.size < 5000) {
+          setStatus('idle');
+          setIsRecording(false);
+          return;
+        }
+
+        // Send to Whisper API
+        setStatus('processing');
+        setLiveTranscript('Transcribing...');
+
+        try {
+          const formData = new FormData();
+          formData.append('audio', audioBlob, 'recording.webm');
+          formData.append('language', language);
+
+          const response = await fetch('/api/transcribe', {
+            method: 'POST',
+            credentials: 'include',
+            body: formData,
+          });
+
+          const data = await response.json();
+
+          if (data.success && data.text) {
+            logger.talkToQuran.transcribe(recordingTime);
+            setLiveTranscript('');
+            sendMessage(data.text);
+          } else {
+            logger.talkToQuran.error(data.error || 'Transcription failed', 'whisper');
+            setError(data.error || 'Transcription failed. Try again or type your question.');
+            setStatus('idle');
+            setLiveTranscript('');
+          }
+        } catch (err) {
+          console.error('[Whisper] Error:', err);
+          logger.talkToQuran.error(err.message, 'whisper');
+          setError('Failed to transcribe. Please try again or type your question.');
+          setStatus('idle');
+          setLiveTranscript('');
+        }
+
+        setIsRecording(false);
+      };
+
+      mediaRecorder.onerror = (e) => {
+        console.error('[Recording] Error:', e);
+        setError('Recording failed. Please try again.');
+        setStatus('idle');
+        setIsRecording(false);
+        stream.getTracks().forEach(track => track.stop());
+      };
+
+      // Start recording
+      mediaRecorder.start(100); // Collect data every 100ms
+      setIsRecording(true);
+      setStatus('listening');
+
+      // Start recording timer
+      recordingTimerRef.current = setInterval(() => {
+        setRecordingTime(prev => prev + 1);
+      }, 1000);
+
+    } catch (err) {
+      console.error('[Recording] Permission error:', err);
+      if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
+        setError('Microphone access denied. Please allow microphone permission or type your question.');
+      } else {
+        setError('Could not access microphone. Please type your question instead.');
+      }
+      setShowTextInput(true);
+    }
+  }, [language]);
+
+  const stopRecording = useCallback(() => {
+    if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'recording') {
+      mediaRecorderRef.current.stop();
+    }
+    if (recordingTimerRef.current) {
+      clearInterval(recordingTimerRef.current);
+      recordingTimerRef.current = null;
+    }
+  }, []);
+
+  const cancelRecording = useCallback(() => {
+    if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'recording') {
+      mediaRecorderRef.current.stop();
+    }
+    if (recordingTimerRef.current) {
+      clearInterval(recordingTimerRef.current);
+      recordingTimerRef.current = null;
+    }
+    audioChunksRef.current = [];
+    setIsRecording(false);
+    setStatus('idle');
+    setRecordingTime(0);
+  }, []);
+
+  // Unified start function - chooses between Web Speech and Whisper
+  const handleStartVoice = useCallback(() => {
+    if (useWhisperFallback) {
+      startRecording();
+    } else {
+      startListening();
+    }
+  }, [startRecording, startListening]);
+
+  // Unified stop function
+  const handleStopVoice = useCallback(() => {
+    if (useWhisperFallback || isRecording) {
+      stopRecording();
+    } else {
+      stopAndSend();
+    }
+  }, [isRecording, stopRecording, stopAndSend]);
+
+  // Unified cancel function - handles both Web Speech and Whisper
+  const handleCancelVoice = useCallback(() => {
+    if (useWhisperFallback || isRecording) {
+      cancelRecording();
+    } else {
+      recognitionRef.current?.stop();
+    }
     setLiveTranscript('');
     setStatus('idle');
-  }, []);
+  }, [isRecording, cancelRecording]);
 
   const sendMessage = async (text) => {
     if (!text.trim() || !hasAccess) return;
@@ -859,6 +1066,16 @@ export default function TalkToQuran({ isVisible, onClose, onNavigate }) {
                 Ask anything about the Quran and receive guidance from Allah's words
               </p>
 
+              {/* iOS/Safari voice hint */}
+              {useWhisperFallback && hasAccess && !showTextInput && (
+                <div className="mt-4 flex items-center gap-2 px-4 py-2 rounded-full bg-purple-500/15 border border-purple-400/30">
+                  <Icons.Info className="w-4 h-4 text-purple-300 flex-shrink-0" />
+                  <span className="text-xs text-purple-200/80">
+                    {isIOS ? 'Tap the bubble to start, tap Send when done' : 'Tap to start recording'}
+                  </span>
+                </div>
+              )}
+
               {/* Sample Questions */}
               {hasAccess && (
                 <div className="mt-8 w-full max-w-md">
@@ -1036,8 +1253,20 @@ export default function TalkToQuran({ isVisible, onClose, onNavigate }) {
                 style={{ animation: 'pulse 1s ease-in-out infinite' }}
               />
               <span className="text-sm text-white/80">
-                {status === 'listening' ? 'Listening...' :
+                {status === 'listening' ? (
+                  isRecording ? `Recording ${recordingTime}s...` : 'Listening...'
+                ) :
                  status === 'processing' ? 'Thinking...' : 'Speaking...'}
+              </span>
+            </div>
+          )}
+
+          {/* iOS/Mobile hint for hold-to-record */}
+          {useWhisperFallback && status === 'idle' && hasAccess && !showTextInput && (messages.length > 0 || streamingText || liveTranscript) && (
+            <div className="mb-3 flex items-center gap-2 px-4 py-2 rounded-full bg-purple-500/15 border border-purple-400/30">
+              <Icons.Info className="w-4 h-4 text-purple-300 flex-shrink-0" />
+              <span className="text-xs text-purple-200/80">
+                {isIOS ? 'Tap mic to start, tap again to send' : 'Tap mic to record your question'}
               </span>
             </div>
           )}
@@ -1104,7 +1333,7 @@ export default function TalkToQuran({ isVisible, onClose, onNavigate }) {
 
               {status === 'idle' && !showTextInput && (
                 <button
-                  onClick={startListening}
+                  onClick={handleStartVoice}
                   className="relative w-18 h-18 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 group"
                   style={{
                     width: '72px',
@@ -1121,7 +1350,7 @@ export default function TalkToQuran({ isVisible, onClose, onNavigate }) {
               {status === 'listening' && (
                 <div className="flex items-center gap-6">
                   <button
-                    onClick={cancelListening}
+                    onClick={handleCancelVoice}
                     className="w-14 h-14 rounded-full flex items-center justify-center transition-all hover:scale-105"
                     style={{
                       background: 'linear-gradient(145deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05))',
@@ -1133,7 +1362,7 @@ export default function TalkToQuran({ isVisible, onClose, onNavigate }) {
                     <Icons.X className="w-6 h-6 text-white/80" />
                   </button>
                   <button
-                    onClick={stopAndSend}
+                    onClick={handleStopVoice}
                     className="relative flex items-center justify-center transition-all hover:scale-105"
                     style={{
                       width: '80px',

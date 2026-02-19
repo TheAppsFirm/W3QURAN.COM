@@ -32,6 +32,25 @@ import { useLocalStorage, useIsMobile } from '../../hooks';
 import { logReadingSession, trackSurahCompletion, trackFeatureUsage } from '../../utils/trackingUtils';
 import { shareVerse } from '../../utils/shareUtils';
 import { useAuth } from '../../contexts/AuthContext';
+import logger from '../../utils/logger';
+
+// Browser detection for Safari-specific optimizations
+const isSafari = typeof navigator !== 'undefined' && /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+const isIOS = typeof navigator !== 'undefined' && /iPad|iPhone|iPod/.test(navigator.userAgent);
+const isMobileSafari = isSafari || isIOS;
+
+// Memory monitoring for Safari
+const checkMemoryPressure = () => {
+  if (typeof performance !== 'undefined' && performance.memory) {
+    const { usedJSHeapSize, jsHeapSizeLimit } = performance.memory;
+    const usagePercent = (usedJSHeapSize / jsHeapSizeLimit) * 100;
+    if (usagePercent > 80) {
+      logger.memoryWarning('audio prefetch');
+      return true;
+    }
+  }
+  return false;
+};
 
 // Simple HTML sanitizer to prevent XSS attacks in tafseer content
 const sanitizeHTML = (html) => {
@@ -1515,6 +1534,19 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
   const prefetchAbortRef = useRef(null); // AbortController for canceling prefetch
   const prefetchingRef = useRef(new Set()); // Currently prefetching URLs
 
+  // Log surah open event
+  useEffect(() => {
+    if (surah?.id) {
+      logger.surahOpen(surah.id, surah.name);
+      logger.memoryWarning('surah open');
+    }
+    return () => {
+      if (surah?.id) {
+        logger.surahClose(surah.id, currentAyah);
+      }
+    };
+  }, [surah?.id]);
+
   // Get language code from translation for TTS
   const ttsLanguage = useMemo(() => {
     if (!selectedTranslation) return 'en';
@@ -1699,9 +1731,18 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
     }
   }, []);
 
-  // Prefetch next N ayahs
+  // Prefetch next N ayahs (reduced on Safari to prevent crashes)
   const prefetchNextAyahs = useCallback((currentAyahNum, count = 3) => {
     if (!surah?.id || !selectedReciter) return;
+
+    // Safari/iOS optimization: reduce prefetching and check memory
+    const safariCount = isMobileSafari ? 1 : count; // Only prefetch 1 on Safari
+    const effectiveCount = checkMemoryPressure() ? 0 : safariCount; // Skip if high memory
+
+    if (effectiveCount === 0) {
+      console.log('[Prefetch] Skipping - memory pressure or Safari limit');
+      return;
+    }
 
     // Create new AbortController for this batch
     if (prefetchAbortRef.current) {
@@ -1712,7 +1753,20 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
 
     const total = totalVersesRef.current || surah.ayahs;
 
-    for (let i = 1; i <= count; i++) {
+    // Limit cache size on Safari to prevent memory buildup
+    if (isMobileSafari && audioCacheRef.current.size > 5) {
+      console.log('[Prefetch] Clearing old cache entries for Safari');
+      const entries = Array.from(audioCacheRef.current.entries());
+      // Keep only the 3 most recent entries
+      entries.slice(0, entries.length - 3).forEach(([key, cached]) => {
+        if (cached.blobUrl) {
+          URL.revokeObjectURL(cached.blobUrl);
+        }
+        audioCacheRef.current.delete(key);
+      });
+    }
+
+    for (let i = 1; i <= effectiveCount; i++) {
       const nextAyah = currentAyahNum + i;
       if (nextAyah > total) break;
 
@@ -1724,8 +1778,8 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
 
       prefetchAudio(arabicUrl, arabicKey, signal);
 
-      // Translation audio URL (if using everyayah narrator)
-      if (effectiveNarrator && narratorUrlConfig[effectiveNarrator]) {
+      // Skip translation prefetch on Safari to save memory
+      if (!isMobileSafari && effectiveNarrator && narratorUrlConfig[effectiveNarrator]) {
         const config = narratorUrlConfig[effectiveNarrator];
         if (config.type === 'everyayah') {
           const transUrl = `${config.baseUrl}/${paddedSurah}${paddedAyah}.mp3`;
@@ -2615,7 +2669,12 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
 
     const handleCanPlay = () => { setAudioLoading(false); setAudioError(null); };
     const handleLoadStart = () => { setAudioLoading(true); setAudioError(null); };
-    const handleError = () => { setAudioError('Failed to load audio'); setAudioLoading(false); setIsPlaying(false); };
+    const handleError = (e) => {
+      logger.audioError(surah?.id, currentAyahRef.current, e?.message || 'Failed to load audio');
+      setAudioError('Failed to load audio');
+      setAudioLoading(false);
+      setIsPlaying(false);
+    };
     const handleEnded = () => {
       const repeat = repeatModeRef.current;
       const current = currentAyahRef.current;
