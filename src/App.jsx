@@ -10,7 +10,7 @@
  */
 
 import React, { Suspense, useState, useEffect, useMemo, useCallback, useRef } from 'react';
-import { ErrorBoundary, LoadingSpinner, BubbleModal, BubbleReaderOverlay, ProgressDashboard, OfflineManager, HifzMode, SearchPanel, DonateModal, WordSearchMap, EmotionalTracker, ScholarVideoSync, PropheticMap, QuranCompanionAI, GlobalUmmahPulse, VerseWeatherSync, SoundHealingRoom, QuranicBabyNames } from './components/common';
+import { ErrorBoundary, LoadingSpinner, BubbleModal, BubbleReaderOverlay, ProgressDashboard, OfflineManager, HifzMode, SearchPanel, DonateModal, WordSearchMap, EmotionalTracker, ScholarVideoSync, PropheticMap, QuranCompanionAI, GlobalUmmahPulse, VerseWeatherSync, SoundHealingRoom, QuranicBabyNames, TalkToQuran } from './components/common';
 import { Header, FloatingMenu, StatsBar } from './components/layout';
 import { SurahBubble, LayoutSelector, ClockLayout, GridLayout, JuzzGroupLayout, AlphabetLayout, RevelationLayout, BookLayout } from './components/bubbles';
 import { AnalyticsPanel } from './components/widgets';
@@ -281,6 +281,7 @@ function QuranBubbleApp() {
   const [showWeatherSync, setShowWeatherSync] = useState(false);
   const [showSoundHealing, setShowSoundHealing] = useState(false);
   const [showBabyNames, setShowBabyNames] = useState(false);
+  const [showTalkToQuran, setShowTalkToQuran] = useState(false);
 
   // Track if we're handling a popstate event (browser back/forward)
   const isPopstateRef = useRef(false);
@@ -1124,6 +1125,7 @@ function QuranBubbleApp() {
         onMood={() => setShowMoodTracker(true)}
         onVideoSync={() => setShowVideoSync(true)}
         onBabyNames={() => setShowBabyNames(true)}
+        onTalkToQuran={() => setShowTalkToQuran(true)}
       />
 
       {/* Bubble Modal */}
@@ -1433,6 +1435,13 @@ function QuranBubbleApp() {
       <QuranicBabyNames
         isVisible={showBabyNames}
         onClose={handleCloseBabyNames}
+      />
+
+      {/* Talk to Quran AI */}
+      <TalkToQuran
+        isVisible={showTalkToQuran}
+        onClose={() => setShowTalkToQuran(false)}
+        darkMode={darkMode}
       />
 
       {/* Animation Styles */}

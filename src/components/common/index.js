@@ -30,3 +30,4 @@ export { default as VerseWeatherSync } from './VerseWeatherSync';
 export { default as SoundHealingRoom } from './SoundHealingRoom';
 export { default as QuranicBabyNames } from './QuranicBabyNames';
 export { TreebankOverlay, GrammarButton, OntologyView } from './TreebankAnalysis';
+export { default as TalkToQuran } from './TalkToQuran';

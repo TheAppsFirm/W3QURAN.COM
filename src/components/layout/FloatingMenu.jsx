@@ -148,7 +148,7 @@ const BubbleMenuItem = ({ item, active, onClick, delay = 0, darkMode }) => {
   );
 };
 
-function FloatingMenu({ view, setView, darkMode, onDonate, onMindMap, onMood, onVideoSync, onBabyNames }) {
+function FloatingMenu({ view, setView, darkMode, onDonate, onMindMap, onMood, onVideoSync, onBabyNames, onTalkToQuran }) {
   const [showMore, setShowMore] = useState(false);
   const menuRef = useRef(null);
 
@@ -167,6 +167,7 @@ function FloatingMenu({ view, setView, darkMode, onDonate, onMindMap, onMood, on
 
   const mainItems = [
     { id: 'surahs', label: 'Quran', icon: Icons.Book },
+    { id: 'talk', label: 'Talk', icon: Icons.Mic, isTalk: true },
     { id: 'more', label: 'More', icon: Icons.Grid, isMore: true },
   ];
 
@@ -305,12 +306,21 @@ function FloatingMenu({ view, setView, darkMode, onDonate, onMindMap, onMood, on
             const Icon = item.icon || Icons.Star;
             const active = item.isMore ? showMore : view === item.id;
             const gradient = item.id === 'surahs' ? ['#10b981', '#14b8a6']
+              : item.id === 'talk' ? ['#A855F7', '#EC4899']
               : ['#f59e0b', '#eab308'];
 
             return (
               <button
                 key={item.id}
-                onClick={() => (item.isMore ? setShowMore(!showMore) : setView(item.id))}
+                onClick={() => {
+                  if (item.isMore) {
+                    setShowMore(!showMore);
+                  } else if (item.isTalk && onTalkToQuran) {
+                    onTalkToQuran();
+                  } else {
+                    setView(item.id);
+                  }
+                }}
                 className="relative flex flex-col items-center gap-1 transition-all duration-300"
               >
                 {/* Bubble */}
