@@ -1075,21 +1075,21 @@ function QuranBubbleApp() {
               )}
             </div>
 
-            {/* Filter info */}
+            {/* Filter info - positioned above the bottom floating menu */}
             {(filters.type || filters.ayahRange || filters.topic || filters.search) && (
               <div
-                className={`absolute top-4 right-4 z-30 backdrop-blur-xl rounded-2xl px-4 py-2 shadow-lg border ${
-                  darkMode ? 'bg-gray-800/90 border-gray-700' : 'bg-white/90 border-gray-200'
+                className={`fixed bottom-36 left-1/2 -translate-x-1/2 z-40 backdrop-blur-xl rounded-full px-5 py-2.5 shadow-lg border flex items-center gap-3 ${
+                  darkMode ? 'bg-gray-800/95 border-gray-700' : 'bg-white/95 border-gray-200'
                 }`}
               >
-                <span className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-                  Showing {filtered.length} of 114 surahs
+                <span className={`text-sm font-medium ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                  {filtered.length} of 114 surahs
                 </span>
                 <button
                   onClick={clearFilters}
-                  className="ml-3 text-sm text-purple-600 font-semibold hover:text-purple-800"
+                  className="text-sm text-purple-600 font-semibold hover:text-purple-800 flex items-center gap-1"
                 >
-                  Clear filters
+                  ✕ Clear
                 </button>
               </div>
             )}
