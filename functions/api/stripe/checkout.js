@@ -1,6 +1,28 @@
 /**
  * Stripe Checkout - Create checkout session
+ * Supports subscriptions (Starter, Premium, Scholar) and one-time purchases (Lifetime, Credit Packs)
  */
+
+// Price IDs from Stripe (created via scripts/create-stripe-products.js)
+const STRIPE_PRICES = {
+  starter_monthly: 'price_1T2Rh7CnbCeWpM4XTdLXxgfU', // 30 credits
+  premium_monthly: 'price_1T2Rh8CnbCeWpM4XiQL1YsAI', // 80 credits
+  premium_yearly: 'price_1T2Rh9CnbCeWpM4XdHjDJcuv', // 80 credits
+  scholar_monthly: 'price_1T2RhACnbCeWpM4XGhAaaAnD', // 300 credits
+  scholar_yearly: 'price_1T2RhBCnbCeWpM4XEfsrQUhd', // 300 credits
+  lifetime: 'price_1T2RhCCnbCeWpM4XEBx0EKSI', // 100 credits/month forever
+  credits_20: 'price_1T2RhDCnbCeWpM4XqnbWkTrI', // 20 credits
+  credits_50: 'price_1T2RhFCnbCeWpM4XSWjxl9yf', // 50 credits
+  credits_100: 'price_1T2RhGCnbCeWpM4XatkkkMA3', // 100 credits
+};
+
+// One-time purchase prices (not subscriptions)
+const ONE_TIME_PRICES = [
+  STRIPE_PRICES.lifetime,
+  STRIPE_PRICES.credits_20,
+  STRIPE_PRICES.credits_50,
+  STRIPE_PRICES.credits_100,
+];
 
 export async function onRequest(context) {
   const { env, request } = context;
@@ -59,6 +81,29 @@ export async function onRequest(context) {
     const isLocal = url.hostname === 'localhost' || url.hostname === '127.0.0.1';
     const baseUrl = isLocal ? `${url.protocol}//${url.host}` : 'https://w3quran.com';
 
+    // Check if this is a one-time purchase or subscription
+    const isOneTime = ONE_TIME_PRICES.includes(priceId);
+    const mode = isOneTime ? 'payment' : 'subscription';
+
+    // Build checkout session params
+    const params = {
+      'mode': mode,
+      'customer_email': userResult.email,
+      'client_reference_id': userResult.id,
+      'line_items[0][price]': priceId,
+      'line_items[0][quantity]': '1',
+      'success_url': `${baseUrl}/settings?payment=success`,
+      'cancel_url': `${baseUrl}/settings?payment=canceled`,
+      'metadata[user_id]': userResult.id,
+      'metadata[price_id]': priceId,
+    };
+
+    // If user already has a Stripe customer ID, use it
+    if (userResult.stripe_customer_id) {
+      params['customer'] = userResult.stripe_customer_id;
+      delete params['customer_email'];
+    }
+
     // Create Stripe checkout session
     const stripeResponse = await fetch('https://api.stripe.com/v1/checkout/sessions', {
       method: 'POST',
@@ -66,16 +111,7 @@ export async function onRequest(context) {
         'Authorization': `Bearer ${env.STRIPE_SECRET_KEY}`,
         'Content-Type': 'application/x-www-form-urlencoded',
       },
-      body: new URLSearchParams({
-        'mode': 'subscription',
-        'customer_email': userResult.email,
-        'client_reference_id': userResult.id,
-        'line_items[0][price]': priceId,
-        'line_items[0][quantity]': '1',
-        'success_url': `${baseUrl}/settings?payment=success`,
-        'cancel_url': `${baseUrl}/settings?payment=canceled`,
-        'metadata[user_id]': userResult.id,
-      }),
+      body: new URLSearchParams(params),
     });
 
     if (!stripeResponse.ok) {
