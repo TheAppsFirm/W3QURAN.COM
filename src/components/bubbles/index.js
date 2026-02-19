@@ -22,7 +22,6 @@ export {
   WaveLayout,
   LengthLayout,
   KidsLayout,
-  LudoLayout,
   ArtLayout,
-  NetflixLayout,
+  Card3DLayout,
 } from './BubbleLayouts';

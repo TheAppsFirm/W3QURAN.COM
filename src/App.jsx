@@ -12,7 +12,7 @@
 import React, { Suspense, useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { ErrorBoundary, LoadingSpinner, BubbleModal, BubbleReaderOverlay, ProgressDashboard, OfflineManager, HifzMode, SearchPanel, DonateModal, WordSearchMap, EmotionalTracker, ScholarVideoSync, PropheticMap, QuranCompanionAI, GlobalUmmahPulse, VerseWeatherSync, SoundHealingRoom, QuranicBabyNames, TalkToQuran } from './components/common';
 import { Header, FloatingMenu, StatsBar } from './components/layout';
-import { SurahBubble, LayoutSelector, ClockLayout, GridLayout, JuzzGroupLayout, AlphabetLayout, RevelationLayout, BookLayout, ListLayout, CompactLayout, HoneycombLayout, WaveLayout, LengthLayout, KidsLayout, LudoLayout, ArtLayout, NetflixLayout } from './components/bubbles';
+import { SurahBubble, LayoutSelector, ClockLayout, GridLayout, JuzzGroupLayout, AlphabetLayout, RevelationLayout, BookLayout, ListLayout, CompactLayout, HoneycombLayout, WaveLayout, LengthLayout, KidsLayout, ArtLayout, Card3DLayout } from './components/bubbles';
 import { AnalyticsPanel } from './components/widgets';
 import {
   NamesOfAllahView,
@@ -1155,17 +1155,6 @@ function QuranBubbleApp() {
                 />
               )}
 
-              {/* Kids Ludo Layout - Board game style */}
-              {surahLayout === 'kids-ludo' && (
-                <LudoLayout
-                  surahs={filtered}
-                  onSurahClick={handleSelectSurah}
-                  zoom={zoom}
-                  contentZoom={contentZoom}
-                  darkMode={darkMode}
-                />
-              )}
-
               {/* Kids Art Layout - Art studio style */}
               {surahLayout === 'kids-art' && (
                 <ArtLayout
@@ -1177,9 +1166,9 @@ function QuranBubbleApp() {
                 />
               )}
 
-              {/* Netflix Cinema Layout */}
-              {surahLayout === 'netflix' && (
-                <NetflixLayout
+              {/* 3D Card Layout */}
+              {surahLayout === 'cards' && (
+                <Card3DLayout
                   surahs={filtered}
                   onSurahClick={handleSelectSurah}
                   zoom={zoom}
