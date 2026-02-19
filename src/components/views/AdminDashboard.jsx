@@ -1,14 +1,11 @@
 /**
  * Admin Dashboard - User Management & Sales Board
- * Only accessible by admin email (theappsfirm@gmail.com)
+ * Only accessible by admin users (configured via ADMIN_EMAILS env var)
  */
 
 import { useState, useEffect, useCallback } from 'react';
 import { Icons } from '../common/Icons';
 import { useAuth } from '../../hooks';
-
-// Admin email check
-const ADMIN_EMAIL = 'theappsfirm@gmail.com';
 
 // Stat Card Component
 const StatCard = ({ title, value, subtitle, icon: Icon, color, trend }) => (
@@ -180,7 +177,7 @@ const EditUserModal = ({ user, onClose, onSave }) => {
 };
 
 export default function AdminDashboard({ onClose }) {
-  const { user, isAuthenticated } = useAuth();
+  const { user, isAuthenticated, isAdmin } = useAuth();
   const [stats, setStats] = useState(null);
   const [users, setUsers] = useState([]);
   const [pagination, setPagination] = useState({ page: 1, totalPages: 1, total: 0 });
@@ -190,9 +187,6 @@ export default function AdminDashboard({ onClose }) {
   const [filterTier, setFilterTier] = useState('');
   const [editingUser, setEditingUser] = useState(null);
   const [activeTab, setActiveTab] = useState('overview'); // overview, users, transactions
-
-  // Check if current user is admin
-  const isAdmin = user?.email === ADMIN_EMAIL;
 
   // Fetch stats
   const fetchStats = useCallback(async () => {

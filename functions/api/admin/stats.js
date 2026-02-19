@@ -3,8 +3,11 @@
  * Protected: Only accessible by admin email
  */
 
-// Admin email
-const ADMIN_EMAIL = 'theappsfirm@gmail.com';
+// Admin emails - set via ADMIN_EMAILS environment variable (comma-separated)
+const getAdminEmails = (env) => {
+  const emails = env.ADMIN_EMAILS || 'theappsfirm@gmail.com';
+  return emails.split(',').map(e => e.trim().toLowerCase());
+};
 
 // Helper to verify admin session
 async function verifyAdminSession(request, env) {
@@ -27,7 +30,8 @@ async function verifyAdminSession(request, env) {
     return { error: 'Invalid session', status: 401 };
   }
 
-  if (result.email !== ADMIN_EMAIL) {
+  const adminEmails = getAdminEmails(env);
+  if (!adminEmails.includes(result.email.toLowerCase())) {
     return { error: 'Access denied. Admin only.', status: 403 };
   }
 

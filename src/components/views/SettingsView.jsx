@@ -84,8 +84,8 @@ function SettingsView({ darkMode, setDarkMode, onNavigate }) {
           Customize your experience
         </p>
 
-        {/* Admin Section - Only show for admin email */}
-        {user?.email === 'theappsfirm@gmail.com' && (
+        {/* Admin Section - Only show for admin users */}
+        {user?.isAdmin && (
           <div className="mb-6">
             <h3 className={`text-sm font-semibold uppercase tracking-wider mb-3 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
               Admin
