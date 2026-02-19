@@ -1526,8 +1526,29 @@ export const KidsLayout = memo(function KidsLayout({
   darkMode,
   variant = 'rainbow',
 }) {
-  // Rainbow colors for kids
-  const rainbowColors = ['#FF6B6B', '#FFE66D', '#4ECDC4', '#45B7D1', '#96E6A1', '#DDA0DD', '#FFB347', '#87CEEB'];
+  const [showShortSurahs, setShowShortSurahs] = useState(false);
+  const [currentFilter, setCurrentFilter] = useState('all'); // all, short, medium, long
+
+  // Rainbow colors for kids - bright and fun
+  const rainbowColors = [
+    '#FF6B6B', // Red
+    '#FF8E53', // Orange
+    '#FFE66D', // Yellow
+    '#96E6A1', // Light Green
+    '#4ECDC4', // Teal
+    '#45B7D1', // Sky Blue
+    '#A78BFA', // Purple
+    '#F472B6', // Pink
+  ];
+
+  // Get emoji based on surah type
+  const getSurahEmoji = (surah) => {
+    if (surah.ayahs <= 10) return '🌟';
+    if (surah.ayahs <= 20) return '⭐';
+    if (surah.ayahs <= 50) return '📖';
+    if (surah.ayahs <= 100) return '📚';
+    return '📜';
+  };
 
   // Star ratings based on surah length (easy = more stars for kids)
   const getStars = (ayahs) => {
@@ -1538,56 +1559,109 @@ export const KidsLayout = memo(function KidsLayout({
     return 1;
   };
 
+  // Filter surahs based on current filter
+  const filteredSurahs = useMemo(() => {
+    switch (currentFilter) {
+      case 'short': return surahs.filter(s => s.ayahs <= 20);
+      case 'medium': return surahs.filter(s => s.ayahs > 20 && s.ayahs <= 80);
+      case 'long': return surahs.filter(s => s.ayahs > 80);
+      default: return surahs;
+    }
+  }, [surahs, currentFilter]);
+
   const getBubbleStyle = (index, surah) => {
     const color = rainbowColors[index % rainbowColors.length];
 
     switch (variant) {
       case 'stars':
         return {
-          background: `linear-gradient(135deg, ${color}, ${color}dd)`,
+          background: `linear-gradient(145deg, ${color}, ${color}cc)`,
           borderRadius: '50%',
-          border: '4px solid gold',
-          boxShadow: `0 0 20px ${color}60, 0 0 40px gold`,
+          border: '4px solid #FFD700',
+          boxShadow: `0 8px 30px ${color}60, inset 0 -4px 10px rgba(0,0,0,0.1)`,
         };
       case 'blocks':
         return {
-          background: `linear-gradient(135deg, ${color}, ${color}dd)`,
-          borderRadius: '16px',
+          background: `linear-gradient(145deg, ${color}, ${color}dd)`,
+          borderRadius: '20px',
           border: '4px solid white',
-          boxShadow: `8px 8px 0 rgba(0,0,0,0.2)`,
+          boxShadow: `6px 6px 0 rgba(0,0,0,0.15), inset 0 2px 0 rgba(255,255,255,0.3)`,
         };
       case 'bubbles':
         return {
-          background: `radial-gradient(circle at 30% 30%, white, ${color})`,
+          background: `radial-gradient(circle at 30% 30%, rgba(255,255,255,0.8), ${color})`,
           borderRadius: '50%',
-          boxShadow: `inset -10px -10px 30px rgba(0,0,0,0.1), 0 10px 30px ${color}40`,
+          boxShadow: `inset -8px -8px 20px rgba(0,0,0,0.15), 0 8px 30px ${color}50`,
         };
       default: // rainbow
         return {
-          background: `linear-gradient(135deg, ${color}, ${color}dd)`,
+          background: `linear-gradient(145deg, ${color}, ${color}cc)`,
           borderRadius: '24px',
-          boxShadow: `0 8px 25px ${color}50`,
+          boxShadow: `0 8px 30px ${color}50, inset 0 2px 0 rgba(255,255,255,0.3)`,
         };
     }
   };
 
-  const size = 90 * zoom;
+  const size = 100 * zoom;
 
   return (
-    <div className="p-6">
+    <div className="p-4 sm:p-6 pb-24">
       {/* Fun header for kids */}
-      <div className="text-center mb-8">
-        <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500">
+      <div className="text-center mb-6">
+        <h2 className="text-2xl sm:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 animate-pulse">
           ✨ Learn Quran ✨
         </h2>
-        <p className="text-lg mt-2" style={{ color: darkMode ? '#FFD700' : '#8B5CF6' }}>
+        <p className="text-base sm:text-lg mt-2" style={{ color: darkMode ? '#FFD700' : '#8B5CF6' }}>
           Tap a surah to start reading! 📖
         </p>
       </div>
 
-      <div className="flex flex-wrap justify-center gap-4">
-        {surahs.map((surah, index) => {
+      {/* Filter Buttons for Kids */}
+      <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-6">
+        {[
+          { id: 'all', label: 'All Surahs', emoji: '📚', color: '#8B5CF6' },
+          { id: 'short', label: 'Easy (Short)', emoji: '🌟', color: '#10B981' },
+          { id: 'medium', label: 'Medium', emoji: '⭐', color: '#F59E0B' },
+          { id: 'long', label: 'Challenge!', emoji: '🏆', color: '#EF4444' },
+        ].map((filter) => (
+          <button
+            key={filter.id}
+            onClick={() => setCurrentFilter(filter.id)}
+            className={`flex items-center gap-2 px-4 py-2.5 rounded-full font-bold text-sm transition-all transform hover:scale-105 active:scale-95 ${
+              currentFilter === filter.id
+                ? 'text-white shadow-lg scale-105'
+                : 'bg-white/80 text-gray-700 hover:bg-white'
+            }`}
+            style={{
+              background: currentFilter === filter.id
+                ? `linear-gradient(135deg, ${filter.color}, ${filter.color}dd)`
+                : undefined,
+              boxShadow: currentFilter === filter.id
+                ? `0 4px 15px ${filter.color}50`
+                : '0 2px 8px rgba(0,0,0,0.1)',
+            }}
+          >
+            <span className="text-lg">{filter.emoji}</span>
+            <span className="hidden sm:inline">{filter.label}</span>
+          </button>
+        ))}
+      </div>
+
+      {/* Count badge */}
+      <div className="text-center mb-4">
+        <span className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium ${
+          darkMode ? 'bg-white/10 text-white' : 'bg-purple-100 text-purple-700'
+        }`}>
+          <span className="text-lg">📖</span>
+          {filteredSurahs.length} Surahs to explore!
+        </span>
+      </div>
+
+      {/* Surahs Grid */}
+      <div className="flex flex-wrap justify-center gap-4 sm:gap-5">
+        {filteredSurahs.map((surah, index) => {
           const stars = getStars(surah.ayahs);
+          const emoji = getSurahEmoji(surah);
 
           return (
             <div
@@ -1596,47 +1670,60 @@ export const KidsLayout = memo(function KidsLayout({
                 playClickSound();
                 onSurahClick(surah, { x: e.clientX, y: e.clientY });
               }}
-              className="cursor-pointer transition-all hover:scale-110 hover:rotate-3 active:scale-95"
+              className="cursor-pointer transition-all hover:scale-110 hover:-rotate-2 active:scale-95 relative"
               style={{
                 width: size,
-                height: size + 30,
-                animation: `gentleFloat ${2 + (index % 4) * 0.5}s ease-in-out infinite`,
+                height: size + 35,
+                animation: `gentleFloat ${2.5 + (index % 4) * 0.4}s ease-in-out infinite`,
+                animationDelay: `${index * 0.05}s`,
               }}
             >
+              {/* Surah number badge - OUTSIDE the bubble to not get cut */}
               <div
-                className="w-full h-full flex flex-col items-center justify-center text-white relative overflow-hidden"
+                className="absolute -top-2 -left-2 w-9 h-9 rounded-full bg-white text-gray-800 font-bold flex items-center justify-center text-sm shadow-lg z-10"
+                style={{
+                  border: '3px solid #FFD700',
+                  background: 'linear-gradient(145deg, #ffffff, #f0f0f0)',
+                }}
+              >
+                {surah.id}
+              </div>
+
+              {/* Emoji badge */}
+              <div className="absolute -top-1 -right-1 text-xl z-10 animate-bounce" style={{ animationDuration: '2s' }}>
+                {emoji}
+              </div>
+
+              {/* Main bubble */}
+              <div
+                className="w-full h-full flex flex-col items-center justify-center text-white relative pt-2"
                 style={getBubbleStyle(index, surah)}
               >
-                {/* Sparkle effects */}
-                <div className="absolute top-2 right-2 text-lg animate-pulse">✨</div>
+                {/* Sparkle effect */}
+                <div className="absolute top-3 right-3 text-sm opacity-80 animate-pulse">✨</div>
 
-                {/* Surah number in circle */}
-                <div
-                  className="absolute -top-1 -left-1 w-8 h-8 rounded-full bg-white text-gray-800 font-bold flex items-center justify-center text-sm shadow-lg"
-                  style={{ border: '2px solid gold' }}
-                >
-                  {surah.id}
-                </div>
-
-                {/* Surah name */}
+                {/* Surah name - Arabic */}
                 <span
-                  className="font-bold leading-tight text-center drop-shadow-lg"
+                  className="font-bold leading-tight text-center drop-shadow-lg mt-2"
                   style={{
-                    fontSize: size * 0.26 * contentZoom,
-                    fontFamily: "'Scheherazade New', serif",
+                    fontSize: size * 0.28 * contentZoom,
+                    fontFamily: "'Scheherazade New', 'Amiri', serif",
                     textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
                   }}
                 >
                   {surah.arabic}
                 </span>
 
-                {/* Stars rating (difficulty/length indicator for kids) */}
-                <div className="flex gap-0.5 mt-1">
+                {/* Stars rating */}
+                <div className="flex gap-0.5 mt-1.5">
                   {[...Array(5)].map((_, i) => (
                     <span
                       key={i}
-                      className="text-xs"
-                      style={{ opacity: i < stars ? 1 : 0.3 }}
+                      className="text-[11px]"
+                      style={{
+                        opacity: i < stars ? 1 : 0.25,
+                        filter: i < stars ? 'none' : 'grayscale(1)',
+                      }}
                     >
                       ⭐
                     </span>
@@ -1644,8 +1731,16 @@ export const KidsLayout = memo(function KidsLayout({
                 </div>
 
                 {/* English name */}
-                <span className="text-white/80 text-[10px] mt-1 font-medium">
+                <span
+                  className="text-white/90 text-[11px] mt-1 font-semibold px-2 text-center leading-tight"
+                  style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.3)' }}
+                >
                   {surah.name}
+                </span>
+
+                {/* Ayah count */}
+                <span className="text-white/70 text-[9px] mt-0.5">
+                  {surah.ayahs} verses
                 </span>
               </div>
             </div>
@@ -1653,12 +1748,39 @@ export const KidsLayout = memo(function KidsLayout({
         })}
       </div>
 
-      {/* Legend for kids */}
+      {/* Fun Legend for kids */}
       <div className="mt-8 text-center">
-        <div className={`inline-flex items-center gap-4 p-4 rounded-2xl ${darkMode ? 'bg-white/10' : 'bg-purple-100'}`}>
-          <span className="text-sm">⭐⭐⭐⭐⭐ = Short & Easy</span>
-          <span className="text-sm">⭐ = Long & Challenging</span>
+        <div className={`inline-flex flex-wrap items-center justify-center gap-3 sm:gap-6 p-4 rounded-2xl ${
+          darkMode ? 'bg-white/10' : 'bg-gradient-to-r from-purple-50 to-pink-50'
+        }`}>
+          <div className="flex items-center gap-2">
+            <span className="text-xl">🌟</span>
+            <span className={`text-xs sm:text-sm ${darkMode ? 'text-white/80' : 'text-gray-600'}`}>Very Short</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="text-xl">⭐</span>
+            <span className={`text-xs sm:text-sm ${darkMode ? 'text-white/80' : 'text-gray-600'}`}>Short</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="text-xl">📖</span>
+            <span className={`text-xs sm:text-sm ${darkMode ? 'text-white/80' : 'text-gray-600'}`}>Medium</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="text-xl">📚</span>
+            <span className={`text-xs sm:text-sm ${darkMode ? 'text-white/80' : 'text-gray-600'}`}>Long</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="text-xl">📜</span>
+            <span className={`text-xs sm:text-sm ${darkMode ? 'text-white/80' : 'text-gray-600'}`}>Very Long</span>
+          </div>
         </div>
+      </div>
+
+      {/* Encouraging message */}
+      <div className="mt-6 text-center">
+        <p className={`text-sm ${darkMode ? 'text-white/60' : 'text-purple-600'}`}>
+          🎉 Great job! Keep learning and Allah will bless you! 🤲
+        </p>
       </div>
     </div>
   );
