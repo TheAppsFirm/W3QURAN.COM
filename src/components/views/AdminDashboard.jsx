@@ -750,6 +750,406 @@ const EditUserModal = ({ user, onClose, onSave }) => {
   );
 };
 
+// Analytics Panel Component - Firebase-style analytics with AI insights
+const AnalyticsPanel = () => {
+  const [analytics, setAnalytics] = useState(null);
+  const [aiInsights, setAiInsights] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [insightsLoading, setInsightsLoading] = useState(false);
+  const [period, setPeriod] = useState('30d');
+  const [error, setError] = useState(null);
+
+  // Fetch analytics data
+  const fetchAnalytics = useCallback(async () => {
+    setLoading(true);
+    try {
+      const response = await fetch(`/api/admin/analytics?period=${period}&metrics=realtime,users,revenue,content,errors`, {
+        credentials: 'include'
+      });
+      if (!response.ok) throw new Error('Failed to fetch analytics');
+      const data = await response.json();
+      setAnalytics(data);
+      setError(null);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  }, [period]);
+
+  // Fetch AI insights
+  const fetchAiInsights = useCallback(async (forceNew = false) => {
+    setInsightsLoading(true);
+    try {
+      const method = forceNew ? 'POST' : 'GET';
+      const body = forceNew ? JSON.stringify({ analysisType: 'full' }) : undefined;
+      const response = await fetch('/api/admin/ai-insights', {
+        method,
+        headers: forceNew ? { 'Content-Type': 'application/json' } : {},
+        body,
+        credentials: 'include'
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setAiInsights(data);
+      } else if (response.status === 404 && !forceNew) {
+        // No cached insights, generate new ones
+        await fetchAiInsights(true);
+      }
+    } catch (err) {
+      console.error('Failed to fetch AI insights:', err);
+    } finally {
+      setInsightsLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchAnalytics();
+    fetchAiInsights();
+  }, [fetchAnalytics]);
+
+  // Simple bar chart component
+  const SimpleBarChart = ({ data, labelKey, valueKey, color = '#A855F7', maxItems = 10 }) => {
+    if (!data || data.length === 0) return <p className="text-white/40 text-sm">No data available</p>;
+    const maxValue = Math.max(...data.slice(0, maxItems).map(d => d[valueKey] || 0));
+    return (
+      <div className="space-y-2">
+        {data.slice(0, maxItems).map((item, i) => (
+          <div key={i} className="flex items-center gap-2">
+            <span className="text-xs text-white/60 w-20 truncate">{item[labelKey] || 'Unknown'}</span>
+            <div className="flex-1 h-4 bg-white/10 rounded-full overflow-hidden">
+              <div
+                className="h-full rounded-full transition-all"
+                style={{
+                  width: `${maxValue > 0 ? (item[valueKey] / maxValue) * 100 : 0}%`,
+                  background: `linear-gradient(90deg, ${color}80, ${color})`
+                }}
+              />
+            </div>
+            <span className="text-xs text-white font-medium w-12 text-right">{item[valueKey]}</span>
+          </div>
+        ))}
+      </div>
+    );
+  };
+
+  // Priority badge for insights
+  const PriorityBadge = ({ priority }) => {
+    const colors = {
+      high: 'bg-red-500/20 text-red-300 border-red-500/30',
+      medium: 'bg-amber-500/20 text-amber-300 border-amber-500/30',
+      low: 'bg-green-500/20 text-green-300 border-green-500/30'
+    };
+    return (
+      <span className={`px-2 py-0.5 rounded-full text-xs font-medium border ${colors[priority] || colors.medium}`}>
+        {priority}
+      </span>
+    );
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <Icons.Loader className="w-8 h-8 animate-spin text-purple-400" />
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-6">
+      {/* Period Selector */}
+      <div className="flex items-center justify-between">
+        <h2 className="text-xl font-bold text-white">Analytics Dashboard</h2>
+        <div className="flex items-center gap-2">
+          {['today', '7d', '30d', '90d'].map(p => (
+            <button
+              key={p}
+              onClick={() => setPeriod(p)}
+              className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+                period === p
+                  ? 'bg-purple-500 text-white'
+                  : 'bg-white/10 text-white/60 hover:bg-white/20'
+              }`}
+            >
+              {p === 'today' ? 'Today' : p}
+            </button>
+          ))}
+          <button
+            onClick={fetchAnalytics}
+            className="p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors"
+            title="Refresh"
+          >
+            <Icons.RefreshCw className="w-4 h-4 text-white/60" />
+          </button>
+        </div>
+      </div>
+
+      {error && (
+        <div className="bg-red-500/20 border border-red-500/30 rounded-xl p-4">
+          <p className="text-red-300 text-sm">{error}</p>
+        </div>
+      )}
+
+      {/* Real-time Stats */}
+      {analytics?.realtime && (
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <StatCard
+            title="Users Online"
+            value={analytics.realtime.usersOnline}
+            subtitle="Last 5 minutes"
+            icon={Icons.Users}
+            color="#10B981"
+          />
+          <StatCard
+            title="Sessions Today"
+            value={analytics.realtime.sessionsToday}
+            subtitle="Unique sessions"
+            icon={Icons.Activity}
+            color="#3B82F6"
+          />
+          <StatCard
+            title="Revenue Today"
+            value={`$${analytics.realtime.revenueToday || 0}`}
+            subtitle="New subscriptions"
+            icon={Icons.CreditCard}
+            color="#A855F7"
+          />
+          <StatCard
+            title="AI Credits Used"
+            value={analytics.realtime.creditsUsedToday}
+            subtitle="Talk to Quran"
+            icon={Icons.MessageCircle}
+            color="#F59E0B"
+          />
+        </div>
+      )}
+
+      {/* AI Insights Section */}
+      <div className="bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-2xl p-5 border border-purple-500/20">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center">
+              <Icons.Brain className="w-5 h-5 text-white" />
+            </div>
+            <div>
+              <h3 className="text-white font-bold">AI Growth Advisor</h3>
+              <p className="text-white/50 text-xs">
+                {aiInsights?.generatedAt
+                  ? `Updated ${new Date(aiInsights.generatedAt).toLocaleString()}`
+                  : 'Powered by GPT-4o'}
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={() => fetchAiInsights(true)}
+            disabled={insightsLoading}
+            className="px-4 py-2 rounded-xl bg-purple-500 hover:bg-purple-600 text-white text-sm font-medium disabled:opacity-50 transition-colors flex items-center gap-2"
+          >
+            {insightsLoading ? (
+              <>
+                <Icons.Loader className="w-4 h-4 animate-spin" />
+                Analyzing...
+              </>
+            ) : (
+              <>
+                <Icons.Zap className="w-4 h-4" />
+                Analyze Now
+              </>
+            )}
+          </button>
+        </div>
+
+        {aiInsights?.insights && aiInsights.insights.length > 0 ? (
+          <div className="space-y-3">
+            {aiInsights.insights.slice(0, 5).map((insight, i) => (
+              <div
+                key={insight.id || i}
+                className="bg-white/5 rounded-xl p-4 border border-white/10"
+              >
+                <div className="flex items-start gap-3">
+                  <div className="text-2xl">
+                    {insight.category === 'revenue' ? '💰' :
+                     insight.category === 'growth' ? '📈' :
+                     insight.category === 'retention' ? '🎯' :
+                     insight.category === 'marketing' ? '📣' : '💡'}
+                  </div>
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-1">
+                      <PriorityBadge priority={insight.priority} />
+                      <span className="text-white/40 text-xs">{insight.category}</span>
+                    </div>
+                    <h4 className="text-white font-medium">{insight.title}</h4>
+                    <p className="text-white/60 text-sm mt-1">{insight.description}</p>
+                    <div className="flex items-center gap-4 mt-2">
+                      <span className="text-emerald-400 text-sm font-medium">
+                        → {insight.action}
+                      </span>
+                      {insight.potentialRevenue && (
+                        <span className="text-amber-400 text-xs">
+                          +${insight.potentialRevenue}/mo potential
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : insightsLoading ? (
+          <div className="text-center py-8">
+            <Icons.Loader className="w-8 h-8 animate-spin text-purple-400 mx-auto mb-2" />
+            <p className="text-white/60 text-sm">Analyzing your metrics with AI...</p>
+          </div>
+        ) : (
+          <div className="text-center py-8">
+            <p className="text-white/60 text-sm">Click "Analyze Now" to get AI-powered insights</p>
+          </div>
+        )}
+
+        {aiInsights?.summary && (
+          <div className="mt-4 p-3 bg-white/5 rounded-xl">
+            <p className="text-white/80 text-sm italic">"{aiInsights.summary}"</p>
+          </div>
+        )}
+      </div>
+
+      {/* Metrics Grid */}
+      <div className="grid md:grid-cols-2 gap-6">
+        {/* User Engagement */}
+        <div className="bg-white/5 rounded-2xl p-5 border border-white/10">
+          <h3 className="text-white font-bold mb-4 flex items-center gap-2">
+            <Icons.Users className="w-5 h-5 text-blue-400" />
+            User Engagement
+          </h3>
+          <div className="grid grid-cols-3 gap-4 mb-4">
+            <div className="text-center">
+              <p className="text-2xl font-bold text-white">{analytics?.users?.wau || 0}</p>
+              <p className="text-white/40 text-xs">Weekly Active</p>
+            </div>
+            <div className="text-center">
+              <p className="text-2xl font-bold text-white">{analytics?.users?.mau || 0}</p>
+              <p className="text-white/40 text-xs">Monthly Active</p>
+            </div>
+            <div className="text-center">
+              <p className="text-2xl font-bold text-white">{analytics?.users?.newUsers || 0}</p>
+              <p className="text-white/40 text-xs">New Users</p>
+            </div>
+          </div>
+          <div className="mb-4">
+            <p className="text-white/60 text-sm mb-2">Retention</p>
+            <div className="flex gap-4">
+              <div className="flex-1 text-center p-2 bg-white/5 rounded-lg">
+                <p className="text-lg font-bold text-green-400">{analytics?.users?.retention?.day1 || 0}%</p>
+                <p className="text-white/40 text-[10px]">Day 1</p>
+              </div>
+              <div className="flex-1 text-center p-2 bg-white/5 rounded-lg">
+                <p className="text-lg font-bold text-amber-400">{analytics?.users?.retention?.day7 || 0}%</p>
+                <p className="text-white/40 text-[10px]">Day 7</p>
+              </div>
+              <div className="flex-1 text-center p-2 bg-white/5 rounded-lg">
+                <p className="text-lg font-bold text-purple-400">{analytics?.users?.retention?.day30 || 0}%</p>
+                <p className="text-white/40 text-[10px]">Day 30</p>
+              </div>
+            </div>
+          </div>
+          <p className="text-white/60 text-sm mb-2">By Device</p>
+          <SimpleBarChart data={analytics?.users?.byDevice} labelKey="device" valueKey="count" color="#3B82F6" />
+        </div>
+
+        {/* Revenue */}
+        <div className="bg-white/5 rounded-2xl p-5 border border-white/10">
+          <h3 className="text-white font-bold mb-4 flex items-center gap-2">
+            <Icons.CreditCard className="w-5 h-5 text-green-400" />
+            Revenue & Subscriptions
+          </h3>
+          <div className="grid grid-cols-2 gap-4 mb-4">
+            <div className="p-3 bg-gradient-to-r from-green-500/20 to-emerald-500/20 rounded-xl border border-green-500/30">
+              <p className="text-white/60 text-xs">MRR</p>
+              <p className="text-2xl font-bold text-green-400">${analytics?.revenue?.mrr || 0}</p>
+            </div>
+            <div className="p-3 bg-white/5 rounded-xl">
+              <p className="text-white/60 text-xs">Conversion Rate</p>
+              <p className="text-2xl font-bold text-white">{analytics?.revenue?.conversionRate || 0}%</p>
+            </div>
+          </div>
+          <div className="mb-4">
+            <p className="text-white/60 text-sm mb-2">Churn Rate</p>
+            <div className="flex items-center gap-2">
+              <div className="flex-1 h-2 bg-white/10 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-red-500 rounded-full"
+                  style={{ width: `${Math.min(analytics?.revenue?.churnRate || 0, 100)}%` }}
+                />
+              </div>
+              <span className="text-red-400 text-sm font-medium">{analytics?.revenue?.churnRate || 0}%</span>
+            </div>
+          </div>
+          <p className="text-white/60 text-sm mb-2">Users by Tier</p>
+          <SimpleBarChart data={analytics?.revenue?.byTier} labelKey="tier" valueKey="count" color="#10B981" />
+        </div>
+
+        {/* Content Performance */}
+        <div className="bg-white/5 rounded-2xl p-5 border border-white/10">
+          <h3 className="text-white font-bold mb-4 flex items-center gap-2">
+            <Icons.BookOpen className="w-5 h-5 text-amber-400" />
+            Content Performance
+          </h3>
+          <div className="grid grid-cols-2 gap-4 mb-4">
+            <div className="text-center">
+              <p className="text-2xl font-bold text-white">{analytics?.content?.talkToQuran?.totalConversations || 0}</p>
+              <p className="text-white/40 text-xs">AI Conversations</p>
+            </div>
+            <div className="text-center">
+              <p className="text-2xl font-bold text-white">{analytics?.content?.audioStats?.totalPlays || 0}</p>
+              <p className="text-white/40 text-xs">Audio Plays</p>
+            </div>
+          </div>
+          <p className="text-white/60 text-sm mb-2">Top Surahs Read</p>
+          <SimpleBarChart data={analytics?.content?.topSurahs} labelKey="surah_id" valueKey="count" color="#F59E0B" />
+        </div>
+
+        {/* Error Monitoring */}
+        <div className="bg-white/5 rounded-2xl p-5 border border-white/10">
+          <h3 className="text-white font-bold mb-4 flex items-center gap-2">
+            <Icons.AlertCircle className="w-5 h-5 text-red-400" />
+            Error Monitoring
+          </h3>
+          <div className="grid grid-cols-2 gap-4 mb-4">
+            <div className="p-3 bg-red-500/10 rounded-xl border border-red-500/20">
+              <p className="text-white/60 text-xs">Error Rate</p>
+              <p className="text-2xl font-bold text-red-400">{analytics?.errors?.errorRate || 0}%</p>
+            </div>
+            <div className="p-3 bg-white/5 rounded-xl">
+              <p className="text-white/60 text-xs">Memory Warnings</p>
+              <p className="text-2xl font-bold text-amber-400">{analytics?.errors?.memoryWarnings?.count || 0}</p>
+            </div>
+          </div>
+          <p className="text-white/60 text-sm mb-2">Errors by Browser</p>
+          <SimpleBarChart data={analytics?.errors?.byBrowser} labelKey="browser" valueKey="count" color="#EF4444" />
+        </div>
+      </div>
+
+      {/* Top Features */}
+      {analytics?.content?.topFeatures && analytics.content.topFeatures.length > 0 && (
+        <div className="bg-white/5 rounded-2xl p-5 border border-white/10">
+          <h3 className="text-white font-bold mb-4 flex items-center gap-2">
+            <Icons.Zap className="w-5 h-5 text-purple-400" />
+            Feature Usage
+          </h3>
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+            {analytics.content.topFeatures.map((feature, i) => (
+              <div key={i} className="text-center p-3 bg-white/5 rounded-xl">
+                <p className="text-xl font-bold text-white">{feature.count}</p>
+                <p className="text-white/60 text-xs capitalize">{feature.feature_name?.replace(/_/g, ' ')}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
 export default function AdminDashboard({ onClose }) {
   const { user, isAuthenticated, isAdmin, loading: authLoading } = useAuth();
 
@@ -953,8 +1353,9 @@ export default function AdminDashboard({ onClose }) {
         <div className="flex gap-6">
           {[
             { id: 'overview', label: 'Overview', icon: Icons.PieChart },
+            { id: 'analytics', label: 'Analytics', icon: Icons.Activity },
             { id: 'users', label: 'Users', icon: Icons.Users },
-            { id: 'logs', label: 'Logs', icon: Icons.Activity },
+            { id: 'logs', label: 'Logs', icon: Icons.FileText },
             { id: 'transactions', label: 'Transactions', icon: Icons.CreditCard },
             { id: 'settings', label: 'Settings', icon: Icons.Settings },
           ].map(tab => (
@@ -1050,6 +1451,9 @@ export default function AdminDashboard({ onClose }) {
                 </div>
               </div>
             )}
+
+            {/* Analytics Tab */}
+            {activeTab === 'analytics' && <AnalyticsPanel />}
 
             {/* Users Tab */}
             {activeTab === 'users' && (
