@@ -75,3 +75,6 @@ export {
   isDesktopDevice,
   BREAKPOINTS,
 } from './useMediaQuery';
+
+// Auth hook
+export { useAuth } from './useAuth';

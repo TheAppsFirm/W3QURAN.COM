@@ -1,10 +1,11 @@
 /**
  * Stripe Checkout - Create checkout session
  * Supports subscriptions (Starter, Premium, Scholar) and one-time purchases (Lifetime, Credit Packs)
+ * Admin can toggle between test/live mode via admin settings
  */
 
-// Price IDs from Stripe (created via scripts/create-stripe-products.js)
-const STRIPE_PRICES = {
+// Live mode price IDs (production)
+const LIVE_PRICES = {
   starter_monthly: 'price_1T2Rh7CnbCeWpM4XTdLXxgfU', // 30 credits
   premium_monthly: 'price_1T2Rh8CnbCeWpM4XiQL1YsAI', // 80 credits
   premium_yearly: 'price_1T2Rh9CnbCeWpM4XdHjDJcuv', // 80 credits
@@ -16,13 +17,59 @@ const STRIPE_PRICES = {
   credits_100: 'price_1T2RhGCnbCeWpM4XatkkkMA3', // 100 credits
 };
 
-// One-time purchase prices (not subscriptions)
-const ONE_TIME_PRICES = [
-  STRIPE_PRICES.lifetime,
-  STRIPE_PRICES.credits_20,
-  STRIPE_PRICES.credits_50,
-  STRIPE_PRICES.credits_100,
-];
+// Test mode price IDs (created via Stripe CLI)
+const TEST_PRICES = {
+  starter_monthly: 'price_1T2Zt9CnbCeWpM4XtLcuhjkP', // $4.99/month test
+  premium_monthly: 'price_1T2Zt9CnbCeWpM4XtLcuhjkP', // $4.99/month test
+  premium_yearly: 'price_1T2Zt9CnbCeWpM4XtLcuhjkP', // Using same for testing
+  scholar_monthly: 'price_1T2Zt9CnbCeWpM4XtLcuhjkP', // Using same for testing
+  scholar_yearly: 'price_1T2Zt9CnbCeWpM4XtLcuhjkP', // Using same for testing
+  lifetime: 'price_1T2Zt9CnbCeWpM4XtLcuhjkP', // Using same for testing
+  credits_20: 'price_1T2Zt9CnbCeWpM4XtLcuhjkP',
+  credits_50: 'price_1T2Zt9CnbCeWpM4XtLcuhjkP',
+  credits_100: 'price_1T2Zt9CnbCeWpM4XtLcuhjkP',
+};
+
+// One-time purchase products (not subscriptions)
+const ONE_TIME_PRODUCTS = ['lifetime', 'credits_20', 'credits_50', 'credits_100'];
+
+// Helper to get Stripe config based on admin settings or auto-detect
+async function getStripeConfig(env) {
+  // Check admin setting from KV (gracefully handle if KV not set up)
+  let stripeMode = 'auto';
+  try {
+    if (env.SETTINGS_KV) {
+      stripeMode = await env.SETTINGS_KV.get('stripe_mode') || 'auto';
+    }
+  } catch (e) {
+    console.log('[Stripe] KV not available, using auto mode');
+  }
+
+  let secretKey, isTestMode;
+
+  if (stripeMode === 'test' && env.STRIPE_SECRET_KEY_TEST) {
+    // Admin forced test mode
+    secretKey = env.STRIPE_SECRET_KEY_TEST;
+    isTestMode = true;
+  } else if (stripeMode === 'live') {
+    // Admin forced live mode - use _LIVE key or fall back to primary
+    secretKey = env.STRIPE_SECRET_KEY_LIVE || env.STRIPE_SECRET_KEY;
+    isTestMode = false;
+  } else {
+    // Auto-detect from primary key (fallback)
+    secretKey = env.STRIPE_SECRET_KEY;
+    isTestMode = secretKey?.startsWith('sk_test_');
+  }
+
+  console.log('[Stripe Config] Mode:', stripeMode, 'IsTest:', isTestMode, 'KeyExists:', !!secretKey);
+
+  return {
+    secretKey,
+    isTestMode,
+    stripeMode,
+    prices: isTestMode ? TEST_PRICES : LIVE_PRICES,
+  };
+}
 
 export async function onRequest(context) {
   const { env, request } = context;
@@ -67,14 +114,86 @@ export async function onRequest(context) {
       });
     }
 
-    const { priceId } = await request.json();
+    const { product, priceId: legacyPriceId } = await request.json();
 
-    if (!priceId) {
-      return new Response(JSON.stringify({ error: 'Price ID required' }), {
+    // SECURITY: Simple rate limiting using KV (1 checkout attempt per 10 seconds)
+    const rateLimitKey = `checkout_${userResult.id}`;
+    if (env.SETTINGS_KV) {
+      const lastAttempt = await env.SETTINGS_KV.get(rateLimitKey);
+      if (lastAttempt) {
+        const elapsed = Date.now() - parseInt(lastAttempt);
+        if (elapsed < 10000) { // 10 seconds
+          console.log('[Stripe] SECURITY: Rate limit hit for user:', userResult.id);
+          return new Response(JSON.stringify({ error: 'Please wait before trying again' }), {
+            status: 429,
+            headers: { 'Content-Type': 'application/json' },
+          });
+        }
+      }
+      // Store this attempt
+      await env.SETTINGS_KV.put(rateLimitKey, Date.now().toString(), { expirationTtl: 60 });
+    }
+
+    // SECURITY: Validate product type is in allowed list
+    const ALLOWED_PRODUCTS = Object.keys(LIVE_PRICES);
+    const productType = product || 'premium_monthly';
+
+    if (!ALLOWED_PRODUCTS.includes(productType)) {
+      console.error('[Stripe] SECURITY: Invalid product type attempted:', productType);
+      return new Response(JSON.stringify({ error: 'Invalid product' }), {
         status: 400,
         headers: { 'Content-Type': 'application/json' },
       });
     }
+
+    // SECURITY: Block legacy priceId requests (only accept product type)
+    if (legacyPriceId) {
+      console.error('[Stripe] SECURITY: Legacy priceId request blocked:', legacyPriceId);
+      return new Response(JSON.stringify({ error: 'Invalid request format' }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
+    // SECURITY: Check for existing active subscription (prevent duplicates)
+    const existingSub = await env.DB.prepare(`
+      SELECT plan, status FROM subscriptions WHERE user_id = ? AND status = 'active' AND plan != 'free'
+    `).bind(userResult.id).first();
+
+    const isSubscriptionProduct = !ONE_TIME_PRODUCTS.includes(productType);
+    if (existingSub && isSubscriptionProduct && existingSub.plan !== 'free') {
+      console.log('[Stripe] User already has active subscription:', existingSub.plan);
+      return new Response(JSON.stringify({
+        error: 'You already have an active subscription. Please manage or cancel it first.',
+        currentPlan: existingSub.plan
+      }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
+    // Get Stripe config (respects admin setting)
+    const stripeConfig = await getStripeConfig(env);
+    const { secretKey, isTestMode, stripeMode, prices: STRIPE_PRICES } = stripeConfig;
+
+    if (!secretKey) {
+      return new Response(JSON.stringify({ error: 'Stripe not configured' }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
+    // Resolve price ID from product type
+    const priceId = STRIPE_PRICES[productType];
+
+    if (!priceId) {
+      return new Response(JSON.stringify({ error: 'Invalid product type' }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
+    console.log(`[Stripe] Mode: ${isTestMode ? 'TEST' : 'LIVE'} (setting: ${stripeMode}), Product: ${productType}, Price: ${priceId}`);
 
     // Determine base URL
     const url = new URL(request.url);
@@ -82,7 +201,7 @@ export async function onRequest(context) {
     const baseUrl = isLocal ? `${url.protocol}//${url.host}` : 'https://w3quran.com';
 
     // Check if this is a one-time purchase or subscription
-    const isOneTime = ONE_TIME_PRICES.includes(priceId);
+    const isOneTime = ONE_TIME_PRODUCTS.includes(productType);
     const mode = isOneTime ? 'payment' : 'subscription';
 
     // Build checkout session params
@@ -99,7 +218,11 @@ export async function onRequest(context) {
     };
 
     // If user already has a Stripe customer ID, use it
-    if (userResult.stripe_customer_id) {
+    // Note: Production DB should be clean - no test mode customer IDs
+    // Stripe will create new customer if ID doesn't exist in current mode
+    if (userResult.stripe_customer_id &&
+        userResult.stripe_customer_id !== 'null' &&
+        userResult.stripe_customer_id !== 'NULL') {
       params['customer'] = userResult.stripe_customer_id;
       delete params['customer_email'];
     }
@@ -108,16 +231,20 @@ export async function onRequest(context) {
     const stripeResponse = await fetch('https://api.stripe.com/v1/checkout/sessions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${env.STRIPE_SECRET_KEY}`,
+        'Authorization': `Bearer ${secretKey}`,
         'Content-Type': 'application/x-www-form-urlencoded',
       },
       body: new URLSearchParams(params),
     });
 
     if (!stripeResponse.ok) {
-      const errorText = await stripeResponse.text();
-      console.error('[Stripe] Checkout error:', errorText);
-      return new Response(JSON.stringify({ error: 'Failed to create checkout' }), {
+      const errorData = await stripeResponse.json().catch(() => ({}));
+      console.error('[Stripe] Checkout error:', JSON.stringify(errorData));
+      return new Response(JSON.stringify({
+        error: 'Failed to create checkout',
+        stripeError: errorData.error?.message || 'Unknown Stripe error',
+        details: errorData.error
+      }), {
         status: 500,
         headers: { 'Content-Type': 'application/json' },
       });

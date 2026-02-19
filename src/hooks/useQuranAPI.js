@@ -218,11 +218,68 @@ export function useQuranAPI(surahId, options = {}) {
           totalVerses: arabicData.numberOfAyahs,
         });
 
+        // Strip Bismillah from first ayah (except Surah 1 where it IS ayah 1, and Surah 9 which has no Bismillah)
+        const shouldStripBismillah = surahId !== 1 && surahId !== 9;
+
+        // Helper to strip Bismillah - finds and removes "بسم الله الرحمن الرحيم" in any Unicode form
+        const removeBismillah = (text) => {
+          // Normalize: remove all diacritics/tashkeel for reliable matching
+          const diacriticsRegex = /[\u064B-\u065F\u0670\u06D6-\u06ED\u06DF\u0640\u0651\u0652\u0653\u0654\u0655]/g;
+          const normalized = text.replace(diacriticsRegex, '');
+
+          // Check if it starts with بسم (with possible alef variations or no space)
+          if (!normalized.match(/^بسم/)) {
+            return text; // Doesn't start with Bismillah
+          }
+
+          // Bismillah has exactly 3 م letters:
+          // 1. بِسْمِ (bismi)
+          // 2. الرَّحْمَٰنِ (ar-rahman)
+          // 3. الرَّحِيمِ (ar-raheem)
+          // We need to find the 3rd م and strip everything up to and including it
+          let mCount = 0;
+
+          for (let i = 0; i < text.length; i++) {
+            const char = text[i];
+            // Skip diacritics
+            if (char.match(/[\u064B-\u065F\u0670\u06D6-\u06ED\u06DF\u0640\u0651-\u0655]/)) {
+              continue;
+            }
+            if (char === 'م') {
+              mCount++;
+              // Bismillah ends after the 3rd م (in الرحيم)
+              if (mCount === 3) {
+                // Found the third م (end of الرحيم)
+                // Skip any trailing diacritics and whitespace
+                let endIndex = i + 1;
+                while (endIndex < text.length) {
+                  const nextChar = text[endIndex];
+                  if (nextChar.match(/[\u064B-\u065F\u0670\u06D6-\u06ED\u06DF\u0640\u0651-\u0655\s]/)) {
+                    endIndex++;
+                  } else {
+                    break;
+                  }
+                }
+                return text.substring(endIndex).trim();
+              }
+            }
+          }
+
+          return text; // Couldn't find pattern, return original
+        };
+
         // Combine verse data
         const combinedVerses = arabicData.ayahs.map((ayah, index) => {
+          let arabicText = ayah.text;
+
+          // Strip Bismillah from first ayah if needed (it's shown separately in header)
+          if (shouldStripBismillah && ayah.numberInSurah === 1) {
+            arabicText = removeBismillah(arabicText);
+          }
+
           const verse = {
             number: ayah.numberInSurah,
-            arabic: ayah.text,
+            arabic: arabicText,
             translation: translationData?.ayahs[index]?.text || '',
           };
 

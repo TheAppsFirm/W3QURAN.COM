@@ -5,7 +5,7 @@
 
 // Admin emails - set via ADMIN_EMAILS environment variable (comma-separated)
 const getAdminEmails = (env) => {
-  const emails = env.ADMIN_EMAILS || 'theappsfirm@gmail.com';
+  const emails = env.ADMIN_EMAILS || '';
   return emails.split(',').map(e => e.trim().toLowerCase());
 };
 

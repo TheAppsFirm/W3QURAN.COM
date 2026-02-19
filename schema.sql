@@ -147,6 +147,17 @@ CREATE TABLE IF NOT EXISTS quran_conversations (
   FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
+-- Free user daily usage (tracks daily query limit for free users)
+CREATE TABLE IF NOT EXISTS free_daily_usage (
+  user_id TEXT NOT NULL,
+  usage_date TEXT NOT NULL, -- YYYY-MM-DD format
+  query_count INTEGER DEFAULT 0,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (user_id, usage_date),
+  FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
 -- Indexes for credit system
 CREATE INDEX IF NOT EXISTS idx_credits_user ON user_credits(user_id);
 CREATE INDEX IF NOT EXISTS idx_credits_tier ON user_credits(subscription_tier);
@@ -154,3 +165,4 @@ CREATE INDEX IF NOT EXISTS idx_transactions_user ON credit_transactions(user_id)
 CREATE INDEX IF NOT EXISTS idx_transactions_created ON credit_transactions(created_at);
 CREATE INDEX IF NOT EXISTS idx_conversations_user ON quran_conversations(user_id);
 CREATE INDEX IF NOT EXISTS idx_conversations_created ON quran_conversations(created_at);
+CREATE INDEX IF NOT EXISTS idx_free_daily_user_date ON free_daily_usage(user_id, usage_date);

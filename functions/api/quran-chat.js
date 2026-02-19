@@ -4,15 +4,37 @@
  *
  * Cost per query: ~$0.05 (GPT input + output + TTS)
  * 1 Credit = 1 query
+ *
+ * Access tiers:
+ * - Admin: Unlimited (no credit deduction)
+ * - Paid: Based on subscription credits
+ * - Free: 5 queries per day
  */
 
 // Subscription tier credit allowances
 const TIER_CREDITS = {
-  free: 3, // one-time welcome bonus
+  free: 0, // free users get 5 per day, not credits
   starter: 30, // per month
   premium: 80, // per month
   scholar: 300, // per month
   lifetime: 100, // per month forever
+};
+
+// Free tier daily limit
+const FREE_DAILY_LIMIT = 5;
+
+// Helper to get admin emails from environment
+const getAdminEmails = (env) => {
+  const emails = env.ADMIN_EMAILS || '';
+  if (!emails) return [];
+  return emails.split(',').map(e => e.trim().toLowerCase());
+};
+
+// Check if user is admin
+const isAdminUser = (email, env) => {
+  if (!email) return false;
+  const adminEmails = getAdminEmails(env);
+  return adminEmails.includes(email.toLowerCase());
 };
 
 // System prompt with strict Quran-only guidelines
@@ -151,6 +173,51 @@ async function useCredit(env, userId) {
   `).bind(txId, userId).run();
 }
 
+// Get today's date in YYYY-MM-DD format
+function getTodayDate() {
+  return new Date().toISOString().split('T')[0];
+}
+
+// Get free user daily usage
+async function getFreeDailyUsage(env, userId) {
+  const today = getTodayDate();
+
+  // Check if there's a daily usage record for today
+  const usage = await env.DB.prepare(`
+    SELECT * FROM free_daily_usage
+    WHERE user_id = ? AND usage_date = ?
+  `).bind(userId, today).first();
+
+  if (!usage) {
+    return { count: 0, remaining: FREE_DAILY_LIMIT };
+  }
+
+  return {
+    count: usage.query_count,
+    remaining: Math.max(0, FREE_DAILY_LIMIT - usage.query_count)
+  };
+}
+
+// Increment free user daily usage
+async function incrementFreeDailyUsage(env, userId) {
+  const today = getTodayDate();
+
+  // Try to update existing record
+  const result = await env.DB.prepare(`
+    UPDATE free_daily_usage
+    SET query_count = query_count + 1, updated_at = datetime('now')
+    WHERE user_id = ? AND usage_date = ?
+  `).bind(userId, today).run();
+
+  // If no record existed, create one
+  if (result.changes === 0) {
+    await env.DB.prepare(`
+      INSERT INTO free_daily_usage (user_id, usage_date, query_count)
+      VALUES (?, ?, 1)
+    `).bind(userId, today).run();
+  }
+}
+
 // Call OpenAI API
 async function callOpenAI(env, message, conversationHistory = []) {
   const messages = [
@@ -183,12 +250,24 @@ async function callOpenAI(env, message, conversationHistory = []) {
   return data.choices[0].message.content;
 }
 
+// Voice settings for different languages
+// OpenAI TTS voices: alloy, echo, fable, onyx, nova, shimmer
+// onyx = deep male, nova = warm female, echo = warm male
+const VOICE_SETTINGS = {
+  en: { voice: 'onyx', speed: 1.0 },    // Deep male for English
+  ur: { voice: 'echo', speed: 0.95 },   // Warm male, slightly slower for Urdu
+  ar: { voice: 'echo', speed: 0.9 },    // Warm male, slower for Arabic clarity
+};
+
 // Generate TTS audio using OpenAI
-async function generateTTS(env, text) {
+async function generateTTS(env, text, language = 'en') {
   // Skip TTS for very long responses
   if (text.length > 2000) {
     return null;
   }
+
+  // Get voice settings for language
+  const settings = VOICE_SETTINGS[language] || VOICE_SETTINGS.en;
 
   try {
     const response = await fetch('https://api.openai.com/v1/audio/speech', {
@@ -198,9 +277,10 @@ async function generateTTS(env, text) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'tts-1',
+        model: 'tts-1-hd', // HD model for better quality
         input: text,
-        voice: 'alloy', // Options: alloy, echo, fable, onyx, nova, shimmer
+        voice: settings.voice,
+        speed: settings.speed,
       }),
     });
 
@@ -273,7 +353,8 @@ export async function onRequest(context) {
       });
     }
 
-    const { message, conversationHistory = [], language = 'en', includeTTS = false } = await request.json();
+    const { message, conversationHistory = [], language = 'en', includeTTS = false, voiceLanguage } = await request.json();
+    const ttsLanguage = voiceLanguage || language; // Use voiceLanguage if provided, otherwise use language
 
     if (!message || message.trim().length === 0) {
       return new Response(JSON.stringify({ error: 'Message is required' }), {
@@ -282,37 +363,35 @@ export async function onRequest(context) {
       });
     }
 
+    // Check if user is admin - unlimited access
+    const isAdmin = isAdminUser(user.email, env);
+
     // Get user credits
     let credits = await getUserCredits(env, user.user_id);
 
-    // Check for monthly reset
+    // Check for monthly reset (only for paid users)
     credits = await checkMonthlyReset(env, user.user_id, credits);
 
-    // Claim free credits for new users
-    if (!credits.free_credits_claimed && credits.subscription_tier === 'free') {
-      await env.DB.prepare(`
-        UPDATE user_credits
-        SET credits_balance = credits_balance + 3,
-            free_credits_claimed = TRUE,
-            updated_at = datetime('now')
-        WHERE user_id = ?
-      `).bind(user.user_id).run();
+    // Determine access level and check limits
+    let accessType = 'paid'; // 'admin' or 'paid'
 
-      // Log transaction
-      const txId = `tx_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-      await env.DB.prepare(`
-        INSERT INTO credit_transactions (id, user_id, type, amount, description)
-        VALUES (?, ?, 'free_gift', 3, 'Welcome bonus - 3 free credits')
-      `).bind(txId, user.user_id).run();
-
-      credits.credits_balance += 3;
-      credits.free_credits_claimed = true;
-    }
-
-    // Check if user has credits
-    if (credits.credits_balance <= 0) {
+    if (isAdmin) {
+      // Admin: unlimited access
+      accessType = 'admin';
+    } else if (credits.subscription_tier === 'free' && credits.credits_balance <= 0) {
+      // Free user with no credits: NO ACCESS - must upgrade or have admin-granted credits
       return new Response(JSON.stringify({
-        error: 'No credits remaining',
+        error: 'Talk to Quran is a premium feature. Please upgrade to access AI-powered Quranic conversations.',
+        code: 'PREMIUM_REQUIRED',
+        subscription_tier: 'free',
+      }), {
+        status: 402,
+        headers: corsHeaders,
+      });
+    } else if (credits.credits_balance <= 0) {
+      // Paid user with no credits remaining
+      return new Response(JSON.stringify({
+        error: 'No credits remaining. Please wait for monthly reset or purchase more credits.',
         code: 'NO_CREDITS',
         subscription_tier: credits.subscription_tier,
         credits_balance: 0,
@@ -320,21 +399,27 @@ export async function onRequest(context) {
         status: 402,
         headers: corsHeaders,
       });
+    } else {
+      // User has credits (paid tier OR free with admin-granted credits)
+      accessType = 'paid';
     }
 
     // Call OpenAI
     const aiResponse = await callOpenAI(env, message, conversationHistory);
 
-    // Deduct credit
-    await useCredit(env, user.user_id);
+    // Deduct credit for paid users (admin gets free access)
+    if (accessType === 'paid') {
+      await useCredit(env, user.user_id);
+    }
+    // Admin: no deduction
 
     // Extract verse references
     const versesCited = extractVerseReferences(aiResponse);
 
-    // Generate TTS if requested
+    // Generate TTS if requested (with language-specific voice)
     let audioUrl = null;
     if (includeTTS) {
-      audioUrl = await generateTTS(env, aiResponse);
+      audioUrl = await generateTTS(env, aiResponse, ttsLanguage);
     }
 
     // Save conversation
@@ -351,20 +436,34 @@ export async function onRequest(context) {
       language
     ).run();
 
-    // Get updated credits
+    // Get updated credits/usage
     const updatedCredits = await getUserCredits(env, user.user_id);
+
+    // Build response based on access type
+    let creditsResponse;
+    if (accessType === 'admin') {
+      creditsResponse = {
+        balance: '∞',
+        tier: 'admin',
+        unlimited: true,
+      };
+    } else {
+      // Paid user
+      creditsResponse = {
+        balance: updatedCredits.credits_balance,
+        tier: updatedCredits.subscription_tier,
+        usedThisMonth: updatedCredits.credits_used_this_month,
+        monthlyAllowance: updatedCredits.credits_monthly_allowance,
+      };
+    }
 
     return new Response(JSON.stringify({
       success: true,
       response: aiResponse,
       versesCited,
       audioUrl,
-      credits: {
-        balance: updatedCredits.credits_balance,
-        tier: updatedCredits.subscription_tier,
-        usedThisMonth: updatedCredits.credits_used_this_month,
-        monthlyAllowance: updatedCredits.credits_monthly_allowance,
-      },
+      credits: creditsResponse,
+      accessType,
       conversationId: convId,
     }), {
       status: 200,

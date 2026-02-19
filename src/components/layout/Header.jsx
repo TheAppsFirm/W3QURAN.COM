@@ -108,7 +108,7 @@ const Header = memo(function Header({ filters, setFilters, showAnalytics, setSho
           {/* Search - Enhanced */}
           <div className="relative group">
             <div
-              className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl transition-all duration-300 border ${
+              className={`flex items-center gap-2 px-4 h-10 rounded-2xl transition-all duration-300 border ${
                 isSearchFocused
                   ? 'bg-white/25 border-white/50 shadow-lg shadow-white/20 scale-105'
                   : 'bg-white/15 border-white/25 hover:bg-white/20'
@@ -146,7 +146,7 @@ const Header = memo(function Header({ filters, setFilters, showAnalytics, setSho
               <button
                 ref={(el) => buttonRefs.current[f.id] = el}
                 onClick={() => setOpen(open === f.id ? null : f.id)}
-                className={`group flex items-center gap-2 px-4 py-2.5 rounded-2xl text-white font-medium transition-all duration-300 border ${
+                className={`group flex items-center justify-center gap-2 px-4 h-10 rounded-2xl text-white font-medium transition-all duration-300 border ${
                   (f.id === 'rev' && filters.type) ||
                   (f.id === 'ayahRange' && filters.ayahRange) ||
                   (f.id === 'chronOrder' && filters.chronOrder)
@@ -169,7 +169,7 @@ const Header = memo(function Header({ filters, setFilters, showAnalytics, setSho
           {/* Topics Button */}
           <button
             onClick={() => setShowTopics(!showTopics)}
-            className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-2xl text-white font-medium transition-all duration-300 border ${
+            className={`flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 h-10 rounded-2xl text-white font-medium transition-all duration-300 border ${
               filters.topic || showTopics
                 ? 'bg-gradient-to-r from-amber-500/80 to-orange-500/80 border-amber-400/50 shadow-lg shadow-amber-500/30'
                 : 'bg-white/10 hover:bg-white/20 border-white/20 hover:border-white/40'
@@ -186,7 +186,7 @@ const Header = memo(function Header({ filters, setFilters, showAnalytics, setSho
           {/* Analytics Button */}
           <button
             onClick={() => setShowAnalytics(!showAnalytics)}
-            className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-2xl text-white font-medium transition-all duration-300 border ${
+            className={`flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 h-10 rounded-2xl text-white font-medium transition-all duration-300 border ${
               showAnalytics
                 ? 'bg-gradient-to-r from-emerald-500/80 to-teal-500/80 border-emerald-400/50 shadow-lg shadow-emerald-500/30'
                 : 'bg-white/10 hover:bg-white/20 border-white/20 hover:border-white/40'

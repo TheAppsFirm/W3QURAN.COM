@@ -8,7 +8,7 @@ export function LoginButton({ className = '', compact = false }) {
     return (
       <button
         disabled
-        className={`flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 text-white/50 ${className}`}
+        className={`flex items-center justify-center gap-2 h-10 rounded-full bg-white/10 text-white/50 ${compact ? 'w-10' : 'px-4'} ${className}`}
       >
         <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
         {!compact && <span>Loading...</span>}
@@ -19,7 +19,7 @@ export function LoginButton({ className = '', compact = false }) {
   return (
     <button
       onClick={login}
-      className={`flex items-center gap-2 px-4 py-2 rounded-full bg-white text-gray-800 hover:bg-gray-100 transition-all shadow-lg hover:shadow-xl ${className}`}
+      className={`flex items-center justify-center gap-2 h-10 rounded-full bg-white text-gray-800 hover:bg-gray-100 transition-all shadow-lg hover:shadow-xl ${compact ? 'w-10' : 'px-4'} ${className}`}
     >
       {/* Google Icon */}
       <svg className="w-5 h-5" viewBox="0 0 24 24">

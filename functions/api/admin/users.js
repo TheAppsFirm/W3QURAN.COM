@@ -1,99 +1,57 @@
 /**
  * Admin API - User Management
- * Protected: Only accessible by admin email
+ * List all users and their subscription status
  */
-
-// Admin emails - set via ADMIN_EMAILS environment variable (comma-separated)
-// Example: ADMIN_EMAILS=admin@example.com,theappsfirm@gmail.com
-const getAdminEmails = (env) => {
-  const emails = env.ADMIN_EMAILS || 'theappsfirm@gmail.com';
-  return emails.split(',').map(e => e.trim().toLowerCase());
-};
-
-// Helper to verify admin session
-async function verifyAdminSession(request, env) {
-  const cookies = request.headers.get('Cookie') || '';
-  const sessionMatch = cookies.match(/w3quran_session=([^;]+)/);
-  const sessionToken = sessionMatch?.[1];
-
-  if (!sessionToken) {
-    return { error: 'Not authenticated', status: 401 };
-  }
-
-  const result = await env.DB.prepare(`
-    SELECT s.user_id, u.email, u.name
-    FROM sessions s
-    JOIN users u ON s.user_id = u.id
-    WHERE s.token = ? AND s.expires_at > datetime('now')
-  `).bind(sessionToken).first();
-
-  if (!result) {
-    return { error: 'Invalid session', status: 401 };
-  }
-
-  const adminEmails = getAdminEmails(env);
-  if (!adminEmails.includes(result.email.toLowerCase())) {
-    return { error: 'Access denied. Admin only.', status: 403 };
-  }
-
-  return { user: result };
-}
 
 export async function onRequest(context) {
   const { env, request } = context;
 
-  const corsHeaders = {
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type',
-    'Content-Type': 'application/json',
-  };
+  // Get session token from cookie
+  const cookieHeader = request.headers.get('Cookie') || '';
+  const cookies = Object.fromEntries(
+    cookieHeader.split(';').map(c => {
+      const [key, ...val] = c.trim().split('=');
+      return [key, val.join('=')];
+    })
+  );
 
-  if (request.method === 'OPTIONS') {
-    return new Response(null, { headers: corsHeaders });
-  }
+  const sessionToken = cookies['w3quran_session'];
 
-  // Verify admin access
-  const auth = await verifyAdminSession(request, env);
-  if (auth.error) {
-    return new Response(JSON.stringify({ error: auth.error }), {
-      status: auth.status,
-      headers: corsHeaders,
+  if (!sessionToken) {
+    return new Response(JSON.stringify({ error: 'Not authenticated' }), {
+      status: 401,
+      headers: { 'Content-Type': 'application/json' },
     });
   }
 
   try {
-    const url = new URL(request.url);
-    const page = parseInt(url.searchParams.get('page') || '1');
-    const limit = parseInt(url.searchParams.get('limit') || '50');
-    const search = url.searchParams.get('search') || '';
-    const tier = url.searchParams.get('tier') || '';
-    const offset = (page - 1) * limit;
+    // Get current user and verify admin status
+    const currentUser = await env.DB.prepare(`
+      SELECT u.email
+      FROM sessions sess
+      JOIN users u ON sess.user_id = u.id
+      WHERE sess.token = ? AND sess.expires_at > datetime('now')
+      LIMIT 1
+    `).bind(sessionToken).first();
 
+    if (!currentUser) {
+      return new Response(JSON.stringify({ error: 'Invalid session' }), {
+        status: 401,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
+    // Check if admin
+    const adminEmails = (env.ADMIN_EMAILS || '').split(',').map(e => e.trim().toLowerCase()).filter(Boolean);
+    if (!adminEmails.includes(currentUser.email?.toLowerCase())) {
+      return new Response(JSON.stringify({ error: 'Admin access required' }), {
+        status: 403,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
+    // GET - List all users
     if (request.method === 'GET') {
-      // Build query with filters
-      let whereClause = '1=1';
-      const params = [];
-
-      if (search) {
-        whereClause += ' AND (u.email LIKE ? OR u.name LIKE ?)';
-        params.push(`%${search}%`, `%${search}%`);
-      }
-
-      if (tier) {
-        whereClause += ' AND COALESCE(c.subscription_tier, "free") = ?';
-        params.push(tier);
-      }
-
-      // Get total count
-      const countQuery = await env.DB.prepare(`
-        SELECT COUNT(*) as total
-        FROM users u
-        LEFT JOIN user_credits c ON u.id = c.user_id
-        WHERE ${whereClause}
-      `).bind(...params).first();
-
-      // Get users with their credits and subscriptions
       const users = await env.DB.prepare(`
         SELECT
           u.id,
@@ -101,96 +59,120 @@ export async function onRequest(context) {
           u.name,
           u.picture,
           u.created_at,
-          COALESCE(c.subscription_tier, 'free') as tier,
-          COALESCE(c.credits_balance, 0) as credits,
-          COALESCE(c.credits_monthly_allowance, 0) as monthly_allowance,
-          COALESCE(c.credits_used_this_month, 0) as used_this_month,
-          c.lifetime_purchase,
-          s.plan as subscription_plan,
+          s.plan,
           s.status as subscription_status,
+          s.current_period_end,
           s.stripe_customer_id,
-          s.current_period_end
+          uc.credits_balance,
+          uc.credits_monthly_allowance,
+          uc.subscription_tier,
+          uc.lifetime_purchase,
+          uc.credits_used_this_month,
+          (SELECT COUNT(*) FROM quran_conversations WHERE user_id = u.id) as conversation_count
         FROM users u
-        LEFT JOIN user_credits c ON u.id = c.user_id
         LEFT JOIN subscriptions s ON u.id = s.user_id
-        WHERE ${whereClause}
+        LEFT JOIN user_credits uc ON u.id = uc.user_id
         ORDER BY u.created_at DESC
-        LIMIT ? OFFSET ?
-      `).bind(...params, limit, offset).all();
-
-      // Get conversation counts per user
-      const convCounts = await env.DB.prepare(`
-        SELECT user_id, COUNT(*) as count
-        FROM quran_conversations
-        GROUP BY user_id
       `).all();
 
-      const convMap = {};
-      (convCounts.results || []).forEach(c => {
-        convMap[c.user_id] = c.count;
-      });
-
-      // Add conversation count to each user
-      const usersWithConv = (users.results || []).map(u => ({
-        ...u,
-        conversation_count: convMap[u.id] || 0,
+      // Transform for frontend
+      const transformedUsers = users.results.map(u => ({
+        id: u.id,
+        email: u.email,
+        name: u.name,
+        picture: u.picture,
+        created_at: u.created_at,
+        plan: u.plan,
+        tier: u.subscription_tier || 'free',
+        credits: u.credits_balance || 0,
+        monthly_allowance: u.credits_monthly_allowance || 0,
+        used_this_month: u.credits_used_this_month || 0,
+        conversation_count: u.conversation_count || 0,
+        lifetime_purchase: u.lifetime_purchase || 0,
       }));
 
       return new Response(JSON.stringify({
-        users: usersWithConv,
-        pagination: {
-          total: countQuery?.total || 0,
-          page,
-          limit,
-          totalPages: Math.ceil((countQuery?.total || 0) / limit),
-        },
+        users: transformedUsers,
+        pagination: { page: 1, totalPages: 1, total: transformedUsers.length }
       }), {
         status: 200,
-        headers: corsHeaders,
+        headers: { 'Content-Type': 'application/json' },
       });
     }
 
     // PUT - Update user
     if (request.method === 'PUT') {
-      const { userId, credits, tier, monthlyAllowance } = await request.json();
+      const { userId, tier, credits, monthlyAllowance } = await request.json();
 
       if (!userId) {
         return new Response(JSON.stringify({ error: 'User ID required' }), {
           status: 400,
-          headers: corsHeaders,
+          headers: { 'Content-Type': 'application/json' },
         });
       }
 
-      // Update user credits
+      // Map tier to plan name
+      const tierToPlan = {
+        free: 'free',
+        starter: 'starter_monthly',
+        premium: 'premium_monthly',
+        scholar: 'scholar_monthly',
+        lifetime: 'lifetime',
+      };
+      const plan = tierToPlan[tier] || 'free';
+
+      // Calculate next reset date (1st of next month)
+      const now = new Date();
+      const nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+      const nextResetDate = nextMonth.toISOString().split('T')[0];
+
+      // Update subscriptions table
       await env.DB.prepare(`
-        INSERT INTO user_credits (user_id, credits_balance, subscription_tier, credits_monthly_allowance)
-        VALUES (?, ?, ?, ?)
-        ON CONFLICT(user_id) DO UPDATE SET
-          credits_balance = COALESCE(?, credits_balance),
-          subscription_tier = COALESCE(?, subscription_tier),
-          credits_monthly_allowance = COALESCE(?, credits_monthly_allowance),
-          updated_at = datetime('now')
+        UPDATE subscriptions
+        SET plan = ?,
+            status = 'active',
+            current_period_end = datetime('now', '+1 month')
+        WHERE user_id = ?
+      `).bind(plan, userId).run();
+
+      // Update user_credits table
+      await env.DB.prepare(`
+        UPDATE user_credits
+        SET subscription_tier = ?,
+            credits_balance = ?,
+            credits_monthly_allowance = ?,
+            credits_used_this_month = 0,
+            credits_reset_date = ?,
+            lifetime_purchase = ?,
+            updated_at = datetime('now')
+        WHERE user_id = ?
       `).bind(
-        userId, credits || 0, tier || 'free', monthlyAllowance || 0,
-        credits, tier, monthlyAllowance
+        tier || 'free',
+        credits || 0,
+        monthlyAllowance || 0,
+        nextResetDate,
+        tier === 'lifetime' ? 1 : 0,
+        userId
       ).run();
 
-      return new Response(JSON.stringify({ success: true }), {
+      console.log('[Admin] Updated user:', userId, 'to tier:', tier, 'credits:', credits);
+
+      return new Response(JSON.stringify({
+        success: true,
+        message: 'User updated successfully',
+      }), {
         status: 200,
-        headers: corsHeaders,
+        headers: { 'Content-Type': 'application/json' },
       });
     }
 
-    return new Response(JSON.stringify({ error: 'Method not allowed' }), {
-      status: 405,
-      headers: corsHeaders,
-    });
+    return new Response('Method not allowed', { status: 405 });
 
   } catch (error) {
-    console.error('[Admin Users] Error:', error);
-    return new Response(JSON.stringify({ error: 'Server error', details: error.message }), {
+    console.error('[Admin] Users error:', error);
+    return new Response(JSON.stringify({ error: 'Server error' }), {
       status: 500,
-      headers: corsHeaders,
+      headers: { 'Content-Type': 'application/json' },
     });
   }
 }

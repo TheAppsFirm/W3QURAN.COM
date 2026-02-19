@@ -272,7 +272,7 @@ const VERSE_COUNTS = [
  * @param {number} ayahNum - Ayah number within surah
  * @returns {number} - Global ayah number
  */
-function getGlobalAyahNumber(surahId, ayahNum) {
+export function getGlobalAyahNumber(surahId, ayahNum) {
   let globalAyah = 0;
   for (let i = 1; i < surahId; i++) {
     globalAyah += VERSE_COUNTS[i];

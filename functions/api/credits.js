@@ -6,12 +6,53 @@
 
 // Subscription tier credit allowances
 const TIER_CREDITS = {
-  free: 0, // 3 one-time welcome bonus (handled separately)
+  free: 0, // free users get 5 per day
   starter: 30, // per month
   premium: 80, // per month
   scholar: 300, // per month
   lifetime: 100, // per month forever
 };
+
+// Free tier daily limit
+const FREE_DAILY_LIMIT = 5;
+
+// Helper to get admin emails from environment
+const getAdminEmails = (env) => {
+  const emails = env.ADMIN_EMAILS || '';
+  if (!emails) return [];
+  return emails.split(',').map(e => e.trim().toLowerCase());
+};
+
+// Check if user is admin
+const isAdminUser = (email, env) => {
+  if (!email) return false;
+  const adminEmails = getAdminEmails(env);
+  return adminEmails.includes(email.toLowerCase());
+};
+
+// Get today's date in YYYY-MM-DD format
+function getTodayDate() {
+  return new Date().toISOString().split('T')[0];
+}
+
+// Get free user daily usage
+async function getFreeDailyUsage(env, userId) {
+  const today = getTodayDate();
+
+  const usage = await env.DB.prepare(`
+    SELECT * FROM free_daily_usage
+    WHERE user_id = ? AND usage_date = ?
+  `).bind(userId, today).first();
+
+  if (!usage) {
+    return { count: 0, remaining: FREE_DAILY_LIMIT };
+  }
+
+  return {
+    count: usage.query_count,
+    remaining: Math.max(0, FREE_DAILY_LIMIT - usage.query_count)
+  };
+}
 
 // Helper to verify user session
 async function verifySession(request, env) {
@@ -119,6 +160,9 @@ export async function onRequest(context) {
     }
 
     if (request.method === 'GET') {
+      // Check if user is admin
+      const isAdmin = isAdminUser(user.email, env);
+
       // Get user credits
       let credits = await getUserCredits(env, user.user_id);
 
@@ -138,16 +182,40 @@ export async function onRequest(context) {
         SELECT COUNT(*) as count FROM quran_conversations WHERE user_id = ?
       `).bind(user.user_id).first();
 
-      return new Response(JSON.stringify({
-        credits: {
+      // Build response based on user type
+      let creditsResponse;
+
+      if (isAdmin) {
+        // Admin: unlimited access
+        creditsResponse = {
+          balance: '∞',
+          tier: 'admin',
+          unlimited: true,
+          hasAccess: true,
+        };
+      } else if (credits.subscription_tier === 'free' || credits.credits_monthly_allowance <= 0) {
+        // Free user: NO access to Talk to Quran (premium only)
+        creditsResponse = {
+          balance: 0,
+          tier: 'free',
+          hasAccess: false,
+          premiumRequired: true,
+        };
+      } else {
+        // Paid user: show credits
+        creditsResponse = {
           balance: credits.credits_balance,
           monthlyAllowance: credits.credits_monthly_allowance,
           usedThisMonth: credits.credits_used_this_month,
           resetDate: credits.credits_reset_date,
           tier: credits.subscription_tier,
           isLifetime: credits.lifetime_purchase,
-          freeCreditsAvailable: !credits.free_credits_claimed && credits.subscription_tier === 'free',
-        },
+          hasAccess: true,
+        };
+      }
+
+      return new Response(JSON.stringify({
+        credits: creditsResponse,
         stats: {
           totalConversations: convCount?.count || 0,
         },

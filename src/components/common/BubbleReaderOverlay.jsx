@@ -27,7 +27,7 @@ import { hasTreebankData, canAccessTreebank } from '../../data/treebankData';
 import { hasOntologyData } from '../../data/treebank/index';
 import { PALETTES, SURAHS, fetchTafseer, getTafseersByLanguage, getDefaultTafseer, TRANSLATION_TO_TAFSEER_LANG, getVideosForSurah, generateSearchQuery, SCHOLARS, SURAH_TOPICS, TAFSEER_SOURCES, markAyahRead } from '../../data';
 import { useQuranAPI, useMultilingualWords, TRANSLATIONS, TAJWEED_RULES, POS_LABELS } from '../../hooks/useQuranAPI';
-import { speakText, getTranslationAudioSource, getTranslationAudioUrl, getAvailableTranslationAudio, TRANSLATION_RECITERS } from '../../hooks/useAudioPlayer';
+import { speakText, getTranslationAudioSource, getTranslationAudioUrl, getAvailableTranslationAudio, TRANSLATION_RECITERS, getGlobalAyahNumber } from '../../hooks/useAudioPlayer';
 import { useLocalStorage, useIsMobile } from '../../hooks';
 import { logReadingSession, trackSurahCompletion, trackFeatureUsage } from '../../utils/trackingUtils';
 import { shareVerse } from '../../utils/shareUtils';
@@ -90,14 +90,6 @@ const VERSE_COUNTS = [
   28, 20, 56, 40, 31, 50, 40, 46, 42, 29, 19, 36, 25, 22, 17, 19, 26, 30, 20,
   15, 21, 11, 8, 8, 19, 5, 8, 8, 11, 11, 8, 3, 9, 5, 4, 7, 3, 6, 3, 5, 4, 5, 6
 ];
-
-function getGlobalAyahNumber(surahId, ayahNum) {
-  let globalAyah = 0;
-  for (let i = 1; i < surahId; i++) {
-    globalAyah += VERSE_COUNTS[i];
-  }
-  return globalAyah + ayahNum;
-}
 
 // Tajweed Text Renderer
 const TajweedText = memo(function TajweedText({ segments }) {
@@ -1518,6 +1510,11 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
   const isPlayingCombinedRef = useRef(false);
   const versesRef = useRef([]);
 
+  // Audio prefetch cache for smooth playback
+  const audioCacheRef = useRef(new Map()); // Map<cacheKey, {audio: Audio, blob: Blob}>
+  const prefetchAbortRef = useRef(null); // AbortController for canceling prefetch
+  const prefetchingRef = useRef(new Set()); // Currently prefetching URLs
+
   // Get language code from translation for TTS
   const ttsLanguage = useMemo(() => {
     if (!selectedTranslation) return 'en';
@@ -1637,6 +1634,143 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
     console.log('[Narrator] Changing to:', newNarrator);
     setSelectedTranslationNarrator(newNarrator);
   }, [setSelectedTranslationNarrator]);
+
+  // ============ AUDIO PREFETCH SYSTEM ============
+  // Prefetch upcoming ayahs for instant playback
+
+  // Clear audio cache
+  const clearAudioCache = useCallback(() => {
+    console.log('[Prefetch] Clearing audio cache, size:', audioCacheRef.current.size);
+    // Revoke blob URLs to free memory
+    audioCacheRef.current.forEach((cached) => {
+      if (cached.blobUrl) URL.revokeObjectURL(cached.blobUrl);
+    });
+    audioCacheRef.current.clear();
+    prefetchingRef.current.clear();
+    // Abort any pending fetches
+    if (prefetchAbortRef.current) {
+      prefetchAbortRef.current.abort();
+      prefetchAbortRef.current = null;
+    }
+  }, []);
+
+  // Generate cache key for an ayah
+  const getAudioCacheKey = useCallback((surahId, ayahNum, reciterId) => {
+    return `${surahId}-${ayahNum}-${reciterId}`;
+  }, []);
+
+  // Prefetch a single audio file
+  const prefetchAudio = useCallback(async (url, cacheKey, signal) => {
+    if (audioCacheRef.current.has(cacheKey) || prefetchingRef.current.has(cacheKey)) {
+      return; // Already cached or prefetching
+    }
+
+    prefetchingRef.current.add(cacheKey);
+    console.log('[Prefetch] Starting prefetch:', cacheKey);
+
+    try {
+      const response = await fetch(url, { signal });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+      const blob = await response.blob();
+      const blobUrl = URL.createObjectURL(blob);
+
+      // Create preloaded Audio element
+      const audio = new Audio();
+      audio.preload = 'auto';
+      audio.src = blobUrl;
+
+      // Wait for audio to be ready
+      await new Promise((resolve, reject) => {
+        audio.oncanplaythrough = resolve;
+        audio.onerror = reject;
+        // Timeout after 10 seconds
+        setTimeout(resolve, 10000);
+      });
+
+      audioCacheRef.current.set(cacheKey, { audio, blobUrl, url });
+      console.log('[Prefetch] Cached:', cacheKey);
+    } catch (err) {
+      if (err.name !== 'AbortError') {
+        console.log('[Prefetch] Failed:', cacheKey, err.message);
+      }
+    } finally {
+      prefetchingRef.current.delete(cacheKey);
+    }
+  }, []);
+
+  // Prefetch next N ayahs
+  const prefetchNextAyahs = useCallback((currentAyahNum, count = 3) => {
+    if (!surah?.id || !selectedReciter) return;
+
+    // Create new AbortController for this batch
+    if (prefetchAbortRef.current) {
+      prefetchAbortRef.current.abort();
+    }
+    prefetchAbortRef.current = new AbortController();
+    const signal = prefetchAbortRef.current.signal;
+
+    const total = totalVersesRef.current || surah.ayahs;
+
+    for (let i = 1; i <= count; i++) {
+      const nextAyah = currentAyahNum + i;
+      if (nextAyah > total) break;
+
+      // Arabic audio URL
+      const paddedSurah = String(surah.id).padStart(3, '0');
+      const paddedAyah = String(nextAyah).padStart(3, '0');
+      const arabicUrl = `https://cdn.islamic.network/quran/audio/128/${selectedReciter}/${getGlobalAyahNumber(surah.id, nextAyah)}.mp3`;
+      const arabicKey = getAudioCacheKey(surah.id, nextAyah, selectedReciter);
+
+      prefetchAudio(arabicUrl, arabicKey, signal);
+
+      // Translation audio URL (if using everyayah narrator)
+      if (effectiveNarrator && narratorUrlConfig[effectiveNarrator]) {
+        const config = narratorUrlConfig[effectiveNarrator];
+        if (config.type === 'everyayah') {
+          const transUrl = `${config.baseUrl}/${paddedSurah}${paddedAyah}.mp3`;
+          const transKey = getAudioCacheKey(surah.id, nextAyah, effectiveNarrator);
+          prefetchAudio(transUrl, transKey, signal);
+        }
+      }
+    }
+  }, [surah?.id, selectedReciter, effectiveNarrator, prefetchAudio, getAudioCacheKey]);
+
+  // Get cached audio or null
+  const getCachedAudio = useCallback((surahId, ayahNum, reciterId) => {
+    const key = getAudioCacheKey(surahId, ayahNum, reciterId);
+    const cached = audioCacheRef.current.get(key);
+    if (cached) {
+      console.log('[Prefetch] Cache HIT:', key);
+      // Clone the audio for playback (so we can reuse cached version)
+      const audio = new Audio(cached.blobUrl);
+      audio.preload = 'auto';
+      return audio;
+    }
+    console.log('[Prefetch] Cache MISS:', key);
+    return null;
+  }, [getAudioCacheKey]);
+
+  // Clear cache when surah changes
+  useEffect(() => {
+    clearAudioCache();
+  }, [surah?.id, clearAudioCache]);
+
+  // Clear cache and stop translation audio when translation/narrator changes
+  useEffect(() => {
+    // Stop any playing translation audio
+    if (translationAudioRef.current) {
+      console.log('[Translation-Change] Stopping translation audio');
+      translationAudioRef.current.pause();
+      translationAudioRef.current.src = '';
+      translationAudioRef.current = null;
+    }
+    // Clear the prefetch cache for old translation
+    clearAudioCache();
+    console.log('[Translation-Change] Cleared cache for new translation:', selectedTranslation, 'narrator:', effectiveNarrator);
+  }, [selectedTranslation, effectiveNarrator, clearAudioCache]);
+
+  // ============ END AUDIO PREFETCH SYSTEM ============
 
   // Ref to track previous narrator for change detection
   const prevNarratorRef = useRef(effectiveNarrator);
@@ -2388,8 +2522,18 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
       const apiUrl = getTranslationAudioUrl(surah?.id, ayahNum, narrator);
       console.log('[Combined-API] Generated API URL:', apiUrl);
       if (apiUrl) {
-        console.log('[Combined-API] Creating Audio object for API audio...');
-        const audio = new Audio();
+        // Check cache first for instant playback
+        const cachedAudio = getCachedAudio(surah?.id, ayahNum, narrator);
+        let audio;
+
+        if (cachedAudio) {
+          console.log('[Combined-API] Using CACHED audio for ayah:', ayahNum);
+          audio = cachedAudio;
+        } else {
+          console.log('[Combined-API] Creating Audio object for API audio...');
+          audio = new Audio();
+        }
+
         audio._playbackId = playbackId;
         audio._isAPI = true;
         audio._ayahNum = ayahNum; // Store for debugging
@@ -2415,23 +2559,34 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
           playWithTTS();
         };
 
-        audio.src = apiUrl;
-        audio.load();
-        console.log('[Combined-API] Loading API audio...');
+        // Only load if not already cached
+        if (!cachedAudio) {
+          audio.src = apiUrl;
+          audio.load();
+          console.log('[Combined-API] Loading API audio...');
 
-        audio.oncanplaythrough = () => {
-          console.log('[Combined-API] canplaythrough event fired for ayah:', ayahNum);
-          if (translationAudioRef.current?._playbackId !== playbackId) {
-            console.log('[Combined-API] Playback ID mismatch, ignoring canplaythrough');
-            return;
-          }
-          console.log('[Combined-API] API audio ready, calling play()');
+          audio.oncanplaythrough = () => {
+            console.log('[Combined-API] canplaythrough event fired for ayah:', ayahNum);
+            if (translationAudioRef.current?._playbackId !== playbackId) {
+              console.log('[Combined-API] Playback ID mismatch, ignoring canplaythrough');
+              return;
+            }
+            console.log('[Combined-API] API audio ready, calling play()');
+            audio.play().catch((err) => {
+              console.log('[Combined-API] Play failed:', err.name, err.message);
+              if (err.name === 'AbortError') return;
+              playWithTTS();
+            });
+          };
+        } else {
+          // Cached audio is already ready, play immediately
+          console.log('[Combined-API] Cached audio ready, playing immediately');
           audio.play().catch((err) => {
-            console.log('[Combined-API] Play failed:', err.name, err.message);
+            console.log('[Combined-API] Cached play failed:', err.name, err.message);
             if (err.name === 'AbortError') return;
             playWithTTS();
           });
-        };
+        }
 
         return;
       } else {
@@ -2508,17 +2663,36 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio || !surah?.id) return;
+
+    // Check cache first for instant playback
+    const cachedAudio = getCachedAudio(surah.id, currentAyah, selectedReciter);
     const globalAyah = getGlobalAyahNumber(surah.id, currentAyah);
     const url = `${AUDIO_CDN}/${selectedReciter}/${globalAyah}.mp3`;
+
     audio.pause();
-    audio.src = url;
+
+    if (cachedAudio) {
+      // Use cached blob URL for instant playback
+      audio.src = cachedAudio.src;
+      console.log('[Audio] Using cached audio for ayah:', currentAyah);
+    } else {
+      // Fall back to network URL
+      audio.src = url;
+      console.log('[Audio] Loading from network for ayah:', currentAyah);
+    }
+
     audio.load();
+
+    // Prefetch next ayahs in background
+    if (isPlaying || isPlayingCombined) {
+      prefetchNextAyahs(currentAyah, 3);
+    }
 
     if (autoScroll && versesContainerRef.current) {
       const ayahElement = versesContainerRef.current.querySelector(`[data-ayah="${currentAyah}"]`);
       if (ayahElement) ayahElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
-  }, [surah?.id, currentAyah, selectedReciter, autoScroll]);
+  }, [surah?.id, currentAyah, selectedReciter, autoScroll, getCachedAudio, prefetchNextAyahs, isPlaying, isPlayingCombined]);
 
   useEffect(() => {
     const audio = audioRef.current;

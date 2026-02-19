@@ -57,7 +57,15 @@ export async function onRequest(context) {
     // Check if user is admin (from environment variable)
     const adminEmails = (env.ADMIN_EMAILS || '').split(',').map(e => e.trim().toLowerCase()).filter(Boolean);
     const isAdmin = adminEmails.includes(result.email?.toLowerCase());
-    const hasPaidPlan = ['monthly', 'yearly', 'lifetime'].includes(result.plan);
+
+    // Check for paid plans (includes all subscription tiers)
+    const paidPlans = [
+      'monthly', 'yearly', 'lifetime',
+      'starter_monthly', 'starter_yearly',
+      'premium_monthly', 'premium_yearly',
+      'scholar_monthly', 'scholar_yearly'
+    ];
+    const hasPaidPlan = paidPlans.includes(result.plan);
 
     // Return user data
     const user = {

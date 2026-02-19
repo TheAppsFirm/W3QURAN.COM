@@ -3,24 +3,109 @@
  * Single Responsibility: Manage app settings with localStorage persistence
  */
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Icons } from '../common/Icons';
 import { useLocalStorage } from '../../hooks';
 import { isSoundEnabled, setSoundEnabled } from '../../utils/soundUtils';
 import { useAuth } from '../../contexts/AuthContext';
 
-// Stripe Price IDs - from Cloudflare environment
-const STRIPE_PRICES = {
-  monthly: 'price_1T12VWCnbCeWpM4XWRkPjxJb',
-  yearly: 'price_1T12VxCnbCeWpM4Xg2ttTsm5',
+// Product types - backend resolves correct price for test/live mode
+const PRODUCTS = {
+  starter_monthly: 'starter_monthly',
+  premium_monthly: 'premium_monthly',
+  premium_yearly: 'premium_yearly',
+  scholar_monthly: 'scholar_monthly',
+  scholar_yearly: 'scholar_yearly',
+  lifetime: 'lifetime',
+  credits_20: 'credits_20',
+  credits_50: 'credits_50',
+  credits_100: 'credits_100',
 };
 
+// Subscription tier info
+const SUBSCRIPTION_TIERS = [
+  { id: 'starter', name: 'Starter', credits: 30, price: '$3/mo', product: PRODUCTS.starter_monthly, color: 'from-blue-400 to-blue-500' },
+  { id: 'premium', name: 'Premium', credits: 80, price: '$7/mo', product: PRODUCTS.premium_monthly, color: 'from-purple-400 to-purple-500', popular: true },
+  { id: 'scholar', name: 'Scholar', credits: 300, price: '$15/mo', product: PRODUCTS.scholar_monthly, color: 'from-amber-400 to-amber-500' },
+  { id: 'lifetime', name: 'Lifetime', credits: 100, price: '$99', product: PRODUCTS.lifetime, color: 'from-emerald-400 to-emerald-500', oneTime: true },
+];
+
+// Credit packs
+const CREDIT_PACKS = [
+  { credits: 20, price: '$2', product: PRODUCTS.credits_20 },
+  { credits: 50, price: '$4', product: PRODUCTS.credits_50 },
+  { credits: 100, price: '$7', product: PRODUCTS.credits_100 },
+];
+
 function SettingsView({ darkMode, setDarkMode, onNavigate }) {
-  const { user, subscription, isPremium } = useAuth();
+  const { user, subscription, isPremium, isAdmin, loading: authLoading } = useAuth();
   const [upgradeLoading, setUpgradeLoading] = useState(null);
   const [upgradeError, setUpgradeError] = useState(null);
   const [syncStatus, setSyncStatus] = useState(null); // 'syncing' | 'success' | 'error'
   const [lastSynced, setLastSynced] = useLocalStorage('last_synced', null);
+  const [credits, setCredits] = useState(null);
+  const [creditsLoading, setCreditsLoading] = useState(false);
+  const [paymentStatus, setPaymentStatus] = useState(null); // 'success' | 'canceled'
+
+  // Check for payment redirect
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const payment = params.get('payment');
+    if (payment === 'success' || payment === 'canceled') {
+      setPaymentStatus(payment);
+      // Clear URL param after showing message
+      window.history.replaceState({}, '', '/settings');
+      // Auto-hide after 5 seconds
+      setTimeout(() => setPaymentStatus(null), 5000);
+      // Refresh credits on success to show updated subscription
+      if (payment === 'success') {
+        fetchCredits();
+      }
+    }
+  }, []);
+
+  // Fetch Talk to Quran credits
+  useEffect(() => {
+    if (user) {
+      fetchCredits();
+    }
+  }, [user]);
+
+  const fetchCredits = async () => {
+    setCreditsLoading(true);
+    try {
+      const res = await fetch('/api/credits', { credentials: 'include' });
+      if (res.ok) {
+        const data = await res.json();
+        setCredits(data.credits);
+      }
+    } catch (e) {
+      console.error('Failed to fetch credits:', e);
+    }
+    setCreditsLoading(false);
+  };
+
+  const handleCheckout = async (product) => {
+    setUpgradeLoading(product);
+    setUpgradeError(null);
+    try {
+      const res = await fetch('/api/stripe/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ product }),
+      });
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        setUpgradeError(data.error || 'Failed to start checkout');
+      }
+    } catch (e) {
+      setUpgradeError('Network error. Please try again.');
+    }
+    setUpgradeLoading(null);
+  };
   // All settings persisted to localStorage
   const [notifications, setNotifications] = useLocalStorage('settings_notifications', true);
   const [autoPlayAudio, setAutoPlayAudio] = useLocalStorage('settings_autoplay', false);
@@ -84,8 +169,49 @@ function SettingsView({ darkMode, setDarkMode, onNavigate }) {
           Customize your experience
         </p>
 
-        {/* Admin Section - Only show for admin users */}
-        {user?.isAdmin && (
+        {/* Payment Status Banner */}
+        {paymentStatus && (
+          <div className={`mb-6 p-4 rounded-2xl border transition-all animate-pulse ${
+            paymentStatus === 'success'
+              ? 'bg-emerald-500/20 border-emerald-500/30'
+              : 'bg-amber-500/20 border-amber-500/30'
+          }`}>
+            <div className="flex items-center justify-center gap-3">
+              {paymentStatus === 'success' ? (
+                <>
+                  <div className="w-8 h-8 rounded-full bg-emerald-500 flex items-center justify-center">
+                    <Icons.Check className="w-5 h-5 text-white" />
+                  </div>
+                  <div className="text-center">
+                    <p className={`font-bold ${darkMode ? 'text-emerald-300' : 'text-emerald-700'}`}>
+                      Payment Successful!
+                    </p>
+                    <p className={`text-sm ${darkMode ? 'text-emerald-400' : 'text-emerald-600'}`}>
+                      Your subscription is now active
+                    </p>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="w-8 h-8 rounded-full bg-amber-500 flex items-center justify-center">
+                    <Icons.X className="w-5 h-5 text-white" />
+                  </div>
+                  <div className="text-center">
+                    <p className={`font-bold ${darkMode ? 'text-amber-300' : 'text-amber-700'}`}>
+                      Payment Canceled
+                    </p>
+                    <p className={`text-sm ${darkMode ? 'text-amber-400' : 'text-amber-600'}`}>
+                      No charges were made
+                    </p>
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Admin Section - Show for admin users */}
+        {(isAdmin || user?.email === 'ziadevtmc@gmail.com') && (
           <div className="mb-6">
             <h3 className={`text-sm font-semibold uppercase tracking-wider mb-3 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
               Admin
@@ -169,80 +295,234 @@ function SettingsView({ darkMode, setDarkMode, onNavigate }) {
 
                   <div className="flex gap-2 pt-2">
                     <button
-                      onClick={async () => {
-                        setUpgradeLoading('monthly');
-                        setUpgradeError(null);
-                        try {
-                          const res = await fetch('/api/stripe/checkout', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ priceId: STRIPE_PRICES.monthly }),
-                          });
-                          const data = await res.json();
-                          if (data.url) window.location.href = data.url;
-                          else setUpgradeError(data.error || 'Failed to start checkout');
-                        } catch (e) {
-                          setUpgradeError('Network error. Please try again.');
-                        }
-                        setUpgradeLoading(null);
-                      }}
+                      onClick={() => handleCheckout(PRODUCTS.premium_monthly)}
                       disabled={upgradeLoading}
                       className="flex-1 py-2 px-4 bg-gradient-to-r from-purple-500 to-violet-500 text-white font-medium rounded-xl hover:shadow-lg hover:shadow-purple-500/30 transition-all disabled:opacity-50"
                     >
-                      {upgradeLoading === 'monthly' ? 'Loading...' : '$5/mo'}
+                      {upgradeLoading === PRODUCTS.premium_monthly ? 'Loading...' : '$7/mo'}
                     </button>
                     <button
-                      onClick={async () => {
-                        setUpgradeLoading('yearly');
-                        setUpgradeError(null);
-                        try {
-                          const res = await fetch('/api/stripe/checkout', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ priceId: STRIPE_PRICES.yearly }),
-                          });
-                          const data = await res.json();
-                          if (data.url) window.location.href = data.url;
-                          else setUpgradeError(data.error || 'Failed to start checkout');
-                        } catch (e) {
-                          setUpgradeError('Network error. Please try again.');
-                        }
-                        setUpgradeLoading(null);
-                      }}
+                      onClick={() => handleCheckout(PRODUCTS.premium_yearly)}
                       disabled={upgradeLoading}
                       className="flex-1 py-2 px-4 bg-gradient-to-r from-amber-400 to-orange-500 text-white font-medium rounded-xl hover:shadow-lg hover:shadow-amber-500/30 transition-all disabled:opacity-50"
                     >
-                      {upgradeLoading === 'yearly' ? 'Loading...' : '$30/yr'}
+                      {upgradeLoading === PRODUCTS.premium_yearly ? 'Loading...' : '$49/yr'}
                     </button>
                   </div>
                   <p className={`text-xs text-center ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>
-                    Yearly saves 50%
+                    Yearly saves 40%
                   </p>
                 </div>
               )}
 
-              {/* Manage Subscription - Show if premium */}
-              {isPremium && (
+              {/* Manage Subscription - Show if premium but NOT for admin-only access */}
+              {isPremium && !isAdmin && (
                 <div className="pt-3 border-t border-gray-200 dark:border-gray-700">
+                  {/* Portal Error Message */}
+                  {upgradeError && (
+                    <div className="mb-3 p-3 bg-red-500/20 border border-red-500/30 rounded-xl">
+                      <p className="text-red-400 text-sm text-center">{upgradeError}</p>
+                    </div>
+                  )}
                   <button
                     onClick={async () => {
                       setUpgradeError(null);
+                      setUpgradeLoading('portal');
                       try {
-                        const res = await fetch('/api/stripe/portal', { method: 'POST' });
+                        const res = await fetch('/api/stripe/portal', { method: 'POST', credentials: 'include' });
                         const data = await res.json();
-                        if (data.url) window.location.href = data.url;
-                        else setUpgradeError(data.error || 'Failed to open portal');
+                        if (data.url) {
+                          window.location.href = data.url;
+                        } else if (data.code === 'MODE_MISMATCH') {
+                          setUpgradeError('Your subscription was created in test mode and cannot be managed in live mode. Please contact support.');
+                        } else {
+                          setUpgradeError(data.error || 'Failed to open portal');
+                        }
                       } catch (e) {
                         setUpgradeError('Network error. Please try again.');
                       }
+                      setUpgradeLoading(null);
                     }}
+                    disabled={upgradeLoading === 'portal'}
                     className={`w-full py-2 px-4 rounded-xl font-medium transition-all ${
                       darkMode ? 'bg-gray-700 text-white hover:bg-gray-600' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                    }`}
+                    } ${upgradeLoading === 'portal' ? 'opacity-50' : ''}`}
                   >
-                    Manage Subscription
+                    {upgradeLoading === 'portal' ? 'Loading...' : 'Manage Subscription'}
                   </button>
                 </div>
+              )}
+
+              {/* Admin Notice */}
+              {isAdmin && (
+                <div className="pt-3 border-t border-gray-200 dark:border-gray-700">
+                  <div className={`text-center py-2 px-4 rounded-xl ${
+                    darkMode ? 'bg-red-900/20 text-red-400' : 'bg-red-50 text-red-600'
+                  }`}>
+                    <div className="flex items-center justify-center gap-2">
+                      <Icons.Shield className="w-4 h-4" />
+                      <span className="text-sm font-medium">Admin Access - Unlimited</span>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Talk to Quran Credits Section */}
+        {user && (
+          <div className="mb-6">
+            <h3 className={`text-sm font-semibold uppercase tracking-wider mb-3 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+              Talk to Quran
+            </h3>
+
+            <div className={`rounded-2xl p-4 shadow-lg border ${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}>
+              {creditsLoading ? (
+                <div className="flex items-center justify-center py-4">
+                  <div className="w-6 h-6 border-2 border-purple-500 border-t-transparent rounded-full animate-spin" />
+                </div>
+              ) : (
+                <>
+                  {/* Credit Balance Display */}
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-3">
+                      <div className={`w-12 h-12 rounded-full flex items-center justify-center ${
+                        isAdmin ? 'bg-gradient-to-r from-red-500 to-pink-500' :
+                        credits?.tier === 'free' ? 'bg-gradient-to-r from-gray-400 to-gray-500' :
+                        'bg-gradient-to-r from-purple-500 to-pink-500'
+                      }`}>
+                        <Icons.MessageCircle className="w-6 h-6 text-white" />
+                      </div>
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className={`text-2xl font-bold ${darkMode ? 'text-white' : 'text-gray-800'}`}>
+                            {isAdmin ? '∞' : credits?.balance ?? 0}
+                          </span>
+                          <span className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                            {isAdmin ? '' : credits?.tier === 'free' ? 'left today' : 'credits'}
+                          </span>
+                        </div>
+                        <span className={`text-xs px-2 py-0.5 rounded-full capitalize ${
+                          isAdmin ? 'bg-red-500/20 text-red-400' :
+                          credits?.tier === 'free' ? 'bg-gray-500/20 text-gray-400' :
+                          'bg-purple-500/20 text-purple-400'
+                        }`}>
+                          {isAdmin ? 'Admin' : credits?.tier || 'free'}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Usage Stats */}
+                    {!isAdmin && credits && (
+                      <div className={`text-right text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                        {credits.tier === 'free' ? (
+                          <>
+                            <p>{credits.dailyUsed || 0} / {credits.dailyLimit || 5} today</p>
+                            <p>Resets daily</p>
+                          </>
+                        ) : (
+                          <>
+                            <p>{credits.usedThisMonth || 0} used this month</p>
+                            <p>Resets: {credits.resetDate ? new Date(credits.resetDate).toLocaleDateString() : 'N/A'}</p>
+                          </>
+                        )}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Admin Message */}
+                  {isAdmin && (
+                    <div className="p-3 rounded-xl bg-gradient-to-r from-red-500/10 to-pink-500/10 border border-red-500/20 mb-4">
+                      <p className={`text-sm text-center ${darkMode ? 'text-red-300' : 'text-red-600'}`}>
+                        Unlimited access as Admin
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Free User - Premium Lock */}
+                  {!isAdmin && credits?.tier === 'free' && (
+                    <div className="pt-3 border-t border-gray-200 dark:border-gray-700">
+                      <div className="flex items-center gap-3 mb-3 p-3 rounded-xl bg-amber-500/10 border border-amber-500/20">
+                        <Icons.Lock className="w-5 h-5 text-amber-500" />
+                        <p className={`text-sm ${darkMode ? 'text-amber-200' : 'text-amber-700'}`}>
+                          Talk to Quran is a premium feature
+                        </p>
+                      </div>
+
+                      <p className={`text-sm mb-3 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                        Upgrade to unlock AI-powered Quranic conversations:
+                      </p>
+
+                      {/* Subscription Tiers */}
+                      <div className="grid grid-cols-2 gap-2 mb-3">
+                        {SUBSCRIPTION_TIERS.slice(0, 2).map((tier) => (
+                          <button
+                            key={tier.id}
+                            onClick={() => handleCheckout(tier.product)}
+                            disabled={upgradeLoading}
+                            className={`relative p-3 rounded-xl text-center transition-all hover:scale-105 ${
+                              upgradeLoading === tier.product ? 'opacity-50' : ''
+                            } bg-gradient-to-r ${tier.color} text-white`}
+                          >
+                            {tier.popular && (
+                              <span className="absolute -top-2 left-1/2 -translate-x-1/2 px-2 py-0.5 bg-amber-400 text-amber-900 text-xs font-bold rounded-full">
+                                POPULAR
+                              </span>
+                            )}
+                            <p className="font-bold">{tier.name}</p>
+                            <p className="text-xs opacity-80">{tier.credits} credits/mo</p>
+                            <p className="text-sm font-medium mt-1">{tier.price}</p>
+                          </button>
+                        ))}
+                      </div>
+
+                      <button
+                        onClick={() => handleCheckout(PRODUCTS.lifetime)}
+                        disabled={upgradeLoading}
+                        className="w-full p-3 rounded-xl bg-gradient-to-r from-emerald-400 to-emerald-500 text-white text-center transition-all hover:scale-105"
+                      >
+                        <p className="font-bold">Lifetime - $99 one-time</p>
+                        <p className="text-xs opacity-80">100 credits/month forever</p>
+                      </button>
+                    </div>
+                  )}
+
+                  {/* Paid User - Buy More Credits */}
+                  {!isAdmin && credits?.tier !== 'free' && (
+                    <div className="pt-3 border-t border-gray-200 dark:border-gray-700">
+                      <p className={`text-sm mb-3 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                        Need more credits?
+                      </p>
+                      <div className="flex gap-2">
+                        {CREDIT_PACKS.map((pack) => (
+                          <button
+                            key={pack.credits}
+                            onClick={() => handleCheckout(pack.product)}
+                            disabled={upgradeLoading}
+                            className={`flex-1 p-2 rounded-xl text-center transition-all hover:scale-105 ${
+                              darkMode ? 'bg-gray-700 hover:bg-gray-600' : 'bg-gray-100 hover:bg-gray-200'
+                            } ${upgradeLoading === pack.product ? 'opacity-50' : ''}`}
+                          >
+                            <p className={`font-bold ${darkMode ? 'text-white' : 'text-gray-800'}`}>
+                              +{pack.credits}
+                            </p>
+                            <p className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                              {pack.price}
+                            </p>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Error Message */}
+                  {upgradeError && (
+                    <div className="mt-3 p-3 bg-red-500/20 border border-red-500/30 rounded-xl">
+                      <p className="text-red-400 text-sm text-center">{upgradeError}</p>
+                    </div>
+                  )}
+                </>
               )}
             </div>
           </div>
@@ -584,7 +864,7 @@ function SettingsView({ darkMode, setDarkMode, onNavigate }) {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-emerald-500/20 flex items-center justify-center">
-                    <Icons.FileText className="w-5 h-5 text-emerald-500" />
+                    <Icons.Book className="w-5 h-5 text-emerald-500" />
                   </div>
                   <div>
                     <span className={`font-bold block ${darkMode ? 'text-white' : 'text-gray-800'}`}>

@@ -26,3 +26,9 @@ id = "157b19cc21004f42933884ea1848ccf4"
 # For local preview, create with: wrangler kv:namespace create "UMMAH_KV" --preview
 # Then replace this ID with the preview namespace ID
 preview_id = "157b19cc21004f42933884ea1848ccf4"
+
+# KV Namespace for Admin Settings (Stripe test/live mode toggle)
+[[kv_namespaces]]
+binding = "SETTINGS_KV"
+id = "d6171370e7fb43c894d6d1165e84f676"
+preview_id = "d6171370e7fb43c894d6d1165e84f676"
