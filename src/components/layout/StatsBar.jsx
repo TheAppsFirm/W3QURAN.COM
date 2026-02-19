@@ -229,7 +229,7 @@ const StatsBar = memo(function StatsBar({
               {/* Right fade indicator */}
               <div className="absolute right-0 top-0 bottom-0 w-6 bg-gradient-to-l from-white/95 to-transparent z-10 pointer-events-none sm:hidden" />
 
-              <div className="flex items-center gap-2 sm:gap-3 overflow-x-auto scrollbar-hide px-1 snap-x snap-mandatory" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+              <div className="flex items-center gap-2 sm:gap-3 overflow-x-auto overflow-y-hidden scrollbar-hide px-1 snap-x snap-mandatory" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', touchAction: 'pan-x' }}>
               {/* Layout Selector - Bubble Style */}
               <button
                 ref={layoutBtnRef}
