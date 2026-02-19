@@ -300,12 +300,17 @@ const LogsPanel = () => {
       });
       if (response.ok) {
         const data = await response.json();
-        alert(`Deleted ${data.deleted} old logs`);
+        if (data.deleted === 0) {
+          alert(`No logs older than ${days} days found. Database is already clean!`);
+        } else {
+          alert(`Successfully deleted ${data.deleted} old logs`);
+        }
         fetchLogs();
         fetchSummary();
       }
     } catch (err) {
       console.error('Failed to delete logs:', err);
+      alert('Failed to delete logs. Please try again.');
     }
   };
 
@@ -766,12 +771,15 @@ const AnalyticsPanel = () => {
       const response = await fetch(`/api/admin/analytics?period=${period}&metrics=realtime,users,revenue,content,errors`, {
         credentials: 'include'
       });
-      if (!response.ok) throw new Error('Failed to fetch analytics');
       const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || data.error || 'Failed to fetch analytics');
+      }
       setAnalytics(data);
       setError(null);
     } catch (err) {
-      setError(err.message);
+      console.error('[Analytics] Fetch error:', err);
+      setError(err.message || 'Failed to connect to analytics API');
     } finally {
       setLoading(false);
     }
