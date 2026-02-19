@@ -735,9 +735,24 @@ export default function TalkToQuran({ isVisible, onClose, onNavigate }) {
         }),
       });
 
-      const data = await res.json();
+      // Handle non-JSON responses (like network errors)
+      let data;
+      try {
+        data = await res.json();
+      } catch (parseError) {
+        console.error('[TalkToQuran] Response parse error:', parseError);
+        setError('Server error. Please try again.');
+        setStatus('idle');
+        return;
+      }
+
       if (!res.ok) {
-        setError(data.error || 'Failed');
+        // Show detailed error if available
+        const errorMsg = data.details
+          ? `${data.error} (${data.details})`
+          : data.error || 'Request failed';
+        console.error('[TalkToQuran] API error:', data);
+        setError(errorMsg);
         setStatus('idle');
         return;
       }

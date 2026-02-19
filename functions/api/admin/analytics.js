@@ -103,6 +103,10 @@ export async function onRequest(context) {
       promises.push(getErrorMetrics(env, dateRange).then(data => response.errors = data));
     }
 
+    if (requestedMetrics.includes('funnel')) {
+      promises.push(getFunnelMetrics(env, dateRange).then(data => response.funnel = data));
+    }
+
     await Promise.all(promises);
 
     return new Response(JSON.stringify(response), {
@@ -633,4 +637,177 @@ async function getErrorMetrics(env, dateRange) {
       maxPercent: memoryWarningsResult?.max_percent || 0
     }
   };
+}
+
+/**
+ * Get funnel analysis metrics
+ * Tracks user journey: Visitors → Signup → Active → Trial → Hit Limit → Paid
+ */
+async function getFunnelMetrics(env, dateRange) {
+  const { start, end } = dateRange;
+
+  const safeQuery = async (queryFn) => {
+    try {
+      return await queryFn();
+    } catch (e) {
+      console.warn('[Analytics] Funnel query failed:', e.message);
+      return null;
+    }
+  };
+
+  // Stage 1: Total unique visitors (sessions) in period
+  const visitorsResult = await safeQuery(() => env.DB.prepare(`
+    SELECT COUNT(DISTINCT session_id) as count
+    FROM analytics_events
+    WHERE DATE(created_at) BETWEEN ? AND ?
+  `).bind(start, end).first());
+
+  // Stage 2: Users who signed up (registered)
+  const signupsResult = await safeQuery(() => env.DB.prepare(`
+    SELECT COUNT(*) as count
+    FROM users
+    WHERE DATE(created_at) BETWEEN ? AND ?
+  `).bind(start, end).first());
+
+  // Stage 3: Active users (users with at least one analytics event)
+  const activeUsersResult = await safeQuery(() => env.DB.prepare(`
+    SELECT COUNT(DISTINCT user_id) as count
+    FROM analytics_events
+    WHERE user_id IS NOT NULL
+    AND DATE(created_at) BETWEEN ? AND ?
+  `).bind(start, end).first());
+
+  // Stage 4: Users who used AI feature (Talk to Quran)
+  const usedAIResult = await safeQuery(() => env.DB.prepare(`
+    SELECT COUNT(DISTINCT user_id) as count
+    FROM quran_conversations
+    WHERE DATE(created_at) BETWEEN ? AND ?
+  `).bind(start, end).first());
+
+  // Stage 5: Free users who hit their daily limit
+  const hitLimitResult = await safeQuery(() => env.DB.prepare(`
+    SELECT COUNT(DISTINCT uc.user_id) as count
+    FROM user_credits uc
+    WHERE uc.subscription_tier = 'free'
+    AND uc.daily_credits_used >= 3
+  `).first());
+
+  // Stage 6: Paid subscribers
+  const paidUsersResult = await safeQuery(() => env.DB.prepare(`
+    SELECT COUNT(DISTINCT user_id) as count
+    FROM subscriptions
+    WHERE status = 'active'
+    AND plan NOT LIKE '%free%'
+  `).first());
+
+  // Get breakdown by plan
+  const planBreakdownResult = await safeQuery(() => env.DB.prepare(`
+    SELECT
+      CASE
+        WHEN plan LIKE '%starter%' THEN 'starter'
+        WHEN plan LIKE '%premium%' THEN 'premium'
+        WHEN plan LIKE '%scholar%' THEN 'scholar'
+        WHEN plan LIKE '%lifetime%' THEN 'lifetime'
+        ELSE 'other'
+      END as plan_type,
+      COUNT(*) as count
+    FROM subscriptions
+    WHERE status = 'active'
+    GROUP BY plan_type
+    ORDER BY count DESC
+  `).all());
+
+  // Calculate values
+  const visitors = visitorsResult?.count || 0;
+  const signups = signupsResult?.count || 0;
+  const activeUsers = activeUsersResult?.count || 0;
+  const trialUsers = usedAIResult?.count || 0; // Users who tried AI feature
+  const hitLimit = hitLimitResult?.count || 0;
+  const paidUsers = paidUsersResult?.count || 0;
+
+  // Return flat structure that frontend expects
+  return {
+    // Primary metrics (flat structure for frontend)
+    visitors,
+    signups,
+    activeUsers,
+    trialUsers,
+    hitLimit,
+    paidUsers,
+
+    // Conversion rates
+    conversions: {
+      visitorToSignup: visitors > 0 ? Math.round((signups / visitors) * 1000) / 10 : 0,
+      signupToActive: signups > 0 ? Math.round((activeUsers / signups) * 1000) / 10 : 0,
+      activeToTrial: activeUsers > 0 ? Math.round((trialUsers / activeUsers) * 1000) / 10 : 0,
+      trialToLimit: trialUsers > 0 ? Math.round((hitLimit / trialUsers) * 1000) / 10 : 0,
+      limitToPaid: hitLimit > 0 ? Math.round((paidUsers / hitLimit) * 1000) / 10 : 0,
+      overallConversion: visitors > 0 ? Math.round((paidUsers / visitors) * 1000) / 10 : 0
+    },
+
+    // Plan breakdown
+    planBreakdown: planBreakdownResult?.results || [],
+
+    // Auto-generated insights
+    insights: generateFunnelInsights(visitors, signups, activeUsers, trialUsers, hitLimit, paidUsers)
+  };
+}
+
+/**
+ * Generate actionable insights from funnel data
+ */
+function generateFunnelInsights(visitors, signups, activeUsers, trialUsers, hitLimit, paidUsers) {
+  const insights = [];
+
+  // Signup conversion insight
+  const signupRate = visitors > 0 ? (signups / visitors) * 100 : 0;
+  if (signupRate < 5) {
+    insights.push({
+      type: 'warning',
+      stage: 'signup',
+      message: `Only ${signupRate.toFixed(1)}% of visitors sign up. Consider improving landing page and value proposition.`
+    });
+  }
+
+  // Activation insight
+  const activationRate = signups > 0 ? (activeUsers / signups) * 100 : 0;
+  if (activationRate < 50) {
+    insights.push({
+      type: 'warning',
+      stage: 'activation',
+      message: `${(100 - activationRate).toFixed(1)}% of signups never become active. Improve onboarding experience.`
+    });
+  }
+
+  // AI feature adoption
+  const aiRate = activeUsers > 0 ? (trialUsers / activeUsers) * 100 : 0;
+  if (aiRate < 30) {
+    insights.push({
+      type: 'opportunity',
+      stage: 'ai_adoption',
+      message: `Only ${aiRate.toFixed(1)}% of users try the AI feature. Promote "Talk to Quran" more prominently.`
+    });
+  }
+
+  // Limit to paid conversion
+  const limitToPaidRate = hitLimit > 0 ? (paidUsers / hitLimit) * 100 : 0;
+  if (hitLimit > 0 && limitToPaidRate < 10) {
+    insights.push({
+      type: 'opportunity',
+      stage: 'conversion',
+      message: `${hitLimit} users hit the free limit but only ${paidUsers} converted. Consider targeted upgrade prompts.`
+    });
+  }
+
+  // Users hitting limit but not converting
+  const unconverted = hitLimit - paidUsers;
+  if (unconverted > 10) {
+    insights.push({
+      type: 'revenue',
+      stage: 'unconverted',
+      message: `${unconverted} users hit limits but didn't upgrade. Potential MRR: $${unconverted * 3} - $${unconverted * 7}/month.`
+    });
+  }
+
+  return insights;
 }

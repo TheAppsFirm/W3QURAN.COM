@@ -220,33 +220,76 @@ async function incrementFreeDailyUsage(env, userId) {
 
 // Call OpenAI API
 async function callOpenAI(env, message, conversationHistory = []) {
+  // Validate API key exists
+  if (!env.OPENAI_API_KEY) {
+    console.error('[OpenAI] Missing OPENAI_API_KEY');
+    throw new Error('OpenAI API key not configured');
+  }
+
   const messages = [
     { role: 'system', content: SYSTEM_PROMPT },
     ...conversationHistory.slice(-6), // Keep last 6 messages for context
     { role: 'user', content: message }
   ];
 
-  const response = await fetch('https://api.openai.com/v1/chat/completions', {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${env.OPENAI_API_KEY}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      model: 'gpt-4o',
-      messages,
-      max_tokens: 1000,
-      temperature: 0.7,
-    }),
-  });
-
-  if (!response.ok) {
-    const error = await response.text();
-    console.error('[OpenAI] Error:', error);
-    throw new Error('Failed to get AI response');
+  let response;
+  try {
+    response = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${env.OPENAI_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'gpt-4o',
+        messages,
+        max_tokens: 1000,
+        temperature: 0.7,
+      }),
+    });
+  } catch (fetchError) {
+    console.error('[OpenAI] Network error:', fetchError);
+    throw new Error(`Network error connecting to OpenAI: ${fetchError.message}`);
   }
 
-  const data = await response.json();
+  if (!response.ok) {
+    const errorText = await response.text().catch(() => 'Unknown error');
+    console.error('[OpenAI] API Error:', response.status, errorText);
+
+    // Parse error for better messages
+    let errorMessage = 'Failed to get AI response';
+    try {
+      const errorJson = JSON.parse(errorText);
+      if (errorJson.error?.message) {
+        errorMessage = errorJson.error.message;
+      }
+    } catch {
+      // Use status code based messages
+      if (response.status === 401) {
+        errorMessage = 'Invalid OpenAI API key';
+      } else if (response.status === 429) {
+        errorMessage = 'Rate limit exceeded. Please try again in a moment.';
+      } else if (response.status === 500 || response.status === 503) {
+        errorMessage = 'OpenAI service temporarily unavailable';
+      }
+    }
+
+    throw new Error(errorMessage);
+  }
+
+  let data;
+  try {
+    data = await response.json();
+  } catch (jsonError) {
+    console.error('[OpenAI] JSON parse error:', jsonError);
+    throw new Error('Invalid response from OpenAI');
+  }
+
+  if (!data.choices || !data.choices[0] || !data.choices[0].message) {
+    console.error('[OpenAI] Unexpected response format:', data);
+    throw new Error('Unexpected response format from OpenAI');
+  }
+
   return data.choices[0].message.content;
 }
 
@@ -342,7 +385,21 @@ export async function onRequest(context) {
 
   try {
     // Verify user is logged in
-    const user = await verifySession(request, env);
+    let user;
+    try {
+      user = await verifySession(request, env);
+    } catch (sessionError) {
+      console.error('[QuranChat] Session verification error:', sessionError);
+      return new Response(JSON.stringify({
+        error: 'Session verification failed',
+        code: 'SESSION_ERROR',
+        details: sessionError.message
+      }), {
+        status: 500,
+        headers: corsHeaders,
+      });
+    }
+
     if (!user) {
       return new Response(JSON.stringify({
         error: 'Authentication required',
@@ -353,7 +410,23 @@ export async function onRequest(context) {
       });
     }
 
-    const { message, conversationHistory = [], language = 'en', includeTTS = false, voiceLanguage } = await request.json();
+    // Parse request body
+    let body;
+    try {
+      body = await request.json();
+    } catch (parseError) {
+      console.error('[QuranChat] JSON parse error:', parseError);
+      return new Response(JSON.stringify({
+        error: 'Invalid request body',
+        code: 'PARSE_ERROR',
+        details: parseError.message
+      }), {
+        status: 400,
+        headers: corsHeaders,
+      });
+    }
+
+    const { message, conversationHistory = [], language = 'en', includeTTS = false, voiceLanguage } = body;
     const ttsLanguage = voiceLanguage || language; // Use voiceLanguage if provided, otherwise use language
 
     if (!message || message.trim().length === 0) {
@@ -367,10 +440,28 @@ export async function onRequest(context) {
     const isAdmin = isAdminUser(user.email, env);
 
     // Get user credits
-    let credits = await getUserCredits(env, user.user_id);
+    let credits;
+    try {
+      credits = await getUserCredits(env, user.user_id);
+    } catch (creditsError) {
+      console.error('[QuranChat] Credits fetch error:', creditsError);
+      return new Response(JSON.stringify({
+        error: 'Failed to fetch user credits',
+        code: 'CREDITS_ERROR',
+        details: creditsError.message
+      }), {
+        status: 500,
+        headers: corsHeaders,
+      });
+    }
 
     // Check for monthly reset (only for paid users)
-    credits = await checkMonthlyReset(env, user.user_id, credits);
+    try {
+      credits = await checkMonthlyReset(env, user.user_id, credits);
+    } catch (resetError) {
+      console.error('[QuranChat] Monthly reset error:', resetError);
+      // Non-fatal, continue with existing credits
+    }
 
     // Determine access level and check limits
     let accessType = 'paid'; // 'admin' or 'paid'
@@ -405,11 +496,29 @@ export async function onRequest(context) {
     }
 
     // Call OpenAI
-    const aiResponse = await callOpenAI(env, message, conversationHistory);
+    let aiResponse;
+    try {
+      aiResponse = await callOpenAI(env, message, conversationHistory);
+    } catch (openAIError) {
+      console.error('[QuranChat] OpenAI API error:', openAIError);
+      return new Response(JSON.stringify({
+        error: 'AI service temporarily unavailable',
+        code: 'OPENAI_ERROR',
+        details: openAIError.message
+      }), {
+        status: 503,
+        headers: corsHeaders,
+      });
+    }
 
     // Deduct credit for paid users (admin gets free access)
     if (accessType === 'paid') {
-      await useCredit(env, user.user_id);
+      try {
+        await useCredit(env, user.user_id);
+      } catch (creditError) {
+        console.error('[QuranChat] Credit deduction error:', creditError);
+        // Non-fatal, already got response
+      }
     }
     // Admin: no deduction
 
@@ -424,17 +533,22 @@ export async function onRequest(context) {
 
     // Save conversation
     const convId = `conv_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-    await env.DB.prepare(`
-      INSERT INTO quran_conversations (id, user_id, message, response, verses_cited, language)
-      VALUES (?, ?, ?, ?, ?, ?)
-    `).bind(
-      convId,
-      user.user_id,
-      message,
-      aiResponse,
-      JSON.stringify(versesCited),
-      language
-    ).run();
+    try {
+      await env.DB.prepare(`
+        INSERT INTO quran_conversations (id, user_id, message, response, verses_cited, language)
+        VALUES (?, ?, ?, ?, ?, ?)
+      `).bind(
+        convId,
+        user.user_id,
+        message,
+        aiResponse,
+        JSON.stringify(versesCited),
+        language
+      ).run();
+    } catch (saveError) {
+      console.error('[QuranChat] Conversation save error:', saveError);
+      // Non-fatal, continue with response
+    }
 
     // Get updated credits/usage
     const updatedCredits = await getUserCredits(env, user.user_id);
@@ -471,9 +585,26 @@ export async function onRequest(context) {
     });
 
   } catch (error) {
-    console.error('[QuranChat] Error:', error);
+    console.error('[QuranChat] Unhandled error:', error);
+
+    // Provide user-friendly error messages based on error type
+    let userMessage = 'Something went wrong. Please try again.';
+    let errorCode = 'UNKNOWN_ERROR';
+
+    if (error.message?.includes('OpenAI')) {
+      userMessage = 'AI service is temporarily unavailable. Please try again.';
+      errorCode = 'AI_SERVICE_ERROR';
+    } else if (error.message?.includes('network') || error.message?.includes('Network')) {
+      userMessage = 'Network error. Please check your connection.';
+      errorCode = 'NETWORK_ERROR';
+    } else if (error.message?.includes('database') || error.message?.includes('DB')) {
+      userMessage = 'Database error. Please try again.';
+      errorCode = 'DATABASE_ERROR';
+    }
+
     return new Response(JSON.stringify({
-      error: 'Failed to process request',
+      error: userMessage,
+      code: errorCode,
       details: error.message
     }), {
       status: 500,

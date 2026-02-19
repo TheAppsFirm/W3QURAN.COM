@@ -817,6 +817,10 @@ const AnalyticsPanel = () => {
   const [chatLoading, setChatLoading] = useState(false);
   const chatEndRef = useRef(null);
 
+  // Funnel data state
+  const [funnelData, setFunnelData] = useState(null);
+  const [funnelLoading, setFunnelLoading] = useState(false);
+
   // Fetch analytics data
   const fetchAnalytics = useCallback(async () => {
     setLoading(true);
@@ -864,10 +868,29 @@ const AnalyticsPanel = () => {
     }
   }, []);
 
+  // Fetch funnel data
+  const fetchFunnelData = useCallback(async () => {
+    setFunnelLoading(true);
+    try {
+      const response = await fetch(`/api/admin/analytics?period=${period}&metrics=funnel`, {
+        credentials: 'include'
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setFunnelData(data.funnel);
+      }
+    } catch (err) {
+      console.error('Failed to fetch funnel data:', err);
+    } finally {
+      setFunnelLoading(false);
+    }
+  }, [period]);
+
   useEffect(() => {
     fetchAnalytics();
     fetchAiInsights();
-  }, [fetchAnalytics]);
+    fetchFunnelData();
+  }, [fetchAnalytics, fetchFunnelData]);
 
   // Scroll chat to bottom when new messages arrive
   useEffect(() => {
@@ -1350,6 +1373,135 @@ const AnalyticsPanel = () => {
           </div>
         </div>
       )}
+
+      {/* Funnel Analysis */}
+      <div className="bg-gradient-to-r from-indigo-500/10 to-purple-500/10 rounded-2xl p-5 border border-indigo-500/20">
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-500 flex items-center justify-center">
+              <Icons.Filter className="w-5 h-5 text-white" />
+            </div>
+            <div>
+              <h3 className="text-white font-bold">Conversion Funnel</h3>
+              <p className="text-white/50 text-xs">User journey from visitor to paid subscriber</p>
+            </div>
+          </div>
+          <button
+            onClick={fetchFunnelData}
+            disabled={funnelLoading}
+            className="p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors"
+          >
+            <Icons.RefreshCw className={`w-4 h-4 text-white/60 ${funnelLoading ? 'animate-spin' : ''}`} />
+          </button>
+        </div>
+
+        {funnelLoading ? (
+          <div className="flex items-center justify-center h-48">
+            <Icons.Loader className="w-8 h-8 animate-spin text-indigo-400" />
+          </div>
+        ) : funnelData ? (
+          <div className="space-y-4">
+            {/* Funnel Visualization */}
+            <div className="relative">
+              {[
+                { key: 'visitors', label: 'Total Visitors', icon: '👥', color: 'from-blue-500 to-blue-600' },
+                { key: 'signups', label: 'Signed Up', icon: '✍️', color: 'from-cyan-500 to-cyan-600' },
+                { key: 'activeUsers', label: 'Active Users', icon: '⚡', color: 'from-emerald-500 to-emerald-600' },
+                { key: 'trialUsers', label: 'Used AI Feature', icon: '🤖', color: 'from-amber-500 to-amber-600' },
+                { key: 'hitLimit', label: 'Hit Free Limit', icon: '🔥', color: 'from-orange-500 to-orange-600' },
+                { key: 'paidUsers', label: 'Paid Subscribers', icon: '💎', color: 'from-purple-500 to-purple-600' },
+              ].map((step, index, arr) => {
+                const value = funnelData[step.key] || 0;
+                const prevValue = index > 0 ? (funnelData[arr[index - 1].key] || 1) : value;
+                const conversionRate = index > 0 && prevValue > 0 ? Math.round((value / prevValue) * 100) : 100;
+                const totalConversion = funnelData.visitors > 0 ? Math.round((value / funnelData.visitors) * 100) : 0;
+                const width = funnelData.visitors > 0 ? Math.max(20, (value / funnelData.visitors) * 100) : 100;
+
+                return (
+                  <div key={step.key} className="relative mb-2">
+                    {/* Connector line */}
+                    {index > 0 && (
+                      <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 flex flex-col items-center">
+                        <div className="w-0.5 h-2 bg-white/20" />
+                        <span className={`text-[10px] font-medium px-1.5 py-0.5 rounded-full ${
+                          conversionRate >= 50 ? 'bg-green-500/20 text-green-300' :
+                          conversionRate >= 20 ? 'bg-amber-500/20 text-amber-300' :
+                          'bg-red-500/20 text-red-300'
+                        }`}>
+                          {conversionRate}%
+                        </span>
+                      </div>
+                    )}
+
+                    {/* Funnel bar */}
+                    <div
+                      className="mx-auto transition-all duration-500"
+                      style={{ width: `${width}%`, minWidth: '200px' }}
+                    >
+                      <div className={`bg-gradient-to-r ${step.color} rounded-xl p-3 flex items-center justify-between shadow-lg`}>
+                        <div className="flex items-center gap-2">
+                          <span className="text-lg">{step.icon}</span>
+                          <span className="text-white font-medium text-sm">{step.label}</span>
+                        </div>
+                        <div className="text-right">
+                          <span className="text-white font-bold">{value.toLocaleString()}</span>
+                          {index > 0 && (
+                            <span className="text-white/60 text-xs ml-1">({totalConversion}%)</span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Funnel Insights */}
+            <div className="grid grid-cols-3 gap-4 mt-6 pt-4 border-t border-white/10">
+              <div className="text-center">
+                <p className="text-2xl font-bold text-emerald-400">
+                  {funnelData.visitors > 0 ? Math.round((funnelData.signups / funnelData.visitors) * 100) : 0}%
+                </p>
+                <p className="text-white/50 text-xs">Visitor → Signup</p>
+              </div>
+              <div className="text-center">
+                <p className="text-2xl font-bold text-amber-400">
+                  {funnelData.signups > 0 ? Math.round((funnelData.hitLimit / funnelData.signups) * 100) : 0}%
+                </p>
+                <p className="text-white/50 text-xs">Signup → Hit Limit</p>
+              </div>
+              <div className="text-center">
+                <p className="text-2xl font-bold text-purple-400">
+                  {funnelData.hitLimit > 0 ? Math.round((funnelData.paidUsers / funnelData.hitLimit) * 100) : 0}%
+                </p>
+                <p className="text-white/50 text-xs">Hit Limit → Paid</p>
+              </div>
+            </div>
+
+            {/* Optimization Tips */}
+            {funnelData.hitLimit > 0 && funnelData.paidUsers === 0 && (
+              <div className="mt-4 p-3 bg-amber-500/10 border border-amber-500/20 rounded-xl">
+                <div className="flex items-start gap-2">
+                  <span className="text-lg">💡</span>
+                  <div>
+                    <p className="text-amber-300 font-medium text-sm">Conversion Opportunity</p>
+                    <p className="text-white/60 text-xs mt-1">
+                      {funnelData.hitLimit} users hit the free limit but haven't converted.
+                      Consider sending targeted upgrade emails or offering a discount.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        ) : (
+          <div className="text-center py-12">
+            <Icons.Filter className="w-12 h-12 text-white/20 mx-auto mb-3" />
+            <p className="text-white/40 text-sm">No funnel data available yet</p>
+            <p className="text-white/30 text-xs mt-1">Data will appear as users interact with your app</p>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
