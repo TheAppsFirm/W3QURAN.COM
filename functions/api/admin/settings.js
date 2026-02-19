@@ -54,11 +54,13 @@ export async function onRequest(context) {
     // GET - Get current settings
     if (request.method === 'GET') {
       // Check if we have both test and live keys
+      // Live key can be STRIPE_SECRET_KEY_LIVE or STRIPE_SECRET_KEY starting with sk_live_
       const hasTestKey = !!env.STRIPE_SECRET_KEY_TEST;
-      const hasLiveKey = !!env.STRIPE_SECRET_KEY_LIVE;
+      const primaryKey = env.STRIPE_SECRET_KEY || '';
+      const hasLiveKey = !!env.STRIPE_SECRET_KEY_LIVE || primaryKey.startsWith('sk_live_');
 
       // Detect current mode from the active key
-      const currentKey = env.STRIPE_SECRET_KEY || '';
+      const currentKey = primaryKey;
       const isTestMode = currentKey.startsWith('sk_test_');
 
       // Get stored mode preference from KV or fallback
