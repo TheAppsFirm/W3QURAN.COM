@@ -9,6 +9,7 @@ import { Icons } from './Icons';
 import {
   searchQuran,
   searchArabic,
+  searchUrdu,
   getSearchSuggestions,
   getRecentSearches,
   addRecentSearch,
@@ -48,8 +49,8 @@ const SearchResultItem = memo(function SearchResultItem({ result, onSelect }) {
       <div
         className="text-[11px] leading-relaxed text-white/80"
         style={{
-          direction: result.isArabic ? 'rtl' : 'ltr',
-          fontFamily: result.isArabic ? "'Scheherazade New', serif" : 'inherit',
+          direction: (result.isArabic || result.isUrdu) ? 'rtl' : 'ltr',
+          fontFamily: (result.isArabic || result.isUrdu) ? "'Scheherazade New', serif" : 'inherit',
         }}
         dangerouslySetInnerHTML={{ __html: sanitizeHighlight(result.highlighted || result.text) }}
       />
@@ -124,7 +125,7 @@ const SearchPanel = memo(function SearchPanel({ onClose, onSelectResult }) {
     setError(null);
 
     try {
-      const searchFn = searchMode === 'arabic' ? searchArabic : searchQuran;
+      const searchFn = searchMode === 'arabic' ? searchArabic : searchMode === 'urdu' ? searchUrdu : searchQuran;
       const response = await searchFn(searchQuery);
 
       if (response.error) {

@@ -142,6 +142,64 @@ export const searchArabic = async (query, limit = 50) => {
 };
 
 /**
+ * Search in Urdu translation using Quran.com API
+ */
+export const searchUrdu = async (query, limit = 50) => {
+  if (!query || query.trim().length < 2) {
+    return { results: [], total: 0, query };
+  }
+
+  const cacheKey = `urdu_${query}_${limit}`;
+  if (searchCache[cacheKey]) {
+    return searchCache[cacheKey];
+  }
+
+  try {
+    // Use Quran.com search API with Urdu language
+    const response = await fetch(
+      `${QURAN_COM_API}/search?q=${encodeURIComponent(query)}&size=${limit}&language=ur`
+    );
+
+    if (!response.ok) {
+      throw new Error('Urdu search failed');
+    }
+
+    const data = await response.json();
+
+    if (!data.search || !data.search.results) {
+      return { results: [], total: 0, query };
+    }
+
+    const results = data.search.results.map(match => {
+      const [surahId, ayahNumber] = (match.verse_key || '1:1').split(':').map(Number);
+      const surah = SURAHS.find(s => s.id === surahId);
+      return {
+        surahId,
+        surahName: surah?.name || `Surah ${surahId}`,
+        surahArabic: surah?.arabic || '',
+        ayahNumber,
+        text: match.text || '',
+        highlighted: match.highlighted,
+        isUrdu: true,
+      };
+    });
+
+    const result = {
+      results,
+      total: data.search.total_results || results.length,
+      query,
+    };
+
+    searchCache[cacheKey] = result;
+
+    return result;
+  } catch (error) {
+    console.error('Urdu search error:', error);
+    return { results: [], total: 0, query, error: error.message };
+  }
+};
+
+/**
  * Highlight search term in text
  */
 const highlightText = (text, query) => {

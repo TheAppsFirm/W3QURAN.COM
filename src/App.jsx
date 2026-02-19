@@ -1240,6 +1240,7 @@ function QuranBubbleApp() {
         onVideoSync={() => setShowVideoSync(true)}
         onBabyNames={() => setShowBabyNames(true)}
         onTalkToQuran={() => setShowTalkToQuran(true)}
+        onProgress={() => setShowProgressDashboard(true)}
       />
 
       {/* Bubble Modal */}

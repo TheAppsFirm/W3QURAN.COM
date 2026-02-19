@@ -148,7 +148,7 @@ const BubbleMenuItem = ({ item, active, onClick, delay = 0, darkMode }) => {
   );
 };
 
-function FloatingMenu({ view, setView, darkMode, onDonate, onMindMap, onMood, onVideoSync, onBabyNames, onTalkToQuran }) {
+function FloatingMenu({ view, setView, darkMode, onDonate, onMindMap, onMood, onVideoSync, onBabyNames, onTalkToQuran, onProgress }) {
   const [showMore, setShowMore] = useState(false);
   const menuRef = useRef(null);
 
@@ -203,6 +203,8 @@ function FloatingMenu({ view, setView, darkMode, onDonate, onMindMap, onMood, on
       onVideoSync();
     } else if (item.id === 'babynames' && onBabyNames) {
       onBabyNames();
+    } else if (item.id === 'progress' && onProgress) {
+      onProgress();
     } else if (item.id === 'listen') {
       setView('listen');
     } else {
