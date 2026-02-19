@@ -16,4 +16,10 @@ export {
   AlphabetLayout,
   RevelationLayout,
   BookLayout,
+  ListLayout,
+  CompactLayout,
+  HoneycombLayout,
+  WaveLayout,
+  LengthLayout,
+  KidsLayout,
 } from './BubbleLayouts';

@@ -12,7 +12,7 @@
 import React, { Suspense, useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { ErrorBoundary, LoadingSpinner, BubbleModal, BubbleReaderOverlay, ProgressDashboard, OfflineManager, HifzMode, SearchPanel, DonateModal, WordSearchMap, EmotionalTracker, ScholarVideoSync, PropheticMap, QuranCompanionAI, GlobalUmmahPulse, VerseWeatherSync, SoundHealingRoom, QuranicBabyNames, TalkToQuran } from './components/common';
 import { Header, FloatingMenu, StatsBar } from './components/layout';
-import { SurahBubble, LayoutSelector, ClockLayout, GridLayout, JuzzGroupLayout, AlphabetLayout, RevelationLayout, BookLayout } from './components/bubbles';
+import { SurahBubble, LayoutSelector, ClockLayout, GridLayout, JuzzGroupLayout, AlphabetLayout, RevelationLayout, BookLayout, ListLayout, CompactLayout, HoneycombLayout, WaveLayout, LengthLayout, KidsLayout } from './components/bubbles';
 import { AnalyticsPanel } from './components/widgets';
 import {
   NamesOfAllahView,
@@ -265,7 +265,7 @@ function QuranBubbleApp() {
   const [overlayReaderSurah, setOverlayReaderSurah] = useState(null);
   const [initialVerse, setInitialVerse] = useState(1); // For navigating to specific verse
   const [initialPanel, setInitialPanel] = useState(null); // For opening specific panel (tafseer, etc.)
-  // Smart layout default: grid for mobile, spiral for desktop
+  // Grid layout is the default for all devices (cleanest, most stable UI)
   // User's saved preference takes priority (handled by useLocalStorage)
   const getDefaultLayout = () => {
     // Check if user already has a saved preference
@@ -273,8 +273,8 @@ function QuranBubbleApp() {
     if (stored) {
       try { return JSON.parse(stored); } catch { return stored; }
     }
-    // First-time visitor: mobile=grid, desktop=spiral
-    return isMobileDevice() ? 'grid' : 'spiral';
+    // Default: grid for all devices (bubble layouts have UI issues on mobile)
+    return 'grid';
   };
   const [surahLayout, setSurahLayout] = useLocalStorage('surahLayout', getDefaultLayout());
   const [showProgressDashboard, setShowProgressDashboard] = useState(false);
@@ -1085,6 +1085,74 @@ function QuranBubbleApp() {
                   zoom={zoom}
                   contentZoom={contentZoom}
                   darkMode={darkMode}
+                />
+              )}
+
+              {/* List Layout - Simple list view */}
+              {surahLayout === 'list' && (
+                <ListLayout
+                  surahs={filtered}
+                  onSurahClick={handleSelectSurah}
+                  zoom={zoom}
+                  contentZoom={contentZoom}
+                  darkMode={darkMode}
+                />
+              )}
+
+              {/* Compact Layout - Smaller grid */}
+              {surahLayout === 'compact' && (
+                <CompactLayout
+                  surahs={filtered}
+                  onSurahClick={handleSelectSurah}
+                  zoom={zoom}
+                  contentZoom={contentZoom}
+                  darkMode={darkMode}
+                />
+              )}
+
+              {/* Honeycomb Layout */}
+              {surahLayout === 'honeycomb' && (
+                <HoneycombLayout
+                  surahs={filtered}
+                  onSurahClick={handleSelectSurah}
+                  zoom={zoom}
+                  contentZoom={contentZoom}
+                  darkMode={darkMode}
+                />
+              )}
+
+              {/* Wave Layout */}
+              {surahLayout === 'wave' && (
+                <WaveLayout
+                  surahs={filtered}
+                  onSurahClick={handleSelectSurah}
+                  zoom={zoom}
+                  contentZoom={contentZoom}
+                  darkMode={darkMode}
+                />
+              )}
+
+              {/* Length Layout - Sorted by ayah count */}
+              {surahLayout === 'length' && (
+                <LengthLayout
+                  surahs={filtered}
+                  onSurahClick={handleSelectSurah}
+                  zoom={zoom}
+                  contentZoom={contentZoom}
+                  darkMode={darkMode}
+                />
+              )}
+
+              {/* Kids Layouts - Fun and colorful for children */}
+              {(surahLayout === 'kids-rainbow' || surahLayout === 'kids-stars' ||
+                surahLayout === 'kids-blocks' || surahLayout === 'kids-bubbles') && (
+                <KidsLayout
+                  surahs={filtered}
+                  onSurahClick={handleSelectSurah}
+                  zoom={zoom}
+                  contentZoom={contentZoom}
+                  darkMode={darkMode}
+                  variant={surahLayout.replace('kids-', '')}
                 />
               )}
             </div>
