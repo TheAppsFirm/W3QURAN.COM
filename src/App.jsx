@@ -178,6 +178,14 @@ const ROUTE_CONFIG = {
   '/daily-verse': { view: 'daily' },
   '/privacy': { view: 'privacy' },
   '/terms': { view: 'terms' },
+  // Admin routes with tabs
+  '/admin': { view: 'admin', tab: 'overview' },
+  '/admin/overview': { view: 'admin', tab: 'overview' },
+  '/admin/analytics': { view: 'admin', tab: 'analytics' },
+  '/admin/users': { view: 'admin', tab: 'users' },
+  '/admin/logs': { view: 'admin', tab: 'logs' },
+  '/admin/transactions': { view: 'admin', tab: 'transactions' },
+  '/admin/settings': { view: 'admin', tab: 'settings' },
   // Modals/Features
   '/search': { modal: 'search' },
   '/progress': { modal: 'progress' },
@@ -200,6 +208,7 @@ const VIEW_TO_ROUTE = {
   listen: '/listen',
   donate: '/donate',
   settings: '/settings',
+  admin: '/admin',
   names: '/names-of-allah',
   quiz: '/quiz',
   prayer: '/prayer-times',
@@ -283,6 +292,7 @@ function QuranBubbleApp() {
   const [showSoundHealing, setShowSoundHealing] = useState(false);
   const [showBabyNames, setShowBabyNames] = useState(false);
   const [showTalkToQuran, setShowTalkToQuran] = useState(false);
+  const [adminTab, setAdminTab] = useState('overview');
 
   // Track if we're handling a popstate event (browser back/forward)
   const isPopstateRef = useRef(false);
@@ -358,6 +368,10 @@ function QuranBubbleApp() {
       if (config) {
         if (config.view) {
           setView(config.view);
+          // Handle admin tab from route
+          if (config.tab) {
+            setAdminTab(config.tab);
+          }
         } else if (config.modal) {
           setView('surahs'); // Modals open over surahs view
           switch (config.modal) {
@@ -1100,7 +1114,16 @@ function QuranBubbleApp() {
         {view === 'listen' && <ListenView level={level} darkMode={darkMode} />}
         {view === 'donate' && <DonateView darkMode={darkMode} />}
         {view === 'settings' && <SettingsView darkMode={darkMode} setDarkMode={setDarkMode} onNavigate={setView} />}
-        {view === 'admin' && <AdminDashboard onClose={() => setView('settings')} />}
+        {view === 'admin' && (
+          <AdminDashboard
+            onClose={() => setView('settings')}
+            initialTab={adminTab}
+            onTabChange={(tab) => {
+              setAdminTab(tab);
+              updateURL(tab === 'overview' ? '/admin' : `/admin/${tab}`);
+            }}
+          />
+        )}
         {view === 'names' && <NamesOfAllahView darkMode={darkMode} />}
         {view === 'quiz' && <QuizView darkMode={darkMode} onEarnPoints={handleEarnPoints} />}
         {view === 'prayer' && <PrayerTimesView darkMode={darkMode} />}

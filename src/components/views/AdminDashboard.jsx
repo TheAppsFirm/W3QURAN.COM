@@ -1176,7 +1176,7 @@ const AnalyticsPanel = () => {
   );
 };
 
-export default function AdminDashboard({ onClose }) {
+export default function AdminDashboard({ onClose, initialTab = 'overview', onTabChange }) {
   const { user, isAuthenticated, isAdmin, loading: authLoading } = useAuth();
 
   // Check if user is admin (either via isAdmin flag or email check as fallback)
@@ -1190,7 +1190,20 @@ export default function AdminDashboard({ onClose }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterTier, setFilterTier] = useState('');
   const [editingUser, setEditingUser] = useState(null);
-  const [activeTab, setActiveTab] = useState('overview'); // overview, users, transactions, settings
+  const [activeTab, setActiveTab] = useState(initialTab); // overview, users, transactions, settings
+
+  // Handle tab change with URL update
+  const handleTabChange = useCallback((tab) => {
+    setActiveTab(tab);
+    if (onTabChange) {
+      onTabChange(tab);
+    }
+  }, [onTabChange]);
+
+  // Sync activeTab when initialTab changes (browser back/forward)
+  useEffect(() => {
+    setActiveTab(initialTab);
+  }, [initialTab]);
   const [settings, setSettings] = useState(null);
   const [settingsLoading, setSettingsLoading] = useState(false);
   const [settingsSaving, setSettingsSaving] = useState(false);
@@ -1387,7 +1400,7 @@ export default function AdminDashboard({ onClose }) {
           ].map(tab => (
             <button
               key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
+              onClick={() => handleTabChange(tab.id)}
               className={`flex items-center gap-2 py-4 border-b-2 transition-colors ${
                 activeTab === tab.id
                   ? 'border-purple-500 text-white'
