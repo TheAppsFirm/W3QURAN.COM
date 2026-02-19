@@ -41,3 +41,4 @@ coverage/
 *.local
 .cache/
 .wrangler/
+scripts/test-payment-flow.js
