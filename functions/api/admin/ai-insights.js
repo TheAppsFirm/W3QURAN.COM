@@ -66,9 +66,15 @@ export async function onRequest(context) {
     }
 
     if (request.method === 'POST') {
-      // Generate new insights
       const body = await request.json();
       const analysisType = body.analysisType || 'full';
+
+      // Handle chat questions
+      if (analysisType === 'chat') {
+        return await handleChatQuestion(env, body.question, body.context, corsHeaders);
+      }
+
+      // Generate new insights
       return await generateInsights(env, analysisType, corsHeaders);
     }
 
@@ -206,6 +212,85 @@ async function generateInsights(env, analysisType, corsHeaders) {
     status: 200,
     headers: { ...corsHeaders, 'Content-Type': 'application/json' }
   });
+}
+
+/**
+ * Handle chat questions about analytics
+ */
+async function handleChatQuestion(env, question, context, corsHeaders) {
+  if (!question) {
+    return new Response(JSON.stringify({ error: 'Question is required' }), {
+      status: 400,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+    });
+  }
+
+  // Fetch fresh metrics if context not provided
+  const metrics = context || await fetchMetricsForAI(env);
+
+  const systemPrompt = `You are an AI analytics assistant for w3Quran, an Islamic Quran learning app with premium subscriptions.
+
+BUSINESS CONTEXT:
+- Freemium SaaS: Starter ($3/mo), Premium ($7/mo), Scholar ($20/mo), Lifetime ($49 one-time)
+- Key feature: "Talk to Quran" AI-powered Q&A
+- Target: Muslims worldwide, peak during prayer times and Ramadan
+
+You have access to real-time analytics data. Answer questions concisely and actionably. Use specific numbers from the data when relevant. Keep responses under 150 words unless the question requires detail.
+
+If asked for recommendations, prioritize by revenue impact.`;
+
+  const userPrompt = `CURRENT ANALYTICS DATA:
+${JSON.stringify(metrics, null, 2)}
+
+USER QUESTION: ${question}
+
+Please answer based on the analytics data above. Be specific and actionable.`;
+
+  try {
+    const openaiResponse = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${env.OPENAI_API_KEY}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        model: 'gpt-4o',
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: userPrompt }
+        ],
+        temperature: 0.7,
+        max_tokens: 500
+      })
+    });
+
+    if (!openaiResponse.ok) {
+      const error = await openaiResponse.text();
+      console.error('[AI Chat] OpenAI error:', error);
+      throw new Error('Failed to get AI response');
+    }
+
+    const aiResult = await openaiResponse.json();
+    const answer = aiResult.choices[0]?.message?.content;
+
+    return new Response(JSON.stringify({
+      answer: answer || 'I could not generate a response. Please try rephrasing your question.',
+      question,
+      timestamp: new Date().toISOString()
+    }), {
+      status: 200,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+    });
+  } catch (error) {
+    console.error('[AI Chat] Error:', error);
+    return new Response(JSON.stringify({
+      answer: 'Sorry, I encountered an error processing your question. Please try again.',
+      error: error.message
+    }), {
+      status: 500,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+    });
+  }
 }
 
 /**

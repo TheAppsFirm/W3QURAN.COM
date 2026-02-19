@@ -3,7 +3,7 @@
  * Only accessible by admin users (configured via ADMIN_EMAILS env var)
  */
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { Icons } from '../common/Icons';
 import { useAuth } from '../../contexts/AuthContext';
 
@@ -205,11 +205,46 @@ const DeviceInfo = ({ browser, os, device }) => {
   );
 };
 
+// Toast Notification Component
+const Toast = ({ message, type = 'success', onClose }) => {
+  useEffect(() => {
+    const timer = setTimeout(onClose, 4000);
+    return () => clearTimeout(timer);
+  }, [onClose]);
+
+  const colors = {
+    success: 'from-green-500 to-emerald-600 border-green-400',
+    error: 'from-red-500 to-rose-600 border-red-400',
+    info: 'from-blue-500 to-cyan-600 border-blue-400',
+    warning: 'from-amber-500 to-orange-600 border-amber-400'
+  };
+
+  const icons = {
+    success: '✓',
+    error: '✕',
+    info: 'ℹ',
+    warning: '⚠'
+  };
+
+  return (
+    <div className="fixed top-4 right-4 z-[9999] animate-slideDown">
+      <div className={`bg-gradient-to-r ${colors[type]} border rounded-2xl shadow-2xl px-6 py-4 flex items-center gap-3 min-w-[300px]`}>
+        <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-white text-lg font-bold">
+          {icons[type]}
+        </div>
+        <p className="text-white font-medium flex-1">{message}</p>
+        <button onClick={onClose} className="text-white/70 hover:text-white text-xl">&times;</button>
+      </div>
+    </div>
+  );
+};
+
 // Logs Panel Component
 const LogsPanel = () => {
   const [logs, setLogs] = useState([]);
   const [summary, setSummary] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [toast, setToast] = useState(null);
   const [filters, setFilters] = useState({
     level: '',
     type: '',
@@ -290,6 +325,11 @@ const LogsPanel = () => {
     return () => clearInterval(interval);
   }, [autoRefresh, fetchLogs, fetchSummary]);
 
+  // Show toast notification
+  const showToast = (message, type = 'success') => {
+    setToast({ message, type });
+  };
+
   // Clear all logs
   const handleClearAllLogs = async () => {
     if (!confirm('⚠️ Are you sure you want to delete ALL logs? This cannot be undone!')) return;
@@ -300,13 +340,20 @@ const LogsPanel = () => {
       });
       if (response.ok) {
         const data = await response.json();
-        alert(`Successfully cleared all logs (${data.deleted} deleted)`);
+        showToast(
+          data.deleted > 0
+            ? `🧹 Cleared ${data.deleted} logs successfully!`
+            : '✨ Database is already clean - no logs to delete!',
+          data.deleted > 0 ? 'success' : 'info'
+        );
         fetchLogs();
         fetchSummary();
+      } else {
+        showToast('Failed to clear logs. Server error.', 'error');
       }
     } catch (err) {
       console.error('Failed to clear logs:', err);
-      alert('Failed to clear logs. Please try again.');
+      showToast('Failed to clear logs. Please try again.', 'error');
     }
   };
 
@@ -320,6 +367,9 @@ const LogsPanel = () => {
 
   return (
     <div className="space-y-6">
+      {/* Toast Notification */}
+      {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
+
       {/* Summary Cards */}
       {summary && (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -761,6 +811,12 @@ const AnalyticsPanel = () => {
   const [period, setPeriod] = useState('30d');
   const [error, setError] = useState(null);
 
+  // AI Chat state
+  const [chatMessages, setChatMessages] = useState([]);
+  const [chatInput, setChatInput] = useState('');
+  const [chatLoading, setChatLoading] = useState(false);
+  const chatEndRef = useRef(null);
+
   // Fetch analytics data
   const fetchAnalytics = useCallback(async () => {
     setLoading(true);
@@ -812,6 +868,63 @@ const AnalyticsPanel = () => {
     fetchAnalytics();
     fetchAiInsights();
   }, [fetchAnalytics]);
+
+  // Scroll chat to bottom when new messages arrive
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [chatMessages]);
+
+  // Send chat message to AI
+  const sendChatMessage = async () => {
+    if (!chatInput.trim() || chatLoading) return;
+
+    const userMessage = chatInput.trim();
+    setChatInput('');
+    setChatMessages(prev => [...prev, { role: 'user', content: userMessage }]);
+    setChatLoading(true);
+
+    try {
+      const response = await fetch('/api/admin/ai-insights', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          analysisType: 'chat',
+          question: userMessage,
+          context: analytics // Send current analytics data as context
+        }),
+        credentials: 'include'
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setChatMessages(prev => [...prev, {
+          role: 'assistant',
+          content: data.answer || data.insights?.[0]?.description || 'I analyzed your data but couldn\'t generate a specific response. Try asking a different question.'
+        }]);
+      } else {
+        setChatMessages(prev => [...prev, {
+          role: 'assistant',
+          content: 'Sorry, I encountered an error analyzing your request. Please try again.'
+        }]);
+      }
+    } catch (err) {
+      console.error('Chat error:', err);
+      setChatMessages(prev => [...prev, {
+        role: 'assistant',
+        content: 'Failed to connect to AI service. Please try again.'
+      }]);
+    } finally {
+      setChatLoading(false);
+    }
+  };
+
+  // Handle Enter key in chat
+  const handleChatKeyPress = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendChatMessage();
+    }
+  };
 
   // Simple bar chart component
   const SimpleBarChart = ({ data, labelKey, valueKey, color = '#A855F7', maxItems = 10 }) => {
@@ -1016,6 +1129,92 @@ const AnalyticsPanel = () => {
             <p className="text-white/80 text-sm italic">"{aiInsights.summary}"</p>
           </div>
         )}
+      </div>
+
+      {/* AI Chat Interface */}
+      <div className="bg-gradient-to-r from-blue-500/10 to-cyan-500/10 rounded-2xl border border-blue-500/20 overflow-hidden">
+        <div className="p-4 border-b border-white/10 flex items-center gap-3">
+          <div className="w-8 h-8 rounded-lg bg-gradient-to-r from-blue-500 to-cyan-500 flex items-center justify-center">
+            <Icons.MessageCircle className="w-4 h-4 text-white" />
+          </div>
+          <div>
+            <h3 className="text-white font-bold text-sm">Ask Analytics AI</h3>
+            <p className="text-white/50 text-xs">Ask questions about your data</p>
+          </div>
+        </div>
+
+        {/* Chat Messages */}
+        <div className="h-64 overflow-y-auto p-4 space-y-3">
+          {chatMessages.length === 0 ? (
+            <div className="text-center py-8">
+              <Icons.MessageCircle className="w-12 h-12 text-white/20 mx-auto mb-3" />
+              <p className="text-white/40 text-sm mb-4">Ask me anything about your analytics!</p>
+              <div className="flex flex-wrap justify-center gap-2">
+                {[
+                  "What's my top performing surah?",
+                  "How can I increase revenue?",
+                  "Why are users churning?",
+                  "Show me growth trends"
+                ].map((suggestion, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setChatInput(suggestion)}
+                    className="px-3 py-1.5 bg-white/10 hover:bg-white/20 rounded-full text-white/70 text-xs transition-colors"
+                  >
+                    {suggestion}
+                  </button>
+                ))}
+              </div>
+            </div>
+          ) : (
+            chatMessages.map((msg, i) => (
+              <div
+                key={i}
+                className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
+              >
+                <div
+                  className={`max-w-[80%] rounded-2xl px-4 py-2 ${
+                    msg.role === 'user'
+                      ? 'bg-blue-500 text-white'
+                      : 'bg-white/10 text-white/90'
+                  }`}
+                >
+                  <p className="text-sm whitespace-pre-wrap">{msg.content}</p>
+                </div>
+              </div>
+            ))
+          )}
+          {chatLoading && (
+            <div className="flex justify-start">
+              <div className="bg-white/10 rounded-2xl px-4 py-3">
+                <div className="flex items-center gap-2">
+                  <Icons.Loader className="w-4 h-4 animate-spin text-blue-400" />
+                  <span className="text-white/60 text-sm">Analyzing...</span>
+                </div>
+              </div>
+            </div>
+          )}
+          <div ref={chatEndRef} />
+        </div>
+
+        {/* Chat Input */}
+        <div className="p-3 border-t border-white/10 flex gap-2">
+          <input
+            type="text"
+            value={chatInput}
+            onChange={(e) => setChatInput(e.target.value)}
+            onKeyPress={handleChatKeyPress}
+            placeholder="Ask about revenue, users, errors..."
+            className="flex-1 bg-white/10 border border-white/20 rounded-xl px-4 py-2 text-white placeholder-white/40 text-sm focus:outline-none focus:border-blue-500/50"
+          />
+          <button
+            onClick={sendChatMessage}
+            disabled={chatLoading || !chatInput.trim()}
+            className="px-4 py-2 bg-blue-500 hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed rounded-xl text-white transition-colors"
+          >
+            <Icons.Send className="w-4 h-4" />
+          </button>
+        </div>
       </div>
 
       {/* Metrics Grid */}
