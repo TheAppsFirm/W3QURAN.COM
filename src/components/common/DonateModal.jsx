@@ -1,6 +1,6 @@
 /**
  * Donate Modal Component
- * Single Responsibility: Display donation options (PayPal & JazzCash)
+ * Single Responsibility: Display donation options (PayPal, JazzCash & Botim Pay)
  */
 
 import { memo, useState } from 'react';
@@ -17,10 +17,15 @@ const DONATION_CONFIG = {
     accountName: 'Muhammad Zia Shahid',
     enabled: true,
   },
+  botim: {
+    accountName: 'Zia',
+    enabled: true,
+  },
 };
 
 const DonateModal = memo(function DonateModal({ isOpen, onClose }) {
   const [copied, setCopied] = useState(false);
+  const [mobilePayTab, setMobilePayTab] = useState('jazzcash'); // 'jazzcash' or 'botim'
 
   if (!isOpen) return null;
 
@@ -41,7 +46,7 @@ const DonateModal = memo(function DonateModal({ isOpen, onClose }) {
 
       {/* Modal */}
       <div
-        className="relative w-full max-w-sm bg-gradient-to-br from-emerald-600 via-teal-600 to-cyan-600 rounded-3xl p-6 shadow-2xl"
+        className="relative w-full max-w-sm bg-gradient-to-br from-emerald-600 via-teal-600 to-cyan-600 rounded-3xl p-6 shadow-2xl max-h-[90vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
         style={{ animation: 'bubblePopIn 0.3s ease-out' }}
       >
@@ -88,46 +93,109 @@ const DonateModal = memo(function DonateModal({ isOpen, onClose }) {
             </a>
           )}
 
-          {/* JazzCash */}
-          {DONATION_CONFIG.jazzcash.enabled && (
+          {/* Mobile Pay Section with Tabs */}
+          {(DONATION_CONFIG.jazzcash.enabled || DONATION_CONFIG.botim.enabled) && (
             <div className="p-4 bg-white/10 rounded-2xl">
-              <div className="flex items-center gap-4 mb-3">
-                <div className="w-12 h-12 rounded-xl bg-[#ED1C24] flex items-center justify-center shadow-lg">
-                  <span className="text-white font-bold text-lg">JC</span>
-                </div>
-                <div className="flex-1">
-                  <div className="text-white font-semibold">JazzCash</div>
-                  <div className="text-white/60 text-sm">Scan QR Code to Pay</div>
-                </div>
+              {/* Tabs */}
+              <div className="flex gap-2 mb-4">
+                <button
+                  onClick={() => setMobilePayTab('jazzcash')}
+                  className={`flex-1 py-2.5 px-4 rounded-xl font-semibold text-sm transition-all flex items-center justify-center gap-2 ${
+                    mobilePayTab === 'jazzcash'
+                      ? 'bg-[#ED1C24] text-white shadow-lg'
+                      : 'bg-white/10 text-white/70 hover:bg-white/20'
+                  }`}
+                >
+                  <span className="text-lg">🇵🇰</span>
+                  JazzCash
+                </button>
+                <button
+                  onClick={() => setMobilePayTab('botim')}
+                  className={`flex-1 py-2.5 px-4 rounded-xl font-semibold text-sm transition-all flex items-center justify-center gap-2 ${
+                    mobilePayTab === 'botim'
+                      ? 'bg-black text-white shadow-lg'
+                      : 'bg-white/10 text-white/70 hover:bg-white/20'
+                  }`}
+                >
+                  <span className="text-lg">🇦🇪</span>
+                  Botim Pay
+                </button>
               </div>
 
-              {/* JazzCash QR Code */}
-              <div className="bg-white rounded-xl p-3 text-center">
-                <p className="text-gray-700 font-medium text-sm mb-2">
-                  {DONATION_CONFIG.jazzcash.accountName}
-                </p>
-                <img
-                  src="/jazzcash-qr.jpeg"
-                  alt="JazzCash QR Code"
-                  className="w-40 h-40 mx-auto object-contain"
-                />
-                <p className="text-gray-500 text-xs mt-2">Scan with JazzCash App</p>
-                {/* Number with copy button */}
-                <div className="mt-2 pt-2 border-t border-gray-200 flex items-center justify-center gap-2">
-                  <span className="text-gray-600 text-sm font-mono">{DONATION_CONFIG.jazzcash.number}</span>
-                  <button
-                    onClick={copyNumber}
-                    className="p-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 transition-all"
-                    title="Copy number"
-                  >
-                    {copied ? (
-                      <Icons.CheckCircle className="w-4 h-4 text-green-500" />
-                    ) : (
-                      <Icons.Copy className="w-4 h-4 text-gray-500" />
-                    )}
-                  </button>
-                </div>
-              </div>
+              {/* JazzCash Content */}
+              {mobilePayTab === 'jazzcash' && (
+                <>
+                  <div className="flex items-center gap-4 mb-3">
+                    <div className="w-12 h-12 rounded-xl bg-[#ED1C24] flex items-center justify-center shadow-lg">
+                      <span className="text-white font-bold text-lg">JC</span>
+                    </div>
+                    <div className="flex-1">
+                      <div className="text-white font-semibold">JazzCash</div>
+                      <div className="text-white/60 text-sm">Pakistan 🇵🇰</div>
+                    </div>
+                  </div>
+
+                  {/* JazzCash QR Code */}
+                  <div className="bg-white rounded-xl p-3 text-center">
+                    <p className="text-gray-700 font-medium text-sm mb-2">
+                      {DONATION_CONFIG.jazzcash.accountName}
+                    </p>
+                    <img
+                      src="/jazzcash-qr.jpeg"
+                      alt="JazzCash QR Code"
+                      className="w-40 h-40 mx-auto object-contain rounded-lg"
+                    />
+                    <p className="text-gray-500 text-xs mt-2">Scan with JazzCash App</p>
+                    {/* Number with copy button */}
+                    <div className="mt-2 pt-2 border-t border-gray-200 flex items-center justify-center gap-2">
+                      <span className="text-gray-600 text-sm font-mono">{DONATION_CONFIG.jazzcash.number}</span>
+                      <button
+                        onClick={copyNumber}
+                        className="p-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 transition-all"
+                        title="Copy number"
+                      >
+                        {copied ? (
+                          <Icons.CheckCircle className="w-4 h-4 text-green-500" />
+                        ) : (
+                          <Icons.Copy className="w-4 h-4 text-gray-500" />
+                        )}
+                      </button>
+                    </div>
+                  </div>
+                </>
+              )}
+
+              {/* Botim Pay Content */}
+              {mobilePayTab === 'botim' && (
+                <>
+                  <div className="flex items-center gap-4 mb-3">
+                    <div className="w-12 h-12 rounded-xl bg-black flex items-center justify-center shadow-lg">
+                      <span className="text-white font-bold text-sm">botim</span>
+                    </div>
+                    <div className="flex-1">
+                      <div className="text-white font-semibold">Botim Pay</div>
+                      <div className="text-white/60 text-sm">UAE 🇦🇪</div>
+                    </div>
+                  </div>
+
+                  {/* Botim QR Code */}
+                  <div className="bg-black rounded-xl p-4 text-center">
+                    <div className="flex items-center justify-center gap-2 mb-3">
+                      <span className="text-white font-bold text-lg tracking-wider">botim</span>
+                      <span className="bg-white text-black text-xs font-bold px-2 py-0.5 rounded-full">PAY</span>
+                    </div>
+                    <div className="bg-white p-3 rounded-xl inline-block">
+                      <img
+                        src="/botim-qr.png"
+                        alt="Botim Pay QR Code"
+                        className="w-44 h-44 object-contain"
+                      />
+                    </div>
+                    <p className="text-gray-400 text-sm mt-3 font-medium">{DONATION_CONFIG.botim.accountName}</p>
+                    <p className="text-gray-500 text-xs mt-1">Please scan to pay</p>
+                  </div>
+                </>
+              )}
             </div>
           )}
         </div>

@@ -22,4 +22,6 @@ export {
   WaveLayout,
   LengthLayout,
   KidsLayout,
+  LudoLayout,
+  ArtLayout,
 } from './BubbleLayouts';

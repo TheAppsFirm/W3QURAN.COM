@@ -154,6 +154,12 @@ const StatsBar = memo(function StatsBar({
     { id: 'grid', icon: '⊞', label: 'Grid', category: 'standard' },
     { id: 'list', icon: '☰', label: 'List', category: 'standard' },
     { id: 'compact', icon: '▦', label: 'Compact', category: 'standard' },
+    // Kids layouts (fun & interactive) - moved up for easy access
+    { id: 'kids-rainbow', icon: '🌈', label: 'Rainbow', category: 'kids' },
+    { id: 'kids-art', icon: '🎨', label: 'Art Studio', category: 'kids' },
+    { id: 'kids-ludo', icon: '🎲', label: 'Ludo Game', category: 'kids' },
+    { id: 'kids-blocks', icon: '🧱', label: 'Blocks', category: 'kids' },
+    { id: 'kids-bubbles', icon: '🫧', label: 'Bubbles', category: 'kids' },
     // Creative layouts
     { id: 'spiral', icon: '🌀', label: 'Spiral', category: 'creative' },
     { id: 'clock', icon: '🕐', label: 'Clock', category: 'creative' },
@@ -165,11 +171,6 @@ const StatsBar = memo(function StatsBar({
     { id: 'revelation', icon: '📜', label: 'Revelation', category: 'organize' },
     { id: 'book', icon: '📖', label: 'Book', category: 'organize' },
     { id: 'length', icon: '📏', label: 'By Length', category: 'organize' },
-    // Kids layouts (fun & interactive)
-    { id: 'kids-rainbow', icon: '🌈', label: 'Rainbow', category: 'kids' },
-    { id: 'kids-stars', icon: '⭐', label: 'Stars', category: 'kids' },
-    { id: 'kids-blocks', icon: '🧱', label: 'Blocks', category: 'kids' },
-    { id: 'kids-bubbles', icon: '🫧', label: 'Bubbles', category: 'kids' },
   ];
 
   const currentLayout = layouts.find(l => l.id === surahLayout) || layouts[0];
@@ -457,6 +458,26 @@ const StatsBar = memo(function StatsBar({
               </button>
             ))}
 
+            {/* Category: Kids - moved up for easy access */}
+            <div className="text-white/60 text-[10px] font-bold uppercase tracking-wider px-3 py-2 mt-2 flex items-center gap-2 border-t border-white/10 pt-3">
+              <span>👶</span> Kids Mode
+            </div>
+            {layouts.filter(l => l.category === 'kids').map((layout) => (
+              <button
+                key={layout.id}
+                onClick={() => { setSurahLayout(layout.id); setShowLayoutMenu(false); }}
+                className="w-full px-3 py-2 flex items-center gap-3 transition-all rounded-xl hover:bg-white/20"
+                style={{
+                  background: surahLayout === layout.id ? 'rgba(255,255,255,0.3)' : 'transparent',
+                  color: 'white',
+                }}
+              >
+                <span className="text-lg w-7 text-center">{layout.icon}</span>
+                <span className="font-medium text-sm flex-1 text-left">{layout.label}</span>
+                {surahLayout === layout.id && <Icons.Check className="w-4 h-4 text-green-300" />}
+              </button>
+            ))}
+
             {/* Category: Creative */}
             <div className="text-white/60 text-[10px] font-bold uppercase tracking-wider px-3 py-2 mt-2 flex items-center gap-2 border-t border-white/10 pt-3">
               <span>✨</span> Creative
@@ -482,26 +503,6 @@ const StatsBar = memo(function StatsBar({
               <span>📁</span> Organize
             </div>
             {layouts.filter(l => l.category === 'organize').map((layout) => (
-              <button
-                key={layout.id}
-                onClick={() => { setSurahLayout(layout.id); setShowLayoutMenu(false); }}
-                className="w-full px-3 py-2 flex items-center gap-3 transition-all rounded-xl hover:bg-white/20"
-                style={{
-                  background: surahLayout === layout.id ? 'rgba(255,255,255,0.3)' : 'transparent',
-                  color: 'white',
-                }}
-              >
-                <span className="text-lg w-7 text-center">{layout.icon}</span>
-                <span className="font-medium text-sm flex-1 text-left">{layout.label}</span>
-                {surahLayout === layout.id && <Icons.Check className="w-4 h-4 text-green-300" />}
-              </button>
-            ))}
-
-            {/* Category: Kids */}
-            <div className="text-white/60 text-[10px] font-bold uppercase tracking-wider px-3 py-2 mt-2 flex items-center gap-2 border-t border-white/10 pt-3">
-              <span>👶</span> Kids Mode
-            </div>
-            {layouts.filter(l => l.category === 'kids').map((layout) => (
               <button
                 key={layout.id}
                 onClick={() => { setSurahLayout(layout.id); setShowLayoutMenu(false); }}

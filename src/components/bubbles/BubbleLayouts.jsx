@@ -1786,6 +1786,487 @@ export const KidsLayout = memo(function KidsLayout({
   );
 });
 
+// Ludo Layout - Fun board game style for kids
+export const LudoLayout = memo(function LudoLayout({
+  surahs,
+  onSurahClick,
+  zoom = 1,
+  contentZoom = 1,
+  darkMode,
+}) {
+  const [rollingDice, setRollingDice] = useState(false);
+  const [diceValue, setDiceValue] = useState(1);
+  const [highlightedSurah, setHighlightedSurah] = useState(null);
+
+  // Ludo board colors - 4 corners
+  const ludoColors = ['#EF4444', '#22C55E', '#3B82F6', '#FBBF24'];
+
+  // Fun dice emojis
+  const diceEmojis = ['⚀', '⚁', '⚂', '⚃', '⚄', '⚅'];
+
+  // Roll dice animation
+  const rollDice = () => {
+    if (rollingDice) return;
+    setRollingDice(true);
+
+    // Animation
+    let rolls = 0;
+    const interval = setInterval(() => {
+      setDiceValue(Math.floor(Math.random() * 6) + 1);
+      rolls++;
+      if (rolls >= 10) {
+        clearInterval(interval);
+        const finalValue = Math.floor(Math.random() * 6) + 1;
+        setDiceValue(finalValue);
+        setRollingDice(false);
+
+        // Highlight a random surah based on dice
+        const randomIndex = Math.floor(Math.random() * surahs.length);
+        setHighlightedSurah(surahs[randomIndex]?.id);
+        setTimeout(() => setHighlightedSurah(null), 3000);
+      }
+    }, 100);
+  };
+
+  // Get color based on position (like Ludo board quadrants)
+  const getQuadrantColor = (index) => {
+    const quadrant = Math.floor((index / surahs.length) * 4);
+    return ludoColors[quadrant % 4];
+  };
+
+  // Player pieces styles
+  const playerPieces = ['🔴', '🟢', '🔵', '🟡'];
+
+  return (
+    <div className="p-4 sm:p-6 pb-24">
+      {/* Fun Ludo header */}
+      <div className="text-center mb-6">
+        <h2 className="text-2xl sm:text-3xl font-bold">
+          <span className="text-red-500">L</span>
+          <span className="text-green-500">u</span>
+          <span className="text-blue-500">d</span>
+          <span className="text-yellow-500">o</span>
+          <span className={`ml-2 ${darkMode ? 'text-white' : 'text-gray-700'}`}>Quran</span>
+          <span className="ml-2">🎲</span>
+        </h2>
+        <p className="text-base sm:text-lg mt-2" style={{ color: darkMode ? '#FFD700' : '#8B5CF6' }}>
+          Roll the dice and explore! 🎯
+        </p>
+      </div>
+
+      {/* Dice roller section */}
+      <div className="flex justify-center items-center gap-4 mb-6">
+        <button
+          onClick={rollDice}
+          disabled={rollingDice}
+          className={`relative px-6 py-4 rounded-2xl font-bold text-lg transition-all ${
+            rollingDice ? 'animate-bounce' : 'hover:scale-110 active:scale-95'
+          }`}
+          style={{
+            background: 'linear-gradient(145deg, #8B5CF6, #6366F1)',
+            boxShadow: '0 8px 30px rgba(139, 92, 246, 0.4)',
+            color: 'white',
+          }}
+        >
+          <span className="text-4xl mr-2">{diceEmojis[diceValue - 1]}</span>
+          {rollingDice ? 'Rolling...' : 'Roll Dice!'}
+        </button>
+
+        {highlightedSurah && (
+          <div className="animate-bounce text-lg">
+            🎯 Go to Surah {highlightedSurah}!
+          </div>
+        )}
+      </div>
+
+      {/* Ludo board path - circular layout */}
+      <div className="relative mx-auto" style={{ maxWidth: '900px' }}>
+        {/* Corner decorations */}
+        <div className="absolute -top-2 -left-2 text-4xl">🔴</div>
+        <div className="absolute -top-2 -right-2 text-4xl">🟢</div>
+        <div className="absolute -bottom-2 -left-2 text-4xl">🔵</div>
+        <div className="absolute -bottom-2 -right-2 text-4xl">🟡</div>
+
+        {/* Surahs as game pieces on the board */}
+        <div className="flex flex-wrap justify-center gap-3 sm:gap-4 p-4 rounded-3xl"
+          style={{
+            background: darkMode
+              ? 'linear-gradient(145deg, rgba(30,20,50,0.9), rgba(50,30,80,0.9))'
+              : 'linear-gradient(145deg, #f0f9ff, #e0f2fe)',
+            border: '4px solid',
+            borderImage: 'linear-gradient(45deg, #EF4444, #22C55E, #3B82F6, #FBBF24) 1',
+          }}
+        >
+          {surahs.map((surah, index) => {
+            const quadrantColor = getQuadrantColor(index);
+            const isHighlighted = highlightedSurah === surah.id;
+            const size = 85 * zoom;
+            const playerPiece = playerPieces[index % 4];
+
+            return (
+              <div
+                key={surah.id}
+                onClick={(e) => {
+                  playClickSound();
+                  onSurahClick(surah, { x: e.clientX, y: e.clientY });
+                }}
+                className={`cursor-pointer transition-all relative ${
+                  isHighlighted ? 'animate-pulse scale-125 z-20' : 'hover:scale-110 hover:z-10'
+                }`}
+                style={{
+                  width: size,
+                  height: size + 30,
+                  animation: `gentleFloat ${2.5 + (index % 4) * 0.3}s ease-in-out infinite`,
+                }}
+              >
+                {/* Game piece marker */}
+                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 text-2xl z-10"
+                  style={{
+                    animation: isHighlighted ? 'bounce 0.5s infinite' : 'none',
+                  }}
+                >
+                  {playerPiece}
+                </div>
+
+                {/* Surah number badge */}
+                <div
+                  className="absolute -top-1 -left-1 w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-sm z-10 shadow-lg"
+                  style={{
+                    background: quadrantColor,
+                    border: '2px solid white',
+                  }}
+                >
+                  {surah.id}
+                </div>
+
+                {/* Main tile - game board style */}
+                <div
+                  className="w-full h-full rounded-2xl flex flex-col items-center justify-center text-white relative overflow-hidden pt-3"
+                  style={{
+                    background: `linear-gradient(145deg, ${quadrantColor}dd, ${quadrantColor}aa)`,
+                    boxShadow: isHighlighted
+                      ? `0 0 30px ${quadrantColor}, 0 8px 30px rgba(0,0,0,0.3)`
+                      : `0 6px 25px ${quadrantColor}50`,
+                    border: isHighlighted ? '4px solid #FFD700' : '3px solid rgba(255,255,255,0.3)',
+                  }}
+                >
+                  {/* Dots decoration (like ludo board) */}
+                  <div className="absolute top-2 right-2 flex gap-0.5">
+                    <div className="w-1.5 h-1.5 bg-white/40 rounded-full" />
+                    <div className="w-1.5 h-1.5 bg-white/40 rounded-full" />
+                  </div>
+
+                  {/* Arabic name */}
+                  <span
+                    className="font-bold leading-tight text-center drop-shadow-lg"
+                    style={{
+                      fontSize: size * 0.26 * contentZoom,
+                      fontFamily: "'Scheherazade New', 'Amiri', serif",
+                      textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
+                    }}
+                  >
+                    {surah.arabic}
+                  </span>
+
+                  {/* English name */}
+                  <span className="text-white/90 text-[10px] mt-1 font-semibold px-2 text-center leading-tight">
+                    {surah.name}
+                  </span>
+
+                  {/* Ayah count with dice-like dots */}
+                  <div className="flex items-center gap-1 mt-1">
+                    <span className="text-white/70 text-[9px]">{surah.ayahs} ayahs</span>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Fun instructions */}
+      <div className="mt-8 text-center">
+        <div className={`inline-flex flex-wrap items-center justify-center gap-4 p-4 rounded-2xl ${
+          darkMode ? 'bg-white/10' : 'bg-gradient-to-r from-red-50 via-green-50 via-blue-50 to-yellow-50'
+        }`}>
+          <div className="flex items-center gap-2">
+            <span className="text-2xl">🎲</span>
+            <span className={`text-sm ${darkMode ? 'text-white/80' : 'text-gray-600'}`}>Roll to discover!</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="text-2xl">👆</span>
+            <span className={`text-sm ${darkMode ? 'text-white/80' : 'text-gray-600'}`}>Tap to read</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="text-2xl">🏆</span>
+            <span className={`text-sm ${darkMode ? 'text-white/80' : 'text-gray-600'}`}>Complete surahs!</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Encouraging message */}
+      <div className="mt-6 text-center">
+        <p className={`text-sm ${darkMode ? 'text-white/60' : 'text-purple-600'}`}>
+          🎮 Learning Quran is fun! Keep rolling and reading! 📖
+        </p>
+      </div>
+    </div>
+  );
+});
+
+// Art Studio Layout - Creative painting style for kids
+export const ArtLayout = memo(function ArtLayout({
+  surahs,
+  onSurahClick,
+  zoom = 1,
+  contentZoom = 1,
+  darkMode,
+}) {
+  const [selectedTool, setSelectedTool] = useState('brush');
+
+  // Art supply colors - paint palette style
+  const paintColors = [
+    '#FF6B6B', '#FF8E53', '#FFE66D', '#96E6A1', '#4ECDC4',
+    '#45B7D1', '#A78BFA', '#F472B6', '#FB7185', '#C084FC',
+  ];
+
+  // Art tools with emojis
+  const artTools = [
+    { id: 'brush', emoji: '🖌️', label: 'Brush' },
+    { id: 'crayon', emoji: '🖍️', label: 'Crayon' },
+    { id: 'pencil', emoji: '✏️', label: 'Pencil' },
+    { id: 'palette', emoji: '🎨', label: 'Palette' },
+  ];
+
+  // Get style based on selected tool
+  const getCardStyle = (index, surah) => {
+    const color = paintColors[index % paintColors.length];
+    const nextColor = paintColors[(index + 1) % paintColors.length];
+
+    switch (selectedTool) {
+      case 'brush':
+        return {
+          background: `linear-gradient(145deg, ${color}, ${nextColor})`,
+          borderRadius: '24px 8px 24px 8px',
+          boxShadow: `0 8px 30px ${color}50, 4px 4px 0 ${color}40`,
+          border: '3px solid white',
+        };
+      case 'crayon':
+        return {
+          background: `repeating-linear-gradient(45deg, ${color}, ${color} 10px, ${nextColor} 10px, ${nextColor} 20px)`,
+          borderRadius: '20px',
+          boxShadow: `0 6px 20px ${color}40`,
+          border: '4px solid #333',
+        };
+      case 'pencil':
+        return {
+          background: `linear-gradient(135deg, #FEF3C7, #FDE68A)`,
+          borderRadius: '12px',
+          boxShadow: `3px 3px 0 #92400E, 6px 6px 0 #78350F`,
+          border: `3px solid ${color}`,
+        };
+      default: // palette
+        return {
+          background: `conic-gradient(from ${index * 30}deg, ${paintColors.slice(0, 6).join(', ')})`,
+          borderRadius: '50%',
+          boxShadow: `0 8px 30px rgba(0,0,0,0.3), inset 0 2px 0 rgba(255,255,255,0.5)`,
+          border: '4px solid white',
+        };
+    }
+  };
+
+  const size = 95 * zoom;
+
+  return (
+    <div className="p-4 sm:p-6 pb-24" style={{
+      background: darkMode
+        ? 'linear-gradient(145deg, #1a1a2e, #16213e)'
+        : 'linear-gradient(145deg, #FFF7ED, #FEF3C7)',
+    }}>
+      {/* Art Studio Header */}
+      <div className="text-center mb-6">
+        <h2 className="text-2xl sm:text-3xl font-bold flex items-center justify-center gap-2">
+          <span>🎨</span>
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500">
+            Art Studio Quran
+          </span>
+          <span>🖼️</span>
+        </h2>
+        <p className="text-base sm:text-lg mt-2" style={{ color: darkMode ? '#FFD700' : '#8B5CF6' }}>
+          Choose your art tool and paint your journey! 🖌️
+        </p>
+      </div>
+
+      {/* Art Tools Selector */}
+      <div className="flex justify-center gap-3 mb-6">
+        {artTools.map((tool) => (
+          <button
+            key={tool.id}
+            onClick={() => setSelectedTool(tool.id)}
+            className={`flex flex-col items-center gap-1 px-4 py-3 rounded-2xl font-bold transition-all transform hover:scale-110 active:scale-95 ${
+              selectedTool === tool.id
+                ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg scale-105'
+                : darkMode
+                ? 'bg-white/10 text-white/80 hover:bg-white/20'
+                : 'bg-white text-gray-700 hover:bg-gray-100 shadow-md'
+            }`}
+          >
+            <span className="text-2xl">{tool.emoji}</span>
+            <span className="text-xs">{tool.label}</span>
+          </button>
+        ))}
+      </div>
+
+      {/* Paint Palette Color Strip */}
+      <div className="flex justify-center gap-1 mb-6 p-3 rounded-full mx-auto max-w-lg"
+        style={{
+          background: darkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)',
+        }}
+      >
+        {paintColors.map((color, i) => (
+          <div
+            key={i}
+            className="w-6 h-6 sm:w-8 sm:h-8 rounded-full transition-transform hover:scale-125 cursor-pointer"
+            style={{
+              background: color,
+              boxShadow: `0 2px 8px ${color}50`,
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Canvas area with Surahs */}
+      <div className="relative p-6 rounded-3xl mx-auto max-w-5xl"
+        style={{
+          background: darkMode
+            ? 'linear-gradient(145deg, rgba(30,20,50,0.8), rgba(50,30,80,0.8))'
+            : 'linear-gradient(145deg, #FFFFFF, #F3F4F6)',
+          border: `8px solid ${darkMode ? '#4A5568' : '#D4A574'}`,
+          boxShadow: '0 10px 40px rgba(0,0,0,0.2), inset 0 2px 0 rgba(255,255,255,0.1)',
+        }}
+      >
+        {/* Canvas texture overlay */}
+        <div className="absolute inset-0 opacity-10 rounded-2xl pointer-events-none"
+          style={{
+            backgroundImage: 'url("data:image/svg+xml,%3Csvg width="20" height="20" xmlns="http://www.w3.org/2000/svg"%3E%3Cpath d="M0 0h20v20H0z" fill="none"/%3E%3Cpath d="M0 0l20 20M20 0L0 20" stroke="%23000" stroke-width="0.5"/%3E%3C/svg%3E")',
+          }}
+        />
+
+        {/* Easel legs decoration */}
+        <div className="absolute -bottom-6 left-1/4 w-4 h-8 bg-amber-700 rounded-b-lg transform -rotate-12" />
+        <div className="absolute -bottom-6 right-1/4 w-4 h-8 bg-amber-700 rounded-b-lg transform rotate-12" />
+
+        {/* Surahs as art pieces */}
+        <div className="flex flex-wrap justify-center gap-4 sm:gap-5 relative z-10">
+          {surahs.map((surah, index) => (
+            <div
+              key={surah.id}
+              onClick={(e) => {
+                playClickSound();
+                onSurahClick(surah, { x: e.clientX, y: e.clientY });
+              }}
+              className="cursor-pointer transition-all hover:scale-110 hover:rotate-1 active:scale-95 relative group"
+              style={{
+                width: size,
+                height: size + 35,
+                animation: `gentleFloat ${2.5 + (index % 4) * 0.4}s ease-in-out infinite`,
+                animationDelay: `${index * 0.03}s`,
+              }}
+            >
+              {/* Art frame decoration */}
+              <div className="absolute -inset-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"
+                style={{
+                  background: 'linear-gradient(45deg, #FFD700, #FFA500, #FFD700)',
+                  filter: 'blur(2px)',
+                }}
+              />
+
+              {/* Surah number badge - paintbrush style */}
+              <div
+                className="absolute -top-3 -left-3 w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold z-20 shadow-lg"
+                style={{
+                  background: 'linear-gradient(145deg, #FFD700, #FFA500)',
+                  border: '3px solid white',
+                }}
+              >
+                <span className="text-amber-900">{surah.id}</span>
+              </div>
+
+              {/* Paint splatter decoration */}
+              <div className="absolute -top-1 -right-1 text-lg z-10 transform rotate-12">
+                {index % 4 === 0 ? '🎨' : index % 4 === 1 ? '🖌️' : index % 4 === 2 ? '✨' : '🌈'}
+              </div>
+
+              {/* Main card */}
+              <div
+                className="w-full h-full flex flex-col items-center justify-center text-white relative pt-2 transition-all"
+                style={getCardStyle(index, surah)}
+              >
+                {/* Sparkle effect */}
+                <div className="absolute top-2 right-2 text-sm opacity-70 animate-pulse">✨</div>
+
+                {/* Surah name - Arabic */}
+                <span
+                  className="font-bold leading-tight text-center drop-shadow-lg mt-2"
+                  style={{
+                    fontSize: size * 0.28 * contentZoom,
+                    fontFamily: "'Scheherazade New', 'Amiri', serif",
+                    textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
+                    color: selectedTool === 'pencil' ? '#1F2937' : 'white',
+                  }}
+                >
+                  {surah.arabic}
+                </span>
+
+                {/* English name */}
+                <span className={`text-[10px] mt-1 font-semibold px-2 text-center leading-tight ${
+                  selectedTool === 'pencil' ? 'text-gray-700' : 'text-white/90'
+                }`}>
+                  {surah.name}
+                </span>
+
+                {/* Ayah count */}
+                <div className={`flex items-center gap-1 mt-1 text-[9px] ${
+                  selectedTool === 'pencil' ? 'text-gray-500' : 'text-white/70'
+                }`}>
+                  <span>{surah.ayahs} ayahs</span>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Art supplies footer */}
+      <div className="mt-8 text-center">
+        <div className={`inline-flex flex-wrap items-center justify-center gap-4 p-4 rounded-2xl ${
+          darkMode ? 'bg-white/10' : 'bg-white shadow-lg'
+        }`}>
+          <div className="flex items-center gap-2">
+            <span className="text-2xl">🎨</span>
+            <span className={`text-sm ${darkMode ? 'text-white/80' : 'text-gray-600'}`}>Switch tools above!</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="text-2xl">👆</span>
+            <span className={`text-sm ${darkMode ? 'text-white/80' : 'text-gray-600'}`}>Tap to read</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="text-2xl">🖼️</span>
+            <span className={`text-sm ${darkMode ? 'text-white/80' : 'text-gray-600'}`}>Create your masterpiece!</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Encouraging message */}
+      <div className="mt-6 text-center">
+        <p className={`text-sm ${darkMode ? 'text-white/60' : 'text-purple-600'}`}>
+          🎨 Every surah is a beautiful work of art from Allah! Paint your journey! 🖌️
+        </p>
+      </div>
+    </div>
+  );
+});
+
 export default {
   LayoutSelector,
   ClockLayout,
@@ -1800,4 +2281,6 @@ export default {
   WaveLayout,
   LengthLayout,
   KidsLayout,
+  LudoLayout,
+  ArtLayout,
 };

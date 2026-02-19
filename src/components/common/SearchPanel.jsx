@@ -190,13 +190,13 @@ const SearchPanel = memo(function SearchPanel({ onClose, onSelectResult }) {
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder={searchMode === 'arabic' ? 'Search in Arabic...' : 'Search in English...'}
+              placeholder={searchMode === 'arabic' ? 'Search in Arabic...' : searchMode === 'urdu' ? 'اردو میں تلاش کریں...' : 'Search in English...'}
               className="w-full py-2.5 px-4 rounded-xl text-sm"
               style={{
                 background: 'rgba(0,0,0,0.3)',
                 border: '1px solid rgba(255,255,255,0.2)',
                 color: '#fff',
-                direction: searchMode === 'arabic' ? 'rtl' : 'ltr',
+                direction: (searchMode === 'arabic' || searchMode === 'urdu') ? 'rtl' : 'ltr',
               }}
             />
           </div>
@@ -225,12 +225,20 @@ const SearchPanel = memo(function SearchPanel({ onClose, onSelectResult }) {
           English
         </button>
         <button
+          onClick={() => setSearchMode('urdu')}
+          className={`flex-1 py-1.5 rounded-lg text-[11px] font-medium transition-all ${
+            searchMode === 'urdu' ? 'bg-white/20 text-white' : 'text-white/50'
+          }`}
+        >
+          اردو
+        </button>
+        <button
           onClick={() => setSearchMode('arabic')}
           className={`flex-1 py-1.5 rounded-lg text-[11px] font-medium transition-all ${
             searchMode === 'arabic' ? 'bg-white/20 text-white' : 'text-white/50'
           }`}
         >
-          Arabic
+          عربی
         </button>
       </div>
 

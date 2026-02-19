@@ -179,6 +179,7 @@ function FloatingMenu({ view, setView, darkMode, onDonate, onMindMap, onMood, on
     { id: 'videosync', label: 'Video Sync', icon: Icons.Video, gradient: ['#F472B6', '#EC4899'], isSpecial: true },
     { id: 'babynames', label: 'Baby Names', icon: Icons.Baby, gradient: ['#F59E0B', '#EA580C'], isSpecial: true },
     // Regular features
+    { id: 'progress', label: 'Progress', icon: Icons.BarChart, gradient: ['#8b5cf6', '#a855f7'] },
     { id: 'daily', label: 'Daily Verse', icon: Icons.Sun, gradient: ['#f59e0b', '#eab308'] },
     { id: 'names', label: '99 Names', icon: Icons.Sparkles, gradient: ['#8b5cf6', '#a855f7'] },
     { id: 'quiz', label: 'Quiz', icon: Icons.HelpCircle, gradient: ['#ec4899', '#f43f5e'] },
