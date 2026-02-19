@@ -39,6 +39,11 @@ const isSafari = typeof navigator !== 'undefined' && /^((?!chrome|android).)*saf
 const isIOS = typeof navigator !== 'undefined' && /iPad|iPhone|iPod/.test(navigator.userAgent);
 const isMobileSafari = isSafari || isIOS;
 
+// Progressive loading constants to prevent memory crashes on large surahs (especially Safari)
+const INITIAL_VERSE_CHUNK = isMobileSafari ? 20 : 50; // Start with fewer verses on Safari
+const VERSE_CHUNK_SIZE = isMobileSafari ? 15 : 30; // Load fewer at a time on Safari
+const LARGE_SURAH_THRESHOLD = 50; // Surahs with more verses than this use progressive loading
+
 // Memory monitoring for Safari
 const checkMemoryPressure = () => {
   if (typeof performance !== 'undefined' && performance.memory) {
@@ -1534,6 +1539,12 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
   const prefetchAbortRef = useRef(null); // AbortController for canceling prefetch
   const prefetchingRef = useRef(new Set()); // Currently prefetching URLs
 
+  // Progressive loading state for large surahs (prevents Safari crashes)
+  const [visibleVerseCount, setVisibleVerseCount] = useState(INITIAL_VERSE_CHUNK);
+  const [isLoadingMoreVerses, setIsLoadingMoreVerses] = useState(false);
+  const loadMoreTriggerRef = useRef(null); // IntersectionObserver target
+  const isLargeSurah = (surah?.ayahs || 0) > LARGE_SURAH_THRESHOLD;
+
   // Log surah open event
   useEffect(() => {
     if (surah?.id) {
@@ -1546,6 +1557,50 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
       }
     };
   }, [surah?.id]);
+
+  // Reset visible verse count when surah changes
+  useEffect(() => {
+    setVisibleVerseCount(INITIAL_VERSE_CHUNK);
+    setIsLoadingMoreVerses(false);
+  }, [surah?.id]);
+
+  // Progressive loading: IntersectionObserver to load more verses on scroll
+  useEffect(() => {
+    if (!isLargeSurah || !loadMoreTriggerRef.current) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const [entry] = entries;
+        if (entry.isIntersecting && !isLoadingMoreVerses) {
+          const totalVerseCount = surah?.ayahs || 0;
+          if (visibleVerseCount < totalVerseCount) {
+            setIsLoadingMoreVerses(true);
+            // Use requestAnimationFrame to batch DOM updates
+            requestAnimationFrame(() => {
+              setVisibleVerseCount(prev => {
+                const newCount = Math.min(prev + VERSE_CHUNK_SIZE, totalVerseCount);
+                logger.performance(`Progressive load: ${prev} -> ${newCount} verses`, {
+                  surahId: surah?.id,
+                  totalVerses: totalVerseCount,
+                  isSafari: isMobileSafari
+                });
+                return newCount;
+              });
+              setIsLoadingMoreVerses(false);
+            });
+          }
+        }
+      },
+      { rootMargin: '200px', threshold: 0.1 }
+    );
+
+    const trigger = loadMoreTriggerRef.current;
+    if (trigger) observer.observe(trigger);
+
+    return () => {
+      if (trigger) observer.unobserve(trigger);
+    };
+  }, [isLargeSurah, visibleVerseCount, isLoadingMoreVerses, surah?.id, surah?.ayahs]);
 
   // Get language code from translation for TTS
   const ttsLanguage = useMemo(() => {
@@ -2221,6 +2276,15 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
     versesRef.current = verses;
   }, [verses]);
 
+  // Progressive loading: expand visible verses when currentAyah approaches the limit
+  useEffect(() => {
+    if (!isLargeSurah) return;
+    // Load more when within 5 verses of the visible limit
+    if (currentAyah >= visibleVerseCount - 5 && visibleVerseCount < verses.length) {
+      setVisibleVerseCount(prev => Math.min(prev + VERSE_CHUNK_SIZE, verses.length));
+    }
+  }, [currentAyah, isLargeSurah, visibleVerseCount, verses.length]);
+
   // Effect to restart audio when narrator changes while playing
   useEffect(() => {
     const prevNarrator = prevNarratorRef.current;
@@ -2296,6 +2360,12 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
     const targetVerse = Math.min(Math.max(1, initialVerse), verses.length || 1);
 
     if (targetVerse > 1 && verses.length > 0 && versesContainerRef.current) {
+      // For progressive loading: ensure enough verses are loaded to show target
+      if (isLargeSurah && targetVerse > visibleVerseCount) {
+        // Expand visible count to include target verse + buffer
+        setVisibleVerseCount(Math.min(targetVerse + VERSE_CHUNK_SIZE, verses.length));
+      }
+
       // Set current ayah to the initial verse
       setCurrentAyah(targetVerse);
 
@@ -2323,7 +2393,7 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
         clearTimeout(highlightTimer);
       };
     }
-  }, [initialVerse, verses.length]);
+  }, [initialVerse, verses.length, isLargeSurah, visibleVerseCount]);
 
   // Effect to handle continuous translation playback (translation-only mode, NOT combined mode)
   useEffect(() => {
@@ -3537,10 +3607,16 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
                       </div>
                     )}
 
-                    {verses.map((verse, index) => {
+                    {/* Progressive loading: only render visibleVerseCount verses for large surahs */}
+                    {(isLargeSurah ? verses.slice(0, visibleVerseCount) : verses).map((verse, index) => {
+                      // Safety check: skip invalid verses
+                      if (!verse || !verse.arabic) {
+                        logger.error('Invalid verse data', { surahId: surah?.id, index, verse });
+                        return null;
+                      }
                       const ayahNum = verse.number || index + 1;
                       const isCurrentAyah = currentAyah === ayahNum;
-                      const arabicWords = verse.arabic.split(' ').filter(w => w.trim());
+                      const arabicWords = (verse.arabic || '').split(' ').filter(w => w.trim());
                       const wordMeanings = wordsMap[ayahNum] || [];
                       const hideLevel = memorizeSettings.hideLevel || 0;
                       const shouldHideWord = (wordIdx) => {
@@ -3716,6 +3792,27 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
                         </div>
                       );
                     })}
+
+                    {/* Progressive loading trigger and indicator for large surahs */}
+                    {isLargeSurah && visibleVerseCount < verses.length && (
+                      <div
+                        ref={loadMoreTriggerRef}
+                        className="py-4 text-center"
+                      >
+                        {isLoadingMoreVerses ? (
+                          <div className="flex items-center justify-center gap-2">
+                            <Icons.Loader className="w-4 h-4 animate-spin text-white/60" />
+                            <span className="text-xs text-white/60">Loading more verses...</span>
+                          </div>
+                        ) : (
+                          <div className="text-xs text-white/40">
+                            Showing {visibleVerseCount} of {verses.length} verses
+                            <span className="block text-[10px] mt-1">Scroll down for more</span>
+                          </div>
+                        )}
+                      </div>
+                    )}
+
                     <div className="h-4" />
                   </div>
                 )}
