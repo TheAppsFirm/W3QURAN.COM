@@ -137,6 +137,537 @@ const UserCard = ({ user, onEdit }) => (
   </div>
 );
 
+// Log Level Badge
+const LogLevelBadge = ({ level }) => {
+  const colors = {
+    debug: 'bg-gray-500/20 text-gray-300',
+    info: 'bg-blue-500/20 text-blue-300',
+    warn: 'bg-amber-500/20 text-amber-300',
+    error: 'bg-red-500/20 text-red-300',
+    critical: 'bg-red-600/30 text-red-200 border border-red-500/50',
+  };
+
+  return (
+    <span className={`px-2 py-0.5 rounded-full text-xs font-medium uppercase ${colors[level] || colors.info}`}>
+      {level}
+    </span>
+  );
+};
+
+// Log Type Badge
+const LogTypeBadge = ({ type }) => {
+  const colors = {
+    error: 'text-red-400',
+    crash: 'text-red-500',
+    performance: 'text-amber-400',
+    memory: 'text-orange-400',
+    audio: 'text-purple-400',
+    api: 'text-blue-400',
+    action: 'text-green-400',
+    navigation: 'text-cyan-400',
+    feature: 'text-pink-400',
+    talk_to_quran: 'text-indigo-400',
+    treebank: 'text-teal-400',
+  };
+
+  return (
+    <span className={`text-xs font-medium ${colors[type] || 'text-white/60'}`}>
+      {type}
+    </span>
+  );
+};
+
+// Browser/OS Icon
+const DeviceInfo = ({ browser, os, device }) => {
+  const browserIcons = {
+    chrome: '🌐',
+    safari: '🧭',
+    firefox: '🦊',
+    edge: '📘',
+  };
+  const osIcons = {
+    ios: '📱',
+    android: '🤖',
+    macos: '🍎',
+    windows: '🪟',
+    linux: '🐧',
+  };
+
+  return (
+    <div className="flex items-center gap-1 text-xs text-white/50">
+      <span>{browserIcons[browser] || '🌐'}</span>
+      <span>{browser}</span>
+      <span className="mx-1">•</span>
+      <span>{osIcons[os] || '💻'}</span>
+      <span>{os}</span>
+      {device === 'mobile' && <span className="ml-1">📱</span>}
+    </div>
+  );
+};
+
+// Logs Panel Component
+const LogsPanel = () => {
+  const [logs, setLogs] = useState([]);
+  const [summary, setSummary] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [filters, setFilters] = useState({
+    level: '',
+    type: '',
+    browser: '',
+    os: '',
+    surah: '',
+    search: '',
+    hours: 24,
+    view: '', // 'errors', 'performance', ''
+  });
+  const [pagination, setPagination] = useState({ total: 0, limit: 50, offset: 0 });
+  const [autoRefresh, setAutoRefresh] = useState(false);
+  const [expandedLog, setExpandedLog] = useState(null);
+
+  // Fetch logs
+  const fetchLogs = useCallback(async () => {
+    try {
+      const params = new URLSearchParams({
+        hours: filters.hours.toString(),
+        limit: pagination.limit.toString(),
+        offset: pagination.offset.toString(),
+        ...(filters.level && { level: filters.level }),
+        ...(filters.type && { type: filters.type }),
+        ...(filters.browser && { browser: filters.browser }),
+        ...(filters.os && { os: filters.os }),
+        ...(filters.surah && { surah: filters.surah }),
+        ...(filters.search && { search: filters.search }),
+        ...(filters.view && { view: filters.view }),
+      });
+
+      const response = await fetch(`/api/admin/logs?${params}`, { credentials: 'include' });
+      if (response.ok) {
+        const data = await response.json();
+        setLogs(data.logs || []);
+        setPagination(prev => ({ ...prev, total: data.total || 0 }));
+      }
+    } catch (err) {
+      console.error('Failed to fetch logs:', err);
+    }
+  }, [filters, pagination.limit, pagination.offset]);
+
+  // Fetch summary
+  const fetchSummary = useCallback(async () => {
+    try {
+      const response = await fetch(`/api/admin/logs?view=summary&hours=${filters.hours}`, { credentials: 'include' });
+      if (response.ok) {
+        const data = await response.json();
+        setSummary(data);
+      }
+    } catch (err) {
+      console.error('Failed to fetch summary:', err);
+    }
+  }, [filters.hours]);
+
+  // Initial load
+  useEffect(() => {
+    setLoading(true);
+    Promise.all([fetchLogs(), fetchSummary()]).finally(() => setLoading(false));
+  }, []);
+
+  // Refetch on filter change
+  useEffect(() => {
+    fetchLogs();
+  }, [filters, pagination.offset]);
+
+  // Refetch summary on hours change
+  useEffect(() => {
+    fetchSummary();
+  }, [filters.hours]);
+
+  // Auto-refresh
+  useEffect(() => {
+    if (!autoRefresh) return;
+    const interval = setInterval(() => {
+      fetchLogs();
+      fetchSummary();
+    }, 10000);
+    return () => clearInterval(interval);
+  }, [autoRefresh, fetchLogs, fetchSummary]);
+
+  // Delete old logs
+  const handleDeleteOldLogs = async (days) => {
+    if (!confirm(`Delete logs older than ${days} days?`)) return;
+    try {
+      const response = await fetch(`/api/admin/logs?days=${days}`, {
+        method: 'DELETE',
+        credentials: 'include',
+      });
+      if (response.ok) {
+        const data = await response.json();
+        alert(`Deleted ${data.deleted} old logs`);
+        fetchLogs();
+        fetchSummary();
+      }
+    } catch (err) {
+      console.error('Failed to delete logs:', err);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="w-8 h-8 border-2 border-purple-500 border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-6">
+      {/* Summary Cards */}
+      {summary && (
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <StatCard
+            title="Total Errors"
+            value={summary.totals?.total_errors || 0}
+            subtitle={`${summary.totals?.total_logs || 0} total logs`}
+            icon={Icons.AlertCircle}
+            color="#EF4444"
+          />
+          <StatCard
+            title="Unique Sessions"
+            value={summary.totals?.unique_sessions || 0}
+            subtitle={`Last ${filters.hours}h`}
+            icon={Icons.Users}
+            color="#8B5CF6"
+          />
+          <StatCard
+            title="Memory Warnings"
+            value={summary.memoryWarnings?.count || 0}
+            subtitle={summary.memoryWarnings?.max_percent ? `Max: ${summary.memoryWarnings.max_percent}%` : 'No warnings'}
+            icon={Icons.Cpu}
+            color="#F59E0B"
+          />
+          <StatCard
+            title="Actions Logged"
+            value={summary.totals?.total_actions || 0}
+            subtitle="Feature usage"
+            icon={Icons.Activity}
+            color="#10B981"
+          />
+        </div>
+      )}
+
+      {/* Error Breakdown */}
+      {summary && (summary.errorsByBrowser?.length > 0 || summary.errorsBySurah?.length > 0) && (
+        <div className="grid md:grid-cols-2 gap-4">
+          {/* Errors by Browser */}
+          {summary.errorsByBrowser?.length > 0 && (
+            <div className="bg-white/5 rounded-2xl p-4 border border-white/10">
+              <h4 className="text-white font-medium mb-3 flex items-center gap-2">
+                <Icons.Globe className="w-4 h-4 text-blue-400" />
+                Errors by Browser
+              </h4>
+              <div className="space-y-2">
+                {summary.errorsByBrowser.map(({ browser, count }) => (
+                  <div key={browser} className="flex items-center justify-between">
+                    <span className="text-white/70 text-sm capitalize">{browser || 'Unknown'}</span>
+                    <span className="text-red-400 font-medium">{count}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Errors by Surah */}
+          {summary.errorsBySurah?.length > 0 && (
+            <div className="bg-white/5 rounded-2xl p-4 border border-white/10">
+              <h4 className="text-white font-medium mb-3 flex items-center gap-2">
+                <Icons.BookOpen className="w-4 h-4 text-emerald-400" />
+                Crashes by Surah
+              </h4>
+              <div className="space-y-2">
+                {summary.errorsBySurah.map(({ surah_id, count }) => (
+                  <div key={surah_id} className="flex items-center justify-between">
+                    <span className="text-white/70 text-sm">Surah {surah_id}</span>
+                    <span className="text-red-400 font-medium">{count}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Top Errors */}
+      {summary?.topErrors?.length > 0 && (
+        <div className="bg-white/5 rounded-2xl p-4 border border-white/10">
+          <h4 className="text-white font-medium mb-3 flex items-center gap-2">
+            <Icons.AlertTriangle className="w-4 h-4 text-red-400" />
+            Top Error Messages
+          </h4>
+          <div className="space-y-2 max-h-48 overflow-y-auto">
+            {summary.topErrors.slice(0, 10).map((err, i) => (
+              <div key={i} className="flex items-start justify-between gap-4 py-2 border-b border-white/5 last:border-0">
+                <span className="text-white/70 text-sm truncate flex-1">{err.message}</span>
+                <div className="flex items-center gap-2 flex-shrink-0">
+                  <span className="text-red-400 font-medium text-sm">{err.count}x</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Filters */}
+      <div className="bg-white/5 rounded-2xl p-4 border border-white/10">
+        <div className="flex flex-wrap gap-3 items-center">
+          {/* Time Range */}
+          <select
+            value={filters.hours}
+            onChange={(e) => setFilters(f => ({ ...f, hours: parseInt(e.target.value) }))}
+            className="px-3 py-2 rounded-lg bg-white/10 border border-white/20 text-white text-sm"
+          >
+            <option value="1">Last 1 hour</option>
+            <option value="6">Last 6 hours</option>
+            <option value="24">Last 24 hours</option>
+            <option value="48">Last 48 hours</option>
+            <option value="168">Last 7 days</option>
+          </select>
+
+          {/* Quick Filters */}
+          <div className="flex gap-2">
+            <button
+              onClick={() => setFilters(f => ({ ...f, view: f.view === 'errors' ? '' : 'errors', level: '', type: '' }))}
+              className={`px-3 py-2 rounded-lg text-sm transition-colors ${
+                filters.view === 'errors' ? 'bg-red-500/30 text-red-300 border border-red-500/50' : 'bg-white/10 text-white/70 hover:bg-white/20'
+              }`}
+            >
+              🔴 Errors Only
+            </button>
+            <button
+              onClick={() => setFilters(f => ({ ...f, view: f.view === 'performance' ? '' : 'performance', level: '', type: '' }))}
+              className={`px-3 py-2 rounded-lg text-sm transition-colors ${
+                filters.view === 'performance' ? 'bg-amber-500/30 text-amber-300 border border-amber-500/50' : 'bg-white/10 text-white/70 hover:bg-white/20'
+              }`}
+            >
+              ⚡ Performance
+            </button>
+          </div>
+
+          {/* Level Filter */}
+          <select
+            value={filters.level}
+            onChange={(e) => setFilters(f => ({ ...f, level: e.target.value, view: '' }))}
+            className="px-3 py-2 rounded-lg bg-white/10 border border-white/20 text-white text-sm"
+          >
+            <option value="">All Levels</option>
+            <option value="critical">Critical</option>
+            <option value="error">Error</option>
+            <option value="warn">Warning</option>
+            <option value="info">Info</option>
+            <option value="debug">Debug</option>
+          </select>
+
+          {/* Type Filter */}
+          <select
+            value={filters.type}
+            onChange={(e) => setFilters(f => ({ ...f, type: e.target.value, view: '' }))}
+            className="px-3 py-2 rounded-lg bg-white/10 border border-white/20 text-white text-sm"
+          >
+            <option value="">All Types</option>
+            <option value="crash">Crash</option>
+            <option value="error">Error</option>
+            <option value="audio">Audio</option>
+            <option value="api">API</option>
+            <option value="memory">Memory</option>
+            <option value="performance">Performance</option>
+            <option value="navigation">Navigation</option>
+            <option value="action">Action</option>
+            <option value="feature">Feature</option>
+            <option value="talk_to_quran">Talk to Quran</option>
+            <option value="treebank">Treebank</option>
+          </select>
+
+          {/* Browser Filter */}
+          <select
+            value={filters.browser}
+            onChange={(e) => setFilters(f => ({ ...f, browser: e.target.value }))}
+            className="px-3 py-2 rounded-lg bg-white/10 border border-white/20 text-white text-sm"
+          >
+            <option value="">All Browsers</option>
+            <option value="safari">Safari</option>
+            <option value="chrome">Chrome</option>
+            <option value="firefox">Firefox</option>
+            <option value="edge">Edge</option>
+          </select>
+
+          {/* OS Filter */}
+          <select
+            value={filters.os}
+            onChange={(e) => setFilters(f => ({ ...f, os: e.target.value }))}
+            className="px-3 py-2 rounded-lg bg-white/10 border border-white/20 text-white text-sm"
+          >
+            <option value="">All OS</option>
+            <option value="ios">iOS</option>
+            <option value="android">Android</option>
+            <option value="macos">macOS</option>
+            <option value="windows">Windows</option>
+          </select>
+
+          {/* Surah Filter */}
+          <input
+            type="number"
+            placeholder="Surah #"
+            value={filters.surah}
+            onChange={(e) => setFilters(f => ({ ...f, surah: e.target.value }))}
+            className="w-20 px-3 py-2 rounded-lg bg-white/10 border border-white/20 text-white text-sm placeholder-white/40"
+            min="1"
+            max="114"
+          />
+
+          {/* Search */}
+          <div className="relative flex-1 min-w-[150px]">
+            <Icons.Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+            <input
+              type="text"
+              placeholder="Search messages..."
+              value={filters.search}
+              onChange={(e) => setFilters(f => ({ ...f, search: e.target.value }))}
+              className="w-full pl-10 pr-4 py-2 rounded-lg bg-white/10 border border-white/20 text-white placeholder-white/40 text-sm"
+            />
+          </div>
+
+          {/* Auto-refresh toggle */}
+          <button
+            onClick={() => setAutoRefresh(!autoRefresh)}
+            className={`px-3 py-2 rounded-lg text-sm flex items-center gap-2 transition-colors ${
+              autoRefresh ? 'bg-green-500/30 text-green-300' : 'bg-white/10 text-white/70 hover:bg-white/20'
+            }`}
+          >
+            <div className={`w-2 h-2 rounded-full ${autoRefresh ? 'bg-green-400 animate-pulse' : 'bg-white/40'}`} />
+            Auto
+          </button>
+
+          {/* Refresh */}
+          <button
+            onClick={() => { fetchLogs(); fetchSummary(); }}
+            className="px-3 py-2 rounded-lg bg-white/10 text-white/70 hover:bg-white/20 transition-colors"
+          >
+            <Icons.RefreshCw className="w-4 h-4" />
+          </button>
+
+          {/* Delete old logs */}
+          <button
+            onClick={() => handleDeleteOldLogs(7)}
+            className="px-3 py-2 rounded-lg bg-red-500/20 text-red-300 hover:bg-red-500/30 transition-colors text-sm"
+          >
+            🗑️ Clean 7d+
+          </button>
+        </div>
+      </div>
+
+      {/* Logs Table */}
+      <div className="bg-white/5 rounded-2xl border border-white/10 overflow-hidden">
+        <div className="p-4 border-b border-white/10 flex items-center justify-between">
+          <h3 className="text-lg font-bold text-white">
+            Logs ({pagination.total})
+          </h3>
+        </div>
+
+        <div className="overflow-x-auto max-h-[500px] overflow-y-auto">
+          <table className="w-full">
+            <thead className="sticky top-0 bg-slate-800">
+              <tr className="border-b border-white/10 bg-white/5">
+                <th className="text-left py-3 px-4 text-white/60 text-xs font-medium">Time</th>
+                <th className="text-left py-3 px-4 text-white/60 text-xs font-medium">Level</th>
+                <th className="text-left py-3 px-4 text-white/60 text-xs font-medium">Type</th>
+                <th className="text-left py-3 px-4 text-white/60 text-xs font-medium">Message</th>
+                <th className="text-left py-3 px-4 text-white/60 text-xs font-medium">Device</th>
+                <th className="text-left py-3 px-4 text-white/60 text-xs font-medium">Surah</th>
+                <th className="text-left py-3 px-4 text-white/60 text-xs font-medium">Memory</th>
+              </tr>
+            </thead>
+            <tbody>
+              {logs.length === 0 ? (
+                <tr>
+                  <td colSpan="7" className="py-8 text-center text-white/50">
+                    No logs found matching filters
+                  </td>
+                </tr>
+              ) : logs.map((log) => (
+                <tr
+                  key={log.id}
+                  className={`border-b border-white/5 hover:bg-white/5 cursor-pointer transition-colors ${
+                    expandedLog === log.id ? 'bg-white/10' : ''
+                  } ${log.log_level === 'error' || log.log_level === 'critical' ? 'bg-red-500/5' : ''}`}
+                  onClick={() => setExpandedLog(expandedLog === log.id ? null : log.id)}
+                >
+                  <td className="py-2 px-4 text-white/50 text-xs whitespace-nowrap">
+                    {new Date(log.created_at).toLocaleString()}
+                  </td>
+                  <td className="py-2 px-4">
+                    <LogLevelBadge level={log.log_level} />
+                  </td>
+                  <td className="py-2 px-4">
+                    <LogTypeBadge type={log.log_type} />
+                  </td>
+                  <td className="py-2 px-4 text-white/80 text-sm max-w-xs truncate">
+                    {log.message}
+                  </td>
+                  <td className="py-2 px-4">
+                    <DeviceInfo browser={log.browser} os={log.os} device={log.device} />
+                  </td>
+                  <td className="py-2 px-4 text-white/60 text-xs">
+                    {log.surah_id ? `${log.surah_id}:${log.ayah_num || '?'}` : '-'}
+                  </td>
+                  <td className="py-2 px-4 text-white/60 text-xs">
+                    {log.memory_percent ? (
+                      <span className={log.memory_percent > 70 ? 'text-amber-400' : ''}>
+                        {log.memory_percent}%
+                      </span>
+                    ) : '-'}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Expanded Log Details */}
+        {expandedLog && logs.find(l => l.id === expandedLog) && (
+          <div className="p-4 bg-white/5 border-t border-white/10">
+            <h4 className="text-white font-medium mb-2">Log Details</h4>
+            <pre className="text-white/70 text-xs bg-black/30 p-3 rounded-lg overflow-x-auto max-h-64 overflow-y-auto">
+              {JSON.stringify(logs.find(l => l.id === expandedLog), null, 2)}
+            </pre>
+          </div>
+        )}
+
+        {/* Pagination */}
+        {pagination.total > pagination.limit && (
+          <div className="p-4 border-t border-white/10 flex items-center justify-between">
+            <p className="text-white/50 text-sm">
+              Showing {pagination.offset + 1}-{Math.min(pagination.offset + pagination.limit, pagination.total)} of {pagination.total}
+            </p>
+            <div className="flex gap-2">
+              <button
+                onClick={() => setPagination(p => ({ ...p, offset: Math.max(0, p.offset - p.limit) }))}
+                disabled={pagination.offset === 0}
+                className="px-3 py-1 rounded bg-white/10 text-white text-sm disabled:opacity-50"
+              >
+                Prev
+              </button>
+              <button
+                onClick={() => setPagination(p => ({ ...p, offset: p.offset + p.limit }))}
+                disabled={pagination.offset + pagination.limit >= pagination.total}
+                className="px-3 py-1 rounded bg-white/10 text-white text-sm disabled:opacity-50"
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
 // Edit User Modal
 const EditUserModal = ({ user, onClose, onSave }) => {
   const [credits, setCredits] = useState(user.credits || 0);
@@ -423,6 +954,7 @@ export default function AdminDashboard({ onClose }) {
           {[
             { id: 'overview', label: 'Overview', icon: Icons.PieChart },
             { id: 'users', label: 'Users', icon: Icons.Users },
+            { id: 'logs', label: 'Logs', icon: Icons.Activity },
             { id: 'transactions', label: 'Transactions', icon: Icons.CreditCard },
             { id: 'settings', label: 'Settings', icon: Icons.Settings },
           ].map(tab => (
@@ -608,6 +1140,9 @@ export default function AdminDashboard({ onClose }) {
                 )}
               </div>
             )}
+
+            {/* Logs Tab */}
+            {activeTab === 'logs' && <LogsPanel />}
 
             {/* Transactions Tab */}
             {activeTab === 'transactions' && stats && (
