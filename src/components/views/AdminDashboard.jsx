@@ -557,13 +557,31 @@ const LogsPanel = () => {
             <Icons.RefreshCw className="w-4 h-4" />
           </button>
 
-          {/* Delete old logs */}
-          <button
-            onClick={() => handleDeleteOldLogs(7)}
-            className="px-3 py-2 rounded-lg bg-red-500/20 text-red-300 hover:bg-red-500/30 transition-colors text-sm"
-          >
-            🗑️ Clean 7d+
-          </button>
+          {/* Delete old logs - multiple options */}
+          <div className="flex items-center gap-1">
+            <span className="text-white/40 text-xs mr-1">Clean:</span>
+            <button
+              onClick={() => handleDeleteOldLogs(1)}
+              className="px-2 py-1 rounded bg-red-500/20 text-red-300 hover:bg-red-500/30 transition-colors text-xs"
+              title="Delete logs older than 1 day"
+            >
+              1d+
+            </button>
+            <button
+              onClick={() => handleDeleteOldLogs(3)}
+              className="px-2 py-1 rounded bg-red-500/20 text-red-300 hover:bg-red-500/30 transition-colors text-xs"
+              title="Delete logs older than 3 days"
+            >
+              3d+
+            </button>
+            <button
+              onClick={() => handleDeleteOldLogs(7)}
+              className="px-2 py-1 rounded bg-red-500/20 text-red-300 hover:bg-red-500/30 transition-colors text-xs"
+              title="Delete logs older than 7 days"
+            >
+              7d+
+            </button>
+          </div>
         </div>
       </div>
 
