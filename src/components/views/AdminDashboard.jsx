@@ -290,27 +290,23 @@ const LogsPanel = () => {
     return () => clearInterval(interval);
   }, [autoRefresh, fetchLogs, fetchSummary]);
 
-  // Delete old logs
-  const handleDeleteOldLogs = async (days) => {
-    if (!confirm(`Delete logs older than ${days} days?`)) return;
+  // Clear all logs
+  const handleClearAllLogs = async () => {
+    if (!confirm('⚠️ Are you sure you want to delete ALL logs? This cannot be undone!')) return;
     try {
-      const response = await fetch(`/api/admin/logs?days=${days}`, {
+      const response = await fetch(`/api/admin/logs?all=true`, {
         method: 'DELETE',
         credentials: 'include',
       });
       if (response.ok) {
         const data = await response.json();
-        if (data.deleted === 0) {
-          alert(`No logs older than ${days} days found. Database is already clean!`);
-        } else {
-          alert(`Successfully deleted ${data.deleted} old logs`);
-        }
+        alert(`Successfully cleared all logs (${data.deleted} deleted)`);
         fetchLogs();
         fetchSummary();
       }
     } catch (err) {
-      console.error('Failed to delete logs:', err);
-      alert('Failed to delete logs. Please try again.');
+      console.error('Failed to clear logs:', err);
+      alert('Failed to clear logs. Please try again.');
     }
   };
 
@@ -557,31 +553,14 @@ const LogsPanel = () => {
             <Icons.RefreshCw className="w-4 h-4" />
           </button>
 
-          {/* Delete old logs - multiple options */}
-          <div className="flex items-center gap-1">
-            <span className="text-white/40 text-xs mr-1">Clean:</span>
-            <button
-              onClick={() => handleDeleteOldLogs(1)}
-              className="px-2 py-1 rounded bg-red-500/20 text-red-300 hover:bg-red-500/30 transition-colors text-xs"
-              title="Delete logs older than 1 day"
-            >
-              1d+
-            </button>
-            <button
-              onClick={() => handleDeleteOldLogs(3)}
-              className="px-2 py-1 rounded bg-red-500/20 text-red-300 hover:bg-red-500/30 transition-colors text-xs"
-              title="Delete logs older than 3 days"
-            >
-              3d+
-            </button>
-            <button
-              onClick={() => handleDeleteOldLogs(7)}
-              className="px-2 py-1 rounded bg-red-500/20 text-red-300 hover:bg-red-500/30 transition-colors text-xs"
-              title="Delete logs older than 7 days"
-            >
-              7d+
-            </button>
-          </div>
+          {/* Clear all logs */}
+          <button
+            onClick={handleClearAllLogs}
+            className="px-3 py-1.5 rounded bg-red-500/30 text-red-300 hover:bg-red-500/50 transition-colors text-sm font-medium"
+            title="Delete all logs"
+          >
+            🗑️ Clear All
+          </button>
         </div>
       </div>
 

@@ -181,19 +181,26 @@ export async function onRequest(context) {
   }
 
   if (request.method === 'DELETE') {
-    // Clean up old logs
-    const days = parseInt(url.searchParams.get('days') || '7', 10);
+    const clearAll = url.searchParams.get('all') === 'true';
 
     try {
-      const result = await env.DB.prepare(`
-        DELETE FROM app_logs
-        WHERE created_at < datetime('now', '-${days} days')
-      `).run();
+      let result;
+      if (clearAll) {
+        // Delete ALL logs
+        result = await env.DB.prepare(`DELETE FROM app_logs`).run();
+      } else {
+        // Clean up old logs by days
+        const days = parseInt(url.searchParams.get('days') || '7', 10);
+        result = await env.DB.prepare(`
+          DELETE FROM app_logs
+          WHERE created_at < datetime('now', '-${days} days')
+        `).run();
+      }
 
       return new Response(JSON.stringify({
         success: true,
         deleted: result.changes || 0,
-        message: `Deleted logs older than ${days} days`,
+        message: clearAll ? 'Cleared all logs' : `Deleted old logs`,
       }), {
         status: 200,
         headers: corsHeaders,
