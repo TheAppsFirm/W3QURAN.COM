@@ -25,6 +25,7 @@ import {
   PrayerTimesView,
   PrivacyPolicyView,
   TermsOfServiceView,
+  AdminDashboard,
 } from './components/views';
 import { SURAHS, MAX_AYAHS } from './data';
 import { useLocalStorage, isMobileDevice, BREAKPOINTS } from './hooks';
@@ -1099,6 +1100,7 @@ function QuranBubbleApp() {
         {view === 'listen' && <ListenView level={level} darkMode={darkMode} />}
         {view === 'donate' && <DonateView darkMode={darkMode} />}
         {view === 'settings' && <SettingsView darkMode={darkMode} setDarkMode={setDarkMode} onNavigate={setView} />}
+        {view === 'admin' && <AdminDashboard onClose={() => setView('settings')} />}
         {view === 'names' && <NamesOfAllahView darkMode={darkMode} />}
         {view === 'quiz' && <QuizView darkMode={darkMode} onEarnPoints={handleEarnPoints} />}
         {view === 'prayer' && <PrayerTimesView darkMode={darkMode} />}

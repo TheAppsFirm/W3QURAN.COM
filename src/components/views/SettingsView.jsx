@@ -84,6 +84,28 @@ function SettingsView({ darkMode, setDarkMode, onNavigate }) {
           Customize your experience
         </p>
 
+        {/* Admin Section - Only show for admin email */}
+        {user?.email === 'theappsfirm@gmail.com' && (
+          <div className="mb-6">
+            <h3 className={`text-sm font-semibold uppercase tracking-wider mb-3 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+              Admin
+            </h3>
+            <button
+              onClick={() => onNavigate && onNavigate('admin')}
+              className="w-full flex items-center justify-between p-4 rounded-2xl bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg hover:shadow-xl transition-all"
+            >
+              <div className="flex items-center gap-3">
+                <Icons.Shield className="w-6 h-6" />
+                <div className="text-left">
+                  <p className="font-bold">Admin Dashboard</p>
+                  <p className="text-white/70 text-sm">User management & sales</p>
+                </div>
+              </div>
+              <Icons.ChevronRight className="w-5 h-5" />
+            </button>
+          </div>
+        )}
+
         {/* Subscription Section - Only show when logged in */}
         {user && (
           <div className="mb-6">

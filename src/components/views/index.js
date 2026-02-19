@@ -14,3 +14,4 @@ export { default as DonateView } from './DonateView';
 export { default as PrayerTimesView } from './PrayerTimesView';
 export { default as PrivacyPolicyView } from './PrivacyPolicyView';
 export { default as TermsOfServiceView } from './TermsOfServiceView';
+export { default as AdminDashboard } from './AdminDashboard';
