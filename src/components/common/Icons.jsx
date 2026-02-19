@@ -728,6 +728,29 @@ export const ActivityIcon = (props) => (
   </Icon>
 );
 
+export const CpuIcon = (props) => (
+  <Icon {...props}>
+    <rect x="4" y="4" width="16" height="16" rx="2" ry="2" />
+    <rect x="9" y="9" width="6" height="6" />
+    <line x1="9" y1="1" x2="9" y2="4" />
+    <line x1="15" y1="1" x2="15" y2="4" />
+    <line x1="9" y1="20" x2="9" y2="23" />
+    <line x1="15" y1="20" x2="15" y2="23" />
+    <line x1="20" y1="9" x2="23" y2="9" />
+    <line x1="20" y1="14" x2="23" y2="14" />
+    <line x1="1" y1="9" x2="4" y2="9" />
+    <line x1="1" y1="14" x2="4" y2="14" />
+  </Icon>
+);
+
+export const RefreshCwIcon = (props) => (
+  <Icon {...props}>
+    <polyline points="23 4 23 10 17 10" />
+    <polyline points="1 20 1 14 7 14" />
+    <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
+  </Icon>
+);
+
 export const LinkIcon = (props) => (
   <Icon {...props}>
     <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
@@ -1173,6 +1196,8 @@ export const Icons = {
   Zap: ZapIcon,
   Cloud: CloudIcon,
   Activity: ActivityIcon,
+  Cpu: CpuIcon,
+  RefreshCw: RefreshCwIcon,
   Link: LinkIcon,
   Network: NetworkIcon,
   Scale: ScaleIcon,
