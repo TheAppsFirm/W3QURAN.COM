@@ -184,15 +184,18 @@ const DonateModal = memo(function DonateModal({ isOpen, onClose }) {
                       <span className="text-white font-bold text-lg tracking-wider">botim</span>
                       <span className="bg-white text-black text-xs font-bold px-2 py-0.5 rounded-full">PAY</span>
                     </div>
-                    <div className="bg-white p-3 rounded-xl inline-block">
-                      <img
-                        src="/botim-qr.png"
-                        alt="Botim Pay QR Code"
-                        className="w-44 h-44 object-contain"
-                      />
+                    <div className="bg-gradient-to-br from-teal-500 to-cyan-600 p-4 rounded-xl inline-block">
+                      <div className="bg-white p-3 rounded-lg">
+                        <div className="w-40 h-40 flex flex-col items-center justify-center text-center">
+                          <span className="text-4xl mb-2">📱</span>
+                          <p className="text-gray-700 font-bold text-sm">Search in Botim App:</p>
+                          <p className="text-teal-600 font-bold text-lg mt-1">{DONATION_CONFIG.botim.accountName}</p>
+                          <p className="text-gray-500 text-xs mt-2">Open Botim → Pay → Search Name</p>
+                        </div>
+                      </div>
                     </div>
                     <p className="text-gray-400 text-sm mt-3 font-medium">{DONATION_CONFIG.botim.accountName}</p>
-                    <p className="text-gray-500 text-xs mt-1">Please scan to pay</p>
+                    <p className="text-gray-500 text-xs mt-1">Search the name in Botim Pay</p>
                   </div>
                 </>
               )}

@@ -1786,7 +1786,7 @@ export const KidsLayout = memo(function KidsLayout({
   );
 });
 
-// Ludo Layout - Authentic Ludo board game design for kids
+// Ludo Layout - Super Colorful Board Game Design for Kids
 export const LudoLayout = memo(function LudoLayout({
   surahs,
   onSurahClick,
@@ -1798,13 +1798,14 @@ export const LudoLayout = memo(function LudoLayout({
   const [diceValue, setDiceValue] = useState(1);
   const [highlightedSurah, setHighlightedSurah] = useState(null);
   const [activeQuadrant, setActiveQuadrant] = useState(null);
+  const [confetti, setConfetti] = useState([]);
 
-  // Ludo board colors - 4 corners (Red, Green, Yellow, Blue)
+  // SUPER BRIGHT Ludo board colors - More vibrant!
   const quadrantColors = {
-    red: { bg: '#DC2626', light: '#FCA5A5', border: '#B91C1C' },
-    green: { bg: '#16A34A', light: '#86EFAC', border: '#15803D' },
-    yellow: { bg: '#EAB308', light: '#FDE047', border: '#CA8A04' },
-    blue: { bg: '#2563EB', light: '#93C5FD', border: '#1D4ED8' },
+    red: { bg: '#FF3B3B', light: '#FF8A8A', border: '#CC0000', glow: '#FF6B6B', emoji: '🔴' },
+    green: { bg: '#00D26A', light: '#7DFFB3', border: '#00A352', glow: '#50FF9E', emoji: '🟢' },
+    yellow: { bg: '#FFD000', light: '#FFEB80', border: '#CC9900', glow: '#FFE44D', emoji: '🟡' },
+    blue: { bg: '#3B82F6', light: '#93C5FD', border: '#1D4ED8', glow: '#60A5FA', emoji: '🔵' },
   };
 
   // Divide surahs into 4 quadrants (28-29 each)
@@ -1818,10 +1819,209 @@ export const LudoLayout = memo(function LudoLayout({
   // Fun dice faces
   const diceFaces = ['⚀', '⚁', '⚂', '⚃', '⚄', '⚅'];
 
-  // Roll dice animation
-  const rollDice = () => {
+  // Spawn confetti on dice roll
+  const spawnConfetti = () => {
+    const newConfetti = Array.from({ length: 20 }, (_, i) => ({
+      id: Date.now() + i,
+      x: Math.random() * 100,
+      color: ['#FF3B3B', '#00D26A', '#FFD000', '#3B82F6', '#FF69B4', '#00CED1'][Math.floor(Math.random() * 6)],
+      delay: Math.random() * 0.5,
+    }));
+    setConfetti(newConfetti);
+    setTimeout(() => setConfetti([]), 3000);
+  };
+
+  // Render a single surah tile - MORE COLORFUL!
+  const SurahTile = ({ surah, color, isHighlighted, size }) => (
+    <div
+      onClick={(e) => {
+        playClickSound();
+        onSurahClick(surah, { x: e.clientX, y: e.clientY });
+      }}
+      className={`cursor-pointer transition-all duration-300 relative ${
+        isHighlighted ? 'scale-125 z-20' : 'hover:scale-110 hover:-rotate-2'
+      }`}
+      style={{
+        width: size,
+        minHeight: size * 0.95,
+      }}
+    >
+      {/* Glow effect behind tile */}
+      <div
+        className="absolute inset-0 rounded-2xl blur-md transition-opacity"
+        style={{
+          background: color.glow,
+          opacity: isHighlighted ? 0.8 : 0,
+          transform: 'scale(1.1)',
+        }}
+      />
+
+      <div
+        className="w-full h-full rounded-2xl flex flex-col items-center justify-center p-2 relative overflow-hidden"
+        style={{
+          background: isHighlighted
+            ? `linear-gradient(135deg, ${color.bg} 0%, ${color.glow} 50%, ${color.light} 100%)`
+            : `linear-gradient(145deg, white 0%, ${color.light} 100%)`,
+          border: `3px solid ${isHighlighted ? '#FFD700' : color.bg}`,
+          boxShadow: isHighlighted
+            ? `0 0 30px ${color.glow}, 0 8px 25px rgba(0,0,0,0.3), inset 0 -4px 10px rgba(0,0,0,0.1)`
+            : `0 4px 15px ${color.bg}40, inset 0 2px 0 rgba(255,255,255,0.5)`,
+          animation: isHighlighted ? 'ludoPulse 0.5s ease-in-out infinite' : 'none',
+        }}
+      >
+        {/* Sparkle effect */}
+        {isHighlighted && (
+          <>
+            <div className="absolute top-1 left-1 text-sm animate-ping">✨</div>
+            <div className="absolute top-1 right-1 text-sm animate-ping" style={{ animationDelay: '0.2s' }}>⭐</div>
+            <div className="absolute bottom-1 left-1 text-sm animate-ping" style={{ animationDelay: '0.4s' }}>✨</div>
+          </>
+        )}
+
+        {/* Game piece style number */}
+        <div
+          className="w-8 h-8 rounded-full flex items-center justify-center text-white font-black text-sm mb-1 relative"
+          style={{
+            background: `radial-gradient(circle at 30% 30%, ${color.light}, ${color.bg})`,
+            boxShadow: `0 3px 8px ${color.border}80, inset 0 2px 4px rgba(255,255,255,0.5)`,
+            border: '2px solid white',
+          }}
+        >
+          {surah.id}
+          {/* Shine on piece */}
+          <div className="absolute top-1 left-1.5 w-2 h-2 bg-white/60 rounded-full" />
+        </div>
+
+        {/* Arabic name */}
+        <span
+          className="font-bold text-center leading-tight drop-shadow-sm"
+          style={{
+            fontSize: size * 0.2 * contentZoom,
+            fontFamily: "'Scheherazade New', 'Amiri', serif",
+            color: isHighlighted ? 'white' : color.border,
+            textShadow: isHighlighted ? '0 2px 4px rgba(0,0,0,0.3)' : 'none',
+          }}
+        >
+          {surah.arabic}
+        </span>
+
+        {/* English name */}
+        <span
+          className="text-[9px] text-center leading-tight mt-0.5 px-1 font-medium"
+          style={{ color: isHighlighted ? 'white' : '#555' }}
+        >
+          {surah.name}
+        </span>
+      </div>
+    </div>
+  );
+
+  // Render a quadrant (home base area) - SUPER COLORFUL!
+  const Quadrant = ({ name, color, surahs: quadrantSurahs, position }) => {
+    const isActive = activeQuadrant === name;
+    const tileSize = 65 * zoom;
+
+    return (
+      <div
+        className={`relative rounded-3xl p-4 transition-all duration-500 ${isActive ? 'scale-105 z-10' : ''}`}
+        style={{
+          background: `linear-gradient(145deg, ${color.bg} 0%, ${color.glow} 50%, ${color.border} 100%)`,
+          boxShadow: isActive
+            ? `0 0 50px ${color.glow}, 0 15px 40px rgba(0,0,0,0.4), inset 0 2px 0 rgba(255,255,255,0.3)`
+            : `0 10px 35px ${color.bg}60, inset 0 2px 0 rgba(255,255,255,0.2)`,
+          border: isActive ? '4px solid #FFD700' : '3px solid rgba(255,255,255,0.3)',
+        }}
+      >
+        {/* Corner decorations */}
+        <div className="absolute -top-2 -left-2 text-2xl animate-bounce" style={{ animationDuration: '2s' }}>
+          {color.emoji}
+        </div>
+        <div className="absolute -top-2 -right-2 text-xl">✨</div>
+
+        {/* Home base inner area - Brighter! */}
+        <div
+          className="rounded-2xl p-3 mb-3 relative overflow-hidden"
+          style={{
+            background: `linear-gradient(135deg, ${color.light} 0%, white 50%, ${color.light} 100%)`,
+            boxShadow: 'inset 0 3px 10px rgba(0,0,0,0.1), 0 2px 4px rgba(0,0,0,0.1)',
+          }}
+        >
+          {/* Decorative pattern */}
+          <div className="absolute inset-0 opacity-10" style={{
+            backgroundImage: `radial-gradient(${color.bg} 1px, transparent 1px)`,
+            backgroundSize: '10px 10px',
+          }} />
+
+          {/* Home circles (like Ludo pieces) - Bigger and shinier! */}
+          <div className="flex justify-center gap-3 mb-2 relative z-10">
+            {[1, 2, 3, 4].map((i) => (
+              <div
+                key={i}
+                className="w-8 h-8 rounded-full relative transition-transform hover:scale-110"
+                style={{
+                  background: `radial-gradient(circle at 30% 30%, white 0%, ${color.light} 30%, ${color.bg} 100%)`,
+                  border: `3px solid ${color.border}`,
+                  boxShadow: `0 4px 8px ${color.bg}60, inset 0 2px 4px rgba(255,255,255,0.5)`,
+                }}
+              >
+                {/* Shine spot */}
+                <div className="absolute top-1 left-1.5 w-2.5 h-2.5 bg-white/70 rounded-full" />
+              </div>
+            ))}
+          </div>
+
+          {/* Quadrant label - More playful! */}
+          <div className="text-center relative z-10">
+            <span className="text-sm font-black px-3 py-1 rounded-full" style={{
+              color: 'white',
+              background: color.bg,
+              boxShadow: `0 2px 8px ${color.bg}80`,
+            }}>
+              {name === 'red' ? '🔥 Surah 1-29' :
+               name === 'green' ? '🌿 Surah 30-57' :
+               name === 'yellow' ? '⭐ Surah 58-86' : '💎 Surah 87-114'}
+            </span>
+          </div>
+        </div>
+
+        {/* Surahs grid inside quadrant */}
+        <div
+          className="grid gap-2 overflow-y-auto scrollbar-thin"
+          style={{
+            gridTemplateColumns: `repeat(auto-fill, minmax(${tileSize}px, 1fr))`,
+            maxHeight: '300px',
+            scrollbarColor: `${color.light} transparent`,
+          }}
+        >
+          {quadrantSurahs.map((surah, idx) => (
+            <SurahTile
+              key={surah.id}
+              surah={surah}
+              color={color}
+              isHighlighted={highlightedSurah === surah.id}
+              size={tileSize}
+            />
+          ))}
+        </div>
+
+        {/* Active glow ring */}
+        {isActive && (
+          <div className="absolute inset-0 rounded-3xl pointer-events-none"
+            style={{
+              boxShadow: `inset 0 0 30px ${color.glow}80`,
+              animation: 'ludoPulse 1s ease-in-out infinite',
+            }}
+          />
+        )}
+      </div>
+    );
+  };
+
+  // Update roll dice to trigger confetti
+  const handleRollDice = () => {
     if (rollingDice) return;
     setRollingDice(true);
+    spawnConfetti();
 
     let rolls = 0;
     const interval = setInterval(() => {
@@ -1833,7 +2033,6 @@ export const LudoLayout = memo(function LudoLayout({
         setDiceValue(finalValue);
         setRollingDice(false);
 
-        // Highlight random quadrant and surah
         const quadrantNames = ['red', 'green', 'yellow', 'blue'];
         const randomQuadrant = quadrantNames[Math.floor(Math.random() * 4)];
         const quadrantSurahs = quadrants[randomQuadrant];
@@ -1849,215 +2048,114 @@ export const LudoLayout = memo(function LudoLayout({
     }, 80);
   };
 
-  // Render a single surah tile
-  const SurahTile = ({ surah, color, isHighlighted, size }) => (
-    <div
-      onClick={(e) => {
-        playClickSound();
-        onSurahClick(surah, { x: e.clientX, y: e.clientY });
-      }}
-      className={`cursor-pointer transition-all relative ${
-        isHighlighted ? 'scale-110 z-20' : 'hover:scale-105'
-      }`}
-      style={{
-        width: size,
-        minHeight: size * 0.9,
-      }}
-    >
-      <div
-        className="w-full h-full rounded-xl flex flex-col items-center justify-center p-1.5 relative overflow-hidden"
-        style={{
-          background: isHighlighted
-            ? `linear-gradient(145deg, ${color.bg}, ${color.light})`
-            : `linear-gradient(145deg, ${color.light}90, white)`,
-          border: `2px solid ${isHighlighted ? '#FFD700' : color.bg}`,
-          boxShadow: isHighlighted
-            ? `0 0 20px ${color.bg}80, 0 4px 15px rgba(0,0,0,0.2)`
-            : `0 2px 8px rgba(0,0,0,0.1)`,
-          animation: isHighlighted ? 'pulse 1s infinite' : 'none',
-        }}
-      >
-        {/* Surah number circle */}
-        <div
-          className="w-6 h-6 rounded-full flex items-center justify-center text-white font-bold text-[10px] mb-1"
-          style={{ background: color.bg }}
-        >
-          {surah.id}
-        </div>
-
-        {/* Arabic name */}
-        <span
-          className="font-bold text-center leading-tight"
-          style={{
-            fontSize: size * 0.18 * contentZoom,
-            fontFamily: "'Scheherazade New', 'Amiri', serif",
-            color: isHighlighted ? 'white' : color.border,
-          }}
-        >
-          {surah.arabic}
-        </span>
-
-        {/* English name - tiny */}
-        <span
-          className="text-[8px] text-center leading-tight mt-0.5 px-1"
-          style={{ color: isHighlighted ? 'white' : '#666' }}
-        >
-          {surah.name}
-        </span>
-      </div>
-    </div>
-  );
-
-  // Render a quadrant (home base area)
-  const Quadrant = ({ name, color, surahs: quadrantSurahs, position }) => {
-    const isActive = activeQuadrant === name;
-    const tileSize = 60 * zoom;
-
-    return (
-      <div
-        className={`relative rounded-2xl p-3 transition-all ${isActive ? 'ring-4 ring-yellow-400 ring-opacity-75' : ''}`}
-        style={{
-          background: `linear-gradient(145deg, ${color.bg}, ${color.border})`,
-          boxShadow: isActive
-            ? `0 0 30px ${color.bg}80`
-            : `0 8px 30px ${color.bg}40, inset 0 2px 0 rgba(255,255,255,0.2)`,
-        }}
-      >
-        {/* Home base inner area */}
-        <div
-          className="rounded-xl p-2 mb-2"
-          style={{
-            background: color.light,
-            boxShadow: 'inset 0 2px 8px rgba(0,0,0,0.1)',
-          }}
-        >
-          {/* Home circles (like Ludo pieces) */}
-          <div className="flex justify-center gap-2 mb-2">
-            {[1, 2, 3, 4].map((i) => (
-              <div
-                key={i}
-                className="w-6 h-6 rounded-full border-2"
-                style={{
-                  background: `radial-gradient(circle at 30% 30%, white, ${color.bg})`,
-                  borderColor: color.border,
-                  boxShadow: `0 2px 4px ${color.bg}50`,
-                }}
-              />
-            ))}
-          </div>
-
-          {/* Quadrant label */}
-          <div className="text-center mb-2">
-            <span className="text-xs font-bold" style={{ color: color.border }}>
-              {name === 'red' ? 'Surah 1-29' :
-               name === 'green' ? 'Surah 30-57' :
-               name === 'yellow' ? 'Surah 58-86' : 'Surah 87-114'}
-            </span>
-          </div>
-        </div>
-
-        {/* Surahs grid inside quadrant */}
-        <div
-          className="grid gap-1.5 overflow-y-auto scrollbar-thin scrollbar-thumb-white/30"
-          style={{
-            gridTemplateColumns: `repeat(auto-fill, minmax(${tileSize}px, 1fr))`,
-            maxHeight: '280px',
-          }}
-        >
-          {quadrantSurahs.map((surah) => (
-            <SurahTile
-              key={surah.id}
-              surah={surah}
-              color={color}
-              isHighlighted={highlightedSurah === surah.id}
-              size={tileSize}
-            />
-          ))}
-        </div>
-      </div>
-    );
-  };
-
   return (
-    <div className="p-4 sm:p-6 pb-24" style={{
+    <div className="p-4 sm:p-6 pb-24 relative overflow-hidden" style={{
       background: darkMode
-        ? 'linear-gradient(145deg, #1a1a2e 0%, #16213e 100%)'
-        : 'linear-gradient(145deg, #f0f4f8 0%, #d9e2ec 100%)',
+        ? 'linear-gradient(145deg, #1a1a2e 0%, #0f0f23 50%, #16213e 100%)'
+        : 'linear-gradient(145deg, #FFF5E6 0%, #FFE4CC 50%, #FFDAB3 100%)',
     }}>
-      {/* Ludo Header */}
-      <div className="text-center mb-6">
-        <h2 className="text-2xl sm:text-3xl font-bold flex items-center justify-center gap-1">
-          <span className="text-red-500">L</span>
-          <span className="text-green-500">U</span>
-          <span className="text-yellow-500">D</span>
-          <span className="text-blue-500">O</span>
-          <span className={`ml-2 ${darkMode ? 'text-white' : 'text-gray-700'}`}>Quran</span>
-          <span className="text-2xl ml-2">🎲</span>
+      {/* Confetti Animation */}
+      {confetti.map((c) => (
+        <div
+          key={c.id}
+          className="absolute w-3 h-3 rounded-full pointer-events-none z-50"
+          style={{
+            left: `${c.x}%`,
+            top: '-20px',
+            background: c.color,
+            animation: `confettiFall 3s ease-out ${c.delay}s forwards`,
+          }}
+        />
+      ))}
+
+      {/* Background decorations */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-10 left-10 text-6xl opacity-10 animate-pulse">🎲</div>
+        <div className="absolute top-20 right-20 text-5xl opacity-10 animate-pulse" style={{ animationDelay: '0.5s' }}>⭐</div>
+        <div className="absolute bottom-40 left-20 text-5xl opacity-10 animate-pulse" style={{ animationDelay: '1s' }}>🎮</div>
+        <div className="absolute bottom-20 right-10 text-6xl opacity-10 animate-pulse" style={{ animationDelay: '1.5s' }}>🏆</div>
+      </div>
+
+      {/* Ludo Header - More Colorful! */}
+      <div className="text-center mb-6 relative z-10">
+        <h2 className="text-3xl sm:text-4xl font-black flex items-center justify-center gap-0.5">
+          <span className="text-red-500 drop-shadow-lg" style={{ textShadow: '2px 2px 0 #FF8A8A' }}>L</span>
+          <span className="text-green-500 drop-shadow-lg" style={{ textShadow: '2px 2px 0 #7DFFB3' }}>U</span>
+          <span className="text-yellow-500 drop-shadow-lg" style={{ textShadow: '2px 2px 0 #FFEB80' }}>D</span>
+          <span className="text-blue-500 drop-shadow-lg" style={{ textShadow: '2px 2px 0 #93C5FD' }}>O</span>
+          <span className={`ml-3 ${darkMode ? 'text-white' : 'text-purple-700'}`} style={{ textShadow: '2px 2px 0 rgba(139,92,246,0.3)' }}>Quran</span>
+          <span className="text-3xl ml-2 animate-bounce">🎲</span>
         </h2>
-        <p className="text-sm sm:text-base mt-2" style={{ color: darkMode ? '#FFD700' : '#6B7280' }}>
-          Roll the dice to discover a surah!
+        <p className="text-base sm:text-lg mt-2 font-semibold" style={{
+          color: darkMode ? '#FFD700' : '#7C3AED',
+          textShadow: '1px 1px 0 rgba(0,0,0,0.1)',
+        }}>
+          ✨ Roll the dice to discover your next surah! ✨
         </p>
       </div>
 
-      {/* Center Dice Area - Like Ludo board center */}
-      <div className="flex justify-center mb-6">
+      {/* Center Dice Area - SUPER COLORFUL! */}
+      <div className="flex justify-center mb-8 relative z-10">
         <div
-          className="relative p-6 rounded-2xl"
+          className="relative p-8 rounded-3xl"
           style={{
             background: darkMode
-              ? 'linear-gradient(145deg, #2D3748, #1A202C)'
-              : 'linear-gradient(145deg, white, #E2E8F0)',
-            boxShadow: '0 10px 40px rgba(0,0,0,0.2), inset 0 2px 0 rgba(255,255,255,0.5)',
-            border: '4px solid',
-            borderImage: 'linear-gradient(45deg, #DC2626, #16A34A, #EAB308, #2563EB) 1',
+              ? 'linear-gradient(145deg, #2D3748 0%, #1A202C 50%, #2D3748 100%)'
+              : 'linear-gradient(145deg, #FFFFFF 0%, #F8FAFC 50%, #FFFFFF 100%)',
+            boxShadow: `
+              0 20px 60px rgba(0,0,0,0.3),
+              inset 0 2px 0 rgba(255,255,255,0.5),
+              0 0 0 4px #FFD700,
+              0 0 0 8px #FF3B3B,
+              0 0 0 12px #00D26A,
+              0 0 0 16px #3B82F6
+            `,
           }}
         >
-          {/* Corner triangles like real Ludo */}
-          <div className="absolute top-0 left-0 w-0 h-0" style={{
-            borderLeft: '20px solid #DC2626',
-            borderBottom: '20px solid transparent',
-          }} />
-          <div className="absolute top-0 right-0 w-0 h-0" style={{
-            borderRight: '20px solid #16A34A',
-            borderBottom: '20px solid transparent',
-          }} />
-          <div className="absolute bottom-0 left-0 w-0 h-0" style={{
-            borderLeft: '20px solid #2563EB',
-            borderTop: '20px solid transparent',
-          }} />
-          <div className="absolute bottom-0 right-0 w-0 h-0" style={{
-            borderRight: '20px solid #EAB308',
-            borderTop: '20px solid transparent',
-          }} />
+          {/* Animated corner pieces */}
+          <div className="absolute -top-4 -left-4 text-3xl animate-bounce" style={{ animationDuration: '1.5s' }}>🔴</div>
+          <div className="absolute -top-4 -right-4 text-3xl animate-bounce" style={{ animationDuration: '1.7s' }}>🟢</div>
+          <div className="absolute -bottom-4 -left-4 text-3xl animate-bounce" style={{ animationDuration: '1.9s' }}>🔵</div>
+          <div className="absolute -bottom-4 -right-4 text-3xl animate-bounce" style={{ animationDuration: '2.1s' }}>🟡</div>
 
-          {/* Dice Button */}
+          {/* Dice Button - Bigger and more fun! */}
           <button
-            onClick={rollDice}
+            onClick={handleRollDice}
             disabled={rollingDice}
-            className={`flex flex-col items-center gap-2 px-8 py-4 rounded-xl font-bold transition-all ${
-              rollingDice ? 'animate-bounce' : 'hover:scale-110 active:scale-95'
+            className={`flex flex-col items-center gap-3 px-10 py-6 rounded-2xl font-black transition-all ${
+              rollingDice ? '' : 'hover:scale-110 active:scale-95'
             }`}
             style={{
               background: rollingDice
-                ? 'linear-gradient(145deg, #F59E0B, #D97706)'
-                : 'linear-gradient(145deg, #8B5CF6, #6366F1)',
-              boxShadow: '0 8px 25px rgba(139, 92, 246, 0.4)',
+                ? 'linear-gradient(145deg, #FF6B35 0%, #F7931E 50%, #FFD700 100%)'
+                : 'linear-gradient(145deg, #9333EA 0%, #7C3AED 50%, #6366F1 100%)',
+              boxShadow: rollingDice
+                ? '0 10px 40px rgba(255,107,53,0.6), inset 0 2px 0 rgba(255,255,255,0.3)'
+                : '0 10px 40px rgba(139,92,246,0.5), inset 0 2px 0 rgba(255,255,255,0.3)',
               color: 'white',
+              animation: rollingDice ? 'diceShake 0.1s infinite' : 'none',
             }}
           >
-            <span className={`text-5xl ${rollingDice ? 'animate-spin' : ''}`}>
+            <span className={`text-6xl ${rollingDice ? 'animate-spin' : ''}`} style={{ animationDuration: '0.3s' }}>
               {diceFaces[diceValue - 1]}
             </span>
-            <span className="text-sm">
-              {rollingDice ? 'Rolling...' : 'Roll Dice!'}
+            <span className="text-lg tracking-wide">
+              {rollingDice ? '🎲 Rolling... 🎲' : '🎯 Roll Dice! 🎯'}
             </span>
           </button>
 
           {/* Highlighted surah message */}
           {highlightedSurah && (
-            <div className="absolute -bottom-12 left-1/2 transform -translate-x-1/2 whitespace-nowrap">
-              <div className="animate-bounce px-4 py-2 rounded-full bg-yellow-400 text-yellow-900 font-bold text-sm shadow-lg">
-                🎯 Go to Surah {highlightedSurah}!
+            <div className="absolute -bottom-16 left-1/2 transform -translate-x-1/2 whitespace-nowrap">
+              <div className="px-6 py-3 rounded-full font-black text-lg shadow-2xl"
+                style={{
+                  background: 'linear-gradient(135deg, #FFD700 0%, #FFA500 100%)',
+                  color: '#7C2D12',
+                  boxShadow: '0 8px 30px rgba(255,215,0,0.5)',
+                  animation: 'ludoPulse 0.5s ease-in-out infinite',
+                }}
+              >
+                🎯 Go to Surah {highlightedSurah}! 🎯
               </div>
             </div>
           )}
@@ -2098,10 +2196,30 @@ export const LudoLayout = memo(function LudoLayout({
 
       {/* Encouraging message */}
       <div className="mt-6 text-center">
-        <p className={`text-sm ${darkMode ? 'text-white/60' : 'text-purple-600'}`}>
-          🎮 Roll the dice and race to complete all surahs! May Allah bless your journey! 📖
+        <p className={`text-base font-semibold ${darkMode ? 'text-white/80' : 'text-purple-700'}`}>
+          🎮 Roll the dice and race to complete all surahs! 🏆
+        </p>
+        <p className={`text-sm mt-1 ${darkMode ? 'text-white/60' : 'text-purple-500'}`}>
+          May Allah bless your Quran journey! 📖✨
         </p>
       </div>
+
+      {/* CSS Animations */}
+      <style>{`
+        @keyframes ludoPulse {
+          0%, 100% { transform: scale(1); }
+          50% { transform: scale(1.05); }
+        }
+        @keyframes diceShake {
+          0%, 100% { transform: rotate(0deg); }
+          25% { transform: rotate(-5deg); }
+          75% { transform: rotate(5deg); }
+        }
+        @keyframes confettiFall {
+          0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+          100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+      `}</style>
     </div>
   );
 });
