@@ -24,4 +24,5 @@ export {
   KidsLayout,
   LudoLayout,
   ArtLayout,
+  NetflixLayout,
 } from './BubbleLayouts';

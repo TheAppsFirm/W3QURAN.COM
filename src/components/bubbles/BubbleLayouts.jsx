@@ -7,7 +7,7 @@
  * - Revelation Order
  */
 
-import { useState, useMemo, memo, useEffect, useCallback } from 'react';
+import { useState, useMemo, memo, useEffect, useCallback, useRef } from 'react';
 import { PALETTES } from '../../data';
 import { Icons } from '../common/Icons';
 import { playThrottledHoverSound, playClickSound } from '../../utils/soundUtils';
@@ -2359,6 +2359,448 @@ export const ArtLayout = memo(function ArtLayout({
   );
 });
 
+// Netflix-style 3D Card Carousel Layout
+export const NetflixLayout = memo(function NetflixLayout({
+  surahs,
+  onSurahClick,
+  zoom = 1,
+  contentZoom = 1,
+  darkMode,
+}) {
+  const [activeRow, setActiveRow] = useState(null);
+  const [hoveredCard, setHoveredCard] = useState(null);
+  const [autoPlay, setAutoPlay] = useState(false);
+  const scrollRefs = useRef({});
+
+  // Surah categories for Netflix-style rows
+  const categories = useMemo(() => [
+    {
+      id: 'popular',
+      title: 'Most Beloved Surahs',
+      emoji: '❤️',
+      surahs: surahs.filter(s => [1, 2, 18, 36, 55, 56, 67, 78, 112, 113, 114].includes(s.id)),
+    },
+    {
+      id: 'short',
+      title: 'Quick Reads (Under 20 Ayahs)',
+      emoji: '⚡',
+      surahs: surahs.filter(s => s.ayahs <= 20),
+    },
+    {
+      id: 'makki',
+      title: 'Revealed in Makkah',
+      emoji: '🕋',
+      surahs: surahs.filter(s => s.type === 'Makki'),
+    },
+    {
+      id: 'madani',
+      title: 'Revealed in Madinah',
+      emoji: '🕌',
+      surahs: surahs.filter(s => s.type === 'Madani'),
+    },
+    {
+      id: 'long',
+      title: 'Deep Dives (50+ Ayahs)',
+      emoji: '📚',
+      surahs: surahs.filter(s => s.ayahs >= 50),
+    },
+    {
+      id: 'juz30',
+      title: 'Juz Amma (Last Juz)',
+      emoji: '🌟',
+      surahs: surahs.filter(s => s.id >= 78),
+    },
+  ], [surahs]);
+
+  // Thematic gradients for movie poster effect
+  const getCardGradient = (surah) => {
+    const gradients = [
+      ['#1a1a2e', '#16213e', '#0f3460'], // Deep Night
+      ['#2d132c', '#801336', '#c72c41'], // Royal Crimson
+      ['#1b262c', '#0f4c75', '#3282b8'], // Ocean Deep
+      ['#2b2e4a', '#e84545', '#903749'], // Mystic Red
+      ['#0c0032', '#190061', '#240090'], // Purple Night
+      ['#1a1a2e', '#4a4e69', '#22223b'], // Slate
+      ['#2d3436', '#636e72', '#b2bec3'], // Silver
+      ['#192a56', '#273c75', '#40739e'], // Blue Steel
+      ['#1e3c72', '#2a5298', '#0f0c29'], // Midnight Blue
+      ['#134e5e', '#71b280', '#1d4350'], // Forest
+    ];
+    return gradients[(surah.id - 1) % gradients.length];
+  };
+
+  // Get thematic icon/emoji for surah
+  const getSurahIcon = (surah) => {
+    const icons = {
+      1: '🤲', 2: '📖', 3: '👨‍👩‍👧', 4: '⚖️', 5: '🍽️', 6: '🐄', 7: '📜',
+      8: '⚔️', 9: '🕊️', 10: '👨', 11: '🏔️', 12: '👑', 13: '⚡', 14: '🏛️',
+      15: '🪨', 16: '🐝', 17: '🌙', 18: '🏔️', 19: '👶', 20: '✨',
+      21: '📿', 22: '🕋', 23: '🙏', 24: '💡', 25: '⚖️', 26: '📜',
+      27: '🐜', 28: '📖', 29: '🕷️', 30: '🏛️', 31: '👴', 32: '🙇',
+      36: '💚', 55: '🌹', 56: '⭐', 67: '👑', 78: '📰', 112: '☝️',
+      113: '🌅', 114: '👥',
+    };
+    return icons[surah.id] || '📖';
+  };
+
+  // Auto-scroll functionality
+  useEffect(() => {
+    if (!autoPlay) return;
+
+    const intervals = categories.map((cat, idx) => {
+      return setInterval(() => {
+        const ref = scrollRefs.current[cat.id];
+        if (ref) {
+          const maxScroll = ref.scrollWidth - ref.clientWidth;
+          if (ref.scrollLeft >= maxScroll - 10) {
+            ref.scrollTo({ left: 0, behavior: 'smooth' });
+          } else {
+            ref.scrollBy({ left: 300, behavior: 'smooth' });
+          }
+        }
+      }, 4000 + idx * 500);
+    });
+
+    return () => intervals.forEach(clearInterval);
+  }, [autoPlay, categories]);
+
+  // Card component with 3D effect
+  const MovieCard = ({ surah, isHovered, onHover, onLeave }) => {
+    const gradient = getCardGradient(surah);
+    const icon = getSurahIcon(surah);
+    const cardWidth = 180 * zoom;
+    const cardHeight = 270 * zoom;
+
+    return (
+      <div
+        className="flex-shrink-0 cursor-pointer transition-all duration-500 relative"
+        style={{
+          width: cardWidth,
+          height: cardHeight,
+          perspective: '1000px',
+          zIndex: isHovered ? 50 : 1,
+        }}
+        onMouseEnter={() => onHover(surah.id)}
+        onMouseLeave={onLeave}
+        onClick={(e) => {
+          playClickSound();
+          onSurahClick(surah, { x: e.clientX, y: e.clientY });
+        }}
+      >
+        <div
+          className="w-full h-full rounded-xl overflow-hidden relative transition-all duration-500"
+          style={{
+            transform: isHovered
+              ? 'scale(1.15) translateY(-20px) rotateY(5deg)'
+              : 'scale(1) rotateY(0deg)',
+            transformStyle: 'preserve-3d',
+            boxShadow: isHovered
+              ? `0 25px 50px rgba(0,0,0,0.5), 0 0 40px ${gradient[1]}60`
+              : '0 8px 25px rgba(0,0,0,0.3)',
+          }}
+        >
+          {/* Background Gradient */}
+          <div
+            className="absolute inset-0"
+            style={{
+              background: `linear-gradient(180deg, ${gradient[0]} 0%, ${gradient[1]} 50%, ${gradient[2]} 100%)`,
+            }}
+          />
+
+          {/* Decorative pattern overlay */}
+          <div
+            className="absolute inset-0 opacity-10"
+            style={{
+              backgroundImage: `radial-gradient(circle at 50% 0%, rgba(255,255,255,0.3) 0%, transparent 50%)`,
+            }}
+          />
+
+          {/* Islamic geometric pattern hint */}
+          <div
+            className="absolute inset-0 opacity-5"
+            style={{
+              backgroundImage: `repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,0.1) 10px, rgba(255,255,255,0.1) 20px)`,
+            }}
+          />
+
+          {/* Top icon/badge */}
+          <div className="absolute top-4 left-4 text-3xl" style={{ textShadow: '0 2px 10px rgba(0,0,0,0.5)' }}>
+            {icon}
+          </div>
+
+          {/* Surah number badge */}
+          <div
+            className="absolute top-4 right-4 w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm"
+            style={{
+              background: 'rgba(255,255,255,0.15)',
+              backdropFilter: 'blur(10px)',
+              border: '2px solid rgba(255,255,255,0.3)',
+              color: 'white',
+            }}
+          >
+            {surah.id}
+          </div>
+
+          {/* Content area - bottom */}
+          <div className="absolute bottom-0 left-0 right-0 p-4"
+            style={{
+              background: 'linear-gradient(transparent, rgba(0,0,0,0.8) 30%)',
+            }}
+          >
+            {/* Arabic name */}
+            <h3
+              className="text-white font-bold text-center mb-1 drop-shadow-lg"
+              style={{
+                fontSize: 24 * contentZoom,
+                fontFamily: "'Scheherazade New', 'Amiri', serif",
+                textShadow: '0 2px 10px rgba(0,0,0,0.5)',
+              }}
+            >
+              {surah.arabic}
+            </h3>
+
+            {/* English name */}
+            <p className="text-white/90 text-center text-sm font-medium mb-2">
+              {surah.name}
+            </p>
+
+            {/* Metadata row */}
+            <div className="flex justify-center gap-3 text-white/70 text-xs">
+              <span className="flex items-center gap-1">
+                <span>📄</span> {surah.ayahs} Ayahs
+              </span>
+              <span className="flex items-center gap-1">
+                {surah.type === 'Makki' ? '🕋' : '🕌'} {surah.type}
+              </span>
+            </div>
+
+            {/* Hover info */}
+            {isHovered && (
+              <div className="mt-3 pt-3 border-t border-white/20 animate-fadeIn">
+                <p className="text-white/80 text-xs text-center italic">
+                  "{surah.meaning}"
+                </p>
+                <button
+                  className="w-full mt-2 py-2 rounded-lg font-semibold text-sm transition-all hover:scale-105"
+                  style={{
+                    background: 'linear-gradient(135deg, #10B981, #059669)',
+                    color: 'white',
+                  }}
+                >
+                  ▶ Read Now
+                </button>
+              </div>
+            )}
+          </div>
+
+          {/* Shine effect on hover */}
+          {isHovered && (
+            <div
+              className="absolute inset-0 pointer-events-none"
+              style={{
+                background: 'linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.1) 45%, transparent 50%)',
+                animation: 'shine 1.5s infinite',
+              }}
+            />
+          )}
+        </div>
+      </div>
+    );
+  };
+
+  // Category row component
+  const CategoryRow = ({ category }) => (
+    <div className="mb-8">
+      {/* Row header */}
+      <div className="flex items-center justify-between mb-4 px-4">
+        <h2 className={`text-lg sm:text-xl font-bold flex items-center gap-2 ${
+          darkMode ? 'text-white' : 'text-gray-800'
+        }`}>
+          <span className="text-2xl">{category.emoji}</span>
+          {category.title}
+          <span className={`text-sm font-normal ${darkMode ? 'text-white/50' : 'text-gray-500'}`}>
+            ({category.surahs.length})
+          </span>
+        </h2>
+
+        {/* Scroll arrows */}
+        <div className="flex gap-2">
+          <button
+            onClick={() => scrollRefs.current[category.id]?.scrollBy({ left: -300, behavior: 'smooth' })}
+            className={`w-8 h-8 rounded-full flex items-center justify-center transition-all hover:scale-110 ${
+              darkMode ? 'bg-white/10 text-white hover:bg-white/20' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+            }`}
+          >
+            ◀
+          </button>
+          <button
+            onClick={() => scrollRefs.current[category.id]?.scrollBy({ left: 300, behavior: 'smooth' })}
+            className={`w-8 h-8 rounded-full flex items-center justify-center transition-all hover:scale-110 ${
+              darkMode ? 'bg-white/10 text-white hover:bg-white/20' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+            }`}
+          >
+            ▶
+          </button>
+        </div>
+      </div>
+
+      {/* Scrollable cards */}
+      <div
+        ref={(el) => scrollRefs.current[category.id] = el}
+        className="flex gap-4 overflow-x-auto pb-4 px-4 scrollbar-hide scroll-smooth"
+        style={{
+          scrollbarWidth: 'none',
+          msOverflowStyle: 'none',
+        }}
+        onMouseEnter={() => setActiveRow(category.id)}
+        onMouseLeave={() => setActiveRow(null)}
+      >
+        {category.surahs.map((surah) => (
+          <MovieCard
+            key={surah.id}
+            surah={surah}
+            isHovered={hoveredCard === surah.id}
+            onHover={setHoveredCard}
+            onLeave={() => setHoveredCard(null)}
+          />
+        ))}
+      </div>
+    </div>
+  );
+
+  return (
+    <div
+      className="min-h-screen pb-24"
+      style={{
+        background: darkMode
+          ? 'linear-gradient(180deg, #0a0a0a 0%, #141414 100%)'
+          : 'linear-gradient(180deg, #1a1a2e 0%, #16213e 100%)',
+      }}
+    >
+      {/* Netflix-style header */}
+      <div className="pt-6 pb-4 px-4">
+        <div className="flex items-center justify-between max-w-7xl mx-auto">
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-bold text-white flex items-center gap-2">
+              <span className="text-red-500">Q</span>uran
+              <span className="text-xs sm:text-sm font-normal bg-red-600 text-white px-2 py-0.5 rounded ml-2">
+                BROWSE
+              </span>
+            </h1>
+            <p className="text-white/60 text-sm mt-1">
+              Explore the Holy Quran like never before
+            </p>
+          </div>
+
+          {/* Auto-play toggle */}
+          <button
+            onClick={() => setAutoPlay(!autoPlay)}
+            className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
+              autoPlay
+                ? 'bg-red-600 text-white'
+                : 'bg-white/10 text-white/70 hover:bg-white/20'
+            }`}
+          >
+            {autoPlay ? '⏸️ Pause' : '▶️ Auto-Play'}
+          </button>
+        </div>
+      </div>
+
+      {/* Featured Hero Card */}
+      <div className="px-4 mb-8">
+        <div
+          className="max-w-7xl mx-auto rounded-2xl overflow-hidden relative"
+          style={{
+            height: '300px',
+            background: 'linear-gradient(135deg, #1a1a2e 0%, #2d132c 50%, #0f3460 100%)',
+          }}
+        >
+          {/* Background pattern */}
+          <div className="absolute inset-0 opacity-20"
+            style={{
+              backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+            }}
+          />
+
+          {/* Content */}
+          <div className="absolute inset-0 flex items-center justify-between p-8">
+            <div className="max-w-lg">
+              <div className="text-5xl mb-4">📖</div>
+              <h2 className="text-3xl sm:text-4xl font-bold text-white mb-2">
+                Surah Al-Fatiha
+              </h2>
+              <p className="text-white/80 text-lg mb-2">The Opening</p>
+              <p className="text-white/60 text-sm mb-4">
+                The greatest surah in the Quran. Recited in every unit of prayer.
+              </p>
+              <div className="flex gap-3">
+                <button
+                  onClick={(e) => {
+                    playClickSound();
+                    onSurahClick(surahs[0], { x: e.clientX, y: e.clientY });
+                  }}
+                  className="px-6 py-3 rounded-lg font-bold text-white flex items-center gap-2 transition-all hover:scale-105"
+                  style={{ background: 'linear-gradient(135deg, #10B981, #059669)' }}
+                >
+                  ▶ Read Now
+                </button>
+                <button className="px-6 py-3 rounded-lg font-bold text-white bg-white/20 hover:bg-white/30 transition-all">
+                  ℹ️ More Info
+                </button>
+              </div>
+            </div>
+
+            {/* Arabic calligraphy */}
+            <div className="hidden md:block text-right">
+              <span
+                className="text-white/90 font-bold"
+                style={{
+                  fontSize: '80px',
+                  fontFamily: "'Scheherazade New', 'Amiri', serif",
+                  textShadow: '0 4px 20px rgba(0,0,0,0.3)',
+                }}
+              >
+                الفاتحة
+              </span>
+            </div>
+          </div>
+
+          {/* Gradient overlay */}
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background: 'linear-gradient(90deg, rgba(0,0,0,0.7) 0%, transparent 60%)',
+            }}
+          />
+        </div>
+      </div>
+
+      {/* Category rows */}
+      {categories.map((category) => (
+        <CategoryRow key={category.id} category={category} />
+      ))}
+
+      {/* CSS for animations */}
+      <style>{`
+        @keyframes shine {
+          0% { transform: translateX(-100%); }
+          100% { transform: translateX(200%); }
+        }
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(10px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fadeIn {
+          animation: fadeIn 0.3s ease-out forwards;
+        }
+        .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+        }
+      `}</style>
+    </div>
+  );
+});
+
 export default {
   LayoutSelector,
   ClockLayout,
@@ -2375,4 +2817,5 @@ export default {
   KidsLayout,
   LudoLayout,
   ArtLayout,
+  NetflixLayout,
 };

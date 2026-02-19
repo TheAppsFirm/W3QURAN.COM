@@ -154,6 +154,7 @@ const StatsBar = memo(function StatsBar({
     { id: 'grid', icon: '⊞', label: 'Grid', category: 'standard' },
     { id: 'list', icon: '☰', label: 'List', category: 'standard' },
     { id: 'compact', icon: '▦', label: 'Compact', category: 'standard' },
+    { id: 'netflix', icon: '🎬', label: 'Cinema', category: 'standard' },
     // Kids layouts (fun & interactive) - moved up for easy access
     { id: 'kids-rainbow', icon: '🌈', label: 'Rainbow', category: 'kids' },
     { id: 'kids-art', icon: '🎨', label: 'Art Studio', category: 'kids' },

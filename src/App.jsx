@@ -12,7 +12,7 @@
 import React, { Suspense, useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { ErrorBoundary, LoadingSpinner, BubbleModal, BubbleReaderOverlay, ProgressDashboard, OfflineManager, HifzMode, SearchPanel, DonateModal, WordSearchMap, EmotionalTracker, ScholarVideoSync, PropheticMap, QuranCompanionAI, GlobalUmmahPulse, VerseWeatherSync, SoundHealingRoom, QuranicBabyNames, TalkToQuran } from './components/common';
 import { Header, FloatingMenu, StatsBar } from './components/layout';
-import { SurahBubble, LayoutSelector, ClockLayout, GridLayout, JuzzGroupLayout, AlphabetLayout, RevelationLayout, BookLayout, ListLayout, CompactLayout, HoneycombLayout, WaveLayout, LengthLayout, KidsLayout, LudoLayout, ArtLayout } from './components/bubbles';
+import { SurahBubble, LayoutSelector, ClockLayout, GridLayout, JuzzGroupLayout, AlphabetLayout, RevelationLayout, BookLayout, ListLayout, CompactLayout, HoneycombLayout, WaveLayout, LengthLayout, KidsLayout, LudoLayout, ArtLayout, NetflixLayout } from './components/bubbles';
 import { AnalyticsPanel } from './components/widgets';
 import {
   NamesOfAllahView,
@@ -1169,6 +1169,17 @@ function QuranBubbleApp() {
               {/* Kids Art Layout - Art studio style */}
               {surahLayout === 'kids-art' && (
                 <ArtLayout
+                  surahs={filtered}
+                  onSurahClick={handleSelectSurah}
+                  zoom={zoom}
+                  contentZoom={contentZoom}
+                  darkMode={darkMode}
+                />
+              )}
+
+              {/* Netflix Cinema Layout */}
+              {surahLayout === 'netflix' && (
+                <NetflixLayout
                   surahs={filtered}
                   onSurahClick={handleSelectSurah}
                   zoom={zoom}
