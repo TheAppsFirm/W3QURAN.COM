@@ -112,7 +112,7 @@ const BubbleBackground = () => (
 );
 
 // Central Quran bubble orb
-const QuranBubble = ({ status, isPlaying, onClick, hasAccess, isAuthenticated }) => {
+const QuranBubble = ({ status, isPlaying, onClick, hasAccess, isAuthenticated, showTextInput }) => {
   const isActive = status !== 'idle';
 
   return (
@@ -1061,7 +1061,7 @@ export default function TalkToQuran({ isVisible, onClose, onNavigate }) {
         <div className="flex-1 overflow-y-auto px-4 py-4">
           {messages.length === 0 && !streamingText && status === 'idle' && !liveTranscript && (
             <div className="h-full flex flex-col items-center justify-center px-4">
-              <QuranBubble status={status} isPlaying={isPlaying} onClick={handleBubbleClick} hasAccess={hasAccess} isAuthenticated={isAuthenticated} />
+              <QuranBubble status={status} isPlaying={isPlaying} onClick={handleBubbleClick} hasAccess={hasAccess} isAuthenticated={isAuthenticated} showTextInput={showTextInput} />
               <p className="mt-6 text-white/60 text-center max-w-xs text-sm">
                 Ask anything about the Quran and receive guidance from Allah's words
               </p>

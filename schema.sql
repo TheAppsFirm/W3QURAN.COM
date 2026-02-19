@@ -221,3 +221,67 @@ CREATE TABLE IF NOT EXISTS error_logs (
 -- Indexes for error logs
 CREATE INDEX IF NOT EXISTS idx_error_logs_type ON error_logs(error_type);
 CREATE INDEX IF NOT EXISTS idx_error_logs_created ON error_logs(created_at);
+
+-- ============================================
+-- ANALYTICS TABLES (Firebase-style tracking)
+-- ============================================
+
+-- Analytics events table (raw event tracking from client)
+CREATE TABLE IF NOT EXISTS analytics_events (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  event_type TEXT NOT NULL, -- 'page_view', 'surah_read', 'audio_play', 'feature_use', 'search', 'purchase', 'error'
+  user_id TEXT,
+  session_id TEXT NOT NULL,
+  page_url TEXT,
+  surah_id INTEGER,
+  ayah_num INTEGER,
+  feature_name TEXT, -- 'talk_to_quran', 'tafseer', 'memorize', 'bookmark', etc.
+  duration_seconds INTEGER,
+  completion_percent INTEGER, -- 0-100 for surah reading completion
+  search_query TEXT,
+  result_count INTEGER,
+  metadata TEXT, -- JSON for additional context
+  country TEXT, -- geo location
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Indexes for analytics events
+CREATE INDEX IF NOT EXISTS idx_analytics_events_type ON analytics_events(event_type);
+CREATE INDEX IF NOT EXISTS idx_analytics_events_created ON analytics_events(created_at);
+CREATE INDEX IF NOT EXISTS idx_analytics_events_type_date ON analytics_events(event_type, created_at);
+CREATE INDEX IF NOT EXISTS idx_analytics_events_session ON analytics_events(session_id);
+CREATE INDEX IF NOT EXISTS idx_analytics_events_user ON analytics_events(user_id);
+CREATE INDEX IF NOT EXISTS idx_analytics_events_surah ON analytics_events(surah_id);
+CREATE INDEX IF NOT EXISTS idx_analytics_events_feature ON analytics_events(feature_name);
+
+-- Daily aggregates table (pre-computed metrics for fast dashboard queries)
+CREATE TABLE IF NOT EXISTS analytics_daily (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  date TEXT NOT NULL, -- YYYY-MM-DD
+  metric_name TEXT NOT NULL, -- 'dau', 'sessions', 'page_views', 'revenue', 'new_users', 'surah_reads', etc.
+  metric_value REAL NOT NULL,
+  dimensions TEXT, -- JSON: {"country": "US", "tier": "premium", "browser": "chrome"}
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE(date, metric_name, dimensions)
+);
+
+-- Indexes for daily aggregates
+CREATE INDEX IF NOT EXISTS idx_analytics_daily_date ON analytics_daily(date);
+CREATE INDEX IF NOT EXISTS idx_analytics_daily_metric ON analytics_daily(metric_name);
+CREATE INDEX IF NOT EXISTS idx_analytics_daily_metric_date ON analytics_daily(metric_name, date);
+
+-- AI Insights cache table (stores generated insights)
+CREATE TABLE IF NOT EXISTS ai_insights (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  insight_type TEXT NOT NULL, -- 'full', 'quick', 'revenue', 'growth', 'weekly'
+  insights_json TEXT NOT NULL, -- Full AI response
+  metrics_snapshot TEXT, -- Metrics used to generate insights
+  generated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  expires_at DATETIME, -- Cache expiration
+  sent_email BOOLEAN DEFAULT FALSE
+);
+
+-- Index for AI insights
+CREATE INDEX IF NOT EXISTS idx_ai_insights_type ON ai_insights(insight_type);
+CREATE INDEX IF NOT EXISTS idx_ai_insights_generated ON ai_insights(generated_at);
+CREATE INDEX IF NOT EXISTS idx_ai_insights_expires ON ai_insights(expires_at);
