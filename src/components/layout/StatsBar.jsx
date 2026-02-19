@@ -16,7 +16,7 @@ const BubbleButton = memo(function BubbleButton({ icon: Icon, label, color, colo
       onClick={onClick}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className="relative flex flex-col items-center gap-0.5 transition-all duration-300 flex-shrink-0"
+      className="relative flex flex-col items-center gap-0.5 transition-all duration-300 flex-shrink-0 snap-start"
       title={label}
     >
       {/* Bubble */}
@@ -223,12 +223,18 @@ const StatsBar = memo(function StatsBar({
 
           {/* Center - Layout & Zoom Controls + Mood & Mind Map */}
           {showControls && (
-            <div className="flex items-center gap-2 sm:gap-3 flex-1 overflow-x-auto scrollbar-hide px-2" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+            <div className="relative flex-1 min-w-0">
+              {/* Left fade indicator */}
+              <div className="absolute left-0 top-0 bottom-0 w-6 bg-gradient-to-r from-white/95 to-transparent z-10 pointer-events-none sm:hidden" />
+              {/* Right fade indicator */}
+              <div className="absolute right-0 top-0 bottom-0 w-6 bg-gradient-to-l from-white/95 to-transparent z-10 pointer-events-none sm:hidden" />
+
+              <div className="flex items-center gap-2 sm:gap-3 overflow-x-auto scrollbar-hide px-1 snap-x snap-mandatory" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
               {/* Layout Selector - Bubble Style */}
               <button
                 ref={layoutBtnRef}
                 onClick={(e) => { e.stopPropagation(); setShowLayoutMenu(!showLayoutMenu); setShowZoomMenu(false); }}
-                className="relative flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-full text-white font-medium transition-all hover:shadow-lg hover:scale-105 overflow-hidden flex-shrink-0"
+                className="relative flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-full text-white font-medium transition-all hover:shadow-lg hover:scale-105 overflow-hidden flex-shrink-0 snap-start"
                 style={{
                   background: 'linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%)',
                   boxShadow: '0 4px 15px rgba(139, 92, 246, 0.4), inset 0 -6px 15px rgba(99, 102, 241, 0.3), inset 0 6px 15px rgba(255,255,255,0.2)',
@@ -256,7 +262,7 @@ const StatsBar = memo(function StatsBar({
               <button
                 ref={zoomBtnRef}
                 onClick={(e) => { e.stopPropagation(); setShowZoomMenu(!showZoomMenu); setShowLayoutMenu(false); }}
-                className="relative flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-full text-white font-medium transition-all hover:shadow-lg hover:scale-105 overflow-hidden flex-shrink-0"
+                className="relative flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-full text-white font-medium transition-all hover:shadow-lg hover:scale-105 overflow-hidden flex-shrink-0 snap-start"
                 style={{
                   background: 'linear-gradient(135deg, #14b8a6 0%, #10b981 100%)',
                   boxShadow: '0 4px 15px rgba(20, 184, 166, 0.4), inset 0 -6px 15px rgba(16, 185, 129, 0.3), inset 0 6px 15px rgba(255,255,255,0.2)',
@@ -356,6 +362,7 @@ const StatsBar = memo(function StatsBar({
                   onClick={onSoundHealing}
                 />
               )}
+              </div>
             </div>
           )}
 
