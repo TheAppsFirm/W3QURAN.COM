@@ -33,6 +33,7 @@ import { logReadingSession, trackSurahCompletion, trackFeatureUsage } from '../.
 import { shareVerse } from '../../utils/shareUtils';
 import { useAuth } from '../../contexts/AuthContext';
 import logger from '../../utils/logger';
+import { trackSurahRead, trackFeatureUse, trackAudioPlay, trackTafseerView } from '../../utils/analyticsTracker';
 
 // Browser detection for Safari-specific optimizations
 const isSafari = typeof navigator !== 'undefined' && /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
@@ -1545,15 +1546,21 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
   const loadMoreTriggerRef = useRef(null); // IntersectionObserver target
   const isLargeSurah = (surah?.ayahs || 0) > LARGE_SURAH_THRESHOLD;
 
-  // Log surah open event
+  // Log surah open event and track reading start time
+  const readingStartTime = useRef(Date.now());
   useEffect(() => {
     if (surah?.id) {
       logger.surahOpen(surah.id, surah.name);
       logger.memoryWarning('surah open');
+      readingStartTime.current = Date.now();
     }
     return () => {
       if (surah?.id) {
         logger.surahClose(surah.id, currentAyah);
+        // Track surah reading with duration and completion
+        const durationSeconds = Math.round((Date.now() - readingStartTime.current) / 1000);
+        const completionPercent = Math.round((currentAyah / (surah.ayahs || 1)) * 100);
+        trackSurahRead(surah.id, durationSeconds, completionPercent);
       }
     };
   }, [surah?.id]);
