@@ -2091,7 +2091,7 @@ export const Card3DLayout = memo(function Card3DLayout({
     },
   ], [surahs]);
 
-  // Thematic gradients for movie poster effect
+  // Thematic gradients for card backgrounds
   const getCardGradient = (surah) => {
     const gradients = [
       ['#1a1a2e', '#16213e', '#0f3460'], // Deep Night
