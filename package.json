@@ -2,6 +2,9 @@
   "name": "w3quran",
   "private": true,
   "version": "1.0.0",
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "description": "A beautiful, interactive Quran application built with React and modern web technologies",
   "author": "w3Quran Team",
   "license": "MIT",
