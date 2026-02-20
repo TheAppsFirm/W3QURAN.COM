@@ -438,11 +438,15 @@ export const GridLayout = memo(function GridLayout({
         display: 'grid',
         gridTemplateColumns: gridColumns,
         gap: `${gap}px`,
-        padding: isMobile ? '16px' : '24px',
-        paddingRight: isMobile ? '64px' : '80px', // Extra space for right side menu
+        padding: isMobile ? '12px' : '24px',
+        paddingRight: isMobile ? '48px' : '64px', // Reduced space for right side menu
+        paddingLeft: isMobile ? '12px' : '24px',
         paddingBottom: isMobile ? '140px' : '160px', // Extra space for floating menu
         width: '100%',
+        maxWidth: '100%',
+        margin: '0 auto',
         direction: 'rtl',
+        justifyContent: 'center',
       }}
     >
       {surahs.map((surah, index) => {
@@ -573,7 +577,7 @@ export const JuzzGroupLayout = memo(function JuzzGroupLayout({
   ];
 
   return (
-    <div className="p-3 sm:p-4 md:p-6 pr-16 sm:pr-20 pb-28 sm:pb-32 space-y-4 sm:space-y-6">
+    <div className="p-3 sm:p-4 md:p-6 pr-12 sm:pr-14 pb-28 sm:pb-32 space-y-4 sm:space-y-6">
       {Object.entries(juzzGroups).map(([juzz, surahList]) => {
         if (surahList.length === 0) return null;
 
@@ -686,7 +690,7 @@ export const AlphabetLayout = memo(function AlphabetLayout({
   };
 
   return (
-    <div className="p-3 sm:p-4 md:p-6 pr-16 sm:pr-20 pb-28 sm:pb-32 space-y-4 sm:space-y-6">
+    <div className="p-3 sm:p-4 md:p-6 pr-12 sm:pr-14 pb-28 sm:pb-32 space-y-4 sm:space-y-6">
       {Object.entries(alphabetGroups).map(([letter, surahList]) => {
         if (surahList.length === 0) return null;
 
@@ -790,7 +794,7 @@ export const RevelationLayout = memo(function RevelationLayout({
   const madaniSurahs = sortedSurahs.filter(s => s.type === 'Madani');
 
   return (
-    <div className="p-3 sm:p-4 md:p-6 pr-16 sm:pr-20 pb-28 sm:pb-32 space-y-6 sm:space-y-8">
+    <div className="p-3 sm:p-4 md:p-6 pr-12 sm:pr-14 pb-28 sm:pb-32 space-y-6 sm:space-y-8">
       {/* Makki Period */}
       <div>
         <div
@@ -1112,7 +1116,7 @@ export const BookLayout = memo(function BookLayout({
   );
 
   return (
-    <div className="relative min-h-[70vh] sm:min-h-[80vh] w-full flex flex-col items-center pt-4 sm:pt-8 pb-28 sm:pb-32 pr-16 sm:pr-20 px-2 sm:px-4">
+    <div className="relative min-h-[70vh] sm:min-h-[80vh] w-full flex flex-col items-center pt-4 sm:pt-8 pb-28 sm:pb-32 pr-12 sm:pr-14 px-2 sm:px-4">
       {/* Header */}
       <div className="text-center mb-4 sm:mb-8">
         <div
@@ -1240,7 +1244,7 @@ export const ListLayout = memo(function ListLayout({
   darkMode,
 }) {
   return (
-    <div className="p-2 sm:p-4 pr-16 sm:pr-20 pb-28 sm:pb-32 max-w-3xl mx-auto" dir="rtl">
+    <div className="p-2 sm:p-4 pr-12 sm:pr-14 pb-28 sm:pb-32 max-w-3xl mx-auto" dir="rtl">
       <div className="space-y-1.5 sm:space-y-2">
         {surahs.map((surah, index) => {
           const palette = PALETTES[(surah.id - 1) % 10];
@@ -1296,7 +1300,7 @@ export const CompactLayout = memo(function CompactLayout({
   darkMode,
 }) {
   return (
-    <div className="p-2 sm:p-4 pr-16 sm:pr-20 pb-28 sm:pb-32" dir="rtl">
+    <div className="p-2 sm:p-4 pr-12 sm:pr-14 pb-28 sm:pb-32" dir="rtl">
       <div className="grid grid-cols-5 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 xl:grid-cols-12 gap-1.5 sm:gap-2">
         {surahs.map((surah) => {
           const palette = PALETTES[(surah.id - 1) % 10];
@@ -1338,7 +1342,7 @@ export const HoneycombLayout = memo(function HoneycombLayout({
   const hexHeight = hexSize * 1.2;
 
   return (
-    <div className="p-6 pr-16 sm:pr-20 pb-28 sm:pb-32 flex justify-center" dir="rtl">
+    <div className="p-6 pr-12 sm:pr-14 pb-28 sm:pb-32 flex justify-center" dir="rtl">
       <div className="relative" style={{ width: '100%', maxWidth: '1200px' }}>
         <div className="flex flex-wrap justify-center">
           {surahs.map((surah, index) => {
@@ -1396,7 +1400,7 @@ export const WaveLayout = memo(function WaveLayout({
   darkMode,
 }) {
   return (
-    <div className="p-6 pr-16 sm:pr-20 pb-28 sm:pb-32 overflow-x-auto" dir="rtl">
+    <div className="p-6 pr-12 sm:pr-14 pb-28 sm:pb-32 overflow-x-auto" dir="rtl">
       <div className="flex flex-wrap justify-center gap-3">
         {surahs.map((surah, index) => {
           const palette = PALETTES[(surah.id - 1) % 10];
@@ -1510,7 +1514,7 @@ export const LengthLayout = memo(function LengthLayout({
   );
 
   return (
-    <div className="p-4 pr-16 sm:pr-20 pb-28 sm:pb-32" dir="rtl">
+    <div className="p-4 pr-12 sm:pr-14 pb-28 sm:pb-32" dir="rtl">
       {renderGroup('Long Surahs (100+ verses)', '📜', longSurahs, '#8B5CF6')}
       {renderGroup('Medium Surahs (30-99 verses)', '📖', mediumSurahs, '#10B981')}
       {renderGroup('Short Surahs (< 30 verses)', '📄', shortSurahs, '#F59E0B')}
@@ -1606,7 +1610,7 @@ export const KidsLayout = memo(function KidsLayout({
   const size = 100 * zoom;
 
   return (
-    <div className="p-4 sm:p-6 pr-16 sm:pr-20 pb-28 sm:pb-32" dir="rtl">
+    <div className="p-4 sm:p-6 pr-12 sm:pr-14 pb-28 sm:pb-32" dir="rtl">
       {/* Fun header for kids */}
       <div className="text-center mb-6">
         <h2 className="text-2xl sm:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 animate-pulse">
@@ -1856,7 +1860,7 @@ export const ArtLayout = memo(function ArtLayout({
   const size = 95 * zoom;
 
   return (
-    <div className="p-4 sm:p-6 pr-16 sm:pr-20 pb-28 sm:pb-32" dir="rtl" style={{
+    <div className="p-4 sm:p-6 pr-12 sm:pr-14 pb-28 sm:pb-32" dir="rtl" style={{
       background: darkMode
         ? 'linear-gradient(145deg, #1a1a2e, #16213e)'
         : 'linear-gradient(145deg, #FFF7ED, #FEF3C7)',
