@@ -51,15 +51,25 @@ async function getAccessToken(env) {
   if (!response.ok) {
     const error = await response.text();
     console.error('OAuth error:', error);
-    throw new Error(`OAuth failed: ${response.status}`);
+    throw new Error(`OAuth failed: ${response.status} - ${error.substring(0, 200)}`);
   }
 
-  const data = await response.json();
+  let data;
+  try {
+    data = await response.json();
+  } catch (parseError) {
+    console.error('OAuth JSON parse error:', parseError);
+    throw new Error('Failed to parse OAuth response');
+  }
+
+  if (!data || !data.access_token) {
+    throw new Error('No access token in OAuth response');
+  }
 
   // Cache the token (with 5 min buffer before expiry)
   tokenCache = {
     accessToken: data.access_token,
-    expiresAt: Date.now() + (data.expires_in - 300) * 1000,
+    expiresAt: Date.now() + ((data.expires_in || 3600) - 300) * 1000,
   };
 
   return data.access_token;
@@ -85,10 +95,23 @@ async function fetchWords(surahId, language, accessToken) {
   });
 
   if (!response.ok) {
-    throw new Error(`API error: ${response.status}`);
+    const errorText = await response.text().catch(() => 'Unknown error');
+    throw new Error(`API error: ${response.status} ${response.statusText} - ${errorText.substring(0, 200)}`);
   }
 
-  return response.json();
+  let data;
+  try {
+    data = await response.json();
+  } catch (parseError) {
+    console.error('[Quran Words API] JSON parse error:', parseError);
+    throw new Error('Invalid API response format');
+  }
+
+  if (!data || typeof data !== 'object') {
+    throw new Error('Invalid API response structure');
+  }
+
+  return data;
 }
 
 /**

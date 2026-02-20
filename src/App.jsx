@@ -1249,6 +1249,7 @@ function QuranBubbleApp() {
           }}
           darkMode={darkMode}
           originPosition={clickPosition}
+          layoutStyle={surahLayout}
         />
       )}
 
@@ -1266,6 +1267,7 @@ function QuranBubbleApp() {
           initialVerse={initialVerse}
           initialPanel={initialPanel}
           readerStyle={surahLayout}
+          layoutStyle={surahLayout}
           onPanelChange={(panel) => {
             // Update URL when panel changes
             const basePath = `/surah/${overlayReaderSurah.id}${initialVerse > 1 ? `/${initialVerse}` : ''}`;

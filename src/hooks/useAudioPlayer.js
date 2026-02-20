@@ -420,11 +420,16 @@ export function useAudioPlayer(options = {}) {
             })
             .catch((err) => {
               playPromiseRef.current = null;
-              // AbortError is expected when source changes - ignore it
-              if (err.name === 'AbortError') {
-                return;
+              // Safely handle different error types
+              if (err && typeof err === 'object') {
+                // AbortError is expected when source changes - ignore it
+                if (err.name === 'AbortError') {
+                  return;
+                }
+                console.error('Playback error:', err.message || err);
+              } else if (err) {
+                console.error('Playback error (unknown type):', err);
               }
-              console.error('Playback error:', err);
               setError('Playback failed. Tap play to retry.');
               setIsPlaying(false);
             });

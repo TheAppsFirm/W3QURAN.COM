@@ -314,23 +314,30 @@ function PrayerTimesView({ darkMode }) {
   return (
     <div className={`h-full flex flex-col overflow-auto ${darkMode ? 'text-white' : ''}`}>
       {/* Header with Hijri Date */}
-      <div className={`sticky top-0 z-10 backdrop-blur-xl p-4 ${darkMode ? 'bg-gray-900/90' : 'bg-white/90'} border-b ${darkMode ? 'border-gray-800' : 'border-gray-200'}`}>
-        {/* Back button */}
-        <button
-          onClick={handleBack}
-          className={`absolute left-4 top-4 p-2 rounded-full transition-all ${darkMode ? 'hover:bg-white/10' : 'hover:bg-gray-100'}`}
-          title="Go back"
-        >
-          <Icons.ChevronLeft className={`w-6 h-6 ${darkMode ? 'text-white' : 'text-gray-600'}`} />
-        </button>
+      <div
+        className={`sticky top-0 z-10 backdrop-blur-xl ${darkMode ? 'bg-gray-900/90' : 'bg-white/90'} border-b ${darkMode ? 'border-gray-800' : 'border-gray-200'}`}
+        style={{ paddingTop: 'max(1rem, env(safe-area-inset-top))' }}
+      >
+        {/* Title row with back button */}
+        <div className="relative flex items-center justify-center px-4 py-3">
+          {/* Back button - vertically centered, proper touch target */}
+          <button
+            onClick={handleBack}
+            className={`absolute left-3 p-2.5 rounded-full transition-all ${darkMode ? 'hover:bg-white/10 active:bg-white/20' : 'hover:bg-gray-100 active:bg-gray-200'}`}
+            style={{ minWidth: '44px', minHeight: '44px' }}
+            title="Go back"
+          >
+            <Icons.ChevronLeft className={`w-6 h-6 ${darkMode ? 'text-white' : 'text-gray-600'}`} />
+          </button>
 
-        <h2 className={`text-2xl font-bold text-center ${darkMode ? 'text-white' : 'text-gray-800'}`}>
-          🕌 Prayer Times
-        </h2>
+          <h2 className={`text-2xl font-bold text-center ${darkMode ? 'text-white' : 'text-gray-800'}`}>
+            🕌 Prayer Times
+          </h2>
+        </div>
 
         {/* Hijri Date */}
         {hijriDate && (
-          <div className="text-center mt-2">
+          <div className="text-center px-4 pb-2">
             <p className={`text-lg font-semibold ${darkMode ? 'text-emerald-400' : 'text-emerald-600'}`} dir="rtl">
               {hijriDate.formattedAr}
             </p>
@@ -342,7 +349,7 @@ function PrayerTimesView({ darkMode }) {
 
         {/* Ramadan Banner */}
         {isRamadan && (
-          <div className="mt-3 p-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 text-white text-center">
+          <div className="mx-4 mb-3 p-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 text-white text-center">
             <p className="font-bold text-lg">🌙 Ramadan Mubarak! 🌙</p>
             <div className="flex justify-center gap-6 mt-2 text-sm">
               <div>

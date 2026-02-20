@@ -303,39 +303,63 @@ class BinauralBeatGenerator {
   start(baseFreq, beatFreq, volume = 0.3) {
     if (this.isPlaying) this.stop();
 
-    this.init();
+    try {
+      const audioContext = this.init();
+      if (!audioContext) {
+        console.error('[Binaural] AudioContext failed to initialize');
+        return;
+      }
 
-    // Create gain node
-    this.gainNode = this.audioContext.createGain();
-    this.gainNode.gain.value = volume;
-    this.gainNode.connect(this.audioContext.destination);
+      // Create gain node with null check
+      this.gainNode = audioContext.createGain();
+      if (!this.gainNode || !this.gainNode.gain) {
+        console.error('[Binaural] Failed to create gain node');
+        return;
+      }
+      this.gainNode.gain.value = volume;
+      this.gainNode.connect(audioContext.destination);
 
-    // Create stereo panner for left channel
-    const leftPanner = this.audioContext.createStereoPanner();
-    leftPanner.pan.value = -1;
-    leftPanner.connect(this.gainNode);
+      // Create stereo panner for left channel
+      const leftPanner = audioContext.createStereoPanner();
+      if (leftPanner && leftPanner.pan) {
+        leftPanner.pan.value = -1;
+      }
+      leftPanner.connect(this.gainNode);
 
-    // Create stereo panner for right channel
-    const rightPanner = this.audioContext.createStereoPanner();
-    rightPanner.pan.value = 1;
-    rightPanner.connect(this.gainNode);
+      // Create stereo panner for right channel
+      const rightPanner = audioContext.createStereoPanner();
+      if (rightPanner && rightPanner.pan) {
+        rightPanner.pan.value = 1;
+      }
+      rightPanner.connect(this.gainNode);
 
-    // Create left oscillator
-    this.leftOscillator = this.audioContext.createOscillator();
-    this.leftOscillator.type = 'sine';
-    this.leftOscillator.frequency.value = baseFreq;
-    this.leftOscillator.connect(leftPanner);
+      // Create left oscillator with error handling
+      this.leftOscillator = audioContext.createOscillator();
+      if (!this.leftOscillator || !this.leftOscillator.frequency) {
+        throw new Error('Failed to create left oscillator');
+      }
+      this.leftOscillator.type = 'sine';
+      this.leftOscillator.frequency.value = baseFreq;
+      this.leftOscillator.connect(leftPanner);
 
-    // Create right oscillator with beat frequency difference
-    this.rightOscillator = this.audioContext.createOscillator();
-    this.rightOscillator.type = 'sine';
-    this.rightOscillator.frequency.value = baseFreq + beatFreq;
-    this.rightOscillator.connect(rightPanner);
+      // Create right oscillator with beat frequency difference
+      this.rightOscillator = audioContext.createOscillator();
+      if (!this.rightOscillator || !this.rightOscillator.frequency) {
+        throw new Error('Failed to create right oscillator');
+      }
+      this.rightOscillator.type = 'sine';
+      this.rightOscillator.frequency.value = baseFreq + beatFreq;
+      this.rightOscillator.connect(rightPanner);
 
-    // Start oscillators
-    this.leftOscillator.start();
-    this.rightOscillator.start();
-    this.isPlaying = true;
+      // Start oscillators
+      this.leftOscillator.start();
+      this.rightOscillator.start();
+      this.isPlaying = true;
+    } catch (error) {
+      console.error('[Binaural] Failed to start binaural beats:', error);
+      this.stop();
+      this.isPlaying = false;
+    }
   }
 
   setVolume(volume) {

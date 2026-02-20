@@ -1,33 +1,17 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#8b5cf6"/>
-      <stop offset="100%" style="stop-color:#581c87"/>
-    </linearGradient>
-    <linearGradient id="book" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#fbbf24"/>
-      <stop offset="100%" style="stop-color:#f59e0b"/>
+    <linearGradient id="f1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#059669"/>
+      <stop offset="100%" stop-color="#06B6D4"/>
     </linearGradient>
   </defs>
-
-  <!-- Background circle -->
-  <circle cx="50" cy="50" r="48" fill="url(#bg)"/>
-
-  <!-- Decorative border -->
-  <circle cx="50" cy="50" r="44" fill="none" stroke="#fbbf24" stroke-width="1.5" opacity="0.5"/>
-
-  <!-- Book icon -->
-  <g transform="translate(25, 28) scale(2)">
-    <path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
-          fill="none"
-          stroke="url(#book)"
-          stroke-width="1.5"
-          stroke-linecap="round"
-          stroke-linejoin="round"/>
+  <!-- Simple squircle -->
+  <rect x="12" y="12" width="176" height="176" rx="48" fill="url(#f1)"/>
+  <!-- Just the mihrab arch — ultra simple -->
+  <g transform="translate(100,100)">
+    <path d="M-28,36 L-28,-4 C-28,-30 0,-50 0,-50 C0,-50 28,-30 28,-4 L28,36"
+          fill="none" stroke="white" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- Tiny light dot -->
+    <circle cx="0" cy="-44" r="6" fill="white" opacity="0.9"/>
   </g>
-
-  <!-- Decorative star -->
-  <path d="M50 12 L52 18 L58 18 L53 22 L55 28 L50 24 L45 28 L47 22 L42 18 L48 18 Z"
-        fill="#fbbf24"
-        opacity="0.8"/>
 </svg>

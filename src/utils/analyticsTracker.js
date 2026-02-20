@@ -16,11 +16,22 @@
 let sessionId = null;
 const getSessionId = () => {
   if (!sessionId) {
-    // Check for existing session in sessionStorage
-    sessionId = sessionStorage.getItem('w3q_session_id');
+    // Check for existing session in sessionStorage (with error handling for private browsing)
+    try {
+      sessionId = sessionStorage.getItem('w3q_session_id');
+    } catch (e) {
+      // sessionStorage access denied (private browsing mode)
+      console.warn('[Analytics] sessionStorage access denied:', e.message);
+    }
+
     if (!sessionId) {
       sessionId = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-      sessionStorage.setItem('w3q_session_id', sessionId);
+      // Try to persist (but don't crash if it fails)
+      try {
+        sessionStorage.setItem('w3q_session_id', sessionId);
+      } catch (e) {
+        console.warn('[Analytics] sessionStorage write denied:', e.message);
+      }
     }
   }
   return sessionId;

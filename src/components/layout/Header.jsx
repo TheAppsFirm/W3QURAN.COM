@@ -5,7 +5,7 @@
 
 import { useState, useEffect, useRef, memo } from 'react';
 import { Icons } from '../common/Icons';
-import { Logo } from '../common/Logo';
+import { FusionLogo, FusionLogoWithText } from '../common/Logo';
 import { FAQ_TOPICS } from '../../data';
 import { useAuth } from '../../contexts/AuthContext';
 import { LoginButton, UserMenu } from '../auth';
@@ -100,9 +100,14 @@ const Header = memo(function Header({ filters, setFilters, showAnalytics, setSho
         {/* Main Row */}
         <div className="flex items-center justify-center gap-2 sm:gap-3 flex-wrap">
 
-          {/* App Logo - w3Quran bubble logo */}
+          {/* App Logo - Mobile: Icon only, Desktop: Icon + Text */}
+          {/* Mobile Logo (Icon only) */}
+          <div className="flex lg:hidden items-center mr-2">
+            <FusionLogo size={40} variant="gateway" animated={true} />
+          </div>
+          {/* Desktop Logo (Icon + Text) */}
           <div className="hidden lg:flex items-center mr-4">
-            <Logo size="medium" showText={true} />
+            <FusionLogoWithText size={48} variant="gateway" textColor="white" />
           </div>
 
           {/* Search - Enhanced */}

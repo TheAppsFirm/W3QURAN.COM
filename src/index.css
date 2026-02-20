@@ -43,6 +43,26 @@ body {
   text-align: right;
 }
 
+/* Performance optimizations for overlays and modals */
+.modal-overlay,
+.fixed.inset-0,
+[class*="absolute"][class*="inset-0"][class*="flex"][class*="items-center"][class*="justify-center"] {
+  contain: layout style;
+  will-change: opacity;
+}
+
+/* Optimize text rendering for better INP */
+.text-center {
+  text-rendering: optimizeSpeed;
+}
+
+/* Reduce paint for animated elements */
+[class*="animate-"],
+[class*="transition-"] {
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+}
+
 /* Glass morphism utilities */
 @layer utilities {
   .glass {
@@ -222,6 +242,24 @@ body {
   50% {
     transform: scale(1.05);
     opacity: 1;
+  }
+}
+
+@keyframes wave {
+  0%, 100% {
+    transform: translateY(0) scaleX(1);
+  }
+  50% {
+    transform: translateY(-5px) scaleX(1.02);
+  }
+}
+
+@keyframes rainbow {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
   }
 }
 

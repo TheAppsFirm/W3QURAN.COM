@@ -96,6 +96,512 @@ const RECITERS = {
   'ar.minshawi': { name: 'Mohamed Al-Minshawi', country: 'Egypt' },
 };
 
+// Layout style configurations for the reader overlay container
+// Design philosophy: Reading views should be CALM and STABLE for immersive reading
+// CRITICAL: Some layouts have LIGHT themes with DARK text (List, Rainbow, Art Studio, Blocks, Juzz, By Length short)
+const OVERLAY_STYLES = {
+  // ============================================
+  // 1. GRID - Beautiful emerald/teal green gradient (ORIGINAL DESIGN)
+  // ============================================
+  grid: {
+    shape: 'rectangle',
+    isCalm: true,
+    isDark: true,
+    width: 'min(94vw, 680px)',
+    height: 'min(82vh, 720px)',
+    marginTop: '70px',
+    borderRadius: '1.5rem',
+    border: '1px solid rgba(16, 185, 129, 0.25)',
+    customGradient: () => 'linear-gradient(145deg, #059669 0%, #10b981 50%, #34d399 100%)',
+    boxShadow: () => `0 25px 80px rgba(16, 185, 129, 0.4), 0 0 60px rgba(5, 150, 105, 0.3)`,
+    // Verse styling
+    textColor: 'rgba(255,255,255,0.95)',
+    translationColor: 'rgba(255,255,255,0.8)',
+    verseBg: 'rgba(255,255,255,0.08)',
+    verseBorder: 'rgba(255,255,255,0.12)',
+    activeBg: 'rgba(255,255,255,0.15)',
+    activeBorder: 'rgba(255,255,255,0.3)',
+    badgeBg: 'rgba(255,255,255,0.2)',
+    badgeColor: '#ffffff',
+  },
+
+  // ============================================
+  // 2. LIST - WHITE background with DARK text (LIGHT THEME)
+  // ============================================
+  list: {
+    shape: 'rectangle',
+    isCalm: true,
+    isDark: false,
+    width: 'min(94vw, 680px)',
+    height: 'min(82vh, 720px)',
+    marginTop: '70px',
+    borderRadius: '1.25rem',
+    border: '1px solid #e2e8f0',
+    customGradient: () => '#FFFFFF',
+    boxShadow: () => `0 20px 60px rgba(0,0,0,0.15)`,
+    // Verse styling - DARK text on WHITE
+    textColor: '#1e293b',
+    translationColor: '#64748b',
+    verseBg: '#f8fafc',
+    verseBorder: '#e2e8f0',
+    activeBg: '#f0fdf4',
+    activeBorder: '#86efac',
+    badgeBg: '#ecfdf5',
+    badgeColor: '#059669',
+  },
+
+  // ============================================
+  // 3. COMPACT - Beautiful indigo gradient
+  // ============================================
+  compact: {
+    shape: 'rectangle',
+    isCalm: true,
+    isDark: true,
+    width: 'min(94vw, 680px)',
+    height: 'min(82vh, 720px)',
+    marginTop: '70px',
+    borderRadius: '1rem',
+    border: '1px solid rgba(99, 102, 241, 0.25)',
+    customGradient: () => 'linear-gradient(145deg, #4f46e5 0%, #6366f1 50%, #818cf8 100%)',
+    boxShadow: () => `0 20px 60px rgba(99, 102, 241, 0.35)`,
+    textColor: 'rgba(255,255,255,0.95)',
+    translationColor: 'rgba(255,255,255,0.85)',
+    verseBg: 'rgba(255,255,255,0.08)',
+    verseBorder: 'rgba(255,255,255,0.12)',
+    activeBg: 'rgba(255,255,255,0.15)',
+    activeBorder: 'rgba(255,255,255,0.3)',
+    badgeBg: 'rgba(255,255,255,0.2)',
+    badgeColor: '#ffffff',
+  },
+
+  // ============================================
+  // 4. RAINBOW - Warm pastel with DARK text (LIGHT THEME)
+  // ============================================
+  rainbow: {
+    shape: 'rectangle',
+    isCalm: true,
+    isDark: false,
+    width: 'min(94vw, 680px)',
+    height: 'min(82vh, 720px)',
+    marginTop: '70px',
+    borderRadius: '1.5rem',
+    border: '2px solid rgba(236, 72, 153, 0.2)',
+    customGradient: () => 'linear-gradient(180deg, #fffbeb 0%, #fef3c7 50%, #fdf2f8 100%)',
+    boxShadow: () => `0 20px 60px rgba(236, 72, 153, 0.15)`,
+    textColor: '#1e293b',
+    translationColor: '#64748b',
+    verseBg: 'rgba(255,255,255,0.7)',
+    verseBorder: 'rgba(236,72,153,0.15)',
+    activeBg: 'rgba(251,191,36,0.2)',
+    activeBorder: 'rgba(251,191,36,0.4)',
+    badgeBg: 'rgba(251,191,36,0.2)',
+    badgeColor: '#b45309',
+  },
+
+  // ============================================
+  // 5. ART STUDIO - Cream with dark brown text (LIGHT THEME)
+  // ============================================
+  gallery: {
+    shape: 'rectangle',
+    isCalm: true,
+    isDark: false,
+    width: 'min(94vw, 680px)',
+    height: 'min(82vh, 720px)',
+    marginTop: '70px',
+    borderRadius: '0.75rem',
+    border: '4px solid #F5F5F0',
+    customGradient: () => 'linear-gradient(180deg, #FFFEF0 0%, #FFF8E7 100%)',
+    boxShadow: () => `0 20px 60px rgba(139, 69, 19, 0.12)`,
+    textColor: '#78350f',
+    translationColor: '#92400e',
+    verseBg: 'rgba(212,165,116,0.08)',
+    verseBorder: 'rgba(180,83,9,0.1)',
+    activeBg: 'rgba(180,83,9,0.1)',
+    activeBorder: 'rgba(180,83,9,0.25)',
+    badgeBg: 'rgba(180,83,9,0.15)',
+    badgeColor: '#92400e',
+  },
+
+  // ============================================
+  // 6. BLOCKS - Ivory notebook with DARK text (LIGHT THEME)
+  // ============================================
+  blocks: {
+    shape: 'rectangle',
+    isCalm: true,
+    isDark: false,
+    width: 'min(94vw, 680px)',
+    height: 'min(82vh, 720px)',
+    marginTop: '70px',
+    borderRadius: '1.5rem',
+    border: '2px solid rgba(245, 158, 11, 0.2)',
+    customGradient: () => '#FFFFF0',
+    boxShadow: () => `0 20px 60px rgba(0,0,0,0.12)`,
+    textColor: '#1e293b',
+    translationColor: '#64748b',
+    verseBg: '#FFFDE7',
+    verseBorder: 'rgba(245,158,11,0.15)',
+    activeBg: 'rgba(245,158,11,0.15)',
+    activeBorder: 'rgba(245,158,11,0.4)',
+    badgeBg: 'rgba(245,158,11,0.2)',
+    badgeColor: '#b45309',
+    hasNotebookLines: true,
+  },
+
+  // ============================================
+  // 7. BUBBLES - Beautiful violet/purple gradient
+  // ============================================
+  bubbles: {
+    shape: 'rectangle',
+    isCalm: true,
+    isDark: true,
+    width: 'min(94vw, 680px)',
+    height: 'min(82vh, 720px)',
+    marginTop: '70px',
+    borderRadius: '1.75rem',
+    border: '2px solid rgba(168, 85, 247, 0.25)',
+    customGradient: () => 'linear-gradient(145deg, #7c3aed 0%, #a855f7 50%, #c4b5fd 100%)',
+    boxShadow: () => `0 0 60px rgba(168, 85, 247, 0.3), 0 25px 80px rgba(0,0,0,0.4)`,
+    textColor: 'rgba(255,255,255,0.95)',
+    translationColor: 'rgba(255,255,255,0.85)',
+    verseBg: 'rgba(255,255,255,0.08)',
+    verseBorder: 'rgba(255,255,255,0.12)',
+    activeBg: 'rgba(255,255,255,0.15)',
+    activeBorder: 'rgba(255,255,255,0.3)',
+    badgeBg: 'rgba(255,255,255,0.2)',
+    badgeColor: '#ffffff',
+  },
+
+  // ============================================
+  // 8. SPIRAL - Beautiful pink/purple gradient
+  // ============================================
+  bubble: {
+    shape: 'rectangle',
+    isCalm: true,
+    isDark: true,
+    width: 'min(94vw, 680px)',
+    height: 'min(82vh, 720px)',
+    marginTop: '70px',
+    borderRadius: '1.5rem',
+    border: '1px solid rgba(236, 72, 153, 0.25)',
+    customGradient: () => 'linear-gradient(145deg, #ec4899 0%, #a855f7 50%, #8b5cf6 100%)',
+    boxShadow: () => `0 0 60px rgba(236, 72, 153, 0.3), 0 25px 80px rgba(0,0,0,0.4)`,
+    textColor: 'rgba(255,255,255,0.95)',
+    translationColor: 'rgba(255,255,255,0.85)',
+    verseBg: 'rgba(255,255,255,0.08)',
+    verseBorder: 'rgba(255,255,255,0.12)',
+    activeBg: 'rgba(255,255,255,0.15)',
+    activeBorder: 'rgba(255,255,255,0.3)',
+    badgeBg: 'rgba(255,255,255,0.2)',
+    badgeColor: '#ffffff',
+  },
+
+  // ============================================
+  // 9. HONEYCOMB - Beautiful teal to emerald gradient
+  // ============================================
+  hexagon: {
+    shape: 'rectangle',
+    isCalm: true,
+    isDark: true,
+    width: 'min(94vw, 680px)',
+    height: 'min(82vh, 720px)',
+    marginTop: '70px',
+    borderRadius: '1.5rem',
+    border: '1px solid rgba(16, 185, 129, 0.25)',
+    customGradient: () => 'linear-gradient(145deg, #0d9488 0%, #10b981 50%, #059669 100%)',
+    boxShadow: () => `0 0 60px rgba(16, 185, 129, 0.3), 0 25px 80px rgba(0,0,0,0.4)`,
+    textColor: 'rgba(255,255,255,0.95)',
+    translationColor: 'rgba(255,255,255,0.85)',
+    verseBg: 'rgba(255,255,255,0.08)',
+    verseBorder: 'rgba(255,255,255,0.12)',
+    activeBg: 'rgba(255,255,255,0.15)',
+    activeBorder: 'rgba(255,255,255,0.3)',
+    badgeBg: 'rgba(255,255,255,0.2)',
+    badgeColor: '#ffffff',
+  },
+
+  // ============================================
+  // 10. WAVE - Beautiful ocean blue gradient
+  // ============================================
+  wave: {
+    shape: 'rectangle',
+    isCalm: true,
+    isDark: true,
+    width: 'min(94vw, 680px)',
+    height: 'min(82vh, 720px)',
+    marginTop: '70px',
+    borderRadius: '1.5rem',
+    border: '1px solid rgba(14, 165, 233, 0.25)',
+    customGradient: () => 'linear-gradient(145deg, #0ea5e9 0%, #3b82f6 50%, #6366f1 100%)',
+    boxShadow: () => `0 0 60px rgba(14, 165, 233, 0.3), 0 25px 80px rgba(0,0,0,0.4)`,
+    textColor: 'rgba(255,255,255,0.95)',
+    translationColor: 'rgba(255,255,255,0.85)',
+    verseBg: 'rgba(255,255,255,0.08)',
+    verseBorder: 'rgba(255,255,255,0.12)',
+    activeBg: 'rgba(255,255,255,0.15)',
+    activeBorder: 'rgba(255,255,255,0.3)',
+    badgeBg: 'rgba(255,255,255,0.2)',
+    badgeColor: '#ffffff',
+  },
+
+  // ============================================
+  // 11. JUZZ - Parchment with brown text (LIGHT THEME)
+  // ============================================
+  juzz: {
+    shape: 'rectangle',
+    isCalm: true,
+    isDark: false,
+    width: 'min(94vw, 680px)',
+    height: 'min(82vh, 720px)',
+    marginTop: '70px',
+    borderRadius: '1.25rem',
+    border: '2px solid #d1fae5',
+    customGradient: () => 'linear-gradient(180deg, #FFFEF5 0%, #FFF8E1 100%)',
+    boxShadow: () => `0 20px 60px rgba(16, 185, 129, 0.12)`,
+    textColor: '#78350f',
+    translationColor: '#92400e',
+    verseBg: 'rgba(139,90,43,0.05)',
+    verseBorder: 'rgba(16,185,129,0.12)',
+    activeBg: 'rgba(16,185,129,0.1)',
+    activeBorder: 'rgba(16,185,129,0.3)',
+    badgeBg: 'rgba(16,185,129,0.15)',
+    badgeColor: '#059669',
+  },
+
+  // ============================================
+  // 12. ARABIC ALPHABET - Navy/purple with gold accents
+  // ============================================
+  alphabet: {
+    shape: 'rectangle',
+    isCalm: true,
+    isDark: true,
+    width: 'min(94vw, 680px)',
+    height: 'min(82vh, 720px)',
+    marginTop: '70px',
+    borderRadius: '1.25rem',
+    border: '2px solid rgba(255, 215, 0, 0.2)',
+    customGradient: () => 'linear-gradient(180deg, #1a1a4e 0%, #2d1b69 100%)',
+    boxShadow: () => `0 25px 80px rgba(0,0,0,0.5), inset 0 0 40px rgba(255,215,0,0.03)`,
+    textColor: 'rgba(255,255,255,0.95)',
+    translationColor: 'rgba(255,255,255,0.7)',
+    verseBg: 'rgba(255,215,0,0.04)',
+    verseBorder: 'rgba(255,215,0,0.08)',
+    activeBg: 'rgba(255,215,0,0.1)',
+    activeBorder: 'rgba(255,215,0,0.25)',
+    badgeBg: 'rgba(255,215,0,0.15)',
+    badgeColor: '#fcd34d',
+  },
+
+  // ============================================
+  // 13. REVELATION - Dynamic Makki (brown/gold) or Madani (blue)
+  // ============================================
+  timeline: {
+    shape: 'rectangle',
+    isCalm: true,
+    isDark: true,
+    width: 'min(94vw, 680px)',
+    height: 'min(82vh, 720px)',
+    marginTop: '70px',
+    borderRadius: '1rem',
+    border: '1px solid rgba(245, 158, 11, 0.15)',
+    // Default Makki - computed dynamically
+    customGradient: () => 'linear-gradient(180deg, #451a03 0%, #78350f 100%)',
+    boxShadow: () => `0 25px 80px rgba(0,0,0,0.5)`,
+    textColor: 'rgba(255,255,255,0.95)',
+    translationColor: 'rgba(255,255,255,0.7)',
+    verseBg: 'rgba(255,215,0,0.04)',
+    verseBorder: 'rgba(255,215,0,0.08)',
+    activeBg: 'rgba(255,215,0,0.1)',
+    activeBorder: 'rgba(255,215,0,0.25)',
+    badgeBg: 'rgba(255,215,0,0.15)',
+    badgeColor: '#fcd34d',
+    // Dynamic functions for Makki/Madani
+    getMakkiStyle: () => ({
+      customGradient: () => 'linear-gradient(180deg, #451a03 0%, #78350f 100%)',
+      border: '1px solid rgba(245, 158, 11, 0.15)',
+      badgeColor: '#fcd34d',
+    }),
+    getMadaniStyle: () => ({
+      customGradient: () => 'linear-gradient(180deg, #0f172a 0%, #1e3a5f 100%)',
+      border: '1px solid rgba(59, 130, 246, 0.15)',
+      verseBg: 'rgba(59,130,246,0.06)',
+      verseBorder: 'rgba(59,130,246,0.1)',
+      activeBg: 'rgba(59,130,246,0.12)',
+      activeBorder: 'rgba(59,130,246,0.3)',
+      badgeBg: 'rgba(59,130,246,0.2)',
+      badgeColor: '#93c5fd',
+    }),
+  },
+
+  // ============================================
+  // 14. BY LENGTH - Dynamic: short=white, med=teal, long=indigo
+  // ============================================
+  length: {
+    shape: 'rectangle',
+    isCalm: true,
+    isDark: true,
+    width: 'min(94vw, 680px)',
+    height: 'min(82vh, 720px)',
+    marginTop: '70px',
+    borderRadius: '1.25rem',
+    border: '1px solid rgba(255, 255, 255, 0.08)',
+    customGradient: () => '#0f172a',
+    boxShadow: () => `0 25px 80px rgba(0,0,0,0.5)`,
+    textColor: 'rgba(255,255,255,0.95)',
+    translationColor: 'rgba(255,255,255,0.7)',
+    verseBg: 'rgba(255,255,255,0.04)',
+    verseBorder: 'rgba(255,255,255,0.06)',
+    activeBg: 'rgba(20,184,166,0.1)',
+    activeBorder: 'rgba(20,184,166,0.3)',
+    badgeBg: 'rgba(20,184,166,0.2)',
+    badgeColor: '#5eead4',
+    // Dynamic style functions
+    getShortStyle: () => ({
+      isDark: false,
+      customGradient: () => '#FFFFFF',
+      border: '1px solid #e2e8f0',
+      textColor: '#1e293b',
+      translationColor: '#64748b',
+      verseBg: '#f8fafc',
+      verseBorder: '#e2e8f0',
+      activeBg: '#f0fdf4',
+      activeBorder: '#86efac',
+      badgeBg: '#ecfdf5',
+      badgeColor: '#059669',
+    }),
+    getMediumStyle: () => ({
+      isDark: true,
+      customGradient: () => 'linear-gradient(180deg, #0d9488 0%, #14b8a6 100%)',
+      border: '1px solid rgba(255,255,255,0.15)',
+      textColor: 'rgba(255,255,255,0.95)',
+      verseBg: 'rgba(255,255,255,0.08)',
+      activeBg: 'rgba(255,255,255,0.15)',
+      badgeColor: '#ffffff',
+    }),
+    getLongStyle: () => ({
+      isDark: true,
+      customGradient: () => 'linear-gradient(180deg, #312e81 0%, #4338ca 50%, #6366f1 100%)',
+      border: '1px solid rgba(255,255,255,0.1)',
+      textColor: 'rgba(255,255,255,0.95)',
+      verseBg: 'rgba(255,255,255,0.05)',
+      activeBg: 'rgba(129,140,248,0.15)',
+      badgeBg: 'rgba(129,140,248,0.2)',
+      badgeColor: '#c7d2fe',
+    }),
+  },
+
+  // ============================================
+  // LEGACY MAPPINGS (for backwards compatibility)
+  // ============================================
+  card: {
+    shape: 'rectangle',
+    isCalm: true,
+    width: 'min(96vw, 700px)',
+    height: 'min(90vh, 800px)',
+    borderRadius: '1.5rem',
+    glowInset: '-20px',
+    conicInset: '-10px',
+    border: '1px solid rgba(99, 102, 241, 0.12)',
+    hasParticles: false,
+    hasGlassHighlight: false,
+    hasCalmGlow: true,
+    customGradient: () => `linear-gradient(180deg, rgba(15, 23, 42, 0.97) 0%, rgba(30, 41, 59, 0.98) 50%, rgba(15, 23, 42, 0.99) 100%)`,
+    boxShadow: () => `0 0 60px rgba(99, 102, 241, 0.12), 0 25px 80px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05)`,
+  },
+  book: {
+    shape: 'rectangle',
+    isCalm: true,
+    width: 'min(96vw, 700px)',
+    height: 'min(90vh, 800px)',
+    borderRadius: '0.5rem',
+    glowInset: '-15px',
+    conicInset: '-8px',
+    border: '2px solid rgba(139, 69, 19, 0.2)',
+    hasParticles: false,
+    hasGlassHighlight: false,
+    hasPageLines: false,
+    hasSpine: false,
+    hasCalmGlow: true,
+    // Warm parchment-tinted dark theme
+    customGradient: () => `linear-gradient(180deg, rgba(41, 37, 36, 0.97) 0%, rgba(68, 64, 60, 0.4) 50%, rgba(41, 37, 36, 0.99) 100%)`,
+    boxShadow: () => `0 0 50px rgba(217, 119, 6, 0.08), 0 20px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.03)`,
+  },
+  clock: {
+    shape: 'rectangle',
+    isCalm: true,
+    width: 'min(96vw, 700px)',
+    height: 'min(90vh, 800px)',
+    borderRadius: '1.5rem',
+    glowInset: '-25px',
+    conicInset: '-12px',
+    border: '1px solid rgba(139, 92, 246, 0.15)',
+    hasParticles: false,
+    hasGlassHighlight: false,
+    hasClockRing: false,
+    hasClockTicks: false,
+    hasCalmGlow: true,
+    customGradient: () => `linear-gradient(180deg, rgba(46, 16, 101, 0.97) 0%, rgba(76, 29, 149, 0.3) 50%, rgba(46, 16, 101, 0.99) 100%)`,
+    boxShadow: () => `0 0 60px rgba(139, 92, 246, 0.12), 0 25px 80px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05)`,
+  },
+  kids: {
+    shape: 'rectangle',
+    isCalm: true,
+    width: 'min(96vw, 680px)',
+    height: 'min(88vh, 760px)',
+    borderRadius: '1.5rem',
+    glowInset: '-25px',
+    conicInset: '-12px',
+    border: '2px solid rgba(255, 255, 255, 0.15)',
+    hasParticles: false,
+    hasGlassHighlight: false,
+    hasStars: false,
+    hasRainbowBorder: false,
+    hasCalmGlow: true,
+    customGradient: () => `linear-gradient(180deg, rgba(55, 48, 76, 0.97) 0%, rgba(76, 61, 92, 0.98) 50%, rgba(55, 48, 76, 0.99) 100%)`,
+    boxShadow: () => `0 0 60px rgba(236, 72, 153, 0.12), 0 25px 80px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.06)`,
+  },
+  minimal: {
+    shape: 'rectangle',
+    isCalm: true,
+    width: 'min(96vw, 700px)',
+    height: 'min(90vh, 800px)',
+    borderRadius: '1.25rem',
+    glowInset: '-20px',
+    conicInset: '-10px',
+    border: '1px solid rgba(20, 184, 166, 0.12)',
+    hasParticles: false,
+    hasGlassHighlight: false,
+    hasCalmGlow: true,
+    customGradient: () => `linear-gradient(180deg, rgba(15, 23, 42, 0.97) 0%, rgba(17, 24, 39, 0.98) 50%, rgba(15, 23, 42, 0.99) 100%)`,
+    boxShadow: () => `0 0 60px rgba(20, 184, 166, 0.12), 0 25px 80px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05)`,
+  },
+};
+
+// Map layout names to overlay styles - each layout gets its unique calm reading theme
+const layoutToOverlayStyle = {
+  // Primary 14 layouts with unique calm reading themes
+  'spiral': 'bubble',           // 1. Spiral → Deep purple calm reading
+  'grid': 'grid',               // 2. Grid → Slate/indigo calm reading
+  'list': 'list',               // 3. List → Teal calm reading
+  'compact': 'compact',         // 4. Compact → Indigo compact calm
+  'kids-rainbow': 'rainbow',    // 5. Rainbow → Soft warm reading
+  'art': 'gallery',             // 6. Art Studio → Warm cream reading
+  'kids-blocks': 'blocks',      // 7. Blocks → Blue calm reading
+  'kids-bubbles': 'bubbles',    // 8. Bubbles → Purple calm reading
+  'honeycomb': 'hexagon',       // 9. Honeycomb → Teal calm reading (primary)
+  'wave': 'wave',               // 10. Wave → Ocean calm reading
+  'juzz': 'juzz',               // 11. Juzz → Emerald calm reading
+  'alphabet': 'alphabet',       // 12. Arabic Alphabet → Warm amber reading
+  'revelation': 'timeline',     // 13. Revelation → Indigo historical reading
+  'length': 'length',           // 14. By Length → Dynamic palette-based
+
+  // Legacy/alias mappings for backwards compatibility
+  'cards': 'grid',
+  'book': 'book',
+  'clock': 'clock',
+  'kids': 'rainbow',
+  'kids-art': 'gallery',
+};
+
 // Feature definitions with colors
 const FEATURES = [
   { id: 'tafseer', icon: 'BookOpen', label: 'Tafseer', color: '#8B5CF6', gradient: 'from-purple-500 to-indigo-600' },
@@ -1462,7 +1968,7 @@ const SharePanel = memo(function SharePanel({ surahId, surahName, ayahNumber, ve
 // MAIN COMPONENT
 // ============================================
 
-const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, darkMode, onChangeSurah, initialVerse = 1, initialPanel = null, onPanelChange, readerStyle = 'default' }) {
+const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, darkMode, onChangeSurah, initialVerse = 1, initialPanel = null, onPanelChange, readerStyle = 'default', layoutStyle = 'spiral' }) {
   // Auth state for premium features
   const { isPremium, isAuthenticated, login } = useAuth();
 
@@ -1545,101 +2051,87 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
   const loadMoreTriggerRef = useRef(null); // IntersectionObserver target
   const isLargeSurah = (surah?.ayahs || 0) > LARGE_SURAH_THRESHOLD;
 
-  // Reader style configurations based on layout selection
+  // Book page navigation state
+  const VERSES_PER_PAGE = 7;
+  const totalPages = Math.ceil((surah?.ayahs || 7) / VERSES_PER_PAGE);
+  const [currentBookPage, setCurrentBookPage] = useState(1);
+
+  // Scroll to specific page in book layout
+  const scrollToBookPage = useCallback((pageNum) => {
+    setCurrentBookPage(pageNum);
+    const firstVerseOfPage = (pageNum - 1) * VERSES_PER_PAGE + 1;
+    const verseElement = versesContainerRef.current?.querySelector(`[data-ayah="${firstVerseOfPage}"]`);
+    if (verseElement) {
+      verseElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, []);
+
+  // Reader style - optimized for each layout's theme (light or dark)
+  // CRITICAL: Uses OVERLAY_STYLES config values for dynamic theming
   const readerStyleConfig = useMemo(() => {
-    const styles = {
-      // Cards: 3D elevated cards with depth
-      cards: {
-        container: 'grid grid-cols-1 gap-3 sm:gap-4',
-        verse: 'rounded-2xl sm:rounded-3xl p-4 sm:p-5 transition-all duration-300 transform hover:scale-[1.01] sm:hover:scale-[1.02] hover:-translate-y-0.5 sm:hover:-translate-y-1',
-        verseActive: 'bg-gradient-to-br from-white/30 to-white/10 shadow-2xl scale-[1.01]',
-        verseDefault: 'bg-gradient-to-br from-white/20 to-white/5 shadow-xl',
-        verseBorder: 'border border-white/20',
-        ayahBadge: 'absolute -top-2 sm:-top-3 -right-2 sm:-right-3 w-8 sm:w-10 h-8 sm:h-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 text-white font-bold flex items-center justify-center text-xs sm:text-sm shadow-lg',
-        arabicExtra: '',
-        translationExtra: 'mt-2 sm:mt-3 pt-2 sm:pt-3 border-t border-white/10',
-      },
-      // List: Clean minimal list view
-      list: {
-        container: 'flex flex-col gap-1.5 sm:gap-2',
-        verse: 'rounded-lg sm:rounded-xl p-3 sm:p-4 transition-all duration-200 border-l-3 sm:border-l-4',
-        verseActive: 'bg-white/20 border-l-emerald-400',
-        verseDefault: 'bg-white/5 border-l-white/20 hover:border-l-white/40',
-        verseBorder: '',
-        ayahBadge: 'inline-flex items-center justify-center w-5 sm:w-6 h-5 sm:h-6 rounded-full ml-1.5 sm:ml-2 text-[10px] sm:text-xs font-semibold bg-white/20',
-        arabicExtra: '',
-        translationExtra: 'mt-1.5 sm:mt-2 text-white/70',
-      },
-      // Compact: Dense newspaper-style columns
-      compact: {
-        container: 'columns-1 sm:columns-2 gap-3 sm:gap-4',
-        verse: 'break-inside-avoid rounded-md sm:rounded-lg p-2 sm:p-3 mb-2 sm:mb-3 transition-all duration-200',
-        verseActive: 'bg-white/25',
-        verseDefault: 'bg-white/5 hover:bg-white/10',
-        verseBorder: '',
-        ayahBadge: 'inline-flex items-center justify-center w-4 sm:w-5 h-4 sm:h-5 rounded text-[9px] sm:text-[10px] font-bold ml-1 bg-white/20',
-        arabicExtra: '',
-        translationExtra: 'mt-1 text-xs sm:text-sm',
-      },
-      // Grid: Masonry grid for shorter verses
-      grid: {
-        container: 'grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3',
-        verse: 'rounded-xl sm:rounded-2xl p-3 sm:p-4 transition-all duration-300 flex flex-col',
-        verseActive: 'bg-gradient-to-br from-emerald-500/30 to-teal-500/20 ring-2 ring-emerald-400/50',
-        verseDefault: 'bg-white/10 hover:bg-white/15',
-        verseBorder: '',
-        ayahBadge: 'absolute top-1.5 sm:top-2 right-1.5 sm:right-2 w-6 sm:w-7 h-6 sm:h-7 rounded-md sm:rounded-lg bg-black/30 text-white text-[10px] sm:text-xs font-bold flex items-center justify-center',
-        arabicExtra: '',
-        translationExtra: 'mt-auto pt-1.5 sm:pt-2',
-      },
-      // Bubbles: Floating bubble-style verses
-      bubbles: {
-        container: 'flex flex-wrap justify-center gap-3 sm:gap-4',
-        verse: 'rounded-[2rem] sm:rounded-full p-4 sm:p-6 min-w-[160px] sm:min-w-[200px] max-w-[300px] sm:max-w-[400px] transition-all duration-500 flex flex-col items-center text-center',
-        verseActive: 'bg-gradient-to-br from-cyan-400/40 to-purple-500/30 shadow-2xl scale-105',
-        verseDefault: 'bg-gradient-to-br from-white/15 to-white/5 hover:from-white/25 hover:to-white/10 shadow-lg',
-        verseBorder: 'border border-white/30',
-        ayahBadge: 'absolute -top-1.5 sm:-top-2 left-1/2 -translate-x-1/2 w-7 sm:w-8 h-7 sm:h-8 rounded-full bg-gradient-to-br from-cyan-400 to-purple-500 text-white font-bold flex items-center justify-center text-xs sm:text-sm shadow-lg',
-        arabicExtra: '',
-        translationExtra: 'mt-2 sm:mt-3',
-      },
-      // Default: Current beautiful style
-      default: {
-        container: 'flex flex-col gap-3',
-        verse: 'rounded-2xl p-3 transition-all duration-500 overflow-hidden',
-        verseActive: 'bg-white/25',
-        verseDefault: 'bg-white/10',
-        verseBorder: '',
-        ayahBadge: 'inline-flex items-center justify-center w-7 h-7 rounded-full ml-2 text-xs font-bold align-middle bg-white/25',
-        arabicExtra: '',
-        translationExtra: '',
-      },
+    const styleKey = layoutToOverlayStyle[layoutStyle] || 'bubble';
+    let styleConfig = { ...OVERLAY_STYLES[styleKey] };
+
+    // Apply dynamic styles for Timeline (Revelation) layout based on Makki/Madani
+    if (styleKey === 'timeline' && surah) {
+      const isMakki = surah.type === 'Makki' || surah.revelationType === 'Meccan';
+      const dynamicStyle = isMakki
+        ? styleConfig.getMakkiStyle?.()
+        : styleConfig.getMadaniStyle?.();
+      if (dynamicStyle) {
+        styleConfig = { ...styleConfig, ...dynamicStyle };
+      }
+    }
+
+    // Apply dynamic styles for Length layout based on ayah count
+    if (styleKey === 'length' && surah) {
+      const ayahCount = surah.ayahs || 0;
+      let dynamicStyle;
+      if (ayahCount <= 30) {
+        dynamicStyle = styleConfig.getShortStyle?.();
+      } else if (ayahCount <= 80) {
+        dynamicStyle = styleConfig.getMediumStyle?.();
+      } else {
+        dynamicStyle = styleConfig.getLongStyle?.();
+      }
+      if (dynamicStyle) {
+        styleConfig = { ...styleConfig, ...dynamicStyle };
+      }
+    }
+
+    const isDark = styleConfig?.isDark ?? true;
+    const isCalm = styleConfig?.isCalm ?? true;
+
+    // Extract theme colors from config, with sensible defaults
+    const colors = {
+      text: styleConfig?.textColor || (isDark ? 'rgba(255,255,255,0.95)' : '#1e293b'),
+      translation: styleConfig?.translationColor || (isDark ? 'rgba(255,255,255,0.7)' : '#64748b'),
+      verseBg: styleConfig?.verseBg || (isDark ? 'rgba(255,255,255,0.04)' : '#f8fafc'),
+      verseBorder: styleConfig?.verseBorder || (isDark ? 'rgba(255,255,255,0.06)' : '#e2e8f0'),
+      activeBg: styleConfig?.activeBg || (isDark ? 'rgba(20,184,166,0.12)' : '#f0fdf4'),
+      activeBorder: styleConfig?.activeBorder || (isDark ? 'rgba(20,184,166,0.3)' : '#86efac'),
+      badgeBg: styleConfig?.badgeBg || (isDark ? 'rgba(20,184,166,0.2)' : '#ecfdf5'),
+      badgeColor: styleConfig?.badgeColor || (isDark ? '#5eead4' : '#059669'),
     };
 
-    // Map layout names to reader styles
-    const layoutToStyle = {
-      'cards': 'cards',
-      'list': 'list',
-      'compact': 'compact',
-      'grid': 'grid',
-      'kids-art': 'cards',
-      'kids-rainbow': 'cards',
-      'kids-blocks': 'grid',
-      'kids-bubbles': 'bubbles',
-      'spiral': 'bubbles',
-      'clock': 'bubbles',
-      'honeycomb': 'grid',
-      'wave': 'bubbles',
-      'juzz': 'list',
-      'alphabet': 'list',
-      'revelation': 'list',
-      'book': 'default',
-      'length': 'compact',
+    return {
+      container: 'flex flex-col gap-3',
+      isDark,
+      isCalm,
+      colors,
+      // Base verse card classes (layout only, colors via inline styles)
+      verse: 'rounded-2xl p-5 transition-all duration-500',
+      // Empty Tailwind classes - all styling via inline styles now
+      verseActive: '',
+      verseDefault: '',
+      verseBorder: '',
+      // Ayah badge base classes (colors via inline styles)
+      ayahBadge: 'inline-flex items-center justify-center w-7 h-7 rounded-full ml-2 text-xs font-bold flex-shrink-0',
+      arabicExtra: '',
+      translationExtra: '',
+      badgePosition: 'inline',
     };
-
-    const styleKey = layoutToStyle[readerStyle] || 'default';
-    return styles[styleKey];
-  }, [readerStyle]);
+  }, [layoutStyle, surah]);
 
   // Log surah open event and track reading start time
   const readingStartTime = useRef(Date.now());
@@ -2369,6 +2861,45 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
   const { wordsMap, loading: wordsLoading, isFallback: isWordsFallback, userLanguage: wordsUserLang } = useMultilingualWords(wordByWordMode ? surah?.id : null, selectedTranslation);
 
   const palette = useMemo(() => PALETTES[(surah?.id - 1) % 10], [surah?.id]);
+
+  // Get overlay style configuration based on layout
+  // CRITICAL: Apply dynamic styles for Timeline (Makki/Madani) and Length layouts
+  const overlayConfig = useMemo(() => {
+    const styleKey = layoutToOverlayStyle[layoutStyle] || 'bubble';
+    let config = { ...OVERLAY_STYLES[styleKey] };
+
+    // Apply dynamic styles for Timeline (Revelation) layout based on Makki/Madani
+    if (styleKey === 'timeline' && surah) {
+      const isMakki = surah.type === 'Makki' || surah.revelationType === 'Meccan';
+      const dynamicStyle = isMakki
+        ? config.getMakkiStyle?.()
+        : config.getMadaniStyle?.();
+      if (dynamicStyle) {
+        config = { ...config, ...dynamicStyle };
+      }
+    }
+
+    // Apply dynamic styles for Length layout based on ayah count
+    if (styleKey === 'length' && surah) {
+      const ayahCount = surah.ayahs || 0;
+      let dynamicStyle;
+      if (ayahCount <= 30) {
+        dynamicStyle = config.getShortStyle?.();
+      } else if (ayahCount <= 80) {
+        dynamicStyle = config.getMediumStyle?.();
+      } else {
+        dynamicStyle = config.getLongStyle?.();
+      }
+      if (dynamicStyle) {
+        config = { ...config, ...dynamicStyle };
+      }
+    }
+
+    // Debug: log which style is being applied
+    console.log('[BubbleReaderOverlay] Layout:', layoutStyle, '→ Style:', styleKey, '→ isDark:', config?.isDark);
+    return config;
+  }, [layoutStyle, surah]);
+
   const totalVerses = verses.length || surah?.ayahs || 0;
   const totalVersesRef = useRef(totalVerses);
   useEffect(() => { totalVersesRef.current = totalVerses; }, [totalVerses]);
@@ -2503,6 +3034,15 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
     if (isPlayingCombined) return;
     if (!isPlayingTranslation || !verses.length) return;
 
+    // IMPORTANT: Stop Arabic audio when translation starts
+    // This prevents both audios playing simultaneously
+    if (isPlaying) {
+      setIsPlaying(false);
+      if (audioRef.current) {
+        audioRef.current.pause();
+      }
+    }
+
     const verse = verses.find(v => v.number === translationAyah);
     if (!verse) {
       console.log('Verse not found:', translationAyah, 'available:', verses.map(v => v.number));
@@ -2519,7 +3059,7 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
 
     // No cleanup here - playTranslationAudio handles stopping previous audio
     // Cleanup was causing race condition by pausing before new audio could start
-  }, [isPlayingTranslation, translationAyah, verses, playTranslationAudio, isPlayingCombined]);
+  }, [isPlayingTranslation, translationAyah, verses, playTranslationAudio, isPlayingCombined, isPlaying]);
 
   // Cleanup translation audio on unmount
   useEffect(() => {
@@ -2929,6 +3469,17 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
     const audio = audioRef.current;
     if (!audio) return;
     if (isPlaying) {
+      // IMPORTANT: Stop any translation audio when Arabic starts playing
+      // This prevents the race condition where both play simultaneously
+      if (isPlayingTranslation || translationAudioRef.current) {
+        setIsPlayingTranslation(false);
+        isPlayingTranslationRef.current = false;
+        if (translationAudioRef.current) {
+          translationAudioRef.current.pause();
+          translationAudioRef.current.src = '';
+          translationAudioRef.current = null;
+        }
+      }
       const attemptPlay = () => { audio.play().catch(err => { if (err.name !== 'AbortError') { setAudioError('Playback failed'); setIsPlaying(false); } }); };
       if (audio.readyState >= 3) attemptPlay();
       else {
@@ -2937,7 +3488,7 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
         return () => audio.removeEventListener('canplaythrough', handleCanPlay);
       }
     } else { audio.pause(); }
-  }, [isPlaying, currentAyah, selectedReciter]);
+  }, [isPlaying, currentAyah, selectedReciter, isPlayingTranslation]);
 
   // Ref to always have latest handleClose (defined below)
   const handleCloseRef = useRef(null);
@@ -3031,12 +3582,45 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
   }, [handleClose]);
 
   const toggleAyahPlayback = useCallback((ayahNum) => {
-    if (currentAyah === ayahNum && isPlaying) setIsPlaying(false);
-    else if (currentAyah === ayahNum && !isPlaying) setIsPlaying(true);
-    else { setCurrentAyah(ayahNum); setIsPlaying(true); }
+    if (currentAyah === ayahNum && isPlaying) {
+      setIsPlaying(false);
+    } else {
+      // IMPORTANT: Stop translation audio before starting Arabic
+      if (isPlayingTranslation) {
+        setIsPlayingTranslation(false);
+        isPlayingTranslationRef.current = false;
+        if (translationAudioRef.current) {
+          translationAudioRef.current.pause();
+          translationAudioRef.current.src = '';
+          translationAudioRef.current = null;
+        }
+      }
+      // Start Arabic playback
+      if (currentAyah === ayahNum) {
+        setIsPlaying(true);
+      } else {
+        setCurrentAyah(ayahNum);
+        setIsPlaying(true);
+      }
+    }
     // Track progress when user plays a verse
     if (surah?.id) markAyahRead(surah.id, ayahNum);
-  }, [currentAyah, isPlaying, surah?.id]);
+  }, [currentAyah, isPlaying, isPlayingTranslation, surah?.id]);
+
+  // Safe function to start Arabic playback (stops translation first)
+  const startArabicPlayback = useCallback(() => {
+    // Stop translation audio before starting Arabic
+    if (isPlayingTranslation) {
+      setIsPlayingTranslation(false);
+      isPlayingTranslationRef.current = false;
+      if (translationAudioRef.current) {
+        translationAudioRef.current.pause();
+        translationAudioRef.current.src = '';
+        translationAudioRef.current = null;
+      }
+    }
+    setIsPlaying(true);
+  }, [isPlayingTranslation]);
 
   // Track reading progress when viewing verses
   useEffect(() => {
@@ -3204,7 +3788,7 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
   return (
     <div className="fixed inset-0 flex items-center justify-center p-4" style={{ zIndex: 9999999 }} onClick={handleClose} role="dialog" aria-modal="true">
       <div className={`absolute inset-0 transition-opacity duration-500 ${isAnimating ? 'opacity-0' : 'opacity-100'}`}
-        style={{ background: darkMode ? 'radial-gradient(ellipse at center, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.9) 100%)' : 'radial-gradient(ellipse at center, rgba(255,255,255,0.4) 0%, rgba(200,200,220,0.8) 100%)', backdropFilter: 'blur(15px)' }} />
+        style={{ background: darkMode ? 'radial-gradient(ellipse at center, rgba(15,10,30,0.92) 0%, rgba(10,5,25,0.97) 100%)' : 'radial-gradient(ellipse at center, rgba(255,255,255,0.85) 0%, rgba(240,240,250,0.95) 100%)', backdropFilter: 'blur(30px)' }} />
 
       {/* Floating Feature Bubbles */}
       {/* Tafseer - Right Side (Independent) */}
@@ -3369,7 +3953,7 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
         }}
         onNextVerse={() => setCurrentAyah(prev => prev < totalVerses ? prev + 1 : prev)}
         onPreviousVerse={() => setCurrentAyah(prev => prev > 1 ? prev - 1 : prev)}
-        onPlay={() => setIsPlaying(true)}
+        onPlay={startArabicPlayback}
         onPause={() => setIsPlaying(false)}
         onStop={() => { setIsPlaying(false); setCurrentAyah(1); }}
         onShowTafseer={() => setShowTafseer(true)}
@@ -3574,42 +4158,298 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
       )}
 
       <div className={`relative transition-all duration-500 ease-out ${isAnimating ? 'scale-50 opacity-0' : 'scale-100 opacity-100'}`}
-        style={{ width: 'min(95vw, 900px)', height: 'min(90vh, 650px)' }} onClick={stopPropagation}>
+        data-layout={layoutStyle}
+        data-shape={overlayConfig.shape}
+        style={{
+          width: overlayConfig.width || 'min(94vw, 680px)',
+          height: overlayConfig.height || 'min(82vh, 720px)',
+          maxHeight: overlayConfig.maxHeight || '82vh',
+          marginTop: overlayConfig.marginTop || '70px'
+        }} onClick={stopPropagation}>
 
-        <div className="absolute pointer-events-none" style={{ inset: '-40px', borderRadius: '50%', background: `radial-gradient(ellipse 55% 45% at center, ${palette.colors[0]}50 0%, transparent 70%)`, animation: 'breathe 3s ease-in-out infinite' }} />
-        <div className="absolute opacity-40 pointer-events-none" style={{ inset: '-20px', borderRadius: '50%', background: `conic-gradient(from 0deg, ${palette.colors[0]}, ${palette.colors[1]}, ${palette.colors[2]}, ${palette.colors[0]})`, filter: 'blur(18px)', animation: 'spin 15s linear infinite' }} />
+        {/* Outer glow - layout aware (disabled for calm reading modes) */}
+        {!overlayConfig.isCalm && (
+          <div className="absolute pointer-events-none" style={{
+            inset: overlayConfig.glowInset || '-40px',
+            borderRadius: overlayConfig.clipPath ? '0' : overlayConfig.borderRadius,
+            clipPath: overlayConfig.clipPath || 'none',
+            background: `radial-gradient(ellipse 55% 45% at center, ${palette.colors[0]}50 0%, transparent 70%)`,
+            animation: 'breathe 3s ease-in-out infinite'
+          }} />
+        )}
 
-        <div className="absolute inset-0 overflow-hidden" style={{ borderRadius: '50%', background: `linear-gradient(145deg, ${palette.colors[0]}, ${palette.colors[1]}, ${palette.colors[2]})`, boxShadow: `0 0 80px ${palette.colors[0]}60, 0 0 120px ${palette.colors[1]}40, inset 0 -40px 80px rgba(0,0,0,0.3), inset 0 40px 80px rgba(255,255,255,0.2)` }}>
-          <div className="absolute pointer-events-none" style={{ top: '3%', left: '15%', width: '50%', height: '18%', background: 'linear-gradient(180deg, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0.1) 50%, transparent 100%)', borderRadius: '50%', filter: 'blur(2px)', transform: 'scaleY(0.35)' }} />
+        {/* Conic gradient ring - layout aware (disabled for calm reading modes) */}
+        {!overlayConfig.isCalm && (
+          <div className="absolute opacity-40 pointer-events-none" style={{
+            inset: overlayConfig.conicInset || '-20px',
+            borderRadius: overlayConfig.clipPath ? '0' : overlayConfig.borderRadius,
+            clipPath: overlayConfig.clipPath || 'none',
+            background: `conic-gradient(from 0deg, ${palette.colors[0]}, ${palette.colors[1]}, ${palette.colors[2]}, ${palette.colors[0]})`,
+            filter: 'blur(18px)',
+            animation: overlayConfig.shape === 'hexagon' ? 'none' : 'spin 15s linear infinite'
+          }} />
+        )}
 
-          {particles.map((p, i) => (
+        {/* Main container - layout aware */}
+        <div className="absolute inset-0 overflow-hidden" style={{
+          borderRadius: overlayConfig.clipPath ? '0' : overlayConfig.borderRadius,
+          clipPath: overlayConfig.clipPath || 'none',
+          background: overlayConfig.customGradient ? overlayConfig.customGradient(palette.colors) : `linear-gradient(145deg, ${palette.colors[0]}, ${palette.colors[1]}, ${palette.colors[2]})`,
+          boxShadow: typeof overlayConfig.boxShadow === 'function'
+            ? overlayConfig.boxShadow(palette.colors)
+            : `0 0 80px ${palette.colors[0]}60, 0 0 120px ${palette.colors[1]}40, inset 0 -40px 80px rgba(0,0,0,0.3), inset 0 40px 80px rgba(255,255,255,0.2)`,
+          border: overlayConfig.border || 'none'
+        }}>
+          {/* Glass highlight - only for dark-themed styles */}
+          {overlayConfig.hasGlassHighlight && overlayConfig.isDark !== false && (
+            <div className="absolute pointer-events-none" style={{ top: '3%', left: '20%', width: '40%', height: '15%', background: 'linear-gradient(180deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 50%, transparent 100%)', borderRadius: '50%', filter: 'blur(2px)', transform: 'scaleY(0.35)' }} />
+          )}
+
+          {/* Book spine effect - dark leather binding */}
+          {overlayConfig.hasSpine && (
+            <div className="absolute left-0 top-0 bottom-0 w-[5%] pointer-events-none" style={{
+              background: 'linear-gradient(90deg, #3D2914 0%, #5D4037 30%, #8B6914 60%, transparent 100%)',
+              borderRight: '2px solid #3D2914',
+              boxShadow: 'inset -5px 0 15px rgba(0,0,0,0.3)'
+            }} />
+          )}
+
+          {/* Page texture for book style */}
+          {overlayConfig.hasPageTexture && (
+            <div className="absolute inset-0 pointer-events-none opacity-30" style={{
+              backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
+            }} />
+          )}
+
+          {/* Page lines for book style */}
+          {overlayConfig.hasPageLines && (
+            <>
+              <div className="absolute inset-y-[3%] left-[7%] w-[1px] pointer-events-none" style={{ background: 'linear-gradient(180deg, transparent 0%, #8B6914 10%, #8B6914 90%, transparent 100%)', opacity: 0.3 }} />
+              <div className="absolute inset-y-[3%] left-[9%] w-[1px] pointer-events-none" style={{ background: 'linear-gradient(180deg, transparent 0%, #8B6914 10%, #8B6914 90%, transparent 100%)', opacity: 0.2 }} />
+              <div className="absolute top-0 left-[5%] right-0 h-3 pointer-events-none" style={{ background: 'linear-gradient(180deg, rgba(139, 90, 43, 0.2) 0%, transparent 100%)' }} />
+              <div className="absolute bottom-0 left-[5%] right-0 h-3 pointer-events-none" style={{ background: 'linear-gradient(0deg, rgba(139, 90, 43, 0.2) 0%, transparent 100%)' }} />
+            </>
+          )}
+
+          {/* Top gradient highlight for card style */}
+          {overlayConfig.hasTopGradient && (
+            <div className="absolute top-0 left-0 right-0 h-1/3 pointer-events-none" style={{
+              background: 'linear-gradient(180deg, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0.1) 50%, transparent 100%)',
+              borderRadius: '1.5rem 1.5rem 0 0'
+            }} />
+          )}
+
+          {/* Corner badge for card style */}
+          {overlayConfig.hasCornerBadge && (
+            <div className="absolute top-3 right-3 w-8 h-8 rounded-full bg-black/20 backdrop-blur-sm pointer-events-none flex items-center justify-center">
+              <span className="text-white/80 text-xs font-bold">{surah.id}</span>
+            </div>
+          )}
+
+          {/* Clock ring effect */}
+          {overlayConfig.hasClockRing && (
+            <div className="absolute inset-[4%] rounded-full border-[3px] border-white/25 pointer-events-none" style={{ boxShadow: 'inset 0 0 40px rgba(139, 92, 246, 0.4), 0 0 20px rgba(139, 92, 246, 0.2)' }} />
+          )}
+
+          {/* Clock tick marks */}
+          {overlayConfig.hasClockTicks && (
+            <div className="absolute inset-[6%] rounded-full pointer-events-none">
+              {[...Array(12)].map((_, i) => (
+                <div key={i} className="absolute w-0.5 h-3 bg-white/40 rounded-full" style={{
+                  top: '0',
+                  left: '50%',
+                  transformOrigin: '50% calc(50vmin - 6%)',
+                  transform: `translateX(-50%) rotate(${i * 30}deg)`
+                }} />
+              ))}
+            </div>
+          )}
+
+          {/* Honeycomb pattern overlay */}
+          {overlayConfig.hasHoneycomb && (
+            <div className="absolute inset-0 pointer-events-none opacity-15" style={{
+              backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'56\' height=\'100\' viewBox=\'0 0 56 100\'%3E%3Cpath d=\'M28 66L0 50V16L28 0l28 16v34L28 66zM28 0L0 16v34l28 16 28-16V16L28 0z\' fill=\'%23ffffff\' fill-opacity=\'0.4\'/%3E%3C/svg%3E")',
+              backgroundSize: '40px 70px'
+            }} />
+          )}
+
+          {/* Calm glow effect for reading - subtle teal accent at edges */}
+          {overlayConfig.hasCalmGlow && (
+            <>
+              {/* Top subtle glow */}
+              <div className="absolute top-0 left-0 right-0 h-32 pointer-events-none" style={{
+                background: 'linear-gradient(180deg, rgba(20, 184, 166, 0.08) 0%, transparent 100%)',
+                borderRadius: '1.5rem 1.5rem 0 0'
+              }} />
+              {/* Bottom subtle glow */}
+              <div className="absolute bottom-0 left-0 right-0 h-24 pointer-events-none" style={{
+                background: 'linear-gradient(0deg, rgba(20, 184, 166, 0.06) 0%, transparent 100%)',
+                borderRadius: '0 0 1.5rem 1.5rem'
+              }} />
+            </>
+          )}
+
+          {/* Stars for kids style - more fun scattered stars */}
+          {overlayConfig.hasStars && (
+            <>
+              <div className="absolute w-3 h-3 pointer-events-none animate-pulse" style={{ top: '6%', left: '10%', fontSize: '20px' }}>⭐</div>
+              <div className="absolute w-3 h-3 pointer-events-none animate-pulse" style={{ top: '12%', right: '8%', animationDelay: '0.3s', fontSize: '16px' }}>✨</div>
+              <div className="absolute w-3 h-3 pointer-events-none animate-pulse" style={{ top: '25%', left: '5%', animationDelay: '0.6s', fontSize: '14px' }}>🌟</div>
+              <div className="absolute w-3 h-3 pointer-events-none animate-pulse" style={{ bottom: '20%', right: '6%', animationDelay: '0.9s', fontSize: '18px' }}>⭐</div>
+              <div className="absolute w-3 h-3 pointer-events-none animate-pulse" style={{ bottom: '10%', left: '12%', animationDelay: '1.2s', fontSize: '16px' }}>✨</div>
+              <div className="absolute w-3 h-3 pointer-events-none animate-pulse" style={{ bottom: '30%', left: '4%', animationDelay: '1.5s', fontSize: '12px' }}>🌟</div>
+            </>
+          )}
+
+          {/* Rainbow border glow for kids */}
+          {overlayConfig.hasRainbowBorder && (
+            <div className="absolute -inset-1 rounded-[2.5rem] pointer-events-none" style={{
+              background: 'linear-gradient(90deg, #FF6B6B, #FF8E53, #FFE66D, #96E6A1, #4ECDC4, #45B7D1, #A78BFA, #F472B6, #FF6B6B)',
+              backgroundSize: '200% 100%',
+              animation: 'rainbow 3s linear infinite',
+              opacity: 0.6,
+              filter: 'blur(4px)'
+            }} />
+          )}
+
+          {/* Wave effect for wave style - multiple animated layers */}
+          {overlayConfig.hasWaveEffect && (
+            <div className="absolute bottom-0 left-0 right-0 h-24 pointer-events-none overflow-hidden">
+              <div className="absolute bottom-0 left-0 right-0 h-16" style={{
+                background: 'linear-gradient(180deg, transparent 0%, rgba(255,255,255,0.2) 100%)'
+              }} />
+              <div className="absolute bottom-[-5px] left-[-10%] right-[-10%] h-10" style={{
+                background: 'rgba(255,255,255,0.15)',
+                borderRadius: '50% 50% 0 0',
+                animation: 'wave 3s ease-in-out infinite'
+              }} />
+              <div className="absolute bottom-[-8px] left-[-5%] right-[-5%] h-8" style={{
+                background: 'rgba(255,255,255,0.1)',
+                borderRadius: '50% 50% 0 0',
+                animation: 'wave 4s ease-in-out infinite reverse'
+              }} />
+            </div>
+          )}
+
+          {/* Wave layers at top too */}
+          {overlayConfig.hasWaveLayers && (
+            <div className="absolute top-0 left-0 right-0 h-16 pointer-events-none overflow-hidden">
+              <div className="absolute top-0 left-0 right-0 h-12" style={{
+                background: 'linear-gradient(0deg, transparent 0%, rgba(255,255,255,0.15) 100%)'
+              }} />
+            </div>
+          )}
+
+          {/* Left accent for timeline style - thicker with dots */}
+          {overlayConfig.leftAccent && (
+            <>
+              <div className="absolute left-0 top-[6%] bottom-[6%] w-2 bg-white/60 rounded-r pointer-events-none" style={{ boxShadow: '3px 0 15px rgba(255,255,255,0.4)' }} />
+              {overlayConfig.hasTimelineDots && (
+                <>
+                  <div className="absolute left-[3px] top-[15%] w-3 h-3 rounded-full bg-white/80 pointer-events-none" />
+                  <div className="absolute left-[3px] top-[35%] w-3 h-3 rounded-full bg-white/60 pointer-events-none" />
+                  <div className="absolute left-[3px] top-[55%] w-3 h-3 rounded-full bg-white/60 pointer-events-none" />
+                  <div className="absolute left-[3px] top-[75%] w-3 h-3 rounded-full bg-white/80 pointer-events-none" />
+                </>
+              )}
+            </>
+          )}
+
+          {/* Islamic geometric pattern for juzz */}
+          {overlayConfig.hasIslamicPattern && (
+            <div className="absolute inset-0 pointer-events-none opacity-10" style={{
+              backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'80\' height=\'80\' viewBox=\'0 0 80 80\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'0.5\'%3E%3Cpath d=\'M40 0L0 40l40 40 40-40L40 0zm0 10l30 30-30 30-30-30 30-30z\'/%3E%3C/g%3E%3C/svg%3E")',
+              backgroundSize: '60px 60px'
+            }} />
+          )}
+
+          {/* Outer frame border for gallery */}
+          {overlayConfig.outerBorder && (
+            <div className="absolute -inset-[4px] pointer-events-none" style={{
+              border: overlayConfig.outerBorder,
+              borderRadius: '0.5rem',
+              boxShadow: '0 4px 20px rgba(0,0,0,0.15)'
+            }} />
+          )}
+
+          {/* Frame corners for gallery */}
+          {overlayConfig.hasFrameCorners && (
+            <>
+              <div className="absolute top-2 left-2 w-6 h-6 border-t-2 border-l-2 border-gray-400/50 pointer-events-none" />
+              <div className="absolute top-2 right-2 w-6 h-6 border-t-2 border-r-2 border-gray-400/50 pointer-events-none" />
+              <div className="absolute bottom-2 left-2 w-6 h-6 border-b-2 border-l-2 border-gray-400/50 pointer-events-none" />
+              <div className="absolute bottom-2 right-2 w-6 h-6 border-b-2 border-r-2 border-gray-400/50 pointer-events-none" />
+            </>
+          )}
+
+          {/* Minimal accent line */}
+          {overlayConfig.hasMinimalAccent && (
+            <div className="absolute top-0 left-[10%] right-[10%] h-1 bg-white/40 rounded-b pointer-events-none" />
+          )}
+
+          {/* Floating rings for bubble style */}
+          {overlayConfig.hasFloatingRings && (
+            <>
+              <div className="absolute inset-[8%] rounded-full border border-white/10 pointer-events-none" style={{ animation: 'pulse 4s ease-in-out infinite' }} />
+              <div className="absolute inset-[12%] rounded-full border border-white/5 pointer-events-none" style={{ animation: 'pulse 4s ease-in-out infinite 1s' }} />
+            </>
+          )}
+
+          {/* Particles - only for styles that have them */}
+          {overlayConfig.hasParticles && particles.map((p, i) => (
             <div key={i} className="absolute rounded-full pointer-events-none"
               style={{ width: p.size, height: p.size, left: `${p.left}%`, top: `${p.top}%`, background: 'rgba(255,255,255,0.8)', boxShadow: '0 0 8px rgba(255,255,255,0.8)', animation: `floatParticle ${p.duration}s ease-in-out infinite`, animationDelay: `${p.delay}s` }} />
           ))}
 
-          {/* Top header with surah number and close button */}
+          {/* Top header with surah number and close button - adapts to shape */}
           <div className="absolute z-[70] flex items-center justify-between"
-            style={{ top: '6%', left: '25%', right: '25%' }}>
-            {/* Surah number badge - left side */}
-            <div className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold text-white"
-              style={{ background: 'rgba(255,255,255,0.25)', backdropFilter: 'blur(10px)' }}>
+            style={{
+              top: overlayConfig.shape === 'circle' ? '8%' : (overlayConfig.isCalm ? '16px' : '4%'),
+              left: overlayConfig.shape === 'circle' ? '25%' : (overlayConfig.isCalm ? '20px' : '5%'),
+              right: overlayConfig.shape === 'circle' ? '25%' : (overlayConfig.isCalm ? '20px' : '5%')
+            }}>
+            {/* Surah number badge - adapts to theme */}
+            <div className={`w-10 h-10 flex items-center justify-center text-sm font-bold ${overlayConfig.shape === 'circle' ? 'rounded-full' : 'rounded-xl'}`}
+              style={{
+                background: !overlayConfig.isDark ? 'rgba(139, 90, 43, 0.25)' : (overlayConfig.isCalm ? 'rgba(20, 184, 166, 0.25)' : 'rgba(255,255,255,0.25)'),
+                backdropFilter: 'blur(10px)',
+                color: !overlayConfig.isDark ? '#5D4037' : 'white',
+                border: overlayConfig.isCalm ? '1px solid rgba(20, 184, 166, 0.3)' : 'none'
+              }}>
               {surah.id}
             </div>
 
-            {/* Close button - right side */}
+            {/* Close button - adapts to theme */}
             <button onClick={handleCloseClick}
-              className="w-10 h-10 rounded-full backdrop-blur-sm flex items-center justify-center hover:bg-white/40 hover:scale-110 transition-all text-white"
-              style={{ background: 'rgba(255,255,255,0.25)', backdropFilter: 'blur(10px)' }}
+              className={`w-10 h-10 backdrop-blur-sm flex items-center justify-center hover:scale-110 transition-all ${overlayConfig.shape === 'circle' ? 'rounded-full' : 'rounded-xl'}`}
+              style={{
+                background: !overlayConfig.isDark ? 'rgba(139, 90, 43, 0.25)' : (overlayConfig.isCalm ? 'rgba(20, 184, 166, 0.25)' : 'rgba(255,255,255,0.25)'),
+                backdropFilter: 'blur(10px)',
+                color: !overlayConfig.isDark ? '#5D4037' : 'white',
+                border: overlayConfig.isCalm ? '1px solid rgba(20, 184, 166, 0.3)' : 'none'
+              }}
               aria-label="Close">
               <Icons.X className="w-5 h-5" />
             </button>
           </div>
 
-          <div className="absolute flex text-white overflow-hidden" style={{ top: '14%', left: '4%', right: '4%', bottom: '5%' }}>
+          {/* Content area - adapts to different shapes */}
+          <div className="absolute flex overflow-hidden" style={{
+            top: overlayConfig.shape === 'circle' ? '16%' : (overlayConfig.isCalm ? '70px' : '13%'),
+            left: overlayConfig.shape === 'circle' ? '6%' : (overlayConfig.isCalm ? '16px' : (overlayConfig.hasSpine ? '14%' : '6%')),
+            right: overlayConfig.shape === 'circle' ? '6%' : (overlayConfig.isCalm ? '16px' : '6%'),
+            bottom: overlayConfig.shape === 'circle' ? '6%' : (overlayConfig.isCalm ? '16px' : '5%'),
+            color: !overlayConfig.isDark ? '#3E2723' : 'white'
+          }}>
             <div className="flex-1 flex flex-col min-w-0">
               <div className="text-center flex-shrink-0 mb-1">
-                <div className="text-xl sm:text-2xl mb-0.5" style={{ fontFamily: "'Scheherazade New', serif", textShadow: '0 2px 12px rgba(0,0,0,0.4)' }} lang="ar" dir="rtl">{surah.arabic}</div>
-                <h1 className="text-sm sm:text-base font-bold" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.3)' }}>{surah.name}</h1>
+                <div className="text-xl sm:text-2xl mb-0.5" style={{
+                  fontFamily: "'Scheherazade New', serif",
+                  textShadow: !overlayConfig.isDark ? '0 1px 2px rgba(255,255,255,0.3)' : '0 2px 12px rgba(0,0,0,0.4)'
+                }} lang="ar" dir="rtl">{surah.arabic}</div>
+                <h1 className="text-sm sm:text-base font-bold" style={{
+                  textShadow: !overlayConfig.isDark ? '0 1px 2px rgba(255,255,255,0.2)' : '0 2px 8px rgba(0,0,0,0.3)'
+                }}>{surah.name}</h1>
 
                 <div className="flex items-center justify-center gap-1 sm:gap-2 mt-1 sm:mt-2 flex-wrap">
                   <button onClick={toggleSettings} className={`p-1.5 sm:p-2 rounded-full transition-all ${showSettings ? 'bg-white/30' : 'bg-white/15 hover:bg-white/25'}`}>
@@ -3702,9 +4542,68 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
                     <p className="text-sm">{error}</p>
                   </div>
                 ) : (
-                  <div className="space-y-3 py-2 overflow-x-hidden">
+                  <div className={`py-2 overflow-x-hidden ${readerStyleConfig.container}`}>
+                    {/* Book Page Navigator - only for book layout */}
+                    {readerStyle === 'book' && totalPages > 1 && (
+                      <div className="sticky top-0 z-20 bg-black/50 backdrop-blur-xl rounded-xl p-2 sm:p-3 mb-3 border border-amber-700/30">
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="text-amber-400/70 text-[10px] sm:text-xs font-medium">Page</span>
+                          {totalPages <= 10 ? (
+                            // Show all page buttons for small surahs
+                            <div className="flex items-center gap-1 flex-wrap justify-center flex-1">
+                              {Array.from({ length: totalPages }, (_, i) => (
+                                <button
+                                  key={i}
+                                  onClick={() => scrollToBookPage(i + 1)}
+                                  className={`w-7 h-7 sm:w-8 sm:h-8 rounded-lg text-[10px] sm:text-xs font-medium transition-all ${
+                                    currentBookPage === i + 1
+                                      ? 'bg-gradient-to-br from-amber-500 to-amber-700 text-white shadow-lg scale-110'
+                                      : 'bg-white/10 text-white/60 hover:bg-white/20 hover:text-white'
+                                  }`}
+                                >
+                                  {i + 1}
+                                </button>
+                              ))}
+                            </div>
+                          ) : (
+                            // Show dropdown for large surahs
+                            <div className="flex items-center gap-2 flex-1 justify-center">
+                              <button
+                                onClick={() => currentBookPage > 1 && scrollToBookPage(currentBookPage - 1)}
+                                disabled={currentBookPage <= 1}
+                                className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white/20 hover:bg-white/30 disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center text-white transition-all"
+                              >
+                                <Icons.ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
+                              </button>
+                              <select
+                                value={currentBookPage}
+                                onChange={(e) => scrollToBookPage(Number(e.target.value))}
+                                className="bg-gradient-to-br from-amber-600 to-amber-700 text-white text-sm sm:text-base font-bold px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl cursor-pointer outline-none shadow-lg min-w-[80px]"
+                              >
+                                {Array.from({ length: totalPages }, (_, i) => (
+                                  <option key={i} value={i + 1} className="text-gray-800">
+                                    Page {i + 1}
+                                  </option>
+                                ))}
+                              </select>
+                              <button
+                                onClick={() => currentBookPage < totalPages && scrollToBookPage(currentBookPage + 1)}
+                                disabled={currentBookPage >= totalPages}
+                                className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white/20 hover:bg-white/30 disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center text-white transition-all"
+                              >
+                                <Icons.ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
+                              </button>
+                            </div>
+                          )}
+                          <span className="text-white/40 text-[9px] sm:text-[10px]">
+                            {(currentBookPage - 1) * VERSES_PER_PAGE + 1}-{Math.min(currentBookPage * VERSES_PER_PAGE, surah.ayahs)}
+                          </span>
+                        </div>
+                      </div>
+                    )}
+
                     {surah.id !== 9 && surah.id !== 1 && (
-                      <div className="text-center py-2 overflow-hidden" style={{ fontFamily: "'Scheherazade New', serif", fontSize: fontSizeMap[fontSize].arabic, textShadow: '0 2px 8px rgba(0,0,0,0.3)', wordWrap: 'break-word' }} dir="rtl" lang="ar">
+                      <div className="text-center py-2 overflow-hidden" style={{ fontFamily: "'Scheherazade New', serif", fontSize: fontSizeMap[fontSize].arabic, color: readerStyleConfig.colors.text, textShadow: readerStyleConfig.isDark ? '0 2px 8px rgba(0,0,0,0.3)' : 'none', wordWrap: 'break-word' }} dir="rtl" lang="ar">
                         بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
                       </div>
                     )}
@@ -3730,22 +4629,38 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
 
                       const isSelected = selectedVerses.includes(ayahNum);
 
+                      // Get dynamic verse styles from readerStyleConfig.colors
+                      const verseColors = readerStyleConfig.colors;
+                      const verseStyle = {
+                        background: isSelected ? 'rgba(16,185,129,0.2)' : isCurrentAyah ? verseColors.activeBg : verseColors.verseBg,
+                        borderColor: isCurrentAyah ? verseColors.activeBorder : verseColors.verseBorder,
+                        borderWidth: '1px',
+                        borderStyle: 'solid',
+                        transform: isCurrentAyah ? 'scale(1.01)' : 'scale(1)',
+                        boxShadow: isCurrentAyah ? '0 0 20px rgba(255,255,255,0.15)' : isSelected ? '0 0 15px rgba(16,185,129,0.3)' : 'none',
+                      };
+
                       return (
                         <div key={ayahNum} data-ayah={ayahNum}
                           onClick={selectionMode ? () => toggleVerseSelection(ayahNum) : undefined}
-                          className={`relative ${readerStyleConfig.verse} ${readerStyleConfig.verseBorder} ${isCurrentAyah ? readerStyleConfig.verseActive : readerStyleConfig.verseDefault} ${hideLevel > 0 ? 'ring-2 ring-amber-400/30' : ''} ${isSelected ? 'ring-2 ring-emerald-400/60 bg-emerald-500/20' : ''} ${selectionMode ? 'cursor-pointer hover:bg-white/20' : ''}`}
-                          style={{ transform: isCurrentAyah ? 'scale(1.01)' : 'scale(1)', boxShadow: isCurrentAyah ? '0 0 20px rgba(255,255,255,0.2)' : isSelected ? '0 0 15px rgba(16,185,129,0.3)' : 'none' }}>
+                          className={`relative ${readerStyleConfig.verse} ${hideLevel > 0 ? 'ring-2 ring-amber-400/30' : ''} ${isSelected ? 'ring-2 ring-emerald-400/60' : ''} ${selectionMode ? 'cursor-pointer' : ''}`}
+                          style={verseStyle}>
 
                           {/* Selection checkbox */}
                           {selectionMode && (
                             <div className="flex items-center gap-2 mb-2">
-                              <div className={`w-5 h-5 rounded-md flex items-center justify-center transition-all ${isSelected ? 'bg-emerald-500' : 'bg-white/20'}`}>
+                              <div className={`w-5 h-5 rounded-md flex items-center justify-center transition-all ${isSelected ? 'bg-emerald-500' : readerStyleConfig.isDark ? 'bg-white/20' : 'bg-slate-200'}`}>
                                 {isSelected && <Icons.Check className="w-3.5 h-3.5 text-white" />}
                               </div>
-                              <span className="text-xs text-white/60">Verse {ayahNum}</span>
+                              <span className="text-xs" style={{ color: verseColors.translation }}>Verse {ayahNum}</span>
                             </div>
                           )}
-                          <div className="leading-[2.2] mb-2" style={{ fontFamily: "'Scheherazade New', serif", fontSize: fontSizeMap[fontSize].arabic, textShadow: '0 1px 6px rgba(0,0,0,0.3)', wordWrap: 'break-word', overflowWrap: 'break-word', maxWidth: '100%' }} dir="rtl" lang="ar">
+                          {/* Timeline badge - positioned on timeline line (left side) */}
+                          {readerStyleConfig.badgePosition === 'timeline' && (
+                            <span className={readerStyleConfig.ayahBadge} style={{ background: verseColors.badgeBg, color: verseColors.badgeColor, border: `1px solid ${verseColors.activeBorder}` }}>{ayahNum}</span>
+                          )}
+
+                          <div className="leading-[2.2] mb-2" style={{ fontFamily: "'Scheherazade New', serif", fontSize: fontSizeMap[fontSize].arabic, color: verseColors.text, textShadow: readerStyleConfig.isDark ? '0 1px 6px rgba(0,0,0,0.3)' : 'none', wordWrap: 'break-word', overflowWrap: 'break-word', maxWidth: '100%' }} dir="rtl" lang="ar">
                             {wordByWordMode ? (
                               wordMeanings.length > 0 ? (
                                 wordMeanings.map((wordData, wordIdx) => (
@@ -3763,22 +4678,23 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
                             ) : (
                               verse.arabic
                             )}
-                            {readerStyle !== 'cards' && readerStyle !== 'grid' && (
-                              <span className={readerStyleConfig.ayahBadge}>{ayahNum}</span>
+                            {/* Inline badge - after Arabic text */}
+                            {readerStyleConfig.badgePosition === 'inline' && (
+                              <span className={readerStyleConfig.ayahBadge} style={{ background: verseColors.badgeBg, color: verseColors.badgeColor, border: `1px solid ${verseColors.activeBorder}` }}>{ayahNum}</span>
                             )}
                           </div>
 
-                          {/* For cards/grid layout, show badge at top-right */}
-                          {(readerStyle === 'cards' || readerStyle === 'grid') && (
-                            <span className={readerStyleConfig.ayahBadge}>{ayahNum}</span>
+                          {/* Absolute positioned badge - top corner or centered */}
+                          {(readerStyleConfig.badgePosition === 'absolute' || readerStyleConfig.badgePosition === 'absolute-bottom') && (
+                            <span className={readerStyleConfig.ayahBadge} style={{ background: verseColors.badgeBg, color: verseColors.badgeColor, border: `1px solid ${verseColors.activeBorder}` }}>{ayahNum}</span>
                           )}
 
                           {showTranslation && verse.translation && (
-                            <p className={`text-white/85 leading-relaxed mb-2 ${readerStyleConfig.translationExtra}`} style={{ fontSize: fontSizeMap[fontSize].translation }}>{verse.translation}</p>
+                            <p className="leading-relaxed mb-2" style={{ fontSize: fontSizeMap[fontSize].translation, color: verseColors.translation }}>{verse.translation}</p>
                           )}
 
                           {selectedWordData?.key?.startsWith(`${ayahNum}-`) && (
-                            <div className="mt-2 p-3 bg-black/30 rounded-xl" style={{ animation: 'slideDown 0.2s ease-out' }}>
+                            <div className="mt-2 p-3 rounded-xl" style={{ animation: 'slideDown 0.2s ease-out', background: readerStyleConfig.isDark ? 'rgba(0,0,0,0.3)' : 'rgba(0,0,0,0.05)' }}>
                               <div className="flex items-start gap-3">
                                 {/* Play Word Audio Button - Always show, disabled if no audio */}
                                 <button
