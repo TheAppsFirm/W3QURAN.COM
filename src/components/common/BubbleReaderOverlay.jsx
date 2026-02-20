@@ -3572,14 +3572,13 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
           {/* Expanded State - Shows details inside the bubble */}
           {showSurahDetails && (
             <div className="relative z-10">
-              {/* Header with close button - prominent X button */}
+              {/* Header with close button */}
               <div className="p-3 pb-2 border-b border-white/20 relative">
                 <button
                   onClick={(e) => { e.stopPropagation(); closeSurahDetails(); }}
-                  className="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-white/40 hover:bg-white/60 flex items-center justify-center transition-all z-50 shadow-lg border-2 border-white/30"
-                  style={{ backdropFilter: 'blur(8px)' }}
+                  className="absolute top-2 right-2 w-6 h-6 rounded-full bg-black/30 hover:bg-black/50 flex items-center justify-center transition-all z-20"
                 >
-                  <Icons.X className="w-4 h-4 text-white" strokeWidth={2.5} />
+                  <Icons.X className="w-3.5 h-3.5 text-white" strokeWidth={2.5} />
                 </button>
 
                 <div className="text-xl font-bold" style={{ fontFamily: "'Scheherazade New', serif" }} dir="rtl">{surah.arabic}</div>
