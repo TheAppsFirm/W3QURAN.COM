@@ -114,20 +114,36 @@ export const THEME_LIST = [
 // LAYOUT TO THEME MAPPING
 // ============================================
 export const LAYOUT_TO_OVERLAY_THEME = {
-  'grid': 'grid',
-  'list': 'list',
-  'compact': 'compact',
-  'rainbow': 'rainbow',
-  'gallery': 'gallery',
-  'blocks': 'blocks',
-  'bubbles': 'bubbles',
-  'spiral': 'bubble',
-  'honeycomb': 'hexagon',
-  'wave': 'wave',
-  'juzz': 'juzz',
-  'arabic': 'alphabet',
-  'revelation': 'timeline',
-  'byLength': 'length',
+  // Primary 14 layouts with unique calm reading themes
+  'spiral': 'bubble',           // 1. Spiral -> Deep purple calm reading
+  'grid': 'grid',               // 2. Grid -> Slate/indigo calm reading
+  'list': 'list',               // 3. List -> Teal calm reading
+  'compact': 'compact',         // 4. Compact -> Indigo compact calm
+  'kids-rainbow': 'rainbow',    // 5. Rainbow -> Soft warm reading
+  'rainbow': 'rainbow',         // Alias
+  'art': 'gallery',             // 6. Art Studio -> Warm cream reading
+  'gallery': 'gallery',         // Alias
+  'kids-blocks': 'blocks',      // 7. Blocks -> Blue calm reading
+  'blocks': 'blocks',           // Alias
+  'kids-bubbles': 'bubbles',    // 8. Bubbles -> Purple calm reading
+  'bubbles': 'bubbles',         // Alias
+  'honeycomb': 'hexagon',       // 9. Honeycomb -> Teal calm reading (primary)
+  'wave': 'wave',               // 10. Wave -> Ocean calm reading
+  'juzz': 'juzz',               // 11. Juzz -> Emerald calm reading
+  'alphabet': 'alphabet',       // 12. Arabic Alphabet -> Warm amber reading
+  'arabic': 'alphabet',         // Alias
+  'revelation': 'timeline',     // 13. Revelation -> Indigo historical reading
+  'length': 'length',           // 14. By Length -> Dynamic palette-based
+  'byLength': 'length',         // Alias
+
+  // Legacy/alias mappings for backwards compatibility
+  'cards': 'grid',
+  'book': 'book',
+  'clock': 'clock',
+  'kids': 'rainbow',
+  'kids-art': 'gallery',
+  'card': 'card',
+  'minimal': 'minimal',
 };
 
 export const LAYOUT_TO_MODAL_THEME = { ...LAYOUT_TO_OVERLAY_THEME };
@@ -406,6 +422,84 @@ export const OVERLAY_THEMES = {
       badgeColor: '#a5b4fc',
       lengthLabel: 'Long (100+)',
     }),
+  },
+
+  // ============================================
+  // LEGACY STYLES (for backwards compatibility)
+  // ============================================
+  card: {
+    ...OVERLAY_BASE,
+    ...DARK_VERSE_TOKENS,
+    id: 'card',
+    name: 'Card',
+    isDark: true,
+    width: 'min(96vw, 700px)',
+    height: 'min(90vh, 800px)',
+    borderRadius: '1.5rem',
+    border: '1px solid rgba(99, 102, 241, 0.12)',
+    customGradient: 'linear-gradient(180deg, rgba(15, 23, 42, 0.97) 0%, rgba(30, 41, 59, 0.98) 50%, rgba(15, 23, 42, 0.99) 100%)',
+    boxShadow: '0 0 60px rgba(99, 102, 241, 0.12), 0 25px 80px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05)',
+    hasCalmGlow: true,
+  },
+
+  book: {
+    ...OVERLAY_BASE,
+    ...DARK_VERSE_TOKENS,
+    id: 'book',
+    name: 'Book',
+    isDark: true,
+    width: 'min(96vw, 700px)',
+    height: 'min(90vh, 800px)',
+    borderRadius: '0.5rem',
+    border: '2px solid rgba(139, 69, 19, 0.2)',
+    customGradient: 'linear-gradient(180deg, rgba(41, 37, 36, 0.97) 0%, rgba(68, 64, 60, 0.4) 50%, rgba(41, 37, 36, 0.99) 100%)',
+    boxShadow: '0 0 50px rgba(217, 119, 6, 0.08), 0 20px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.03)',
+    hasCalmGlow: true,
+  },
+
+  clock: {
+    ...OVERLAY_BASE,
+    ...DARK_VERSE_TOKENS,
+    id: 'clock',
+    name: 'Clock',
+    isDark: true,
+    width: 'min(96vw, 700px)',
+    height: 'min(90vh, 800px)',
+    borderRadius: '1.5rem',
+    border: '1px solid rgba(139, 92, 246, 0.15)',
+    customGradient: 'linear-gradient(180deg, rgba(46, 16, 101, 0.97) 0%, rgba(76, 29, 149, 0.3) 50%, rgba(46, 16, 101, 0.99) 100%)',
+    boxShadow: '0 0 60px rgba(139, 92, 246, 0.12), 0 25px 80px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05)',
+    hasCalmGlow: true,
+  },
+
+  kids: {
+    ...OVERLAY_BASE,
+    ...DARK_VERSE_TOKENS,
+    id: 'kids',
+    name: 'Kids',
+    isDark: true,
+    width: 'min(96vw, 680px)',
+    height: 'min(88vh, 760px)',
+    borderRadius: '1.5rem',
+    border: '2px solid rgba(255, 255, 255, 0.15)',
+    customGradient: 'linear-gradient(180deg, rgba(55, 48, 76, 0.97) 0%, rgba(76, 61, 92, 0.98) 50%, rgba(55, 48, 76, 0.99) 100%)',
+    boxShadow: '0 0 60px rgba(236, 72, 153, 0.12), 0 25px 80px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.06)',
+    hasCalmGlow: true,
+  },
+
+  minimal: {
+    ...OVERLAY_BASE,
+    ...DARK_VERSE_TOKENS,
+    id: 'minimal',
+    name: 'Minimal',
+    isDark: true,
+    width: 'min(96vw, 700px)',
+    height: 'min(90vh, 800px)',
+    borderRadius: '1.25rem',
+    border: '1px solid rgba(20, 184, 166, 0.12)',
+    customGradient: 'linear-gradient(180deg, rgba(15, 23, 42, 0.97) 0%, rgba(17, 24, 39, 0.98) 50%, rgba(15, 23, 42, 0.99) 100%)',
+    boxShadow: '0 0 60px rgba(20, 184, 166, 0.12), 0 25px 80px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05)',
+    hasCalmGlow: true,
   },
 };
 

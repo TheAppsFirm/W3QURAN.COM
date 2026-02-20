@@ -1,28 +1,70 @@
 /**
  * Reader Module
  *
- * Feature-based organization for Quran reader components
+ * Feature-based organization for Quran reader components.
+ * This is the main entry point for all reader-related exports.
  *
  * Structure:
- * - panels/       - Floating feature panels (tafseer, videos, etc.)
+ * - panels/        - Floating feature panels (tafseer, videos, bookmarks, etc.)
  * - subcomponents/ - Small reusable components (TajweedText, WordItem)
- * - hooks/        - Reader-specific hooks
- * - constants.js  - Configuration constants
- * - utils.js      - Helper functions
+ * - hooks/         - Reader-specific hooks (useReaderState)
+ * - data/          - Static data (scholars, configurations)
+ * - constants.js   - Configuration constants
+ * - utils.js       - Helper functions
+ *
+ * Usage:
+ * ```js
+ * import {
+ *   // Constants
+ *   RECITERS, FEATURE_GRADIENTS, DEFAULT_READER_SETTINGS,
+ *   // Utilities
+ *   sanitizeHTML, checkMemoryPressure,
+ *   // Components
+ *   TajweedText, WordItem, FloatingFeatureBubble,
+ *   // Panels
+ *   TafseerFloatingBubble, VideosFloatingBubble, SharePanel,
+ *   // Hooks
+ *   useReaderState, READER_ACTIONS,
+ *   // Data
+ *   YOUTUBE_SCHOLARS,
+ * } from '@/components/reader';
+ * ```
  */
 
+// ===========================================
 // Constants
+// ===========================================
 export * from './constants';
 
+// ===========================================
 // Utilities
+// ===========================================
 export * from './utils';
 
-// Subcomponents
-export { default as TajweedText } from './subcomponents/TajweedText';
-export { default as WordItem } from './subcomponents/WordItem';
+// ===========================================
+// Subcomponents (re-export from index)
+// ===========================================
+export { TajweedText, WordItem } from './subcomponents';
 
-// Panels
-export { default as FloatingFeatureBubble } from './panels/FloatingFeatureBubble';
+// ===========================================
+// Panels (re-export from index)
+// ===========================================
+export {
+  FloatingFeatureBubble,
+  TafseerFloatingBubble,
+  VideosFloatingBubble,
+  SharePanel,
+  MemorizePanel,
+  BookmarksPanel,
+  YouTubePanel,
+} from './panels';
 
-// Hooks
-export { useReaderState, ACTIONS as READER_ACTIONS } from './hooks/useReaderState';
+// ===========================================
+// Hooks (re-export from index)
+// ===========================================
+export { useReaderState, READER_ACTIONS } from './hooks';
+
+// ===========================================
+// Data (re-export from index)
+// ===========================================
+export { YOUTUBE_SCHOLARS } from './data';

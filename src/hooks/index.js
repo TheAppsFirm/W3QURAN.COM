@@ -11,7 +11,7 @@ export { useLocalStorage, useClearStorage } from './useLocalStorage';
 // Debounce/Throttle hooks
 export { useDebounce, useDebouncedCallback, useThrottledCallback } from './useDebounce';
 
-// Quran data hooks
+// Quran data hooks (from services/api)
 export {
   useChapters,
   useVerses,
@@ -43,21 +43,69 @@ export {
   speakText,
 } from './useAudioPlayer';
 
-// Quran Cloud API hook (Tajweed, Word-by-Word, Translations)
+// ==================================================
+// Quran Cloud API hooks (Split by Single Responsibility)
+// ==================================================
+
+// API Utilities
 export {
-  useQuranAPI,
-  useWordByWord,
+  API_BASE,
+  QURAN_COM_API,
+  QURANWBW_API,
+  fetchWithCache,
+  fetchWithCacheSimple,
+  getFromCache,
+  setInCache,
+  hasInCache,
+  clearCache,
+  clearCacheEntry,
+} from './apiUtils';
+
+// Verses API - Fetching verses with Arabic, translations, tajweed
+export {
+  useVersesAPI,
+  fetchSingleVerse,
+} from './useVersesAPI';
+
+// Translations API - Translation constants and utilities
+export {
+  TRANSLATIONS,
+  WORD_TRANSLATION_LANGUAGES,
+  getAvailableTranslations,
+  getTranslationsByLanguage,
+  getTranslationInfo,
+  getWordLanguage,
+  isValidTranslation,
+  getUrduTranslations,
+  getEnglishTranslations,
+} from './useTranslationsAPI';
+
+// Tajweed API - Tajweed rules and parsing
+export {
+  TAJWEED_RULES,
+  TAJWEED_CATEGORIES,
+  parseTajweedText,
+  getTajweedRule,
+  getTajweedRulesByCategory,
+  getUsedTajweedRules,
+  countTajweedRules,
+} from './useTajweed';
+
+// Word-by-Word API - Multi-language word translations
+export {
   useMultilingualWords,
-  fetchVerse,
+  useWordByWord,
   fetchMultilingualWords,
   fetchWordMorphology,
-  getAvailableTranslations,
   getWordMeanings,
-  parseTajweedText,
-  TRANSLATIONS,
-  TAJWEED_RULES,
-  WORD_TRANSLATION_LANGUAGES,
   POS_LABELS,
+} from './useWordByWordAPI';
+
+// Legacy facade (backward compatibility)
+// useQuranAPI is now an alias for useVersesAPI
+export {
+  useQuranAPI,
+  fetchVerse,
 } from './useQuranAPI';
 
 // Media query hooks for responsive design

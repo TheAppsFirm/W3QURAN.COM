@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
-import { LocaleProvider } from './context'
+import { LocaleProvider } from './contexts'
 import './index.css'
 
 // Import logger early to set up global error handlers

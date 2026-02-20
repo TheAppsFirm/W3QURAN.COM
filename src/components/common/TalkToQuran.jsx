@@ -6,7 +6,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { Icons } from './Icons';
 import { useAuth } from '../../contexts/AuthContext';
-import { useLocale } from '../../context';
+import { useLocale } from '../../contexts';
 import logger from '../../utils/logger';
 
 // Speech APIs (SSR-safe)
