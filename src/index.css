@@ -308,6 +308,33 @@ body {
   }
 }
 
+/* Logo animations for mobile support */
+@keyframes fusionPulse {
+  0%, 100% {
+    filter: drop-shadow(0 0 20px rgba(16,185,129,0.15));
+    transform: scale(1);
+  }
+  50% {
+    filter: drop-shadow(0 0 35px rgba(16,185,129,0.35));
+    transform: scale(1.02);
+  }
+}
+
+@keyframes logoGlow {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50% { opacity: 0.9; transform: scale(1.08); }
+}
+
+@keyframes logoSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes logoSpinReverse {
+  from { transform: rotate(360deg); }
+  to { transform: rotate(0deg); }
+}
+
 @keyframes wave {
   0%, 100% {
     transform: translateY(0) scaleX(1);

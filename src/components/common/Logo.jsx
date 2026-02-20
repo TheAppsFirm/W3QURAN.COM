@@ -438,7 +438,7 @@ export const FusionLogo = memo(function FusionLogo({
         height={size}
         xmlns="http://www.w3.org/2000/svg"
         style={{
-          animation: animated ? 'fusionPulse 3s ease-in-out infinite' : 'none',
+          animation: animated ? 'fusionPulse 3s ease-in-out infinite, gentleFloat 4s ease-in-out infinite' : 'none',
         }}
       >
         <defs>
