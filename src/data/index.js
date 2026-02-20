@@ -9,6 +9,22 @@ export { SURAHS, MAX_AYAHS, TOTAL_SURAHS, JUZZ, getSurahById, getSurahsByType, g
 // Color palettes
 export { PALETTES, TOPIC_PALETTES, TOPIC_ICONS, getTopicPalette, getTopicIcon } from './palettes';
 
+// Themes - Centralized theme system for the entire app
+export {
+  OVERLAY_THEMES,
+  MODAL_THEMES,
+  THEME_LIST,
+  LAYOUT_TO_OVERLAY_THEME,
+  LAYOUT_TO_MODAL_THEME,
+  getOverlayTheme,
+  getModalTheme,
+  getAvailableThemes,
+  isThemeDark,
+  createCustomTheme,
+  resolveGradient,
+  DEFAULT_THEME_CONFIG,
+} from './themes';
+
 // Topic categories
 export { FAQ_TOPICS, getTopicById, getTopicsForSurah } from './topics';
 
