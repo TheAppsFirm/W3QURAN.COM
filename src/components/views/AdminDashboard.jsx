@@ -1717,9 +1717,9 @@ export default function AdminDashboard({ onClose, initialTab = 'overview', onTab
         </button>
       </div>
 
-      {/* Tabs */}
-      <div className="border-b border-white/10 px-6">
-        <div className="flex gap-6">
+      {/* Tabs - Horizontally scrollable on mobile */}
+      <div className="border-b border-white/10 px-4 sm:px-6 overflow-x-auto scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+        <div className="flex gap-4 sm:gap-6 min-w-max">
           {[
             { id: 'overview', label: 'Overview', icon: Icons.PieChart },
             { id: 'analytics', label: 'Analytics', icon: Icons.Activity },

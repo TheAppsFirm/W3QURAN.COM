@@ -178,9 +178,14 @@ const StatsBar = memo(function StatsBar({
   useEffect(() => {
     if (showLayoutMenu && layoutBtnRef.current) {
       const rect = layoutBtnRef.current.getBoundingClientRect();
-      // Ensure dropdown doesn't go off-screen
-      const left = Math.min(rect.left, window.innerWidth - 200);
-      const top = rect.bottom + 8;
+      // Ensure dropdown doesn't go off-screen horizontally or vertically
+      const dropdownHeight = 420;
+      const left = Math.min(rect.left, window.innerWidth - 240);
+      // If not enough space below, position above the button or limit top position
+      const spaceBelow = window.innerHeight - rect.bottom - 20;
+      const top = spaceBelow < dropdownHeight
+        ? Math.max(20, window.innerHeight - dropdownHeight - 20)
+        : rect.bottom + 8;
       setLayoutMenuPos({ top, left: Math.max(10, left) });
     }
   }, [showLayoutMenu]);
@@ -424,13 +429,14 @@ const StatsBar = memo(function StatsBar({
           <div
             className="absolute overflow-y-auto scrollbar-thin"
             style={{
-              top: layoutMenuPos.top,
+              top: Math.min(layoutMenuPos.top, window.innerHeight - 450),
               left: layoutMenuPos.left,
-              maxHeight: 'calc(100vh - 120px)',
+              maxHeight: 'min(calc(100vh - 80px), 420px)',
               minWidth: '220px',
               background: 'linear-gradient(145deg, rgba(139, 92, 246, 0.98), rgba(99, 102, 241, 0.98))',
               borderRadius: '20px',
               padding: '8px',
+              paddingBottom: '16px',
               boxShadow: '0 25px 50px rgba(0, 0, 0, 0.4), 0 0 40px rgba(139, 92, 246, 0.3), inset 0 1px 0 rgba(255,255,255,0.2)',
               backdropFilter: 'blur(20px)',
               border: '2px solid rgba(255,255,255,0.3)',
