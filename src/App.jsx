@@ -882,7 +882,7 @@ function QuranBubbleApp() {
         {/* Surahs View */}
         {view === 'surahs' && (
           <>
-            <div className="absolute inset-0 overflow-auto bubble-container pt-4 pr-14 sm:pr-16 pb-28 sm:pb-32">
+            <div className="absolute inset-0 overflow-auto bubble-container pt-4 pr-10 sm:pr-12 pb-28 sm:pb-32">
               {/* Spiral Layout (Default) */}
               {surahLayout === 'spiral' && (
                 <div

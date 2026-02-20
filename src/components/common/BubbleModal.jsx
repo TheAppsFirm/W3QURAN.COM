@@ -841,24 +841,25 @@ const BubbleModal = memo(function BubbleModal({
             />
           )}
 
-          {/* Close Button - Responsive positioning */}
+          {/* Close Button - Fixed positioning with high visibility */}
           <button
             ref={closeButtonRef}
             onClick={(e) => {
               e.stopPropagation();
               onClose();
             }}
-            className={`absolute w-9 h-9 rounded-full flex items-center justify-center hover:scale-110 transition-all z-20 ${
-              modalConfig.textDark ? 'bg-gray-200 hover:bg-gray-300 text-gray-700' : 'bg-white/30 hover:bg-white/50 text-white'
+            className={`absolute w-10 h-10 rounded-full flex items-center justify-center hover:scale-110 transition-all z-50 shadow-lg ${
+              modalConfig.textDark ? 'bg-gray-200 hover:bg-gray-300 text-gray-700' : 'bg-white/40 hover:bg-white/60 text-white'
             }`}
             style={{
-              top: isCircle ? '14%' : (isHexagon ? '15%' : '16px'),
-              right: isCircle ? '14%' : (isHexagon ? '20%' : '16px'),
-              backdropFilter: 'blur(10px)',
+              top: isCircle ? '8%' : (isHexagon ? '10%' : '12px'),
+              right: isCircle ? '8%' : (isHexagon ? '12%' : '12px'),
+              backdropFilter: 'blur(12px)',
+              border: modalConfig.textDark ? '2px solid rgba(0,0,0,0.1)' : '2px solid rgba(255,255,255,0.3)',
             }}
             aria-label="Close"
           >
-            <Icons.X className="w-4 h-4" />
+            <Icons.X className="w-5 h-5" strokeWidth={2.5} />
           </button>
 
           {/* Surah Number Badge */}
