@@ -1462,7 +1462,7 @@ const SharePanel = memo(function SharePanel({ surahId, surahName, ayahNumber, ve
 // MAIN COMPONENT
 // ============================================
 
-const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, darkMode, onChangeSurah, initialVerse = 1, initialPanel = null, onPanelChange }) {
+const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, darkMode, onChangeSurah, initialVerse = 1, initialPanel = null, onPanelChange, readerStyle = 'default' }) {
   // Auth state for premium features
   const { isPremium, isAuthenticated, login } = useAuth();
 
@@ -1544,6 +1544,102 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
   const [isLoadingMoreVerses, setIsLoadingMoreVerses] = useState(false);
   const loadMoreTriggerRef = useRef(null); // IntersectionObserver target
   const isLargeSurah = (surah?.ayahs || 0) > LARGE_SURAH_THRESHOLD;
+
+  // Reader style configurations based on layout selection
+  const readerStyleConfig = useMemo(() => {
+    const styles = {
+      // Cards: 3D elevated cards with depth
+      cards: {
+        container: 'grid grid-cols-1 gap-3 sm:gap-4',
+        verse: 'rounded-2xl sm:rounded-3xl p-4 sm:p-5 transition-all duration-300 transform hover:scale-[1.01] sm:hover:scale-[1.02] hover:-translate-y-0.5 sm:hover:-translate-y-1',
+        verseActive: 'bg-gradient-to-br from-white/30 to-white/10 shadow-2xl scale-[1.01]',
+        verseDefault: 'bg-gradient-to-br from-white/20 to-white/5 shadow-xl',
+        verseBorder: 'border border-white/20',
+        ayahBadge: 'absolute -top-2 sm:-top-3 -right-2 sm:-right-3 w-8 sm:w-10 h-8 sm:h-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 text-white font-bold flex items-center justify-center text-xs sm:text-sm shadow-lg',
+        arabicExtra: '',
+        translationExtra: 'mt-2 sm:mt-3 pt-2 sm:pt-3 border-t border-white/10',
+      },
+      // List: Clean minimal list view
+      list: {
+        container: 'flex flex-col gap-1.5 sm:gap-2',
+        verse: 'rounded-lg sm:rounded-xl p-3 sm:p-4 transition-all duration-200 border-l-3 sm:border-l-4',
+        verseActive: 'bg-white/20 border-l-emerald-400',
+        verseDefault: 'bg-white/5 border-l-white/20 hover:border-l-white/40',
+        verseBorder: '',
+        ayahBadge: 'inline-flex items-center justify-center w-5 sm:w-6 h-5 sm:h-6 rounded-full ml-1.5 sm:ml-2 text-[10px] sm:text-xs font-semibold bg-white/20',
+        arabicExtra: '',
+        translationExtra: 'mt-1.5 sm:mt-2 text-white/70',
+      },
+      // Compact: Dense newspaper-style columns
+      compact: {
+        container: 'columns-1 sm:columns-2 gap-3 sm:gap-4',
+        verse: 'break-inside-avoid rounded-md sm:rounded-lg p-2 sm:p-3 mb-2 sm:mb-3 transition-all duration-200',
+        verseActive: 'bg-white/25',
+        verseDefault: 'bg-white/5 hover:bg-white/10',
+        verseBorder: '',
+        ayahBadge: 'inline-flex items-center justify-center w-4 sm:w-5 h-4 sm:h-5 rounded text-[9px] sm:text-[10px] font-bold ml-1 bg-white/20',
+        arabicExtra: '',
+        translationExtra: 'mt-1 text-xs sm:text-sm',
+      },
+      // Grid: Masonry grid for shorter verses
+      grid: {
+        container: 'grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3',
+        verse: 'rounded-xl sm:rounded-2xl p-3 sm:p-4 transition-all duration-300 flex flex-col',
+        verseActive: 'bg-gradient-to-br from-emerald-500/30 to-teal-500/20 ring-2 ring-emerald-400/50',
+        verseDefault: 'bg-white/10 hover:bg-white/15',
+        verseBorder: '',
+        ayahBadge: 'absolute top-1.5 sm:top-2 right-1.5 sm:right-2 w-6 sm:w-7 h-6 sm:h-7 rounded-md sm:rounded-lg bg-black/30 text-white text-[10px] sm:text-xs font-bold flex items-center justify-center',
+        arabicExtra: '',
+        translationExtra: 'mt-auto pt-1.5 sm:pt-2',
+      },
+      // Bubbles: Floating bubble-style verses
+      bubbles: {
+        container: 'flex flex-wrap justify-center gap-3 sm:gap-4',
+        verse: 'rounded-[2rem] sm:rounded-full p-4 sm:p-6 min-w-[160px] sm:min-w-[200px] max-w-[300px] sm:max-w-[400px] transition-all duration-500 flex flex-col items-center text-center',
+        verseActive: 'bg-gradient-to-br from-cyan-400/40 to-purple-500/30 shadow-2xl scale-105',
+        verseDefault: 'bg-gradient-to-br from-white/15 to-white/5 hover:from-white/25 hover:to-white/10 shadow-lg',
+        verseBorder: 'border border-white/30',
+        ayahBadge: 'absolute -top-1.5 sm:-top-2 left-1/2 -translate-x-1/2 w-7 sm:w-8 h-7 sm:h-8 rounded-full bg-gradient-to-br from-cyan-400 to-purple-500 text-white font-bold flex items-center justify-center text-xs sm:text-sm shadow-lg',
+        arabicExtra: '',
+        translationExtra: 'mt-2 sm:mt-3',
+      },
+      // Default: Current beautiful style
+      default: {
+        container: 'flex flex-col gap-3',
+        verse: 'rounded-2xl p-3 transition-all duration-500 overflow-hidden',
+        verseActive: 'bg-white/25',
+        verseDefault: 'bg-white/10',
+        verseBorder: '',
+        ayahBadge: 'inline-flex items-center justify-center w-7 h-7 rounded-full ml-2 text-xs font-bold align-middle bg-white/25',
+        arabicExtra: '',
+        translationExtra: '',
+      },
+    };
+
+    // Map layout names to reader styles
+    const layoutToStyle = {
+      'cards': 'cards',
+      'list': 'list',
+      'compact': 'compact',
+      'grid': 'grid',
+      'kids-art': 'cards',
+      'kids-rainbow': 'cards',
+      'kids-blocks': 'grid',
+      'kids-bubbles': 'bubbles',
+      'spiral': 'bubbles',
+      'clock': 'bubbles',
+      'honeycomb': 'grid',
+      'wave': 'bubbles',
+      'juzz': 'list',
+      'alphabet': 'list',
+      'revelation': 'list',
+      'book': 'default',
+      'length': 'compact',
+    };
+
+    const styleKey = layoutToStyle[readerStyle] || 'default';
+    return styles[styleKey];
+  }, [readerStyle]);
 
   // Log surah open event and track reading start time
   const readingStartTime = useRef(Date.now());
@@ -3637,7 +3733,7 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
                       return (
                         <div key={ayahNum} data-ayah={ayahNum}
                           onClick={selectionMode ? () => toggleVerseSelection(ayahNum) : undefined}
-                          className={`rounded-2xl p-3 transition-all duration-500 overflow-hidden ${isCurrentAyah ? 'bg-white/25' : 'bg-white/10'} ${hideLevel > 0 ? 'ring-2 ring-amber-400/30' : ''} ${isSelected ? 'ring-2 ring-emerald-400/60 bg-emerald-500/20' : ''} ${selectionMode ? 'cursor-pointer hover:bg-white/20' : ''}`}
+                          className={`relative ${readerStyleConfig.verse} ${readerStyleConfig.verseBorder} ${isCurrentAyah ? readerStyleConfig.verseActive : readerStyleConfig.verseDefault} ${hideLevel > 0 ? 'ring-2 ring-amber-400/30' : ''} ${isSelected ? 'ring-2 ring-emerald-400/60 bg-emerald-500/20' : ''} ${selectionMode ? 'cursor-pointer hover:bg-white/20' : ''}`}
                           style={{ transform: isCurrentAyah ? 'scale(1.01)' : 'scale(1)', boxShadow: isCurrentAyah ? '0 0 20px rgba(255,255,255,0.2)' : isSelected ? '0 0 15px rgba(16,185,129,0.3)' : 'none' }}>
 
                           {/* Selection checkbox */}
@@ -3667,11 +3763,18 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
                             ) : (
                               verse.arabic
                             )}
-                            <span className="inline-flex items-center justify-center w-7 h-7 rounded-full ml-2 text-xs font-bold align-middle bg-white/25">{ayahNum}</span>
+                            {readerStyle !== 'cards' && readerStyle !== 'grid' && (
+                              <span className={readerStyleConfig.ayahBadge}>{ayahNum}</span>
+                            )}
                           </div>
 
+                          {/* For cards/grid layout, show badge at top-right */}
+                          {(readerStyle === 'cards' || readerStyle === 'grid') && (
+                            <span className={readerStyleConfig.ayahBadge}>{ayahNum}</span>
+                          )}
+
                           {showTranslation && verse.translation && (
-                            <p className="text-white/85 leading-relaxed mb-2" style={{ fontSize: fontSizeMap[fontSize].translation }}>{verse.translation}</p>
+                            <p className={`text-white/85 leading-relaxed mb-2 ${readerStyleConfig.translationExtra}`} style={{ fontSize: fontSizeMap[fontSize].translation }}>{verse.translation}</p>
                           )}
 
                           {selectedWordData?.key?.startsWith(`${ayahNum}-`) && (

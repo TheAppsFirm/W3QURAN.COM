@@ -439,6 +439,7 @@ export const GridLayout = memo(function GridLayout({
         gridTemplateColumns: gridColumns,
         gap: `${gap}px`,
         padding: isMobile ? '16px' : '24px',
+        paddingRight: isMobile ? '64px' : '80px', // Extra space for right side menu
         paddingBottom: isMobile ? '140px' : '160px', // Extra space for floating menu
         width: '100%',
         direction: 'rtl',
@@ -572,7 +573,7 @@ export const JuzzGroupLayout = memo(function JuzzGroupLayout({
   ];
 
   return (
-    <div className="p-3 sm:p-4 md:p-6 space-y-4 sm:space-y-6">
+    <div className="p-3 sm:p-4 md:p-6 pr-16 sm:pr-20 pb-28 sm:pb-32 space-y-4 sm:space-y-6">
       {Object.entries(juzzGroups).map(([juzz, surahList]) => {
         if (surahList.length === 0) return null;
 
@@ -685,7 +686,7 @@ export const AlphabetLayout = memo(function AlphabetLayout({
   };
 
   return (
-    <div className="p-3 sm:p-4 md:p-6 space-y-4 sm:space-y-6">
+    <div className="p-3 sm:p-4 md:p-6 pr-16 sm:pr-20 pb-28 sm:pb-32 space-y-4 sm:space-y-6">
       {Object.entries(alphabetGroups).map(([letter, surahList]) => {
         if (surahList.length === 0) return null;
 
@@ -789,7 +790,7 @@ export const RevelationLayout = memo(function RevelationLayout({
   const madaniSurahs = sortedSurahs.filter(s => s.type === 'Madani');
 
   return (
-    <div className="p-3 sm:p-4 md:p-6 space-y-6 sm:space-y-8">
+    <div className="p-3 sm:p-4 md:p-6 pr-16 sm:pr-20 pb-28 sm:pb-32 space-y-6 sm:space-y-8">
       {/* Makki Period */}
       <div>
         <div
@@ -1111,7 +1112,7 @@ export const BookLayout = memo(function BookLayout({
   );
 
   return (
-    <div className="relative min-h-[70vh] sm:min-h-[80vh] w-full flex flex-col items-center pt-4 sm:pt-8 pb-16 px-2 sm:px-4">
+    <div className="relative min-h-[70vh] sm:min-h-[80vh] w-full flex flex-col items-center pt-4 sm:pt-8 pb-28 sm:pb-32 pr-16 sm:pr-20 px-2 sm:px-4">
       {/* Header */}
       <div className="text-center mb-4 sm:mb-8">
         <div
@@ -1230,7 +1231,7 @@ export const BookLayout = memo(function BookLayout({
   );
 });
 
-// List Layout - Simple vertical list
+// List Layout - Simple vertical list (Mobile-optimized)
 export const ListLayout = memo(function ListLayout({
   surahs,
   onSurahClick,
@@ -1239,15 +1240,15 @@ export const ListLayout = memo(function ListLayout({
   darkMode,
 }) {
   return (
-    <div className="p-4 max-w-3xl mx-auto">
-      <div className="space-y-2">
+    <div className="p-2 sm:p-4 pr-16 sm:pr-20 pb-28 sm:pb-32 max-w-3xl mx-auto" dir="rtl">
+      <div className="space-y-1.5 sm:space-y-2">
         {surahs.map((surah, index) => {
           const palette = PALETTES[(surah.id - 1) % 10];
           return (
             <div
               key={surah.id}
               onClick={(e) => onSurahClick(surah, { x: e.clientX, y: e.clientY })}
-              className="flex items-center gap-4 p-4 rounded-2xl cursor-pointer transition-all hover:scale-[1.02] hover:shadow-lg"
+              className="flex items-center gap-2 sm:gap-4 p-2.5 sm:p-4 rounded-xl sm:rounded-2xl cursor-pointer transition-all hover:scale-[1.01] sm:hover:scale-[1.02] hover:shadow-lg active:scale-[0.99]"
               style={{
                 background: darkMode
                   ? `linear-gradient(135deg, ${palette.colors[0]}20, ${palette.colors[1]}10)`
@@ -1256,28 +1257,28 @@ export const ListLayout = memo(function ListLayout({
               }}
             >
               <div
-                className="w-12 h-12 rounded-xl flex items-center justify-center text-white font-bold text-lg flex-shrink-0"
+                className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl flex items-center justify-center text-white font-bold text-sm sm:text-lg flex-shrink-0"
                 style={{ background: `linear-gradient(135deg, ${palette.colors[0]}, ${palette.colors[1]})` }}
               >
                 {surah.id}
               </div>
               <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
                   <span
-                    className={`font-bold text-lg ${darkMode ? 'text-white' : 'text-gray-800'}`}
+                    className={`font-bold text-base sm:text-lg ${darkMode ? 'text-white' : 'text-gray-800'}`}
                     style={{ fontFamily: "'Scheherazade New', serif" }}
                   >
                     {surah.arabic}
                   </span>
-                  <span className={`text-sm ${darkMode ? 'text-white/60' : 'text-gray-500'}`}>
+                  <span className={`text-xs sm:text-sm ${darkMode ? 'text-white/60' : 'text-gray-500'}`}>
                     {surah.name}
                   </span>
                 </div>
-                <div className={`text-xs ${darkMode ? 'text-white/40' : 'text-gray-400'}`}>
+                <div className={`text-[10px] sm:text-xs ${darkMode ? 'text-white/40' : 'text-gray-400'} truncate`}>
                   {surah.ayahs} verses • {surah.type} • {surah.meaning}
                 </div>
               </div>
-              <Icons.ChevronRight className={`w-5 h-5 ${darkMode ? 'text-white/40' : 'text-gray-400'}`} />
+              <Icons.ChevronLeft className={`w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0 ${darkMode ? 'text-white/40' : 'text-gray-400'}`} />
             </div>
           );
         })}
@@ -1286,7 +1287,7 @@ export const ListLayout = memo(function ListLayout({
   );
 });
 
-// Compact Layout - Smaller, denser grid
+// Compact Layout - Smaller, denser grid (Mobile-optimized)
 export const CompactLayout = memo(function CompactLayout({
   surahs,
   onSurahClick,
@@ -1295,8 +1296,8 @@ export const CompactLayout = memo(function CompactLayout({
   darkMode,
 }) {
   return (
-    <div className="p-4">
-      <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 xl:grid-cols-12 gap-2">
+    <div className="p-2 sm:p-4 pr-16 sm:pr-20 pb-28 sm:pb-32" dir="rtl">
+      <div className="grid grid-cols-5 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 xl:grid-cols-12 gap-1.5 sm:gap-2">
         {surahs.map((surah) => {
           const palette = PALETTES[(surah.id - 1) % 10];
           const size = 50 * zoom;
@@ -1337,7 +1338,7 @@ export const HoneycombLayout = memo(function HoneycombLayout({
   const hexHeight = hexSize * 1.2;
 
   return (
-    <div className="p-6 flex justify-center">
+    <div className="p-6 pr-16 sm:pr-20 pb-28 sm:pb-32 flex justify-center" dir="rtl">
       <div className="relative" style={{ width: '100%', maxWidth: '1200px' }}>
         <div className="flex flex-wrap justify-center">
           {surahs.map((surah, index) => {
@@ -1395,7 +1396,7 @@ export const WaveLayout = memo(function WaveLayout({
   darkMode,
 }) {
   return (
-    <div className="p-6 overflow-x-auto">
+    <div className="p-6 pr-16 sm:pr-20 pb-28 sm:pb-32 overflow-x-auto" dir="rtl">
       <div className="flex flex-wrap justify-center gap-3">
         {surahs.map((surah, index) => {
           const palette = PALETTES[(surah.id - 1) % 10];
@@ -1509,7 +1510,7 @@ export const LengthLayout = memo(function LengthLayout({
   );
 
   return (
-    <div className="p-4">
+    <div className="p-4 pr-16 sm:pr-20 pb-28 sm:pb-32" dir="rtl">
       {renderGroup('Long Surahs (100+ verses)', '📜', longSurahs, '#8B5CF6')}
       {renderGroup('Medium Surahs (30-99 verses)', '📖', mediumSurahs, '#10B981')}
       {renderGroup('Short Surahs (< 30 verses)', '📄', shortSurahs, '#F59E0B')}
@@ -1605,7 +1606,7 @@ export const KidsLayout = memo(function KidsLayout({
   const size = 100 * zoom;
 
   return (
-    <div className="p-4 sm:p-6 pb-24">
+    <div className="p-4 sm:p-6 pr-16 sm:pr-20 pb-28 sm:pb-32" dir="rtl">
       {/* Fun header for kids */}
       <div className="text-center mb-6">
         <h2 className="text-2xl sm:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 animate-pulse">
@@ -1794,12 +1795,18 @@ export const ArtLayout = memo(function ArtLayout({
   darkMode,
 }) {
   const [selectedTool, setSelectedTool] = useState('brush');
+  const [selectedColorIndex, setSelectedColorIndex] = useState(null); // null = show all
 
   // Art supply colors - paint palette style
   const paintColors = [
     '#FF6B6B', '#FF8E53', '#FFE66D', '#96E6A1', '#4ECDC4',
     '#45B7D1', '#A78BFA', '#F472B6', '#FB7185', '#C084FC',
   ];
+
+  // Filter surahs based on selected color
+  const filteredSurahs = selectedColorIndex === null
+    ? surahs
+    : surahs.filter((_, index) => index % paintColors.length === selectedColorIndex);
 
   // Art tools with emojis
   const artTools = [
@@ -1849,7 +1856,7 @@ export const ArtLayout = memo(function ArtLayout({
   const size = 95 * zoom;
 
   return (
-    <div className="p-4 sm:p-6 pb-24" style={{
+    <div className="p-4 sm:p-6 pr-16 sm:pr-20 pb-28 sm:pb-32" dir="rtl" style={{
       background: darkMode
         ? 'linear-gradient(145deg, #1a1a2e, #16213e)'
         : 'linear-gradient(145deg, #FFF7ED, #FEF3C7)',
@@ -1859,7 +1866,7 @@ export const ArtLayout = memo(function ArtLayout({
         <h2 className="text-2xl sm:text-3xl font-bold flex items-center justify-center gap-2">
           <span>🎨</span>
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500">
-            Art Studio Quran
+            Quran
           </span>
           <span>🖼️</span>
         </h2>
@@ -1889,21 +1896,61 @@ export const ArtLayout = memo(function ArtLayout({
       </div>
 
       {/* Paint Palette Color Strip */}
-      <div className="flex justify-center gap-1 mb-6 p-3 rounded-full mx-auto max-w-lg"
-        style={{
-          background: darkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)',
-        }}
-      >
-        {paintColors.map((color, i) => (
-          <div
-            key={i}
-            className="w-6 h-6 sm:w-8 sm:h-8 rounded-full transition-transform hover:scale-125 cursor-pointer"
-            style={{
-              background: color,
-              boxShadow: `0 2px 8px ${color}50`,
-            }}
-          />
-        ))}
+      <div className="flex flex-col items-center gap-2 mb-6">
+        <div className="flex items-center gap-2 p-2 rounded-full mx-auto"
+          style={{
+            background: darkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)',
+          }}
+        >
+          {/* Show All / Reset Button */}
+          <button
+            onClick={() => setSelectedColorIndex(null)}
+            className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1 ${
+              selectedColorIndex === null
+                ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg'
+                : darkMode
+                  ? 'bg-white/10 text-white/60 hover:bg-white/20'
+                  : 'bg-white/50 text-gray-600 hover:bg-white/80'
+            }`}
+          >
+            <span>All</span>
+            <span className="text-sm">🎨</span>
+          </button>
+
+          {/* Color circles */}
+          <div className="flex gap-1">
+            {paintColors.map((color, i) => (
+              <button
+                key={i}
+                onClick={() => setSelectedColorIndex(selectedColorIndex === i ? null : i)}
+                className={`w-6 h-6 sm:w-7 sm:h-7 rounded-full transition-all cursor-pointer ${
+                  selectedColorIndex === i ? 'ring-2 ring-white ring-offset-1 scale-110' : 'hover:scale-105'
+                }`}
+                style={{
+                  background: color,
+                  boxShadow: selectedColorIndex === i
+                    ? `0 4px 15px ${color}`
+                    : `0 2px 6px ${color}40`,
+                  opacity: selectedColorIndex !== null && selectedColorIndex !== i ? 0.4 : 1,
+                }}
+                title={`Filter by color ${i + 1}`}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* Filter status badge */}
+        {selectedColorIndex !== null && (
+          <div className="text-xs px-3 py-1 rounded-full bg-white/20 text-white flex items-center gap-2">
+            <span>Showing {filteredSurahs.length} of 114 surahs</span>
+            <button
+              onClick={() => setSelectedColorIndex(null)}
+              className="w-4 h-4 rounded-full bg-white/30 hover:bg-white/50 flex items-center justify-center text-xs font-bold transition-all"
+            >
+              ×
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Canvas area with Surahs */}
@@ -1929,7 +1976,7 @@ export const ArtLayout = memo(function ArtLayout({
 
         {/* Surahs as art pieces */}
         <div className="flex flex-wrap justify-center gap-4 sm:gap-5 relative z-10">
-          {surahs.map((surah, index) => (
+          {filteredSurahs.map((surah, index) => (
             <div
               key={surah.id}
               onClick={(e) => {
@@ -1965,13 +2012,13 @@ export const ArtLayout = memo(function ArtLayout({
 
               {/* Paint splatter decoration */}
               <div className="absolute -top-1 -right-1 text-lg z-10 transform rotate-12">
-                {index % 4 === 0 ? '🎨' : index % 4 === 1 ? '🖌️' : index % 4 === 2 ? '✨' : '🌈'}
+                {(surah.id - 1) % 4 === 0 ? '🎨' : (surah.id - 1) % 4 === 1 ? '🖌️' : (surah.id - 1) % 4 === 2 ? '✨' : '🌈'}
               </div>
 
               {/* Main card */}
               <div
                 className="w-full h-full flex flex-col items-center justify-center text-white relative pt-2 transition-all"
-                style={getCardStyle(index, surah)}
+                style={getCardStyle(surah.id - 1, surah)}
               >
                 {/* Sparkle effect */}
                 <div className="absolute top-2 right-2 text-sm opacity-70 animate-pulse">✨</div>
@@ -2037,449 +2084,6 @@ export const ArtLayout = memo(function ArtLayout({
     </div>
   );
 });
-
-// 3D Card Carousel Layout - Beautiful card view
-export const Card3DLayout = memo(function Card3DLayout({
-  surahs,
-  onSurahClick,
-  zoom = 1,
-  contentZoom = 1,
-  darkMode,
-}) {
-  const [activeRow, setActiveRow] = useState(null);
-  const [hoveredCard, setHoveredCard] = useState(null);
-  const [autoPlay, setAutoPlay] = useState(false);
-  const scrollRefs = useRef({});
-
-  // Surah categories for card rows
-  const categories = useMemo(() => [
-    {
-      id: 'popular',
-      title: 'Most Beloved Surahs',
-      emoji: '❤️',
-      surahs: surahs.filter(s => [1, 2, 18, 36, 55, 56, 67, 78, 112, 113, 114].includes(s.id)),
-    },
-    {
-      id: 'short',
-      title: 'Quick Reads (Under 20 Ayahs)',
-      emoji: '⚡',
-      surahs: surahs.filter(s => s.ayahs <= 20),
-    },
-    {
-      id: 'makki',
-      title: 'Revealed in Makkah',
-      emoji: '🕋',
-      surahs: surahs.filter(s => s.type === 'Makki'),
-    },
-    {
-      id: 'madani',
-      title: 'Revealed in Madinah',
-      emoji: '🕌',
-      surahs: surahs.filter(s => s.type === 'Madani'),
-    },
-    {
-      id: 'long',
-      title: 'Deep Dives (50+ Ayahs)',
-      emoji: '📚',
-      surahs: surahs.filter(s => s.ayahs >= 50),
-    },
-    {
-      id: 'juz30',
-      title: 'Juz Amma (Last Juz)',
-      emoji: '🌟',
-      surahs: surahs.filter(s => s.id >= 78),
-    },
-  ], [surahs]);
-
-  // Thematic gradients for card backgrounds
-  const getCardGradient = (surah) => {
-    const gradients = [
-      ['#1a1a2e', '#16213e', '#0f3460'], // Deep Night
-      ['#2d132c', '#801336', '#c72c41'], // Royal Crimson
-      ['#1b262c', '#0f4c75', '#3282b8'], // Ocean Deep
-      ['#2b2e4a', '#e84545', '#903749'], // Mystic Red
-      ['#0c0032', '#190061', '#240090'], // Purple Night
-      ['#1a1a2e', '#4a4e69', '#22223b'], // Slate
-      ['#2d3436', '#636e72', '#b2bec3'], // Silver
-      ['#192a56', '#273c75', '#40739e'], // Blue Steel
-      ['#1e3c72', '#2a5298', '#0f0c29'], // Midnight Blue
-      ['#134e5e', '#71b280', '#1d4350'], // Forest
-    ];
-    return gradients[(surah.id - 1) % gradients.length];
-  };
-
-  // Get thematic icon/emoji for surah
-  const getSurahIcon = (surah) => {
-    const icons = {
-      1: '🤲', 2: '📖', 3: '👨‍👩‍👧', 4: '⚖️', 5: '🍽️', 6: '🐄', 7: '📜',
-      8: '⚔️', 9: '🕊️', 10: '👨', 11: '🏔️', 12: '👑', 13: '⚡', 14: '🏛️',
-      15: '🪨', 16: '🐝', 17: '🌙', 18: '🏔️', 19: '👶', 20: '✨',
-      21: '📿', 22: '🕋', 23: '🙏', 24: '💡', 25: '⚖️', 26: '📜',
-      27: '🐜', 28: '📖', 29: '🕷️', 30: '🏛️', 31: '👴', 32: '🙇',
-      36: '💚', 55: '🌹', 56: '⭐', 67: '👑', 78: '📰', 112: '☝️',
-      113: '🌅', 114: '👥',
-    };
-    return icons[surah.id] || '📖';
-  };
-
-  // Auto-scroll functionality
-  useEffect(() => {
-    if (!autoPlay) return;
-
-    const intervals = categories.map((cat, idx) => {
-      return setInterval(() => {
-        const ref = scrollRefs.current[cat.id];
-        if (ref) {
-          const maxScroll = ref.scrollWidth - ref.clientWidth;
-          if (ref.scrollLeft >= maxScroll - 10) {
-            ref.scrollTo({ left: 0, behavior: 'smooth' });
-          } else {
-            ref.scrollBy({ left: 300, behavior: 'smooth' });
-          }
-        }
-      }, 4000 + idx * 500);
-    });
-
-    return () => intervals.forEach(clearInterval);
-  }, [autoPlay, categories]);
-
-  // Card component with 3D effect
-  const MovieCard = ({ surah, isHovered, onHover, onLeave }) => {
-    const gradient = getCardGradient(surah);
-    const icon = getSurahIcon(surah);
-    const cardWidth = 180 * zoom;
-    const cardHeight = 270 * zoom;
-
-    return (
-      <div
-        className="flex-shrink-0 cursor-pointer transition-all duration-500 relative"
-        style={{
-          width: cardWidth,
-          height: cardHeight,
-          perspective: '1000px',
-          zIndex: isHovered ? 50 : 1,
-        }}
-        onMouseEnter={() => onHover(surah.id)}
-        onMouseLeave={onLeave}
-        onClick={(e) => {
-          playClickSound();
-          onSurahClick(surah, { x: e.clientX, y: e.clientY });
-        }}
-      >
-        <div
-          className="w-full h-full rounded-xl overflow-hidden relative transition-all duration-500"
-          style={{
-            transform: isHovered
-              ? 'scale(1.15) translateY(-20px) rotateY(5deg)'
-              : 'scale(1) rotateY(0deg)',
-            transformStyle: 'preserve-3d',
-            boxShadow: isHovered
-              ? `0 25px 50px rgba(0,0,0,0.5), 0 0 40px ${gradient[1]}60`
-              : '0 8px 25px rgba(0,0,0,0.3)',
-          }}
-        >
-          {/* Background Gradient */}
-          <div
-            className="absolute inset-0"
-            style={{
-              background: `linear-gradient(180deg, ${gradient[0]} 0%, ${gradient[1]} 50%, ${gradient[2]} 100%)`,
-            }}
-          />
-
-          {/* Decorative pattern overlay */}
-          <div
-            className="absolute inset-0 opacity-10"
-            style={{
-              backgroundImage: `radial-gradient(circle at 50% 0%, rgba(255,255,255,0.3) 0%, transparent 50%)`,
-            }}
-          />
-
-          {/* Islamic geometric pattern hint */}
-          <div
-            className="absolute inset-0 opacity-5"
-            style={{
-              backgroundImage: `repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,0.1) 10px, rgba(255,255,255,0.1) 20px)`,
-            }}
-          />
-
-          {/* Top icon/badge */}
-          <div className="absolute top-4 left-4 text-3xl" style={{ textShadow: '0 2px 10px rgba(0,0,0,0.5)' }}>
-            {icon}
-          </div>
-
-          {/* Surah number badge */}
-          <div
-            className="absolute top-4 right-4 w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm"
-            style={{
-              background: 'rgba(255,255,255,0.15)',
-              backdropFilter: 'blur(10px)',
-              border: '2px solid rgba(255,255,255,0.3)',
-              color: 'white',
-            }}
-          >
-            {surah.id}
-          </div>
-
-          {/* Content area - bottom */}
-          <div className="absolute bottom-0 left-0 right-0 p-4"
-            style={{
-              background: 'linear-gradient(transparent, rgba(0,0,0,0.8) 30%)',
-            }}
-          >
-            {/* Arabic name */}
-            <h3
-              className="text-white font-bold text-center mb-1 drop-shadow-lg"
-              style={{
-                fontSize: 24 * contentZoom,
-                fontFamily: "'Scheherazade New', 'Amiri', serif",
-                textShadow: '0 2px 10px rgba(0,0,0,0.5)',
-              }}
-            >
-              {surah.arabic}
-            </h3>
-
-            {/* English name */}
-            <p className="text-white/90 text-center text-sm font-medium mb-2">
-              {surah.name}
-            </p>
-
-            {/* Metadata row */}
-            <div className="flex justify-center gap-3 text-white/70 text-xs">
-              <span className="flex items-center gap-1">
-                <span>📄</span> {surah.ayahs} Ayahs
-              </span>
-              <span className="flex items-center gap-1">
-                {surah.type === 'Makki' ? '🕋' : '🕌'} {surah.type}
-              </span>
-            </div>
-
-            {/* Hover info */}
-            {isHovered && (
-              <div className="mt-3 pt-3 border-t border-white/20 animate-fadeIn">
-                <p className="text-white/80 text-xs text-center italic">
-                  "{surah.meaning}"
-                </p>
-                <button
-                  className="w-full mt-2 py-2 rounded-lg font-semibold text-sm transition-all hover:scale-105"
-                  style={{
-                    background: 'linear-gradient(135deg, #10B981, #059669)',
-                    color: 'white',
-                  }}
-                >
-                  ▶ Read Now
-                </button>
-              </div>
-            )}
-          </div>
-
-          {/* Shine effect on hover */}
-          {isHovered && (
-            <div
-              className="absolute inset-0 pointer-events-none"
-              style={{
-                background: 'linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.1) 45%, transparent 50%)',
-                animation: 'shine 1.5s infinite',
-              }}
-            />
-          )}
-        </div>
-      </div>
-    );
-  };
-
-  // Category row component
-  const CategoryRow = ({ category }) => (
-    <div className="mb-8">
-      {/* Row header */}
-      <div className="flex items-center justify-between mb-4 px-4">
-        <h2 className={`text-lg sm:text-xl font-bold flex items-center gap-2 ${
-          darkMode ? 'text-white' : 'text-gray-800'
-        }`}>
-          <span className="text-2xl">{category.emoji}</span>
-          {category.title}
-          <span className={`text-sm font-normal ${darkMode ? 'text-white/50' : 'text-gray-500'}`}>
-            ({category.surahs.length})
-          </span>
-        </h2>
-
-        {/* Scroll arrows */}
-        <div className="flex gap-2">
-          <button
-            onClick={() => scrollRefs.current[category.id]?.scrollBy({ left: -300, behavior: 'smooth' })}
-            className={`w-8 h-8 rounded-full flex items-center justify-center transition-all hover:scale-110 ${
-              darkMode ? 'bg-white/10 text-white hover:bg-white/20' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-            }`}
-          >
-            ◀
-          </button>
-          <button
-            onClick={() => scrollRefs.current[category.id]?.scrollBy({ left: 300, behavior: 'smooth' })}
-            className={`w-8 h-8 rounded-full flex items-center justify-center transition-all hover:scale-110 ${
-              darkMode ? 'bg-white/10 text-white hover:bg-white/20' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-            }`}
-          >
-            ▶
-          </button>
-        </div>
-      </div>
-
-      {/* Scrollable cards */}
-      <div
-        ref={(el) => scrollRefs.current[category.id] = el}
-        className="flex gap-4 overflow-x-auto pb-4 px-4 scrollbar-hide scroll-smooth"
-        style={{
-          scrollbarWidth: 'none',
-          msOverflowStyle: 'none',
-        }}
-        onMouseEnter={() => setActiveRow(category.id)}
-        onMouseLeave={() => setActiveRow(null)}
-      >
-        {category.surahs.map((surah) => (
-          <MovieCard
-            key={surah.id}
-            surah={surah}
-            isHovered={hoveredCard === surah.id}
-            onHover={setHoveredCard}
-            onLeave={() => setHoveredCard(null)}
-          />
-        ))}
-      </div>
-    </div>
-  );
-
-  return (
-    <div
-      className="min-h-screen pb-24"
-      style={{
-        background: darkMode
-          ? 'linear-gradient(180deg, #0a0a0a 0%, #141414 100%)'
-          : 'linear-gradient(180deg, #1a1a2e 0%, #16213e 100%)',
-      }}
-    >
-      {/* Card layout header */}
-      <div className="pt-6 pb-4 px-4">
-        <div className="flex items-center justify-between max-w-7xl mx-auto">
-          <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-white flex items-center gap-2">
-              <span className="text-red-500">Q</span>uran
-              <span className="text-xs sm:text-sm font-normal bg-red-600 text-white px-2 py-0.5 rounded ml-2">
-                BROWSE
-              </span>
-            </h1>
-            <p className="text-white/60 text-sm mt-1">
-              Explore the Holy Quran like never before
-            </p>
-          </div>
-
-          {/* Auto-play toggle */}
-          <button
-            onClick={() => setAutoPlay(!autoPlay)}
-            className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
-              autoPlay
-                ? 'bg-red-600 text-white'
-                : 'bg-white/10 text-white/70 hover:bg-white/20'
-            }`}
-          >
-            {autoPlay ? '⏸️ Pause' : '▶️ Auto-Play'}
-          </button>
-        </div>
-      </div>
-
-      {/* Featured Hero Card */}
-      <div className="px-4 mb-8">
-        <div
-          className="max-w-7xl mx-auto rounded-2xl overflow-hidden relative"
-          style={{
-            height: '300px',
-            background: 'linear-gradient(135deg, #1a1a2e 0%, #2d132c 50%, #0f3460 100%)',
-          }}
-        >
-          {/* Background pattern */}
-          <div className="absolute inset-0 opacity-20"
-            style={{
-              backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-            }}
-          />
-
-          {/* Content */}
-          <div className="absolute inset-0 flex items-center justify-between p-8">
-            <div className="max-w-lg">
-              <div className="text-5xl mb-4">📖</div>
-              <h2 className="text-3xl sm:text-4xl font-bold text-white mb-2">
-                Surah Al-Fatiha
-              </h2>
-              <p className="text-white/80 text-lg mb-2">The Opening</p>
-              <p className="text-white/60 text-sm mb-4">
-                The greatest surah in the Quran. Recited in every unit of prayer.
-              </p>
-              <div className="flex gap-3">
-                <button
-                  onClick={(e) => {
-                    playClickSound();
-                    onSurahClick(surahs[0], { x: e.clientX, y: e.clientY });
-                  }}
-                  className="px-6 py-3 rounded-lg font-bold text-white flex items-center gap-2 transition-all hover:scale-105"
-                  style={{ background: 'linear-gradient(135deg, #10B981, #059669)' }}
-                >
-                  ▶ Read Now
-                </button>
-                <button className="px-6 py-3 rounded-lg font-bold text-white bg-white/20 hover:bg-white/30 transition-all">
-                  ℹ️ More Info
-                </button>
-              </div>
-            </div>
-
-            {/* Arabic calligraphy */}
-            <div className="hidden md:block text-right">
-              <span
-                className="text-white/90 font-bold"
-                style={{
-                  fontSize: '80px',
-                  fontFamily: "'Scheherazade New', 'Amiri', serif",
-                  textShadow: '0 4px 20px rgba(0,0,0,0.3)',
-                }}
-              >
-                الفاتحة
-              </span>
-            </div>
-          </div>
-
-          {/* Gradient overlay */}
-          <div
-            className="absolute inset-0 pointer-events-none"
-            style={{
-              background: 'linear-gradient(90deg, rgba(0,0,0,0.7) 0%, transparent 60%)',
-            }}
-          />
-        </div>
-      </div>
-
-      {/* Category rows */}
-      {categories.map((category) => (
-        <CategoryRow key={category.id} category={category} />
-      ))}
-
-      {/* CSS for animations */}
-      <style>{`
-        @keyframes shine {
-          0% { transform: translateX(-100%); }
-          100% { transform: translateX(200%); }
-        }
-        @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(10px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-fadeIn {
-          animation: fadeIn 0.3s ease-out forwards;
-        }
-        .scrollbar-hide::-webkit-scrollbar {
-          display: none;
-        }
-      `}</style>
-    </div>
-  );
-});
-
 export default {
   LayoutSelector,
   ClockLayout,
@@ -2495,5 +2099,4 @@ export default {
   LengthLayout,
   KidsLayout,
   ArtLayout,
-  Card3DLayout,
 };

@@ -19,6 +19,15 @@ const CALCULATION_METHODS = [
   { id: '0', name: 'Shia Ithna-Ansari', region: 'Shia' },
 ];
 
+// Helper to convert 24h to 12h format
+const formatTime = (time24, use12Hour) => {
+  if (!time24 || !use12Hour) return time24;
+  const [hours, minutes] = time24.split(':').map(Number);
+  const period = hours >= 12 ? 'PM' : 'AM';
+  const hours12 = hours % 12 || 12;
+  return `${hours12}:${minutes.toString().padStart(2, '0')} ${period}`;
+};
+
 function PrayerTimesView({ darkMode }) {
   // Location state
   const [location, setLocation] = useLocalStorage('prayer_location', null);
@@ -28,6 +37,7 @@ function PrayerTimesView({ darkMode }) {
 
   // Settings
   const [calculationMethod, setCalculationMethod] = useLocalStorage('prayer_method', '2');
+  const [use12HourFormat, setUse12HourFormat] = useLocalStorage('prayer_time_format', true); // default to 12h
   const [showSettings, setShowSettings] = useState(false);
 
   // API data
@@ -78,19 +88,81 @@ function PrayerTimesView({ darkMode }) {
     );
   }, [setLocation, setLocationName]);
 
-  // Fetch prayer times from API
+  // Fetch prayer times from Aladhan API directly
   const fetchPrayerTimes = useCallback(async () => {
     if (!location) return;
 
     setIsLoading(true);
     try {
+      const today = new Date();
+      const dateStr = `${today.getDate()}-${today.getMonth() + 1}-${today.getFullYear()}`;
+
       const response = await fetch(
-        `/api/prayer-times?lat=${location.latitude}&lng=${location.longitude}&method=${calculationMethod}`
+        `https://api.aladhan.com/v1/timings/${dateStr}?latitude=${location.latitude}&longitude=${location.longitude}&method=${calculationMethod}`
       );
+
       if (response.ok) {
         const data = await response.json();
-        if (data.success) {
-          setPrayerData(data);
+        if (data.code === 200 && data.data) {
+          const timings = data.data.timings;
+          const hijri = data.data.date.hijri;
+          const gregorian = data.data.date.gregorian;
+
+          // Check if Ramadan
+          const isRamadan = hijri.month.number === 9;
+
+          // Calculate next prayer
+          const now = new Date();
+          const currentMinutes = now.getHours() * 60 + now.getMinutes();
+          const prayerOrder = ['Fajr', 'Sunrise', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
+          let nextPrayer = null;
+
+          for (const prayer of prayerOrder) {
+            const [hours, mins] = timings[prayer].split(':').map(Number);
+            const prayerMinutes = hours * 60 + mins;
+            if (prayerMinutes > currentMinutes) {
+              const diffMins = prayerMinutes - currentMinutes;
+              const hours = Math.floor(diffMins / 60);
+              const mins = diffMins % 60;
+              nextPrayer = {
+                name: prayer,
+                time: timings[prayer],
+                countdown: hours > 0 ? `${hours}h ${mins}m` : `${mins}m`
+              };
+              break;
+            }
+          }
+
+          // If no next prayer today, it's Fajr tomorrow
+          if (!nextPrayer) {
+            nextPrayer = {
+              name: 'Fajr',
+              time: timings.Fajr,
+              countdown: 'Tomorrow'
+            };
+          }
+
+          setPrayerData({
+            success: true,
+            timings,
+            date: {
+              hijri: {
+                formatted: `${hijri.day} ${hijri.month.en} ${hijri.year} AH`,
+                formattedAr: `${hijri.day} ${hijri.month.ar} ${hijri.year} هـ`
+              },
+              gregorian: gregorian.date
+            },
+            ramadan: isRamadan ? {
+              isRamadan: true,
+              suhoorTime: timings.Fajr,
+              iftarTime: timings.Maghrib
+            } : { isRamadan: false },
+            nextPrayer,
+            location: {
+              method: CALCULATION_METHODS.find(m => m.id === calculationMethod)?.name || 'Unknown',
+              timezone: data.data.meta.timezone
+            }
+          });
         }
       }
     } catch (error) {
@@ -99,18 +171,50 @@ function PrayerTimesView({ darkMode }) {
     setIsLoading(false);
   }, [location, calculationMethod]);
 
-  // Fetch Qibla direction from API
+  // Fetch Qibla direction from Aladhan API directly
   const fetchQiblaDirection = useCallback(async () => {
     if (!location) return;
 
     try {
       const response = await fetch(
-        `/api/qibla?lat=${location.latitude}&lng=${location.longitude}`
+        `https://api.aladhan.com/v1/qibla/${location.latitude}/${location.longitude}`
       );
+
       if (response.ok) {
         const data = await response.json();
-        if (data.success) {
-          setQiblaData(data);
+        if (data.code === 200 && data.data) {
+          const direction = data.data.direction;
+          const directionRounded = Math.round(direction);
+
+          // Calculate compass direction
+          const compassDirections = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW'];
+          const compassAr = ['شمال', 'شمال شمال شرق', 'شمال شرق', 'شرق شمال شرق', 'شرق', 'شرق جنوب شرق', 'جنوب شرق', 'جنوب جنوب شرق', 'جنوب', 'جنوب جنوب غرب', 'جنوب غرب', 'غرب جنوب غرب', 'غرب', 'غرب شمال غرب', 'شمال غرب', 'شمال شمال غرب'];
+          const index = Math.round(direction / 22.5) % 16;
+
+          // Calculate distance to Kaaba (approximate)
+          const kaabaLat = 21.4225;
+          const kaabaLng = 39.8262;
+          const R = 6371; // Earth's radius in km
+          const dLat = (kaabaLat - location.latitude) * Math.PI / 180;
+          const dLng = (kaabaLng - location.longitude) * Math.PI / 180;
+          const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                    Math.cos(location.latitude * Math.PI / 180) * Math.cos(kaabaLat * Math.PI / 180) *
+                    Math.sin(dLng/2) * Math.sin(dLng/2);
+          const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+          const distance = R * c;
+
+          setQiblaData({
+            success: true,
+            qibla: {
+              direction,
+              directionRounded,
+              compass: compassDirections[index],
+              compassAr: compassAr[index]
+            },
+            distance: {
+              km: Math.round(distance)
+            }
+          });
         }
       }
     } catch (error) {
@@ -186,23 +290,40 @@ function PrayerTimesView({ darkMode }) {
     if (!prayerData?.timings) return [];
     const t = prayerData.timings;
     return [
-      { name: 'Fajr', arabic: 'الفجر', time: t.Fajr, icon: '🌅', color: '#818CF8' },
-      { name: 'Sunrise', arabic: 'الشروق', time: t.Sunrise, icon: '☀️', color: '#FBBF24' },
-      { name: 'Dhuhr', arabic: 'الظهر', time: t.Dhuhr, icon: '🌞', color: '#F59E0B' },
-      { name: 'Asr', arabic: 'العصر', time: t.Asr, icon: '🌤️', color: '#FB923C' },
-      { name: 'Maghrib', arabic: 'المغرب', time: t.Maghrib, icon: '🌅', color: '#F472B6' },
-      { name: 'Isha', arabic: 'العشاء', time: t.Isha, icon: '🌙', color: '#8B5CF6' },
+      { name: 'Fajr', arabic: 'الفجر', time: formatTime(t.Fajr, use12HourFormat), icon: '🌅', color: '#818CF8' },
+      { name: 'Sunrise', arabic: 'الشروق', time: formatTime(t.Sunrise, use12HourFormat), icon: '☀️', color: '#FBBF24' },
+      { name: 'Dhuhr', arabic: 'الظهر', time: formatTime(t.Dhuhr, use12HourFormat), icon: '🌞', color: '#F59E0B' },
+      { name: 'Asr', arabic: 'العصر', time: formatTime(t.Asr, use12HourFormat), icon: '🌤️', color: '#FB923C' },
+      { name: 'Maghrib', arabic: 'المغرب', time: formatTime(t.Maghrib, use12HourFormat), icon: '🌅', color: '#F472B6' },
+      { name: 'Isha', arabic: 'العشاء', time: formatTime(t.Isha, use12HourFormat), icon: '🌙', color: '#8B5CF6' },
     ];
-  }, [prayerData]);
+  }, [prayerData, use12HourFormat]);
 
   const isRamadan = prayerData?.ramadan?.isRamadan;
   const hijriDate = prayerData?.date?.hijri;
   const nextPrayer = prayerData?.nextPrayer;
+  const suhoorTime = formatTime(prayerData?.ramadan?.suhoorTime, use12HourFormat);
+  const iftarTime = formatTime(prayerData?.ramadan?.iftarTime, use12HourFormat);
+  const nextPrayerTime = formatTime(nextPrayer?.time, use12HourFormat);
+
+  // Handle back navigation
+  const handleBack = () => {
+    window.history.back();
+  };
 
   return (
     <div className={`h-full flex flex-col overflow-auto ${darkMode ? 'text-white' : ''}`}>
       {/* Header with Hijri Date */}
       <div className={`sticky top-0 z-10 backdrop-blur-xl p-4 ${darkMode ? 'bg-gray-900/90' : 'bg-white/90'} border-b ${darkMode ? 'border-gray-800' : 'border-gray-200'}`}>
+        {/* Back button */}
+        <button
+          onClick={handleBack}
+          className={`absolute left-4 top-4 p-2 rounded-full transition-all ${darkMode ? 'hover:bg-white/10' : 'hover:bg-gray-100'}`}
+          title="Go back"
+        >
+          <Icons.ChevronLeft className={`w-6 h-6 ${darkMode ? 'text-white' : 'text-gray-600'}`} />
+        </button>
+
         <h2 className={`text-2xl font-bold text-center ${darkMode ? 'text-white' : 'text-gray-800'}`}>
           🕌 Prayer Times
         </h2>
@@ -226,11 +347,11 @@ function PrayerTimesView({ darkMode }) {
             <div className="flex justify-center gap-6 mt-2 text-sm">
               <div>
                 <span className="opacity-80">Suhoor ends:</span>{' '}
-                <span className="font-bold">{prayerData.ramadan.suhoorTime}</span>
+                <span className="font-bold">{suhoorTime}</span>
               </div>
               <div>
                 <span className="opacity-80">Iftar:</span>{' '}
-                <span className="font-bold">{prayerData.ramadan.iftarTime}</span>
+                <span className="font-bold">{iftarTime}</span>
               </div>
             </div>
           </div>
@@ -280,21 +401,53 @@ function PrayerTimesView({ darkMode }) {
 
         {/* Settings Panel */}
         {showSettings && (
-          <div className={`p-4 rounded-2xl ${darkMode ? 'bg-gray-800' : 'bg-white'} shadow-lg`}>
-            <h3 className={`font-bold mb-3 ${darkMode ? 'text-white' : 'text-gray-800'}`}>
-              Calculation Method
-            </h3>
-            <select
-              value={calculationMethod}
-              onChange={(e) => setCalculationMethod(e.target.value)}
-              className={`w-full p-3 rounded-xl ${darkMode ? 'bg-gray-700 text-white' : 'bg-gray-100'}`}
-            >
-              {CALCULATION_METHODS.map((method) => (
-                <option key={method.id} value={method.id}>
-                  {method.name} - {method.region}
-                </option>
-              ))}
-            </select>
+          <div className={`p-4 rounded-2xl ${darkMode ? 'bg-gray-800' : 'bg-white'} shadow-lg space-y-4`}>
+            {/* Time Format Toggle */}
+            <div>
+              <h3 className={`font-bold mb-2 ${darkMode ? 'text-white' : 'text-gray-800'}`}>
+                Time Format
+              </h3>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => setUse12HourFormat(true)}
+                  className={`flex-1 py-2 px-4 rounded-xl font-medium transition-all ${
+                    use12HourFormat
+                      ? 'bg-emerald-500 text-white'
+                      : darkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-100 text-gray-600'
+                  }`}
+                >
+                  12 Hour (AM/PM)
+                </button>
+                <button
+                  onClick={() => setUse12HourFormat(false)}
+                  className={`flex-1 py-2 px-4 rounded-xl font-medium transition-all ${
+                    !use12HourFormat
+                      ? 'bg-emerald-500 text-white'
+                      : darkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-100 text-gray-600'
+                  }`}
+                >
+                  24 Hour
+                </button>
+              </div>
+            </div>
+
+            {/* Calculation Method */}
+            <div>
+              <h3 className={`font-bold mb-2 ${darkMode ? 'text-white' : 'text-gray-800'}`}>
+                Calculation Method
+              </h3>
+              <select
+                value={calculationMethod}
+                onChange={(e) => setCalculationMethod(e.target.value)}
+                className={`w-full p-3 rounded-xl ${darkMode ? 'bg-gray-700 text-white' : 'bg-gray-100'}`}
+              >
+                {CALCULATION_METHODS.map((method) => (
+                  <option key={method.id} value={method.id}>
+                    {method.name} - {method.region}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
         )}
 
@@ -303,7 +456,7 @@ function PrayerTimesView({ darkMode }) {
           <div className={`p-4 rounded-2xl ${darkMode ? 'bg-gray-800' : 'bg-white'} shadow-lg text-center`}>
             <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>Next Prayer</p>
             <p className={`text-2xl font-bold ${darkMode ? 'text-white' : 'text-gray-800'}`}>
-              {nextPrayer.name} at {nextPrayer.time}
+              {nextPrayer.name} at {nextPrayerTime}
             </p>
             <p className="text-emerald-500 font-semibold text-lg">
               ⏱️ {nextPrayer.countdown}

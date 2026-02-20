@@ -23,5 +23,4 @@ export {
   LengthLayout,
   KidsLayout,
   ArtLayout,
-  Card3DLayout,
 } from './BubbleLayouts';

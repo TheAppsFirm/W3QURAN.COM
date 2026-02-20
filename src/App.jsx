@@ -12,7 +12,7 @@
 import React, { Suspense, useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { ErrorBoundary, LoadingSpinner, BubbleModal, BubbleReaderOverlay, ProgressDashboard, OfflineManager, HifzMode, SearchPanel, DonateModal, WordSearchMap, EmotionalTracker, ScholarVideoSync, PropheticMap, QuranCompanionAI, GlobalUmmahPulse, VerseWeatherSync, SoundHealingRoom, QuranicBabyNames, TalkToQuran } from './components/common';
 import { Header, FloatingMenu, StatsBar } from './components/layout';
-import { SurahBubble, LayoutSelector, ClockLayout, GridLayout, JuzzGroupLayout, AlphabetLayout, RevelationLayout, BookLayout, ListLayout, CompactLayout, HoneycombLayout, WaveLayout, LengthLayout, KidsLayout, ArtLayout, Card3DLayout } from './components/bubbles';
+import { SurahBubble, LayoutSelector, ClockLayout, GridLayout, JuzzGroupLayout, AlphabetLayout, RevelationLayout, BookLayout, ListLayout, CompactLayout, HoneycombLayout, WaveLayout, LengthLayout, KidsLayout, ArtLayout } from './components/bubbles';
 import { AnalyticsPanel } from './components/widgets';
 import {
   NamesOfAllahView,
@@ -882,7 +882,7 @@ function QuranBubbleApp() {
         {/* Surahs View */}
         {view === 'surahs' && (
           <>
-            <div className="absolute inset-0 overflow-auto bubble-container pt-4">
+            <div className="absolute inset-0 overflow-auto bubble-container pt-4 pr-16 sm:pr-20 pb-28 sm:pb-32">
               {/* Spiral Layout (Default) */}
               {surahLayout === 'spiral' && (
                 <div
@@ -1165,17 +1165,6 @@ function QuranBubbleApp() {
                   darkMode={darkMode}
                 />
               )}
-
-              {/* 3D Card Layout */}
-              {surahLayout === 'cards' && (
-                <Card3DLayout
-                  surahs={filtered}
-                  onSurahClick={handleSelectSurah}
-                  zoom={zoom}
-                  contentZoom={contentZoom}
-                  darkMode={darkMode}
-                />
-              )}
             </div>
 
             {/* Filter info - positioned above the bottom floating menu */}
@@ -1276,6 +1265,7 @@ function QuranBubbleApp() {
           darkMode={darkMode}
           initialVerse={initialVerse}
           initialPanel={initialPanel}
+          readerStyle={surahLayout}
           onPanelChange={(panel) => {
             // Update URL when panel changes
             const basePath = `/surah/${overlayReaderSurah.id}${initialVerse > 1 ? `/${initialVerse}` : ''}`;
@@ -1404,6 +1394,33 @@ function QuranBubbleApp() {
             <span className="absolute right-full mr-3 px-2 py-1 rounded-lg text-xs font-medium text-white whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
               style={{ background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(4px)' }}>
               Offline
+            </span>
+          </button>
+
+          {/* Prayer Times Button */}
+          <button
+            onClick={() => setView('prayer')}
+            className="w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center transition-all hover:scale-110 active:scale-95 group"
+            style={{
+              background: 'linear-gradient(145deg, #06b6d4, #0891b2)',
+              boxShadow: `
+                0 0 20px rgba(6, 182, 212, 0.35),
+                0 4px 15px rgba(0, 0, 0, 0.2),
+                inset 0 -3px 10px rgba(0,0,0,0.2),
+                inset 0 3px 10px rgba(255,255,255,0.25)
+              `,
+              animation: 'gentleFloat 4s ease-in-out infinite',
+              animationDelay: '2s',
+            }}
+            title="Prayer Times & Qibla"
+          >
+            <div className="absolute inset-1 rounded-full opacity-50" style={{
+              background: 'linear-gradient(180deg, rgba(255,255,255,0.5) 0%, transparent 50%)',
+            }} />
+            <span className="text-xl relative z-10">🕌</span>
+            <span className="absolute right-full mr-3 px-2 py-1 rounded-lg text-xs font-medium text-white whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
+              style={{ background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(4px)' }}>
+              Prayer
             </span>
           </button>
         </div>

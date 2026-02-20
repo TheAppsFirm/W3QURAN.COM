@@ -185,7 +185,7 @@ const BubbleOverlay = memo(function BubbleOverlay({
             />
           ))}
 
-          {/* Close Button - Top Right - Positioned inside circular area */}
+          {/* Close Button - Top Right - Positioned inside circular area, moved left to avoid side menu overlap */}
           <button
             onClick={(e) => {
               e.stopPropagation();
@@ -194,7 +194,7 @@ const BubbleOverlay = memo(function BubbleOverlay({
             className="absolute w-11 h-11 sm:w-12 sm:h-12 rounded-full flex items-center justify-center hover:scale-110 active:scale-90 transition-all z-50 text-white group touch-target"
             style={{
               top: '8%',
-              right: '12%',
+              right: '20%', // Moved more to the left to avoid side menu overlap
               background: 'linear-gradient(135deg, rgba(239,68,68,0.95), rgba(220,38,38,0.95))',
               boxShadow: '0 4px 20px rgba(239,68,68,0.5), 0 0 0 3px rgba(255,255,255,0.3), inset 0 2px 0 rgba(255,255,255,0.3)',
               border: '2px solid rgba(255,255,255,0.4)',
