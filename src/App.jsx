@@ -10,8 +10,8 @@
  */
 
 import React, { Suspense, lazy, useState, useEffect, useMemo, useCallback, useRef } from 'react';
-// Core components (needed immediately for first paint + reading)
-import { ErrorBoundary, LoadingSpinner, BubbleModal, BubbleReaderOverlay } from './components/common';
+// Core components (needed immediately for first paint)
+import { ErrorBoundary, LoadingSpinner, BubbleModal } from './components/common';
 import { Header, FloatingMenu, StatsBar } from './components/layout';
 import { SurahBubble, LayoutSelector, ClockLayout, GridLayout, JuzzGroupLayout, AlphabetLayout, RevelationLayout, BookLayout, ListLayout, CompactLayout, HoneycombLayout, WaveLayout, LengthLayout, KidsLayout, ArtLayout } from './components/bubbles';
 import { SURAHS, MAX_AYAHS } from './data';
@@ -64,6 +64,7 @@ const QuranicBabyNames = lazyWithRetry(() => import('./components/common/Quranic
 const TalkToQuran = lazyWithRetry(() => import('./components/common/TalkToQuran'));
 const KidsMode = lazyWithRetry(() => import('./components/kids/KidsMode'));
 const AnalyticsPanel = lazyWithRetry(() => import('./components/widgets/AnalyticsPanel'));
+const BubbleReaderOverlay = lazyWithRetry(() => import('./components/common/BubbleReaderOverlay'));
 
 // All animation keyframes and utility CSS classes moved to index.css for better caching
 // Fonts: Amiri + Scheherazade loaded in index.html; Noto Nastaliq Urdu loaded on demand below
