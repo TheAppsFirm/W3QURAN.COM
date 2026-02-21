@@ -18,6 +18,11 @@ import {
 function StatisticsView({ darkMode, readingProgress, streak: propStreak, points }) {
   // Real statistics
   const [weeklyData, setWeeklyData] = useState([0, 0, 0, 0, 0, 0, 0]);
+
+  // Handle back navigation
+  const handleBack = () => {
+    window.history.back();
+  };
   const [realStreak, setRealStreak] = useState(0);
   const [totalAyahs, setTotalAyahs] = useState(0);
   const [totalTime, setTotalTime] = useState(0);
@@ -55,10 +60,24 @@ function StatisticsView({ darkMode, readingProgress, streak: propStreak, points 
   };
 
   return (
-    <div className={`h-full flex flex-col p-6 overflow-auto ${darkMode ? 'text-white' : ''}`}>
-      <h2 className={`text-3xl font-bold text-center mb-6 ${darkMode ? 'text-white' : 'text-gray-800'}`}>
-        Your Statistics
-      </h2>
+    <div className={`h-full flex flex-col overflow-auto ${darkMode ? 'text-white' : ''}`}>
+      {/* Header with back button */}
+      <div className={`sticky top-0 z-10 backdrop-blur-xl ${darkMode ? 'bg-gray-900/90' : 'bg-white/90'} border-b ${darkMode ? 'border-gray-800' : 'border-gray-200'}`}>
+        <div className="flex items-center gap-3 p-4">
+          <button
+            onClick={handleBack}
+            className={`p-2 rounded-full transition-all ${darkMode ? 'hover:bg-white/10' : 'hover:bg-gray-100'}`}
+            title="Go back"
+          >
+            <Icons.ChevronLeft className={`w-6 h-6 ${darkMode ? 'text-white' : 'text-gray-600'}`} />
+          </button>
+          <h2 className={`text-xl font-bold ${darkMode ? 'text-white' : 'text-gray-800'}`}>
+            Your Statistics
+          </h2>
+        </div>
+      </div>
+
+      <div className="p-6">
 
       {/* Today's Progress */}
       <div className={`max-w-lg mx-auto w-full rounded-2xl p-4 mb-6 ${darkMode ? 'bg-gray-800' : 'bg-white'} shadow-xl`}>
@@ -191,6 +210,7 @@ function StatisticsView({ darkMode, readingProgress, streak: propStreak, points 
             </div>
           ))}
         </div>
+      </div>
       </div>
     </div>
   );

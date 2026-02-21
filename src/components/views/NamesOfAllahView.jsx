@@ -67,16 +67,35 @@ function NamesOfAllahView({ darkMode }) {
     }
   }, [selectedName]);
 
+  // Handle back navigation
+  const handleBack = () => {
+    window.history.back();
+  };
+
   return (
-    <div className={`h-full flex flex-col p-6 overflow-auto ${darkMode ? 'text-white' : ''}`}>
-      <div className="text-center mb-6">
-        <h2 className={`text-3xl font-bold mb-2 ${darkMode ? 'text-white' : 'text-gray-800'}`}>
-          99 Names of Allah
-        </h2>
-        <p className={darkMode ? 'text-gray-400' : 'text-gray-500'}>
-          Asma ul Husna - The Beautiful Names
-        </p>
+    <div className={`h-full flex flex-col overflow-auto ${darkMode ? 'text-white' : ''}`}>
+      {/* Header with back button */}
+      <div className={`sticky top-0 z-10 backdrop-blur-xl ${darkMode ? 'bg-gray-900/90' : 'bg-white/90'} border-b ${darkMode ? 'border-gray-800' : 'border-gray-200'}`}>
+        <div className="flex items-center gap-3 p-4">
+          <button
+            onClick={handleBack}
+            className={`p-2 rounded-full transition-all ${darkMode ? 'hover:bg-white/10' : 'hover:bg-gray-100'}`}
+            title="Go back"
+          >
+            <Icons.ChevronLeft className={`w-6 h-6 ${darkMode ? 'text-white' : 'text-gray-600'}`} />
+          </button>
+          <div>
+            <h2 className={`text-xl font-bold ${darkMode ? 'text-white' : 'text-gray-800'}`}>
+              99 Names of Allah
+            </h2>
+            <p className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+              Asma ul Husna - The Beautiful Names
+            </p>
+          </div>
+        </div>
       </div>
+
+      <div className="p-6">
 
       {/* Search */}
       <div className="max-w-md mx-auto w-full mb-6">
@@ -244,6 +263,7 @@ function NamesOfAllahView({ darkMode }) {
           </div>
         </div>
       )}
+      </div>
     </div>
   );
 }

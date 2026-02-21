@@ -77,6 +77,8 @@ const SurahBubble = memo(function SurahBubble({
       style={{
         width: size,
         height: size,
+        aspectRatio: '1 / 1',
+        borderRadius: '50%',
         left: `calc(50% + ${x}px - ${size / 2}px)`,
         top: `calc(50% + ${y}px - ${size / 2}px)`,
         transform: `scale(${hovered ? 1.18 : 1}) ${hovered ? 'translateY(-8px)' : ''}`,

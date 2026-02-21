@@ -1199,60 +1199,64 @@ const WordSearchMap = memo(function WordSearchMap({
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex-shrink-0 p-4 border-b border-white/10 bg-black/30">
-          <div className="flex items-center justify-between mb-3">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center relative overflow-hidden">
-                <Icons.Search className="w-5 h-5 text-white relative z-10" />
+        <div className="flex-shrink-0 p-3 sm:p-4 border-b border-white/10 bg-black/30">
+          {/* Top row: Title and Close button */}
+          <div className="flex items-center justify-between mb-2 sm:mb-3">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center relative overflow-hidden flex-shrink-0">
+                <Icons.Search className="w-4 h-4 sm:w-5 sm:h-5 text-white relative z-10" />
               </div>
               <div>
-                <h2 className="text-lg font-bold text-white">Word Search Map</h2>
-                <p className="text-white/60 text-xs">Visual search across the Quran</p>
+                <h2 className="text-base sm:text-lg font-bold text-white">Word Search Map</h2>
+                <p className="text-white/60 text-[10px] sm:text-xs hidden sm:block">Visual search across the Quran</p>
               </div>
             </div>
 
-            <div className="flex items-center gap-2">
-              {/* Animation Toggle */}
-              <button
-                onClick={() => setAnimationsEnabled(!animationsEnabled)}
-                className={`p-2 rounded-lg transition-all ${
-                  animationsEnabled ? 'bg-purple-500/30 text-purple-300' : 'bg-white/10 text-white/50'
-                }`}
-                title={animationsEnabled ? 'Disable animations' : 'Enable animations'}
-              >
-                <Icons.Zap className="w-4 h-4" />
-              </button>
+            {/* Close button always visible */}
+            <button onClick={onClose} className="p-2 rounded-lg hover:bg-white/10 transition-all flex-shrink-0" title="Close (Esc)">
+              <Icons.X className="w-5 h-5 text-white/70" />
+            </button>
+          </div>
 
-              {/* Export Button */}
-              {searchResults.length > 0 && (
-                <button
-                  onClick={handleExportImage}
-                  className="p-2 rounded-lg bg-white/10 hover:bg-white/20 text-white/70 hover:text-white transition-all"
-                  title="Export as image"
-                >
-                  <Icons.Download className="w-4 h-4" />
-                </button>
+          {/* Toolbar row - horizontally scrollable on mobile */}
+          <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto pb-2 -mx-3 px-3 sm:mx-0 sm:px-0 scrollbar-hide mb-2 sm:mb-3">
+            {/* Animation Toggle */}
+            <button
+              onClick={() => setAnimationsEnabled(!animationsEnabled)}
+              className={`p-2 rounded-lg transition-all flex-shrink-0 ${
+                animationsEnabled ? 'bg-purple-500/30 text-purple-300' : 'bg-white/10 text-white/50'
+              }`}
+              title={animationsEnabled ? 'Disable animations' : 'Enable animations'}
+            >
+              <Icons.Zap className="w-4 h-4" />
+            </button>
+
+            <LanguageSelector selectedLang={searchLanguage} onSelect={setSearchLanguage} />
+            <FilterPanel filters={filters} onFilterChange={handleFilterChange} resultsCount={filteredResults().length} />
+            <LayoutSelector selectedLayout={layout} onSelect={setLayout} />
+
+            <button
+              onClick={() => setIsFullscreen(!isFullscreen)}
+              className="p-2 rounded-lg hover:bg-white/10 transition-all flex-shrink-0"
+              title={isFullscreen ? 'Exit fullscreen (F)' : 'Enter fullscreen (F)'}
+            >
+              {isFullscreen ? (
+                <Icons.Minimize className="w-4 h-4 sm:w-5 sm:h-5 text-white/70" />
+              ) : (
+                <Icons.Maximize className="w-4 h-4 sm:w-5 sm:h-5 text-white/70" />
               )}
+            </button>
 
-              <LanguageSelector selectedLang={searchLanguage} onSelect={setSearchLanguage} />
-              <FilterPanel filters={filters} onFilterChange={handleFilterChange} resultsCount={filteredResults().length} />
-              <LayoutSelector selectedLayout={layout} onSelect={setLayout} />
-
+            {/* Export Button */}
+            {searchResults.length > 0 && (
               <button
-                onClick={() => setIsFullscreen(!isFullscreen)}
-                className="p-2 rounded-lg hover:bg-white/10 transition-all"
-                title={isFullscreen ? 'Exit fullscreen (F)' : 'Enter fullscreen (F)'}
+                onClick={handleExportImage}
+                className="p-2 rounded-lg bg-white/10 hover:bg-white/20 text-white/70 hover:text-white transition-all flex-shrink-0"
+                title="Export as image"
               >
-                {isFullscreen ? (
-                  <Icons.Minimize className="w-5 h-5 text-white/70" />
-                ) : (
-                  <Icons.Maximize className="w-5 h-5 text-white/70" />
-                )}
+                <Icons.Download className="w-4 h-4" />
               </button>
-              <button onClick={onClose} className="p-2 rounded-lg hover:bg-white/10 transition-all" title="Close (Esc)">
-                <Icons.X className="w-5 h-5 text-white/70" />
-              </button>
-            </div>
+            )}
           </div>
 
           {/* Search Input */}

@@ -19,6 +19,11 @@ function QuizView({ darkMode, onEarnPoints }) {
 
   const question = filteredQuestions[currentQuestion];
 
+  // Handle back navigation
+  const handleBack = () => {
+    window.history.back();
+  };
+
   const handleAnswer = (index) => {
     setSelectedAnswer(index);
     setShowResult(true);
@@ -75,9 +80,25 @@ function QuizView({ darkMode, onEarnPoints }) {
   }
 
   return (
-    <div className={`h-full flex flex-col p-6 ${darkMode ? 'text-white' : ''}`}>
+    <div className={`h-full flex flex-col overflow-auto ${darkMode ? 'text-white' : ''}`}>
+      {/* Header with back button */}
+      <div className={`sticky top-0 z-10 backdrop-blur-xl ${darkMode ? 'bg-gray-900/90' : 'bg-white/90'} border-b ${darkMode ? 'border-gray-800' : 'border-gray-200'}`}>
+        <div className="flex items-center gap-3 p-4">
+          <button
+            onClick={handleBack}
+            className={`p-2 rounded-full transition-all ${darkMode ? 'hover:bg-white/10' : 'hover:bg-gray-100'}`}
+            title="Go back"
+          >
+            <Icons.ChevronLeft className={`w-6 h-6 ${darkMode ? 'text-white' : 'text-gray-600'}`} />
+          </button>
+          <h2 className={`text-xl font-bold ${darkMode ? 'text-white' : 'text-gray-800'}`}>
+            Quran Quiz
+          </h2>
+        </div>
+      </div>
+
+      <div className="p-6">
       <div className="text-center mb-6">
-        <h2 className={`text-3xl font-bold mb-2 ${darkMode ? 'text-white' : 'text-gray-800'}`}>Quran Quiz</h2>
 
         {/* Difficulty Selector */}
         <div className="flex justify-center gap-2 mt-4">
@@ -171,6 +192,7 @@ function QuizView({ darkMode, onEarnPoints }) {
             </button>
           )}
         </div>
+      </div>
       </div>
     </div>
   );

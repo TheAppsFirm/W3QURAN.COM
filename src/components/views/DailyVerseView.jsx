@@ -3,7 +3,7 @@
  * Single Responsibility: Display daily inspirational verses with share/save/listen
  */
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import { Icons } from '../common/Icons';
 import { DAILY_VERSES, SURAHS, PALETTES } from '../../data';
 import { useLocalStorage } from '../../hooks';
@@ -14,6 +14,8 @@ function DailyVerseView({ darkMode }) {
   const [currentIndex, setCurrentIndex] = useState(new Date().getDate() % DAILY_VERSES.length);
   const [shareStatus, setShareStatus] = useState(null);
   const [savedVerses, setSavedVerses] = useLocalStorage('saved_daily_verses', []);
+  const [isAudioPlaying, setIsAudioPlaying] = useState(false);
+  const audioRef = useRef(null);
 
   const verse = DAILY_VERSES[currentIndex];
   const p = PALETTES[currentIndex % 10];
@@ -29,8 +31,22 @@ function DailyVerseView({ darkMode }) {
     totalVerses: surah?.ayahs || 1,
   });
 
-  const nextVerse = () => setCurrentIndex((currentIndex + 1) % DAILY_VERSES.length);
-  const prevVerse = () => setCurrentIndex((currentIndex - 1 + DAILY_VERSES.length) % DAILY_VERSES.length);
+  const stopAudio = useCallback(() => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.src = '';
+      setIsAudioPlaying(false);
+    }
+  }, []);
+
+  const nextVerse = () => {
+    stopAudio();
+    setCurrentIndex((currentIndex + 1) % DAILY_VERSES.length);
+  };
+  const prevVerse = () => {
+    stopAudio();
+    setCurrentIndex((currentIndex - 1 + DAILY_VERSES.length) % DAILY_VERSES.length);
+  };
 
   // Check if current verse is saved
   const isVerseSaved = savedVerses.some(
@@ -77,21 +93,61 @@ function DailyVerseView({ darkMode }) {
 
   // Handle listen - play audio for this verse
   const handleListen = useCallback(() => {
-    // Create temporary audio for just this verse
+    // Stop any existing audio first
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.src = '';
+    }
+
+    // If already playing, just stop
+    if (isAudioPlaying) {
+      setIsAudioPlaying(false);
+      return;
+    }
+
+    // Create and play new audio
     const url = getAudioUrl(verse.surah, verse.ayah);
     const audio = new Audio(url);
-    audio.play().catch((err) => console.error('Audio play failed:', err));
-  }, [verse]);
+    audioRef.current = audio;
+
+    audio.onended = () => setIsAudioPlaying(false);
+    audio.onerror = () => setIsAudioPlaying(false);
+
+    audio.play()
+      .then(() => setIsAudioPlaying(true))
+      .catch((err) => {
+        console.error('Audio play failed:', err);
+        setIsAudioPlaying(false);
+      });
+  }, [verse, isAudioPlaying]);
 
   // Get unique topics from daily verses
   const uniqueTopics = [...new Set(DAILY_VERSES.map((v) => v.topic))];
 
+  // Handle back navigation
+  const handleBack = () => {
+    window.history.back();
+  };
+
   return (
-    <div className={`h-full overflow-auto flex flex-col items-center justify-center p-6 ${darkMode ? 'text-white' : ''}`}>
-      <div className="max-w-lg w-full">
-        <h2 className={`text-2xl font-bold text-center mb-6 ${darkMode ? 'text-white' : 'text-gray-800'}`}>
-          Daily Verses
-        </h2>
+    <div className={`h-full overflow-auto ${darkMode ? 'text-white' : ''}`}>
+      {/* Header with back button */}
+      <div className={`sticky top-0 z-10 backdrop-blur-xl ${darkMode ? 'bg-gray-900/90' : 'bg-white/90'} border-b ${darkMode ? 'border-gray-800' : 'border-gray-200'}`}>
+        <div className="flex items-center gap-3 p-4">
+          <button
+            onClick={handleBack}
+            className={`p-2 rounded-full transition-all ${darkMode ? 'hover:bg-white/10' : 'hover:bg-gray-100'}`}
+            title="Go back"
+          >
+            <Icons.ChevronLeft className={`w-6 h-6 ${darkMode ? 'text-white' : 'text-gray-600'}`} />
+          </button>
+          <h2 className={`text-xl font-bold ${darkMode ? 'text-white' : 'text-gray-800'}`}>
+            Daily Verses
+          </h2>
+        </div>
+      </div>
+
+      <div className="max-w-lg w-full mx-auto p-6">
 
         {/* Main Verse Card */}
         <div
@@ -200,11 +256,17 @@ function DailyVerseView({ darkMode }) {
           <button
             onClick={handleListen}
             className={`px-6 py-3 rounded-2xl flex items-center gap-2 shadow-lg hover:shadow-xl transition-all hover:scale-105 ${
-              darkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-700'
+              isAudioPlaying
+                ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white'
+                : darkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-700'
             }`}
           >
-            <Icons.Volume className="w-5 h-5" />
-            Listen
+            {isAudioPlaying ? (
+              <Icons.Pause className="w-5 h-5" />
+            ) : (
+              <Icons.Volume className="w-5 h-5" />
+            )}
+            {isAudioPlaying ? 'Playing' : 'Listen'}
           </button>
         </div>
 

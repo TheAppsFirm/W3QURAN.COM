@@ -953,7 +953,7 @@ export const BookLayout = memo(function BookLayout({
 
   // Responsive detection using hook
   const isMobileView = useIsMobile();
-  const surahsPerPage = isMobileView ? 4 : 8;
+  const surahsPerPage = 8; // Always show 8 items per page
   const totalPages = Math.ceil(surahs.length / surahsPerPage);
 
   const currentSurahs = useMemo(() => {
@@ -1011,8 +1011,8 @@ export const BookLayout = memo(function BookLayout({
         onMouseLeave={() => setHoveredSurah(null)}
         className="cursor-pointer select-none"
         style={{
-          padding: 12,
-          borderRadius: 12,
+          padding: isMobileView ? 8 : 12,
+          borderRadius: isMobileView ? 10 : 12,
           background: isHovered
             ? `linear-gradient(135deg, ${palette.colors[0]}25, ${palette.colors[1]}15)`
             : darkMode
@@ -1028,25 +1028,26 @@ export const BookLayout = memo(function BookLayout({
       >
         {/* Surah Number */}
         <div
-          className="mx-auto mb-2 flex items-center justify-center rounded-full"
+          className="mx-auto mb-1 flex items-center justify-center rounded-full"
           style={{
-            width: 36,
-            height: 36,
+            width: isMobileView ? 28 : 36,
+            height: isMobileView ? 28 : 36,
             background: `linear-gradient(135deg, ${palette.colors[0]}, ${palette.colors[1]})`,
             boxShadow: `0 3px 10px ${palette.colors[0]}50`,
           }}
         >
-          <span className="text-white font-bold text-sm">{surah.id}</span>
+          <span className="text-white font-bold" style={{ fontSize: isMobileView ? 11 : 14 }}>{surah.id}</span>
         </div>
 
         {/* Arabic Name */}
         <div
-          className="text-center mb-1"
+          className="text-center"
           style={{
             fontFamily: "'Scheherazade New', serif",
-            fontSize: 20 * zoom,
+            fontSize: isMobileView ? 16 : 20 * zoom,
             fontWeight: 'bold',
             color: isHovered ? palette.colors[0] : darkMode ? '#F5DEB3' : '#5D4037',
+            marginBottom: isMobileView ? 0 : 4,
           }}
           dir="rtl"
         >
@@ -1055,16 +1056,23 @@ export const BookLayout = memo(function BookLayout({
 
         {/* English Name */}
         <div
-          className="text-center text-xs"
-          style={{ color: darkMode ? 'rgba(255,255,255,0.7)' : 'rgba(100,80,60,0.8)' }}
+          className="text-center"
+          style={{
+            color: darkMode ? 'rgba(255,255,255,0.7)' : 'rgba(100,80,60,0.8)',
+            fontSize: isMobileView ? 10 : 12,
+          }}
         >
           {surah.name}
         </div>
 
         {/* Ayah count */}
         <div
-          className="text-center text-xs mt-1"
-          style={{ color: darkMode ? 'rgba(255,215,0,0.5)' : 'rgba(139,90,43,0.6)' }}
+          className="text-center"
+          style={{
+            color: darkMode ? 'rgba(255,215,0,0.5)' : 'rgba(139,90,43,0.6)',
+            fontSize: isMobileView ? 9 : 12,
+            marginTop: isMobileView ? 1 : 4,
+          }}
         >
           {surah.ayahs} verses
         </div>
@@ -1073,7 +1081,7 @@ export const BookLayout = memo(function BookLayout({
   };
 
   // Use isMobileView from hook at component level (already defined above)
-  const pageWidth = isMobileView ? 'min(320px, calc(100vw - 32px))' : `min(340px, 40vw)`;
+  const pageWidth = isMobileView ? 'min(360px, calc(100vw - 24px))' : `min(340px, 40vw)`;
 
   // Page component
   const BookPage = ({ pageSurahs, isLeft, isSinglePage = false }) => (
@@ -1081,7 +1089,7 @@ export const BookLayout = memo(function BookLayout({
       style={{
         width: pageWidth,
         minHeight: isMobileView ? 'auto' : 520 * zoom,
-        padding: isMobileView ? '16px 12px' : '20px 16px',
+        padding: isMobileView ? '12px 10px' : '20px 16px',
         background: darkMode
           ? `linear-gradient(${isLeft ? '135deg' : '225deg'}, #1a1a2e 0%, #252540 100%)`
           : `linear-gradient(${isLeft ? '135deg' : '225deg'}, #FFF9F0 0%, #FFF5E6 100%)`,
@@ -1106,8 +1114,8 @@ export const BookLayout = memo(function BookLayout({
         </span>
       </div>
 
-      {/* Surah Grid - 2 columns on mobile, 2x2 on desktop */}
-      <div className={`grid ${isMobileView ? 'grid-cols-2 gap-2' : 'grid-cols-2 gap-3'}`}>
+      {/* Surah Grid - 2 columns, 4 rows on mobile (8 items), 2x2 on desktop per page */}
+      <div className={`grid ${isMobileView ? 'grid-cols-2 gap-1.5' : 'grid-cols-2 gap-3'}`}>
         {pageSurahs.map((surah) => (
           <SurahCard key={surah.id} surah={surah} />
         ))}
@@ -1135,9 +1143,9 @@ export const BookLayout = memo(function BookLayout({
 
       {/* Book Container - Single page on mobile, dual pages on desktop */}
       {isMobileView ? (
-        // Mobile: Single page view
+        // Mobile: Single page view with all 8 surahs
         <div className="w-full flex justify-center">
-          <BookPage pageSurahs={currentSurahs.slice(0, 4)} isLeft={true} isSinglePage={true} />
+          <BookPage pageSurahs={currentSurahs} isLeft={true} isSinglePage={true} />
         </div>
       ) : (
         // Desktop: Dual page view

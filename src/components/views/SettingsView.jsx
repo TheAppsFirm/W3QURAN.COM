@@ -106,15 +106,15 @@ function SettingsView({ darkMode, setDarkMode, onNavigate }) {
     }
     setUpgradeLoading(null);
   };
-  // All settings persisted to localStorage
+  // All settings persisted to localStorage - using same keys as reader for sync
   const [notifications, setNotifications] = useLocalStorage('settings_notifications', true);
   const [autoPlayAudio, setAutoPlayAudio] = useLocalStorage('settings_autoplay', false);
   const [hoverSounds, setHoverSounds] = useLocalStorage('w3quran_sound_enabled', isSoundEnabled());
-  const [showTranslation, setShowTranslation] = useLocalStorage('settings_translation', true);
-  const [tajweedHighlight, setTajweedHighlight] = useLocalStorage('settings_tajweed', false);
-  const [wordByWord, setWordByWord] = useLocalStorage('settings_wordbyword', false);
-  const [fontSize, setFontSize] = useLocalStorage('settings_fontsize', 'medium');
-  const [reciter, setReciter] = useLocalStorage('settings_reciter', 'ar.alafasy');
+  const [showTranslation, setShowTranslation] = useLocalStorage('reader_show_translation', true);
+  const [tajweedHighlight, setTajweedHighlight] = useLocalStorage('reader_tajweed', false);
+  const [wordByWord, setWordByWord] = useLocalStorage('reader_wbw', false);
+  const [fontSize, setFontSize] = useLocalStorage('reader_fontsize', 'medium');
+  const [reciter, setReciter] = useLocalStorage('reader_reciter', 'ar.alafasy');
 
   const settingsToggle = [
     { key: 'notify', label: 'Notifications', icon: Icons.Bell, value: notifications, setter: setNotifications, desc: 'Daily verse and prayer reminders' },

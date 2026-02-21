@@ -173,23 +173,19 @@ function FloatingMenu({ view, setView, darkMode, onDonate, onMindMap, onMood, on
 
   // All features available to everyone
   const moreItems = [
-    // Innovative features - First row
+    // Innovative features - Top row
     { id: 'mindmap', label: 'Explorer', icon: Icons.Search, gradient: ['#A855F7', '#7C3AED'], isSpecial: true },
-    { id: 'mood', label: 'Mood', icon: Icons.Activity, gradient: ['#06B6D4', '#0891B2'], isSpecial: true },
-    { id: 'videosync', label: 'Video Sync', icon: Icons.Video, gradient: ['#F472B6', '#EC4899'], isSpecial: true },
     { id: 'babynames', label: 'Baby Names', icon: Icons.Baby, gradient: ['#F59E0B', '#EA580C'], isSpecial: true },
-    // Regular features
-    { id: 'progress', label: 'Progress', icon: Icons.BarChart, gradient: ['#8b5cf6', '#a855f7'] },
+    // Row 1: Spiritual content
     { id: 'daily', label: 'Daily Verse', icon: Icons.Sun, gradient: ['#f59e0b', '#eab308'] },
     { id: 'names', label: '99 Names', icon: Icons.Sparkles, gradient: ['#8b5cf6', '#a855f7'] },
     { id: 'quiz', label: 'Quiz', icon: Icons.HelpCircle, gradient: ['#ec4899', '#f43f5e'] },
-    { id: 'prayer', label: 'Prayer', icon: Icons.Clock, gradient: ['#06b6d4', '#0ea5e9'] },
-    { id: 'stats', label: 'Stats', icon: Icons.PieChart, gradient: ['#10b981', '#14b8a6'] },
-    { id: 'donate', label: 'Donate', icon: Icons.Heart, gradient: ['#ef4444', '#f97316'], isDonate: true },
-    { id: 'settings', label: 'Settings', icon: Icons.Settings, gradient: ['#6366f1', '#8b5cf6'] },
     { id: 'listen', label: 'Listen', icon: Icons.Headphones, gradient: ['#22c55e', '#10b981'] },
+    // Row 2: Engagement & settings
+    { id: 'stats', label: 'Stats', icon: Icons.PieChart, gradient: ['#10b981', '#14b8a6'] },
+    { id: 'settings', label: 'Settings', icon: Icons.Settings, gradient: ['#6366f1', '#8b5cf6'] },
+    { id: 'donate', label: 'Donate', icon: Icons.Heart, gradient: ['#ef4444', '#f97316'], isDonate: true },
     { id: 'privacy', label: 'Privacy', icon: Icons.Shield, gradient: ['#64748b', '#475569'] },
-    { id: 'terms', label: 'Terms', icon: Icons.FileText, gradient: ['#64748b', '#475569'] },
   ];
 
   const handleItemClick = (item) => {
@@ -221,7 +217,7 @@ function FloatingMenu({ view, setView, darkMode, onDonate, onMindMap, onMood, on
       {/* More Menu Popup - Bubble style grid */}
       {showMore && (
         <div
-          className="fixed left-1/2 -translate-x-1/2 z-[55] w-[95vw] sm:w-auto max-w-[400px]"
+          className="fixed left-1/2 -translate-x-1/2 z-[55] w-[95vw] sm:w-auto max-w-[420px]"
           style={{ bottom: '90px' }}
         >
           <div
@@ -248,21 +244,21 @@ function FloatingMenu({ view, setView, darkMode, onDonate, onMindMap, onMood, on
               }}
             />
 
-            {/* Special features row - Mind Map, Mood, Video Sync (filtered by mode) */}
+            {/* Special features row */}
             {moreItems.filter(i => i.isSpecial).length > 0 && (
             <div className="relative mb-3 sm:mb-4 pb-3 sm:pb-4 border-b border-white/10">
               <p className="text-[9px] sm:text-[10px] font-semibold uppercase tracking-wider mb-2 sm:mb-3 text-center"
                 style={{ color: darkMode ? '#94a3b8' : '#64748b' }}>
                 {specialFeaturesLabel}
               </p>
-              <div className="flex justify-center gap-2 sm:gap-4 flex-wrap">
+              <div className="flex justify-center gap-3 sm:gap-4">
                 {moreItems.filter(i => i.isSpecial).map((item, idx) => (
                   <BubbleMenuItem
                     key={item.id}
                     item={item}
                     active={false}
                     onClick={() => handleItemClick(item)}
-                    delay={idx * 60}
+                    delay={idx * 40}
                     darkMode={darkMode}
                   />
                 ))}
@@ -270,15 +266,15 @@ function FloatingMenu({ view, setView, darkMode, onDonate, onMindMap, onMood, on
             </div>
             )}
 
-            {/* Regular features grid */}
-            <div className="relative grid grid-cols-3 sm:grid-cols-4 gap-2 sm:gap-4">
+            {/* Regular features grid - 4 columns on mobile, fits better */}
+            <div className="relative grid grid-cols-4 gap-2 sm:gap-3">
               {moreItems.filter(i => !i.isSpecial).map((item, idx) => (
                 <BubbleMenuItem
                   key={item.id}
                   item={item}
                   active={view === item.id}
                   onClick={() => handleItemClick(item)}
-                  delay={(idx + 3) * 50}
+                  delay={(idx + 8) * 40}
                   darkMode={darkMode}
                 />
               ))}

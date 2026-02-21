@@ -768,8 +768,8 @@ export default function TalkToQuran({ isVisible, onClose, onNavigate }) {
         playAudio(data.audioUrl, words.length);
       }
 
-      // Stream text display synchronized with audio
-      const wordDelay = data.audioUrl ? 120 : 70; // Slower if playing audio
+      // Stream text display - faster when no audio
+      const wordDelay = data.audioUrl ? 80 : 40; // Optimized for speed
       let i = 0;
       streamingIntervalRef.current = setInterval(() => {
         if (i < words.length) {
@@ -805,25 +805,48 @@ export default function TalkToQuran({ isVisible, onClose, onNavigate }) {
       audioRef.current = null;
     }
 
-    const audio = new Audio(audioUrl);
-    audioRef.current = audio;
-
-    audio.onended = () => {
+    // Skip if no audio URL or invalid
+    if (!audioUrl || !audioUrl.startsWith('data:audio')) {
+      console.log('[TTS] No valid audio URL, skipping playback');
       setIsPlaying(false);
       setStatus('idle');
-    };
+      return;
+    }
 
-    audio.onerror = () => {
-      console.error('[TTS] Audio playback error');
+    try {
+      const audio = new Audio();
+      audioRef.current = audio;
+
+      // Set up event handlers before setting src
+      audio.oncanplaythrough = () => {
+        // Audio is ready, try to play
+        audio.play().catch(err => {
+          console.warn('[TTS] Autoplay blocked:', err.message);
+          // Autoplay was blocked, but text is already shown
+          setIsPlaying(false);
+          setStatus('idle');
+        });
+      };
+
+      audio.onended = () => {
+        setIsPlaying(false);
+        setStatus('idle');
+      };
+
+      audio.onerror = (e) => {
+        console.error('[TTS] Audio error:', e);
+        setIsPlaying(false);
+        setStatus('idle');
+      };
+
+      // Set source after handlers are ready
+      audio.src = audioUrl;
+      audio.load();
+    } catch (err) {
+      console.error('[TTS] Setup error:', err);
       setIsPlaying(false);
       setStatus('idle');
-    };
-
-    audio.play().catch(err => {
-      console.error('[TTS] Play error:', err);
-      setIsPlaying(false);
-      setStatus('idle');
-    });
+    }
   };
 
   const stopSpeaking = () => {

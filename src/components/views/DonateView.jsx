@@ -12,6 +12,11 @@ function DonateView({ darkMode }) {
   const [customAmount, setCustomAmount] = useState('');
   const [showThankYou, setShowThankYou] = useState(false);
 
+  // Handle back navigation
+  const handleBack = () => {
+    window.history.back();
+  };
+
   const amounts = [5, 10, 25, 50, 100, 'Custom'];
 
   // Handle donation selection
@@ -44,15 +49,29 @@ function DonateView({ darkMode }) {
   }, [customAmount]);
 
   return (
-    <div className={`h-full flex flex-col items-center justify-center p-6 overflow-auto ${darkMode ? 'text-white' : ''}`}>
+    <div className={`h-full flex flex-col overflow-auto ${darkMode ? 'text-white' : ''}`}>
+      {/* Header with back button */}
+      <div className={`sticky top-0 z-10 backdrop-blur-xl ${darkMode ? 'bg-gray-900/90' : 'bg-white/90'} border-b ${darkMode ? 'border-gray-800' : 'border-gray-200'}`}>
+        <div className="flex items-center gap-3 p-4">
+          <button
+            onClick={handleBack}
+            className={`p-2 rounded-full transition-all ${darkMode ? 'hover:bg-white/10' : 'hover:bg-gray-100'}`}
+            title="Go back"
+          >
+            <Icons.ChevronLeft className={`w-6 h-6 ${darkMode ? 'text-white' : 'text-gray-600'}`} />
+          </button>
+          <h2 className={`text-xl font-bold ${darkMode ? 'text-white' : 'text-gray-800'}`}>
+            Support the Project
+          </h2>
+        </div>
+      </div>
+
+      <div className="flex-1 flex flex-col items-center justify-center p-6">
       <div className="max-w-md w-full">
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-rose-500 to-pink-500 shadow-lg mb-4">
             <Icons.Heart className="w-8 h-8 text-white" />
           </div>
-          <h2 className={`text-3xl font-bold mb-2 ${darkMode ? 'text-white' : 'text-gray-800'}`}>
-            Support the Project
-          </h2>
           <p className={`${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
             Help us maintain and improve w3Quran
           </p>
@@ -161,6 +180,7 @@ function DonateView({ darkMode }) {
             </li>
           </ul>
         </div>
+      </div>
       </div>
     </div>
   );

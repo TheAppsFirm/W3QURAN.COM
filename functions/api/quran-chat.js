@@ -218,7 +218,7 @@ async function incrementFreeDailyUsage(env, userId) {
   }
 }
 
-// Call OpenAI API
+// Call OpenAI API - optimized for speed
 async function callOpenAI(env, message, conversationHistory = []) {
   // Validate API key exists
   if (!env.OPENAI_API_KEY) {
@@ -228,7 +228,7 @@ async function callOpenAI(env, message, conversationHistory = []) {
 
   const messages = [
     { role: 'system', content: SYSTEM_PROMPT },
-    ...conversationHistory.slice(-6), // Keep last 6 messages for context
+    ...conversationHistory.slice(-4), // Reduced context for speed
     { role: 'user', content: message }
   ];
 
@@ -241,10 +241,10 @@ async function callOpenAI(env, message, conversationHistory = []) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4o',
+        model: 'gpt-4o-mini', // Much faster than gpt-4o, still high quality
         messages,
-        max_tokens: 1000,
-        temperature: 0.7,
+        max_tokens: 600, // Reduced for faster response
+        temperature: 0.6, // Slightly lower for more focused responses
       }),
     });
   } catch (fetchError) {
@@ -302,10 +302,10 @@ const VOICE_SETTINGS = {
   ar: { voice: 'echo', speed: 0.9 },    // Warm male, slower for Arabic clarity
 };
 
-// Generate TTS audio using OpenAI
+// Generate TTS audio using OpenAI - optimized for speed
 async function generateTTS(env, text, language = 'en') {
-  // Skip TTS for very long responses
-  if (text.length > 2000) {
+  // Skip TTS for very long responses (faster cutoff)
+  if (text.length > 800) {
     return null;
   }
 
@@ -320,10 +320,10 @@ async function generateTTS(env, text, language = 'en') {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'tts-1-hd', // HD model for better quality
-        input: text,
+        model: 'tts-1', // Standard model - 2x faster than HD
+        input: text.substring(0, 800), // Limit text for speed
         voice: settings.voice,
-        speed: settings.speed,
+        speed: settings.speed * 1.1, // Slightly faster speech
       }),
     });
 

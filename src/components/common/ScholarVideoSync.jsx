@@ -180,8 +180,7 @@ const ScholarVideoSync = memo(function ScholarVideoSync({
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [miniPlayerMode, setMiniPlayerMode] = useState(false);
   const [selectedScholar, setSelectedScholar] = useState(null);
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [videoCurrentTime, setVideoCurrentTime] = useState(0);
+  const [forceShowFull, setForceShowFull] = useState(false); // Force show full modal when expanding from mini
   const [selectedSurahId, setSelectedSurahId] = useState(surahId);
   const [browseMode, setBrowseMode] = useState(!surahId); // Start in browse mode if no surah
   const playerRef = useRef(null);
@@ -225,6 +224,18 @@ const ScholarVideoSync = memo(function ScholarVideoSync({
     }
   }, [hasVideos, selectedVideo, syncedVideos]);
 
+  // Handle visibility changes - expand from mini player or reset forceShow
+  useEffect(() => {
+    if (isVisible) {
+      // If modal becomes visible while in mini player mode, expand it
+      if (miniPlayerMode) {
+        setMiniPlayerMode(false);
+      }
+      // Reset force show since we're now properly visible
+      setForceShowFull(false);
+    }
+  }, [isVisible, miniPlayerMode]);
+
   // Handle verse click from timeline
   const handleVerseClick = useCallback((verse, timestamp) => {
     if (onAyahChange) {
@@ -247,11 +258,9 @@ const ScholarVideoSync = memo(function ScholarVideoSync({
 
   // Toggle mini player
   const toggleMiniPlayer = useCallback(() => {
-    setMiniPlayerMode(prev => !prev);
-    if (!miniPlayerMode) {
-      onClose?.();
-    }
-  }, [miniPlayerMode, onClose]);
+    setMiniPlayerMode(true);
+    // Don't call onClose - we want to keep the component mounted for mini player
+  }, []);
 
   // Open YouTube search for surahs without synced videos
   const openYouTubeSearch = useCallback(() => {
@@ -260,7 +269,13 @@ const ScholarVideoSync = memo(function ScholarVideoSync({
     window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`, '_blank');
   }, [displaySurahName]);
 
-  if (!isVisible && !miniPlayerMode) return null;
+  // Handle closing the full modal
+  const handleClose = useCallback(() => {
+    setForceShowFull(false);
+    onClose?.();
+  }, [onClose]);
+
+  if (!isVisible && !miniPlayerMode && !forceShowFull) return null;
 
   // Show mini player when minimized
   if (miniPlayerMode && selectedVideo) {
@@ -272,10 +287,13 @@ const ScholarVideoSync = memo(function ScholarVideoSync({
         currentVerse={currentAyah}
         onExpand={() => {
           setMiniPlayerMode(false);
+          setForceShowFull(true); // Force show full modal even if isVisible is false
         }}
         onClose={() => {
           setMiniPlayerMode(false);
           setSelectedVideo(null);
+          setForceShowFull(false);
+          onClose?.(); // Also close the main modal
         }}
         isPlaying={true}
       />
@@ -285,9 +303,9 @@ const ScholarVideoSync = memo(function ScholarVideoSync({
   return (
     <div
       className={`fixed inset-0 z-[100] flex items-center justify-center p-4 transition-all duration-300 ${
-        isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'
+        isVisible || forceShowFull ? 'opacity-100' : 'opacity-0 pointer-events-none'
       }`}
-      onClick={onClose}
+      onClick={handleClose}
     >
       {/* Backdrop */}
       <div className="absolute inset-0 bg-black/80 backdrop-blur-md" />
@@ -341,7 +359,7 @@ const ScholarVideoSync = memo(function ScholarVideoSync({
               </button>
             )}
             <button
-              onClick={onClose}
+              onClick={handleClose}
               className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-all text-white/70 hover:text-white"
             >
               <Icons.X className="w-5 h-5" />
@@ -517,14 +535,6 @@ const ScholarVideoSync = memo(function ScholarVideoSync({
                   </div>
                 </div>
 
-                {/* Search More */}
-                <button
-                  onClick={openYouTubeSearch}
-                  className="w-full mt-4 p-3 bg-white/10 hover:bg-white/20 rounded-xl text-white/70 text-xs transition-all flex items-center justify-center gap-2"
-                >
-                  <Icons.Search className="w-4 h-4" />
-                  Find More on YouTube
-                </button>
               </div>
             </>
           ) : (
@@ -539,13 +549,29 @@ const ScholarVideoSync = memo(function ScholarVideoSync({
                 Search YouTube for tafseer and lectures.
               </p>
 
-              <button
-                onClick={openYouTubeSearch}
-                className="px-6 py-3 bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 rounded-full text-white font-medium transition-all flex items-center gap-2"
-              >
-                <Icons.Search className="w-5 h-5" />
-                Search {surahName} Videos
-              </button>
+              {/* Quick Search Buttons */}
+              <div className="flex gap-3 mb-6">
+                <button
+                  onClick={() => {
+                    const query = `Surah ${surahName} recitation`;
+                    window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`, '_blank');
+                  }}
+                  className="px-5 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 rounded-full text-white font-medium transition-all flex items-center gap-2"
+                >
+                  <Icons.Headphones className="w-5 h-5" />
+                  Recitations
+                </button>
+                <button
+                  onClick={() => {
+                    const query = `Surah ${surahName} tafseer explanation`;
+                    window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`, '_blank');
+                  }}
+                  className="px-5 py-3 bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 rounded-full text-white font-medium transition-all flex items-center gap-2"
+                >
+                  <Icons.BookOpen className="w-5 h-5" />
+                  Tafseer
+                </button>
+              </div>
 
               {/* Popular Scholars */}
               <div className="mt-8 w-full max-w-md">
