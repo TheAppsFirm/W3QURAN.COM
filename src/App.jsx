@@ -11,6 +11,7 @@
 
 import React, { Suspense, useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { ErrorBoundary, LoadingSpinner, BubbleModal, BubbleReaderOverlay, ProgressDashboard, OfflineManager, HifzMode, SearchPanel, DonateModal, WordSearchMap, EmotionalTracker, ScholarVideoSync, PropheticMap, QuranCompanionAI, GlobalUmmahPulse, VerseWeatherSync, SoundHealingRoom, QuranicBabyNames, TalkToQuran } from './components/common';
+import { KidsMode } from './components/kids';
 import { Header, FloatingMenu, StatsBar } from './components/layout';
 import { SurahBubble, LayoutSelector, ClockLayout, GridLayout, JuzzGroupLayout, AlphabetLayout, RevelationLayout, BookLayout, ListLayout, CompactLayout, HoneycombLayout, WaveLayout, LengthLayout, KidsLayout, ArtLayout } from './components/bubbles';
 import { AnalyticsPanel } from './components/widgets';
@@ -168,6 +169,7 @@ const AmbientParticles = ({ darkMode }) => (
 const ROUTE_CONFIG = {
   // Main views
   '/': { view: 'surahs' },
+  '/kids': { view: 'kids' },
   '/listen': { view: 'listen' },
   '/donate': { view: 'donate' },
   '/settings': { view: 'settings' },
@@ -205,6 +207,7 @@ const ROUTE_CONFIG = {
 // Reverse mapping for state to URL
 const VIEW_TO_ROUTE = {
   surahs: '/',
+  kids: '/kids',
   listen: '/listen',
   donate: '/donate',
   settings: '/settings',
@@ -292,6 +295,7 @@ function QuranBubbleApp() {
   const [showSoundHealing, setShowSoundHealing] = useState(false);
   const [showBabyNames, setShowBabyNames] = useState(false);
   const [showTalkToQuran, setShowTalkToQuran] = useState(false);
+  const [showKidsMode, setShowKidsMode] = useState(false);
   const [adminTab, setAdminTab] = useState('overview');
 
   // Track if we're handling a popstate event (browser back/forward)
@@ -1230,6 +1234,7 @@ function QuranBubbleApp() {
         onBabyNames={() => setShowBabyNames(true)}
         onTalkToQuran={() => setShowTalkToQuran(true)}
         onProgress={() => setShowProgressDashboard(true)}
+        onOpenKidsMode={() => setShowKidsMode(true)}
       />
 
       {/* Bubble Modal */}
@@ -1576,6 +1581,18 @@ function QuranBubbleApp() {
         isVisible={showTalkToQuran}
         onClose={() => setShowTalkToQuran(false)}
         darkMode={darkMode}
+      />
+
+      {/* Kids Mode - Quran Learning Journey */}
+      <KidsMode
+        isVisible={showKidsMode || view === 'kids'}
+        onClose={() => {
+          setShowKidsMode(false);
+          if (view === 'kids') {
+            setView('surahs');
+            window.history.pushState({}, '', '/');
+          }
+        }}
       />
 
       {/* Animation Styles */}

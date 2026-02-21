@@ -148,7 +148,7 @@ const BubbleMenuItem = ({ item, active, onClick, delay = 0, darkMode }) => {
   );
 };
 
-function FloatingMenu({ view, setView, darkMode, onDonate, onMindMap, onMood, onVideoSync, onBabyNames, onTalkToQuran, onProgress }) {
+function FloatingMenu({ view, setView, darkMode, onDonate, onMindMap, onMood, onVideoSync, onBabyNames, onTalkToQuran, onProgress, onOpenKidsMode }) {
   const [showMore, setShowMore] = useState(false);
   const menuRef = useRef(null);
 
@@ -167,6 +167,7 @@ function FloatingMenu({ view, setView, darkMode, onDonate, onMindMap, onMood, on
 
   const mainItems = [
     { id: 'surahs', label: 'Quran', icon: Icons.Book },
+    { id: 'kids', label: 'Kids', icon: Icons.Gamepad, isKids: true },
     { id: 'talk', label: 'Talk', icon: Icons.Mic, isTalk: true },
     { id: 'more', label: 'More', icon: Icons.Grid, isMore: true },
   ];
@@ -305,6 +306,7 @@ function FloatingMenu({ view, setView, darkMode, onDonate, onMindMap, onMood, on
             const Icon = item.icon || Icons.Star;
             const active = item.isMore ? showMore : view === item.id;
             const gradient = item.id === 'surahs' ? ['#10b981', '#14b8a6']
+              : item.id === 'kids' ? ['#EC4899', '#8B5CF6']
               : item.id === 'talk' ? ['#A855F7', '#EC4899']
               : ['#f59e0b', '#eab308'];
 
@@ -314,6 +316,9 @@ function FloatingMenu({ view, setView, darkMode, onDonate, onMindMap, onMood, on
                 onClick={() => {
                   if (item.isMore) {
                     setShowMore(!showMore);
+                  } else if (item.isKids) {
+                    // Navigate to /kids path for proper URL routing
+                    setView('kids');
                   } else if (item.isTalk && onTalkToQuran) {
                     onTalkToQuran();
                   } else {
@@ -329,6 +334,7 @@ function FloatingMenu({ view, setView, darkMode, onDonate, onMindMap, onMood, on
                     width: 48,
                     height: 48,
                     transform: `scale(${active ? 1.15 : 1})`,
+                    animation: item.isKids ? 'kidsBounce 2s ease-in-out infinite' : 'none',
                   }}
                 >
                   {/* Outer glow */}
@@ -337,7 +343,7 @@ function FloatingMenu({ view, setView, darkMode, onDonate, onMindMap, onMood, on
                     style={{
                       inset: '-15%',
                       background: `radial-gradient(circle at 50% 50%, ${gradient[0]}50 0%, transparent 70%)`,
-                      opacity: active ? 1 : 0,
+                      opacity: active || item.isKids ? 1 : 0,
                       filter: 'blur(8px)',
                     }}
                   />
@@ -346,10 +352,10 @@ function FloatingMenu({ view, setView, darkMode, onDonate, onMindMap, onMood, on
                   <div
                     className="absolute inset-0 rounded-full overflow-hidden transition-all duration-300"
                     style={{
-                      background: active
+                      background: (active || item.isKids)
                         ? `linear-gradient(135deg, ${gradient[0]} 0%, ${gradient[1]} 100%)`
                         : darkMode ? 'rgba(71, 85, 105, 0.4)' : 'rgba(148, 163, 184, 0.3)',
-                      boxShadow: active
+                      boxShadow: (active || item.isKids)
                         ? `0 0 20px ${gradient[0]}50, 0 6px 20px rgba(0,0,0,0.3), inset 0 -10px 20px ${gradient[1]}40, inset 0 10px 20px rgba(255,255,255,0.25)`
                         : `0 4px 10px rgba(0,0,0,0.1), inset 0 -6px 12px rgba(0,0,0,0.1), inset 0 6px 12px rgba(255,255,255,0.1)`,
                     }}
@@ -365,7 +371,7 @@ function FloatingMenu({ view, setView, darkMode, onDonate, onMindMap, onMood, on
                         background: 'linear-gradient(180deg, rgba(255,255,255,0.5) 0%, transparent 100%)',
                         borderRadius: '50%',
                         transform: 'scaleY(0.5)',
-                        opacity: active ? 1 : 0.5,
+                        opacity: (active || item.isKids) ? 1 : 0.5,
                       }}
                     />
 
@@ -373,7 +379,7 @@ function FloatingMenu({ view, setView, darkMode, onDonate, onMindMap, onMood, on
                     <div className="absolute inset-0 flex items-center justify-center">
                       <Icon
                         className="w-5 h-5 transition-colors duration-300"
-                        style={{ color: active ? '#fff' : darkMode ? '#94a3b8' : '#64748b' }}
+                        style={{ color: (active || item.isKids) ? '#fff' : darkMode ? '#94a3b8' : '#64748b' }}
                       />
                     </div>
                   </div>
@@ -395,7 +401,7 @@ function FloatingMenu({ view, setView, darkMode, onDonate, onMindMap, onMood, on
                 {/* Label */}
                 <span
                   className="text-[10px] font-semibold transition-colors duration-300"
-                  style={{ color: active ? gradient[0] : darkMode ? '#94a3b8' : '#64748b' }}
+                  style={{ color: (active || item.isKids) ? gradient[0] : darkMode ? '#94a3b8' : '#64748b' }}
                 >
                   {item.label}
                 </span>
@@ -415,6 +421,10 @@ function FloatingMenu({ view, setView, darkMode, onDonate, onMindMap, onMood, on
           0% { opacity: 0; transform: scale(0); }
           70% { transform: scale(1.1); }
           100% { opacity: 1; transform: scale(1); }
+        }
+        @keyframes kidsBounce {
+          0%, 100% { transform: scale(1) translateY(0); }
+          50% { transform: scale(1.05) translateY(-2px); }
         }
       `}</style>
     </nav>
