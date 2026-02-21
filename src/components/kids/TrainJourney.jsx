@@ -16,8 +16,12 @@ import { SURAHS } from '../../data';
 import { Icons } from '../common/Icons';
 import { ARABIC_ALPHABET, playLetterSound } from './KidsMode';
 import SurahTeacher from './SurahTeacher';
+import KidsPremiumGate from './KidsPremiumGate';
 import { MagicCarpet, Camel, GardenBackground, SeertBackground, Motorbike, RoadBackground } from './components';
 import { SEERAH_EVENTS } from './data/seerahData';
+
+// Free tier station limit (first 5 stations are free)
+const FREE_STATION_LIMIT = 5;
 
 // ============================================================================
 // Speech Synthesis Priming (required for iOS/Safari)
@@ -2889,7 +2893,7 @@ const Animals = ({ offset }) => {
 // Main TrainJourney Component
 // ============================================================================
 
-const TrainJourney = ({ onEnterStation, onBack, onNextStage, mode = 'surahs', customSurahs = null, hasTopBanner = false, ageGroup = 'young', theme = 'train' }) => {
+const TrainJourney = ({ onEnterStation, onBack, onNextStage, mode = 'surahs', customSurahs = null, hasTopBanner = false, ageGroup = 'young', theme = 'train', isPremium = false }) => {
   // Get config based on mode (with custom surahs support)
   const config = useMemo(() => {
     if (mode === 'surahs' && customSurahs && customSurahs.length > 0) {
@@ -2923,6 +2927,9 @@ const TrainJourney = ({ onEnterStation, onBack, onNextStage, mode = 'surahs', cu
   // Inline surah teacher state
   const [showInlineTeacher, setShowInlineTeacher] = useState(false);
   const [teachingSurah, setTeachingSurah] = useState(null);
+
+  // Premium gate state
+  const [showPremiumGate, setShowPremiumGate] = useState(false);
 
   // Sound effect timing refs
   const lastChuggaRef = useRef(0);
@@ -3115,6 +3122,17 @@ const TrainJourney = ({ onEnterStation, onBack, onNextStage, mode = 'surahs', cu
 
   // Handle entering a station - must be defined before keyboard controls
   const handleEnterStation = useCallback((stationId) => {
+    // Check station limit for free users in surahs mode
+    if (mode === 'surahs' && !isPremium) {
+      // Find the station index
+      const stationIndex = stations.findIndex(s => s.id === stationId);
+      if (stationIndex >= FREE_STATION_LIMIT) {
+        // Show premium gate for stations beyond the free limit
+        setShowPremiumGate(true);
+        return;
+      }
+    }
+
     SoundEffects.success();
 
     // For surahs mode, show inline teacher instead of calling onEnterStation
@@ -3129,7 +3147,7 @@ const TrainJourney = ({ onEnterStation, onBack, onNextStage, mode = 'surahs', cu
 
     // For alphabet and kalimas, use the original behavior
     onEnterStation(stationId);
-  }, [onEnterStation, mode]);
+  }, [onEnterStation, mode, isPremium, stations]);
 
   // Keyboard controls
   useEffect(() => {
@@ -3702,6 +3720,14 @@ const TrainJourney = ({ onEnterStation, onBack, onNextStage, mode = 'surahs', cu
         }}
         completedStage={mode}
       />
+
+      {/* Premium Gate Modal - shown when trying to access station beyond free limit */}
+      {showPremiumGate && (
+        <KidsPremiumGate
+          onClose={() => setShowPremiumGate(false)}
+          feature="station_limit"
+        />
+      )}
 
       {/* CSS Animations */}
       <style jsx>{`

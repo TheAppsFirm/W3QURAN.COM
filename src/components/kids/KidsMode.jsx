@@ -16,7 +16,9 @@ import KidsModeMenu from './KidsModeMenu';
 import TrainJourney from './TrainJourney';
 import ProphetLifeJourney from './ProphetLifeJourney';
 import KidsSurahLearning from './KidsSurahLearning';
+import KidsLoginGate from './KidsLoginGate';
 import { SURAHS } from '../../data';
+import { useAuth } from '../../contexts/AuthContext';
 
 // Full Arabic Alphabet with pronunciations, forms, and example words
 // Forms: isolated, initial (start), medial (middle), final (end)
@@ -559,6 +561,9 @@ const saveAgeGroup = (level) => {
 };
 
 const KidsMode = ({ isVisible, onClose }) => {
+  // Get auth state
+  const { isAuthenticated, isPremium, loading: authLoading } = useAuth();
+
   // State management
   const [selectedTheme, setSelectedTheme] = useState(null);
   const [selectedThemeMode, setSelectedThemeMode] = useState('surahs'); // Mode: surahs, seert
@@ -719,6 +724,11 @@ const KidsMode = ({ isVisible, onClose }) => {
 
   // Don't render if not visible
   if (!isVisible) return null;
+
+  // Show login gate if user is not authenticated (skip during auth loading)
+  if (!authLoading && !isAuthenticated) {
+    return <KidsLoginGate onClose={onClose} />;
+  }
 
   // Kids Surah Learning Mode - when a surah is selected
   if (selectedSurah) {
@@ -954,6 +964,7 @@ const KidsMode = ({ isVisible, onClose }) => {
           customSurahs={currentTrack.surahs}
           hasTopBanner={true}
           ageGroup={surahJourneyLevel}
+          isPremium={isPremium}
           onEnterStation={handleEnterStation}
           onBack={() => {
             setSelectedSurahs(false);
@@ -982,6 +993,7 @@ const KidsMode = ({ isVisible, onClose }) => {
         <TrainJourney
           mode="kalimas"
           theme={selectedAlphabetTheme}
+          isPremium={isPremium}
           onEnterStation={(kalimaIndex) => {
             console.log('Learning Kalima:', kalimaIndex + 1);
           }}
@@ -1003,6 +1015,7 @@ const KidsMode = ({ isVisible, onClose }) => {
         <TrainJourney
           mode="alphabet"
           theme={selectedAlphabetTheme}
+          isPremium={isPremium}
           onEnterStation={(letterIndex) => {
             // Handle letter selection
             console.log('Learning letter:', ARABIC_ALPHABET[letterIndex]);
@@ -1055,6 +1068,7 @@ const KidsMode = ({ isVisible, onClose }) => {
         <TrainJourney
           mode="surahs"
           theme="train"
+          isPremium={isPremium}
           onEnterStation={handleEnterStation}
           onBack={handleBackToMenu}
         />

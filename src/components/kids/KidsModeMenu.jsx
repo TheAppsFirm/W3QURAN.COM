@@ -12,8 +12,11 @@
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Icons } from '../common/Icons';
+import { useAuth } from '../../contexts/AuthContext';
+import KidsPremiumGate from './KidsPremiumGate';
 
 // Arabic Alphabet learning journeys - all show the same alphabet with different themes
+// premium: true means the theme requires premium subscription
 const ALPHABET_JOURNEYS = [
   {
     id: 'alphabet-train',
@@ -27,6 +30,7 @@ const ALPHABET_JOURNEYS = [
     bgPattern: 'train',
     theme: 'train',
     letterDisplay: 'أ ب ت',
+    premium: false, // Free
   },
   {
     id: 'alphabet-garden',
@@ -40,6 +44,7 @@ const ALPHABET_JOURNEYS = [
     bgPattern: 'garden',
     theme: 'garden',
     letterDisplay: 'أ ب ت',
+    premium: true, // Premium
   },
   {
     id: 'alphabet-seert',
@@ -53,10 +58,12 @@ const ALPHABET_JOURNEYS = [
     bgPattern: 'seert',
     theme: 'seert',
     letterDisplay: 'أ ب ت',
+    premium: true, // Premium
   },
 ];
 
 // Theme configurations for Surah journeys
+// premium: true means the theme requires premium subscription
 const THEMES = [
   {
     id: 'train',
@@ -69,6 +76,7 @@ const THEMES = [
     glowColor: 'cyan',
     bgPattern: 'train',
     mode: 'surahs',
+    premium: false, // Free theme
   },
   {
     id: 'garden',
@@ -81,6 +89,7 @@ const THEMES = [
     glowColor: 'pink',
     bgPattern: 'garden',
     mode: 'surahs',
+    premium: true, // Premium theme
   },
   {
     id: 'seert',
@@ -93,6 +102,7 @@ const THEMES = [
     glowColor: 'amber',
     bgPattern: 'desert',
     mode: 'surahs',
+    premium: true, // Premium theme
   },
 ];
 
@@ -142,7 +152,7 @@ const FloatingParticle = ({ emoji, delay, duration, startX, startY }) => (
 );
 
 // Theme Card component with 3D tilt effect
-const ThemeCard = ({ theme, onSelect, index }) => {
+const ThemeCard = ({ theme, onSelect, index, isLocked = false, onLockedClick }) => {
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const [isHovered, setIsHovered] = useState(false);
 
@@ -183,7 +193,7 @@ const ThemeCard = ({ theme, onSelect, index }) => {
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       onMouseEnter={handleMouseEnter}
-      onClick={() => onSelect(theme.id, theme.mode || 'surahs')}
+      onClick={() => isLocked ? onLockedClick?.(theme.id) : onSelect(theme.id, theme.mode || 'surahs')}
     >
       {/* Glow effect */}
       <div
@@ -193,6 +203,18 @@ const ThemeCard = ({ theme, onSelect, index }) => {
           bg-gradient-to-r ${theme.gradient}
         `}
       />
+
+      {/* Lock overlay for premium themes */}
+      {isLocked && (
+        <div className="absolute inset-0 z-20 rounded-xl sm:rounded-2xl bg-black/40 backdrop-blur-[2px] flex items-center justify-center">
+          <div className="flex flex-col items-center">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-r from-amber-400 to-orange-500 flex items-center justify-center shadow-lg">
+              <Icons.Lock className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+            </div>
+            <span className="text-white text-[10px] sm:text-xs font-bold mt-1 drop-shadow">PREMIUM</span>
+          </div>
+        </div>
+      )}
 
       {/* Card body */}
       <div
@@ -206,10 +228,11 @@ const ThemeCard = ({ theme, onSelect, index }) => {
           h-[140px] sm:h-[165px]
           flex flex-col items-center justify-between
           transform-gpu
+          ${isLocked ? 'opacity-80' : ''}
         `}
       >
         {/* Sparkle decorations */}
-        {isHovered && (
+        {isHovered && !isLocked && (
           <>
             <Sparkle style={{ top: '10%', left: '10%' }} delay={0} />
             <Sparkle style={{ top: '20%', right: '15%' }} delay={0.3} />
@@ -289,7 +312,7 @@ const ThemeCard = ({ theme, onSelect, index }) => {
 };
 
 // Alphabet Card component - matching ThemeCard style
-const AlphabetCard = ({ section, onSelect, index }) => {
+const AlphabetCard = ({ section, onSelect, index, isLocked = false, onLockedClick }) => {
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const [isHovered, setIsHovered] = useState(false);
 
@@ -333,7 +356,7 @@ const AlphabetCard = ({ section, onSelect, index }) => {
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       onMouseEnter={handleMouseEnter}
-      onClick={() => onSelect(section.id, section.theme || 'train')}
+      onClick={() => isLocked ? onLockedClick?.(section.theme) : onSelect(section.id, section.theme || 'train')}
     >
       {/* Glow effect */}
       <div
@@ -343,6 +366,18 @@ const AlphabetCard = ({ section, onSelect, index }) => {
           bg-gradient-to-r ${section.gradient}
         `}
       />
+
+      {/* Lock overlay for premium themes */}
+      {isLocked && (
+        <div className="absolute inset-0 z-20 rounded-xl sm:rounded-2xl bg-black/40 backdrop-blur-[2px] flex items-center justify-center">
+          <div className="flex flex-col items-center">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-r from-amber-400 to-orange-500 flex items-center justify-center shadow-lg">
+              <Icons.Lock className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+            </div>
+            <span className="text-white text-[10px] sm:text-xs font-bold mt-1 drop-shadow">PREMIUM</span>
+          </div>
+        </div>
+      )}
 
       {/* Card body */}
       <div
@@ -356,10 +391,11 @@ const AlphabetCard = ({ section, onSelect, index }) => {
           h-[140px] sm:h-[165px]
           flex flex-col items-center justify-between
           transform-gpu
+          ${isLocked ? 'opacity-80' : ''}
         `}
       >
-        {/* Sparkle decorations - hide on mobile for performance */}
-        {isHovered && (
+        {/* Sparkle decorations - hide on mobile for performance and when locked */}
+        {isHovered && !isLocked && (
           <div className="hidden sm:block">
             <Sparkle style={{ top: '10%', left: '10%' }} delay={0} />
             <Sparkle style={{ top: '20%', right: '15%' }} delay={0.3} />
@@ -855,9 +891,26 @@ const SpecialJourneyCard = ({ journey, onSelect, index }) => {
 // Main Menu Component
 const KidsModeMenu = ({ onSelectTheme, onSelectAlphabet, onSelectSpecialJourney, isMuted = false, onToggleMute }) => {
   const [sparkles, setSparkles] = useState([]);
+  const [showPremiumGate, setShowPremiumGate] = useState(false);
+  const [lockedTheme, setLockedTheme] = useState(null);
+
+  // Get auth state
+  const { isPremium } = useAuth();
 
   // Play background music
   useBackgroundMusic(isMuted);
+
+  // Handle locked theme click
+  const handleLockedClick = useCallback((themeId) => {
+    setLockedTheme(themeId);
+    setShowPremiumGate(true);
+  }, []);
+
+  // Check if a theme is locked (premium themes for non-premium users)
+  const isThemeLocked = useCallback((theme) => {
+    if (isPremium) return false;
+    return theme.premium === true || theme.theme === 'garden' || theme.theme === 'seert';
+  }, [isPremium]);
 
   // Generate random sparkles on mount
   useEffect(() => {
@@ -958,12 +1011,16 @@ const KidsModeMenu = ({ onSelectTheme, onSelectAlphabet, onSelectSpecialJourney,
                 section={ALPHABET_JOURNEYS[0]}
                 onSelect={onSelectAlphabet || (() => {})}
                 index={0}
+                isLocked={isThemeLocked(ALPHABET_JOURNEYS[0])}
+                onLockedClick={handleLockedClick}
               />
               <ThemeCard
                 key={THEMES[0].id}
                 theme={THEMES[0]}
                 onSelect={onSelectTheme}
                 index={1}
+                isLocked={isThemeLocked(THEMES[0])}
+                onLockedClick={handleLockedClick}
               />
               {/* Row 2: Letter Garden + Garden Path */}
               <AlphabetCard
@@ -971,12 +1028,16 @@ const KidsModeMenu = ({ onSelectTheme, onSelectAlphabet, onSelectSpecialJourney,
                 section={ALPHABET_JOURNEYS[1]}
                 onSelect={onSelectAlphabet || (() => {})}
                 index={2}
+                isLocked={isThemeLocked(ALPHABET_JOURNEYS[1])}
+                onLockedClick={handleLockedClick}
               />
               <ThemeCard
                 key={THEMES[1].id}
                 theme={THEMES[1]}
                 onSelect={onSelectTheme}
                 index={3}
+                isLocked={isThemeLocked(THEMES[1])}
+                onLockedClick={handleLockedClick}
               />
               {/* Row 3: Desert Letters + Desert Caravan */}
               <AlphabetCard
@@ -984,12 +1045,16 @@ const KidsModeMenu = ({ onSelectTheme, onSelectAlphabet, onSelectSpecialJourney,
                 section={ALPHABET_JOURNEYS[2]}
                 onSelect={onSelectAlphabet || (() => {})}
                 index={4}
+                isLocked={isThemeLocked(ALPHABET_JOURNEYS[2])}
+                onLockedClick={handleLockedClick}
               />
               <ThemeCard
                 key={THEMES[2].id}
                 theme={THEMES[2]}
                 onSelect={onSelectTheme}
                 index={5}
+                isLocked={isThemeLocked(THEMES[2])}
+                onLockedClick={handleLockedClick}
               />
             </div>
             {/* Prophet's Life - Special Journey (full width) */}
@@ -1017,6 +1082,8 @@ const KidsModeMenu = ({ onSelectTheme, onSelectAlphabet, onSelectSpecialJourney,
                   section={section}
                   onSelect={onSelectAlphabet || (() => {})}
                   index={index}
+                  isLocked={isThemeLocked(section)}
+                  onLockedClick={handleLockedClick}
                 />
               ))}
             </div>
@@ -1043,6 +1110,8 @@ const KidsModeMenu = ({ onSelectTheme, onSelectAlphabet, onSelectSpecialJourney,
                   theme={theme}
                   onSelect={onSelectTheme}
                   index={index}
+                  isLocked={isThemeLocked(theme)}
+                  onLockedClick={handleLockedClick}
                 />
               ))}
             </div>
@@ -1131,6 +1200,17 @@ const KidsModeMenu = ({ onSelectTheme, onSelectAlphabet, onSelectSpecialJourney,
           font-family: 'Scheherazade New', 'Amiri', serif;
         }
       `}</style>
+
+      {/* Premium Gate Modal */}
+      {showPremiumGate && (
+        <KidsPremiumGate
+          onClose={() => {
+            setShowPremiumGate(false);
+            setLockedTheme(null);
+          }}
+          lockedTheme={lockedTheme}
+        />
+      )}
     </div>
   );
 };
