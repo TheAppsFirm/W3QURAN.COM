@@ -8,25 +8,27 @@
  * - All features integrated beautifully
  */
 
-import { useState, useEffect, useRef, useCallback, memo, useMemo } from 'react';
+import { useState, useEffect, useRef, useCallback, memo, useMemo, lazy, Suspense } from 'react';
 import { Icons } from './Icons';
 import YouTubePlayer from './YouTubePlayer';
-import VerseArtGenerator from './VerseArtGenerator';
-import EmotionalTracker, { MoodEntryForm } from './EmotionalTracker';
-import AyahConnectionMap from './AyahConnectionMap';
-import ScholarVideoSync from './ScholarVideoSync';
-// Innovative Features
-import LivingVisualization from './LivingVisualization';
-import TimeCapsule from './TimeCapsule';
-import VoiceControl from './VoiceControl';
-import HeartbeatMeditation from './HeartbeatMeditation';
-import FamilyCircle from './FamilyCircle';
-import { trackReadingActivity } from './GlobalUmmahPulse';
-import { TreebankOverlay } from './TreebankAnalysis';
+// trackReadingActivity is dynamically imported at call site to avoid pulling in GlobalUmmahPulse
+
+// Lazy-loaded feature components (only loaded when user activates them)
+const VerseArtGenerator = lazy(() => import('./VerseArtGenerator'));
+const EmotionalTracker = lazy(() => import('./EmotionalTracker'));
+const MoodEntryForm = lazy(() => import('./EmotionalTracker').then(m => ({ default: m.MoodEntryForm })));
+const AyahConnectionMap = lazy(() => import('./AyahConnectionMap'));
+const ScholarVideoSync = lazy(() => import('./ScholarVideoSync'));
+const LivingVisualization = lazy(() => import('./LivingVisualization'));
+const TimeCapsule = lazy(() => import('./TimeCapsule'));
+const VoiceControl = lazy(() => import('./VoiceControl'));
+const HeartbeatMeditation = lazy(() => import('./HeartbeatMeditation'));
+const FamilyCircle = lazy(() => import('./FamilyCircle'));
+const TreebankOverlay = lazy(() => import('./TreebankAnalysis').then(m => ({ default: m.TreebankOverlay })));
 import { hasTreebankData, canAccessTreebank, hasOntologyData } from '../../data/treebank/index';
 import { PALETTES, SURAHS, fetchTafseer, getTafseersByLanguage, getDefaultTafseer, TRANSLATION_TO_TAFSEER_LANG, getVideosForSurah, generateSearchQuery, SCHOLARS, SURAH_TOPICS, TAFSEER_SOURCES, markAyahRead } from '../../data';
 import { OVERLAY_THEMES, LAYOUT_TO_OVERLAY_THEME, getOverlayTheme, resolveGradient } from '../../data/themes';
-import { useQuranAPI, useMultilingualWords, TRANSLATIONS, TAJWEED_RULES, POS_LABELS } from '../../hooks/useQuranAPI';
+import { useQuranAPI, useMultilingualWords, TRANSLATIONS } from '../../hooks/useQuranAPI';
 import { speakText, getTranslationAudioSource, getTranslationAudioUrl, getAvailableTranslationAudio, TRANSLATION_RECITERS, getGlobalAyahNumber } from '../../hooks/useAudioPlayer';
 import { useLocalStorage, useIsMobile } from '../../hooks';
 import { logReadingSession, trackSurahCompletion, trackFeatureUsage } from '../../utils/trackingUtils';
@@ -2351,7 +2353,7 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
   // Track reading activity for Global Ummah Pulse
   useEffect(() => {
     if (surah?.id) {
-      trackReadingActivity(surah.id).catch(() => {});
+      import('./GlobalUmmahPulse').then(m => m.trackReadingActivity(surah.id)).catch(() => {});
     }
   }, [surah?.id]);
 
@@ -3340,8 +3342,10 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
         onOpenArtGenerator={() => setShowArtGenerator(true)}
       />
 
+      {/* Lazy-loaded feature overlays */}
+      <Suspense fallback={null}>
       {/* Verse Art Generator */}
-      <VerseArtGenerator
+      {showArtGenerator && <VerseArtGenerator
         isVisible={showArtGenerator}
         onClose={() => setShowArtGenerator(false)}
         verseArabic={shareVerseData?.arabic || currentVerse?.arabic}
@@ -3349,26 +3353,26 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
         surahName={surah.name}
         surahId={surah.id}
         ayahNumber={shareVerseData?.ayahNumber || currentAyah}
-      />
+      />}
 
       {/* Emotional Journey Tracker */}
-      <EmotionalTracker
+      {showEmotionalTracker && <EmotionalTracker
         isVisible={showEmotionalTracker}
         onClose={() => setShowEmotionalTracker(false)}
-      />
+      />}
 
       {/* Mood Entry Form - shown after reading */}
-      <MoodEntryForm
+      {showMoodEntry && <MoodEntryForm
         isVisible={showMoodEntry}
         onClose={() => { setShowMoodEntry(false); onClose(); }}
         surahId={surah.id}
         surahName={surah.name}
         readingDuration={Math.round((Date.now() - startTime.current) / 60000)}
         versesRead={currentAyah}
-      />
+      />}
 
       {/* Ayah Connection Map */}
-      <AyahConnectionMap
+      {showConnectionMap && <AyahConnectionMap
         isVisible={showConnectionMap}
         onClose={() => setShowConnectionMap(false)}
         initialSurah={surah.id}
@@ -3385,24 +3389,24 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
           }
           setShowConnectionMap(false);
         }}
-      />
+      />}
 
       {/* Scholar Video Sync */}
-      <ScholarVideoSync
+      {showScholarSync && <ScholarVideoSync
         isVisible={showScholarSync}
         onClose={() => setShowScholarSync(false)}
         surahId={surah.id}
         surahName={surah.name}
         currentAyah={currentAyah}
         onAyahChange={setCurrentAyah}
-      />
+      />}
 
       {/* ============================================ */}
       {/* INNOVATIVE FEATURES */}
       {/* ============================================ */}
 
       {/* Living Quran Visualization */}
-      <LivingVisualization
+      {showLivingVisualization && <LivingVisualization
         isVisible={showLivingVisualization}
         onClose={() => setShowLivingVisualization(false)}
         onNavigateToVerse={(surahId, ayahNum) => {
@@ -3417,10 +3421,10 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
           }
           setShowLivingVisualization(false);
         }}
-      />
+      />}
 
       {/* Quran Time Capsule */}
-      <TimeCapsule
+      {showTimeCapsule && <TimeCapsule
         isVisible={showTimeCapsule}
         onClose={() => setShowTimeCapsule(false)}
         currentVerseRef={`${surah.id}:${currentAyah}`}
@@ -3436,10 +3440,10 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
           }
           setShowTimeCapsule(false);
         }}
-      />
+      />}
 
       {/* Voice Control */}
-      <VoiceControl
+      {showVoiceControl && <VoiceControl
         isVisible={showVoiceControl}
         onClose={() => setShowVoiceControl(false)}
         onNavigateSurah={(surahId) => {
@@ -3461,16 +3465,16 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
         onBookmark={() => setLeftFeature('bookmark')}
         onShare={() => setLeftFeature('share')}
         onGoBack={onClose}
-      />
+      />}
 
       {/* Heartbeat Meditation */}
-      <HeartbeatMeditation
+      {showMeditation && <HeartbeatMeditation
         isVisible={showMeditation}
         onClose={() => setShowMeditation(false)}
-      />
+      />}
 
       {/* Family Quran Circle */}
-      <FamilyCircle
+      {showFamilyCircle && <FamilyCircle
         isVisible={showFamilyCircle}
         onClose={() => setShowFamilyCircle(false)}
         onNavigateToSurah={(surahId) => {
@@ -3478,7 +3482,8 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
           if (targetSurah) goToSurah(targetSurah);
           setShowFamilyCircle(false);
         }}
-      />
+      />}
+      </Suspense>
 
       {/* Top Feature Buttons Bar */}
       <div
@@ -4500,23 +4505,25 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
       </div>
 
       {/* Treebank Grammar Analysis Overlay */}
-      <TreebankOverlay
-        surahId={surah?.id}
-        ayahNum={treebankAyah}
-        isVisible={showTreebank}
-        onClose={() => {
-          setShowTreebank(false);
-          setTreebankAyah(null);
-        }}
-        isPremium={isPremium}
-        onUpgrade={() => {
-          setShowTreebank(false);
-          setUpgradeFeature('treebank');
-          setShowUpgradePrompt(true);
-        }}
-        translationId={selectedTranslation}
-        verseTranslation={treebankAyah ? verses[treebankAyah - 1]?.translation : null}
-      />
+      {showTreebank && <Suspense fallback={null}>
+        <TreebankOverlay
+          surahId={surah?.id}
+          ayahNum={treebankAyah}
+          isVisible={showTreebank}
+          onClose={() => {
+            setShowTreebank(false);
+            setTreebankAyah(null);
+          }}
+          isPremium={isPremium}
+          onUpgrade={() => {
+            setShowTreebank(false);
+            setUpgradeFeature('treebank');
+            setShowUpgradePrompt(true);
+          }}
+          translationId={selectedTranslation}
+          verseTranslation={treebankAyah ? verses[treebankAyah - 1]?.translation : null}
+        />
+      </Suspense>}
 
       {/* Premium Upgrade Prompt Modal */}
       {showUpgradePrompt && (
