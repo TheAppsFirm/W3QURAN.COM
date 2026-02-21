@@ -93,7 +93,7 @@ function SettingsView({ darkMode, setDarkMode, onNavigate }) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify({ product }),
+        body: JSON.stringify({ product, source: 'general' }),
       });
       const data = await res.json();
       if (data.url) {

@@ -116,7 +116,11 @@ export async function onRequest(context) {
 
     const requestBody = await request.json();
     // Support both 'product' and 'productType' field names for backwards compatibility
-    const { product, productType: productTypeField, priceId: legacyPriceId, successUrl: customSuccessUrl, cancelUrl: customCancelUrl } = requestBody;
+    const { product, productType: productTypeField, priceId: legacyPriceId, successUrl: customSuccessUrl, cancelUrl: customCancelUrl, source: requestSource } = requestBody;
+
+    // Sanitize source field
+    const ALLOWED_SOURCES = ['kids', 'talk_to_quran', 'general'];
+    const source = ALLOWED_SOURCES.includes(requestSource) ? requestSource : 'general';
 
     // SECURITY: Simple rate limiting using KV (1 checkout attempt per 10 seconds)
     const rateLimitKey = `checkout_${userResult.id}`;
@@ -264,12 +268,14 @@ export async function onRequest(context) {
       delete params['customer_email'];
     }
 
-    // Create Stripe checkout session
+    // Create Stripe checkout session (with idempotency key to prevent duplicates on retry)
+    const idempotencyKey = `checkout_${userResult.id}_${productType}_${Math.floor(Date.now() / 30000)}`;
     const stripeResponse = await fetch('https://api.stripe.com/v1/checkout/sessions', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${secretKey}`,
         'Content-Type': 'application/x-www-form-urlencoded',
+        'Idempotency-Key': idempotencyKey,
       },
       body: new URLSearchParams(params),
     });
@@ -288,6 +294,34 @@ export async function onRequest(context) {
     }
 
     const session = await stripeResponse.json();
+
+    // Track payment initiation for analytics
+    try {
+      await env.DB.prepare(`
+        CREATE TABLE IF NOT EXISTS payment_initiations (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          user_id TEXT NOT NULL,
+          email TEXT,
+          name TEXT,
+          product_type TEXT NOT NULL,
+          source TEXT DEFAULT 'general',
+          status TEXT DEFAULT 'initiated',
+          stripe_session_id TEXT,
+          created_at TEXT DEFAULT (datetime('now')),
+          completed_at TEXT
+        )
+      `).run();
+
+      await env.DB.prepare(`
+        INSERT INTO payment_initiations (user_id, email, product_type, source, stripe_session_id)
+        VALUES (?, ?, ?, ?, ?)
+      `).bind(userResult.id, userResult.email, productType, source, session.id).run();
+
+      console.log('[Stripe] Payment initiation tracked:', { userId: userResult.id, productType, source });
+    } catch (trackErr) {
+      // Don't fail checkout if tracking fails
+      console.error('[Stripe] Failed to track payment initiation:', trackErr);
+    }
 
     return new Response(JSON.stringify({ url: session.url }), {
       status: 200,

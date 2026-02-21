@@ -178,6 +178,19 @@ export async function onRequest(context) {
           break;
         }
 
+        // Update payment initiation status to completed
+        try {
+          if (session.id) {
+            await env.DB.prepare(`
+              UPDATE payment_initiations
+              SET status = 'completed', completed_at = datetime('now')
+              WHERE stripe_session_id = ?
+            `).bind(session.id).run();
+          }
+        } catch (e) {
+          console.error('[Stripe Webhook] Failed to update payment initiation:', e);
+        }
+
         // Ensure user has credits record
         await ensureUserCredits(env, userId);
 
@@ -248,14 +261,26 @@ export async function onRequest(context) {
             WHERE user_id = ?
           `).bind(config.credits, config.credits, nextResetDate, userId).run();
 
-          // Update subscriptions table
-          await env.DB.prepare(`
-            UPDATE subscriptions
-            SET stripe_customer_id = ?,
-                plan = 'lifetime',
-                status = 'active'
-            WHERE user_id = ?
-          `).bind(customerId, userId).run();
+          // Update subscriptions table (INSERT if row doesn't exist yet)
+          const subExists = await env.DB.prepare(
+            `SELECT 1 FROM subscriptions WHERE user_id = ?`
+          ).bind(userId).first();
+
+          if (subExists) {
+            await env.DB.prepare(`
+              UPDATE subscriptions
+              SET stripe_customer_id = ?,
+                  plan = 'lifetime',
+                  status = 'active'
+              WHERE user_id = ?
+            `).bind(customerId, userId).run();
+          } else {
+            const subId = `sub_lt_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`;
+            await env.DB.prepare(`
+              INSERT INTO subscriptions (id, user_id, stripe_customer_id, plan, status)
+              VALUES (?, ?, ?, 'lifetime', 'active')
+            `).bind(subId, userId, customerId).run();
+          }
 
           await logTransaction(env, userId, 'purchase', config.credits, 'Lifetime subscription activated');
           console.log('[Stripe Webhook] Lifetime activated for user:', userId);
@@ -404,6 +429,22 @@ export async function onRequest(context) {
           SET status = 'past_due'
           WHERE stripe_customer_id = ?
         `).bind(customerId).run();
+
+        // Update any pending payment initiations for this customer to failed
+        try {
+          const sub = await env.DB.prepare(`
+            SELECT user_id FROM subscriptions WHERE stripe_customer_id = ?
+          `).bind(customerId).first();
+          if (sub) {
+            await env.DB.prepare(`
+              UPDATE payment_initiations
+              SET status = 'failed'
+              WHERE user_id = ? AND status = 'initiated'
+            `).bind(sub.user_id).run();
+          }
+        } catch (e) {
+          console.error('[Stripe Webhook] Failed to update payment initiation on failure:', e);
+        }
 
         console.log('[Stripe Webhook] Payment failed for customer:', customerId);
         break;

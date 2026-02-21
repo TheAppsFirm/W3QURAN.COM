@@ -148,6 +148,7 @@ const KidsPremiumGate = ({ onClose, feature = 'premium', lockedTheme = null }) =
         credentials: 'include',
         body: JSON.stringify({
           productType: planId,
+          source: 'kids',
           successUrl: `${window.location.origin}/?payment_success=1`,
           cancelUrl: `${window.location.origin}/?payment_canceled=1`,
         }),

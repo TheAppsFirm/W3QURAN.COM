@@ -893,7 +893,7 @@ export default function TalkToQuran({ isVisible, onClose, onNavigate }) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify({ product: 'premium_monthly' }), // Premium monthly
+        body: JSON.stringify({ product: 'premium_monthly', source: 'talk_to_quran' }),
       });
 
       console.log('[TalkToQuran] Checkout response status:', res.status);

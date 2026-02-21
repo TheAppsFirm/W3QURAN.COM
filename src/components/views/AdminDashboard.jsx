@@ -1506,6 +1506,271 @@ const AnalyticsPanel = () => {
   );
 };
 
+// Payment Analytics Panel
+const PaymentsPanel = () => {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);
+  const [statusFilter, setStatusFilter] = useState('');
+  const [sourceFilter, setSourceFilter] = useState('');
+
+  const fetchPayments = useCallback(async () => {
+    setLoading(true);
+    try {
+      const params = new URLSearchParams({
+        page: page.toString(),
+        limit: '20',
+        ...(statusFilter && { status: statusFilter }),
+        ...(sourceFilter && { source: sourceFilter }),
+      });
+      const res = await fetch(`/api/admin/payment-analytics?${params}`, { credentials: 'include' });
+      if (res.ok) {
+        setData(await res.json());
+      }
+    } catch (err) {
+      console.error('[PaymentsPanel] Error:', err);
+    }
+    setLoading(false);
+  }, [page, statusFilter, sourceFilter]);
+
+  useEffect(() => { fetchPayments(); }, [fetchPayments]);
+
+  if (loading && !data) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="w-8 h-8 border-2 border-purple-500 border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
+
+  if (!data) return <p className="text-white/50 text-center py-12">No payment data available</p>;
+
+  const { summary, bySource, byProduct, list, pagination } = data;
+
+  // Aggregate source breakdown
+  const sourceAgg = {};
+  (bySource || []).forEach(r => {
+    if (!sourceAgg[r.source]) sourceAgg[r.source] = { total: 0, completed: 0 };
+    sourceAgg[r.source].total += r.count;
+    if (r.status === 'completed') sourceAgg[r.source].completed += r.count;
+  });
+
+  // Aggregate product breakdown
+  const productAgg = {};
+  (byProduct || []).forEach(r => {
+    if (!productAgg[r.product_type]) productAgg[r.product_type] = { total: 0, completed: 0 };
+    productAgg[r.product_type].total += r.count;
+    if (r.status === 'completed') productAgg[r.product_type].completed += r.count;
+  });
+
+  const statusColors = {
+    initiated: 'bg-amber-500/20 text-amber-300',
+    completed: 'bg-green-500/20 text-green-300',
+    failed: 'bg-red-500/20 text-red-300',
+    abandoned: 'bg-gray-500/20 text-gray-300',
+  };
+
+  const sourceLabels = {
+    kids: 'Kids Mode',
+    talk_to_quran: 'Talk to Quran',
+    general: 'Settings / General',
+  };
+
+  return (
+    <div className="space-y-6">
+      {/* Stat Cards */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <StatCard
+          title="Total Initiations"
+          value={summary.totalInitiated}
+          icon={Icons.CreditCard}
+          color="#A855F7"
+        />
+        <StatCard
+          title="Completed"
+          value={summary.completed}
+          subtitle={`${summary.conversionRate}% conversion`}
+          icon={Icons.Check}
+          color="#10B981"
+        />
+        <StatCard
+          title="Failed"
+          value={summary.failed}
+          icon={Icons.AlertCircle}
+          color="#EF4444"
+        />
+        <StatCard
+          title="Abandoned"
+          value={summary.abandoned}
+          subtitle="Initiated but not completed"
+          icon={Icons.Clock}
+          color="#F59E0B"
+        />
+      </div>
+
+      {/* Breakdowns */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* By Source */}
+        <div className="bg-white/5 rounded-2xl p-5 border border-white/10">
+          <h3 className="text-sm font-semibold text-white/70 mb-3">By Source</h3>
+          <div className="space-y-2">
+            {Object.entries(sourceAgg).map(([src, vals]) => (
+              <div key={src} className="flex items-center justify-between">
+                <span className="text-white text-sm">{sourceLabels[src] || src}</span>
+                <div className="flex items-center gap-2">
+                  <span className="text-white/50 text-xs">{vals.completed}/{vals.total} completed</span>
+                  <span className="text-white font-medium text-sm">{vals.total}</span>
+                </div>
+              </div>
+            ))}
+            {Object.keys(sourceAgg).length === 0 && (
+              <p className="text-white/30 text-sm">No data yet</p>
+            )}
+          </div>
+        </div>
+
+        {/* By Product */}
+        <div className="bg-white/5 rounded-2xl p-5 border border-white/10">
+          <h3 className="text-sm font-semibold text-white/70 mb-3">By Product</h3>
+          <div className="space-y-2">
+            {Object.entries(productAgg).map(([prod, vals]) => (
+              <div key={prod} className="flex items-center justify-between">
+                <span className="text-white text-sm capitalize">{prod.replace(/_/g, ' ')}</span>
+                <div className="flex items-center gap-2">
+                  <span className="text-white/50 text-xs">{vals.completed}/{vals.total}</span>
+                  <span className="text-white font-medium text-sm">{vals.total}</span>
+                </div>
+              </div>
+            ))}
+            {Object.keys(productAgg).length === 0 && (
+              <p className="text-white/30 text-sm">No data yet</p>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Filters + Table */}
+      <div className="bg-white/5 rounded-2xl border border-white/10 overflow-hidden">
+        <div className="p-4 border-b border-white/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+          <h3 className="text-lg font-bold text-white">Payment Initiations</h3>
+          <div className="flex gap-2 flex-wrap">
+            <select
+              value={statusFilter}
+              onChange={(e) => { setStatusFilter(e.target.value); setPage(1); }}
+              className="bg-white/10 text-white text-xs rounded-lg px-3 py-1.5 border border-white/20 outline-none"
+            >
+              <option value="">All Status</option>
+              <option value="initiated">Initiated</option>
+              <option value="completed">Completed</option>
+              <option value="failed">Failed</option>
+            </select>
+            <select
+              value={sourceFilter}
+              onChange={(e) => { setSourceFilter(e.target.value); setPage(1); }}
+              className="bg-white/10 text-white text-xs rounded-lg px-3 py-1.5 border border-white/20 outline-none"
+            >
+              <option value="">All Sources</option>
+              <option value="kids">Kids Mode</option>
+              <option value="talk_to_quran">Talk to Quran</option>
+              <option value="general">General</option>
+            </select>
+          </div>
+        </div>
+
+        {loading ? (
+          <div className="flex items-center justify-center py-12">
+            <div className="w-6 h-6 border-2 border-purple-500 border-t-transparent rounded-full animate-spin" />
+          </div>
+        ) : (
+          <>
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="border-b border-white/10 bg-white/5">
+                    <th className="text-left py-3 px-4 text-white/60 text-sm font-medium">User</th>
+                    <th className="text-left py-3 px-4 text-white/60 text-sm font-medium">Plan</th>
+                    <th className="text-left py-3 px-4 text-white/60 text-sm font-medium">Source</th>
+                    <th className="text-left py-3 px-4 text-white/60 text-sm font-medium">Status</th>
+                    <th className="text-left py-3 px-4 text-white/60 text-sm font-medium">Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {list.length === 0 ? (
+                    <tr>
+                      <td colSpan={5} className="py-12 text-center text-white/40 text-sm">
+                        No payment initiations found
+                      </td>
+                    </tr>
+                  ) : list.map((item) => (
+                    <tr key={item.id} className="border-b border-white/10 hover:bg-white/5">
+                      <td className="py-3 px-4">
+                        <div className="flex items-center gap-2">
+                          {item.user_picture ? (
+                            <img src={item.user_picture} alt="" className="w-7 h-7 rounded-full" />
+                          ) : (
+                            <div className="w-7 h-7 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center">
+                              <span className="text-white text-[10px] font-bold">
+                                {(item.user_name || item.user_email || '?')[0]}
+                              </span>
+                            </div>
+                          )}
+                          <div>
+                            <p className="text-white text-sm">{item.user_name || 'Unknown'}</p>
+                            <p className="text-white/50 text-xs">{item.user_email || item.email}</p>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="py-3 px-4">
+                        <span className="text-white text-sm capitalize">{item.product_type?.replace(/_/g, ' ')}</span>
+                      </td>
+                      <td className="py-3 px-4">
+                        <span className="text-white/70 text-sm">{sourceLabels[item.source] || item.source}</span>
+                      </td>
+                      <td className="py-3 px-4">
+                        <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${statusColors[item.status] || 'bg-gray-500/20 text-gray-300'}`}>
+                          {item.status}
+                        </span>
+                      </td>
+                      <td className="py-3 px-4 text-white/50 text-xs">
+                        {new Date(item.created_at).toLocaleString()}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Pagination */}
+            {pagination && pagination.totalPages > 1 && (
+              <div className="flex items-center justify-between p-4 border-t border-white/10">
+                <p className="text-white/50 text-xs">
+                  Page {pagination.page} of {pagination.totalPages} ({pagination.total} total)
+                </p>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setPage(p => Math.max(1, p - 1))}
+                    disabled={page <= 1}
+                    className="px-3 py-1 rounded-lg bg-white/10 text-white text-xs hover:bg-white/20 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                  >
+                    Previous
+                  </button>
+                  <button
+                    onClick={() => setPage(p => Math.min(pagination.totalPages, p + 1))}
+                    disabled={page >= pagination.totalPages}
+                    className="px-3 py-1 rounded-lg bg-white/10 text-white text-xs hover:bg-white/20 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                  >
+                    Next
+                  </button>
+                </div>
+              </div>
+            )}
+          </>
+        )}
+      </div>
+    </div>
+  );
+};
+
 export default function AdminDashboard({ onClose, initialTab = 'overview', onTabChange }) {
   const { user, isAuthenticated, isAdmin, loading: authLoading } = useAuth();
 
@@ -1726,6 +1991,7 @@ export default function AdminDashboard({ onClose, initialTab = 'overview', onTab
             { id: 'users', label: 'Users', icon: Icons.Users },
             { id: 'logs', label: 'Logs', icon: Icons.FileText },
             { id: 'transactions', label: 'Transactions', icon: Icons.CreditCard },
+            { id: 'payments', label: 'Payments', icon: Icons.DollarSign },
             { id: 'settings', label: 'Settings', icon: Icons.Settings },
           ].map(tab => (
             <button
@@ -1967,6 +2233,9 @@ export default function AdminDashboard({ onClose, initialTab = 'overview', onTab
                 </div>
               </div>
             )}
+
+            {/* Payments Tab */}
+            {activeTab === 'payments' && <PaymentsPanel />}
 
             {/* Settings Tab */}
             {activeTab === 'settings' && (
