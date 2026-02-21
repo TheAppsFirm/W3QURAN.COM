@@ -45,7 +45,7 @@ const SUBSCRIPTION_OPTIONS = [
 ];
 
 // Payment Result Popup Component
-const PaymentResultPopup = ({ success, onClose, onRetry }) => {
+const PaymentResultPopup = ({ success, canceled, onClose, onRetry }) => {
   return (
     <div className="fixed inset-0 z-[10001] flex items-center justify-center bg-black/80 backdrop-blur-sm">
       <div className="bg-white rounded-3xl p-8 max-w-sm mx-4 text-center shadow-2xl">
@@ -62,6 +62,28 @@ const PaymentResultPopup = ({ success, onClose, onRetry }) => {
             >
               Start Learning! 🚀
             </button>
+          </>
+        ) : canceled ? (
+          <>
+            <div className="text-7xl mb-4">🤔</div>
+            <h2 className="text-2xl font-bold text-amber-600 mb-2">Payment Canceled</h2>
+            <p className="text-gray-600 mb-6">
+              No worries! You can upgrade anytime to unlock all features.
+            </p>
+            <div className="space-y-2">
+              <button
+                onClick={onRetry}
+                className="w-full py-3 bg-gradient-to-r from-amber-400 to-orange-500 text-white font-bold rounded-xl hover:shadow-lg transition-all"
+              >
+                Try Again
+              </button>
+              <button
+                onClick={onClose}
+                className="w-full py-2 text-gray-500 hover:text-gray-700 transition-colors"
+              >
+                Continue with Free
+              </button>
+            </div>
           </>
         ) : (
           <>
@@ -107,7 +129,7 @@ const KidsPremiumGate = ({ onClose, feature = 'premium', lockedTheme = null }) =
       // Clean URL
       window.history.replaceState({}, '', window.location.pathname);
     } else if (params.get('payment_canceled') === '1') {
-      setPaymentResult('failed');
+      setPaymentResult('canceled');
       // Clean URL
       window.history.replaceState({}, '', window.location.pathname);
     }
@@ -206,6 +228,7 @@ const KidsPremiumGate = ({ onClose, feature = 'premium', lockedTheme = null }) =
     return (
       <PaymentResultPopup
         success={paymentResult === 'success'}
+        canceled={paymentResult === 'canceled'}
         onClose={handleResultClose}
         onRetry={() => setPaymentResult(null)}
       />
