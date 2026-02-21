@@ -18,38 +18,53 @@ import { SURAHS, MAX_AYAHS } from './data';
 import { useLocalStorage, isMobileDevice, BREAKPOINTS } from './hooks';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 
+// Auto-reload on stale chunk errors (happens after new deploys when cached index.js references old chunk hashes)
+const lazyWithRetry = (importFn) => lazy(() =>
+  importFn().catch(() => {
+    const hasReloaded = sessionStorage.getItem('chunk_reload');
+    if (!hasReloaded) {
+      sessionStorage.setItem('chunk_reload', '1');
+      window.location.reload();
+    }
+    return importFn();
+  })
+);
+
+// Clear reload flag on successful page load
+if (sessionStorage.getItem('chunk_reload')) sessionStorage.removeItem('chunk_reload');
+
 // Lazy-loaded views (only loaded when user navigates to them)
-const SettingsView = lazy(() => import('./components/views/SettingsView'));
-const AdminDashboard = lazy(() => import('./components/views/AdminDashboard'));
-const NamesOfAllahView = lazy(() => import('./components/views/NamesOfAllahView'));
-const QuizView = lazy(() => import('./components/views/QuizView'));
-const DailyVerseView = lazy(() => import('./components/views/DailyVerseView'));
-const StatisticsView = lazy(() => import('./components/views/StatisticsView'));
-const ListenView = lazy(() => import('./components/views/ListenView'));
-const DonateView = lazy(() => import('./components/views/DonateView'));
-const PrayerTimesView = lazy(() => import('./components/views/PrayerTimesView'));
-const PrivacyPolicyView = lazy(() => import('./components/views/PrivacyPolicyView'));
-const TermsOfServiceView = lazy(() => import('./components/views/TermsOfServiceView'));
+const SettingsView = lazyWithRetry(() => import('./components/views/SettingsView'));
+const AdminDashboard = lazyWithRetry(() => import('./components/views/AdminDashboard'));
+const NamesOfAllahView = lazyWithRetry(() => import('./components/views/NamesOfAllahView'));
+const QuizView = lazyWithRetry(() => import('./components/views/QuizView'));
+const DailyVerseView = lazyWithRetry(() => import('./components/views/DailyVerseView'));
+const StatisticsView = lazyWithRetry(() => import('./components/views/StatisticsView'));
+const ListenView = lazyWithRetry(() => import('./components/views/ListenView'));
+const DonateView = lazyWithRetry(() => import('./components/views/DonateView'));
+const PrayerTimesView = lazyWithRetry(() => import('./components/views/PrayerTimesView'));
+const PrivacyPolicyView = lazyWithRetry(() => import('./components/views/PrivacyPolicyView'));
+const TermsOfServiceView = lazyWithRetry(() => import('./components/views/TermsOfServiceView'));
 
 // Lazy-loaded modal features (only loaded when user opens them)
-const ProgressDashboard = lazy(() => import('./components/common/ProgressDashboard'));
-const OfflineManager = lazy(() => import('./components/common/OfflineManager'));
-const HifzMode = lazy(() => import('./components/common/HifzMode'));
-const SearchPanel = lazy(() => import('./components/common/SearchPanel'));
-const DonateModal = lazy(() => import('./components/common/DonateModal'));
-const WordSearchMap = lazy(() => import('./components/common/WordSearchMap'));
-const EmotionalTracker = lazy(() => import('./components/common/EmotionalTracker'));
-const ScholarVideoSync = lazy(() => import('./components/common/ScholarVideoSync'));
-const PropheticMap = lazy(() => import('./components/common/PropheticMap'));
-const QuranCompanionAI = lazy(() => import('./components/common/QuranCompanionAI'));
-const GlobalUmmahPulse = lazy(() => import('./components/common/GlobalUmmahPulse'));
-const VerseWeatherSync = lazy(() => import('./components/common/VerseWeatherSync'));
-const SoundHealingRoom = lazy(() => import('./components/common/SoundHealingRoom'));
-const QuranicBabyNames = lazy(() => import('./components/common/QuranicBabyNames'));
-const TalkToQuran = lazy(() => import('./components/common/TalkToQuran'));
-const KidsMode = lazy(() => import('./components/kids/KidsMode'));
-const AnalyticsPanel = lazy(() => import('./components/widgets/AnalyticsPanel'));
-const BubbleReaderOverlay = lazy(() => import('./components/common/BubbleReaderOverlay'));
+const ProgressDashboard = lazyWithRetry(() => import('./components/common/ProgressDashboard'));
+const OfflineManager = lazyWithRetry(() => import('./components/common/OfflineManager'));
+const HifzMode = lazyWithRetry(() => import('./components/common/HifzMode'));
+const SearchPanel = lazyWithRetry(() => import('./components/common/SearchPanel'));
+const DonateModal = lazyWithRetry(() => import('./components/common/DonateModal'));
+const WordSearchMap = lazyWithRetry(() => import('./components/common/WordSearchMap'));
+const EmotionalTracker = lazyWithRetry(() => import('./components/common/EmotionalTracker'));
+const ScholarVideoSync = lazyWithRetry(() => import('./components/common/ScholarVideoSync'));
+const PropheticMap = lazyWithRetry(() => import('./components/common/PropheticMap'));
+const QuranCompanionAI = lazyWithRetry(() => import('./components/common/QuranCompanionAI'));
+const GlobalUmmahPulse = lazyWithRetry(() => import('./components/common/GlobalUmmahPulse'));
+const VerseWeatherSync = lazyWithRetry(() => import('./components/common/VerseWeatherSync'));
+const SoundHealingRoom = lazyWithRetry(() => import('./components/common/SoundHealingRoom'));
+const QuranicBabyNames = lazyWithRetry(() => import('./components/common/QuranicBabyNames'));
+const TalkToQuran = lazyWithRetry(() => import('./components/common/TalkToQuran'));
+const KidsMode = lazyWithRetry(() => import('./components/kids/KidsMode'));
+const AnalyticsPanel = lazyWithRetry(() => import('./components/widgets/AnalyticsPanel'));
+const BubbleReaderOverlay = lazyWithRetry(() => import('./components/common/BubbleReaderOverlay'));
 
 // All animation keyframes and utility CSS classes moved to index.css for better caching
 // Fonts: Amiri + Scheherazade loaded in index.html; Noto Nastaliq Urdu loaded on demand below
