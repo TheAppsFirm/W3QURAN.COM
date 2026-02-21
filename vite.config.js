@@ -8,6 +8,14 @@ export default defineConfig({
     target: ['es2020', 'safari14', 'chrome87', 'firefox78', 'edge88'],
     // Ensure CSS is compatible
     cssTarget: ['safari14', 'chrome87'],
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'vendor-react': ['react', 'react-dom'],
+          'vendor-maps': ['leaflet', 'react-leaflet'],
+        },
+      },
+    },
   },
   server: {
     proxy: {

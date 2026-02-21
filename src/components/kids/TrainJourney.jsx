@@ -45,58 +45,13 @@ const primeSpeechSynthesis = () => {
 // Surah Name Audio - Uses Speech Synthesis
 // ============================================================================
 
-// Play surah name using Speech Synthesis
+// Play surah name — uses Google TTS for reliable Arabic audio
 const playSurahName = (surah) => {
-  // Skip if no surah, finish station, or no Speech Synthesis support
   if (!surah || !surah.arabic || surah.type === 'finish') return;
-  if (typeof window === 'undefined' || !window.speechSynthesis) return;
+  if (typeof window === 'undefined') return;
 
-  // Prime speech if not already
-  primeSpeechSynthesis();
-
-  // Create and play the utterance
-  const doSpeak = () => {
-    try {
-      window.speechSynthesis.cancel();
-
-      const text = `سورة ${surah.arabic}`;
-      const utterance = new SpeechSynthesisUtterance(text);
-
-      const voices = window.speechSynthesis.getVoices();
-      const arabicVoice = voices.find(v =>
-        v.lang === 'ar-SA' || v.lang === 'ar-AE' || v.lang.startsWith('ar')
-      );
-
-      if (arabicVoice) {
-        utterance.voice = arabicVoice;
-      }
-
-      utterance.lang = 'ar-SA';
-      utterance.rate = 0.7;
-      utterance.pitch = 1.0;
-      utterance.volume = 1.0;
-
-      window.speechSynthesis.speak(utterance);
-    } catch (err) {
-      // Silent fail
-    }
-  };
-
-  let voices = window.speechSynthesis.getVoices();
-
-  if (voices.length > 0) {
-    doSpeak();
-  } else {
-    const handleVoicesChanged = () => {
-      voices = window.speechSynthesis.getVoices();
-      if (voices.length > 0) {
-        doSpeak();
-        window.speechSynthesis.removeEventListener('voiceschanged', handleVoicesChanged);
-      }
-    };
-    window.speechSynthesis.addEventListener('voiceschanged', handleVoicesChanged);
-    setTimeout(doSpeak, 300);
-  }
+  const text = `سورة ${surah.arabic}`;
+  speakArabic(text);
 };
 
 // Kalima audio URLs from TheSufi.com
@@ -697,58 +652,87 @@ const ArabicLetterWritingAnimation = ({ letter, color, isPlaying, onReplay }) =>
 
 // Helper function to speak Arabic text using Speech Synthesis
 // Uses the same reliable pattern as playSurahName above
+// Cached audio element for TTS playback
+let ttsAudioElement = null;
+
 const speakArabic = (text) => {
-  if (!text || typeof window === 'undefined' || !window.speechSynthesis) return;
+  if (!text || typeof window === 'undefined') return;
 
-  // Prime speech synthesis first (required for iOS/Safari)
-  primeSpeechSynthesis();
-
-  const doSpeak = () => {
+  // Strategy 1: Try Google TTS via the app's /api/tts proxy (most reliable for Arabic)
+  const tryGoogleTTS = () => {
     try {
-      // Cancel any ongoing speech
-      window.speechSynthesis.cancel();
-
-      const utterance = new SpeechSynthesisUtterance(text);
-
-      // Find Arabic voice
-      const voices = window.speechSynthesis.getVoices();
-      const arabicVoice = voices.find(v =>
-        v.lang === 'ar-SA' || v.lang === 'ar-AE' || v.lang.startsWith('ar')
-      );
-
-      if (arabicVoice) {
-        utterance.voice = arabicVoice;
+      if (ttsAudioElement) {
+        ttsAudioElement.pause();
+        ttsAudioElement.removeAttribute('src');
+        ttsAudioElement = null;
       }
+      const ttsUrl = `/api/tts?text=${encodeURIComponent(text)}&lang=ar`;
+      ttsAudioElement = new Audio();
+      ttsAudioElement.volume = 1.0;
+      ttsAudioElement.preload = 'auto';
 
-      utterance.lang = 'ar-SA';
-      utterance.rate = 0.6;  // Slower for learning
-      utterance.pitch = 1.0;
-      utterance.volume = 1.0;
-
-      window.speechSynthesis.speak(utterance);
-    } catch (err) {
-      console.log('speakArabic speech synthesis error:', err);
+      // Wait for audio to be ready before playing
+      ttsAudioElement.oncanplaythrough = () => {
+        ttsAudioElement.play().catch(e => {
+          console.log('Google TTS play failed:', e);
+          trySpeechSynthesis();
+        });
+      };
+      ttsAudioElement.onerror = (e) => {
+        console.log('Google TTS load error, trying speechSynthesis:', e);
+        trySpeechSynthesis();
+      };
+      ttsAudioElement.src = ttsUrl;
+      ttsAudioElement.load();
+    } catch (e) {
+      console.log('Google TTS error, trying speechSynthesis:', e);
+      trySpeechSynthesis();
     }
   };
 
-  // Handle voices loading (may be async in some browsers)
-  const voices = window.speechSynthesis.getVoices();
+  // Strategy 2: Fallback to Web Speech API
+  const trySpeechSynthesis = () => {
+    if (!window.speechSynthesis) return;
 
-  if (voices.length > 0) {
-    doSpeak();
-  } else {
-    // Voices not loaded yet, wait for them
-    const handleVoicesChanged = () => {
-      const loadedVoices = window.speechSynthesis.getVoices();
-      if (loadedVoices.length > 0) {
-        doSpeak();
-        window.speechSynthesis.removeEventListener('voiceschanged', handleVoicesChanged);
+    primeSpeechSynthesis();
+
+    const doSpeak = () => {
+      try {
+        window.speechSynthesis.cancel();
+
+        const utterance = new SpeechSynthesisUtterance(text);
+
+        const voices = window.speechSynthesis.getVoices();
+        const arabicVoice = voices.find(v =>
+          v.lang === 'ar-SA' || v.lang === 'ar-AE' || v.lang.startsWith('ar')
+        );
+
+        if (arabicVoice) {
+          utterance.voice = arabicVoice;
+        }
+
+        utterance.lang = 'ar-SA';
+        utterance.rate = 0.6;
+        utterance.pitch = 1.0;
+        utterance.volume = 1.0;
+
+        window.speechSynthesis.speak(utterance);
+      } catch (err) {
+        console.log('speakArabic speech synthesis error:', err);
       }
     };
-    window.speechSynthesis.addEventListener('voiceschanged', handleVoicesChanged);
-    // Also try after a short delay as fallback
-    setTimeout(doSpeak, 300);
-  }
+
+    const voices = window.speechSynthesis.getVoices();
+    if (voices.length > 0) {
+      doSpeak();
+    } else {
+      window.speechSynthesis.addEventListener('voiceschanged', () => doSpeak(), { once: true });
+      setTimeout(doSpeak, 300);
+    }
+  };
+
+  // Try Google TTS first (works reliably for Arabic on all browsers)
+  tryGoogleTTS();
 };
 
 const AlphabetLearningCard = ({ station, visitedCount, color, onPlaySound }) => {

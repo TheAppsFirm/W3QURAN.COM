@@ -660,15 +660,23 @@ const SurahTeacher = ({ surah, onClose, onComplete, isInline = true, ageGroup: p
       audioRef.current.play()
         .then(() => setIsPlayingVerse(true))
         .catch(e => {
-          console.log('Audio failed, trying speech synthesis:', e);
-          if (verseData?.arabic && window.speechSynthesis) {
-            const u = new SpeechSynthesisUtterance(verseData.arabic);
-            u.lang = 'ar-SA';
-            u.rate = 0.6;
-            u.onend = () => setIsPlayingVerse(false);
-            window.speechSynthesis.cancel();
-            window.speechSynthesis.speak(u);
-            setIsPlayingVerse(true);
+          console.log('Audio failed, trying Google TTS:', e);
+          if (verseData?.arabic) {
+            try {
+              const ttsUrl = `/api/tts?text=${encodeURIComponent(verseData.arabic)}&lang=ar`;
+              const ttsAudio = new Audio();
+              ttsAudio.preload = 'auto';
+              ttsAudio.onended = () => setIsPlayingVerse(false);
+              ttsAudio.onerror = () => setIsPlayingVerse(false);
+              ttsAudio.oncanplaythrough = () => {
+                ttsAudio.play().catch(() => setIsPlayingVerse(false));
+              };
+              ttsAudio.src = ttsUrl;
+              ttsAudio.load();
+              setIsPlayingVerse(true);
+            } catch (err) {
+              setIsPlayingVerse(false);
+            }
           }
         });
     }
@@ -683,21 +691,36 @@ const SurahTeacher = ({ surah, onClose, onComplete, isInline = true, ageGroup: p
     return () => audio.removeEventListener('ended', handleEnded);
   }, []);
 
-  // Play individual word
+  // Play individual word — uses Google TTS for reliable Arabic
   const playWord = (index) => {
     const word = currentWords[index];
     if (!word) return;
 
     setPlayingWordIndex(index);
 
-    if (window.speechSynthesis) {
-      const u = new SpeechSynthesisUtterance(word.ar);
-      u.lang = 'ar-SA';
-      u.rate = 0.6;
-      u.onend = () => setPlayingWordIndex(-1);
-      window.speechSynthesis.cancel();
-      window.speechSynthesis.speak(u);
-    } else {
+    try {
+      const ttsUrl = `/api/tts?text=${encodeURIComponent(word.ar)}&lang=ar`;
+      const audio = new Audio();
+      audio.preload = 'auto';
+      audio.onended = () => setPlayingWordIndex(-1);
+      audio.onerror = () => {
+        if (window.speechSynthesis) {
+          const u = new SpeechSynthesisUtterance(word.ar);
+          u.lang = 'ar-SA';
+          u.rate = 0.6;
+          u.onend = () => setPlayingWordIndex(-1);
+          window.speechSynthesis.cancel();
+          window.speechSynthesis.speak(u);
+        } else {
+          setPlayingWordIndex(-1);
+        }
+      };
+      audio.oncanplaythrough = () => {
+        audio.play().catch(() => audio.onerror?.());
+      };
+      audio.src = ttsUrl;
+      audio.load();
+    } catch (e) {
       setTimeout(() => setPlayingWordIndex(-1), 1000);
     }
   };

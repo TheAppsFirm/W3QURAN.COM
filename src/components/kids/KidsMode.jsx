@@ -226,10 +226,24 @@ const LETTER_AUDIO_FILES = [
   '029-yaa.mp3',    // Ya
 ];
 
-const AUDIO_BASE_URL = 'https://www.islamcan.com/learn-arabic/arabic-alphabets/';
+// Local audio files (downloaded from IslamCan.com for offline support)
+const AUDIO_BASE_URL = '/audio/alphabet/';
 
 // Cache for preloaded audio
 const audioCache = {};
+
+// Shared AudioContext for chime sounds (reuse to comply with Chrome autoplay policy)
+let sharedAudioContext = null;
+const getSharedAudioContext = () => {
+  if (!sharedAudioContext) {
+    sharedAudioContext = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  // Resume if suspended (Chrome autoplay policy)
+  if (sharedAudioContext.state === 'suspended') {
+    sharedAudioContext.resume().catch(() => {});
+  }
+  return sharedAudioContext;
+};
 
 // Preload audio files for faster playback
 const preloadLetterAudio = (letterIndex) => {
@@ -268,7 +282,7 @@ const playLetterSound = (letterIndex) => {
       console.log('Audio play failed, trying fresh instance:', e);
       // If cached audio fails, try a fresh instance
       const freshAudio = new Audio(AUDIO_BASE_URL + LETTER_AUDIO_FILES[letterIndex]);
-      freshAudio.play();
+      freshAudio.play().catch(e2 => console.warn('Fresh audio also failed:', e2));
     });
 
     // Preload next few letters for smooth experience
@@ -277,7 +291,7 @@ const playLetterSound = (letterIndex) => {
 
     // Also play a soft chime for extra engagement
     try {
-      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      const audioContext = getSharedAudioContext();
       const osc = audioContext.createOscillator();
       const gain = audioContext.createGain();
 

@@ -101,10 +101,11 @@ export async function onRequest(context) {
     const surahId = parseInt(url.searchParams.get('surah') || '0', 10);
 
     // SERVER-SIDE PREMIUM CHECK - This cannot be bypassed from frontend
-    // Surah Al-Fatiha (id=1) is free for everyone as trial
+    // Free cases: Surah Al-Fatiha (id=1), short text without surah param (Kids mode words)
     const isFreeTrialSurah = surahId === 1;
+    const isShortText = text && text.length <= 50 && surahId === 0;
 
-    if (!isFreeTrialSurah) {
+    if (!isFreeTrialSurah && !isShortText) {
       const { isPremium } = await checkPremiumAccess(request, env);
       if (!isPremium) {
         return new Response(JSON.stringify({

@@ -1083,6 +1083,74 @@ body {
   }
 }
 
+/* Connection line pulse (moved from AnimationStyles JS component) */
+@keyframes connectionPulse {
+  0%, 100% { stroke-opacity: 0.12; }
+  50% { stroke-opacity: 0.28; }
+}
+
+.connection-line {
+  animation: connectionPulse 4s ease-in-out infinite;
+}
+
+/* Aurora background animation (moved from AnimationStyles JS component) */
+@keyframes aurora {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* Floating ambient orbs (moved from AnimationStyles JS component) */
+@keyframes floatOrb {
+  0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.4; }
+  25% { transform: translate(10px, -20px) scale(1.1); opacity: 0.6; }
+  50% { transform: translate(-5px, -10px) scale(0.9); opacity: 0.5; }
+  75% { transform: translate(-15px, 5px) scale(1.05); opacity: 0.45; }
+}
+
+/* Bubble hover effect */
+.bubble-item {
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.bubble-item:hover {
+  transform: scale(1.08) translateY(-5px);
+  z-index: 10;
+}
+
+/* Utility classes */
+.touch-target {
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.bubble-container {
+  scroll-behavior: smooth;
+}
+
+/* Animated background gradient */
+.animated-bg {
+  background: linear-gradient(-45deg, #f0fdfa, #ecfeff, #f0f9ff, #eff6ff, #eef2ff, #fdf4ff);
+  background-size: 400% 400%;
+  animation: aurora 20s ease infinite;
+}
+
+/* Dark mode animated background */
+.animated-bg-dark {
+  background: linear-gradient(-45deg, #0f172a, #1e1b4b, #172554, #1e3a5f, #1e1b4b, #0f172a);
+  background-size: 400% 400%;
+  animation: aurora 20s ease infinite;
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .bubble-item, .connection-line, .animated-bg, .animated-bg-dark {
+    animation: none !important;
+  }
+  .bubble-item:hover {
+    transform: scale(1.02);
+  }
+}
+
 /* Print styles */
 @media print {
   body {

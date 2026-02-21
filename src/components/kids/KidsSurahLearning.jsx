@@ -17,6 +17,20 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Icons } from '../common/Icons';
 import { WORD_MEANINGS } from '../../data/wordMeanings';
 
+// Speech synthesis priming (required for iOS/Safari/Chrome)
+let speechPrimedLocal = false;
+const primeSpeech = () => {
+  if (speechPrimedLocal || typeof window === 'undefined' || !window.speechSynthesis) return;
+  try {
+    const utterance = new SpeechSynthesisUtterance('');
+    utterance.volume = 0;
+    window.speechSynthesis.speak(utterance);
+    speechPrimedLocal = true;
+  } catch (e) {
+    // Ignore
+  }
+};
+
 // Learning modes
 const LEARNING_MODES = {
   LEARN: 'learn',      // Normal learning with word meanings
@@ -135,19 +149,45 @@ const VerseCard = ({
   const audioRef = useRef(null);
   const color = VERSE_COLORS[colorIndex % VERSE_COLORS.length];
 
-  // Play individual word
+  // Play individual word — uses Google TTS for reliable Arabic audio
   const playWord = useCallback((wordIndex) => {
     setPlayingWordIndex(wordIndex);
 
-    // Use Speech Synthesis for word pronunciation
-    if (window.speechSynthesis && words[wordIndex]) {
-      const utterance = new SpeechSynthesisUtterance(words[wordIndex].ar);
-      utterance.lang = 'ar-SA';
-      utterance.rate = 0.7;
-      utterance.onend = () => setPlayingWordIndex(-1);
-      window.speechSynthesis.cancel();
-      window.speechSynthesis.speak(utterance);
-    } else {
+    if (!words[wordIndex]) {
+      setTimeout(() => setPlayingWordIndex(-1), 1000);
+      return;
+    }
+
+    const text = words[wordIndex].ar;
+
+    // Use Google TTS via app proxy (reliable Arabic on all browsers)
+    try {
+      const ttsUrl = `/api/tts?text=${encodeURIComponent(text)}&lang=ar`;
+      const audio = new Audio();
+      audio.volume = 1.0;
+      audio.preload = 'auto';
+      audio.onended = () => setPlayingWordIndex(-1);
+      audio.onerror = () => {
+        // Fallback to speechSynthesis
+        if (window.speechSynthesis) {
+          primeSpeech();
+          const utterance = new SpeechSynthesisUtterance(text);
+          utterance.lang = 'ar-SA';
+          utterance.rate = 0.7;
+          utterance.onend = () => setPlayingWordIndex(-1);
+          utterance.onerror = () => setPlayingWordIndex(-1);
+          window.speechSynthesis.cancel();
+          window.speechSynthesis.speak(utterance);
+        } else {
+          setPlayingWordIndex(-1);
+        }
+      };
+      audio.oncanplaythrough = () => {
+        audio.play().catch(() => audio.onerror?.());
+      };
+      audio.src = ttsUrl;
+      audio.load();
+    } catch (e) {
       setTimeout(() => setPlayingWordIndex(-1), 1000);
     }
   }, [words]);
@@ -400,17 +440,36 @@ const RepeatAfterMe = ({ words, onComplete }) => {
   const currentWord = words[currentWordIndex];
 
   const playCurrentWord = () => {
-    if (window.speechSynthesis && currentWord) {
-      setIsPlaying(true);
-      const utterance = new SpeechSynthesisUtterance(currentWord.ar);
-      utterance.lang = 'ar-SA';
-      utterance.rate = 0.5;
-      utterance.onend = () => {
-        setIsPlaying(false);
-        setShowMeaning(true);
+    if (!currentWord) return;
+    setIsPlaying(true);
+
+    // Use Google TTS for reliable Arabic pronunciation
+    try {
+      const ttsUrl = `/api/tts?text=${encodeURIComponent(currentWord.ar)}&lang=ar`;
+      const audio = new Audio();
+      audio.preload = 'auto';
+      audio.onended = () => { setIsPlaying(false); setShowMeaning(true); };
+      audio.onerror = () => {
+        if (window.speechSynthesis) {
+          const utterance = new SpeechSynthesisUtterance(currentWord.ar);
+          utterance.lang = 'ar-SA';
+          utterance.rate = 0.5;
+          utterance.onend = () => { setIsPlaying(false); setShowMeaning(true); };
+          window.speechSynthesis.cancel();
+          window.speechSynthesis.speak(utterance);
+        } else {
+          setIsPlaying(false);
+          setShowMeaning(true);
+        }
       };
-      window.speechSynthesis.cancel();
-      window.speechSynthesis.speak(utterance);
+      audio.oncanplaythrough = () => {
+        audio.play().catch(() => audio.onerror?.());
+      };
+      audio.src = ttsUrl;
+      audio.load();
+    } catch (e) {
+      setIsPlaying(false);
+      setShowMeaning(true);
     }
   };
 
@@ -616,15 +675,23 @@ const KidsSurahLearning = ({ surah, onBack, onComplete }) => {
         setIsPlayingVerse(true);
       }).catch(e => {
         console.log('Audio play failed:', e);
-        // Fallback to speech synthesis
-        if (verseText?.arabic && window.speechSynthesis) {
-          const utterance = new SpeechSynthesisUtterance(verseText.arabic);
-          utterance.lang = 'ar-SA';
-          utterance.rate = 0.6;
-          utterance.onend = () => setIsPlayingVerse(false);
-          window.speechSynthesis.cancel();
-          window.speechSynthesis.speak(utterance);
-          setIsPlayingVerse(true);
+        // Fallback to Google TTS
+        if (verseText?.arabic) {
+          try {
+            const ttsUrl = `/api/tts?text=${encodeURIComponent(verseText.arabic)}&lang=ar`;
+            const ttsAudio = new Audio();
+            ttsAudio.preload = 'auto';
+            ttsAudio.onended = () => setIsPlayingVerse(false);
+            ttsAudio.onerror = () => setIsPlayingVerse(false);
+            ttsAudio.oncanplaythrough = () => {
+              ttsAudio.play().catch(() => setIsPlayingVerse(false));
+            };
+            ttsAudio.src = ttsUrl;
+            ttsAudio.load();
+            setIsPlayingVerse(true);
+          } catch (err) {
+            setIsPlayingVerse(false);
+          }
         }
       });
     }

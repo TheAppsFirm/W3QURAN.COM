@@ -9,159 +9,103 @@
  * - Dependency Inversion: Depends on abstractions (context, hooks)
  */
 
-import React, { Suspense, useState, useEffect, useMemo, useCallback, useRef } from 'react';
-import { ErrorBoundary, LoadingSpinner, BubbleModal, BubbleReaderOverlay, ProgressDashboard, OfflineManager, HifzMode, SearchPanel, DonateModal, WordSearchMap, EmotionalTracker, ScholarVideoSync, PropheticMap, QuranCompanionAI, GlobalUmmahPulse, VerseWeatherSync, SoundHealingRoom, QuranicBabyNames, TalkToQuran } from './components/common';
-import { KidsMode } from './components/kids';
+import React, { Suspense, lazy, useState, useEffect, useMemo, useCallback, useRef } from 'react';
+// Core components (needed immediately for first paint + reading)
+import { ErrorBoundary, LoadingSpinner, BubbleModal, BubbleReaderOverlay } from './components/common';
 import { Header, FloatingMenu, StatsBar } from './components/layout';
 import { SurahBubble, LayoutSelector, ClockLayout, GridLayout, JuzzGroupLayout, AlphabetLayout, RevelationLayout, BookLayout, ListLayout, CompactLayout, HoneycombLayout, WaveLayout, LengthLayout, KidsLayout, ArtLayout } from './components/bubbles';
-import { AnalyticsPanel } from './components/widgets';
-import {
-  NamesOfAllahView,
-  QuizView,
-  SettingsView,
-  DailyVerseView,
-  StatisticsView,
-  ListenView,
-  DonateView,
-  PrayerTimesView,
-  PrivacyPolicyView,
-  TermsOfServiceView,
-  AdminDashboard,
-} from './components/views';
 import { SURAHS, MAX_AYAHS } from './data';
 import { useLocalStorage, isMobileDevice, BREAKPOINTS } from './hooks';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 
-// CSS Styles - Font imports and utility classes (animations defined in index.css)
-const AnimationStyles = () => (
-  <style>{`
-    @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Scheherazade+New:wght@400;700&family=Noto+Nastaliq+Urdu:wght@400;700&display=swap');
+// Lazy-loaded views (only loaded when user navigates to them)
+const SettingsView = lazy(() => import('./components/views/SettingsView'));
+const AdminDashboard = lazy(() => import('./components/views/AdminDashboard'));
+const NamesOfAllahView = lazy(() => import('./components/views/NamesOfAllahView'));
+const QuizView = lazy(() => import('./components/views/QuizView'));
+const DailyVerseView = lazy(() => import('./components/views/DailyVerseView'));
+const StatisticsView = lazy(() => import('./components/views/StatisticsView'));
+const ListenView = lazy(() => import('./components/views/ListenView'));
+const DonateView = lazy(() => import('./components/views/DonateView'));
+const PrayerTimesView = lazy(() => import('./components/views/PrayerTimesView'));
+const PrivacyPolicyView = lazy(() => import('./components/views/PrivacyPolicyView'));
+const TermsOfServiceView = lazy(() => import('./components/views/TermsOfServiceView'));
 
-    /* Connection line pulse - not in index.css */
-    @keyframes connectionPulse {
-      0%, 100% { stroke-opacity: 0.12; }
-      50% { stroke-opacity: 0.28; }
-    }
+// Lazy-loaded modal features (only loaded when user opens them)
+const ProgressDashboard = lazy(() => import('./components/common/ProgressDashboard'));
+const OfflineManager = lazy(() => import('./components/common/OfflineManager'));
+const HifzMode = lazy(() => import('./components/common/HifzMode'));
+const SearchPanel = lazy(() => import('./components/common/SearchPanel'));
+const DonateModal = lazy(() => import('./components/common/DonateModal'));
+const WordSearchMap = lazy(() => import('./components/common/WordSearchMap'));
+const EmotionalTracker = lazy(() => import('./components/common/EmotionalTracker'));
+const ScholarVideoSync = lazy(() => import('./components/common/ScholarVideoSync'));
+const PropheticMap = lazy(() => import('./components/common/PropheticMap'));
+const QuranCompanionAI = lazy(() => import('./components/common/QuranCompanionAI'));
+const GlobalUmmahPulse = lazy(() => import('./components/common/GlobalUmmahPulse'));
+const VerseWeatherSync = lazy(() => import('./components/common/VerseWeatherSync'));
+const SoundHealingRoom = lazy(() => import('./components/common/SoundHealingRoom'));
+const QuranicBabyNames = lazy(() => import('./components/common/QuranicBabyNames'));
+const TalkToQuran = lazy(() => import('./components/common/TalkToQuran'));
+const KidsMode = lazy(() => import('./components/kids/KidsMode'));
+const AnalyticsPanel = lazy(() => import('./components/widgets/AnalyticsPanel'));
 
-    .connection-line {
-      animation: connectionPulse 4s ease-in-out infinite;
-    }
+// All animation keyframes and utility CSS classes moved to index.css for better caching
+// Fonts: Amiri + Scheherazade loaded in index.html; Noto Nastaliq Urdu loaded on demand below
 
-    /* Aurora background animation - not in index.css */
-    @keyframes aurora {
-      0%, 100% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-    }
+// Ambient Floating Particles Component — deferred to avoid blocking initial render
+const AmbientParticlesInner = ({ darkMode }) => {
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+  const orbCount = isMobile ? 3 : 6;
+  const sparkleCount = isMobile ? 8 : 20;
+  const colors = ['#6366f1', '#8b5cf6', '#a855f7', '#ec4899', '#06b6d4', '#10b981'];
+  return (
+    <div className="fixed inset-0 pointer-events-none overflow-hidden z-0" style={{ contain: 'layout style paint' }}>
+      {[...Array(orbCount)].map((_, i) => (
+        <div
+          key={`orb-${i}`}
+          className="absolute rounded-full blur-3xl"
+          style={{
+            width: 200 + i * 100,
+            height: 200 + i * 100,
+            left: `${(i * 17) % 100}%`,
+            top: `${(i * 23) % 100}%`,
+            background: `radial-gradient(circle, ${colors[i]}${darkMode ? '30' : '20'} 0%, transparent 70%)`,
+            animation: `floatOrb ${15 + i * 3}s ease-in-out infinite`,
+            animationDelay: `${i * 2}s`,
+          }}
+        />
+      ))}
+      {[...Array(sparkleCount)].map((_, i) => (
+        <div
+          key={`sparkle-${i}`}
+          className="absolute rounded-full"
+          style={{
+            width: 4 + (i % 4),
+            height: 4 + (i % 4),
+            left: `${(i * 5.3) % 100}%`,
+            top: `${(i * 7.1) % 100}%`,
+            background: darkMode ? 'rgba(255,255,255,0.6)' : 'rgba(139,92,246,0.5)',
+            boxShadow: darkMode
+              ? '0 0 10px rgba(255,255,255,0.5)'
+              : '0 0 10px rgba(139,92,246,0.4)',
+            animation: `sparkle ${3 + (i % 4)}s ease-in-out infinite`,
+            animationDelay: `${i * 0.3}s`,
+          }}
+        />
+      ))}
+    </div>
+  );
+};
 
-    /* Floating ambient orbs - not in index.css */
-    @keyframes floatOrb {
-      0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.4; }
-      25% { transform: translate(10px, -20px) scale(1.1); opacity: 0.6; }
-      50% { transform: translate(-5px, -10px) scale(0.9); opacity: 0.5; }
-      75% { transform: translate(-15px, 5px) scale(1.05); opacity: 0.45; }
-    }
-
-    /* Sparkle animation - not in index.css */
-    @keyframes sparkle {
-      0%, 100% { opacity: 0; transform: scale(0); }
-      50% { opacity: 1; transform: scale(1); }
-    }
-
-    /* Ripple effect - not in index.css */
-    @keyframes ripple {
-      0% { transform: scale(1); opacity: 0.5; }
-      100% { transform: scale(2); opacity: 0; }
-    }
-
-    /* Bubble hover effect */
-    .bubble-item {
-      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-
-    .bubble-item:hover {
-      transform: scale(1.08) translateY(-5px);
-      z-index: 10;
-    }
-
-    /* Utility classes */
-    .touch-target {
-      min-width: 44px;
-      min-height: 44px;
-    }
-
-    .bubble-container {
-      scroll-behavior: smooth;
-    }
-
-    /* Animated background gradient */
-    .animated-bg {
-      background: linear-gradient(-45deg, #f0fdfa, #ecfeff, #f0f9ff, #eff6ff, #eef2ff, #fdf4ff);
-      background-size: 400% 400%;
-      animation: aurora 20s ease infinite;
-    }
-
-    /* Dark mode animated background */
-    .animated-bg-dark {
-      background: linear-gradient(-45deg, #0f172a, #1e1b4b, #172554, #1e3a5f, #1e1b4b, #0f172a);
-      background-size: 400% 400%;
-      animation: aurora 20s ease infinite;
-    }
-
-    /* Reduce motion for accessibility */
-    @media (prefers-reduced-motion: reduce) {
-      .bubble-item, .connection-line, .animated-bg, .animated-bg-dark {
-        animation: none !important;
-      }
-      .bubble-item:hover {
-        transform: scale(1.02);
-      }
-    }
-  `}</style>
-);
-
-// Ambient Floating Particles Component
-const AmbientParticles = ({ darkMode }) => (
-  <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
-    {/* Large ambient orbs */}
-    {[...Array(6)].map((_, i) => (
-      <div
-        key={`orb-${i}`}
-        className="absolute rounded-full blur-3xl"
-        style={{
-          width: 200 + i * 100,
-          height: 200 + i * 100,
-          left: `${(i * 17) % 100}%`,
-          top: `${(i * 23) % 100}%`,
-          background: darkMode
-            ? `radial-gradient(circle, ${['#6366f1', '#8b5cf6', '#a855f7', '#ec4899', '#06b6d4', '#10b981'][i]}30 0%, transparent 70%)`
-            : `radial-gradient(circle, ${['#6366f1', '#8b5cf6', '#a855f7', '#ec4899', '#06b6d4', '#10b981'][i]}20 0%, transparent 70%)`,
-          animation: `floatOrb ${15 + i * 3}s ease-in-out infinite`,
-          animationDelay: `${i * 2}s`,
-        }}
-      />
-    ))}
-
-    {/* Small sparkle particles */}
-    {[...Array(20)].map((_, i) => (
-      <div
-        key={`sparkle-${i}`}
-        className="absolute rounded-full"
-        style={{
-          width: 4 + (i % 4),
-          height: 4 + (i % 4),
-          left: `${(i * 5.3) % 100}%`,
-          top: `${(i * 7.1) % 100}%`,
-          background: darkMode ? 'rgba(255,255,255,0.6)' : 'rgba(139,92,246,0.5)',
-          boxShadow: darkMode
-            ? '0 0 10px rgba(255,255,255,0.5)'
-            : '0 0 10px rgba(139,92,246,0.4)',
-          animation: `sparkle ${3 + (i % 4)}s ease-in-out infinite`,
-          animationDelay: `${i * 0.3}s`,
-        }}
-      />
-    ))}
-  </div>
-);
+const AmbientParticles = ({ darkMode }) => {
+  const [show, setShow] = useState(false);
+  useEffect(() => {
+    const timer = setTimeout(() => setShow(true), 2000);
+    return () => clearTimeout(timer);
+  }, []);
+  return show ? <AmbientParticlesInner darkMode={darkMode} /> : null;
+};
 
 /**
  * URL Route mapping
@@ -864,7 +808,9 @@ function QuranBubbleApp() {
 
       {/* Analytics Panel */}
       {view === 'surahs' && showAnalytics && (
-        <AnalyticsPanel surahs={filtered} readingProgress={readingProgress} darkMode={darkMode} />
+        <Suspense fallback={null}>
+          <AnalyticsPanel surahs={filtered} readingProgress={readingProgress} darkMode={darkMode} />
+        </Suspense>
       )}
 
       {/* Stats Bar */}
@@ -1204,34 +1150,36 @@ function QuranBubbleApp() {
           </>
         )}
 
-        {/* Other Views */}
-        {view === 'listen' && <ListenView level={level} darkMode={darkMode} />}
-        {view === 'donate' && <DonateView darkMode={darkMode} />}
-        {view === 'settings' && <SettingsView darkMode={darkMode} setDarkMode={setDarkMode} onNavigate={setView} />}
-        {view === 'admin' && (
-          <AdminDashboard
-            onClose={() => setView('settings')}
-            initialTab={adminTab}
-            onTabChange={(tab) => {
-              setAdminTab(tab);
-              updateURL(tab === 'overview' ? '/admin' : `/admin/${tab}`);
-            }}
-          />
-        )}
-        {view === 'names' && <NamesOfAllahView darkMode={darkMode} />}
-        {view === 'quiz' && <QuizView darkMode={darkMode} onEarnPoints={handleEarnPoints} />}
-        {view === 'prayer' && <PrayerTimesView darkMode={darkMode} />}
-        {view === 'stats' && (
-          <StatisticsView
-            darkMode={darkMode}
-            readingProgress={readingProgress}
-            streak={streak}
-            points={points}
-          />
-        )}
-        {view === 'daily' && <DailyVerseView darkMode={darkMode} />}
-        {view === 'privacy' && <PrivacyPolicyView darkMode={darkMode} onBack={() => setView('surahs')} />}
-        {view === 'terms' && <TermsOfServiceView darkMode={darkMode} onBack={() => setView('surahs')} />}
+        {/* Other Views (lazy-loaded) */}
+        <Suspense fallback={<LoadingSpinner message="Loading..." />}>
+          {view === 'listen' && <ListenView level={level} darkMode={darkMode} />}
+          {view === 'donate' && <DonateView darkMode={darkMode} />}
+          {view === 'settings' && <SettingsView darkMode={darkMode} setDarkMode={setDarkMode} onNavigate={setView} />}
+          {view === 'admin' && (
+            <AdminDashboard
+              onClose={() => setView('settings')}
+              initialTab={adminTab}
+              onTabChange={(tab) => {
+                setAdminTab(tab);
+                updateURL(tab === 'overview' ? '/admin' : `/admin/${tab}`);
+              }}
+            />
+          )}
+          {view === 'names' && <NamesOfAllahView darkMode={darkMode} />}
+          {view === 'quiz' && <QuizView darkMode={darkMode} onEarnPoints={handleEarnPoints} />}
+          {view === 'prayer' && <PrayerTimesView darkMode={darkMode} />}
+          {view === 'stats' && (
+            <StatisticsView
+              darkMode={darkMode}
+              readingProgress={readingProgress}
+              streak={streak}
+              points={points}
+            />
+          )}
+          {view === 'daily' && <DailyVerseView darkMode={darkMode} />}
+          {view === 'privacy' && <PrivacyPolicyView darkMode={darkMode} onBack={() => setView('surahs')} />}
+          {view === 'terms' && <TermsOfServiceView darkMode={darkMode} onBack={() => setView('surahs')} />}
+        </Suspense>
       </main>
 
       {/* Floating Menu */}
@@ -1447,168 +1395,223 @@ function QuranBubbleApp() {
 
       {/* Progress Dashboard */}
       {showProgressDashboard && (
-        <ProgressDashboard
-          onClose={handleCloseProgress}
-          onNavigateToSurah={(surah) => {
-            setShowProgressDashboard(false);
-            setOverlayReaderSurah(surah);
-          }}
-        />
+        <Suspense fallback={<LoadingSpinner message="Loading Progress..." />}>
+          <ProgressDashboard
+            onClose={handleCloseProgress}
+            onNavigateToSurah={(surah) => {
+              setShowProgressDashboard(false);
+              setOverlayReaderSurah(surah);
+            }}
+          />
+        </Suspense>
       )}
 
       {/* Offline Manager */}
       {showOfflineManager && (
-        <OfflineManager
-          onClose={handleCloseOffline}
-        />
+        <Suspense fallback={<LoadingSpinner message="Loading Offline Manager..." />}>
+          <OfflineManager
+            onClose={handleCloseOffline}
+          />
+        </Suspense>
       )}
 
       {/* Hifz Mode */}
       {showHifzMode && (
-        <HifzMode
-          onClose={handleCloseHifz}
-        />
+        <Suspense fallback={<LoadingSpinner message="Loading Memorization..." />}>
+          <HifzMode
+            onClose={handleCloseHifz}
+          />
+        </Suspense>
       )}
 
       {/* Search Panel */}
       {showSearchPanel && (
-        <SearchPanel
-          onClose={handleCloseSearch}
-          onSelectResult={(surah, ayahNumber) => {
-            setShowSearchPanel(false);
-            setOverlayReaderSurah(surah);
-            setInitialVerse(ayahNumber || 1);
-          }}
-        />
+        <Suspense fallback={<LoadingSpinner message="Searching..." />}>
+          <SearchPanel
+            onClose={handleCloseSearch}
+            onSelectResult={(surah, ayahNumber) => {
+              setShowSearchPanel(false);
+              setOverlayReaderSurah(surah);
+              setInitialVerse(ayahNumber || 1);
+            }}
+          />
+        </Suspense>
       )}
 
       {/* Donate Modal */}
-      <DonateModal
-        isOpen={showDonateModal}
-        onClose={handleCloseDonate}
-      />
+      {showDonateModal && (
+        <Suspense fallback={null}>
+          <DonateModal
+            isOpen={showDonateModal}
+            onClose={handleCloseDonate}
+          />
+        </Suspense>
+      )}
 
       {/* Word Search Mind Map */}
-      <WordSearchMap
-        isVisible={showMindMap}
-        onClose={handleCloseMindMap}
-        onNavigateToVerse={(surahId, ayahNumber) => {
-          const surah = SURAHS.find(s => s.id === surahId);
-          if (surah) {
-            setShowMindMap(false);
-            setOverlayReaderSurah(surah);
-            setInitialVerse(ayahNumber || 1);
-          }
-        }}
-      />
+      {showMindMap && (
+        <Suspense fallback={<LoadingSpinner message="Loading Mind Map..." />}>
+          <WordSearchMap
+            isVisible={showMindMap}
+            onClose={handleCloseMindMap}
+            onNavigateToVerse={(surahId, ayahNumber) => {
+              const surah = SURAHS.find(s => s.id === surahId);
+              if (surah) {
+                setShowMindMap(false);
+                setOverlayReaderSurah(surah);
+                setInitialVerse(ayahNumber || 1);
+              }
+            }}
+          />
+        </Suspense>
+      )}
 
       {/* Mood Tracker */}
-      <EmotionalTracker
-        isVisible={showMoodTracker}
-        onClose={handleCloseMood}
-        onNavigateToSurah={(surahId) => {
-          const surah = SURAHS.find(s => s.id === surahId);
-          if (surah) {
-            setShowMoodTracker(false);
-            setOverlayReaderSurah(surah);
-          }
-        }}
-      />
+      {showMoodTracker && (
+        <Suspense fallback={<LoadingSpinner message="Loading Mood Tracker..." />}>
+          <EmotionalTracker
+            isVisible={showMoodTracker}
+            onClose={handleCloseMood}
+            onNavigateToSurah={(surahId) => {
+              const surah = SURAHS.find(s => s.id === surahId);
+              if (surah) {
+                setShowMoodTracker(false);
+                setOverlayReaderSurah(surah);
+              }
+            }}
+          />
+        </Suspense>
+      )}
 
       {/* Video Sync - Standalone mode */}
-      <ScholarVideoSync
-        isVisible={showVideoSync}
-        onClose={handleCloseVideoSync}
-        onNavigateToSurah={(surahId) => {
-          const surah = SURAHS.find(s => s.id === surahId);
-          if (surah) {
-            setShowVideoSync(false);
-            setOverlayReaderSurah(surah);
-          }
-        }}
-      />
+      {showVideoSync && (
+        <Suspense fallback={<LoadingSpinner message="Loading Videos..." />}>
+          <ScholarVideoSync
+            isVisible={showVideoSync}
+            onClose={handleCloseVideoSync}
+            onNavigateToSurah={(surahId) => {
+              const surah = SURAHS.find(s => s.id === surahId);
+              if (surah) {
+                setShowVideoSync(false);
+                setOverlayReaderSurah(surah);
+              }
+            }}
+          />
+        </Suspense>
+      )}
 
       {/* Prophetic World Map */}
-      <PropheticMap
-        isVisible={showPropheticMap}
-        onClose={handleClosePropheticMap}
-        onNavigateToVerse={(surahId, ayahNumber) => {
-          const surah = SURAHS.find(s => s.id === surahId);
-          if (surah) {
-            setShowPropheticMap(false);
-            setOverlayReaderSurah(surah);
-            setInitialVerse(ayahNumber);
-          }
-        }}
-      />
+      {showPropheticMap && (
+        <Suspense fallback={<LoadingSpinner message="Loading Map..." />}>
+          <PropheticMap
+            isVisible={showPropheticMap}
+            onClose={handleClosePropheticMap}
+            onNavigateToVerse={(surahId, ayahNumber) => {
+              const surah = SURAHS.find(s => s.id === surahId);
+              if (surah) {
+                setShowPropheticMap(false);
+                setOverlayReaderSurah(surah);
+                setInitialVerse(ayahNumber);
+              }
+            }}
+          />
+        </Suspense>
+      )}
 
       {/* AI Companion Guide */}
-      <QuranCompanionAI
-        isVisible={showCompanionAI}
-        onClose={handleCloseCompanionAI}
-        onNavigateToVerse={(surahId, ayahNumber) => {
-          const surah = SURAHS.find(s => s.id === surahId);
-          if (surah) {
-            setShowCompanionAI(false);
-            setOverlayReaderSurah(surah);
-            setInitialVerse(ayahNumber);
-          }
-        }}
-      />
+      {showCompanionAI && (
+        <Suspense fallback={<LoadingSpinner message="Loading AI Guide..." />}>
+          <QuranCompanionAI
+            isVisible={showCompanionAI}
+            onClose={handleCloseCompanionAI}
+            onNavigateToVerse={(surahId, ayahNumber) => {
+              const surah = SURAHS.find(s => s.id === surahId);
+              if (surah) {
+                setShowCompanionAI(false);
+                setOverlayReaderSurah(surah);
+                setInitialVerse(ayahNumber);
+              }
+            }}
+          />
+        </Suspense>
+      )}
 
       {/* Global Ummah Pulse */}
-      <GlobalUmmahPulse
-        isVisible={showGlobalPulse}
-        onClose={handleCloseGlobalPulse}
-      />
+      {showGlobalPulse && (
+        <Suspense fallback={<LoadingSpinner message="Loading Ummah Pulse..." />}>
+          <GlobalUmmahPulse
+            isVisible={showGlobalPulse}
+            onClose={handleCloseGlobalPulse}
+          />
+        </Suspense>
+      )}
 
       {/* Verse Weather Sync */}
-      <VerseWeatherSync
-        isVisible={showWeatherSync}
-        onClose={handleCloseWeatherSync}
-        onNavigateToVerse={(surahId, ayahNumber) => {
-          const surah = SURAHS.find(s => s.id === surahId);
-          if (surah) {
-            setShowWeatherSync(false);
-            setOverlayReaderSurah(surah);
-            setInitialVerse(ayahNumber);
-          }
-        }}
-      />
+      {showWeatherSync && (
+        <Suspense fallback={<LoadingSpinner message="Loading Weather Verses..." />}>
+          <VerseWeatherSync
+            isVisible={showWeatherSync}
+            onClose={handleCloseWeatherSync}
+            onNavigateToVerse={(surahId, ayahNumber) => {
+              const surah = SURAHS.find(s => s.id === surahId);
+              if (surah) {
+                setShowWeatherSync(false);
+                setOverlayReaderSurah(surah);
+                setInitialVerse(ayahNumber);
+              }
+            }}
+          />
+        </Suspense>
+      )}
 
       {/* Sound Healing Room */}
-      <SoundHealingRoom
-        isVisible={showSoundHealing}
-        onClose={handleCloseSoundHealing}
-      />
+      {showSoundHealing && (
+        <Suspense fallback={<LoadingSpinner message="Loading Sound Healing..." />}>
+          <SoundHealingRoom
+            isVisible={showSoundHealing}
+            onClose={handleCloseSoundHealing}
+          />
+        </Suspense>
+      )}
 
       {/* Quranic Baby Names */}
-      <QuranicBabyNames
-        isVisible={showBabyNames}
-        onClose={handleCloseBabyNames}
-      />
+      {showBabyNames && (
+        <Suspense fallback={<LoadingSpinner message="Loading Baby Names..." />}>
+          <QuranicBabyNames
+            isVisible={showBabyNames}
+            onClose={handleCloseBabyNames}
+          />
+        </Suspense>
+      )}
 
       {/* Talk to Quran AI */}
-      <TalkToQuran
-        isVisible={showTalkToQuran}
-        onClose={() => setShowTalkToQuran(false)}
-        darkMode={darkMode}
-      />
+      {showTalkToQuran && (
+        <Suspense fallback={<LoadingSpinner message="Loading Talk to Quran..." />}>
+          <TalkToQuran
+            isVisible={showTalkToQuran}
+            onClose={() => setShowTalkToQuran(false)}
+            darkMode={darkMode}
+          />
+        </Suspense>
+      )}
 
       {/* Kids Mode - Quran Learning Journey */}
-      <KidsMode
-        isVisible={showKidsMode || view === 'kids'}
-        onClose={() => {
-          setShowKidsMode(false);
-          if (view === 'kids') {
-            setView('surahs');
-            window.history.pushState({}, '', '/');
-          }
-        }}
-      />
+      {(showKidsMode || view === 'kids') && (
+        <Suspense fallback={<LoadingSpinner message="Loading Kids Mode..." />}>
+          <KidsMode
+            isVisible={showKidsMode || view === 'kids'}
+            onClose={() => {
+              setShowKidsMode(false);
+              if (view === 'kids') {
+                setView('surahs');
+                window.history.pushState({}, '', '/');
+              }
+            }}
+          />
+        </Suspense>
+      )}
 
-      {/* Animation Styles */}
-      <AnimationStyles />
+      {/* Animation styles moved to index.css for better caching */}
     </div>
   );
 }
