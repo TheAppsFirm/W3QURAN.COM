@@ -345,6 +345,18 @@ function QuranBubbleApp() {
     }
   }, [isAuthenticated]);
 
+  // Auto-open Kids Mode when returning from payment
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const isPaymentReturn = params.get('payment_success') === '1' || params.get('payment_canceled') === '1';
+    const paymentPending = localStorage.getItem('kids_payment_pending');
+
+    // Open Kids Mode if returning from payment flow
+    if (isPaymentReturn || paymentPending === 'true') {
+      setShowKidsMode(true);
+    }
+  }, []);
+
   // Parse URL and set initial state
   useEffect(() => {
     const parseURL = () => {

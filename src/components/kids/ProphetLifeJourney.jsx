@@ -339,6 +339,7 @@ const ProphetLifeJourney = ({ onBack }) => {
   const [isMoving, setIsMoving] = useState(false);
   const [moveDirection, setMoveDirection] = useState('right');
   const [viewportWidth, setViewportWidth] = useState(window.innerWidth);
+  const [isBikeSoundMuted, setIsBikeSoundMuted] = useState(false); // Bike sound mute state
 
   // Refs
   const containerRef = useRef(null);
@@ -349,6 +350,22 @@ const ProphetLifeJourney = ({ onBack }) => {
 
   // Motorbike engine sound effect
   useEffect(() => {
+    // Don't play sound if muted
+    if (isBikeSoundMuted) {
+      // Stop any existing sound when muted
+      if (engineGainRef.current && audioContextRef.current) {
+        const ctx = audioContextRef.current;
+        engineGainRef.current.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.1);
+        setTimeout(() => {
+          if (engineOscRef.current) {
+            try { engineOscRef.current.stop(); } catch (e) {}
+            engineOscRef.current = null;
+          }
+        }, 150);
+      }
+      return;
+    }
+
     if (isMoving) {
       // Create audio context if needed
       if (!audioContextRef.current) {
@@ -401,7 +418,7 @@ const ProphetLifeJourney = ({ onBack }) => {
         try { engineOscRef.current.stop(); } catch (e) {}
       }
     };
-  }, [isMoving]);
+  }, [isMoving, isBikeSoundMuted]);
 
   // Constants
   const STATION_WIDTH = 180;
@@ -602,15 +619,35 @@ const ProphetLifeJourney = ({ onBack }) => {
           </span>
         </div>
 
-        {/* Language change button */}
-        <button
-          onClick={() => setShowLanguageSelect(true)}
-          className="flex items-center gap-1 px-3 py-2 rounded-full bg-white/90 backdrop-blur-sm text-gray-800 font-bold hover:bg-white transition-all shadow-lg text-sm"
-        >
-          <span className="text-base">
-            {language === 'en' ? '🇬🇧' : language === 'ur' ? '🇵🇰' : '🇸🇦'}
-          </span>
-        </button>
+        {/* Right side buttons */}
+        <div className="flex items-center gap-2">
+          {/* Bike sound mute button */}
+          <button
+            onClick={() => setIsBikeSoundMuted(prev => !prev)}
+            className={`flex items-center justify-center w-10 h-10 rounded-full backdrop-blur-sm font-bold hover:scale-105 transition-all shadow-lg ${
+              isBikeSoundMuted
+                ? 'bg-red-500/90 text-white'
+                : 'bg-white/90 text-gray-800'
+            }`}
+            title={isBikeSoundMuted ? 'Unmute bike sound' : 'Mute bike sound'}
+          >
+            {isBikeSoundMuted ? (
+              <Icons.VolumeX className="w-5 h-5" />
+            ) : (
+              <Icons.Volume2 className="w-5 h-5" />
+            )}
+          </button>
+
+          {/* Language change button */}
+          <button
+            onClick={() => setShowLanguageSelect(true)}
+            className="flex items-center gap-1 px-3 py-2 rounded-full bg-white/90 backdrop-blur-sm text-gray-800 font-bold hover:bg-white transition-all shadow-lg text-sm"
+          >
+            <span className="text-base">
+              {language === 'en' ? '🇬🇧' : language === 'ur' ? '🇵🇰' : '🇸🇦'}
+            </span>
+          </button>
+        </div>
       </div>
 
       {/* Scrolling stations container - ABOVE the bike */}

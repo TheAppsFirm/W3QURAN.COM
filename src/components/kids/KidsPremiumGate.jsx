@@ -1,9 +1,10 @@
 /**
  * KidsPremiumGate.jsx
  * Premium upgrade overlay for Kids Mode - shown when accessing locked features
+ * Handles direct Stripe checkout and payment result display
  */
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { Icons } from '../common/Icons';
 
@@ -43,13 +44,129 @@ const SUBSCRIPTION_OPTIONS = [
   },
 ];
 
-const KidsPremiumGate = ({ onClose, feature = 'premium', lockedTheme = null }) => {
-  const { isAuthenticated, login } = useAuth();
+// Payment Result Popup Component
+const PaymentResultPopup = ({ success, onClose, onRetry }) => {
+  return (
+    <div className="fixed inset-0 z-[10001] flex items-center justify-center bg-black/80 backdrop-blur-sm">
+      <div className="bg-white rounded-3xl p-8 max-w-sm mx-4 text-center shadow-2xl">
+        {success ? (
+          <>
+            <div className="text-7xl mb-4 animate-bounce">🎉</div>
+            <h2 className="text-2xl font-bold text-green-600 mb-2">Payment Successful!</h2>
+            <p className="text-gray-600 mb-6">
+              Welcome to Quran Kids Premium! All features are now unlocked.
+            </p>
+            <button
+              onClick={onClose}
+              className="w-full py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white font-bold rounded-xl hover:shadow-lg transition-all"
+            >
+              Start Learning! 🚀
+            </button>
+          </>
+        ) : (
+          <>
+            <div className="text-7xl mb-4">😔</div>
+            <h2 className="text-2xl font-bold text-red-600 mb-2">Payment Failed</h2>
+            <p className="text-gray-600 mb-6">
+              Something went wrong with your payment. Please try again.
+            </p>
+            <div className="space-y-2">
+              <button
+                onClick={onRetry}
+                className="w-full py-3 bg-gradient-to-r from-amber-400 to-orange-500 text-white font-bold rounded-xl hover:shadow-lg transition-all"
+              >
+                Try Again
+              </button>
+              <button
+                onClick={onClose}
+                className="w-full py-2 text-gray-500 hover:text-gray-700 transition-colors"
+              >
+                Cancel
+              </button>
+            </div>
+          </>
+        )}
+      </div>
+    </div>
+  );
+};
 
-  // Handle upgrade click - redirect to settings/upgrade page
-  const handleUpgrade = (planId) => {
-    // Navigate to settings page with plan pre-selected
-    window.location.href = `/settings?upgrade=${planId}`;
+const KidsPremiumGate = ({ onClose, feature = 'premium', lockedTheme = null }) => {
+  const { isAuthenticated, login, refreshUser } = useAuth();
+  const [isLoading, setIsLoading] = useState(false);
+  const [loadingPlan, setLoadingPlan] = useState(null);
+  const [paymentResult, setPaymentResult] = useState(null); // 'success' | 'failed' | null
+
+  // Check URL for payment result on mount
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('payment_success') === '1') {
+      setPaymentResult('success');
+      // Refresh user data to get updated premium status
+      refreshUser?.();
+      // Clean URL
+      window.history.replaceState({}, '', window.location.pathname);
+    } else if (params.get('payment_canceled') === '1') {
+      setPaymentResult('failed');
+      // Clean URL
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+  }, [refreshUser]);
+
+  // Handle upgrade click - create Stripe checkout session
+  const handleUpgrade = async (planId) => {
+    setIsLoading(true);
+    setLoadingPlan(planId);
+
+    try {
+      // Call checkout API to create Stripe session
+      const response = await fetch('/api/stripe/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({
+          productType: planId,
+          successUrl: `${window.location.origin}/?payment_success=1`,
+          cancelUrl: `${window.location.origin}/?payment_canceled=1`,
+        }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        console.error('Checkout error:', error);
+        setPaymentResult('failed');
+        setIsLoading(false);
+        setLoadingPlan(null);
+        return;
+      }
+
+      const data = await response.json();
+
+      // Redirect to Stripe checkout
+      if (data.url) {
+        // Mark that we're going to Stripe for payment (so we can detect if user returns without completing)
+        localStorage.setItem('kids_payment_pending', 'true');
+        window.location.href = data.url;
+      } else {
+        console.error('No checkout URL returned');
+        setPaymentResult('failed');
+        setIsLoading(false);
+        setLoadingPlan(null);
+      }
+    } catch (error) {
+      console.error('Checkout error:', error);
+      setPaymentResult('failed');
+      setIsLoading(false);
+      setLoadingPlan(null);
+    }
+  };
+
+  // Handle payment result popup close
+  const handleResultClose = () => {
+    setPaymentResult(null);
+    if (paymentResult === 'success') {
+      onClose(); // Close the premium gate on success
+    }
   };
 
   // Get feature-specific message
@@ -72,7 +189,7 @@ const KidsPremiumGate = ({ onClose, feature = 'premium', lockedTheme = null }) =
       return {
         title: 'More Stations Available!',
         emoji: '🚉',
-        description: 'Upgrade to explore all surah stations beyond station 5!',
+        description: 'Upgrade to explore all stations beyond station 5!',
       };
     }
     return {
@@ -84,12 +201,24 @@ const KidsPremiumGate = ({ onClose, feature = 'premium', lockedTheme = null }) =
 
   const featureInfo = getFeatureMessage();
 
+  // Show payment result popup if needed
+  if (paymentResult) {
+    return (
+      <PaymentResultPopup
+        success={paymentResult === 'success'}
+        onClose={handleResultClose}
+        onRetry={() => setPaymentResult(null)}
+      />
+    );
+  }
+
   return (
     <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-black/70 backdrop-blur-sm overflow-y-auto py-4">
       {/* Close button */}
       <button
         onClick={onClose}
         className="absolute top-4 right-4 z-50 p-2 rounded-full bg-white/20 backdrop-blur-md text-white hover:bg-white/30 transition-all"
+        disabled={isLoading}
       >
         <Icons.X className="w-6 h-6" />
       </button>
@@ -123,10 +252,10 @@ const KidsPremiumGate = ({ onClose, feature = 'premium', lockedTheme = null }) =
         <div className="bg-white/10 rounded-2xl p-4 mb-4">
           <h3 className="text-white/90 font-semibold mb-3 text-sm">What you get with Premium:</h3>
           <div className="grid grid-cols-2 gap-2">
-            {PREMIUM_FEATURES.map((feature, i) => (
+            {PREMIUM_FEATURES.map((feat, i) => (
               <div key={i} className="flex items-center gap-2 text-white/80 text-sm">
-                <span>{feature.emoji}</span>
-                <span>{feature.text}</span>
+                <span>{feat.emoji}</span>
+                <span>{feat.text}</span>
               </div>
             ))}
           </div>
@@ -139,31 +268,40 @@ const KidsPremiumGate = ({ onClose, feature = 'premium', lockedTheme = null }) =
               <button
                 key={option.id}
                 onClick={() => handleUpgrade(option.id)}
+                disabled={isLoading}
                 className={`
-                  w-full p-3 rounded-xl border-2 transition-all
+                  w-full p-3 rounded-xl border-2 transition-all relative
                   ${option.popular
                     ? 'bg-gradient-to-r from-amber-400 to-orange-500 border-transparent text-white'
                     : 'bg-white/10 border-white/30 text-white hover:bg-white/20'
                   }
+                  ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}
                 `}
               >
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <span className="font-bold">{option.name}</span>
-                    {option.popular && (
-                      <span className="px-2 py-0.5 bg-white/20 rounded-full text-xs">
-                        Most Popular
-                      </span>
-                    )}
+                {loadingPlan === option.id ? (
+                  <div className="flex items-center justify-center gap-2">
+                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    <span>Processing...</span>
                   </div>
-                  <div className="text-right">
-                    <span className="font-bold text-lg">{option.price}</span>
-                    <span className="text-sm opacity-80">{option.period}</span>
-                    {option.savings && (
-                      <div className="text-xs text-yellow-300">{option.savings}</div>
-                    )}
+                ) : (
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <span className="font-bold">{option.name}</span>
+                      {option.popular && (
+                        <span className="px-2 py-0.5 bg-white/20 rounded-full text-xs">
+                          Most Popular
+                        </span>
+                      )}
+                    </div>
+                    <div className="text-right">
+                      <span className="font-bold text-lg">{option.price}</span>
+                      <span className="text-sm opacity-80">{option.period}</span>
+                      {option.savings && (
+                        <div className="text-xs text-yellow-300">{option.savings}</div>
+                      )}
+                    </div>
                   </div>
-                </div>
+                )}
               </button>
             ))}
           </div>
@@ -203,7 +341,8 @@ const KidsPremiumGate = ({ onClose, feature = 'premium', lockedTheme = null }) =
         <div className="text-center">
           <button
             onClick={onClose}
-            className="text-white/60 text-sm hover:text-white/80 transition-colors"
+            disabled={isLoading}
+            className="text-white/60 text-sm hover:text-white/80 transition-colors disabled:opacity-50"
           >
             Continue with free features
           </button>

@@ -2930,6 +2930,16 @@ const TrainJourney = ({ onEnterStation, onBack, onNextStage, mode = 'surahs', cu
 
   // Premium gate state
   const [showPremiumGate, setShowPremiumGate] = useState(false);
+  const premiumGateShownRef = useRef(false); // Track if we've shown the gate for movement limit
+
+  // Calculate max allowed position for free users (station 5 = index 4, so limit is just before station 6)
+  const maxFreePosition = useMemo(() => {
+    if (isPremium) return Infinity;
+    // Allow movement up to just past station 5 (index 4), block at station 6 (index 5)
+    // Station positions: 100, 300, 500, 700, 900, 1100...
+    // We want to stop at ~1050 (between station 5 and 6)
+    return 100 + (FREE_STATION_LIMIT - 1) * STATION_SPACING + STATION_SPACING * 0.75;
+  }, [isPremium, STATION_SPACING]);
 
   // Sound effect timing refs
   const lastChuggaRef = useRef(0);
@@ -2942,6 +2952,16 @@ const TrainJourney = ({ onEnterStation, onBack, onNextStage, mode = 'surahs', cu
   // Ref for smooth animation
   const speedRef = useRef(0);
   const positionRef = useRef(100);
+
+  // Refs for values used in game loop (to avoid stale closures)
+  const modeRef = useRef(mode);
+  const isPremiumRef = useRef(isPremium);
+  const maxFreePositionRef = useRef(maxFreePosition);
+
+  // Update refs when values change
+  useEffect(() => { modeRef.current = mode; }, [mode]);
+  useEffect(() => { isPremiumRef.current = isPremium; }, [isPremium]);
+  useEffect(() => { maxFreePositionRef.current = maxFreePosition; }, [maxFreePosition]);
 
   // Reset train position when mode changes
   useEffect(() => {
@@ -3046,6 +3066,22 @@ const TrainJourney = ({ onEnterStation, onBack, onNextStage, mode = 'surahs', cu
       // Update position using ref
       positionRef.current += speedRef.current * deltaTime;
       positionRef.current = Math.max(50, Math.min(TRACK_WIDTH - 50, positionRef.current));
+
+      // Check premium limit for alphabet/kalimas mode (free users limited to first 5 stations)
+      if ((modeRef.current === 'alphabet' || modeRef.current === 'kalimas') && !isPremiumRef.current) {
+        if (positionRef.current > maxFreePositionRef.current) {
+          // Stop at the limit
+          positionRef.current = maxFreePositionRef.current;
+          speedRef.current = 0;
+
+          // Show premium gate once when hitting the limit
+          if (!premiumGateShownRef.current) {
+            premiumGateShownRef.current = true;
+            // Use setTimeout to update React state outside of animation frame
+            setTimeout(() => setShowPremiumGate(true), 0);
+          }
+        }
+      }
 
       // Play sounds (throttled) - only gentle chugga, no honk
       const now = Date.now();
@@ -3724,7 +3760,13 @@ const TrainJourney = ({ onEnterStation, onBack, onNextStage, mode = 'surahs', cu
       {/* Premium Gate Modal - shown when trying to access station beyond free limit */}
       {showPremiumGate && (
         <KidsPremiumGate
-          onClose={() => setShowPremiumGate(false)}
+          onClose={() => {
+            setShowPremiumGate(false);
+            // Reset the ref after a delay so the popup can show again if user tries to move past limit
+            setTimeout(() => {
+              premiumGateShownRef.current = false;
+            }, 1000);
+          }}
           feature="station_limit"
         />
       )}

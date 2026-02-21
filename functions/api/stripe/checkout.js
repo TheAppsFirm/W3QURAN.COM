@@ -114,7 +114,9 @@ export async function onRequest(context) {
       });
     }
 
-    const { product, priceId: legacyPriceId } = await request.json();
+    const requestBody = await request.json();
+    // Support both 'product' and 'productType' field names for backwards compatibility
+    const { product, productType: productTypeField, priceId: legacyPriceId, successUrl: customSuccessUrl, cancelUrl: customCancelUrl } = requestBody;
 
     // SECURITY: Simple rate limiting using KV (1 checkout attempt per 10 seconds)
     const rateLimitKey = `checkout_${userResult.id}`;
@@ -136,7 +138,8 @@ export async function onRequest(context) {
 
     // SECURITY: Validate product type is in allowed list
     const ALLOWED_PRODUCTS = Object.keys(LIVE_PRICES);
-    const productType = product || 'premium_monthly';
+    // Accept either 'product' or 'productType' field
+    const productType = productTypeField || product || 'premium_monthly';
 
     if (!ALLOWED_PRODUCTS.includes(productType)) {
       console.error('[Stripe] SECURITY: Invalid product type attempted:', productType);
@@ -204,6 +207,40 @@ export async function onRequest(context) {
     const isOneTime = ONE_TIME_PRODUCTS.includes(productType);
     const mode = isOneTime ? 'payment' : 'subscription';
 
+    // SECURITY: Validate custom URLs if provided (must be same origin)
+    let successUrl = `${baseUrl}/settings?payment=success`;
+    let cancelUrl = `${baseUrl}/settings?payment=canceled`;
+
+    if (customSuccessUrl) {
+      try {
+        const parsedUrl = new URL(customSuccessUrl);
+        // Allow same origin or localhost for development
+        if (parsedUrl.origin === baseUrl || parsedUrl.hostname === 'localhost' || parsedUrl.hostname === '127.0.0.1') {
+          successUrl = customSuccessUrl;
+        } else {
+          console.log('[Stripe] SECURITY: Rejected custom successUrl with different origin:', parsedUrl.origin);
+        }
+      } catch (e) {
+        console.log('[Stripe] Invalid successUrl format:', customSuccessUrl);
+      }
+    }
+
+    if (customCancelUrl) {
+      try {
+        const parsedUrl = new URL(customCancelUrl);
+        // Allow same origin or localhost for development
+        if (parsedUrl.origin === baseUrl || parsedUrl.hostname === 'localhost' || parsedUrl.hostname === '127.0.0.1') {
+          cancelUrl = customCancelUrl;
+        } else {
+          console.log('[Stripe] SECURITY: Rejected custom cancelUrl with different origin:', parsedUrl.origin);
+        }
+      } catch (e) {
+        console.log('[Stripe] Invalid cancelUrl format:', customCancelUrl);
+      }
+    }
+
+    console.log('[Stripe] Using URLs - success:', successUrl, 'cancel:', cancelUrl);
+
     // Build checkout session params
     const params = {
       'mode': mode,
@@ -211,8 +248,8 @@ export async function onRequest(context) {
       'client_reference_id': userResult.id,
       'line_items[0][price]': priceId,
       'line_items[0][quantity]': '1',
-      'success_url': `${baseUrl}/settings?payment=success`,
-      'cancel_url': `${baseUrl}/settings?payment=canceled`,
+      'success_url': successUrl,
+      'cancel_url': cancelUrl,
       'metadata[user_id]': userResult.id,
       'metadata[price_id]': priceId,
     };

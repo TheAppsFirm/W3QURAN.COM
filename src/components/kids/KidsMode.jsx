@@ -17,8 +17,86 @@ import TrainJourney from './TrainJourney';
 import ProphetLifeJourney from './ProphetLifeJourney';
 import KidsSurahLearning from './KidsSurahLearning';
 import KidsLoginGate from './KidsLoginGate';
+import KidsPremiumGate from './KidsPremiumGate';
 import { SURAHS } from '../../data';
 import { useAuth } from '../../contexts/AuthContext';
+
+// Payment Result Popup Component
+const PaymentResultPopup = ({ success, canceled, onClose, onRetry, isLoading = false }) => {
+  return (
+    <div className="fixed inset-0 z-[10001] flex items-center justify-center bg-black/80 backdrop-blur-sm">
+      <div className="bg-white rounded-3xl p-8 max-w-sm mx-4 text-center shadow-2xl">
+        {success ? (
+          <>
+            <div className="text-7xl mb-4 animate-bounce">🎉</div>
+            <h2 className="text-2xl font-bold text-green-600 mb-2">Payment Successful!</h2>
+            <p className="text-gray-600 mb-6">
+              Welcome to Quran Kids Premium! All features are now unlocked.
+            </p>
+            <button
+              onClick={onClose}
+              disabled={isLoading}
+              className={`w-full py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white font-bold rounded-xl hover:shadow-lg transition-all flex items-center justify-center gap-2 ${isLoading ? 'opacity-70 cursor-wait' : ''}`}
+            >
+              {isLoading ? (
+                <>
+                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  <span>Activating Premium...</span>
+                </>
+              ) : (
+                <span>Start Learning! 🚀</span>
+              )}
+            </button>
+          </>
+        ) : canceled ? (
+          <>
+            <div className="text-7xl mb-4">🤔</div>
+            <h2 className="text-2xl font-bold text-amber-600 mb-2">Payment Canceled</h2>
+            <p className="text-gray-600 mb-6">
+              No worries! You can upgrade anytime to unlock all features.
+            </p>
+            <div className="space-y-2">
+              <button
+                onClick={onRetry}
+                className="w-full py-3 bg-gradient-to-r from-amber-400 to-orange-500 text-white font-bold rounded-xl hover:shadow-lg transition-all"
+              >
+                Try Again
+              </button>
+              <button
+                onClick={onClose}
+                className="w-full py-2 text-gray-500 hover:text-gray-700 transition-colors"
+              >
+                Continue with Free
+              </button>
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="text-7xl mb-4">😔</div>
+            <h2 className="text-2xl font-bold text-red-600 mb-2">Payment Failed</h2>
+            <p className="text-gray-600 mb-6">
+              Something went wrong with your payment. Please try again.
+            </p>
+            <div className="space-y-2">
+              <button
+                onClick={onRetry}
+                className="w-full py-3 bg-gradient-to-r from-amber-400 to-orange-500 text-white font-bold rounded-xl hover:shadow-lg transition-all"
+              >
+                Try Again
+              </button>
+              <button
+                onClick={onClose}
+                className="w-full py-2 text-gray-500 hover:text-gray-700 transition-colors"
+              >
+                Cancel
+              </button>
+            </div>
+          </>
+        )}
+      </div>
+    </div>
+  );
+};
 
 // Full Arabic Alphabet with pronunciations, forms, and example words
 // Forms: isolated, initial (start), medial (middle), final (end)
@@ -562,7 +640,7 @@ const saveAgeGroup = (level) => {
 
 const KidsMode = ({ isVisible, onClose }) => {
   // Get auth state
-  const { isAuthenticated, isPremium, loading: authLoading } = useAuth();
+  const { isAuthenticated, isPremium, loading: authLoading, refreshUser } = useAuth();
 
   // State management
   const [selectedTheme, setSelectedTheme] = useState(null);
@@ -578,6 +656,9 @@ const KidsMode = ({ isVisible, onClose }) => {
   const [isExiting, setIsExiting] = useState(false);
   const [selectedSurah, setSelectedSurah] = useState(null);
   const [completedSurahs, setCompletedSurahs] = useState([]);
+  const [paymentResult, setPaymentResult] = useState(null); // 'success' | 'canceled' | null
+  const [showPremiumGate, setShowPremiumGate] = useState(false); // Show premium upgrade popup
+  const [isRefreshingUser, setIsRefreshingUser] = useState(false); // Loading state while refreshing user after payment
 
   // Load saved progress on mount
   useEffect(() => {
@@ -587,6 +668,52 @@ const KidsMode = ({ isVisible, onClose }) => {
       setSurahJourneyLevel(savedLevel);
     }
   }, []);
+
+  // Check for payment result in URL params or localStorage flag
+  useEffect(() => {
+    const handlePaymentReturn = async () => {
+      const params = new URLSearchParams(window.location.search);
+      const paymentPending = localStorage.getItem('kids_payment_pending');
+
+      if (params.get('payment_success') === '1') {
+        // Payment completed successfully
+        setPaymentResult('success');
+        // Clear payment pending flag
+        localStorage.removeItem('kids_payment_pending');
+        // Clean URL immediately
+        window.history.replaceState({}, '', window.location.pathname);
+
+        // Refresh user data to get updated premium status - WAIT for it to complete
+        if (refreshUser) {
+          setIsRefreshingUser(true);
+          try {
+            await refreshUser();
+            console.log('[KidsMode] User refreshed after successful payment');
+          } catch (error) {
+            console.error('[KidsMode] Error refreshing user:', error);
+          } finally {
+            setIsRefreshingUser(false);
+          }
+        }
+      } else if (params.get('payment_canceled') === '1') {
+        // Payment was explicitly canceled
+        setPaymentResult('canceled');
+        // Clear payment pending flag
+        localStorage.removeItem('kids_payment_pending');
+        // Clean URL
+        window.history.replaceState({}, '', window.location.pathname);
+      } else if (paymentPending === 'true') {
+        // User navigated away from Stripe without completing or canceling
+        // This happens when user clicks browser back or closes tab
+        // Treat as a silent return - just clear the flag and let them continue
+        localStorage.removeItem('kids_payment_pending');
+        // Optionally show a "continue where you left off" message
+        // For now, we just silently clear and let user continue with free features
+      }
+    };
+
+    handlePaymentReturn();
+  }, [refreshUser]);
 
   // Memoize stars to prevent regeneration on every render
   const stars = useMemo(() => generateStars(50), []);
@@ -686,7 +813,13 @@ const KidsMode = ({ isVisible, onClose }) => {
   const handleStartSurahJourney = () => {
     const savedLevel = getSavedAgeGroup();
     if (savedLevel) {
-      // Already have age saved, go directly to journey
+      // Check if saved age group is premium and user is not premium
+      if (savedLevel !== 'little' && !isPremium) {
+        // Show premium gate instead of going to journey
+        setShowPremiumGate(true);
+        return;
+      }
+      // Already have age saved and user has access, go directly to journey
       setSurahJourneyLevel(savedLevel);
       setSelectedSurahs(true);
     } else {
@@ -697,16 +830,23 @@ const KidsMode = ({ isVisible, onClose }) => {
 
   // Handle selecting a surah track
   const handleSelectSurahTrack = (levelId) => {
+    // Check if selected age group requires premium
+    if (levelId !== 'little' && !isPremium) {
+      // Show premium gate
+      setShowPremiumGate(true);
+      return;
+    }
+
     setSurahJourneyLevel(levelId);
     saveAgeGroup(levelId);
     setShowSurahSelection(false);
     setSelectedSurahs(true);
   };
 
-  // Check if a level is unlocked - all levels are unlocked, user just picks by age
+  // Check if a level is unlocked (free for non-premium users)
   const isLevelUnlocked = (levelId) => {
-    // All age groups are available - kids just pick their age
-    return true;
+    // Only "little" (3-5 years) is free, others require premium
+    return levelId === 'little' || isPremium;
   };
 
   // Toggle mute
@@ -728,6 +868,35 @@ const KidsMode = ({ isVisible, onClose }) => {
   // Show login gate if user is not authenticated (skip during auth loading)
   if (!authLoading && !isAuthenticated) {
     return <KidsLoginGate onClose={onClose} />;
+  }
+
+  // Show payment result popup if payment was just completed/canceled
+  if (paymentResult) {
+    return (
+      <PaymentResultPopup
+        success={paymentResult === 'success'}
+        canceled={paymentResult === 'canceled'}
+        isLoading={isRefreshingUser}
+        onClose={() => {
+          setPaymentResult(null);
+          // If payment was successful, user is now premium and can continue
+        }}
+        onRetry={() => {
+          setPaymentResult(null);
+          setShowPremiumGate(true); // Show premium gate to try again
+        }}
+      />
+    );
+  }
+
+  // Show premium gate if user wants to upgrade
+  if (showPremiumGate) {
+    return (
+      <KidsPremiumGate
+        onClose={() => setShowPremiumGate(false)}
+        feature="premium"
+      />
+    );
   }
 
   // Kids Surah Learning Mode - when a surah is selected
@@ -808,6 +977,7 @@ const KidsMode = ({ isVisible, onClose }) => {
             {Object.values(SURAH_TRACKS).map((track) => {
               const completedCount = track.surahs.filter(s => completedSurahs.includes(s)).length;
               const progress = Math.round((completedCount / track.surahs.length) * 100);
+              const isLocked = !isLevelUnlocked(track.id);
 
               return (
                 <button
@@ -819,6 +989,14 @@ const KidsMode = ({ isVisible, onClose }) => {
                     boxShadow: `0 10px 40px ${track.color}60`,
                   }}
                 >
+                  {/* Lock overlay for premium age groups */}
+                  {isLocked && (
+                    <div className="absolute inset-0 z-20 rounded-3xl bg-black/50 backdrop-blur-[2px] flex flex-col items-center justify-center">
+                      <Icons.Lock className="w-8 h-8 text-white mb-1" />
+                      <span className="text-white text-xs font-bold px-2 py-1 bg-amber-500 rounded-full">PREMIUM</span>
+                    </div>
+                  )}
+
                   {/* Big emoji */}
                   <div className="text-5xl sm:text-6xl mb-2 animate-pulse">
                     {track.emoji}
@@ -835,7 +1013,7 @@ const KidsMode = ({ isVisible, onClose }) => {
                   </div>
 
                   {/* Progress indicator if they have progress */}
-                  {completedCount > 0 && (
+                  {completedCount > 0 && !isLocked && (
                     <div className="absolute -top-2 -right-2 w-8 h-8 bg-yellow-400 rounded-full flex items-center justify-center shadow-lg">
                       <span className="text-xs font-bold text-yellow-900">{completedCount}</span>
                     </div>
@@ -854,6 +1032,11 @@ const KidsMode = ({ isVisible, onClose }) => {
             <p className="text-white/70 text-sm sm:text-base">
               🚂 Pick your age and hop on the Quran Train! 🚂
             </p>
+            {!isPremium && (
+              <p className="text-white/50 text-xs mt-2">
+                👶 Little Stars (3-5 years) is free • Other ages require Premium
+              </p>
+            )}
           </div>
 
           {/* Change age group option - shown if already selected before */}
