@@ -40,5 +40,8 @@ coverage/
 # Misc
 *.local
 .cache/
+
+# Google service account key (sensitive)
+scripts/google-service-account.json
 .wrangler/
 scripts/test-payment-flow.js

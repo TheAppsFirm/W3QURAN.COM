@@ -193,7 +193,7 @@ const VerseCard = ({
   }, [words]);
 
   return (
-    <div className="w-full max-w-2xl mx-auto">
+    <div className="w-full max-w-2xl lg:max-w-4xl xl:max-w-5xl mx-auto">
       {/* Verse Header */}
       <div className={`
         rounded-t-3xl px-6 py-4 bg-gradient-to-r ${color.bg}
@@ -764,7 +764,7 @@ const KidsSurahLearning = ({ surah, onBack, onComplete }) => {
       </div>
 
       {/* Header */}
-      <header className="absolute top-0 left-0 right-0 z-50 p-3 flex items-center justify-between bg-black/10 backdrop-blur-sm">
+      <header className="absolute top-0 left-0 right-0 z-50 p-3 sm:p-4 lg:px-12 xl:px-20 flex items-center justify-between bg-black/10 backdrop-blur-sm">
         <button
           onClick={onBack}
           className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/20 backdrop-blur-md text-white font-bold hover:bg-white/30 transition-all text-sm"
@@ -824,7 +824,7 @@ const KidsSurahLearning = ({ surah, onBack, onComplete }) => {
       )}
 
       {/* Main Content */}
-      <main className="absolute inset-0 pt-16 pb-4 px-3 overflow-y-auto">
+      <main className="absolute inset-0 pt-16 pb-4 px-3 sm:px-6 lg:px-12 xl:px-20 overflow-y-auto">
         {/* Learning Mode Tabs */}
         <div className="flex justify-center gap-2 mb-3">
           {[
@@ -850,14 +850,14 @@ const KidsSurahLearning = ({ surah, onBack, onComplete }) => {
 
         {/* Content based on mode */}
         {learningMode === LEARNING_MODES.LISTEN && currentWords.length > 0 ? (
-          <div className="max-w-lg mx-auto">
+          <div className="max-w-lg lg:max-w-2xl mx-auto">
             <RepeatAfterMe
               words={currentWords}
               onComplete={() => setLearningMode(LEARNING_MODES.LEARN)}
             />
           </div>
         ) : learningMode === LEARNING_MODES.QUIZ && currentQuiz ? (
-          <div className="max-w-lg mx-auto">
+          <div className="max-w-lg lg:max-w-2xl mx-auto">
             <QuizMode
               quiz={currentQuiz}
               onAnswer={handleQuizAnswer}

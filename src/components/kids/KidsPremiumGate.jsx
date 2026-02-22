@@ -119,21 +119,8 @@ const KidsPremiumGate = ({ onClose, feature = 'premium', lockedTheme = null }) =
   const [loadingPlan, setLoadingPlan] = useState(null);
   const [paymentResult, setPaymentResult] = useState(null); // 'success' | 'failed' | null
 
-  // Check URL for payment result on mount
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    if (params.get('payment_success') === '1') {
-      setPaymentResult('success');
-      // Refresh user data to get updated premium status
-      refreshUser?.();
-      // Clean URL
-      window.history.replaceState({}, '', window.location.pathname);
-    } else if (params.get('payment_canceled') === '1') {
-      setPaymentResult('canceled');
-      // Clean URL
-      window.history.replaceState({}, '', window.location.pathname);
-    }
-  }, [refreshUser]);
+  // Payment result detection is handled by KidsMode.jsx at a higher level.
+  // KidsPremiumGate only handles the checkout flow initiation.
 
   // Handle upgrade click - create Stripe checkout session
   const handleUpgrade = async (planId) => {
@@ -371,7 +358,7 @@ const KidsPremiumGate = ({ onClose, feature = 'premium', lockedTheme = null }) =
             Continue with free features
           </button>
           <p className="text-white/40 text-xs mt-1">
-            Train & Bike themes + first 5 stations free
+            Train theme + Food & Drink duas free
           </p>
         </div>
 

@@ -1781,7 +1781,7 @@ const Train = ({ x, isMoving, direction, speed }) => {
 // Station Component - Cute Little House Design
 // ============================================================================
 
-const Station = ({ surah, x, isSelected, isNearby, onSelect }) => {
+const Station = ({ surah, x, isSelected, isNearby, onSelect, stationScale = 1 }) => {
   const colors = STATION_COLORS[surah.type] || STATION_COLORS.Makki;
   const difficulty = (surah.ayahs || 7) <= 20 ? 1 : (surah.ayahs || 7) <= 100 ? 2 : 3;
   const isMakki = !surah.type || surah.type === 'Makki';
@@ -1795,9 +1795,10 @@ const Station = ({ surah, x, isSelected, isNearby, onSelect }) => {
         isSelected ? 'z-30' : isNearby ? 'z-20' : 'z-10'
       }`}
       style={{
-        left: x - 50,
-        width: 100,
-        transform: `scale(${isSelected ? 1.15 : isNearby ? 1.08 : 1})`,
+        left: x - 50 * stationScale,
+        width: 100 * stationScale,
+        transform: `scale(${(isSelected ? 1.15 : isNearby ? 1.08 : 1) * stationScale})`,
+        transformOrigin: 'bottom center',
         animation: isSelected ? 'houseBounce 0.6s ease-in-out infinite' : 'none',
       }}
       onClick={() => onSelect(surah)}
@@ -1948,7 +1949,7 @@ const Station = ({ surah, x, isSelected, isNearby, onSelect }) => {
 // Alphabet Station Component - For learning Arabic letters
 // ============================================================================
 
-const AlphabetStation = ({ letter, index, x, isSelected, isNearby, onSelect }) => {
+const AlphabetStation = ({ letter, index, x, isSelected, isNearby, onSelect, stationScale = 1 }) => {
   const colors = ALPHABET_COLORS[index % ALPHABET_COLORS.length];
 
   return (
@@ -1957,9 +1958,10 @@ const AlphabetStation = ({ letter, index, x, isSelected, isNearby, onSelect }) =
         isSelected ? 'z-30' : isNearby ? 'z-20' : 'z-10'
       }`}
       style={{
-        left: x - 60,
-        width: 120,
-        transform: `scale(${isSelected ? 1.15 : isNearby ? 1.08 : 1})`,
+        left: x - 60 * stationScale,
+        width: 120 * stationScale,
+        transform: `scale(${(isSelected ? 1.15 : isNearby ? 1.08 : 1) * stationScale})`,
+        transformOrigin: 'bottom center',
         animation: isSelected ? 'letterBounce 0.6s ease-in-out infinite' : 'none',
       }}
       onClick={() => onSelect(letter, index)}
@@ -2043,7 +2045,7 @@ const AlphabetStation = ({ letter, index, x, isSelected, isNearby, onSelect }) =
 // Kalima Station Component - For learning Six Kalimas
 // ============================================================================
 
-const KalimaStation = ({ kalima, index, x, isSelected, isNearby, onSelect }) => {
+const KalimaStation = ({ kalima, index, x, isSelected, isNearby, onSelect, stationScale = 1 }) => {
   const bgColor = kalima.color;
 
   return (
@@ -2052,9 +2054,10 @@ const KalimaStation = ({ kalima, index, x, isSelected, isNearby, onSelect }) => 
         isSelected ? 'z-30' : isNearby ? 'z-20' : 'z-10'
       }`}
       style={{
-        left: x - 100,
-        width: 200,
-        transform: `scale(${isSelected ? 1.1 : isNearby ? 1.05 : 1})`,
+        left: x - 100 * stationScale,
+        width: 200 * stationScale,
+        transform: `scale(${(isSelected ? 1.1 : isNearby ? 1.05 : 1) * stationScale})`,
+        transformOrigin: 'bottom center',
         animation: isSelected ? 'kalimaPulse 2s ease-in-out infinite' : 'none',
       }}
       onClick={() => onSelect(kalima, index)}
@@ -2145,7 +2148,7 @@ const KalimaStation = ({ kalima, index, x, isSelected, isNearby, onSelect }) => 
 // Finish Station Component - Cute tiny house with Kalima flag
 // ============================================================================
 
-const FinishStation = ({ x, isSelected, isNearby, onSelect, mode }) => {
+const FinishStation = ({ x, isSelected, isNearby, onSelect, mode, stationScale = 1 }) => {
   const isAlphabet = mode === 'alphabet';
 
   return (
@@ -2154,9 +2157,10 @@ const FinishStation = ({ x, isSelected, isNearby, onSelect, mode }) => {
         isSelected ? 'z-30' : isNearby ? 'z-20' : 'z-10'
       }`}
       style={{
-        left: x - 50,
-        width: 100,
-        transform: `scale(${isSelected ? 1.15 : isNearby ? 1.08 : 1})`,
+        left: x - 50 * stationScale,
+        width: 100 * stationScale,
+        transform: `scale(${(isSelected ? 1.15 : isNearby ? 1.08 : 1) * stationScale})`,
+        transformOrigin: 'bottom center',
         animation: isSelected ? 'houseBounce 0.6s ease-in-out infinite' : 'none',
       }}
       onClick={onSelect}
@@ -2271,7 +2275,7 @@ const FinishStation = ({ x, isSelected, isNearby, onSelect, mode }) => {
 // Seert (Seerah) Station Component - Tent/Oasis themed for Prophet's life events
 // ============================================================================
 
-const SeertStation = ({ event, index, x, isSelected, isNearby, onSelect }) => {
+const SeertStation = ({ event, index, x, isSelected, isNearby, onSelect, stationScale = 1 }) => {
   const bgColor = event.color || '#D4A574';
 
   return (
@@ -2280,9 +2284,10 @@ const SeertStation = ({ event, index, x, isSelected, isNearby, onSelect }) => {
         isSelected ? 'z-30' : isNearby ? 'z-20' : 'z-10'
       }`}
       style={{
-        left: x - 110,
-        width: 220,
-        transform: `scale(${isSelected ? 1.1 : isNearby ? 1.05 : 1})`,
+        left: x - 110 * stationScale,
+        width: 220 * stationScale,
+        transform: `scale(${(isSelected ? 1.1 : isNearby ? 1.05 : 1) * stationScale})`,
+        transformOrigin: 'bottom center',
         animation: isSelected ? 'seertPulse 2s ease-in-out infinite' : 'none',
       }}
       onClick={() => onSelect(event, index)}
@@ -2878,23 +2883,39 @@ const Animals = ({ offset }) => {
 // ============================================================================
 
 const TrainJourney = ({ onEnterStation, onBack, onNextStage, mode = 'surahs', customSurahs = null, hasTopBanner = false, ageGroup = 'young', theme = 'train', isPremium = false }) => {
-  // Get config based on mode (with custom surahs support)
+  const containerRef = useRef(null);
+  const [viewportWidth, setViewportWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1200);
+
+  // Desktop responsive scale - scales stations and spacing for larger screens
+  const desktopScale = useMemo(() => {
+    if (viewportWidth >= 1536) return 1.6;  // 2xl screens (1536px+)
+    if (viewportWidth >= 1280) return 1.4;  // xl screens (1280px+)
+    if (viewportWidth >= 1024) return 1.2;  // lg screens (1024px+)
+    return 1;                                // mobile/tablet
+  }, [viewportWidth]);
+
+  // Get config based on mode (with custom surahs support), scaled for desktop
   const config = useMemo(() => {
+    let baseConfig;
     if (mode === 'surahs' && customSurahs && customSurahs.length > 0) {
-      // Custom surah track - use custom count
-      return {
-        TRACK_WIDTH: (customSurahs.length + 1) * 200, // +1 for finish station
+      baseConfig = {
+        TRACK_WIDTH: (customSurahs.length + 1) * 200,
         STATION_SPACING: 200,
         STATION_COUNT: customSurahs.length + 1,
       };
+    } else {
+      baseConfig = getConfig(mode);
     }
-    return getConfig(mode);
-  }, [mode, customSurahs]);
+    // Scale spacing and track width for desktop viewports
+    const scaledSpacing = Math.round(baseConfig.STATION_SPACING * desktopScale);
+    return {
+      ...baseConfig,
+      STATION_SPACING: scaledSpacing,
+      TRACK_WIDTH: baseConfig.STATION_COUNT * scaledSpacing,
+    };
+  }, [mode, customSurahs, desktopScale]);
   const TRACK_WIDTH = config.TRACK_WIDTH;
   const STATION_SPACING = config.STATION_SPACING;
-
-  const containerRef = useRef(null);
-  const [viewportWidth, setViewportWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1200);
   // Always start at position 100 (first station)
   const [trainPosition, setTrainPosition] = useState(100);
   const [trainSpeed, setTrainSpeed] = useState(0);
@@ -3092,7 +3113,7 @@ const TrainJourney = ({ onEnterStation, onBack, onNextStage, mode = 'surahs', cu
   // Find nearby station
   useEffect(() => {
     const nearestIndex = stations.findIndex(
-      s => Math.abs(s.position - trainPosition) < 60
+      s => Math.abs(s.position - trainPosition) < 60 * desktopScale
     );
     const nearestStation = nearestIndex >= 0 ? stations[nearestIndex] : null;
 
@@ -3321,6 +3342,7 @@ const TrainJourney = ({ onEnterStation, onBack, onNextStage, mode = 'surahs', cu
                 key="finish"
                 x={station.position}
                 isSelected={selectedStation?.type === 'finish'}
+                stationScale={desktopScale}
                 isNearby={Math.abs(station.position - trainPosition) < 150}
                 mode={mode}
                 onSelect={() => {
@@ -3340,7 +3362,8 @@ const TrainJourney = ({ onEnterStation, onBack, onNextStage, mode = 'surahs', cu
                 index={index}
                 x={station.position}
                 isSelected={selectedStation?.letter === station.letter}
-                isNearby={Math.abs(station.position - trainPosition) < 150}
+                isNearby={Math.abs(station.position - trainPosition) < 150 * desktopScale}
+                stationScale={desktopScale}
                 onSelect={(letter, idx) => {
                   SoundEffects.click();
                   setSelectedStation({ ...letter, index: idx, position: station.position });
@@ -3356,6 +3379,7 @@ const TrainJourney = ({ onEnterStation, onBack, onNextStage, mode = 'surahs', cu
                 key="finish"
                 x={station.position}
                 isSelected={selectedStation?.type === 'finish'}
+                stationScale={desktopScale}
                 isNearby={Math.abs(station.position - trainPosition) < 200}
                 mode={mode}
                 onSelect={() => {
@@ -3375,7 +3399,8 @@ const TrainJourney = ({ onEnterStation, onBack, onNextStage, mode = 'surahs', cu
                 index={index}
                 x={station.position}
                 isSelected={selectedStation?.id === station.id}
-                isNearby={Math.abs(station.position - trainPosition) < 200}
+                isNearby={Math.abs(station.position - trainPosition) < 200 * desktopScale}
+                stationScale={desktopScale}
                 onSelect={(kalima, idx) => {
                   SoundEffects.click();
                   setSelectedStation({ ...kalima, index: idx, position: station.position });
@@ -3391,6 +3416,7 @@ const TrainJourney = ({ onEnterStation, onBack, onNextStage, mode = 'surahs', cu
                 key="finish"
                 x={station.position}
                 isSelected={selectedStation?.type === 'finish'}
+                stationScale={desktopScale}
                 isNearby={Math.abs(station.position - trainPosition) < 200}
                 mode={mode}
                 onSelect={() => {
@@ -3409,7 +3435,8 @@ const TrainJourney = ({ onEnterStation, onBack, onNextStage, mode = 'surahs', cu
                 index={index}
                 x={station.position}
                 isSelected={selectedStation?.id === station.id}
-                isNearby={Math.abs(station.position - trainPosition) < 200}
+                isNearby={Math.abs(station.position - trainPosition) < 200 * desktopScale}
+                stationScale={desktopScale}
                 onSelect={(event, idx) => {
                   SoundEffects.click();
                   setSelectedStation({ ...event, index: idx, position: station.position });
@@ -3425,8 +3452,9 @@ const TrainJourney = ({ onEnterStation, onBack, onNextStage, mode = 'surahs', cu
               surah={station}
               x={station.position}
               isSelected={selectedStation?.id === station.id}
-              isNearby={Math.abs(station.position - trainPosition) < 150}
+              isNearby={Math.abs(station.position - trainPosition) < 150 * desktopScale}
               onSelect={handleStationSelect}
+              stationScale={desktopScale}
             />
           ))
         )}

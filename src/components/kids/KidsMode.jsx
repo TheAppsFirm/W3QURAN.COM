@@ -15,6 +15,7 @@ import { Icons } from '../common/Icons';
 import KidsModeMenu from './KidsModeMenu';
 import TrainJourney from './TrainJourney';
 import ProphetLifeJourney from './ProphetLifeJourney';
+import KidsDuaJourney from './KidsDuaJourney';
 import KidsSurahLearning from './KidsSurahLearning';
 import KidsLoginGate from './KidsLoginGate';
 import KidsPremiumGate from './KidsPremiumGate';
@@ -762,9 +763,13 @@ const KidsMode = ({ isVisible, onClose }) => {
     }
   };
 
-  // Handle special journey selection (Prophet's Life - motorbike)
+  // Handle special journey selection (Kids Dua, Prophet's Life)
   const handleSpecialJourneySelect = (journeyId, mode) => {
-    if (journeyId === 'prophet-life' && mode === 'seert') {
+    if (journeyId === 'kids-dua' && mode === 'dua') {
+      setSelectedTheme('dua');
+      setSelectedThemeMode('dua');
+      setSelectedSurahs(true);
+    } else if (journeyId === 'prophet-life' && mode === 'seert') {
       setSelectedTheme('motorbike');
       setSelectedThemeMode('seert');
       // Prophet's Life doesn't need age selection - go directly
@@ -1073,6 +1078,19 @@ const KidsMode = ({ isVisible, onClose }) => {
             50% { transform: translateY(-20px); }
           }
         `}</style>
+      </div>
+    );
+  }
+
+  // Kids Dua Journey
+  if (selectedSurahs && selectedTheme === 'dua' && selectedThemeMode === 'dua') {
+    return (
+      <div
+        className={`fixed inset-0 z-[9999] overflow-hidden transition-all duration-300 ${
+          isExiting ? 'opacity-0 scale-95' : 'opacity-100 scale-100'
+        }`}
+      >
+        <KidsDuaJourney onBack={handleBackToMenu} isPremium={isPremium} />
       </div>
     );
   }

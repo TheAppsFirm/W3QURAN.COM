@@ -106,8 +106,21 @@ const THEMES = [
   },
 ];
 
-// Special standalone journey - Prophet's Life
+// Special standalone journeys
 const SPECIAL_JOURNEYS = [
+  {
+    id: 'kids-dua',
+    name: "Kids Duas",
+    nameAr: 'أدعية الأطفال',
+    emoji: '🤲',
+    description: 'Learn beautiful daily duas with fun animations!',
+    gradient: 'from-teal-400 via-emerald-500 to-green-600',
+    shadowColor: 'shadow-teal-500/50',
+    glowColor: 'teal',
+    bgPattern: 'dua',
+    mode: 'dua',
+    premium: false,
+  },
   {
     id: 'prophet-life',
     name: "Prophet's Life",
@@ -119,6 +132,7 @@ const SPECIAL_JOURNEYS = [
     glowColor: 'emerald',
     bgPattern: 'road',
     mode: 'seert',
+    premium: false,
   },
 ];
 
@@ -749,7 +763,7 @@ const useBackgroundMusic = (isMuted) => {
 };
 
 // Special Journey Card component (single card style)
-const SpecialJourneyCard = ({ journey, onSelect, index }) => {
+const SpecialJourneyCard = ({ journey, onSelect, index, isLocked = false, onLockedClick }) => {
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const [isHovered, setIsHovered] = useState(false);
 
@@ -790,7 +804,7 @@ const SpecialJourneyCard = ({ journey, onSelect, index }) => {
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       onMouseEnter={handleMouseEnter}
-      onClick={() => onSelect(journey.id, journey.mode)}
+      onClick={() => isLocked ? onLockedClick?.(journey.id) : onSelect(journey.id, journey.mode)}
     >
       {/* Glow effect */}
       <div
@@ -815,6 +829,13 @@ const SpecialJourneyCard = ({ journey, onSelect, index }) => {
           transform-gpu
         `}
       >
+        {/* Lock overlay for premium journeys */}
+        {isLocked && (
+          <div className="absolute inset-0 z-20 rounded-xl sm:rounded-2xl bg-black/50 backdrop-blur-[2px] flex flex-col items-center justify-center">
+            <Icons.Lock className="w-6 h-6 text-white mb-1" />
+            <span className="text-white text-xs font-bold px-2 py-0.5 bg-amber-500 rounded-full">PREMIUM</span>
+          </div>
+        )}
         {/* Sparkle decorations */}
         {isHovered && (
           <>
@@ -1057,13 +1078,18 @@ const KidsModeMenu = ({ onSelectTheme, onSelectAlphabet, onSelectSpecialJourney,
                 onLockedClick={handleLockedClick}
               />
             </div>
-            {/* Prophet's Life - Special Journey (full width) */}
-            <div className="mt-3">
-              <SpecialJourneyCard
-                journey={SPECIAL_JOURNEYS[0]}
-                onSelect={onSelectSpecialJourney || onSelectTheme}
-                index={6}
-              />
+            {/* Special Journeys (full width) */}
+            <div className="mt-3 flex flex-col gap-2">
+              {SPECIAL_JOURNEYS.map((journey, i) => (
+                <SpecialJourneyCard
+                  key={journey.id}
+                  journey={journey}
+                  onSelect={onSelectSpecialJourney || onSelectTheme}
+                  index={6 + i}
+                  isLocked={!isPremium && journey.premium}
+                  onLockedClick={handleLockedClick}
+                />
+              ))}
             </div>
           </div>
 
@@ -1117,18 +1143,25 @@ const KidsModeMenu = ({ onSelectTheme, onSelectAlphabet, onSelectSpecialJourney,
             </div>
           </div>
 
-          {/* Special Journey - Prophet's Life - Desktop only */}
+          {/* Special Journeys - Desktop only */}
           <div className="hidden sm:block w-full max-w-3xl px-6 mt-3 mb-4">
             <h2 className="text-center text-white/90 text-lg font-bold mb-2 flex items-center justify-center gap-2">
               <span className="text-xl">☪️</span>
-              <span>Special Journey</span>
-              <span className="font-arabic text-yellow-300 text-sm">رحلة خاصة</span>
+              <span>Special Journeys</span>
+              <span className="font-arabic text-yellow-300 text-sm">رحلات خاصة</span>
             </h2>
-            <SpecialJourneyCard
-              journey={SPECIAL_JOURNEYS[0]}
-              onSelect={onSelectSpecialJourney || onSelectTheme}
-              index={0}
-            />
+            <div className="flex flex-col gap-3">
+              {SPECIAL_JOURNEYS.map((journey, i) => (
+                <SpecialJourneyCard
+                  key={journey.id}
+                  journey={journey}
+                  onSelect={onSelectSpecialJourney || onSelectTheme}
+                  index={i}
+                  isLocked={!isPremium && journey.premium}
+                  onLockedClick={handleLockedClick}
+                />
+              ))}
+            </div>
           </div>
         </div>
 

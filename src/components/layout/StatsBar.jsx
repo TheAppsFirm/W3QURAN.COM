@@ -132,14 +132,10 @@ const StatsBar = memo(function StatsBar({
   showControls = false,
   // Donation modal callback
   onDonate,
-  // New callbacks for all features
-  onMood,
-  onMindMap,
+  // Callbacks for bubble features
   onWorldMap,
-  onAIGuide,
   onGlobalPulse,
   onWeatherSync,
-  onSoundHealing,
 }) {
   const [showLayoutMenu, setShowLayoutMenu] = useState(false);
   const [showZoomMenu, setShowZoomMenu] = useState(false);
@@ -304,28 +300,6 @@ const StatsBar = memo(function StatsBar({
                 <Icons.ChevronDown className={`w-3 h-3 sm:w-4 sm:h-4 transition-transform relative z-10 ${showZoomMenu ? 'rotate-180' : ''}`} />
               </button>
 
-              {/* Mood Bubble Button */}
-              {onMood && (
-                <BubbleButton
-                  icon={Icons.Activity}
-                  label="Mood"
-                  color="#06B6D4"
-                  color2="#0891B2"
-                  onClick={onMood}
-                />
-              )}
-
-              {/* Mind Map Bubble Button */}
-              {onMindMap && (
-                <BubbleButton
-                  icon={Icons.Network}
-                  label="Explorer"
-                  color="#A855F7"
-                  color2="#7C3AED"
-                  onClick={onMindMap}
-                />
-              )}
-
               {/* World Map Bubble Button */}
               {onWorldMap && (
                 <BubbleButton
@@ -334,17 +308,6 @@ const StatsBar = memo(function StatsBar({
                   color="#0EA5E9"
                   color2="#0284C7"
                   onClick={onWorldMap}
-                />
-              )}
-
-              {/* AI Guide Bubble Button */}
-              {onAIGuide && (
-                <BubbleButton
-                  icon={Icons.HeartHandshake}
-                  label="AI Guide"
-                  color="#14B8A6"
-                  color2="#0D9488"
-                  onClick={onAIGuide}
                 />
               )}
 
@@ -367,17 +330,6 @@ const StatsBar = memo(function StatsBar({
                   color="#3B82F6"
                   color2="#2563EB"
                   onClick={onWeatherSync}
-                />
-              )}
-
-              {/* Sound Healing Bubble Button */}
-              {onSoundHealing && (
-                <BubbleButton
-                  icon={Icons.Music}
-                  label="Healing"
-                  color="#EC4899"
-                  color2="#DB2777"
-                  onClick={onSoundHealing}
                 />
               )}
               </div>

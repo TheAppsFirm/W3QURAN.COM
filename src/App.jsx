@@ -16,6 +16,7 @@ import { Header, FloatingMenu, StatsBar } from './components/layout';
 import { SurahBubble, LayoutSelector, ClockLayout, GridLayout, JuzzGroupLayout, AlphabetLayout, RevelationLayout, BookLayout, ListLayout, CompactLayout, HoneycombLayout, WaveLayout, LengthLayout, KidsLayout, ArtLayout } from './components/bubbles';
 import { SURAHS, MAX_AYAHS } from './data';
 import { useLocalStorage, isMobileDevice, BREAKPOINTS } from './hooks';
+import { updateSEO, getSEOForView } from './hooks/useSEO';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 
 // Auto-reload on stale chunk errors (happens after new deploys when cached index.js references old chunk hashes)
@@ -460,12 +461,15 @@ function QuranBubbleApp() {
     if (showBabyNames) updateURL(MODAL_TO_ROUTE.babyNames);
   }, [showBabyNames, updateURL]);
 
-  // Update page title based on current state
+  // Update page title + meta tags (OG, description, canonical) based on current state
   useEffect(() => {
     let title = 'w3Quran - The Holy Quran';
 
     if (overlayReaderSurah) {
-      title = `${overlayReaderSurah.name} (${overlayReaderSurah.arabic}) - w3Quran`;
+      // Surah page — full SEO with description
+      const seo = getSEOForView(null, overlayReaderSurah);
+      updateSEO(seo);
+      return;
     } else if (showSearchPanel) {
       title = 'Search - w3Quran';
     } else if (showProgressDashboard) {
@@ -491,22 +495,14 @@ function QuranBubbleApp() {
     } else if (showBabyNames) {
       title = 'Quranic Baby Names - w3Quran';
     } else {
-      switch (view) {
-        case 'listen': title = 'Listen - w3Quran'; break;
-        case 'donate': title = 'Donate - w3Quran'; break;
-        case 'settings': title = 'Settings - w3Quran'; break;
-        case 'names': title = '99 Names of Allah - w3Quran'; break;
-        case 'quiz': title = 'Quiz - w3Quran'; break;
-        case 'prayer': title = 'Prayer Times - w3Quran'; break;
-        case 'stats': title = 'Statistics - w3Quran'; break;
-        case 'daily': title = 'Daily Verse - w3Quran'; break;
-        case 'privacy': title = 'Privacy Policy - w3Quran'; break;
-        case 'terms': title = 'Terms of Service - w3Quran'; break;
-        default: title = 'w3Quran - The Holy Quran';
-      }
+      // Known views — use SEO data with descriptions
+      const seo = getSEOForView(view);
+      updateSEO(seo);
+      return;
     }
 
-    document.title = title;
+    // Fallback for modals/overlays — title only
+    updateSEO({ title });
   }, [
     view, overlayReaderSurah, showSearchPanel, showProgressDashboard,
     showHifzMode, showMindMap, showMoodTracker, showVideoSync,
@@ -845,13 +841,9 @@ function QuranBubbleApp() {
           setSurahLayout={setSurahLayout}
           showControls={true}
           onDonate={() => setShowDonateModal(true)}
-          onMood={() => setShowMoodTracker(true)}
-          onMindMap={() => setShowMindMap(true)}
           onWorldMap={() => setShowPropheticMap(true)}
-          onAIGuide={() => setShowCompanionAI(true)}
           onGlobalPulse={() => setShowGlobalPulse(true)}
           onWeatherSync={() => setShowWeatherSync(true)}
-          onSoundHealing={() => setShowSoundHealing(true)}
         />
       )}
 
@@ -1211,6 +1203,8 @@ function QuranBubbleApp() {
         onTalkToQuran={() => setShowTalkToQuran(true)}
         onProgress={() => setShowProgressDashboard(true)}
         onOpenKidsMode={() => setShowKidsMode(true)}
+        onAIGuide={() => setShowCompanionAI(true)}
+        onSoundHealing={() => setShowSoundHealing(true)}
       />
 
       {/* Bubble Modal */}

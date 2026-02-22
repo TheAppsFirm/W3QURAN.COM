@@ -768,7 +768,7 @@ const SurahTeacher = ({ surah, onClose, onComplete, isInline = true, ageGroup: p
 
       {/* Train Interior Intro - Welcome screen with conductor */}
       {showTrainIntro && !showAgeSelection && (
-        <div className="absolute inset-0 z-50 flex flex-col overflow-hidden rounded-b-3xl">
+        <div className="absolute inset-0 z-50 flex flex-col overflow-y-auto rounded-b-3xl">
           {/* Train interior background - wood paneling effect */}
           <div
             className="absolute inset-0"

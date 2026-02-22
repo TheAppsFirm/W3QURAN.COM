@@ -48,7 +48,12 @@ export async function onRequest(context) {
       plan: result.plan || 'free',
       status: result.status || 'active',
       currentPeriodEnd: result.current_period_end,
-      isPremium: ['monthly', 'yearly', 'lifetime'].includes(result.plan),
+      isPremium: [
+        'monthly', 'yearly', 'lifetime',
+        'starter_monthly', 'starter_yearly',
+        'premium_monthly', 'premium_yearly',
+        'scholar_monthly', 'scholar_yearly',
+      ].includes(result.plan),
       canManage: !!result.stripe_subscription_id,
     }), {
       status: 200,
