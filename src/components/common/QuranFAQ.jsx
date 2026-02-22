@@ -41,13 +41,19 @@ const FAQCard = memo(function FAQCard({ faq, language, expanded, onToggle, onNav
           </span>
         </div>
         <div className="flex-1 min-w-0">
-          <p className={`font-semibold transition-colors ${
-            expanded ? 'text-white' : 'text-white/90'
-          } ${language === 'ar' || language === 'ur' ? 'text-right font-arabic' : ''}`}>
+          <p
+            className={`font-semibold transition-colors ${
+              expanded ? 'text-white' : 'text-white/90'
+            } ${language === 'ar' || language === 'ur' ? 'text-right' : ''} ${language === 'ar' ? 'font-arabic' : ''}`}
+            style={language === 'ur' ? { fontFamily: "'Noto Nastaliq Urdu', 'Jameel Noori Nastaleeq', serif" } : undefined}
+          >
             {question}
           </p>
           {!expanded && (
-            <p className="text-white/50 text-sm mt-1 line-clamp-1">
+            <p
+              className={`text-white/50 text-sm mt-1 line-clamp-1 ${language === 'ar' || language === 'ur' ? 'text-right' : ''}`}
+              style={language === 'ur' ? { fontFamily: "'Noto Nastaliq Urdu', 'Jameel Noori Nastaleeq', serif" } : undefined}
+            >
               {answer.substring(0, 80)}...
             </p>
           )}
@@ -61,9 +67,12 @@ const FAQCard = memo(function FAQCard({ faq, language, expanded, onToggle, onNav
 
       {expanded && (
         <div className="px-4 pb-4 space-y-4" style={{ animation: 'fadeIn 0.3s ease-out' }}>
-          <div className={`text-white/80 leading-relaxed ${
-            language === 'ar' || language === 'ur' ? 'text-right font-arabic' : ''
-          }`}>
+          <div
+            className={`text-white/80 leading-relaxed ${
+              language === 'ar' || language === 'ur' ? 'text-right' : ''
+            } ${language === 'ar' ? 'font-arabic' : ''}`}
+            style={language === 'ur' ? { fontFamily: "'Noto Nastaliq Urdu', 'Jameel Noori Nastaleeq', serif", lineHeight: '2' } : undefined}
+          >
             {answer}
           </div>
 
@@ -126,7 +135,10 @@ const CategoryButton = memo(function CategoryButton({ category, selected, onClic
       >
         <IconComponent className="w-3.5 h-3.5" style={{ color: category.color }} />
       </div>
-      <span className={`text-sm font-medium ${selected ? 'text-white' : 'text-white/70'}`}>
+      <span
+        className={`text-sm font-medium ${selected ? 'text-white' : 'text-white/70'} ${language === 'ar' ? 'font-arabic' : ''}`}
+        style={language === 'ur' ? { fontFamily: "'Noto Nastaliq Urdu', 'Jameel Noori Nastaleeq', serif" } : undefined}
+      >
         {name}
       </span>
       <span className={`text-xs px-1.5 py-0.5 rounded-full ${
