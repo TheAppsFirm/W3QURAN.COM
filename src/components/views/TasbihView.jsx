@@ -472,31 +472,36 @@ function TasbihView({ darkMode, onBack }) {
   const [showPremiumGate, setShowPremiumGate] = useState(false);
   const [paymentResult, setPaymentResult] = useState(null); // 'success' | 'canceled' | null
   const [isRefreshingUser, setIsRefreshingUser] = useState(false);
+  const paymentHandledRef = useRef(false);
 
-  // Detect payment return from Stripe
+  // Detect payment return from Stripe (run once on mount)
   useEffect(() => {
-    const handlePaymentReturn = async () => {
-      const params = new URLSearchParams(window.location.search);
-      const paymentPending = localStorage.getItem('kids_payment_pending');
+    if (paymentHandledRef.current) return;
 
-      if (params.get('payment_success') === '1') {
-        setPaymentResult('success');
-        localStorage.removeItem('kids_payment_pending');
-        window.history.replaceState({}, '', window.location.pathname);
-        if (refreshUser) {
-          setIsRefreshingUser(true);
-          try { await refreshUser(); } catch {} finally { setIsRefreshingUser(false); }
-        }
-      } else if (params.get('payment_canceled') === '1') {
-        setPaymentResult('canceled');
-        localStorage.removeItem('kids_payment_pending');
-        window.history.replaceState({}, '', window.location.pathname);
-      } else if (paymentPending === 'true') {
-        localStorage.removeItem('kids_payment_pending');
+    const params = new URLSearchParams(window.location.search);
+    const paymentSuccess = params.get('payment_success') === '1';
+    const paymentCanceled = params.get('payment_canceled') === '1';
+
+    if (paymentSuccess) {
+      paymentHandledRef.current = true;
+      setPaymentResult('success');
+      localStorage.removeItem('kids_payment_pending');
+      window.history.replaceState({}, '', window.location.pathname);
+
+      // Refresh user to get updated premium status
+      if (refreshUser) {
+        setIsRefreshingUser(true);
+        refreshUser().catch(() => {}).finally(() => setIsRefreshingUser(false));
       }
-    };
-    handlePaymentReturn();
-  }, [refreshUser]);
+    } else if (paymentCanceled) {
+      paymentHandledRef.current = true;
+      setPaymentResult('canceled');
+      localStorage.removeItem('kids_payment_pending');
+      window.history.replaceState({}, '', window.location.pathname);
+    } else if (localStorage.getItem('kids_payment_pending') === 'true') {
+      localStorage.removeItem('kids_payment_pending');
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Reset local tasbih data only (free)
   const resetLocalData = useCallback(() => {

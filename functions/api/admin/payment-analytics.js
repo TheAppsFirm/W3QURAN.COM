@@ -98,7 +98,7 @@ export async function onRequest(context) {
 
     // Validate filter values
     const VALID_STATUSES = ['initiated', 'completed', 'failed'];
-    const VALID_SOURCES = ['kids', 'talk_to_quran', 'general'];
+    const VALID_SOURCES = ['kids', 'talk_to_quran', 'tasbih', 'general'];
 
     // Build WHERE clause
     const conditions = [];

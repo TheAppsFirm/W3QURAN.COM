@@ -703,7 +703,6 @@ const KidsMode = ({ isVisible, onClose }) => {
           setIsRefreshingUser(true);
           try {
             await refreshUser();
-            console.log('[KidsMode] User refreshed after successful payment');
           } catch (error) {
             console.error('[KidsMode] Error refreshing user:', error);
           } finally {

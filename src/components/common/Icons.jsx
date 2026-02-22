@@ -457,6 +457,13 @@ export const LockIcon = (props) => (
   </Icon>
 );
 
+export const UnlockIcon = (props) => (
+  <Icon {...props}>
+    <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+    <path d="M7 11V7a5 5 0 0 1 9.9-1" />
+  </Icon>
+);
+
 export const BellIcon = (props) => (
   <Icon {...props}>
     <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
@@ -1163,6 +1170,7 @@ export const Icons = {
   Fire: FireIcon,
   Trophy: TrophyIcon,
   Lock: LockIcon,
+  Unlock: UnlockIcon,
   Bell: BellIcon,
   Type: TypeIcon,
   Refresh: RefreshIcon,

@@ -6,20 +6,33 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [blocked, setBlocked] = useState(false);
+  const [blockedReason, setBlockedReason] = useState(null);
 
   // Check session on mount
   const checkAuth = useCallback(async () => {
     try {
       const response = await fetch('/api/auth/me', { credentials: 'include' });
-      if (response.ok) {
-        const data = await response.json();
+      const data = await response.json();
+
+      if (response.status === 403 && data.blocked) {
+        // User is blocked
+        setUser(null);
+        setBlocked(true);
+        setBlockedReason(data.blockedReason || 'Your account has been suspended.');
+      } else if (response.ok && data.user) {
         setUser(data.user);
+        setBlocked(false);
+        setBlockedReason(null);
       } else {
         setUser(null);
+        setBlocked(false);
+        setBlockedReason(null);
       }
     } catch (err) {
       console.error('[Auth] Check auth error:', err);
       setUser(null);
+      setBlocked(false);
     } finally {
       setLoading(false);
     }
@@ -59,6 +72,12 @@ export function AuthProvider({ children }) {
     await checkAuth();
   }, [checkAuth]);
 
+  // Clear blocked state (to allow user to dismiss the screen)
+  const clearBlocked = useCallback(() => {
+    setBlocked(false);
+    setBlockedReason(null);
+  }, []);
+
   const value = {
     user,
     loading,
@@ -69,6 +88,9 @@ export function AuthProvider({ children }) {
     isAuthenticated: !!user,
     isPremium: user?.subscription?.isPremium || false,
     isAdmin: user?.isAdmin || false,
+    blocked,
+    blockedReason,
+    clearBlocked,
   };
 
   return (

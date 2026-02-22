@@ -8,6 +8,9 @@ CREATE TABLE IF NOT EXISTS users (
   email TEXT UNIQUE NOT NULL,
   name TEXT,
   picture TEXT,
+  blocked INTEGER DEFAULT 0,
+  blocked_at DATETIME,
+  blocked_reason TEXT,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
   updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );

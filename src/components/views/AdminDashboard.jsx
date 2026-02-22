@@ -50,12 +50,12 @@ const TierBadge = ({ tier }) => {
 };
 
 // User Row Component (Desktop)
-const UserRow = ({ user, onEdit }) => (
-  <tr className="border-b border-white/10 hover:bg-white/5 transition-colors">
+const UserRow = ({ user, onEdit, onToggleBlock }) => (
+  <tr className={`border-b border-white/10 hover:bg-white/5 transition-colors ${user.blocked ? 'opacity-60 bg-red-500/5' : ''}`}>
     <td className="py-3 px-4">
       <div className="flex items-center gap-3">
         {user.picture ? (
-          <img src={user.picture} alt="" className="w-8 h-8 rounded-full" />
+          <img src={user.picture} alt="" className={`w-8 h-8 rounded-full ${user.blocked ? 'grayscale' : ''}`} />
         ) : (
           <div className="w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center">
             <span className="text-white text-xs font-bold">
@@ -64,7 +64,14 @@ const UserRow = ({ user, onEdit }) => (
           </div>
         )}
         <div>
-          <p className="text-white text-sm font-medium">{user.name || 'No name'}</p>
+          <div className="flex items-center gap-2">
+            <p className="text-white text-sm font-medium">{user.name || 'No name'}</p>
+            {user.blocked && (
+              <span className="px-1.5 py-0.5 bg-red-500/20 text-red-400 text-[10px] rounded font-medium">
+                BLOCKED
+              </span>
+            )}
+          </div>
           <p className="text-white/50 text-xs">{user.email}</p>
         </div>
       </div>
@@ -85,23 +92,33 @@ const UserRow = ({ user, onEdit }) => (
       {new Date(user.created_at).toLocaleDateString()}
     </td>
     <td className="py-3 px-4">
-      <button
-        onClick={() => onEdit(user)}
-        className="text-purple-400 hover:text-purple-300 transition-colors"
-      >
-        <Icons.Edit className="w-4 h-4" />
-      </button>
+      <div className="flex items-center gap-2">
+        <button
+          onClick={() => onEdit(user)}
+          className="text-purple-400 hover:text-purple-300 transition-colors"
+          title="Edit user"
+        >
+          <Icons.Edit className="w-4 h-4" />
+        </button>
+        <button
+          onClick={() => onToggleBlock(user)}
+          className={`transition-colors ${user.blocked ? 'text-green-400 hover:text-green-300' : 'text-red-400 hover:text-red-300'}`}
+          title={user.blocked ? 'Unblock user' : 'Block user'}
+        >
+          {user.blocked ? <Icons.Unlock className="w-4 h-4" /> : <Icons.Lock className="w-4 h-4" />}
+        </button>
+      </div>
     </td>
   </tr>
 );
 
 // User Card Component (Mobile)
-const UserCard = ({ user, onEdit }) => (
-  <div className="bg-white/5 rounded-xl p-4 border border-white/10">
+const UserCard = ({ user, onEdit, onToggleBlock }) => (
+  <div className={`bg-white/5 rounded-xl p-4 border ${user.blocked ? 'border-red-500/30 bg-red-500/5' : 'border-white/10'}`}>
     <div className="flex items-start justify-between mb-3">
       <div className="flex items-center gap-3">
         {user.picture ? (
-          <img src={user.picture} alt="" className="w-10 h-10 rounded-full" />
+          <img src={user.picture} alt="" className={`w-10 h-10 rounded-full ${user.blocked ? 'grayscale' : ''}`} />
         ) : (
           <div className="w-10 h-10 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center">
             <span className="text-white text-sm font-bold">
@@ -110,16 +127,31 @@ const UserCard = ({ user, onEdit }) => (
           </div>
         )}
         <div>
-          <p className="text-white text-sm font-medium">{user.name || 'No name'}</p>
+          <div className="flex items-center gap-2">
+            <p className="text-white text-sm font-medium">{user.name || 'No name'}</p>
+            {user.blocked && (
+              <span className="px-1.5 py-0.5 bg-red-500/20 text-red-400 text-[10px] rounded font-medium">
+                BLOCKED
+              </span>
+            )}
+          </div>
           <p className="text-white/50 text-xs truncate max-w-[180px]">{user.email}</p>
         </div>
       </div>
-      <button
-        onClick={() => onEdit(user)}
-        className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-purple-400 hover:bg-white/20 transition-colors"
-      >
-        <Icons.Edit className="w-4 h-4" />
-      </button>
+      <div className="flex items-center gap-2">
+        <button
+          onClick={() => onEdit(user)}
+          className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-purple-400 hover:bg-white/20 transition-colors"
+        >
+          <Icons.Edit className="w-4 h-4" />
+        </button>
+        <button
+          onClick={() => onToggleBlock(user)}
+          className={`w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors ${user.blocked ? 'text-green-400' : 'text-red-400'}`}
+        >
+          {user.blocked ? <Icons.Unlock className="w-4 h-4" /> : <Icons.Lock className="w-4 h-4" />}
+        </button>
+      </div>
     </div>
     <div className="grid grid-cols-3 gap-2 text-center">
       <div className="bg-white/5 rounded-lg p-2">
@@ -235,6 +267,100 @@ const Toast = ({ message, type = 'success', onClose }) => {
         </div>
         <p className="text-white font-medium flex-1">{message}</p>
         <button onClick={onClose} className="text-white/70 hover:text-white text-xl">&times;</button>
+      </div>
+    </div>
+  );
+};
+
+// Confirm Modal Component
+const ConfirmModal = ({ isOpen, onClose, onConfirm, title, message, type = 'danger', confirmText = 'Confirm', cancelText = 'Cancel', loading = false }) => {
+  if (!isOpen) return null;
+
+  const typeStyles = {
+    danger: {
+      gradient: 'from-red-500 to-rose-600',
+      iconBg: 'bg-red-500/20',
+      iconColor: 'text-red-400',
+      buttonBg: 'bg-gradient-to-r from-red-500 to-rose-600 hover:from-red-600 hover:to-rose-700',
+      icon: Icons.Lock,
+    },
+    warning: {
+      gradient: 'from-amber-500 to-orange-600',
+      iconBg: 'bg-amber-500/20',
+      iconColor: 'text-amber-400',
+      buttonBg: 'bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700',
+      icon: Icons.AlertCircle,
+    },
+    success: {
+      gradient: 'from-emerald-500 to-teal-600',
+      iconBg: 'bg-emerald-500/20',
+      iconColor: 'text-emerald-400',
+      buttonBg: 'bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700',
+      icon: Icons.Check,
+    },
+  };
+
+  const style = typeStyles[type] || typeStyles.danger;
+  const IconComponent = style.icon;
+
+  return (
+    <div className="fixed inset-0 z-[10000] flex items-center justify-center p-4">
+      {/* Backdrop */}
+      <div
+        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+        onClick={onClose}
+      />
+
+      {/* Modal */}
+      <div className="relative w-full max-w-md animate-scaleIn">
+        <div className="bg-gradient-to-br from-slate-800 via-slate-900 to-slate-800 rounded-3xl border border-white/10 shadow-2xl overflow-hidden">
+          {/* Header with gradient accent */}
+          <div className={`h-1.5 bg-gradient-to-r ${style.gradient}`} />
+
+          <div className="p-6">
+            {/* Icon */}
+            <div className="flex justify-center mb-4">
+              <div className={`w-16 h-16 rounded-full ${style.iconBg} flex items-center justify-center`}>
+                <IconComponent className={`w-8 h-8 ${style.iconColor}`} />
+              </div>
+            </div>
+
+            {/* Title */}
+            <h3 className="text-xl font-bold text-white text-center mb-2">
+              {title}
+            </h3>
+
+            {/* Message */}
+            <p className="text-white/70 text-center mb-6 leading-relaxed">
+              {message}
+            </p>
+
+            {/* Buttons */}
+            <div className="flex gap-3">
+              <button
+                onClick={onClose}
+                disabled={loading}
+                className="flex-1 px-4 py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white font-medium transition-all disabled:opacity-50"
+              >
+                {cancelText}
+              </button>
+              <button
+                onClick={onConfirm}
+                disabled={loading}
+                className={`flex-1 px-4 py-3 rounded-xl ${style.buttonBg} text-white font-medium transition-all shadow-lg disabled:opacity-50 flex items-center justify-center gap-2`}
+              >
+                {loading ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    <span>Processing...</span>
+                  </>
+                ) : (
+                  confirmText
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -1808,6 +1934,17 @@ export default function AdminDashboard({ onClose, initialTab = 'overview', onTab
   const [settingsLoading, setSettingsLoading] = useState(false);
   const [settingsSaving, setSettingsSaving] = useState(false);
 
+  // Confirm modal state
+  const [confirmModal, setConfirmModal] = useState({
+    isOpen: false,
+    title: '',
+    message: '',
+    type: 'danger',
+    confirmText: 'Confirm',
+    onConfirm: null,
+    loading: false,
+  });
+
   // Fetch stats
   const fetchStats = useCallback(async () => {
     try {
@@ -1861,6 +1998,52 @@ export default function AdminDashboard({ onClose, initialTab = 'overview', onTab
     } catch (err) {
       console.error('Failed to save user:', err);
     }
+  };
+
+  // Toggle block/unblock user
+  const toggleBlockUser = (user) => {
+    const action = user.blocked ? 'unblock' : 'block';
+    const isBlocking = action === 'block';
+
+    setConfirmModal({
+      isOpen: true,
+      title: isBlocking ? 'Block User' : 'Unblock User',
+      message: isBlocking
+        ? `Are you sure you want to block ${user.name || user.email}? They will be logged out immediately and won't be able to access the app.`
+        : `Are you sure you want to unblock ${user.name || user.email}? They will be able to log in and use the app again.`,
+      type: isBlocking ? 'danger' : 'success',
+      confirmText: isBlocking ? 'Block User' : 'Unblock User',
+      loading: false,
+      onConfirm: async () => {
+        setConfirmModal(prev => ({ ...prev, loading: true }));
+        try {
+          const response = await fetch('/api/admin/users', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({
+              userId: user.id,
+              action,
+              reason: action === 'block' ? 'Blocked by admin' : undefined,
+            }),
+          });
+
+          if (response.ok) {
+            fetchUsers(pagination.page);
+            setConfirmModal(prev => ({ ...prev, isOpen: false, loading: false }));
+          } else {
+            const data = await response.json();
+            setConfirmModal(prev => ({ ...prev, loading: false }));
+            // Show error toast or alert
+            alert(data.error || 'Failed to update user');
+          }
+        } catch (err) {
+          console.error('Failed to toggle block:', err);
+          setConfirmModal(prev => ({ ...prev, loading: false }));
+          alert('Failed to update user');
+        }
+      },
+    });
   };
 
   // Fetch admin settings
@@ -2155,7 +2338,7 @@ export default function AdminDashboard({ onClose, initialTab = 'overview', onTab
                 {/* Mobile: User Cards */}
                 <div className="md:hidden space-y-3">
                   {users.map(u => (
-                    <UserCard key={u.id} user={u} onEdit={setEditingUser} />
+                    <UserCard key={u.id} user={u} onEdit={setEditingUser} onToggleBlock={toggleBlockUser} />
                   ))}
                 </div>
 
@@ -2176,7 +2359,7 @@ export default function AdminDashboard({ onClose, initialTab = 'overview', onTab
                       </thead>
                       <tbody>
                         {users.map(u => (
-                          <UserRow key={u.id} user={u} onEdit={setEditingUser} />
+                          <UserRow key={u.id} user={u} onEdit={setEditingUser} onToggleBlock={toggleBlockUser} />
                         ))}
                       </tbody>
                     </table>
@@ -2409,6 +2592,18 @@ export default function AdminDashboard({ onClose, initialTab = 'overview', onTab
           onSave={saveUserChanges}
         />
       )}
+
+      {/* Confirm Modal */}
+      <ConfirmModal
+        isOpen={confirmModal.isOpen}
+        onClose={() => setConfirmModal(prev => ({ ...prev, isOpen: false }))}
+        onConfirm={confirmModal.onConfirm}
+        title={confirmModal.title}
+        message={confirmModal.message}
+        type={confirmModal.type}
+        confirmText={confirmModal.confirmText}
+        loading={confirmModal.loading}
+      />
     </div>
   );
 }

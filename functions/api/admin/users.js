@@ -50,30 +50,101 @@ export async function onRequest(context) {
       });
     }
 
-    // GET - List all users
+    // GET - List all users with filtering and pagination
     if (request.method === 'GET') {
-      const users = await env.DB.prepare(`
-        SELECT
-          u.id,
-          u.email,
-          u.name,
-          u.picture,
-          u.created_at,
-          s.plan,
-          s.status as subscription_status,
-          s.current_period_end,
-          s.stripe_customer_id,
-          uc.credits_balance,
-          uc.credits_monthly_allowance,
-          uc.subscription_tier,
-          uc.lifetime_purchase,
-          uc.credits_used_this_month,
-          (SELECT COUNT(*) FROM quran_conversations WHERE user_id = u.id) as conversation_count
+      const url = new URL(request.url);
+      const page = parseInt(url.searchParams.get('page') || '1');
+      const limit = Math.min(parseInt(url.searchParams.get('limit') || '20'), 100);
+      const offset = (page - 1) * limit;
+      const searchTerm = url.searchParams.get('search') || '';
+      const tierFilter = url.searchParams.get('tier') || '';
+
+      // Build WHERE clause
+      const conditions = [];
+      const bindings = [];
+
+      if (searchTerm) {
+        conditions.push('(u.email LIKE ? OR u.name LIKE ?)');
+        bindings.push(`%${searchTerm}%`, `%${searchTerm}%`);
+      }
+
+      if (tierFilter) {
+        conditions.push('COALESCE(uc.subscription_tier, ?) = ?');
+        bindings.push('free', tierFilter);
+      }
+
+      const whereClause = conditions.length > 0 ? 'WHERE ' + conditions.join(' AND ') : '';
+
+      // Get total count for pagination
+      const countQuery = await env.DB.prepare(`
+        SELECT COUNT(*) as count
         FROM users u
-        LEFT JOIN subscriptions s ON u.id = s.user_id
         LEFT JOIN user_credits uc ON u.id = uc.user_id
-        ORDER BY u.created_at DESC
-      `).all();
+        ${whereClause}
+      `).bind(...bindings).first();
+
+      const total = countQuery?.count || 0;
+      const totalPages = Math.ceil(total / limit);
+
+      // Get paginated users (with fallback for DBs without blocked columns)
+      let users;
+      let hasBlockedColumn = true;
+      try {
+        users = await env.DB.prepare(`
+          SELECT
+            u.id,
+            u.email,
+            u.name,
+            u.picture,
+            u.created_at,
+            u.blocked,
+            u.blocked_reason,
+            s.plan,
+            s.status as subscription_status,
+            s.current_period_end,
+            s.stripe_customer_id,
+            uc.credits_balance,
+            uc.credits_monthly_allowance,
+            uc.subscription_tier,
+            uc.lifetime_purchase,
+            uc.credits_used_this_month,
+            (SELECT COUNT(*) FROM quran_conversations WHERE user_id = u.id) as conversation_count
+          FROM users u
+          LEFT JOIN subscriptions s ON u.id = s.user_id
+          LEFT JOIN user_credits uc ON u.id = uc.user_id
+          ${whereClause}
+          ORDER BY u.created_at DESC
+          LIMIT ? OFFSET ?
+        `).bind(...bindings, limit, offset).all();
+      } catch (columnError) {
+        // Fallback for databases without blocked columns
+        console.log('[Admin] Falling back to query without blocked columns');
+        hasBlockedColumn = false;
+        users = await env.DB.prepare(`
+          SELECT
+            u.id,
+            u.email,
+            u.name,
+            u.picture,
+            u.created_at,
+            s.plan,
+            s.status as subscription_status,
+            s.current_period_end,
+            s.stripe_customer_id,
+            uc.credits_balance,
+            uc.credits_monthly_allowance,
+            uc.subscription_tier,
+            uc.lifetime_purchase,
+            uc.credits_used_this_month,
+            (SELECT COUNT(*) FROM quran_conversations WHERE user_id = u.id) as conversation_count
+          FROM users u
+          LEFT JOIN subscriptions s ON u.id = s.user_id
+          LEFT JOIN user_credits uc ON u.id = uc.user_id
+          ${whereClause}
+          ORDER BY u.created_at DESC
+          LIMIT ? OFFSET ?
+        `).bind(...bindings, limit, offset).all();
+      }
 
       // Transform for frontend
       const transformedUsers = users.results.map(u => ({
@@ -89,11 +160,13 @@ export async function onRequest(context) {
         used_this_month: u.credits_used_this_month || 0,
         conversation_count: u.conversation_count || 0,
         lifetime_purchase: u.lifetime_purchase || 0,
+        blocked: hasBlockedColumn ? (u.blocked === 1) : false,
+        blocked_reason: hasBlockedColumn ? u.blocked_reason : null,
       }));
 
       return new Response(JSON.stringify({
         users: transformedUsers,
-        pagination: { page: 1, totalPages: 1, total: transformedUsers.length }
+        pagination: { page, totalPages, total, limit }
       }), {
         status: 200,
         headers: { 'Content-Type': 'application/json' },
@@ -164,6 +237,96 @@ export async function onRequest(context) {
         status: 200,
         headers: { 'Content-Type': 'application/json' },
       });
+    }
+
+    // POST - Block/Unblock user
+    if (request.method === 'POST') {
+      const { userId, action, reason } = await request.json();
+
+      if (!userId || !action) {
+        return new Response(JSON.stringify({ error: 'User ID and action required' }), {
+          status: 400,
+          headers: { 'Content-Type': 'application/json' },
+        });
+      }
+
+      if (!['block', 'unblock'].includes(action)) {
+        return new Response(JSON.stringify({ error: 'Invalid action. Use "block" or "unblock"' }), {
+          status: 400,
+          headers: { 'Content-Type': 'application/json' },
+        });
+      }
+
+      // Prevent admin from blocking themselves
+      if (userId === currentUser.id) {
+        return new Response(JSON.stringify({ error: 'Cannot block yourself' }), {
+          status: 400,
+          headers: { 'Content-Type': 'application/json' },
+        });
+      }
+
+      // Check if target user is also an admin
+      const targetUser = await env.DB.prepare('SELECT email FROM users WHERE id = ?').bind(userId).first();
+      if (targetUser) {
+        const adminEmails = (env.ADMIN_EMAILS || '').split(',').map(e => e.trim().toLowerCase()).filter(Boolean);
+        if (adminEmails.includes(targetUser.email?.toLowerCase())) {
+          return new Response(JSON.stringify({ error: 'Cannot block another admin' }), {
+            status: 400,
+            headers: { 'Content-Type': 'application/json' },
+          });
+        }
+      }
+
+      try {
+        if (action === 'block') {
+          // Block user and invalidate all their sessions
+          await env.DB.prepare(`
+            UPDATE users
+            SET blocked = 1, blocked_at = datetime('now'), blocked_reason = ?
+            WHERE id = ?
+          `).bind(reason || 'Account suspended by admin', userId).run();
+
+          // Delete all active sessions for this user
+          await env.DB.prepare('DELETE FROM sessions WHERE user_id = ?').bind(userId).run();
+
+          console.log('[Admin] Blocked user:', userId, 'Reason:', reason);
+        } else {
+          // Unblock user
+          await env.DB.prepare(`
+            UPDATE users
+            SET blocked = 0, blocked_at = NULL, blocked_reason = NULL
+            WHERE id = ?
+          `).bind(userId).run();
+
+          console.log('[Admin] Unblocked user:', userId);
+        }
+
+        return new Response(JSON.stringify({
+          success: true,
+          message: `User ${action}ed successfully`,
+        }), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' },
+        });
+      } catch (blockError) {
+        console.error('[Admin] Block/unblock error:', blockError);
+        // Check if it's a missing column error
+        const errorMsg = blockError.message || String(blockError);
+        if (errorMsg.includes('no such column')) {
+          return new Response(JSON.stringify({
+            error: 'Block feature requires database migration. Please run: ALTER TABLE users ADD COLUMN blocked INTEGER DEFAULT 0; ALTER TABLE users ADD COLUMN blocked_at DATETIME; ALTER TABLE users ADD COLUMN blocked_reason TEXT;'
+          }), {
+            status: 500,
+            headers: { 'Content-Type': 'application/json' },
+          });
+        }
+        return new Response(JSON.stringify({
+          error: `Failed to ${action} user: ${errorMsg}`
+        }), {
+          status: 500,
+          headers: { 'Content-Type': 'application/json' },
+        });
+      }
     }
 
     return new Response('Method not allowed', { status: 405 });

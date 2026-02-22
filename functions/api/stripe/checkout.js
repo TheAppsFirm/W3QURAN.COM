@@ -119,7 +119,7 @@ export async function onRequest(context) {
     const { product, productType: productTypeField, priceId: legacyPriceId, successUrl: customSuccessUrl, cancelUrl: customCancelUrl, source: requestSource } = requestBody;
 
     // Sanitize source field
-    const ALLOWED_SOURCES = ['kids', 'talk_to_quran', 'general'];
+    const ALLOWED_SOURCES = ['kids', 'talk_to_quran', 'tasbih', 'general'];
     const source = ALLOWED_SOURCES.includes(requestSource) ? requestSource : 'general';
 
     // SECURITY: Simple rate limiting using KV (1 checkout attempt per 10 seconds)

@@ -20,12 +20,10 @@ const BubbleButton = memo(function BubbleButton({ icon: Icon, label, color, colo
       className="relative flex flex-col items-center gap-0.5 transition-all duration-300 flex-shrink-0 snap-start"
       title={label}
     >
-      {/* Bubble */}
+      {/* Bubble - w-10 h-10 (40px) on mobile, w-[54px] h-[54px] on desktop */}
       <div
-        className="relative transition-all duration-300"
+        className="relative transition-all duration-300 w-10 h-10 sm:w-[54px] sm:h-[54px]"
         style={{
-          width: 54,
-          height: 54,
           transform: `scale(${isHovered ? 1.15 : 1})`,
         }}
       >
@@ -93,7 +91,7 @@ const BubbleButton = memo(function BubbleButton({ icon: Icon, label, color, colo
 
           {/* Icon */}
           <div className="absolute inset-0 flex items-center justify-center">
-            <Icon className="w-7 h-7 text-white drop-shadow-lg" />
+            <Icon className="w-5 h-5 sm:w-7 sm:h-7 text-white drop-shadow-lg" />
           </div>
         </div>
 

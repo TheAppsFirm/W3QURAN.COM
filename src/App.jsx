@@ -208,9 +208,36 @@ const MODAL_TO_ROUTE = {
 /**
  * Main App Component
  */
+// Blocked User Screen Component
+const BlockedUserScreen = ({ reason, onDismiss }) => (
+  <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-gradient-to-br from-slate-900 via-red-950 to-slate-900">
+    <div className="max-w-md mx-4 text-center">
+      <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-red-500/20 flex items-center justify-center">
+        <svg className="w-10 h-10 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+        </svg>
+      </div>
+      <h1 className="text-2xl font-bold text-white mb-3">Account Suspended</h1>
+      <p className="text-white/70 mb-6">{reason}</p>
+      <p className="text-white/50 text-sm mb-8">
+        If you believe this is a mistake, please contact support at{' '}
+        <a href="mailto:support@w3quran.com" className="text-purple-400 hover:text-purple-300">
+          support@w3quran.com
+        </a>
+      </p>
+      <button
+        onClick={onDismiss}
+        className="px-6 py-3 bg-white/10 hover:bg-white/20 text-white rounded-xl transition-colors"
+      >
+        Continue as Guest
+      </button>
+    </div>
+  </div>
+);
+
 function QuranBubbleApp() {
   // Auth state
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, blocked, blockedReason, clearBlocked } = useAuth();
 
   // State management using custom hooks for persistence
   const [view, setView] = useState('surahs');
@@ -855,6 +882,11 @@ function QuranBubbleApp() {
         darkMode ? 'animated-bg-dark' : 'animated-bg'
       }`}
     >
+      {/* Blocked User Screen */}
+      {blocked && (
+        <BlockedUserScreen reason={blockedReason} onDismiss={clearBlocked} />
+      )}
+
       {/* Ambient floating particles */}
       <AmbientParticles darkMode={darkMode} />
       {/* Header - only on surahs view */}
