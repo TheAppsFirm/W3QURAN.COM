@@ -291,11 +291,11 @@ function QuranBubbleApp() {
   useEffect(() => {
     const fetchNextPrayer = async () => {
       try {
-        const saved = localStorage.getItem('quran_app_prayer_location');
+        const saved = localStorage.getItem('prayer_location');
         if (!saved) return;
         const loc = JSON.parse(saved);
         if (!loc?.latitude) return;
-        const methodRaw = localStorage.getItem('quran_app_prayer_method');
+        const methodRaw = localStorage.getItem('prayer_method');
         const method = methodRaw ? JSON.parse(methodRaw) : '2';
         const d = new Date();
         const dateStr = `${d.getDate()}-${d.getMonth() + 1}-${d.getFullYear()}`;
