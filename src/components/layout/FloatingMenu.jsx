@@ -28,7 +28,7 @@ const BubbleMenuItem = ({ item, active, onClick, delay = 0, darkMode }) => {
       onMouseLeave={() => setIsHovered(false)}
       className="relative flex flex-col items-center gap-0.5 sm:gap-1 transition-all duration-300"
       style={{
-        // No jumping animation - smooth appearance
+        animation: `bubblePopIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) ${delay}ms both`,
       }}
       aria-label={`Go to ${item.label}`}
       aria-current={active ? 'page' : undefined}
@@ -192,6 +192,7 @@ function FloatingMenu({ view, setView, darkMode, onDonate, onMindMap, onMood, on
     { id: 'names', label: '99 Names', icon: Icons.Sparkles, gradient: ['#8b5cf6', '#a855f7'] },
     { id: 'quiz', label: 'Quiz', icon: Icons.HelpCircle, gradient: ['#ec4899', '#f43f5e'] },
     { id: 'listen', label: 'Listen', icon: Icons.Headphones, gradient: ['#22c55e', '#10b981'] },
+    { id: 'stats', label: 'Stats', icon: Icons.PieChart, gradient: ['#10b981', '#14b8a6'] },
     // Row 3: Engagement & settings
     { id: 'settings', label: 'Settings', icon: Icons.Settings, gradient: ['#6366f1', '#8b5cf6'] },
     { id: 'donate', label: 'Donate', icon: Icons.Heart, gradient: ['#ef4444', '#f97316'], isDonate: true },
@@ -241,7 +242,7 @@ function FloatingMenu({ view, setView, darkMode, onDonate, onMindMap, onMood, on
       {showMore && (
         <div
           className="fixed left-1/2 -translate-x-1/2 z-[55] w-[95vw] sm:w-auto max-w-[420px]"
-          style={{ bottom: 'calc(90px + env(safe-area-inset-bottom, 0px))' }}
+          style={{ bottom: '100px' }}
         >
           <div
             className="relative p-4 sm:p-5 rounded-3xl shadow-2xl backdrop-blur-xl border overflow-hidden"
@@ -308,8 +309,7 @@ function FloatingMenu({ view, setView, darkMode, onDonate, onMindMap, onMood, on
 
       {/* Main Bottom Menu - Bubble styled */}
       <div
-        className="fixed left-1/2 -translate-x-1/2 z-[55]"
-        style={{ bottom: 'max(16px, env(safe-area-inset-bottom, 16px))' }}
+        className="fixed bottom-4 sm:bottom-5 left-1/2 -translate-x-1/2 z-[55] safe-area-bottom"
       >
         <div
           className="flex items-center justify-center gap-3 sm:gap-4 rounded-full px-5 sm:px-6 py-3 shadow-2xl border backdrop-blur-xl"
@@ -357,6 +357,7 @@ function FloatingMenu({ view, setView, darkMode, onDonate, onMindMap, onMood, on
                     width: 48,
                     height: 48,
                     transform: `scale(${active ? 1.15 : 1})`,
+                    animation: item.isKids ? 'kidsBounce 2s ease-in-out infinite' : 'none',
                   }}
                 >
                   {/* Outer glow */}
@@ -438,6 +439,15 @@ function FloatingMenu({ view, setView, darkMode, onDonate, onMindMap, onMood, on
         @keyframes slideUp {
           from { opacity: 0; transform: translateX(-50%) translateY(20px) scale(0.95); }
           to { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+        }
+        @keyframes bubblePopIn {
+          0% { opacity: 0; transform: scale(0); }
+          70% { transform: scale(1.1); }
+          100% { opacity: 1; transform: scale(1); }
+        }
+        @keyframes kidsBounce {
+          0%, 100% { transform: scale(1) translateY(0); }
+          50% { transform: scale(1.05) translateY(-2px); }
         }
       `}</style>
     </nav>
