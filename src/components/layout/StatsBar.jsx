@@ -320,79 +320,142 @@ const StatsBar = memo(function StatsBar({
               />
             )}
 
-            {/* Gamification Stats - Now in the scroll */}
+            {/* Gamification Stats - Styled as bubble buttons */}
             {gamification.isActive ? (
-              <button
-                onClick={onShowAchievements}
-                className="relative flex items-center gap-0 flex-shrink-0 cursor-pointer transition-all hover:scale-[1.03] active:scale-[0.98] snap-start"
-                title={`Level ${gamification.level} ${gamification.levelInfo.current.name} — Click for achievements`}
-              >
-                <div className="relative flex items-center rounded-2xl overflow-hidden"
-                  style={{
-                    background: 'linear-gradient(135deg, rgba(255,255,255,0.95), rgba(248,250,252,0.9))',
-                    boxShadow: `0 2px 12px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.04), 0 0 20px ${gamification.levelInfo.current.color}15`,
-                  }}>
-                  {/* Level circle */}
-                  <div className="relative w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center flex-shrink-0 -ml-0.5 z-10"
+              <>
+                {/* Level Bubble */}
+                <button
+                  onClick={onShowAchievements}
+                  className="relative flex flex-col items-center gap-0.5 transition-all duration-300 flex-shrink-0 snap-start"
+                  title={`Level ${gamification.level} ${gamification.levelInfo.current.name}`}
+                >
+                  <div
+                    className="relative w-10 h-10 sm:w-[54px] sm:h-[54px] rounded-full overflow-hidden transition-all hover:scale-110"
                     style={{
                       background: `linear-gradient(135deg, ${gamification.levelInfo.current.color}, ${gamification.levelInfo.current.color}cc)`,
-                      boxShadow: `0 2px 10px ${gamification.levelInfo.current.color}50, inset 0 1px 2px rgba(255,255,255,0.3)`,
-                      border: '2.5px solid white',
-                    }}>
-                    <span className="text-white text-xs sm:text-sm font-black drop-shadow-sm">{gamification.level}</span>
-                  </div>
-                  {/* Stats row */}
-                  <div className="flex items-center gap-1.5 sm:gap-2 pl-1.5 pr-2 py-1 sm:py-2">
-                    {/* XP */}
-                    <div className="flex items-center gap-0.5" title={`${gamification.xp} XP`}>
-                      <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-full flex items-center justify-center"
-                        style={{ background: 'linear-gradient(135deg, #FEF3C7, #FDE68A)', boxShadow: 'inset 0 -1px 2px #D9770620' }}>
-                        <Icons.Star className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-amber-600" />
-                      </div>
-                      <span className="font-bold text-gray-700 text-[10px] sm:text-xs">{gamification.xp}</span>
-                    </div>
-                    {/* Streak */}
-                    <div className="flex items-center gap-0.5" title={`${gamification.streak.current}-day streak`}>
-                      <div className={`w-4 h-4 sm:w-5 sm:h-5 rounded-full flex items-center justify-center ${gamification.streak.current > 0 ? '' : 'opacity-40'}`}
-                        style={{
-                          background: gamification.streak.current > 0 ? 'linear-gradient(135deg, #FFEDD5, #FED7AA)' : 'linear-gradient(135deg, #F1F5F9, #E2E8F0)',
-                        }}>
-                        <Icons.Fire className={`w-2.5 h-2.5 sm:w-3 sm:h-3 ${gamification.streak.current > 0 ? 'text-orange-500' : 'text-gray-400'}`} />
-                      </div>
-                      <span className={`font-bold text-[10px] sm:text-xs ${gamification.streak.current > 0 ? 'text-gray-700' : 'text-gray-400'}`}>
-                        {gamification.streak.current}
-                      </span>
-                    </div>
-                    {/* Achievements */}
-                    <div className="flex items-center gap-0.5" title={`${gamification.achievements.length} achievements`}>
-                      <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-full flex items-center justify-center"
-                        style={{ background: 'linear-gradient(135deg, #EDE9FE, #DDD6FE)' }}>
-                        <Icons.Trophy className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-purple-500" />
-                      </div>
-                      <span className="font-bold text-gray-700 text-[10px] sm:text-xs">{gamification.achievements.length}</span>
+                      boxShadow: `0 4px 15px ${gamification.levelInfo.current.color}40, inset 0 -8px 15px ${gamification.levelInfo.current.color}50, inset 0 8px 15px rgba(255,255,255,0.2)`,
+                    }}
+                  >
+                    <div className="absolute pointer-events-none" style={{
+                      width: '70%', height: '35%', top: '8%', left: '15%',
+                      background: 'linear-gradient(180deg, rgba(255,255,255,0.5) 0%, transparent 100%)',
+                      borderRadius: '50%', transform: 'scaleY(0.5)',
+                    }} />
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <span className="text-white text-sm sm:text-lg font-black drop-shadow-lg">{gamification.level}</span>
                     </div>
                   </div>
-                </div>
-              </button>
+                  <span className="text-[9px] font-semibold text-gray-500 hidden sm:block">Level</span>
+                </button>
+
+                {/* XP Bubble */}
+                <button
+                  onClick={onShowAchievements}
+                  className="relative flex flex-col items-center gap-0.5 transition-all duration-300 flex-shrink-0 snap-start"
+                  title={`${gamification.xp} XP`}
+                >
+                  <div
+                    className="relative w-10 h-10 sm:w-[54px] sm:h-[54px] rounded-full overflow-hidden transition-all hover:scale-110"
+                    style={{
+                      background: 'linear-gradient(135deg, #F59E0B, #D97706)',
+                      boxShadow: '0 4px 15px rgba(245, 158, 11, 0.4), inset 0 -8px 15px rgba(217, 119, 6, 0.3), inset 0 8px 15px rgba(255,255,255,0.2)',
+                    }}
+                  >
+                    <div className="absolute pointer-events-none" style={{
+                      width: '70%', height: '35%', top: '8%', left: '15%',
+                      background: 'linear-gradient(180deg, rgba(255,255,255,0.5) 0%, transparent 100%)',
+                      borderRadius: '50%', transform: 'scaleY(0.5)',
+                    }} />
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <Icons.Star className="w-5 h-5 sm:w-7 sm:h-7 text-white drop-shadow-lg" />
+                    </div>
+                  </div>
+                  <span className="text-[9px] font-semibold text-gray-500 hidden sm:block">{gamification.xp} XP</span>
+                </button>
+
+                {/* Streak Bubble */}
+                <button
+                  onClick={onShowAchievements}
+                  className="relative flex flex-col items-center gap-0.5 transition-all duration-300 flex-shrink-0 snap-start"
+                  title={`${gamification.streak.current}-day streak`}
+                >
+                  <div
+                    className={`relative w-10 h-10 sm:w-[54px] sm:h-[54px] rounded-full overflow-hidden transition-all hover:scale-110 ${gamification.streak.current === 0 ? 'opacity-50' : ''}`}
+                    style={{
+                      background: gamification.streak.current > 0
+                        ? 'linear-gradient(135deg, #F97316, #EA580C)'
+                        : 'linear-gradient(135deg, #94A3B8, #64748B)',
+                      boxShadow: gamification.streak.current > 0
+                        ? '0 4px 15px rgba(249, 115, 22, 0.4), inset 0 -8px 15px rgba(234, 88, 12, 0.3), inset 0 8px 15px rgba(255,255,255,0.2)'
+                        : '0 4px 15px rgba(148, 163, 184, 0.3), inset 0 -8px 15px rgba(100, 116, 139, 0.3), inset 0 8px 15px rgba(255,255,255,0.2)',
+                    }}
+                  >
+                    <div className="absolute pointer-events-none" style={{
+                      width: '70%', height: '35%', top: '8%', left: '15%',
+                      background: 'linear-gradient(180deg, rgba(255,255,255,0.5) 0%, transparent 100%)',
+                      borderRadius: '50%', transform: 'scaleY(0.5)',
+                    }} />
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <Icons.Fire className="w-5 h-5 sm:w-7 sm:h-7 text-white drop-shadow-lg" />
+                    </div>
+                  </div>
+                  <span className="text-[9px] font-semibold text-gray-500 hidden sm:block">{gamification.streak.current} Days</span>
+                </button>
+
+                {/* Trophy Bubble */}
+                <button
+                  onClick={onShowAchievements}
+                  className="relative flex flex-col items-center gap-0.5 transition-all duration-300 flex-shrink-0 snap-start"
+                  title={`${gamification.achievements.length} achievements`}
+                >
+                  <div
+                    className="relative w-10 h-10 sm:w-[54px] sm:h-[54px] rounded-full overflow-hidden transition-all hover:scale-110"
+                    style={{
+                      background: 'linear-gradient(135deg, #A855F7, #9333EA)',
+                      boxShadow: '0 4px 15px rgba(168, 85, 247, 0.4), inset 0 -8px 15px rgba(147, 51, 234, 0.3), inset 0 8px 15px rgba(255,255,255,0.2)',
+                    }}
+                  >
+                    <div className="absolute pointer-events-none" style={{
+                      width: '70%', height: '35%', top: '8%', left: '15%',
+                      background: 'linear-gradient(180deg, rgba(255,255,255,0.5) 0%, transparent 100%)',
+                      borderRadius: '50%', transform: 'scaleY(0.5)',
+                    }} />
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <Icons.Trophy className="w-5 h-5 sm:w-7 sm:h-7 text-white drop-shadow-lg" />
+                    </div>
+                  </div>
+                  <span className="text-[9px] font-semibold text-gray-500 hidden sm:block">{gamification.achievements.length} Won</span>
+                </button>
+              </>
             ) : (
-              <div className="flex items-center rounded-2xl overflow-hidden opacity-50 flex-shrink-0 snap-start"
-                style={{
-                  background: 'linear-gradient(135deg, rgba(255,255,255,0.95), rgba(248,250,252,0.9))',
-                  boxShadow: '0 2px 12px rgba(0,0,0,0.06), 0 0 0 1px rgba(0,0,0,0.03)',
-                }}>
-                <div className="flex items-center gap-1.5 px-3 py-2">
-                  {[
-                    { icon: Icons.Star, bg: '#FEF3C7', color: '#D97706' },
-                    { icon: Icons.Fire, bg: '#F1F5F9', color: '#94A3B8' },
-                    { icon: Icons.Trophy, bg: '#EDE9FE', color: '#A78BFA' },
-                  ].map((item, i) => (
-                    <div key={i} className="w-4 h-4 sm:w-5 sm:h-5 rounded-full flex items-center justify-center"
-                      style={{ background: item.bg }}>
-                      <item.icon className="w-2.5 h-2.5 sm:w-3 sm:h-3" style={{ color: item.color }} />
+              <>
+                {/* Inactive state - show faded bubbles */}
+                {[
+                  { icon: Icons.Star, color1: '#F59E0B', color2: '#D97706', label: 'XP' },
+                  { icon: Icons.Fire, color1: '#94A3B8', color2: '#64748B', label: 'Streak' },
+                  { icon: Icons.Trophy, color1: '#A855F7', color2: '#9333EA', label: 'Awards' },
+                ].map((item, i) => (
+                  <div key={i} className="relative flex flex-col items-center gap-0.5 transition-all duration-300 flex-shrink-0 snap-start opacity-40">
+                    <div
+                      className="relative w-10 h-10 sm:w-[54px] sm:h-[54px] rounded-full overflow-hidden"
+                      style={{
+                        background: `linear-gradient(135deg, ${item.color1}, ${item.color2})`,
+                        boxShadow: `0 4px 15px ${item.color1}20, inset 0 -8px 15px ${item.color2}20, inset 0 8px 15px rgba(255,255,255,0.1)`,
+                      }}
+                    >
+                      <div className="absolute pointer-events-none" style={{
+                        width: '70%', height: '35%', top: '8%', left: '15%',
+                        background: 'linear-gradient(180deg, rgba(255,255,255,0.3) 0%, transparent 100%)',
+                        borderRadius: '50%', transform: 'scaleY(0.5)',
+                      }} />
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <item.icon className="w-5 h-5 sm:w-7 sm:h-7 text-white drop-shadow-lg" />
+                      </div>
                     </div>
-                  ))}
-                </div>
-              </div>
+                    <span className="text-[9px] font-semibold text-gray-400 hidden sm:block">{item.label}</span>
+                  </div>
+                ))}
+              </>
             )}
           </div>
         </div>
