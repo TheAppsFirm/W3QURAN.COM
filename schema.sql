@@ -311,3 +311,27 @@ CREATE TABLE IF NOT EXISTS leaderboard (
 
 CREATE INDEX IF NOT EXISTS idx_leaderboard_xp ON leaderboard(xp DESC);
 CREATE INDEX IF NOT EXISTS idx_leaderboard_streak ON leaderboard(current_streak DESC);
+
+-- ============================================
+-- ANNOUNCEMENTS TABLE (Admin notifications to users)
+-- ============================================
+
+CREATE TABLE IF NOT EXISTS announcements (
+  id TEXT PRIMARY KEY,
+  title TEXT NOT NULL,
+  message TEXT NOT NULL,
+  type TEXT DEFAULT 'info',              -- info, warning, success, promo
+  target TEXT DEFAULT 'all',             -- all, premium, free, kids
+  priority INTEGER DEFAULT 0,            -- Higher = shows first
+  starts_at DATETIME,                    -- When to start showing (NULL = immediately)
+  expires_at DATETIME,                   -- When to stop showing (NULL = never)
+  dismissible INTEGER DEFAULT 1,         -- Can user dismiss?
+  link_url TEXT,                         -- Optional CTA link
+  link_text TEXT,                        -- Optional CTA button text
+  created_by TEXT,                       -- Admin user ID
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS idx_announcements_active ON announcements(starts_at, expires_at);
+CREATE INDEX IF NOT EXISTS idx_announcements_priority ON announcements(priority DESC);

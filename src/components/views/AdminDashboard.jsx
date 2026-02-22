@@ -260,8 +260,8 @@ const Toast = ({ message, type = 'success', onClose }) => {
   };
 
   return (
-    <div className="fixed top-4 right-4 z-[9999] animate-slideDown">
-      <div className={`bg-gradient-to-r ${colors[type]} border rounded-2xl shadow-2xl px-6 py-4 flex items-center gap-3 min-w-[300px]`}>
+    <div className="fixed top-2 right-2 sm:top-4 sm:right-4 z-[9999] animate-slideDown max-w-[calc(100vw-1rem)] sm:max-w-none">
+      <div className={`bg-gradient-to-r ${colors[type]} border rounded-2xl shadow-2xl px-4 sm:px-6 py-3 sm:py-4 flex items-center gap-2 sm:gap-3 w-full sm:min-w-[300px]`}>
         <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-white text-lg font-bold">
           {icons[type]}
         </div>
@@ -304,7 +304,7 @@ const ConfirmModal = ({ isOpen, onClose, onConfirm, title, message, type = 'dang
   const IconComponent = style.icon;
 
   return (
-    <div className="fixed inset-0 z-[10000] flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-[10000] flex items-center justify-center p-2 sm:p-4">
       {/* Backdrop */}
       <div
         className="absolute inset-0 bg-black/60 backdrop-blur-sm"
@@ -312,12 +312,12 @@ const ConfirmModal = ({ isOpen, onClose, onConfirm, title, message, type = 'dang
       />
 
       {/* Modal */}
-      <div className="relative w-full max-w-md animate-scaleIn">
-        <div className="bg-gradient-to-br from-slate-800 via-slate-900 to-slate-800 rounded-3xl border border-white/10 shadow-2xl overflow-hidden">
+      <div className="relative w-full max-w-[calc(100vw-1rem)] sm:max-w-md animate-scaleIn">
+        <div className="bg-gradient-to-br from-slate-800 via-slate-900 to-slate-800 rounded-2xl sm:rounded-3xl border border-white/10 shadow-2xl overflow-hidden">
           {/* Header with gradient accent */}
           <div className={`h-1.5 bg-gradient-to-r ${style.gradient}`} />
 
-          <div className="p-6">
+          <div className="p-4 sm:p-6">
             {/* Icon */}
             <div className="flex justify-center mb-4">
               <div className={`w-16 h-16 rounded-full ${style.iconBg} flex items-center justify-center`}>
@@ -363,6 +363,194 @@ const ConfirmModal = ({ isOpen, onClose, onConfirm, title, message, type = 'dang
         </div>
       </div>
     </div>
+  );
+};
+
+// Announcement Form Component
+const AnnouncementForm = ({ initial, onSave, onCancel }) => {
+  const [form, setForm] = useState({
+    id: initial?.id || null,
+    title: initial?.title || '',
+    message: initial?.message || '',
+    type: initial?.type || 'info',
+    target: initial?.target || 'all',
+    priority: initial?.priority || 0,
+    starts_at: initial?.starts_at ? initial.starts_at.slice(0, 16) : '',
+    expires_at: initial?.expires_at ? initial.expires_at.slice(0, 16) : '',
+    dismissible: initial?.dismissible !== 0,
+    link_url: initial?.link_url || '',
+    link_text: initial?.link_text || '',
+  });
+  const [saving, setSaving] = useState(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setSaving(true);
+    const success = await onSave({
+      ...form,
+      starts_at: form.starts_at || null,
+      expires_at: form.expires_at || null,
+      dismissible: form.dismissible,
+    });
+    setSaving(false);
+    if (!success) {
+      alert('Failed to save announcement');
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="p-4 space-y-4">
+      {/* Title */}
+      <div>
+        <label className="block text-white/70 text-sm mb-1.5">Title *</label>
+        <input
+          type="text"
+          value={form.title}
+          onChange={e => setForm({ ...form, title: e.target.value })}
+          required
+          className="w-full px-3 py-2.5 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 focus:outline-none focus:border-purple-500 text-sm"
+          placeholder="Announcement title..."
+        />
+      </div>
+
+      {/* Message */}
+      <div>
+        <label className="block text-white/70 text-sm mb-1.5">Message *</label>
+        <textarea
+          value={form.message}
+          onChange={e => setForm({ ...form, message: e.target.value })}
+          required
+          rows={3}
+          className="w-full px-3 py-2.5 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 focus:outline-none focus:border-purple-500 text-sm resize-none"
+          placeholder="Announcement message..."
+        />
+      </div>
+
+      {/* Type & Target */}
+      <div className="grid grid-cols-2 gap-3">
+        <div>
+          <label className="block text-white/70 text-sm mb-1.5">Type</label>
+          <select
+            value={form.type}
+            onChange={e => setForm({ ...form, type: e.target.value })}
+            className="w-full px-3 py-2.5 rounded-xl bg-white/10 border border-white/20 text-white focus:outline-none focus:border-purple-500 text-sm"
+          >
+            <option value="info">Info (Blue)</option>
+            <option value="warning">Warning (Amber)</option>
+            <option value="success">Success (Green)</option>
+            <option value="promo">Promo (Purple)</option>
+          </select>
+        </div>
+        <div>
+          <label className="block text-white/70 text-sm mb-1.5">Target</label>
+          <select
+            value={form.target}
+            onChange={e => setForm({ ...form, target: e.target.value })}
+            className="w-full px-3 py-2.5 rounded-xl bg-white/10 border border-white/20 text-white focus:outline-none focus:border-purple-500 text-sm"
+          >
+            <option value="all">All Users</option>
+            <option value="premium">Premium Only</option>
+            <option value="free">Free Users Only</option>
+            <option value="kids">Kids Mode Users</option>
+          </select>
+        </div>
+      </div>
+
+      {/* Schedule */}
+      <div className="grid grid-cols-2 gap-3">
+        <div>
+          <label className="block text-white/70 text-sm mb-1.5">Starts At (optional)</label>
+          <input
+            type="datetime-local"
+            value={form.starts_at}
+            onChange={e => setForm({ ...form, starts_at: e.target.value })}
+            className="w-full px-3 py-2.5 rounded-xl bg-white/10 border border-white/20 text-white focus:outline-none focus:border-purple-500 text-sm"
+          />
+        </div>
+        <div>
+          <label className="block text-white/70 text-sm mb-1.5">Expires At (optional)</label>
+          <input
+            type="datetime-local"
+            value={form.expires_at}
+            onChange={e => setForm({ ...form, expires_at: e.target.value })}
+            className="w-full px-3 py-2.5 rounded-xl bg-white/10 border border-white/20 text-white focus:outline-none focus:border-purple-500 text-sm"
+          />
+        </div>
+      </div>
+
+      {/* Priority & Dismissible */}
+      <div className="grid grid-cols-2 gap-3">
+        <div>
+          <label className="block text-white/70 text-sm mb-1.5">Priority (higher = first)</label>
+          <input
+            type="number"
+            value={form.priority}
+            onChange={e => setForm({ ...form, priority: parseInt(e.target.value) || 0 })}
+            className="w-full px-3 py-2.5 rounded-xl bg-white/10 border border-white/20 text-white focus:outline-none focus:border-purple-500 text-sm"
+          />
+        </div>
+        <div className="flex items-end">
+          <label className="flex items-center gap-2 cursor-pointer py-2.5">
+            <input
+              type="checkbox"
+              checked={form.dismissible}
+              onChange={e => setForm({ ...form, dismissible: e.target.checked })}
+              className="w-4 h-4 rounded bg-white/10 border-white/20"
+            />
+            <span className="text-white text-sm">Dismissible</span>
+          </label>
+        </div>
+      </div>
+
+      {/* CTA Link */}
+      <div className="grid grid-cols-2 gap-3">
+        <div>
+          <label className="block text-white/70 text-sm mb-1.5">Link Text (optional)</label>
+          <input
+            type="text"
+            value={form.link_text}
+            onChange={e => setForm({ ...form, link_text: e.target.value })}
+            className="w-full px-3 py-2.5 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 focus:outline-none focus:border-purple-500 text-sm"
+            placeholder="Learn More"
+          />
+        </div>
+        <div>
+          <label className="block text-white/70 text-sm mb-1.5">Link URL (optional)</label>
+          <input
+            type="url"
+            value={form.link_url}
+            onChange={e => setForm({ ...form, link_url: e.target.value })}
+            className="w-full px-3 py-2.5 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 focus:outline-none focus:border-purple-500 text-sm"
+            placeholder="https://..."
+          />
+        </div>
+      </div>
+
+      {/* Actions */}
+      <div className="flex gap-3 pt-2">
+        <button
+          type="button"
+          onClick={onCancel}
+          className="flex-1 px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-medium transition-colors text-sm"
+        >
+          Cancel
+        </button>
+        <button
+          type="submit"
+          disabled={saving}
+          className="flex-1 px-4 py-2.5 rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 text-white font-medium transition-opacity hover:opacity-90 disabled:opacity-50 text-sm flex items-center justify-center gap-2"
+        >
+          {saving ? (
+            <>
+              <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+              Saving...
+            </>
+          ) : (
+            <>{initial ? 'Update' : 'Create'} Announcement</>
+          )}
+        </button>
+      </div>
+    </form>
   );
 };
 
@@ -1945,6 +2133,161 @@ export default function AdminDashboard({ onClose, initialTab = 'overview', onTab
     loading: false,
   });
 
+  // Announcements state
+  const [announcements, setAnnouncements] = useState([]);
+  const [announcementsLoading, setAnnouncementsLoading] = useState(false);
+  const [editingAnnouncement, setEditingAnnouncement] = useState(null);
+  const [showAnnouncementForm, setShowAnnouncementForm] = useState(false);
+  const [selectedAnnouncements, setSelectedAnnouncements] = useState(new Set());
+
+  // Fetch announcements
+  const fetchAnnouncements = useCallback(async () => {
+    setAnnouncementsLoading(true);
+    try {
+      const response = await fetch('/api/admin/announcements', { credentials: 'include' });
+      if (response.ok) {
+        const data = await response.json();
+        setAnnouncements(data.announcements || []);
+      }
+    } catch (err) {
+      console.error('Failed to fetch announcements:', err);
+    }
+    setAnnouncementsLoading(false);
+  }, []);
+
+  // Create/Update announcement
+  const saveAnnouncement = async (data) => {
+    try {
+      const method = data.id ? 'PUT' : 'POST';
+      const response = await fetch('/api/admin/announcements', {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(data),
+      });
+      if (response.ok) {
+        fetchAnnouncements();
+        setShowAnnouncementForm(false);
+        setEditingAnnouncement(null);
+        return true;
+      }
+      return false;
+    } catch (err) {
+      console.error('Failed to save announcement:', err);
+      return false;
+    }
+  };
+
+  // Delete announcement
+  const deleteAnnouncement = async (id) => {
+    setConfirmModal({
+      isOpen: true,
+      title: 'Delete Announcement',
+      message: 'Are you sure you want to delete this announcement? This cannot be undone.',
+      type: 'danger',
+      confirmText: 'Delete',
+      loading: false,
+      onConfirm: async () => {
+        setConfirmModal(prev => ({ ...prev, loading: true }));
+        try {
+          const response = await fetch(`/api/admin/announcements?id=${id}`, {
+            method: 'DELETE',
+            credentials: 'include',
+          });
+          if (response.ok) {
+            fetchAnnouncements();
+          }
+        } catch (err) {
+          console.error('Failed to delete announcement:', err);
+        }
+        setConfirmModal(prev => ({ ...prev, isOpen: false, loading: false }));
+      },
+    });
+  };
+
+  // Bulk delete selected announcements
+  const deleteSelectedAnnouncements = async () => {
+    if (selectedAnnouncements.size === 0) return;
+
+    setConfirmModal({
+      isOpen: true,
+      title: 'Delete Selected Announcements',
+      message: `Are you sure you want to delete ${selectedAnnouncements.size} announcement(s)? This cannot be undone.`,
+      type: 'danger',
+      confirmText: 'Delete All Selected',
+      loading: false,
+      onConfirm: async () => {
+        setConfirmModal(prev => ({ ...prev, loading: true }));
+        try {
+          const ids = Array.from(selectedAnnouncements).join(',');
+          const response = await fetch(`/api/admin/announcements?ids=${ids}`, {
+            method: 'DELETE',
+            credentials: 'include',
+          });
+          if (response.ok) {
+            setSelectedAnnouncements(new Set());
+            fetchAnnouncements();
+          }
+        } catch (err) {
+          console.error('Failed to delete announcements:', err);
+        }
+        setConfirmModal(prev => ({ ...prev, isOpen: false, loading: false }));
+      },
+    });
+  };
+
+  // Delete all announcements
+  const deleteAllAnnouncements = async () => {
+    if (announcements.length === 0) return;
+
+    setConfirmModal({
+      isOpen: true,
+      title: 'Delete All Announcements',
+      message: `Are you sure you want to delete ALL ${announcements.length} announcements? This cannot be undone.`,
+      type: 'danger',
+      confirmText: 'Delete All',
+      loading: false,
+      onConfirm: async () => {
+        setConfirmModal(prev => ({ ...prev, loading: true }));
+        try {
+          const response = await fetch('/api/admin/announcements?all=true', {
+            method: 'DELETE',
+            credentials: 'include',
+          });
+          if (response.ok) {
+            setSelectedAnnouncements(new Set());
+            fetchAnnouncements();
+          }
+        } catch (err) {
+          console.error('Failed to delete all announcements:', err);
+        }
+        setConfirmModal(prev => ({ ...prev, isOpen: false, loading: false }));
+      },
+    });
+  };
+
+  // Toggle announcement selection
+  const toggleAnnouncementSelection = (id) => {
+    setSelectedAnnouncements(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(id)) {
+        newSet.delete(id);
+      } else {
+        newSet.add(id);
+      }
+      return newSet;
+    });
+  };
+
+  // Toggle all announcements selection
+  const toggleAllAnnouncements = () => {
+    if (selectedAnnouncements.size === announcements.length) {
+      setSelectedAnnouncements(new Set());
+    } else {
+      setSelectedAnnouncements(new Set(announcements.map(a => a.id)));
+    }
+  };
+
   // Fetch stats
   const fetchStats = useCallback(async () => {
     try {
@@ -2085,12 +2428,12 @@ export default function AdminDashboard({ onClose, initialTab = 'overview', onTab
   useEffect(() => {
     if (isAdminUser) {
       setLoading(true);
-      Promise.all([fetchStats(), fetchUsers(), fetchSettings()]).finally(() => setLoading(false));
+      Promise.all([fetchStats(), fetchUsers(), fetchSettings(), fetchAnnouncements()]).finally(() => setLoading(false));
     } else if (!authLoading) {
       setError('Access denied. Admin only.');
       setLoading(false);
     }
-  }, [isAdminUser, authLoading, fetchStats, fetchUsers, fetchSettings]);
+  }, [isAdminUser, authLoading, fetchStats, fetchUsers, fetchSettings, fetchAnnouncements]);
 
   // Refetch users when search/filter changes
   useEffect(() => {
@@ -2151,14 +2494,14 @@ export default function AdminDashboard({ onClose, initialTab = 'overview', onTab
   return (
     <div className="fixed inset-0 z-[100] bg-slate-900 overflow-hidden">
       {/* Header */}
-      <div className="h-16 border-b border-white/10 flex items-center justify-between px-6">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center">
-            <Icons.Shield className="w-5 h-5 text-white" />
+      <div className="h-14 sm:h-16 border-b border-white/10 flex items-center justify-between px-3 sm:px-6">
+        <div className="flex items-center gap-2 sm:gap-3">
+          <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center">
+            <Icons.Shield className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
           </div>
           <div>
-            <h1 className="text-lg font-bold text-white">Admin Dashboard</h1>
-            <p className="text-xs text-white/50">w3Quran Management</p>
+            <h1 className="text-base sm:text-lg font-bold text-white">Admin</h1>
+            <p className="text-[10px] sm:text-xs text-white/50 hidden sm:block">w3Quran Management</p>
           </div>
         </div>
 
@@ -2170,36 +2513,38 @@ export default function AdminDashboard({ onClose, initialTab = 'overview', onTab
         </button>
       </div>
 
-      {/* Tabs - Horizontally scrollable on mobile */}
-      <div className="border-b border-white/10 px-4 sm:px-6 overflow-x-auto scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
-        <div className="flex gap-4 sm:gap-6 min-w-max">
+      {/* Tabs - Icons only on mobile, icons + text on desktop */}
+      <div className="border-b border-white/10 px-2 sm:px-4 md:px-6 overflow-x-auto scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+        <div className="flex gap-1 sm:gap-3 md:gap-6">
           {[
             { id: 'overview', label: 'Overview', icon: Icons.PieChart },
             { id: 'analytics', label: 'Analytics', icon: Icons.Activity },
             { id: 'users', label: 'Users', icon: Icons.Users },
+            { id: 'announcements', label: 'Announce', icon: Icons.Bell },
             { id: 'logs', label: 'Logs', icon: Icons.FileText },
-            { id: 'transactions', label: 'Transactions', icon: Icons.CreditCard },
+            { id: 'transactions', label: 'Trans', icon: Icons.CreditCard },
             { id: 'payments', label: 'Payments', icon: Icons.DollarSign },
             { id: 'settings', label: 'Settings', icon: Icons.Settings },
           ].map(tab => (
             <button
               key={tab.id}
               onClick={() => handleTabChange(tab.id)}
-              className={`flex items-center gap-2 py-4 border-b-2 transition-colors ${
+              className={`flex items-center justify-center gap-1.5 sm:gap-2 py-4 sm:py-4 px-3 sm:px-4 border-b-2 transition-colors min-w-0 ${
                 activeTab === tab.id
                   ? 'border-purple-500 text-white'
                   : 'border-transparent text-white/50 hover:text-white/70'
               }`}
+              title={tab.label}
             >
-              <tab.icon className="w-4 h-4" />
-              <span className="text-sm font-medium">{tab.label}</span>
+              <tab.icon className="w-5 h-5 sm:w-5 sm:h-5 flex-shrink-0" />
+              <span className="text-xs sm:text-sm font-medium hidden sm:inline truncate">{tab.label}</span>
             </button>
           ))}
         </div>
       </div>
 
       {/* Content */}
-      <div className="h-[calc(100vh-120px)] overflow-y-auto p-6">
+      <div className="h-[calc(100vh-110px)] sm:h-[calc(100vh-120px)] overflow-y-auto p-3 sm:p-4 md:p-6">
         {loading ? (
           <div className="flex items-center justify-center h-64">
             <div className="w-8 h-8 border-2 border-purple-500 border-t-transparent rounded-full animate-spin" />
@@ -2242,9 +2587,9 @@ export default function AdminDashboard({ onClose, initialTab = 'overview', onTab
                 </div>
 
                 {/* Subscription Breakdown */}
-                <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
-                  <h3 className="text-lg font-bold text-white mb-4">Subscription Breakdown</h3>
-                  <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+                <div className="bg-white/5 rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-white/10">
+                  <h3 className="text-base sm:text-lg font-bold text-white mb-3 sm:mb-4">Subscription Breakdown</h3>
+                  <div className="grid grid-cols-3 sm:grid-cols-5 gap-2 sm:gap-4">
                     {Object.entries(stats.subscriptions.byTier || {}).map(([tier, count]) => (
                       <div key={tier} className="text-center">
                         <TierBadge tier={tier} />
@@ -2255,9 +2600,9 @@ export default function AdminDashboard({ onClose, initialTab = 'overview', onTab
                 </div>
 
                 {/* Credit Usage */}
-                <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
-                  <h3 className="text-lg font-bold text-white mb-4">Credit Usage This Month</h3>
-                  <div className="grid grid-cols-3 gap-4">
+                <div className="bg-white/5 rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-white/10">
+                  <h3 className="text-base sm:text-lg font-bold text-white mb-3 sm:mb-4">Credit Usage This Month</h3>
+                  <div className="grid grid-cols-3 gap-2 sm:gap-4">
                     <div className="text-center">
                       <p className="text-white/60 text-sm">Total Available</p>
                       <p className="text-2xl font-bold text-white">{stats.credits.totalAvailable}</p>
@@ -2452,6 +2797,198 @@ export default function AdminDashboard({ onClose, initialTab = 'overview', onTab
 
             {/* Payments Tab */}
             {activeTab === 'payments' && <PaymentsPanel />}
+
+            {/* Announcements Tab */}
+            {activeTab === 'announcements' && (
+              <div className="space-y-4 sm:space-y-6">
+                {/* Header */}
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                  <div>
+                    <h2 className="text-lg sm:text-xl font-bold text-white">Announcements</h2>
+                    <p className="text-white/50 text-xs sm:text-sm">Send notifications to all users on the main site</p>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {/* Bulk delete buttons */}
+                    {selectedAnnouncements.size > 0 && (
+                      <button
+                        onClick={deleteSelectedAnnouncements}
+                        className="flex items-center justify-center gap-2 px-3 py-2 rounded-xl bg-red-500/20 text-red-300 font-medium hover:bg-red-500/30 transition-colors text-sm"
+                      >
+                        <Icons.Trash className="w-4 h-4" />
+                        <span>Delete ({selectedAnnouncements.size})</span>
+                      </button>
+                    )}
+                    {announcements.length > 0 && (
+                      <button
+                        onClick={deleteAllAnnouncements}
+                        className="flex items-center justify-center gap-2 px-3 py-2 rounded-xl bg-red-500/10 text-red-400 font-medium hover:bg-red-500/20 transition-colors text-sm"
+                      >
+                        <Icons.Trash className="w-4 h-4" />
+                        <span>Delete All</span>
+                      </button>
+                    )}
+                    <button
+                      onClick={() => { setEditingAnnouncement(null); setShowAnnouncementForm(true); }}
+                      className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 text-white font-medium hover:opacity-90 transition-opacity"
+                    >
+                      <Icons.Plus className="w-4 h-4" />
+                      <span className="text-sm">New Announcement</span>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Announcements List */}
+                {announcementsLoading ? (
+                  <div className="flex items-center justify-center py-12">
+                    <div className="w-8 h-8 border-2 border-purple-500 border-t-transparent rounded-full animate-spin" />
+                  </div>
+                ) : announcements.length === 0 ? (
+                  <div className="bg-white/5 rounded-xl sm:rounded-2xl border border-white/10 p-8 sm:p-12 text-center">
+                    <Icons.Bell className="w-12 h-12 text-white/20 mx-auto mb-4" />
+                    <p className="text-white/50">No announcements yet</p>
+                    <p className="text-white/30 text-sm mt-1">Create your first announcement to notify users</p>
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    {/* Select All Header */}
+                    <div className="flex items-center gap-3 px-4 py-2 bg-white/5 rounded-xl border border-white/10">
+                      <label className="flex items-center gap-2 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={selectedAnnouncements.size === announcements.length && announcements.length > 0}
+                          onChange={toggleAllAnnouncements}
+                          className="w-4 h-4 rounded border-white/30 bg-white/10 text-purple-500 focus:ring-purple-500 focus:ring-offset-0"
+                        />
+                        <span className="text-white/70 text-sm">
+                          {selectedAnnouncements.size === announcements.length ? 'Deselect All' : 'Select All'}
+                        </span>
+                      </label>
+                      <span className="text-white/40 text-xs">
+                        ({announcements.length} announcement{announcements.length !== 1 ? 's' : ''})
+                      </span>
+                    </div>
+                    {announcements.map(announcement => (
+                      <div
+                        key={announcement.id}
+                        className={`bg-white/5 rounded-xl sm:rounded-2xl border border-white/10 p-4 sm:p-5 ${
+                          announcement.status === 'expired' ? 'opacity-50' : ''
+                        } ${selectedAnnouncements.has(announcement.id) ? 'ring-2 ring-purple-500/50' : ''}`}
+                      >
+                        <div className="flex flex-col sm:flex-row sm:items-start gap-3 sm:gap-4">
+                          {/* Checkbox */}
+                          <div className="flex items-center">
+                            <input
+                              type="checkbox"
+                              checked={selectedAnnouncements.has(announcement.id)}
+                              onChange={() => toggleAnnouncementSelection(announcement.id)}
+                              className="w-4 h-4 rounded border-white/30 bg-white/10 text-purple-500 focus:ring-purple-500 focus:ring-offset-0 cursor-pointer"
+                            />
+                          </div>
+
+                          {/* Type badge */}
+                          <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${
+                            announcement.type === 'info' ? 'bg-blue-500/20' :
+                            announcement.type === 'warning' ? 'bg-amber-500/20' :
+                            announcement.type === 'success' ? 'bg-emerald-500/20' :
+                            'bg-purple-500/20'
+                          }`}>
+                            <Icons.Bell className={`w-5 h-5 ${
+                              announcement.type === 'info' ? 'text-blue-400' :
+                              announcement.type === 'warning' ? 'text-amber-400' :
+                              announcement.type === 'success' ? 'text-emerald-400' :
+                              'text-purple-400'
+                            }`} />
+                          </div>
+
+                          {/* Content */}
+                          <div className="flex-1 min-w-0">
+                            <div className="flex flex-wrap items-center gap-2 mb-1">
+                              <h3 className="font-bold text-white text-sm sm:text-base">{announcement.title}</h3>
+                              <span className={`px-2 py-0.5 rounded-full text-[10px] font-medium ${
+                                announcement.status === 'active' ? 'bg-emerald-500/20 text-emerald-300' :
+                                announcement.status === 'scheduled' ? 'bg-blue-500/20 text-blue-300' :
+                                'bg-gray-500/20 text-gray-300'
+                              }`}>
+                                {announcement.status}
+                              </span>
+                              <span className={`px-2 py-0.5 rounded-full text-[10px] font-medium ${
+                                announcement.type === 'info' ? 'bg-blue-500/20 text-blue-300' :
+                                announcement.type === 'warning' ? 'bg-amber-500/20 text-amber-300' :
+                                announcement.type === 'success' ? 'bg-emerald-500/20 text-emerald-300' :
+                                'bg-purple-500/20 text-purple-300'
+                              }`}>
+                                {announcement.type}
+                              </span>
+                              <span className="px-2 py-0.5 rounded-full text-[10px] font-medium bg-white/10 text-white/60">
+                                {announcement.target}
+                              </span>
+                            </div>
+                            <p className="text-white/70 text-xs sm:text-sm line-clamp-2">{announcement.message}</p>
+                            {announcement.link_url && (
+                              <p className="text-purple-400 text-xs mt-1 truncate">
+                                Link: {announcement.link_text} → {announcement.link_url}
+                              </p>
+                            )}
+                            <div className="flex flex-wrap gap-3 mt-2 text-[10px] sm:text-xs text-white/40">
+                              {announcement.starts_at && (
+                                <span>Starts: {new Date(announcement.starts_at).toLocaleDateString()}</span>
+                              )}
+                              {announcement.expires_at && (
+                                <span>Expires: {new Date(announcement.expires_at).toLocaleDateString()}</span>
+                              )}
+                              <span>Priority: {announcement.priority}</span>
+                            </div>
+                          </div>
+
+                          {/* Actions */}
+                          <div className="flex sm:flex-col gap-2 flex-shrink-0">
+                            <button
+                              onClick={() => { setEditingAnnouncement(announcement); setShowAnnouncementForm(true); }}
+                              className="flex-1 sm:flex-none px-3 py-2 rounded-lg bg-white/10 hover:bg-white/20 text-white text-xs font-medium transition-colors flex items-center justify-center gap-1.5"
+                            >
+                              <Icons.Edit className="w-3.5 h-3.5" />
+                              <span>Edit</span>
+                            </button>
+                            <button
+                              onClick={() => deleteAnnouncement(announcement.id)}
+                              className="flex-1 sm:flex-none px-3 py-2 rounded-lg bg-red-500/20 hover:bg-red-500/30 text-red-300 text-xs font-medium transition-colors flex items-center justify-center gap-1.5"
+                            >
+                              <Icons.Trash className="w-3.5 h-3.5" />
+                              <span>Delete</span>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Announcement Form Modal */}
+                {showAnnouncementForm && (
+                  <div className="fixed inset-0 z-[10000] flex items-center justify-center p-2 sm:p-4">
+                    <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setShowAnnouncementForm(false)} />
+                    <div className="relative w-full max-w-lg max-h-[90vh] overflow-y-auto bg-gradient-to-br from-slate-800 via-slate-900 to-slate-800 rounded-2xl border border-white/10 shadow-2xl">
+                      <div className="sticky top-0 bg-slate-800/90 backdrop-blur-sm border-b border-white/10 p-4 flex items-center justify-between">
+                        <h3 className="text-lg font-bold text-white">
+                          {editingAnnouncement ? 'Edit Announcement' : 'New Announcement'}
+                        </h3>
+                        <button
+                          onClick={() => setShowAnnouncementForm(false)}
+                          className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center"
+                        >
+                          <Icons.X className="w-4 h-4 text-white" />
+                        </button>
+                      </div>
+                      <AnnouncementForm
+                        initial={editingAnnouncement}
+                        onSave={saveAnnouncement}
+                        onCancel={() => setShowAnnouncementForm(false)}
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
 
             {/* Settings Tab */}
             {activeTab === 'settings' && (

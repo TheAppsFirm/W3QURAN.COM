@@ -471,6 +471,15 @@ export const BellIcon = (props) => (
   </Icon>
 );
 
+export const TrashIcon = (props) => (
+  <Icon {...props}>
+    <polyline points="3 6 5 6 21 6" />
+    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+    <line x1="10" y1="11" x2="10" y2="17" />
+    <line x1="14" y1="11" x2="14" y2="17" />
+  </Icon>
+);
+
 export const TypeIcon = (props) => (
   <Icon {...props}>
     <polyline points="4 7 4 4 20 4 20 7" />
@@ -1248,6 +1257,7 @@ export const Icons = {
   DollarSign: DollarSignIcon,
   CreditCard: CreditCardIcon,
   Shield: ShieldIcon,
+  Trash: TrashIcon,
 };
 
 export const FileTextIcon = (props) => (

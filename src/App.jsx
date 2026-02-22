@@ -58,6 +58,7 @@ const SearchPanel = lazyWithRetry(() => import('./components/common/SearchPanel'
 const DonateModal = lazyWithRetry(() => import('./components/common/DonateModal'));
 const WordSearchMap = lazyWithRetry(() => import('./components/common/WordSearchMap'));
 const EmotionalTracker = lazyWithRetry(() => import('./components/common/EmotionalTracker'));
+const AnnouncementBanner = lazyWithRetry(() => import('./components/common/AnnouncementBanner'));
 const ScholarVideoSync = lazyWithRetry(() => import('./components/common/ScholarVideoSync'));
 const PropheticMap = lazyWithRetry(() => import('./components/common/PropheticMap'));
 const QuranCompanionAI = lazyWithRetry(() => import('./components/common/QuranCompanionAI'));
@@ -237,7 +238,7 @@ const BlockedUserScreen = ({ reason, onDismiss }) => (
 
 function QuranBubbleApp() {
   // Auth state
-  const { isAuthenticated, blocked, blockedReason, clearBlocked } = useAuth();
+  const { isAuthenticated, isPremium, blocked, blockedReason, clearBlocked } = useAuth();
 
   // State management using custom hooks for persistence
   const [view, setView] = useState('surahs');
@@ -885,6 +886,13 @@ function QuranBubbleApp() {
       {/* Blocked User Screen */}
       {blocked && (
         <BlockedUserScreen reason={blockedReason} onDismiss={clearBlocked} />
+      )}
+
+      {/* Admin Announcements Banner */}
+      {!blocked && (
+        <Suspense fallback={null}>
+          <AnnouncementBanner userTier={isPremium ? 'premium' : 'free'} />
+        </Suspense>
       )}
 
       {/* Ambient floating particles */}

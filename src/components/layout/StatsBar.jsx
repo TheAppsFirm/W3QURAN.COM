@@ -3,10 +3,14 @@
  * Single Responsibility: Display user stats, progress, and controls
  */
 
-import { memo, useState, useRef, useEffect } from 'react';
+import { memo, useState, useRef, useEffect, Suspense, lazy } from 'react';
 import { createPortal } from 'react-dom';
 import { Icons } from '../common/Icons';
 import { useGamification } from '../../hooks/useGamification';
+import { useAuth } from '../../contexts/AuthContext';
+
+// Lazy load NotificationBell
+const NotificationBell = lazy(() => import('../common/AnnouncementBanner').then(m => ({ default: m.NotificationBell })));
 
 // Bubble Button Component for Mood and Mind Map
 const BubbleButton = memo(function BubbleButton({ icon: Icon, label, color, color2, onClick }) {
@@ -134,6 +138,7 @@ const StatsBar = memo(function StatsBar({
   onWeatherSync,
 }) {
   const gamification = useGamification();
+  const { isPremium } = useAuth();
   const [showLayoutMenu, setShowLayoutMenu] = useState(false);
   const [showZoomMenu, setShowZoomMenu] = useState(false);
   const layoutBtnRef = useRef(null);
@@ -211,7 +216,7 @@ const StatsBar = memo(function StatsBar({
     <>
       <div className="bg-white/95 backdrop-blur-xl px-3 sm:px-4 py-3 sm:py-4 shadow-lg border-b border-gray-100 relative" style={{ zIndex: 100 }}>
         <div className="max-w-6xl mx-auto flex items-center justify-between gap-2 sm:gap-4">
-          {/* Left side - Donation */}
+          {/* Left side - Donation & Notifications */}
           <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
             {/* Donation button */}
             <button
@@ -230,6 +235,11 @@ const StatsBar = memo(function StatsBar({
               <span className="text-base sm:text-xl relative z-10">💝</span>
               <span className="text-white font-bold tracking-wide text-xs sm:text-sm relative z-10">DONATE</span>
             </button>
+
+            {/* Notification Bell */}
+            <Suspense fallback={null}>
+              <NotificationBell userTier={isPremium ? 'premium' : 'free'} />
+            </Suspense>
           </div>
 
           {/* Center - Layout & Zoom Controls + Mood & Mind Map */}
