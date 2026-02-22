@@ -285,13 +285,5 @@ export const useBookmarks = () => {
   return { bookmarks, addBookmark, removeBookmark, isBookmarked };
 };
 
-/**
- * Hook for gamification
- */
-export const useGamification = () => {
-  const { points, streak, level, addPoints, incrementStreak, resetStreak } = useApp();
-  return { points, streak, level, addPoints, incrementStreak, resetStreak };
-};
-
 export { VIEWS, ACTIONS };
 export default AppContext;

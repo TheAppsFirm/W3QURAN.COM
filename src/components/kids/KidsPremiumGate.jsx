@@ -113,7 +113,7 @@ const PaymentResultPopup = ({ success, canceled, onClose, onRetry }) => {
   );
 };
 
-const KidsPremiumGate = ({ onClose, feature = 'premium', lockedTheme = null }) => {
+const KidsPremiumGate = ({ onClose, feature = 'premium', lockedTheme = null, returnPath = '/', source = 'kids' }) => {
   const { isAuthenticated, login, refreshUser } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [loadingPlan, setLoadingPlan] = useState(null);
@@ -135,9 +135,9 @@ const KidsPremiumGate = ({ onClose, feature = 'premium', lockedTheme = null }) =
         credentials: 'include',
         body: JSON.stringify({
           productType: planId,
-          source: 'kids',
-          successUrl: `${window.location.origin}/?payment_success=1`,
-          cancelUrl: `${window.location.origin}/?payment_canceled=1`,
+          source,
+          successUrl: `${window.location.origin}${returnPath}${returnPath.includes('?') ? '&' : '?'}payment_success=1`,
+          cancelUrl: `${window.location.origin}${returnPath}${returnPath.includes('?') ? '&' : '?'}payment_canceled=1`,
         }),
       });
 

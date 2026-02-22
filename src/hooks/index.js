@@ -126,3 +126,6 @@ export {
 
 // Auth hook
 export { useAuth } from './useAuth';
+
+// Gamification hook
+export { useGamification } from './useGamification';

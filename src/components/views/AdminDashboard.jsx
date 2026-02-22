@@ -6,6 +6,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { Icons } from '../common/Icons';
 import { useAuth } from '../../contexts/AuthContext';
+import { SURAHS } from '../../data/surahs';
 
 // Stat Card Component
 const StatCard = ({ title, value, subtitle, icon: Icon, color, trend }) => (
@@ -950,26 +951,29 @@ const AnalyticsPanel = () => {
   };
 
   // Simple bar chart component
-  const SimpleBarChart = ({ data, labelKey, valueKey, color = '#A855F7', maxItems = 10 }) => {
+  const SimpleBarChart = ({ data, labelKey, valueKey, color = '#A855F7', maxItems = 10, formatLabel }) => {
     if (!data || data.length === 0) return <p className="text-white/40 text-sm">No data available</p>;
     const maxValue = Math.max(...data.slice(0, maxItems).map(d => d[valueKey] || 0));
     return (
       <div className="space-y-2">
-        {data.slice(0, maxItems).map((item, i) => (
-          <div key={i} className="flex items-center gap-2">
-            <span className="text-xs text-white/60 w-20 truncate">{item[labelKey] || 'Unknown'}</span>
-            <div className="flex-1 h-4 bg-white/10 rounded-full overflow-hidden">
-              <div
-                className="h-full rounded-full transition-all"
-                style={{
-                  width: `${maxValue > 0 ? (item[valueKey] / maxValue) * 100 : 0}%`,
-                  background: `linear-gradient(90deg, ${color}80, ${color})`
-                }}
-              />
+        {data.slice(0, maxItems).map((item, i) => {
+          const label = formatLabel ? formatLabel(item[labelKey]) : (item[labelKey] || 'Unknown');
+          return (
+            <div key={i} className="flex items-center gap-2">
+              <span className="text-xs text-white/60 w-28 truncate" title={label}>{label}</span>
+              <div className="flex-1 h-4 bg-white/10 rounded-full overflow-hidden">
+                <div
+                  className="h-full rounded-full transition-all"
+                  style={{
+                    width: `${maxValue > 0 ? (item[valueKey] / maxValue) * 100 : 0}%`,
+                    background: `linear-gradient(90deg, ${color}80, ${color})`
+                  }}
+                />
+              </div>
+              <span className="text-xs text-white font-medium w-12 text-right">{item[valueKey]}</span>
             </div>
-            <span className="text-xs text-white font-medium w-12 text-right">{item[valueKey]}</span>
-          </div>
-        ))}
+          );
+        })}
       </div>
     );
   };
@@ -1332,7 +1336,8 @@ const AnalyticsPanel = () => {
             </div>
           </div>
           <p className="text-white/60 text-sm mb-2">Top Surahs Read</p>
-          <SimpleBarChart data={analytics?.content?.topSurahs} labelKey="surah_id" valueKey="count" color="#F59E0B" />
+          <SimpleBarChart data={analytics?.content?.topSurahs} labelKey="surah_id" valueKey="count" color="#F59E0B"
+            formatLabel={(id) => { const s = SURAHS.find(s => s.id === Number(id)); return s ? `${id}. ${s.name}` : id; }} />
         </div>
 
         {/* Error Monitoring */}
@@ -2084,6 +2089,34 @@ export default function AdminDashboard({ onClose, initialTab = 'overview', onTab
                     </div>
                   </div>
                 </div>
+
+                {/* Donation Button Clicks */}
+                {stats.donateClicks && (
+                  <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
+                    <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                      <Icons.Heart className="w-5 h-5 text-pink-400" />
+                      Donation Button Clicks
+                    </h3>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                      <div className="text-center p-3 bg-white/5 rounded-xl">
+                        <p className="text-2xl font-bold text-white">{stats.donateClicks.total}</p>
+                        <p className="text-white/40 text-xs">Total Clicks</p>
+                      </div>
+                      <div className="text-center p-3 bg-white/5 rounded-xl">
+                        <p className="text-2xl font-bold text-blue-400">{stats.donateClicks.today}</p>
+                        <p className="text-white/40 text-xs">Today</p>
+                      </div>
+                      <div className="text-center p-3 bg-white/5 rounded-xl">
+                        <p className="text-2xl font-bold text-purple-400">{stats.donateClicks.loggedIn}</p>
+                        <p className="text-white/40 text-xs">Logged-in Users</p>
+                      </div>
+                      <div className="text-center p-3 bg-white/5 rounded-xl">
+                        <p className="text-2xl font-bold text-gray-400">{stats.donateClicks.guest}</p>
+                        <p className="text-white/40 text-xs">Guest Users</p>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             )}
 

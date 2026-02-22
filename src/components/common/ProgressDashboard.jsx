@@ -143,9 +143,10 @@ const ProgressDashboard = memo(function ProgressDashboard({ onClose }) {
   const [activeTab, setActiveTab] = useState('overview');
   const [goals, setGoals] = useState(() => loadGoals());
 
-  const overallProgress = useMemo(() => getOverallProgress(), []);
-  const readingHistory = useMemo(() => getReadingHistory(10), []);
-  const weeklyStats = useMemo(() => getReadingStats(7), []);
+  // Re-compute on every open (no deps cache) so it always shows latest data
+  const overallProgress = getOverallProgress();
+  const readingHistory = getReadingHistory(10);
+  const weeklyStats = getReadingStats(7);
 
   const tabs = [
     { id: 'overview', label: 'Stats' },

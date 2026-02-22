@@ -38,7 +38,7 @@ export {
   default as ThemeContext,
 } from './ThemeContext';
 
-// App Context - Global app state (views, filters, zoom, bookmarks, gamification)
+// App Context - Global app state (views, filters, zoom, bookmarks)
 export {
   AppProvider,
   useApp,
@@ -46,11 +46,16 @@ export {
   useTheme as useAppTheme, // Renamed to avoid conflict with ThemeContext's useTheme
   useFilters,
   useBookmarks,
-  useGamification,
   VIEWS,
   ACTIONS as AppActions,
   default as AppContext,
 } from './AppContext';
+
+// Gamification Context - XP, levels, achievements, streaks, notifications
+export {
+  GamificationProvider,
+  useGamification,
+} from './GamificationContext';
 
 // Locale Context - Internationalization (i18n)
 export {

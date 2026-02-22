@@ -530,87 +530,124 @@ function PrayerTimesView({ darkMode }) {
           )}
         </div>
 
-        {/* Qibla Compass */}
+        {/* Qibla Direction — Compass with Avatar + Kaaba */}
         <div className={`rounded-3xl p-6 ${darkMode ? 'bg-gray-800' : 'bg-white'} shadow-xl`}>
-          <h3 className={`text-xl font-bold text-center mb-4 ${darkMode ? 'text-white' : 'text-gray-800'}`}>
+          <h3 className={`text-xl font-bold text-center mb-5 ${darkMode ? 'text-white' : 'text-gray-800'}`}>
             🧭 Qibla Direction
           </h3>
 
           {qiblaData ? (
             <>
-              <div className="relative w-56 h-56 mx-auto">
-                {/* Compass Background */}
-                <div
-                  className={`absolute inset-0 rounded-full border-4 ${darkMode ? 'border-gray-700' : 'border-gray-200'}`}
+              {/* Compass */}
+              <div className="relative w-64 h-64 mx-auto">
+                {/* Compass outer ring */}
+                <div className={`absolute inset-0 rounded-full border-2 ${darkMode ? 'border-gray-600' : 'border-gray-200'}`}
                   style={{
                     background: darkMode
-                      ? 'radial-gradient(circle, rgba(16,185,129,0.1) 0%, transparent 70%)'
-                      : 'radial-gradient(circle, rgba(16,185,129,0.05) 0%, transparent 70%)',
+                      ? 'radial-gradient(circle, rgba(16,185,129,0.06) 0%, transparent 70%)'
+                      : 'radial-gradient(circle, rgba(16,185,129,0.03) 0%, transparent 70%)',
                   }}
                 />
 
-                {/* Compass Ring */}
-                <div
-                  className="absolute inset-2 rounded-full transition-transform"
-                  style={{
-                    background: `conic-gradient(from ${-compassHeading}deg,
-                      rgba(16, 185, 129, 0.4) 0deg,
-                      rgba(16, 185, 129, 0.4) 15deg,
-                      transparent 15deg,
-                      transparent 345deg,
-                      rgba(16, 185, 129, 0.4) 345deg)`,
-                    transition: hasCompass ? 'none' : 'transform 0.3s ease-out',
-                  }}
-                />
+                {/* Compass tick marks */}
+                <svg className="absolute inset-0 w-full h-full" viewBox="0 0 256 256">
+                  {Array.from({ length: 72 }).map((_, i) => {
+                    const deg = i * 5;
+                    const r1 = 124;
+                    const r2 = i % 18 === 0 ? 112 : i % 6 === 0 ? 116 : 120;
+                    const x1 = 128 + r1 * Math.sin(deg * Math.PI / 180);
+                    const y1 = 128 - r1 * Math.cos(deg * Math.PI / 180);
+                    const x2 = 128 + r2 * Math.sin(deg * Math.PI / 180);
+                    const y2 = 128 - r2 * Math.cos(deg * Math.PI / 180);
+                    return <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} stroke={darkMode ? '#4b5563' : '#d1d5db'} strokeWidth={i % 18 === 0 ? 2 : 0.8} />;
+                  })}
+                </svg>
 
-                {/* Direction Markers */}
-                {['N', 'E', 'S', 'W'].map((dir, i) => (
-                  <div
-                    key={dir}
-                    className="absolute font-bold"
+                {/* Cardinal direction markers N E S W */}
+                {[
+                  { d: 'N', top: '8px', left: '50%', tx: '-50%', ty: '0', color: '#ef4444' },
+                  { d: 'E', top: '50%', right: '8px', tx: '0', ty: '-50%' },
+                  { d: 'S', bottom: '8px', left: '50%', tx: '-50%', ty: '0' },
+                  { d: 'W', top: '50%', left: '8px', tx: '0', ty: '-50%' },
+                ].map(({ d, color, ...pos }) => (
+                  <div key={d} className="absolute font-bold text-sm"
                     style={{
-                      top: i === 0 ? '12px' : i === 2 ? 'auto' : '50%',
-                      bottom: i === 2 ? '12px' : 'auto',
-                      left: i === 3 ? '12px' : i === 1 ? 'auto' : '50%',
-                      right: i === 1 ? '12px' : 'auto',
-                      transform: `translateX(${i === 0 || i === 2 ? '-50%' : '0'}) translateY(${i === 1 || i === 3 ? '-50%' : '0'})`,
-                      color: dir === 'N' ? '#ef4444' : darkMode ? '#9ca3af' : '#6b7280',
-                      fontSize: '14px',
+                      ...pos,
+                      transform: `translateX(${pos.tx}) translateY(${pos.ty})`,
+                      color: color || (darkMode ? '#9ca3af' : '#6b7280'),
                     }}
                   >
-                    {dir}
+                    {d}
                   </div>
                 ))}
 
-                {/* Kaaba Icon in Center */}
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="text-5xl">🕋</div>
-                </div>
+                {/* Rotating arm: Person (center) → needle → Kaaba (tip) */}
+                {(() => {
+                  const angle = qiblaData.qibla.direction - compassHeading;
+                  return (
+                    <div className="absolute inset-0"
+                      style={{
+                        transform: `rotate(${angle}deg)`,
+                        transition: hasCompass ? 'none' : 'transform 0.3s ease-out',
+                      }}
+                    >
+                      {/* Person in sujood near center — SVG faces UP toward Kaaba */}
+                      <div className="absolute left-1/2 -translate-x-1/2 z-10" style={{ top: '42%' }}>
+                        <svg width="36" height="28" viewBox="0 0 36 28" fill="none"
+                          style={{ transform: `rotate(-${angle}deg)`, transition: hasCompass ? 'none' : 'transform 0.3s ease-out' }}>
+                          {/* Prayer mat */}
+                          <rect x="2" y="22" width="32" height="5" rx="2.5" fill="#10b981" opacity="0.3" />
+                          {/* Body in sujood — torso arched, head down */}
+                          <path d="M28 20 C26 12 22 10 18 14 C16 16 12 20 8 22" stroke="#64748b" strokeWidth="4" strokeLinecap="round" fill="none" />
+                          {/* Head touching ground */}
+                          <circle cx="7" cy="21" r="4" fill="#f0d0a0" />
+                          {/* Head cover */}
+                          <path d="M4 18 Q7 14 10 18" fill="white" stroke="#e5e7eb" strokeWidth="0.5" />
+                          {/* Raised hips */}
+                          <circle cx="29" cy="18" r="3" fill="#f8f8f8" stroke="#e5e7eb" strokeWidth="0.5" />
+                        </svg>
+                      </div>
 
-                {/* Qibla Direction Needle */}
-                <div
-                  className="absolute top-1/2 left-1/2 w-1.5 h-24 bg-gradient-to-t from-emerald-500 to-teal-400 origin-bottom rounded-full shadow-lg"
-                  style={{
-                    transform: `translate(-50%, -100%) rotate(${qiblaData.qibla.direction - compassHeading}deg)`,
-                    transition: hasCompass ? 'none' : 'transform 0.3s ease-out',
-                  }}
-                >
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-0 h-0 border-l-[8px] border-r-[8px] border-b-[14px] border-l-transparent border-r-transparent border-b-emerald-500" />
-                </div>
+                      {/* Needle line */}
+                      <div className="absolute left-1/2 -translate-x-1/2 w-1 rounded-full"
+                        style={{
+                          top: 24,
+                          height: 78,
+                          background: 'linear-gradient(to top, rgba(16,185,129,0.1), #10b981)',
+                        }}
+                      />
+                      {/* Arrow head */}
+                      <div className="absolute left-1/2 -translate-x-1/2" style={{ top: 14 }}>
+                        <div className="w-0 h-0 border-l-[7px] border-r-[7px] border-b-[12px] border-l-transparent border-r-transparent border-b-emerald-500" />
+                      </div>
+                      {/* Kaaba at the tip (counter-rotated to stay upright) */}
+                      <div className="absolute left-1/2 text-xl"
+                        style={{
+                          top: -2,
+                          transform: `translateX(-50%) rotate(-${angle}deg)`,
+                          transition: hasCompass ? 'none' : 'transform 0.3s ease-out',
+                        }}
+                      >
+                        🕋
+                      </div>
+                    </div>
+                  );
+                })()}
               </div>
 
-              <div className="text-center mt-4 space-y-2">
+              {/* Info below compass */}
+              <div className="text-center mt-4 space-y-1.5">
                 <p className={`text-2xl font-bold ${darkMode ? 'text-white' : 'text-gray-800'}`}>
                   {qiblaData.qibla.directionRounded}° {qiblaData.qibla.compass}
                 </p>
-                <p className={`text-lg ${darkMode ? 'text-gray-300' : 'text-gray-600'}`} dir="rtl">
+                <p className={`text-base ${darkMode ? 'text-gray-300' : 'text-gray-600'}`} dir="rtl">
                   {qiblaData.qibla.compassAr}
                 </p>
                 <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
                   📍 Distance to Kaaba: {qiblaData.distance.km.toLocaleString()} km
                 </p>
                 <p className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>
-                  {hasCompass ? 'Turn your device to align with the Qibla' : 'Point your device towards the Qibla'}
+                  {hasCompass ? 'Turn your device to align with the Qibla' : 'Face the direction the 🕋 points to'}
                 </p>
                 {!hasCompass && typeof DeviceOrientationEvent?.requestPermission === 'function' && (
                   <button

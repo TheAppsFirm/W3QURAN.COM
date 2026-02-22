@@ -285,3 +285,26 @@ CREATE TABLE IF NOT EXISTS ai_insights (
 CREATE INDEX IF NOT EXISTS idx_ai_insights_type ON ai_insights(insight_type);
 CREATE INDEX IF NOT EXISTS idx_ai_insights_generated ON ai_insights(generated_at);
 CREATE INDEX IF NOT EXISTS idx_ai_insights_expires ON ai_insights(expires_at);
+
+-- ============================================
+-- LEADERBOARD TABLE (Global XP ranking)
+-- Denormalized stats extracted from gamification JSON on each sync
+-- ============================================
+
+CREATE TABLE IF NOT EXISTS leaderboard (
+  user_id TEXT PRIMARY KEY,
+  display_name TEXT NOT NULL,
+  picture TEXT,
+  xp INTEGER DEFAULT 0,
+  level INTEGER DEFAULT 1,
+  current_streak INTEGER DEFAULT 0,
+  best_streak INTEGER DEFAULT 0,
+  verses_read INTEGER DEFAULT 0,
+  surahs_completed INTEGER DEFAULT 0,
+  achievements_count INTEGER DEFAULT 0,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_leaderboard_xp ON leaderboard(xp DESC);
+CREATE INDEX IF NOT EXISTS idx_leaderboard_streak ON leaderboard(current_streak DESC);

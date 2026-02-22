@@ -43,6 +43,10 @@ export const XP_REWARDS = {
   completeMeditation: 10,
   familySession: 15,
 
+  // Audio Listening
+  listenVerse: 1,
+  listenSurah: 5,
+
   // Engagement
   dailyLogin: 5,
   completeChallenge: 20,
@@ -259,6 +263,38 @@ export const ACHIEVEMENTS = {
     xp: 25,
     category: 'social',
   },
+
+  // Listening Achievements
+  first_listen: {
+    id: 'first_listen',
+    name: 'First Recitation',
+    nameAr: 'أول استماع',
+    description: 'Listen to a complete surah',
+    icon: 'Headphones',
+    color: '#0EA5E9',
+    xp: 10,
+    category: 'listening',
+  },
+  listen_10: {
+    id: 'listen_10',
+    name: 'Devoted Listener',
+    nameAr: 'مستمع مخلص',
+    description: 'Listen to 10 complete surahs',
+    icon: 'Headphones',
+    color: '#6366F1',
+    xp: 50,
+    category: 'listening',
+  },
+  listen_juz: {
+    id: 'listen_juz',
+    name: 'Juz Listener',
+    nameAr: 'مستمع الجزء',
+    description: 'Listen to a complete juz',
+    icon: 'Music',
+    color: '#F59E0B',
+    xp: 100,
+    category: 'listening',
+  },
 };
 
 // ===========================================
@@ -373,6 +409,8 @@ const DEFAULT_DATA = {
     sharesCount: 0,
     memorizedVerses: 0,
     totalReadingTime: 0,
+    surahsListened: [],
+    versesListened: 0,
   },
   createdAt: null,
   lastUpdated: null,
@@ -604,6 +642,15 @@ export const checkAndUnlockAchievements = () => {
   // Social achievements
   if (data.stats.sharesCount >= 10 && !data.achievements.includes('generous_sharer')) {
     newAchievements.push(unlockAchievement('generous_sharer'));
+  }
+
+  // Listening achievements
+  const surahsListened = data.stats.surahsListened?.length || 0;
+  if (surahsListened >= 1 && !data.achievements.includes('first_listen')) {
+    newAchievements.push(unlockAchievement('first_listen'));
+  }
+  if (surahsListened >= 10 && !data.achievements.includes('listen_10')) {
+    newAchievements.push(unlockAchievement('listen_10'));
   }
 
   return newAchievements.filter(a => a.unlocked);
@@ -846,6 +893,29 @@ export const recordMapVisit = (locationId) => {
 };
 
 // ===========================================
+// LISTENING STAT FUNCTIONS
+// ===========================================
+
+export const recordVerseListened = (surahId, ayahNum) => {
+  const data = getGamificationData();
+  data.stats.versesListened = (data.stats.versesListened || 0) + 1;
+  addXP(XP_REWARDS.listenVerse, 'Listened to verse');
+  saveGamificationData(data);
+};
+
+export const recordSurahListened = (surahId) => {
+  const data = getGamificationData();
+  if (!data.stats.surahsListened) data.stats.surahsListened = [];
+  if (!data.stats.surahsListened.includes(surahId)) {
+    data.stats.surahsListened.push(surahId);
+    addXP(XP_REWARDS.listenSurah, `Listened to Surah ${surahId}`);
+  }
+  saveGamificationData(data);
+  checkAndUnlockAchievements();
+  return data.stats.surahsListened;
+};
+
+// ===========================================
 // RESET FUNCTION
 // ===========================================
 
@@ -878,5 +948,7 @@ export default {
   recordVoiceCommand,
   recordShare,
   recordMapVisit,
+  recordVerseListened,
+  recordSurahListened,
   resetGamificationData,
 };

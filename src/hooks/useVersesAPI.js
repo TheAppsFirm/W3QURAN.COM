@@ -8,6 +8,7 @@
 import { useState, useEffect } from 'react';
 import { fetchWithCache, API_BASE } from './apiUtils';
 import { parseTajweedText } from './useTajweed';
+import { getCachedSurah } from '../data/offlineStorage';
 
 /**
  * Remove Bismillah from the beginning of verse text
@@ -101,6 +102,54 @@ export function useVersesAPI(surahId, options = {}) {
     setError(null);
 
     async function fetchData() {
+      // Helper to build verses from cached API data
+      const buildFromCache = (cachedArabic, cachedTranslation) => {
+        setSurahInfo({
+          id: cachedArabic.number,
+          name: cachedArabic.englishName,
+          arabicName: cachedArabic.name,
+          meaning: cachedArabic.englishNameTranslation,
+          type: cachedArabic.revelationType,
+          totalVerses: cachedArabic.numberOfAyahs,
+        });
+
+        const shouldStripBismillah = surahId !== 1 && surahId !== 9;
+        const combinedVerses = cachedArabic.ayahs.map((ayah, index) => {
+          let arabicText = ayah.text;
+          if (shouldStripBismillah && ayah.numberInSurah === 1) {
+            arabicText = removeBismillah(arabicText);
+          }
+          return {
+            number: ayah.numberInSurah,
+            arabic: arabicText,
+            translation: cachedTranslation?.ayahs?.[index]?.text || '',
+          };
+        });
+
+        setVerses(combinedVerses);
+        setError(null);
+        setLoading(false);
+      };
+
+      // 1) Cache-first: check IndexedDB for downloaded surahs
+      //    This is faster and works offline — no reason to hit API if we have the data
+      try {
+        const [cachedArabic, cachedTranslation] = await Promise.all([
+          getCachedSurah(surahId, 'quran-uthmani'),
+          getCachedSurah(surahId, translationId),
+        ]);
+
+        if (cachedArabic?.ayahs && !cancelled) {
+          buildFromCache(cachedArabic, cachedTranslation);
+          return; // Done — no API call needed
+        }
+      } catch {
+        // IndexedDB failed, fall through to API
+      }
+
+      if (cancelled) return;
+
+      // 2) No cache — fetch from API
       try {
         // Build editions to fetch
         const editions = ['quran-uthmani']; // Base Arabic text
@@ -180,6 +229,7 @@ export function useVersesAPI(surahId, options = {}) {
         setLoading(false);
       } catch (err) {
         if (cancelled) return;
+
         setVerses([]);
         setSurahInfo(null);
         setError(err.message);

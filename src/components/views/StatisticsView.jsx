@@ -14,6 +14,7 @@ import {
   getTodayStats,
   getRecentActivity,
 } from '../../utils/trackingUtils';
+import { loadProgress } from '../../data/progressTracker';
 
 function StatisticsView({ darkMode, readingProgress, streak: propStreak, points }) {
   // Real statistics
@@ -30,7 +31,8 @@ function StatisticsView({ darkMode, readingProgress, streak: propStreak, points 
   const [todayStats, setTodayStats] = useState({ ayahsRead: 0, sessions: 0 });
   const [recentActivity, setRecentActivity] = useState([]);
 
-  // Load real statistics
+  // Load real statistics — use progressTracker as source of truth
+  const trackerProgress = loadProgress();
   useEffect(() => {
     setWeeklyData(getWeeklyActivity());
     setRealStreak(calculateStreak());
@@ -44,8 +46,8 @@ function StatisticsView({ darkMode, readingProgress, streak: propStreak, points 
   // Use either calculated streak or prop streak (whichever is higher)
   const displayStreak = Math.max(realStreak, propStreak || 0);
 
-  // Calculate completion percentage
-  const completedSurahs = Object.keys(readingProgress || {}).length;
+  // Calculate completion from progressTracker (real source of truth)
+  const completedSurahs = Object.keys(trackerProgress.surahs || {}).length;
   const completionPercent = Math.round((completedSurahs / 114) * 100);
 
   // Get max value for chart scaling

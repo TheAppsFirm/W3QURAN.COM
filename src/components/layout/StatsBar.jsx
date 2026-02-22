@@ -6,6 +6,7 @@
 import { memo, useState, useRef, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { Icons } from '../common/Icons';
+import { useGamification } from '../../hooks/useGamification';
 
 // Bubble Button Component for Mood and Mind Map
 const BubbleButton = memo(function BubbleButton({ icon: Icon, label, color, color2, onClick }) {
@@ -23,8 +24,8 @@ const BubbleButton = memo(function BubbleButton({ icon: Icon, label, color, colo
       <div
         className="relative transition-all duration-300"
         style={{
-          width: 40,
-          height: 40,
+          width: 54,
+          height: 54,
           transform: `scale(${isHovered ? 1.15 : 1})`,
         }}
       >
@@ -92,7 +93,7 @@ const BubbleButton = memo(function BubbleButton({ icon: Icon, label, color, colo
 
           {/* Icon */}
           <div className="absolute inset-0 flex items-center justify-center">
-            <Icon className="w-5 h-5 text-white drop-shadow-lg" />
+            <Icon className="w-7 h-7 text-white drop-shadow-lg" />
           </div>
         </div>
 
@@ -117,11 +118,6 @@ const BubbleButton = memo(function BubbleButton({ icon: Icon, label, color, colo
 });
 
 const StatsBar = memo(function StatsBar({
-  level,
-  points,
-  streak,
-  badges,
-  onUpgrade,
   // New props for zoom and layout
   zoom,
   setZoom,
@@ -132,11 +128,14 @@ const StatsBar = memo(function StatsBar({
   showControls = false,
   // Donation modal callback
   onDonate,
+  // Gamification callbacks
+  onShowAchievements,
   // Callbacks for bubble features
   onWorldMap,
   onGlobalPulse,
   onWeatherSync,
 }) {
+  const gamification = useGamification();
   const [showLayoutMenu, setShowLayoutMenu] = useState(false);
   const [showZoomMenu, setShowZoomMenu] = useState(false);
   const layoutBtnRef = useRef(null);
@@ -336,39 +335,137 @@ const StatsBar = memo(function StatsBar({
             </div>
           )}
 
-          {/* Right side - Stats */}
-          <div className="flex items-center gap-3 sm:gap-6 flex-shrink-0">
-            <div className="flex items-center gap-1 sm:gap-2">
-              <Icons.Star className="w-4 h-4 sm:w-5 sm:h-5 text-amber-500 drop-shadow-lg" />
-              <span className="font-bold text-gray-700 text-xs sm:text-sm">
-                {points} <span className="text-gray-400 font-normal hidden sm:inline">pts</span>
-              </span>
+          {/* Right side - Gamification Stats */}
+          {gamification.isActive ? (
+            <button
+              onClick={onShowAchievements}
+              className="relative flex items-center gap-0 flex-shrink-0 cursor-pointer transition-all hover:scale-[1.03] active:scale-[0.98]"
+              title={`Level ${gamification.level} ${gamification.levelInfo.current.name} — Click for achievements`}
+            >
+              {/* Unified card background */}
+              <div className="relative flex items-center rounded-2xl overflow-hidden"
+                style={{
+                  background: 'linear-gradient(135deg, rgba(255,255,255,0.95), rgba(248,250,252,0.9))',
+                  boxShadow: `0 2px 12px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.04), 0 0 20px ${gamification.levelInfo.current.color}15`,
+                }}>
+
+                {/* Level circle - overlaps left edge */}
+                <div className="relative w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center flex-shrink-0 -ml-0.5 z-10"
+                  style={{
+                    background: `linear-gradient(135deg, ${gamification.levelInfo.current.color}, ${gamification.levelInfo.current.color}cc)`,
+                    boxShadow: `0 2px 10px ${gamification.levelInfo.current.color}50, inset 0 1px 2px rgba(255,255,255,0.3)`,
+                    border: '2.5px solid white',
+                  }}>
+                  <span className="text-white text-xs sm:text-sm font-black drop-shadow-sm">{gamification.level}</span>
+                </div>
+
+                {/* Stats row */}
+                <div className="flex items-center gap-2.5 sm:gap-3 pl-2 pr-3.5 sm:pr-4 py-1.5 sm:py-2">
+                  {/* Level name */}
+                  <span className="font-semibold text-[10px] sm:text-xs hidden sm:block"
+                    style={{ color: gamification.levelInfo.current.color }}>
+                    {gamification.levelInfo.current.name}
+                  </span>
+
+                  {/* Divider */}
+                  <div className="hidden sm:block w-px h-4 bg-gray-200" />
+
+                  {/* XP */}
+                  <div className="flex items-center gap-1" title={`${gamification.xp} XP`}>
+                    <div className="w-5 h-5 sm:w-5.5 sm:h-5.5 rounded-full flex items-center justify-center"
+                      style={{ background: 'linear-gradient(135deg, #FEF3C7, #FDE68A)', boxShadow: 'inset 0 -1px 2px #D9770620' }}>
+                      <Icons.Star className="w-3 h-3 text-amber-600" />
+                    </div>
+                    <span className="font-bold text-gray-700 text-[11px] sm:text-xs">{gamification.xp}</span>
+                  </div>
+
+                  {/* Streak */}
+                  <div className="flex items-center gap-1" title={`${gamification.streak.current}-day streak`}>
+                    <div className={`w-5 h-5 sm:w-5.5 sm:h-5.5 rounded-full flex items-center justify-center ${
+                      gamification.streak.current > 0 ? '' : 'opacity-40'
+                    }`}
+                      style={{
+                        background: gamification.streak.current > 0
+                          ? 'linear-gradient(135deg, #FFEDD5, #FED7AA)' : 'linear-gradient(135deg, #F1F5F9, #E2E8F0)',
+                        boxShadow: gamification.streak.current > 0 ? 'inset 0 -1px 2px #EA580C15' : 'none',
+                      }}>
+                      <Icons.Fire className={`w-3 h-3 ${gamification.streak.current > 0 ? 'text-orange-500' : 'text-gray-400'}`}
+                        style={gamification.streak.current > 0 ? { animation: 'pulse 2s ease-in-out infinite' } : undefined} />
+                    </div>
+                    <span className={`font-bold text-[11px] sm:text-xs ${gamification.streak.current > 0 ? 'text-gray-700' : 'text-gray-400'}`}>
+                      {gamification.streak.current}
+                    </span>
+                  </div>
+
+                  {/* Achievements */}
+                  <div className="flex items-center gap-1" title={`${gamification.achievements.length} achievements`}>
+                    <div className="w-5 h-5 sm:w-5.5 sm:h-5.5 rounded-full flex items-center justify-center"
+                      style={{ background: 'linear-gradient(135deg, #EDE9FE, #DDD6FE)', boxShadow: 'inset 0 -1px 2px #7C3AED15' }}>
+                      <Icons.Trophy className="w-3 h-3 text-purple-500" />
+                    </div>
+                    <span className="font-bold text-gray-700 text-[11px] sm:text-xs">{gamification.achievements.length}</span>
+                  </div>
+                </div>
+              </div>
+            </button>
+          ) : (
+            <div className="flex items-center rounded-2xl overflow-hidden opacity-50 flex-shrink-0"
+              style={{
+                background: 'linear-gradient(135deg, rgba(255,255,255,0.95), rgba(248,250,252,0.9))',
+                boxShadow: '0 2px 12px rgba(0,0,0,0.06), 0 0 0 1px rgba(0,0,0,0.03)',
+              }}>
+              <div className="flex items-center gap-2.5 px-3.5 py-2">
+                {[
+                  { icon: Icons.Star, bg: '#FEF3C7', color: '#D97706' },
+                  { icon: Icons.Fire, bg: '#F1F5F9', color: '#94A3B8' },
+                  { icon: Icons.Trophy, bg: '#EDE9FE', color: '#A78BFA' },
+                ].map((item, i) => (
+                  <div key={i} className="flex items-center gap-1">
+                    <div className="w-5 h-5 rounded-full flex items-center justify-center"
+                      style={{ background: item.bg }}>
+                      <item.icon className="w-3 h-3" style={{ color: item.color }} />
+                    </div>
+                    <span className="font-bold text-gray-400 text-[11px]">—</span>
+                  </div>
+                ))}
+              </div>
             </div>
-            <div className="flex items-center gap-1 sm:gap-2">
-              <Icons.Fire className="w-4 h-4 sm:w-5 sm:h-5 text-orange-500 drop-shadow-lg" />
-              <span className="font-bold text-gray-700 text-xs sm:text-sm">
-                {streak}<span className="text-gray-400 font-normal hidden sm:inline"> days</span>
-              </span>
-            </div>
-            <div className="hidden sm:flex items-center gap-2">
-              <Icons.Trophy className="w-5 h-5 text-purple-500 drop-shadow-lg" />
-              <span className="font-bold text-gray-700 text-sm">{badges}</span>
-            </div>
-          </div>
+          )}
         </div>
 
-        {/* Progress bar */}
-        <div className="max-w-6xl mx-auto mt-2 sm:mt-3">
-          <div className="h-2 sm:h-3 bg-gray-100 rounded-full overflow-hidden shadow-inner">
-            <div
-              className="h-full bg-gradient-to-r from-emerald-400 via-teal-500 to-cyan-500 rounded-full relative"
-              style={{ width: `${(points / 1000) * 100}%` }}
-            >
-              <div className="absolute inset-0 bg-gradient-to-b from-white/40 to-transparent" />
-              <div className="absolute right-0 top-0 bottom-0 w-6 bg-gradient-to-l from-white/70 to-transparent animate-pulse" />
+        {/* XP Progress bar to next level */}
+        {gamification.isActive && (
+          <div className="max-w-6xl mx-auto mt-2 sm:mt-3">
+            <div className="h-1.5 sm:h-2 rounded-full overflow-hidden relative"
+              style={{
+                background: 'linear-gradient(135deg, rgba(0,0,0,0.04), rgba(0,0,0,0.06))',
+                boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.08), inset 0 -1px 2px rgba(255,255,255,0.5)',
+              }}>
+              <div
+                className="h-full rounded-full relative transition-all duration-500 overflow-hidden"
+                style={{
+                  width: `${Math.min(gamification.levelInfo.progressPercent || 0, 100)}%`,
+                  background: `linear-gradient(to right, ${gamification.levelInfo.current.color}, ${gamification.levelInfo.next?.color || gamification.levelInfo.current.color})`,
+                  boxShadow: `0 0 8px ${gamification.levelInfo.current.color}40`,
+                }}
+              >
+                <div className="absolute inset-0 bg-gradient-to-b from-white/40 to-transparent" />
+                <div className="absolute inset-0" style={{
+                  background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent)',
+                  animation: 'shimmerWave 2s ease-in-out infinite',
+                }} />
+              </div>
+            </div>
+            <div className="flex justify-between mt-0.5">
+              <span className="text-[8px] sm:text-[9px] text-gray-400">Lv.{gamification.level} {gamification.levelInfo.current.name}</span>
+              {gamification.levelInfo.next && (
+                <span className="text-[8px] sm:text-[9px] text-gray-400">
+                  {gamification.levelInfo.xpProgress}/{gamification.levelInfo.xpNeeded} XP → Lv.{gamification.levelInfo.next.level}
+                </span>
+              )}
             </div>
           </div>
-        </div>
+        )}
       </div>
 
       {/* Layout Dropdown - Using Portal for proper z-index */}

@@ -3,8 +3,9 @@
  * Central hub for XP, levels, achievements, daily challenges, and streaks
  */
 
-import { useState, useEffect, useCallback, memo, useMemo } from 'react';
+import { useState, useEffect, memo, useMemo } from 'react';
 import { Icons } from './Icons';
+import { useAuth } from '../../contexts/AuthContext';
 import {
   LEVELS,
   ACHIEVEMENTS,
@@ -14,7 +15,10 @@ import {
   updateStreak,
 } from '../../data/gamificationSystem';
 
-// Level Badge Component
+// Safe icon resolver — prevents React Error #130 from undefined icons
+const getIcon = (name, fallback = Icons.Star) => Icons[name] || fallback;
+
+// Level Badge Component (used in MiniXPDisplay)
 const LevelBadge = memo(function LevelBadge({ level, size = 'md' }) {
   const sizes = {
     sm: { badge: 'w-8 h-8', text: 'text-xs' },
@@ -33,13 +37,54 @@ const LevelBadge = memo(function LevelBadge({ level, size = 'md' }) {
       }}
     >
       <span className={s.text}>{level.level}</span>
-      {/* Glow ring */}
       <div
         className="absolute inset-0 rounded-full animate-pulse"
+        style={{ border: `2px solid ${level.color}`, opacity: 0.5 }}
+      />
+    </div>
+  );
+});
+
+// Profile Avatar — shows user's Google picture with level badge overlay
+const ProfileAvatar = memo(function ProfileAvatar({ user, level }) {
+  return (
+    <div className="relative flex-shrink-0">
+      {user?.picture ? (
+        <img
+          src={user.picture}
+          alt={user.name || ''}
+          className="w-20 h-20 rounded-full object-cover"
+          style={{
+            border: `3px solid ${level.color}`,
+            boxShadow: `0 0 20px ${level.color}60, inset 0 0 20px rgba(0,0,0,0.2)`,
+          }}
+          referrerPolicy="no-referrer"
+        />
+      ) : (
+        <div
+          className="w-20 h-20 rounded-full flex items-center justify-center text-white text-2xl font-bold"
+          style={{
+            background: `linear-gradient(135deg, ${level.color}, ${level.color}aa)`,
+            boxShadow: `0 0 20px ${level.color}60`,
+          }}
+        >
+          {(user?.name || 'U')[0].toUpperCase()}
+        </div>
+      )}
+      {/* Level badge overlay */}
+      <div
+        className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full flex items-center justify-center text-white text-[10px] font-bold border-2 border-black/50"
         style={{
-          border: `2px solid ${level.color}`,
-          opacity: 0.5,
+          background: `linear-gradient(135deg, ${level.color}, ${level.color}cc)`,
+          boxShadow: `0 2px 8px ${level.color}60`,
         }}
+      >
+        {level.level}
+      </div>
+      {/* Glow ring */}
+      <div
+        className="absolute inset-0 rounded-full animate-pulse pointer-events-none"
+        style={{ border: `2px solid ${level.color}`, opacity: 0.4 }}
       />
     </div>
   );
@@ -104,7 +149,7 @@ const StreakDisplay = memo(function StreakDisplay({ current, best }) {
 
 // Daily Challenge Card Component
 const ChallengeCard = memo(function ChallengeCard({ challenge }) {
-  const Icon = Icons[challenge.icon] || Icons.Star;
+  const Icon = getIcon(challenge.icon);
   const progress = Math.min((challenge.progress / challenge.target) * 100, 100);
 
   return (
@@ -153,7 +198,7 @@ const ChallengeCard = memo(function ChallengeCard({ challenge }) {
 
 // Achievement Badge Component
 const AchievementBadge = memo(function AchievementBadge({ achievement, unlocked }) {
-  const Icon = Icons[achievement.icon] || Icons.Award;
+  const Icon = getIcon(achievement.icon, Icons.Award);
 
   return (
     <div
@@ -202,7 +247,7 @@ const StatsGrid = memo(function StatsGrid({ stats }) {
   return (
     <div className="grid grid-cols-3 gap-3">
       {statItems.map((stat) => {
-        const Icon = Icons[stat.icon] || Icons.Star;
+        const Icon = getIcon(stat.icon);
         return (
           <div
             key={stat.label}
@@ -218,31 +263,203 @@ const StatsGrid = memo(function StatsGrid({ stats }) {
   );
 });
 
+// Leaderboard Row Component
+const LeaderboardRow = memo(function LeaderboardRow({ entry, isCurrentUser }) {
+  const levelColor = LEVELS.find(l => l.level === entry.level)?.color || '#6B7280';
+
+  return (
+    <div
+      className={`flex items-center gap-3 p-3 rounded-xl transition-all ${
+        isCurrentUser
+          ? 'bg-gradient-to-r from-amber-500/20 to-orange-500/20 border border-amber-500/30'
+          : 'bg-white/5 border border-white/5'
+      }`}
+    >
+      {/* Rank */}
+      <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 ${
+        entry.rank === 1 ? 'bg-yellow-500/30 text-yellow-400' :
+        entry.rank === 2 ? 'bg-gray-300/30 text-gray-300' :
+        entry.rank === 3 ? 'bg-amber-700/30 text-amber-600' :
+        'bg-white/10 text-white/60'
+      }`}>
+        {entry.rank <= 3 ? ['', '1st', '2nd', '3rd'][entry.rank] : `#${entry.rank}`}
+      </div>
+
+      {/* Avatar */}
+      {entry.picture ? (
+        <img
+          src={entry.picture}
+          alt=""
+          className="w-10 h-10 rounded-full border-2 flex-shrink-0 object-cover"
+          style={{ borderColor: levelColor }}
+          referrerPolicy="no-referrer"
+        />
+      ) : (
+        <div
+          className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold flex-shrink-0"
+          style={{ background: `linear-gradient(135deg, ${levelColor}, ${levelColor}aa)` }}
+        >
+          {(entry.displayName || 'U')[0]}
+        </div>
+      )}
+
+      {/* Name + Level */}
+      <div className="flex-1 min-w-0">
+        <p className="text-white font-medium truncate text-sm">
+          {entry.displayName}
+          {isCurrentUser && <span className="text-amber-400 text-xs ml-1">(You)</span>}
+        </p>
+        <p className="text-xs" style={{ color: levelColor }}>Lv. {entry.level}</p>
+      </div>
+
+      {/* XP + Streak */}
+      <div className="text-right flex-shrink-0">
+        <p className="text-white font-bold text-sm">{entry.xp.toLocaleString()} XP</p>
+        {entry.currentStreak > 0 && (
+          <div className="flex items-center gap-1 justify-end text-orange-400 text-xs">
+            <Icons.Fire className="w-3 h-3" />
+            {entry.currentStreak}d
+          </div>
+        )}
+      </div>
+    </div>
+  );
+});
+
+// Leaderboard Tab Component
+const LeaderboardTab = memo(function LeaderboardTab({ data, loading, error, sort, onSortChange }) {
+  if (loading) {
+    return (
+      <div className="flex flex-col items-center justify-center py-12">
+        <div className="w-8 h-8 border-2 border-white/20 border-t-amber-400 rounded-full animate-spin" />
+        <p className="text-white/40 text-sm mt-3">Loading leaderboard...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="text-center py-12">
+        <Icons.AlertCircle className="w-10 h-10 text-red-400 mx-auto mb-3" />
+        <p className="text-white/60 text-sm">{error}</p>
+        <button
+          onClick={() => onSortChange(sort)}
+          className="mt-3 px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-white text-sm transition-all"
+        >
+          Retry
+        </button>
+      </div>
+    );
+  }
+
+  if (!data?.leaderboard?.length) {
+    return (
+      <div className="text-center py-12">
+        <Icons.Trophy className="w-10 h-10 text-white/20 mx-auto mb-3" />
+        <p className="text-white/40 text-sm">No leaderboard data yet. Keep reading!</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-4">
+      {/* Sort controls */}
+      <div className="flex gap-2">
+        {[
+          { id: 'xp', label: 'XP (Naikee)' },
+          { id: 'streak', label: 'Streak' },
+          { id: 'verses', label: 'Verses' },
+        ].map(s => (
+          <button
+            key={s.id}
+            onClick={() => onSortChange(s.id)}
+            className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
+              sort === s.id
+                ? 'bg-amber-500/30 text-amber-400 border border-amber-500/50'
+                : 'bg-white/5 text-white/50 hover:bg-white/10 border border-white/10'
+            }`}
+          >
+            {s.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Current user's rank if not in top list */}
+      {data.myRank && data.myRank.rank > data.leaderboard.length && (
+        <div className="space-y-2">
+          <p className="text-white/40 text-xs uppercase">Your Rank</p>
+          <LeaderboardRow entry={data.myRank} isCurrentUser />
+          <div className="border-b border-white/10 my-2" />
+        </div>
+      )}
+
+      {/* Top users */}
+      <div className="space-y-2">
+        {data.leaderboard.map((entry) => (
+          <LeaderboardRow
+            key={entry.rank}
+            entry={entry}
+            isCurrentUser={data.myRank?.rank === entry.rank}
+          />
+        ))}
+      </div>
+
+      <p className="text-center text-white/30 text-xs mt-4">
+        Updated every minute
+      </p>
+    </div>
+  );
+});
+
 // Main Gamification Hub Component
 const GamificationHub = memo(function GamificationHub({
   isVisible,
   onClose,
 }) {
+  const { user } = useAuth();
   const [activeTab, setActiveTab] = useState('overview');
   const [data, setData] = useState(null);
   const [levelInfo, setLevelInfo] = useState(null);
   const [challenges, setChallenges] = useState([]);
 
-  // Load data
+  // Leaderboard state
+  const [leaderboardData, setLeaderboardData] = useState(null);
+  const [leaderboardLoading, setLeaderboardLoading] = useState(false);
+  const [leaderboardError, setLeaderboardError] = useState(null);
+  const [leaderboardSort, setLeaderboardSort] = useState('xp');
+
+  // Load gamification data
   useEffect(() => {
     if (!isVisible) return;
 
     const gamData = getGamificationData();
     setData(gamData);
     setLevelInfo(getLevelInfo(gamData.xp));
-
-    // Update streak on open
     updateStreak();
-
-    // Generate/get daily challenges
-    const dailyChallenges = generateDailyChallenges();
-    setChallenges(dailyChallenges);
+    setChallenges(generateDailyChallenges());
   }, [isVisible]);
+
+  // Fetch leaderboard when tab selected
+  useEffect(() => {
+    if (activeTab !== 'leaderboard' || !isVisible) return;
+
+    setLeaderboardLoading(true);
+    setLeaderboardError(null);
+
+    fetch(`/api/leaderboard?sort=${leaderboardSort}&limit=50`, { credentials: 'include' })
+      .then(res => {
+        if (!res.ok) throw new Error('Failed to load');
+        return res.json();
+      })
+      .then(result => {
+        setLeaderboardData(result);
+        setLeaderboardLoading(false);
+      })
+      .catch(() => {
+        setLeaderboardError('Could not load leaderboard. Check your connection.');
+        setLeaderboardLoading(false);
+      });
+  }, [activeTab, leaderboardSort, isVisible]);
 
   // Achievement categories
   const achievementCategories = useMemo(() => {
@@ -276,7 +493,7 @@ const GamificationHub = memo(function GamificationHub({
         <div className="flex-shrink-0 p-6 border-b border-white/10">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <LevelBadge level={levelInfo.current} size="lg" />
+              <ProfileAvatar user={user} level={levelInfo.current} />
               <div>
                 <h2 className="text-2xl font-bold text-white">{levelInfo.current.name}</h2>
                 <p
@@ -300,21 +517,23 @@ const GamificationHub = memo(function GamificationHub({
           <div className="mt-4">
             <XPProgressBar levelInfo={levelInfo} xp={data.xp} />
           </div>
+          <p className="text-white/30 text-[10px] mt-1 text-center">XP = Naikee (نیکی) — every good deed earns you XP</p>
         </div>
 
         {/* Tabs */}
         <div className="flex-shrink-0 flex border-b border-white/10">
           {[
-            { id: 'overview', label: 'Overview', icon: 'Home' },
+            { id: 'overview', label: 'Overview', icon: 'Compass' },
             { id: 'challenges', label: 'Challenges', icon: 'Target' },
             { id: 'achievements', label: 'Badges', icon: 'Award' },
+            { id: 'leaderboard', label: 'Leaderboard', icon: 'Trophy' },
           ].map((tab) => {
-            const Icon = Icons[tab.icon];
+            const Icon = getIcon(tab.icon);
             return (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex-1 flex items-center justify-center gap-2 py-3 text-sm font-medium transition-all ${
+                className={`flex-1 flex items-center justify-center gap-1 sm:gap-2 py-3 text-xs sm:text-sm font-medium transition-all ${
                   activeTab === tab.id
                     ? 'text-white border-b-2'
                     : 'text-white/50 hover:text-white/80'
@@ -324,7 +543,7 @@ const GamificationHub = memo(function GamificationHub({
                 }}
               >
                 <Icon className="w-4 h-4" />
-                {tab.label}
+                <span className="hidden sm:inline">{tab.label}</span>
               </button>
             );
           })}
@@ -400,35 +619,26 @@ const GamificationHub = memo(function GamificationHub({
               ))}
             </div>
           )}
+
+          {activeTab === 'leaderboard' && (
+            <LeaderboardTab
+              data={leaderboardData}
+              loading={leaderboardLoading}
+              error={leaderboardError}
+              sort={leaderboardSort}
+              onSortChange={setLeaderboardSort}
+            />
+          )}
         </div>
       </div>
 
-      {/* Shimmer animation */}
-      <style>{`
-        @keyframes shimmer {
-          0% { transform: translateX(-100%); }
-          100% { transform: translateX(100%); }
-        }
-        .animate-shimmer {
-          animation: shimmer 2s infinite;
-        }
-      `}</style>
     </div>
   );
 });
 
-// Mini XP Display (for embedding in header)
-export const MiniXPDisplay = memo(function MiniXPDisplay({ onClick }) {
-  const [data, setData] = useState(null);
-  const [levelInfo, setLevelInfo] = useState(null);
-
-  useEffect(() => {
-    const gamData = getGamificationData();
-    setData(gamData);
-    setLevelInfo(getLevelInfo(gamData.xp));
-  }, []);
-
-  if (!data || !levelInfo) return null;
+// Mini XP Display (for embedding in header) — uses shared context via props
+export const MiniXPDisplay = memo(function MiniXPDisplay({ onClick, xp, levelInfo, streak }) {
+  if (!levelInfo) return null;
 
   return (
     <button
@@ -437,7 +647,7 @@ export const MiniXPDisplay = memo(function MiniXPDisplay({ onClick }) {
     >
       <LevelBadge level={levelInfo.current} size="sm" />
       <div className="text-left">
-        <p className="text-white text-xs font-medium">{data.xp} XP</p>
+        <p className="text-white text-xs font-medium">{xp || 0} XP</p>
         <div className="w-16 h-1 bg-white/20 rounded-full overflow-hidden">
           <div
             className="h-full rounded-full"
@@ -448,10 +658,10 @@ export const MiniXPDisplay = memo(function MiniXPDisplay({ onClick }) {
           />
         </div>
       </div>
-      {data.streaks.current > 0 && (
+      {streak > 0 && (
         <div className="flex items-center gap-1 text-orange-400">
           <Icons.Fire className="w-3 h-3" />
-          <span className="text-xs font-medium">{data.streaks.current}</span>
+          <span className="text-xs font-medium">{streak}</span>
         </div>
       )}
     </button>

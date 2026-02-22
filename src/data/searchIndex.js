@@ -217,9 +217,37 @@ const escapeRegex = (string) => {
 };
 
 /**
- * Search suggestions based on common topics
+ * Search suggestions based on common topics - multilingual
  */
-export const getSearchSuggestions = () => {
+export const getSearchSuggestions = (mode = 'english') => {
+  if (mode === 'urdu') {
+    return [
+      { query: 'رحمت', label: 'رحمت (Mercy)' },
+      { query: 'صبر', label: 'صبر (Patience)' },
+      { query: 'نماز', label: 'نماز (Prayer)' },
+      { query: 'مغفرت', label: 'مغفرت (Forgiveness)' },
+      { query: 'جنت', label: 'جنت (Paradise)' },
+      { query: 'نیکی', label: 'نیکی (Good Deeds)' },
+      { query: 'ہدایت', label: 'ہدایت (Guidance)' },
+      { query: 'نور', label: 'نور (Light)' },
+      { query: 'حق', label: 'حق (Truth)' },
+      { query: 'ایمان', label: 'ایمان (Belief)' },
+    ];
+  }
+  if (mode === 'arabic') {
+    return [
+      { query: 'رحمة', label: 'رحمة (Mercy)' },
+      { query: 'صبر', label: 'صبر (Patience)' },
+      { query: 'صلاة', label: 'صلاة (Prayer)' },
+      { query: 'مغفرة', label: 'مغفرة (Forgiveness)' },
+      { query: 'جنة', label: 'جنة (Paradise)' },
+      { query: 'صالحات', label: 'صالحات (Good Deeds)' },
+      { query: 'هداية', label: 'هداية (Guidance)' },
+      { query: 'نور', label: 'نور (Light)' },
+      { query: 'حق', label: 'حق (Truth)' },
+      { query: 'إيمان', label: 'إيمان (Belief)' },
+    ];
+  }
   return [
     { query: 'mercy', label: 'Mercy (Rahma)' },
     { query: 'patience', label: 'Patience (Sabr)' },

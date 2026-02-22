@@ -7,6 +7,7 @@
 import { useState, useEffect, useCallback, memo, useRef } from 'react';
 import { Icons } from './Icons';
 import { SURAHS, JUZZ } from '../../data';
+import { SAJDAH_AYAT, MUQATTAAT } from '../../data/ayahConnections';
 
 // Language options for search
 const SEARCH_LANGUAGES = [
@@ -126,21 +127,11 @@ const SearchResultNode = memo(function SearchResultNode({
   const size = baseSize * bubbleZoom;
   const isMakki = surah.type === 'Makki';
 
-  const handleMouseEnter = () => {
-    setIsHovered(true);
-    if (onHover) onHover({ surah, matches, x: x + panX, y: y + panY });
-  };
-
-  const handleMouseLeave = () => {
-    setIsHovered(false);
-    if (onHover) onHover(null);
-  };
-
   return (
     <button
       onClick={(e) => { e.stopPropagation(); onClick(); }}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
       className="absolute transition-all duration-300 focus:outline-none"
       style={{
         left: x + panX,
@@ -443,11 +434,22 @@ const LayoutSelector = memo(function LayoutSelector({ selectedLayout, onSelect }
 // Filter Panel Component
 const FilterPanel = memo(function FilterPanel({ filters, onFilterChange, resultsCount }) {
   const [isOpen, setIsOpen] = useState(false);
+  const btnRef = useRef(null);
+  const [pos, setPos] = useState({ top: 0, left: 0 });
+
+  const handleToggle = () => {
+    if (!isOpen && btnRef.current) {
+      const rect = btnRef.current.getBoundingClientRect();
+      setPos({ top: rect.bottom + 8, left: rect.left });
+    }
+    setIsOpen(!isOpen);
+  };
 
   return (
     <div className="relative">
       <button
-        onClick={() => setIsOpen(!isOpen)}
+        ref={btnRef}
+        onClick={handleToggle}
         className={`flex items-center gap-2 px-3 py-2 rounded-xl border transition-all ${
           filters.revelation !== 'all' || filters.length !== 'all' || filters.topN !== 20
             ? 'bg-purple-500/30 border-purple-500/50 text-white'
@@ -463,8 +465,8 @@ const FilterPanel = memo(function FilterPanel({ filters, onFilterChange, results
 
       {isOpen && (
         <>
-          <div className="fixed inset-0 z-40" onClick={() => setIsOpen(false)} />
-          <div className="absolute top-full left-0 mt-2 z-50 w-[280px] rounded-xl overflow-hidden border border-white/20 bg-gray-800/95 backdrop-blur-xl shadow-xl">
+          <div className="fixed inset-0 z-[100000]" onClick={() => setIsOpen(false)} />
+          <div className="fixed z-[100001] w-[280px] rounded-xl overflow-hidden border border-white/20 bg-gray-800/95 backdrop-blur-xl shadow-xl" style={{ top: pos.top, left: pos.left }}>
             <div className="p-4 space-y-4">
               {/* Revelation Type */}
               <div>
@@ -569,12 +571,23 @@ const FilterPanel = memo(function FilterPanel({ filters, onFilterChange, results
 // Language Selector Component
 const LanguageSelector = memo(function LanguageSelector({ selectedLang, onSelect }) {
   const [isOpen, setIsOpen] = useState(false);
+  const btnRef = useRef(null);
+  const [pos, setPos] = useState({ top: 0, left: 0 });
   const selected = SEARCH_LANGUAGES.find(l => l.id === selectedLang) || SEARCH_LANGUAGES[0];
+
+  const handleToggle = () => {
+    if (!isOpen && btnRef.current) {
+      const rect = btnRef.current.getBoundingClientRect();
+      setPos({ top: rect.bottom + 8, left: rect.left });
+    }
+    setIsOpen(!isOpen);
+  };
 
   return (
     <div className="relative">
       <button
-        onClick={() => setIsOpen(!isOpen)}
+        ref={btnRef}
+        onClick={handleToggle}
         className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 transition-all"
       >
         <Icons.Globe className="w-4 h-4 text-white/70" />
@@ -584,8 +597,8 @@ const LanguageSelector = memo(function LanguageSelector({ selectedLang, onSelect
 
       {isOpen && (
         <>
-          <div className="fixed inset-0 z-40" onClick={() => setIsOpen(false)} />
-          <div className="absolute top-full left-0 mt-2 z-50 min-w-[180px] rounded-xl overflow-hidden border border-white/20 bg-gray-800/95 backdrop-blur-xl shadow-xl">
+          <div className="fixed inset-0 z-[100000]" onClick={() => setIsOpen(false)} />
+          <div className="fixed z-[100001] min-w-[180px] rounded-xl overflow-hidden border border-white/20 bg-gray-800/95 backdrop-blur-xl shadow-xl" style={{ top: pos.top, left: pos.left }}>
             {SEARCH_LANGUAGES.map((lang) => (
               <button
                 key={lang.id}
@@ -622,7 +635,6 @@ const WordSearchMap = memo(function WordSearchMap({
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [searchLanguage, setSearchLanguage] = useState('en');
   const [layout, setLayout] = useState('spiral');
-  const [hoverData, setHoverData] = useState(null);
   const [animationsEnabled, setAnimationsEnabled] = useState(true);
   const [translatedTerms, setTranslatedTerms] = useState(null);
 
@@ -651,6 +663,7 @@ const WordSearchMap = memo(function WordSearchMap({
 
   // Get current language config
   const currentLang = SEARCH_LANGUAGES.find(l => l.id === searchLanguage) || SEARCH_LANGUAGES[0];
+  const isRTL = searchLanguage === 'ar' || searchLanguage === 'ur';
 
   // Handle filter change
   const handleFilterChange = useCallback((key, value) => {
@@ -1359,8 +1372,7 @@ const WordSearchMap = memo(function WordSearchMap({
             <PanControls onPan={handlePan} onReset={handleResetPan} />
           )}
 
-          {/* Hover Preview */}
-          <HoverPreview data={hoverData} containerSize={containerSize} searchLanguage={searchLanguage} />
+          {/* Hover Preview removed - detail shown on click only */}
 
           {/* Empty state with scrollable famous keywords */}
           {!searchQuery && (
@@ -1381,9 +1393,11 @@ const WordSearchMap = memo(function WordSearchMap({
                     />
                   )}
                 </div>
-                <h3 className="text-white font-bold text-base">Explore Quranic Words</h3>
-                <p className="text-white/50 text-xs mt-0.5">
-                  Scroll to explore • Click any word to search
+                <h3 className={`text-white font-bold text-base ${isRTL ? 'font-arabic' : ''}`}>
+                  {searchLanguage === 'ur' ? 'قرآنی الفاظ دریافت کریں' : searchLanguage === 'ar' ? 'استكشف كلمات القرآن' : 'Explore Quranic Words'}
+                </h3>
+                <p className={`text-white/50 text-xs mt-0.5 ${isRTL ? 'font-arabic' : ''}`}>
+                  {searchLanguage === 'ur' ? 'تلاش کے لیے نیچے سکرول کریں • کسی بھی لفظ پر کلک کریں' : searchLanguage === 'ar' ? 'مرر لأسفل للاستكشاف • انقر على أي كلمة للبحث' : 'Scroll to explore • Click any word to search'}
                 </p>
               </div>
 
@@ -1396,6 +1410,91 @@ const WordSearchMap = memo(function WordSearchMap({
                 }}
               >
                 <div className="max-w-4xl mx-auto space-y-3 pb-16">
+                  {/* Sajdah Ayat Quick Jump */}
+                  <div
+                    className="rounded-xl p-3 transition-all hover:bg-white/[0.07]"
+                    style={{
+                      background: 'rgba(239,68,68,0.08)',
+                      border: '1px solid rgba(239,68,68,0.15)',
+                      opacity: animationsEnabled ? 0 : 1,
+                      animation: animationsEnabled ? `fadeSlideIn 0.4s ease-out 0s forwards` : 'none',
+                      direction: isRTL ? 'rtl' : 'ltr',
+                    }}
+                  >
+                    <h4 className={`text-white/80 text-sm font-semibold mb-2 flex items-center gap-2 ${isRTL ? 'font-arabic' : ''}`}>
+                      <span className="text-base">🙇</span>
+                      {searchLanguage === 'ur' ? 'سجدہ تلاوت' : searchLanguage === 'ar' ? 'سجدة التلاوة' : 'سجدہ تلاوت — Sajdah Ayat'}
+                      <span className="text-white/40 text-xs font-normal">({SAJDAH_AYAT.length})</span>
+                    </h4>
+                    <div className="flex flex-wrap gap-2">
+                      {SAJDAH_AYAT.map((item, idx) => (
+                        <button
+                          key={`${item.surah}-${item.ayah}`}
+                          onClick={() => {
+                            if (onNavigateToVerse) {
+                              onNavigateToVerse(item.surah, item.ayah);
+                              onClose();
+                            }
+                          }}
+                          className="group relative px-3 py-1.5 rounded-lg transition-all hover:scale-105 active:scale-95"
+                          style={{
+                            background: 'linear-gradient(135deg, rgba(239,68,68,0.2), rgba(239,68,68,0.08))',
+                            border: '1px solid rgba(239,68,68,0.25)',
+                            animation: animationsEnabled ? `keywordPop 0.3s ease-out ${idx * 0.03}s both` : 'none',
+                          }}
+                        >
+                          <span className={`text-white font-medium text-sm block ${isRTL ? 'font-arabic' : ''}`}>{isRTL ? item.arabic : item.name}</span>
+                          <span className="text-white/40 text-[10px] block" dir="ltr">{item.surah}:{item.ayah}</span>
+                          <div className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
+                            style={{ boxShadow: '0 0 15px rgba(239,68,68,0.2)' }} />
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Huroof al-Muqatta'at Quick Jump */}
+                  <div
+                    className="rounded-xl p-3 transition-all hover:bg-white/[0.07]"
+                    style={{
+                      background: 'rgba(6,182,212,0.08)',
+                      border: '1px solid rgba(6,182,212,0.15)',
+                      opacity: animationsEnabled ? 0 : 1,
+                      animation: animationsEnabled ? `fadeSlideIn 0.4s ease-out 0.08s forwards` : 'none',
+                      direction: isRTL ? 'rtl' : 'ltr',
+                    }}
+                  >
+                    <h4 className={`text-white/80 text-sm font-semibold mb-2 flex items-center gap-2 ${isRTL ? 'font-arabic' : ''}`}>
+                      <span className="text-base font-arabic text-cyan-300">الٓمٓ</span>
+                      {searchLanguage === 'ur' ? 'حروف مقطعات' : searchLanguage === 'ar' ? 'الحروف المقطعة' : 'حروف مقطعات — Muqatta\'at'}
+                      <span className="text-white/40 text-xs font-normal">({MUQATTAAT.length})</span>
+                    </h4>
+                    <div className="flex flex-wrap gap-2">
+                      {MUQATTAAT.map((item, idx) => (
+                        <button
+                          key={item.surah}
+                          onClick={() => {
+                            if (onNavigateToVerse) {
+                              onNavigateToVerse(item.surah, 1);
+                              onClose();
+                            }
+                          }}
+                          className="group relative px-3 py-1.5 rounded-lg transition-all hover:scale-105 active:scale-95"
+                          style={{
+                            background: 'linear-gradient(135deg, rgba(6,182,212,0.2), rgba(6,182,212,0.08))',
+                            border: '1px solid rgba(6,182,212,0.25)',
+                            animation: animationsEnabled ? `keywordPop 0.3s ease-out ${idx * 0.03}s both` : 'none',
+                          }}
+                        >
+                          <span className="text-cyan-300 font-arabic text-sm block">{item.letters}</span>
+                          <span className={`text-white/40 text-[10px] block ${isRTL ? 'font-arabic' : ''}`}>{isRTL ? item.arabic : item.name}</span>
+                          <div className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
+                            style={{ boxShadow: '0 0 15px rgba(6,182,212,0.2)' }} />
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Keyword Categories */}
                   {Object.entries(currentKeywords).map(([category, words], catIndex) => (
                     <div
                       key={category}
@@ -1403,7 +1502,7 @@ const WordSearchMap = memo(function WordSearchMap({
                       style={{
                         background: 'rgba(255,255,255,0.05)',
                         opacity: animationsEnabled ? 0 : 1,
-                        animation: animationsEnabled ? `fadeSlideIn 0.4s ease-out ${catIndex * 0.08}s forwards` : 'none',
+                        animation: animationsEnabled ? `fadeSlideIn 0.4s ease-out ${(catIndex + 2) * 0.08}s forwards` : 'none',
                       }}
                     >
                       <h4 className={`text-white/80 text-sm font-semibold mb-2 flex items-center gap-2 ${
@@ -1426,7 +1525,7 @@ const WordSearchMap = memo(function WordSearchMap({
                             style={{
                               background: `linear-gradient(135deg, ${item.color}25, ${item.color}10)`,
                               border: `1px solid ${item.color}30`,
-                              animation: animationsEnabled ? `keywordPop 0.3s ease-out ${(catIndex * 0.1) + (idx * 0.03)}s both` : 'none',
+                              animation: animationsEnabled ? `keywordPop 0.3s ease-out ${((catIndex + 2) * 0.1) + (idx * 0.03)}s both` : 'none',
                             }}
                           >
                             <span className={`text-white font-medium text-sm block ${
@@ -1543,7 +1642,6 @@ const WordSearchMap = memo(function WordSearchMap({
                   textZoom={textZoom}
                   panX={panX}
                   panY={panY}
-                  onHover={setHoverData}
                   animationsEnabled={animationsEnabled}
                   searchLanguage={searchLanguage}
                 />

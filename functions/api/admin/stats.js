@@ -181,6 +181,33 @@ export async function onRequest(context) {
       SELECT COUNT(*) as count FROM user_credits WHERE lifetime_purchase = TRUE
     `).first();
 
+    // Donation button clicks (from app_logs)
+    let donateStats = { guest: 0, loggedIn: 0, total: 0, today: 0 };
+    try {
+      const donateTotal = await env.DB.prepare(`
+        SELECT
+          COUNT(*) as total,
+          SUM(CASE WHEN user_id IS NULL THEN 1 ELSE 0 END) as guest_clicks,
+          SUM(CASE WHEN user_id IS NOT NULL THEN 1 ELSE 0 END) as user_clicks
+        FROM app_logs
+        WHERE message = 'donate_click'
+      `).first();
+
+      const donateToday = await env.DB.prepare(`
+        SELECT COUNT(*) as count FROM app_logs
+        WHERE message = 'donate_click' AND DATE(created_at) = DATE('now')
+      `).first();
+
+      donateStats = {
+        guest: donateTotal?.guest_clicks || 0,
+        loggedIn: donateTotal?.user_clicks || 0,
+        total: donateTotal?.total || 0,
+        today: donateToday?.count || 0,
+      };
+    } catch {
+      // app_logs table might not have donate_click entries yet
+    }
+
     // Build tier breakdown
     const tierBreakdown = {};
     (usersByTier.results || []).forEach(t => {
@@ -214,6 +241,7 @@ export async function onRequest(context) {
         thisWeek: conversationsWeek?.count || 0,
       },
       recentTransactions: recentTransactions?.results || [],
+      donateClicks: donateStats,
     }), {
       status: 200,
       headers: corsHeaders,

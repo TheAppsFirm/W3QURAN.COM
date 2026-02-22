@@ -261,6 +261,58 @@ export const KEY_WORDS = {
   },
 };
 
+// Sajdah Ayat - 14 verses where prostration is required
+export const SAJDAH_AYAT = [
+  { surah: 7, ayah: 206, name: 'Al-A\'raf', arabic: 'الأعراف' },
+  { surah: 13, ayah: 15, name: 'Ar-Ra\'d', arabic: 'الرعد' },
+  { surah: 16, ayah: 50, name: 'An-Nahl', arabic: 'النحل' },
+  { surah: 17, ayah: 109, name: 'Al-Isra', arabic: 'الإسراء' },
+  { surah: 19, ayah: 58, name: 'Maryam', arabic: 'مريم' },
+  { surah: 22, ayah: 18, name: 'Al-Hajj', arabic: 'الحج' },
+  { surah: 22, ayah: 77, name: 'Al-Hajj', arabic: 'الحج' },
+  { surah: 25, ayah: 60, name: 'Al-Furqan', arabic: 'الفرقان' },
+  { surah: 27, ayah: 26, name: 'An-Naml', arabic: 'النمل' },
+  { surah: 32, ayah: 15, name: 'As-Sajdah', arabic: 'السجدة' },
+  { surah: 38, ayah: 24, name: 'Sad', arabic: 'ص' },
+  { surah: 41, ayah: 38, name: 'Fussilat', arabic: 'فصلت' },
+  { surah: 53, ayah: 62, name: 'An-Najm', arabic: 'النجم' },
+  { surah: 84, ayah: 21, name: 'Al-Inshiqaq', arabic: 'الانشقاق' },
+  { surah: 96, ayah: 19, name: 'Al-Alaq', arabic: 'العلق' },
+];
+
+// Huroof al-Muqatta'at - Disjointed letters at the beginning of 29 surahs
+export const MUQATTAAT = [
+  { surah: 2, letters: 'الٓمٓ', latin: 'Alif Lam Mim', name: 'Al-Baqarah', arabic: 'البقرة' },
+  { surah: 3, letters: 'الٓمٓ', latin: 'Alif Lam Mim', name: 'Aal-Imran', arabic: 'آل عمران' },
+  { surah: 7, letters: 'الٓمٓصٓ', latin: 'Alif Lam Mim Sad', name: 'Al-A\'raf', arabic: 'الأعراف' },
+  { surah: 10, letters: 'الٓر', latin: 'Alif Lam Ra', name: 'Yunus', arabic: 'يونس' },
+  { surah: 11, letters: 'الٓر', latin: 'Alif Lam Ra', name: 'Hud', arabic: 'هود' },
+  { surah: 12, letters: 'الٓر', latin: 'Alif Lam Ra', name: 'Yusuf', arabic: 'يوسف' },
+  { surah: 13, letters: 'الٓمٓر', latin: 'Alif Lam Mim Ra', name: 'Ar-Ra\'d', arabic: 'الرعد' },
+  { surah: 14, letters: 'الٓر', latin: 'Alif Lam Ra', name: 'Ibrahim', arabic: 'إبراهيم' },
+  { surah: 15, letters: 'الٓر', latin: 'Alif Lam Ra', name: 'Al-Hijr', arabic: 'الحجر' },
+  { surah: 19, letters: 'كٓهٰيٰعٓصٓ', latin: 'Kaf Ha Ya Ain Sad', name: 'Maryam', arabic: 'مريم' },
+  { surah: 20, letters: 'طٰهٰ', latin: 'Ta Ha', name: 'Ta-Ha', arabic: 'طه' },
+  { surah: 26, letters: 'طٰسٓمٓ', latin: 'Ta Sin Mim', name: 'Ash-Shu\'ara', arabic: 'الشعراء' },
+  { surah: 27, letters: 'طٰسٓ', latin: 'Ta Sin', name: 'An-Naml', arabic: 'النمل' },
+  { surah: 28, letters: 'طٰسٓمٓ', latin: 'Ta Sin Mim', name: 'Al-Qasas', arabic: 'القصص' },
+  { surah: 29, letters: 'الٓمٓ', latin: 'Alif Lam Mim', name: 'Al-Ankabut', arabic: 'العنكبوت' },
+  { surah: 30, letters: 'الٓمٓ', latin: 'Alif Lam Mim', name: 'Ar-Rum', arabic: 'الروم' },
+  { surah: 31, letters: 'الٓمٓ', latin: 'Alif Lam Mim', name: 'Luqman', arabic: 'لقمان' },
+  { surah: 32, letters: 'الٓمٓ', latin: 'Alif Lam Mim', name: 'As-Sajdah', arabic: 'السجدة' },
+  { surah: 36, letters: 'يٰسٓ', latin: 'Ya Sin', name: 'Ya-Sin', arabic: 'يس' },
+  { surah: 38, letters: 'صٓ', latin: 'Sad', name: 'Sad', arabic: 'ص' },
+  { surah: 40, letters: 'حٰمٓ', latin: 'Ha Mim', name: 'Ghafir', arabic: 'غافر' },
+  { surah: 41, letters: 'حٰمٓ', latin: 'Ha Mim', name: 'Fussilat', arabic: 'فصلت' },
+  { surah: 42, letters: 'حٰمٓ عٓسٓقٓ', latin: 'Ha Mim Ain Sin Qaf', name: 'Ash-Shura', arabic: 'الشورى' },
+  { surah: 43, letters: 'حٰمٓ', latin: 'Ha Mim', name: 'Az-Zukhruf', arabic: 'الزخرف' },
+  { surah: 44, letters: 'حٰمٓ', latin: 'Ha Mim', name: 'Ad-Dukhan', arabic: 'الدخان' },
+  { surah: 45, letters: 'حٰمٓ', latin: 'Ha Mim', name: 'Al-Jathiyah', arabic: 'الجاثية' },
+  { surah: 46, letters: 'حٰمٓ', latin: 'Ha Mim', name: 'Al-Ahqaf', arabic: 'الأحقاف' },
+  { surah: 50, letters: 'قٓ', latin: 'Qaf', name: 'Qaf', arabic: 'ق' },
+  { surah: 68, letters: 'نٓ', latin: 'Nun', name: 'Al-Qalam', arabic: 'القلم' },
+];
+
 // Get connections for a specific verse
 export const getVerseConnections = (surahId, ayahNum) => {
   const connections = {
@@ -322,6 +374,8 @@ export default {
   QURAN_THEMES,
   QURAN_STORIES,
   KEY_WORDS,
+  SAJDAH_AYAT,
+  MUQATTAAT,
   getVerseConnections,
   getAllThemes,
   getAllStories,

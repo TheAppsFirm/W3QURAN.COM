@@ -6,8 +6,10 @@
 import { useState } from 'react';
 import { Icons } from '../common/Icons';
 import { QUIZ_QUESTIONS } from '../../data';
+import { useGamification } from '../../hooks/useGamification';
 
 function QuizView({ darkMode, onEarnPoints }) {
+  const gamification = useGamification();
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [showResult, setShowResult] = useState(false);
@@ -29,7 +31,7 @@ function QuizView({ darkMode, onEarnPoints }) {
     setShowResult(true);
     if (index === question.correct) {
       setScore(score + 1);
-      onEarnPoints(10);
+      if (gamification.isActive) gamification.recordAction('quiz_correct');
     }
   };
 

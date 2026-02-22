@@ -18,6 +18,8 @@ import { SURAHS, MAX_AYAHS } from './data';
 import { useLocalStorage, isMobileDevice, BREAKPOINTS } from './hooks';
 import { updateSEO, getSEOForView } from './hooks/useSEO';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { GamificationProvider } from './contexts/GamificationContext';
+import { logger } from './utils/logger';
 
 // Auto-reload on stale chunk errors (happens after new deploys when cached index.js references old chunk hashes)
 const lazyWithRetry = (importFn) => lazy(() =>
@@ -46,6 +48,7 @@ const DonateView = lazyWithRetry(() => import('./components/views/DonateView'));
 const PrayerTimesView = lazyWithRetry(() => import('./components/views/PrayerTimesView'));
 const PrivacyPolicyView = lazyWithRetry(() => import('./components/views/PrivacyPolicyView'));
 const TermsOfServiceView = lazyWithRetry(() => import('./components/views/TermsOfServiceView'));
+const TasbihView = lazyWithRetry(() => import('./components/views/TasbihView'));
 
 // Lazy-loaded modal features (only loaded when user opens them)
 const ProgressDashboard = lazyWithRetry(() => import('./components/common/ProgressDashboard'));
@@ -66,6 +69,8 @@ const TalkToQuran = lazyWithRetry(() => import('./components/common/TalkToQuran'
 const KidsMode = lazyWithRetry(() => import('./components/kids/KidsMode'));
 const AnalyticsPanel = lazyWithRetry(() => import('./components/widgets/AnalyticsPanel'));
 const BubbleReaderOverlay = lazyWithRetry(() => import('./components/common/BubbleReaderOverlay'));
+const GamificationHub = lazyWithRetry(() => import('./components/common/GamificationHub'));
+const GamificationNotifications = lazyWithRetry(() => import('./components/common/GamificationNotifications'));
 
 // All animation keyframes and utility CSS classes moved to index.css for better caching
 // Fonts: Amiri + Scheherazade loaded in index.html; Noto Nastaliq Urdu loaded on demand below
@@ -139,6 +144,7 @@ const ROUTE_CONFIG = {
   '/prayer-times': { view: 'prayer' },
   '/statistics': { view: 'stats' },
   '/daily-verse': { view: 'daily' },
+  '/tasbih': { view: 'tasbih' },
   '/privacy': { view: 'privacy' },
   '/terms': { view: 'terms' },
   // Admin routes with tabs
@@ -178,6 +184,7 @@ const VIEW_TO_ROUTE = {
   prayer: '/prayer-times',
   stats: '/statistics',
   daily: '/daily-verse',
+  tasbih: '/tasbih',
   privacy: '/privacy',
   terms: '/terms',
 };
@@ -207,10 +214,7 @@ function QuranBubbleApp() {
 
   // State management using custom hooks for persistence
   const [view, setView] = useState('surahs');
-  const [level, setLevel] = useLocalStorage('level', 'starter');
-  const [points, setPoints] = useLocalStorage('points', 170);
-  const [streak, setStreak] = useLocalStorage('streak', 3);
-  const [badges] = useLocalStorage('badges', 2);
+  const [showGamificationHub, setShowGamificationHub] = useState(false);
   const [selected, setSelected] = useState(null);
   const [clickPosition, setClickPosition] = useState(null);
   const [filters, setFilters] = useState({
@@ -251,6 +255,44 @@ function QuranBubbleApp() {
   const [showVideoSync, setShowVideoSync] = useState(false);
   const [showPropheticMap, setShowPropheticMap] = useState(false);
   const [showCompanionAI, setShowCompanionAI] = useState(false);
+
+  // Next prayer time for sidebar badge
+  const [nextPrayerInfo, setNextPrayerInfo] = useState(null);
+  useEffect(() => {
+    const fetchNextPrayer = async () => {
+      try {
+        const saved = localStorage.getItem('quran_app_prayer_location');
+        if (!saved) return;
+        const loc = JSON.parse(saved);
+        if (!loc?.latitude) return;
+        const methodRaw = localStorage.getItem('quran_app_prayer_method');
+        const method = methodRaw ? JSON.parse(methodRaw) : '2';
+        const d = new Date();
+        const dateStr = `${d.getDate()}-${d.getMonth() + 1}-${d.getFullYear()}`;
+        const res = await fetch(`https://api.aladhan.com/v1/timings/${dateStr}?latitude=${loc.latitude}&longitude=${loc.longitude}&method=${method}`);
+        if (!res.ok) return;
+        const data = await res.json();
+        if (data.code !== 200) return;
+        const t = data.data.timings;
+        const nowMins = d.getHours() * 60 + d.getMinutes();
+        for (const p of ['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha']) {
+          const [h, m] = t[p].split(':').map(Number);
+          if (h * 60 + m > nowMins) {
+            const h12 = h % 12 || 12;
+            const ampm = h >= 12 ? 'PM' : 'AM';
+            setNextPrayerInfo({ name: p, time: `${h12}:${String(m).padStart(2,'0')} ${ampm}` });
+            return;
+          }
+        }
+        const [fh, fm] = t.Fajr.split(':').map(Number);
+        const fh12 = fh % 12 || 12;
+        setNextPrayerInfo({ name: 'Fajr', time: `${fh12}:${String(fm).padStart(2,'0')} AM` });
+      } catch { /* silent */ }
+    };
+    fetchNextPrayer();
+    const iv = setInterval(fetchNextPrayer, 60000);
+    return () => clearInterval(iv);
+  }, []);
   const [showGlobalPulse, setShowGlobalPulse] = useState(false);
   const [showWeatherSync, setShowWeatherSync] = useState(false);
   const [showSoundHealing, setShowSoundHealing] = useState(false);
@@ -309,11 +351,13 @@ function QuranBubbleApp() {
   // Auto-open Kids Mode when returning from payment
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
+    const path = window.location.pathname;
     const isPaymentReturn = params.get('payment_success') === '1' || params.get('payment_canceled') === '1';
     const paymentPending = localStorage.getItem('kids_payment_pending');
 
-    // Open Kids Mode if returning from payment flow
-    if (isPaymentReturn || paymentPending === 'true') {
+    // Only open Kids Mode if returning from payment AND not on a view that handles its own payment flow
+    // TasbihView handles its own payment returns, so skip Kids Mode for /tasbih
+    if ((isPaymentReturn || paymentPending === 'true') && path !== '/tasbih') {
       setShowKidsMode(true);
     }
   }, []);
@@ -598,6 +642,12 @@ function QuranBubbleApp() {
     setShowDonateModal(false);
   }, []);
 
+  const handleOpenDonate = useCallback(() => {
+    logger.action('donate_click', { user_type: isAuthenticated ? 'logged_in' : 'guest' });
+    logger.flush(); // Send immediately so admin sees it right away
+    setShowDonateModal(true);
+  }, [isAuthenticated]);
+
   // Track visitor on page load and send heartbeat every 30 seconds
   useEffect(() => {
     let heartbeatInterval = null;
@@ -764,13 +814,12 @@ function QuranBubbleApp() {
     setInitialVerse(1);
     setSelected(null);
     updateURL(`/surah/${surah.id}`);
-    setPoints((p) => p + 10);
     // Update reading progress
     setReadingProgress((prev) => ({
       ...prev,
       [surah.id]: { lastRead: Date.now(), ayahsRead: (prev[surah.id]?.ayahsRead || 0) + 1 },
     }));
-  }, [setPoints, setReadingProgress, updateURL]);
+  }, [setReadingProgress, updateURL]);
 
   // Handle closing the reader overlay
   const handleCloseOverlayReader = useCallback(() => {
@@ -791,9 +840,10 @@ function QuranBubbleApp() {
     }));
   }, [setReadingProgress, updateURL]);
 
-  const handleUpgrade = useCallback(() => setLevel('pro'), [setLevel]);
-
-  const handleEarnPoints = useCallback((pts) => setPoints((p) => p + pts), [setPoints]);
+  // Legacy shim for QuizView — routes to gamification system
+  const handleEarnPoints = useCallback(() => {
+    // Points now handled by gamification system in QuizView directly
+  }, []);
 
   const clearFilters = useCallback(() => {
     setFilters({ type: null, ayahRange: null, chronOrder: null, topic: null, search: '' });
@@ -828,11 +878,6 @@ function QuranBubbleApp() {
       {/* Stats Bar */}
       {view === 'surahs' && (
         <StatsBar
-          level={level}
-          points={points}
-          streak={streak}
-          badges={badges}
-          onUpgrade={handleUpgrade}
           zoom={zoom}
           setZoom={setZoom}
           contentZoom={contentZoom}
@@ -840,7 +885,8 @@ function QuranBubbleApp() {
           surahLayout={surahLayout}
           setSurahLayout={setSurahLayout}
           showControls={true}
-          onDonate={() => setShowDonateModal(true)}
+          onDonate={handleOpenDonate}
+          onShowAchievements={() => setShowGamificationHub(true)}
           onWorldMap={() => setShowPropheticMap(true)}
           onGlobalPulse={() => setShowGlobalPulse(true)}
           onWeatherSync={() => setShowWeatherSync(true)}
@@ -1160,7 +1206,7 @@ function QuranBubbleApp() {
 
         {/* Other Views (lazy-loaded) */}
         <Suspense fallback={<LoadingSpinner message="Loading..." />}>
-          {view === 'listen' && <ListenView level={level} darkMode={darkMode} />}
+          {view === 'listen' && <ListenView darkMode={darkMode} />}
           {view === 'donate' && <DonateView darkMode={darkMode} />}
           {view === 'settings' && <SettingsView darkMode={darkMode} setDarkMode={setDarkMode} onNavigate={setView} />}
           {view === 'admin' && (
@@ -1180,11 +1226,14 @@ function QuranBubbleApp() {
             <StatisticsView
               darkMode={darkMode}
               readingProgress={readingProgress}
-              streak={streak}
-              points={points}
             />
           )}
           {view === 'daily' && <DailyVerseView darkMode={darkMode} />}
+          {view === 'tasbih' && (
+            <Suspense fallback={<LoadingSpinner message="Loading Tasbih..." />}>
+              <TasbihView darkMode={darkMode} onBack={() => setView('surahs')} />
+            </Suspense>
+          )}
           {view === 'privacy' && <PrivacyPolicyView darkMode={darkMode} onBack={() => setView('surahs')} />}
           {view === 'terms' && <TermsOfServiceView darkMode={darkMode} onBack={() => setView('surahs')} />}
         </Suspense>
@@ -1195,7 +1244,7 @@ function QuranBubbleApp() {
         view={view}
         setView={setView}
         darkMode={darkMode}
-        onDonate={() => setShowDonateModal(true)}
+        onDonate={handleOpenDonate}
         onMindMap={() => setShowMindMap(true)}
         onMood={() => setShowMoodTracker(true)}
         onVideoSync={() => setShowVideoSync(true)}
@@ -1205,6 +1254,9 @@ function QuranBubbleApp() {
         onOpenKidsMode={() => setShowKidsMode(true)}
         onAIGuide={() => setShowCompanionAI(true)}
         onSoundHealing={() => setShowSoundHealing(true)}
+        onSearch={() => setShowSearchPanel(true)}
+        onHifz={() => setShowHifzMode(true)}
+        onOffline={() => setShowOfflineManager(true)}
       />
 
       {/* Bubble Modal */}
@@ -1216,7 +1268,7 @@ function QuranBubbleApp() {
             setClickPosition(null);
           }}
           onRead={handleReadSurah}
-          onDonate={() => setShowDonateModal(true)}
+          onDonate={handleOpenDonate}
           onUpgrade={() => {
             setSelected(null);
             setClickPosition(null);
@@ -1252,154 +1304,67 @@ function QuranBubbleApp() {
         />
       )}
 
-      {/* Floating Bubble Buttons - Feature Access - Vertical Stack on Right Side */}
+      {/* Floating Sidebar — 4 Quick Access Buttons */}
       {view === 'surahs' && (
-        <div className="fixed right-2 sm:right-4 z-40 flex flex-col gap-2 sm:gap-3 bottom-24 sm:bottom-28 md:bottom-[100px]">
-          {/* Search Button */}
-          <button
-            onClick={() => setShowSearchPanel(true)}
-            className="w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center transition-all hover:scale-110 active:scale-95 group"
-            style={{
-              background: 'linear-gradient(145deg, #f59e0b, #d97706)',
-              boxShadow: `
-                0 0 20px rgba(245, 158, 11, 0.35),
-                0 4px 15px rgba(0, 0, 0, 0.2),
-                inset 0 -3px 10px rgba(0,0,0,0.2),
-                inset 0 3px 10px rgba(255,255,255,0.25)
-              `,
-              animation: 'gentleFloat 4s ease-in-out infinite',
-            }}
-            title="Search Quran"
-          >
-            <div className="absolute inset-1 rounded-full opacity-50" style={{
-              background: 'linear-gradient(180deg, rgba(255,255,255,0.5) 0%, transparent 50%)',
-            }} />
-            <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-            <span className="absolute right-full mr-3 px-2 py-1 rounded-lg text-xs font-medium text-white whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
-              style={{ background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(4px)' }}>
-              Search
-            </span>
-          </button>
+        <div className="fixed right-2 sm:right-3 z-40 flex flex-col items-center gap-2 sm:gap-2.5 bottom-24 sm:bottom-28 md:bottom-[100px]">
+          {[
+            { key: 'daily', emoji: '☀️', title: 'Daily Verse', bg: ['#f59e0b', '#eab308'], glow: 'rgba(245,158,11,0.3)', delay: '0s', onClick: () => setView('daily') },
+            { key: 'ai', emoji: '🤝', title: 'AI Guide', bg: ['#14b8a6', '#0d9488'], glow: 'rgba(20,184,166,0.3)', delay: '0.7s', onClick: () => setShowCompanionAI(true) },
+            { key: 'tasbih', emoji: '📿', title: 'Tasbih', bg: ['#10b981', '#059669'], glow: 'rgba(16,185,129,0.3)', delay: '1.05s', onClick: () => setView('tasbih') },
+          ].map(btn => (
+            <button
+              key={btn.key}
+              onClick={btn.onClick}
+              className="relative w-11 h-11 sm:w-12 sm:h-12 rounded-full flex items-center justify-center transition-all hover:scale-110 active:scale-95 group overflow-hidden"
+              style={{
+                background: `linear-gradient(145deg, ${btn.bg[0]}, ${btn.bg[1]})`,
+                boxShadow: `0 0 15px ${btn.glow}, 0 3px 10px rgba(0,0,0,0.2), inset 0 -2px 8px rgba(0,0,0,0.2), inset 0 2px 8px rgba(255,255,255,0.25)`,
+                animation: 'gentleFloat 4s ease-in-out infinite',
+                animationDelay: btn.delay,
+              }}
+              title={btn.title}
+            >
+              <div className="absolute inset-0 rounded-full opacity-50 pointer-events-none" style={{ background: 'linear-gradient(180deg, rgba(255,255,255,0.45) 0%, transparent 45%)' }} />
+              <span className="text-base relative z-10 leading-none">{btn.emoji}</span>
+              <span className="absolute right-full mr-3 px-2 py-1 rounded-lg text-xs font-medium text-white whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
+                style={{ background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(4px)' }}>
+                {btn.title}
+              </span>
+            </button>
+          ))}
 
-          {/* Progress Button */}
-          <button
-            onClick={() => setShowProgressDashboard(true)}
-            className="w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center transition-all hover:scale-110 active:scale-95 group"
-            style={{
-              background: 'linear-gradient(145deg, #10b981, #059669)',
-              boxShadow: `
-                0 0 20px rgba(16, 185, 129, 0.35),
-                0 4px 15px rgba(0, 0, 0, 0.2),
-                inset 0 -3px 10px rgba(0,0,0,0.2),
-                inset 0 3px 10px rgba(255,255,255,0.25)
-              `,
-              animation: 'gentleFloat 4s ease-in-out infinite',
-              animationDelay: '0.5s',
-            }}
-            title="Reading Progress"
-          >
-            <div className="absolute inset-1 rounded-full opacity-50" style={{
-              background: 'linear-gradient(180deg, rgba(255,255,255,0.5) 0%, transparent 50%)',
-            }} />
-            <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-            </svg>
-            <span className="absolute right-full mr-3 px-2 py-1 rounded-lg text-xs font-medium text-white whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
-              style={{ background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(4px)' }}>
-              Progress
-            </span>
-          </button>
-
-          {/* Hifz Mode Button */}
-          <button
-            onClick={() => setShowHifzMode(true)}
-            className="w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center transition-all hover:scale-110 active:scale-95 group"
-            style={{
-              background: 'linear-gradient(145deg, #8b5cf6, #6366f1)',
-              boxShadow: `
-                0 0 20px rgba(139, 92, 246, 0.35),
-                0 4px 15px rgba(0, 0, 0, 0.2),
-                inset 0 -3px 10px rgba(0,0,0,0.2),
-                inset 0 3px 10px rgba(255,255,255,0.25)
-              `,
-              animation: 'gentleFloat 4s ease-in-out infinite',
-              animationDelay: '1s',
-            }}
-            title="Hifz Mode (Memorization)"
-          >
-            <div className="absolute inset-1 rounded-full opacity-50" style={{
-              background: 'linear-gradient(180deg, rgba(255,255,255,0.5) 0%, transparent 50%)',
-            }} />
-            <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-            </svg>
-            <span className="absolute right-full mr-3 px-2 py-1 rounded-lg text-xs font-medium text-white whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
-              style={{ background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(4px)' }}>
-              Memorize
-            </span>
-          </button>
-
-          {/* Offline Mode Button */}
-          <button
-            onClick={() => setShowOfflineManager(true)}
-            className="w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center transition-all hover:scale-110 active:scale-95 group"
-            style={{
-              background: 'linear-gradient(145deg, #3b82f6, #2563eb)',
-              boxShadow: `
-                0 0 20px rgba(59, 130, 246, 0.35),
-                0 4px 15px rgba(0, 0, 0, 0.2),
-                inset 0 -3px 10px rgba(0,0,0,0.2),
-                inset 0 3px 10px rgba(255,255,255,0.25)
-              `,
-              animation: 'gentleFloat 4s ease-in-out infinite',
-              animationDelay: '1.5s',
-            }}
-            title="Offline Mode"
-          >
-            <div className="absolute inset-1 rounded-full opacity-50" style={{
-              background: 'linear-gradient(180deg, rgba(255,255,255,0.5) 0%, transparent 50%)',
-            }} />
-            <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-            </svg>
-            <span className="absolute right-full mr-3 px-2 py-1 rounded-lg text-xs font-medium text-white whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
-              style={{ background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(4px)' }}>
-              Offline
-            </span>
-          </button>
-
-          {/* Prayer Times Button */}
-          <button
-            onClick={() => setView('prayer')}
-            className="w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center transition-all hover:scale-110 active:scale-95 group"
-            style={{
-              background: 'linear-gradient(145deg, #06b6d4, #0891b2)',
-              boxShadow: `
-                0 0 20px rgba(6, 182, 212, 0.35),
-                0 4px 15px rgba(0, 0, 0, 0.2),
-                inset 0 -3px 10px rgba(0,0,0,0.2),
-                inset 0 3px 10px rgba(255,255,255,0.25)
-              `,
-              animation: 'gentleFloat 4s ease-in-out infinite',
-              animationDelay: '2s',
-            }}
-            title="Prayer Times & Qibla"
-          >
-            <div className="absolute inset-1 rounded-full opacity-50" style={{
-              background: 'linear-gradient(180deg, rgba(255,255,255,0.5) 0%, transparent 50%)',
-            }} />
-            <span className="text-xl relative z-10">🕌</span>
-            <span className="absolute right-full mr-3 px-2 py-1 rounded-lg text-xs font-medium text-white whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
-              style={{ background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(4px)' }}>
-              Prayer
-            </span>
-          </button>
+          {/* Prayer Times — with next prayer badge */}
+          <div className="flex flex-col items-center">
+            <button
+              onClick={() => setView('prayer')}
+              className="relative w-11 h-11 sm:w-12 sm:h-12 rounded-full flex items-center justify-center transition-all hover:scale-110 active:scale-95 group overflow-hidden"
+              style={{
+                background: 'linear-gradient(145deg, #06b6d4, #0891b2)',
+                boxShadow: '0 0 15px rgba(6,182,212,0.3), 0 3px 10px rgba(0,0,0,0.2), inset 0 -2px 8px rgba(0,0,0,0.2), inset 0 2px 8px rgba(255,255,255,0.25)',
+                animation: 'gentleFloat 4s ease-in-out infinite',
+                animationDelay: '1.4s',
+              }}
+              title="Prayer Times & Qibla"
+            >
+              <div className="absolute inset-0 rounded-full opacity-50 pointer-events-none" style={{ background: 'linear-gradient(180deg, rgba(255,255,255,0.45) 0%, transparent 45%)' }} />
+              <span className="text-base relative z-10 leading-none">🕌</span>
+              <span className="absolute right-full mr-3 px-2 py-1 rounded-lg text-xs font-medium text-white whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
+                style={{ background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(4px)' }}>
+                Prayer
+              </span>
+            </button>
+            {nextPrayerInfo && (
+              <div className="mt-1 px-2 py-0.5 rounded-full text-center whitespace-nowrap"
+                style={{
+                  background: 'linear-gradient(135deg, rgba(6,182,212,0.15), rgba(20,184,166,0.15))',
+                  backdropFilter: 'blur(8px)',
+                  border: '1px solid rgba(6,182,212,0.25)',
+                }}>
+                <p className="text-[8px] sm:text-[9px] font-bold" style={{ color: '#06b6d4' }}>{nextPrayerInfo.name}</p>
+                <p className="text-[7px] sm:text-[8px] font-semibold" style={{ color: '#0891b2' }}>{nextPrayerInfo.time}</p>
+              </div>
+            )}
+          </div>
         </div>
       )}
 
@@ -1621,6 +1586,21 @@ function QuranBubbleApp() {
         </Suspense>
       )}
 
+      {/* Gamification Hub (achievements, challenges, progress) */}
+      {showGamificationHub && (
+        <Suspense fallback={null}>
+          <GamificationHub
+            isVisible={showGamificationHub}
+            onClose={() => setShowGamificationHub(false)}
+          />
+        </Suspense>
+      )}
+
+      {/* Gamification Notifications (XP toasts, achievement modals, level-ups) */}
+      <Suspense fallback={null}>
+        <GamificationNotifications />
+      </Suspense>
+
       {/* Animation styles moved to index.css for better caching */}
     </div>
   );
@@ -1632,11 +1612,13 @@ function QuranBubbleApp() {
 export default function App() {
   return (
     <AuthProvider>
-      <ErrorBoundary>
-        <Suspense fallback={<LoadingSpinner message="Loading Quran App..." />}>
-          <QuranBubbleApp />
-        </Suspense>
-      </ErrorBoundary>
+      <GamificationProvider>
+        <ErrorBoundary>
+          <Suspense fallback={<LoadingSpinner message="Loading Quran App..." />}>
+            <QuranBubbleApp />
+          </Suspense>
+        </ErrorBoundary>
+      </GamificationProvider>
     </AuthProvider>
   );
 }

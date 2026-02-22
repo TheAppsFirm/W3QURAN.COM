@@ -1,9 +1,15 @@
 /**
  * User Data Sync - Upload/Download user data
  *
- * GET: Download all synced data
+ * GET: Download synced data (gamification is free, rest is premium)
  * POST: Upload data to sync
  */
+
+// Data types free for all authenticated users
+const FREE_TYPES = ['gamification', 'tasbih'];
+// Data types requiring premium subscription
+const PREMIUM_TYPES = ['bookmarks', 'progress', 'settings', 'mood', 'activity'];
+const ALL_VALID_TYPES = [...FREE_TYPES, ...PREMIUM_TYPES];
 
 export async function onRequest(context) {
   const { env, request } = context;
@@ -45,64 +51,81 @@ export async function onRequest(context) {
     }
 
     const isPremium = ['monthly', 'yearly', 'lifetime'].includes(userResult.plan);
-
-    // Cloud sync is a premium feature
-    if (!isPremium) {
-      return new Response(JSON.stringify({
-        error: 'Cloud sync is a premium feature',
-        requiresPremium: true,
-      }), {
-        status: 403,
-        headers: { 'Content-Type': 'application/json' },
-      });
-    }
-
     const userId = userResult.id;
 
     if (request.method === 'GET') {
-      // Download all user data
-      const dataResults = await env.DB.prepare(`
-        SELECT data_type, data, updated_at
-        FROM user_data
-        WHERE user_id = ?
-      `).bind(userId).all();
+      // Check if requesting a specific type via query param
+      const url = new URL(request.url);
+      const requestedType = url.searchParams.get('type');
+
+      if (requestedType) {
+        // Single-type fetch
+        if (!ALL_VALID_TYPES.includes(requestedType)) {
+          return new Response(JSON.stringify({ error: 'Invalid data type' }), {
+            status: 400, headers: { 'Content-Type': 'application/json' },
+          });
+        }
+        // Premium check for non-free types
+        if (PREMIUM_TYPES.includes(requestedType) && !isPremium) {
+          return new Response(JSON.stringify({ error: 'Cloud sync is a premium feature', requiresPremium: true }), {
+            status: 403, headers: { 'Content-Type': 'application/json' },
+          });
+        }
+
+        const result = await env.DB.prepare(
+          `SELECT data, updated_at FROM user_data WHERE user_id = ? AND data_type = ?`
+        ).bind(userId, requestedType).first();
+
+        const data = {};
+        if (result) {
+          try { data[requestedType] = { data: JSON.parse(result.data), updatedAt: result.updated_at }; } catch {}
+        }
+        return new Response(JSON.stringify({ data }), {
+          status: 200, headers: { 'Content-Type': 'application/json' },
+        });
+      }
+
+      // Full download — premium users get everything, free users get only free types
+      const typesToFetch = isPremium ? ALL_VALID_TYPES : FREE_TYPES;
+      const placeholders = typesToFetch.map(() => '?').join(',');
+      const dataResults = await env.DB.prepare(
+        `SELECT data_type, data, updated_at FROM user_data WHERE user_id = ? AND data_type IN (${placeholders})`
+      ).bind(userId, ...typesToFetch).all();
 
       const data = {};
       for (const row of dataResults.results || []) {
         try {
-          data[row.data_type] = {
-            data: JSON.parse(row.data),
-            updatedAt: row.updated_at,
-          };
+          data[row.data_type] = { data: JSON.parse(row.data), updatedAt: row.updated_at };
         } catch (e) {
           console.error('[Sync] Parse error for', row.data_type);
         }
       }
 
       return new Response(JSON.stringify({ data }), {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' },
+        status: 200, headers: { 'Content-Type': 'application/json' },
       });
     }
 
     if (request.method === 'POST') {
-      // Upload user data
       const body = await request.json();
       const { dataType, data } = body;
 
       if (!dataType || !data) {
         return new Response(JSON.stringify({ error: 'Missing dataType or data' }), {
-          status: 400,
-          headers: { 'Content-Type': 'application/json' },
+          status: 400, headers: { 'Content-Type': 'application/json' },
         });
       }
 
-      // Validate data types
-      const validTypes = ['bookmarks', 'progress', 'settings', 'mood', 'activity'];
-      if (!validTypes.includes(dataType)) {
+      if (!ALL_VALID_TYPES.includes(dataType)) {
         return new Response(JSON.stringify({ error: 'Invalid data type' }), {
-          status: 400,
-          headers: { 'Content-Type': 'application/json' },
+          status: 400, headers: { 'Content-Type': 'application/json' },
+        });
+      }
+
+      // Premium check for non-free types
+      if (PREMIUM_TYPES.includes(dataType) && !isPremium) {
+        return new Response(JSON.stringify({ error: 'Cloud sync is a premium feature', requiresPremium: true }), {
+          status: 403, headers: { 'Content-Type': 'application/json' },
         });
       }
 
@@ -116,9 +139,13 @@ export async function onRequest(context) {
           updated_at = datetime('now')
       `).bind(dataId, userId, dataType, JSON.stringify(data)).run();
 
+      // Update leaderboard stats when gamification data syncs
+      if (dataType === 'gamification') {
+        await updateLeaderboardStats(env.DB, userId, data);
+      }
+
       return new Response(JSON.stringify({ success: true }), {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' },
+        status: 200, headers: { 'Content-Type': 'application/json' },
       });
     }
 
@@ -130,5 +157,58 @@ export async function onRequest(context) {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });
+  }
+}
+
+// Format display name for privacy: "Zia Ahmed" → "Zia A."
+function formatDisplayName(fullName) {
+  if (!fullName) return 'Anonymous';
+  const parts = fullName.trim().split(/\s+/);
+  if (parts.length === 1) return parts[0];
+  return `${parts[0]} ${parts[parts.length - 1][0]}.`;
+}
+
+// Extract leaderboard stats from gamification JSON and upsert into leaderboard table
+async function updateLeaderboardStats(db, userId, gamData) {
+  try {
+    const user = await db.prepare(
+      'SELECT name, picture FROM users WHERE id = ?'
+    ).bind(userId).first();
+
+    if (!user) return;
+
+    const displayName = formatDisplayName(user.name);
+    const xp = gamData.xp || 0;
+    const level = gamData.level || 1;
+    const currentStreak = gamData.streaks?.current || 0;
+    const bestStreak = gamData.streaks?.best || 0;
+    const versesRead = gamData.stats?.versesRead || 0;
+    const surahsCompleted = Array.isArray(gamData.stats?.surahsCompleted)
+      ? gamData.stats.surahsCompleted.length : 0;
+    const achievementsCount = Array.isArray(gamData.achievements)
+      ? gamData.achievements.length : 0;
+
+    await db.prepare(`
+      INSERT INTO leaderboard (user_id, display_name, picture, xp, level, current_streak, best_streak, verses_read, surahs_completed, achievements_count, updated_at)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'))
+      ON CONFLICT(user_id) DO UPDATE SET
+        display_name = excluded.display_name,
+        picture = excluded.picture,
+        xp = excluded.xp,
+        level = excluded.level,
+        current_streak = excluded.current_streak,
+        best_streak = excluded.best_streak,
+        verses_read = excluded.verses_read,
+        surahs_completed = excluded.surahs_completed,
+        achievements_count = excluded.achievements_count,
+        updated_at = datetime('now')
+    `).bind(
+      userId, displayName, user.picture || null,
+      xp, level, currentStreak, bestStreak,
+      versesRead, surahsCompleted, achievementsCount
+    ).run();
+  } catch (error) {
+    // Non-blocking: leaderboard update failure should not fail the sync
+    console.error('[Sync] Leaderboard update error:', error);
   }
 }

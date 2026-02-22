@@ -107,7 +107,7 @@ const SearchPanel = memo(function SearchPanel({ onClose, onSelectResult }) {
   const [recentSearches, setRecentSearches] = useState(() => getRecentSearches());
   const inputRef = useRef(null);
 
-  const suggestions = getSearchSuggestions();
+  const suggestions = getSearchSuggestions(searchMode);
 
   useEffect(() => {
     if (inputRef.current) {
@@ -307,8 +307,10 @@ const SearchPanel = memo(function SearchPanel({ onClose, onSelectResult }) {
 
           {/* Suggestions */}
           <div>
-            <h3 className="text-xs font-medium mb-2">Popular Topics</h3>
-            <div className="flex flex-wrap gap-2">
+            <h3 className="text-xs font-medium mb-2" style={{ direction: searchMode === 'urdu' || searchMode === 'arabic' ? 'rtl' : 'ltr' }}>
+              {searchMode === 'urdu' ? 'مقبول موضوعات' : searchMode === 'arabic' ? 'مواضيع شائعة' : 'Popular Topics'}
+            </h3>
+            <div className="flex flex-wrap gap-2" style={{ direction: searchMode === 'urdu' || searchMode === 'arabic' ? 'rtl' : 'ltr' }}>
               {suggestions.map((suggestion) => (
                 <SuggestionChip
                   key={suggestion.query}

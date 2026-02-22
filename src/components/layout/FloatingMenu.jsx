@@ -19,7 +19,7 @@ const BubbleMenuItem = ({ item, active, onClick, delay = 0, darkMode }) => {
 
   // Check if mobile using reactive hook
   const isMobile = useIsMobile();
-  const bubbleSize = isMobile ? 44 : 52;
+  const bubbleSize = isMobile ? 38 : 48;
 
   return (
     <button
@@ -136,10 +136,13 @@ const BubbleMenuItem = ({ item, active, onClick, delay = 0, darkMode }) => {
 
       {/* Label */}
       <span
-        className="text-[9px] sm:text-[10px] font-semibold whitespace-nowrap transition-all duration-300 max-w-[50px] sm:max-w-none truncate"
+        className="text-[9px] sm:text-[10px] font-semibold whitespace-nowrap transition-all duration-300 text-center leading-tight"
         style={{
           color: active ? item.gradient[0] : darkMode ? '#94a3b8' : '#64748b',
           textShadow: active ? `0 0 10px ${item.gradient[0]}50` : 'none',
+          maxWidth: 60,
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
         }}
       >
         {item.label}
@@ -148,7 +151,7 @@ const BubbleMenuItem = ({ item, active, onClick, delay = 0, darkMode }) => {
   );
 };
 
-function FloatingMenu({ view, setView, darkMode, onDonate, onMindMap, onMood, onVideoSync, onBabyNames, onTalkToQuran, onProgress, onOpenKidsMode, onAIGuide, onSoundHealing }) {
+function FloatingMenu({ view, setView, darkMode, onDonate, onMindMap, onMood, onVideoSync, onBabyNames, onTalkToQuran, onProgress, onOpenKidsMode, onAIGuide, onSoundHealing, onSearch, onHifz, onOffline }) {
   const [showMore, setShowMore] = useState(false);
   const menuRef = useRef(null);
 
@@ -166,30 +169,34 @@ function FloatingMenu({ view, setView, darkMode, onDonate, onMindMap, onMood, on
   }, [showMore]);
 
   const mainItems = [
-    { id: 'surahs', label: 'Quran', icon: Icons.Book },
-    { id: 'kids', label: 'Kids', icon: Icons.Gamepad, isKids: true },
-    { id: 'talk', label: 'Talk', icon: Icons.Mic, isTalk: true },
-    { id: 'more', label: 'More', icon: Icons.Grid, isMore: true },
+    { id: 'surahs', label: 'Quran', icon: Icons.Book, gradient: ['#10b981', '#059669'] },
+    { id: 'kids', label: 'Kids', icon: Icons.Gamepad, isKids: true, gradient: ['#a855f7', '#7c3aed'] },
+    { id: 'talk', label: 'Talk', icon: Icons.Mic, isTalk: true, gradient: ['#6366f1', '#4f46e5'] },
+    { id: 'more', label: 'More', icon: Icons.Grid, isMore: true, gradient: ['#f59e0b', '#d97706'] },
   ];
 
   // All features available to everyone
   const moreItems = [
     // Innovative features - Top row
     { id: 'mindmap', label: 'Explorer', icon: Icons.Search, gradient: ['#A855F7', '#7C3AED'], isSpecial: true },
-    { id: 'babynames', label: 'Baby Names', icon: Icons.Baby, gradient: ['#F59E0B', '#EA580C'], isSpecial: true },
+    { id: 'babynames', label: 'Names', icon: Icons.Baby, gradient: ['#F59E0B', '#EA580C'], isSpecial: true },
     { id: 'mood', label: 'Mood', icon: Icons.Activity, gradient: ['#06B6D4', '#0891B2'], isSpecial: true },
-    { id: 'aiguide', label: 'AI Guide', icon: Icons.HeartHandshake, gradient: ['#14B8A6', '#0D9488'], isSpecial: true },
     { id: 'soundhealing', label: 'Healing', icon: Icons.Music, gradient: ['#EC4899', '#DB2777'], isSpecial: true },
-    // Row 1: Spiritual content
-    { id: 'daily', label: 'Daily Verse', icon: Icons.Sun, gradient: ['#f59e0b', '#eab308'] },
+    // Row 1: Tools (moved from sidebar)
+    { id: 'search', label: 'Search', icon: Icons.Search, gradient: ['#f59e0b', '#d97706'] },
+    { id: 'progress', label: 'Progress', icon: Icons.BarChart, gradient: ['#10b981', '#059669'] },
+    { id: 'hifz', label: 'Memorize', icon: Icons.Brain, gradient: ['#8b5cf6', '#6366f1'] },
+    { id: 'offline', label: 'Offline', icon: Icons.Download, gradient: ['#3b82f6', '#2563eb'] },
+    // Row 2: Spiritual content
     { id: 'names', label: '99 Names', icon: Icons.Sparkles, gradient: ['#8b5cf6', '#a855f7'] },
     { id: 'quiz', label: 'Quiz', icon: Icons.HelpCircle, gradient: ['#ec4899', '#f43f5e'] },
     { id: 'listen', label: 'Listen', icon: Icons.Headphones, gradient: ['#22c55e', '#10b981'] },
-    // Row 2: Engagement & settings
     { id: 'stats', label: 'Stats', icon: Icons.PieChart, gradient: ['#10b981', '#14b8a6'] },
+    // Row 3: Engagement & settings
     { id: 'settings', label: 'Settings', icon: Icons.Settings, gradient: ['#6366f1', '#8b5cf6'] },
     { id: 'donate', label: 'Donate', icon: Icons.Heart, gradient: ['#ef4444', '#f97316'], isDonate: true },
     { id: 'privacy', label: 'Privacy', icon: Icons.Shield, gradient: ['#64748b', '#475569'] },
+    { id: 'terms', label: 'Terms', icon: Icons.FileText, gradient: ['#6b7280', '#4b5563'] },
   ];
 
   const handleItemClick = (item) => {
@@ -209,6 +216,12 @@ function FloatingMenu({ view, setView, darkMode, onDonate, onMindMap, onMood, on
       onBabyNames();
     } else if (item.id === 'progress' && onProgress) {
       onProgress();
+    } else if (item.id === 'search' && onSearch) {
+      onSearch();
+    } else if (item.id === 'hifz' && onHifz) {
+      onHifz();
+    } else if (item.id === 'offline' && onOffline) {
+      onOffline();
     } else if (item.id === 'listen') {
       setView('listen');
     } else {
@@ -226,7 +239,7 @@ function FloatingMenu({ view, setView, darkMode, onDonate, onMindMap, onMood, on
       {showMore && (
         <div
           className="fixed left-1/2 -translate-x-1/2 z-[55] w-[95vw] sm:w-auto max-w-[420px]"
-          style={{ bottom: '90px' }}
+          style={{ bottom: '100px' }}
         >
           <div
             className="relative p-4 sm:p-5 rounded-3xl shadow-2xl backdrop-blur-xl border overflow-hidden"
@@ -275,7 +288,7 @@ function FloatingMenu({ view, setView, darkMode, onDonate, onMindMap, onMood, on
             )}
 
             {/* Regular features grid - 4 columns on mobile, fits better */}
-            <div className="relative grid grid-cols-4 gap-2 sm:gap-3">
+            <div className="relative grid grid-cols-4 gap-2 sm:gap-3 pb-2">
               {moreItems.filter(i => !i.isSpecial).map((item, idx) => (
                 <BubbleMenuItem
                   key={item.id}
@@ -296,7 +309,7 @@ function FloatingMenu({ view, setView, darkMode, onDonate, onMindMap, onMood, on
         className="fixed bottom-4 sm:bottom-5 left-1/2 -translate-x-1/2 z-[55] safe-area-bottom"
       >
         <div
-          className="flex items-center justify-center gap-2 sm:gap-4 rounded-full px-4 sm:px-6 py-3 shadow-2xl border backdrop-blur-xl"
+          className="flex items-center justify-center gap-3 sm:gap-4 rounded-full px-5 sm:px-6 py-3 shadow-2xl border backdrop-blur-xl"
           style={{
             background: darkMode
               ? 'linear-gradient(145deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.95))'

@@ -302,11 +302,23 @@ const DuaDetailView = ({ dua, onBack, onNext, onPrev, hasNext, hasPrev, isLearne
     const bar = seekBarRef.current;
     if (!bar) return;
     const rect = bar.getBoundingClientRect();
-    const x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
-    const pct = Math.max(0, Math.min(1, x / rect.width));
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const pct = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
     audioRef.current.currentTime = pct * duration;
     setCurrentTime(pct * duration);
   }, [duration]);
+
+  // Desktop drag support
+  const handleMouseDown = useCallback((e) => {
+    handleSeek(e);
+    const onMove = (me) => handleSeek(me);
+    const onUp = () => {
+      document.removeEventListener('mousemove', onMove);
+      document.removeEventListener('mouseup', onUp);
+    };
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup', onUp);
+  }, [handleSeek]);
 
   // Format seconds to m:ss
   const formatTime = (s) => {
@@ -438,7 +450,8 @@ const DuaDetailView = ({ dua, onBack, onNext, onPrev, hasNext, hasPrev, isLearne
             <span className="text-white/50 text-[10px] font-mono w-8 text-right shrink-0">{formatTime(currentTime)}</span>
             <div ref={seekBarRef}
               className="flex-1 h-7 flex items-center cursor-pointer relative"
-              onClick={handleSeek}
+              onMouseDown={handleMouseDown}
+              onTouchStart={handleSeek}
               onTouchMove={handleSeek}>
               {/* Track */}
               <div className="w-full h-1.5 rounded-full bg-white/15 relative">

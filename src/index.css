@@ -43,6 +43,14 @@ body {
   text-align: right;
 }
 
+/* Urdu Font — Nastaleeq style */
+.font-urdu {
+  font-family: 'Noto Nastaliq Urdu', 'Jameel Noori Nastaleeq', 'Nastaliq', 'Urdu Typesetting', serif;
+  direction: rtl;
+  text-align: right;
+  line-height: 2.2;
+}
+
 /* Performance optimizations for overlays and modals */
 .modal-overlay,
 .fixed.inset-0,
@@ -252,6 +260,33 @@ body {
   from {
     opacity: 0;
     transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes xpFloat {
+  0% {
+    opacity: 0;
+    transform: translateY(10px) scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
   }
   to {
     opacity: 1;

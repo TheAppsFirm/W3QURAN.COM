@@ -16,6 +16,8 @@ import {
   QURAN_THEMES,
   QURAN_STORIES,
   CONNECTION_TYPES,
+  SAJDAH_AYAT,
+  MUQATTAAT,
   getVerseConnections,
   getAllThemes,
   getAllStories,
@@ -699,6 +701,8 @@ const AyahConnectionMap = memo(function AyahConnectionMap({
             {[
               { id: 'themes', label: 'Themes', icon: Icons.Layers, count: themes.length, color: '#8B5CF6' },
               { id: 'stories', label: 'Stories', icon: Icons.Book, count: stories.length, color: '#F59E0B' },
+              { id: 'sajdah', label: 'Sajdah', icon: Icons.ChevronDown, count: SAJDAH_AYAT.length, color: '#EF4444' },
+              { id: 'muqattaat', label: 'حروف', icon: Icons.Type, count: MUQATTAAT.length, color: '#06B6D4' },
               { id: 'explore', label: 'Explore', icon: Icons.Search, color: '#10B981' },
             ].map((tab) => {
               const Icon = tab.icon;
@@ -796,6 +800,98 @@ const AyahConnectionMap = memo(function AyahConnectionMap({
               }}
               containerSize={containerSize}
             />
+          )}
+
+          {/* Sajdah Ayat Tab */}
+          {activeTab === 'sajdah' && (
+            <div className="h-full overflow-y-auto p-4 sm:p-6">
+              <div className="max-w-2xl mx-auto">
+                <div className="text-center mb-6">
+                  <div className="w-16 h-16 mx-auto mb-3 rounded-full bg-gradient-to-br from-red-500/30 to-rose-500/30 flex items-center justify-center">
+                    <span className="text-3xl">🙇</span>
+                  </div>
+                  <h3 className="text-white font-bold text-lg">سجدہ تلاوت</h3>
+                  <p className="text-white/50 text-sm mt-1">Sajdah Tilawat — {SAJDAH_AYAT.length} verses requiring prostration</p>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {SAJDAH_AYAT.map((item, i) => (
+                    <button
+                      key={`${item.surah}-${item.ayah}`}
+                      onClick={() => handleNavigateToVerse(item.surah, item.ayah)}
+                      className="p-4 rounded-2xl transition-all hover:scale-[1.02] text-left relative overflow-hidden group"
+                      style={{
+                        background: 'linear-gradient(135deg, rgba(239,68,68,0.15), rgba(239,68,68,0.05))',
+                        border: '1px solid rgba(239,68,68,0.25)',
+                        animation: `bubblePop 0.4s ease-out ${i * 50}ms both`,
+                      }}
+                    >
+                      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity"
+                        style={{ background: 'radial-gradient(circle at 50% 50%, rgba(239,68,68,0.15) 0%, transparent 70%)' }}
+                      />
+                      <div className="flex items-center gap-3 relative z-10">
+                        <div className="w-10 h-10 rounded-full bg-red-500/20 flex items-center justify-center text-red-400 font-bold text-sm flex-shrink-0">
+                          {i + 1}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2">
+                            <span className="text-white font-medium">{item.name}</span>
+                            <span className="text-white/50 font-arabic text-sm">{item.arabic}</span>
+                          </div>
+                          <span className="text-white/50 text-sm">Surah {item.surah} : Ayah {item.ayah}</span>
+                        </div>
+                        <span className="text-red-400 text-xs">🙇 سجدة</span>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Huroof al-Muqatta'at Tab */}
+          {activeTab === 'muqattaat' && (
+            <div className="h-full overflow-y-auto p-4 sm:p-6">
+              <div className="max-w-2xl mx-auto">
+                <div className="text-center mb-6">
+                  <div className="w-16 h-16 mx-auto mb-3 rounded-full bg-gradient-to-br from-cyan-500/30 to-teal-500/30 flex items-center justify-center">
+                    <span className="text-2xl font-arabic text-cyan-300">الٓمٓ</span>
+                  </div>
+                  <h3 className="text-white font-bold text-lg">حروف مقطعات</h3>
+                  <p className="text-white/50 text-sm mt-1">Huroof al-Muqatta'at — Disjointed letters in {MUQATTAAT.length} surahs</p>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {MUQATTAAT.map((item, i) => (
+                    <button
+                      key={item.surah}
+                      onClick={() => handleNavigateToVerse(item.surah, 1)}
+                      className="p-4 rounded-2xl transition-all hover:scale-[1.02] text-left relative overflow-hidden group"
+                      style={{
+                        background: 'linear-gradient(135deg, rgba(6,182,212,0.15), rgba(6,182,212,0.05))',
+                        border: '1px solid rgba(6,182,212,0.25)',
+                        animation: `bubblePop 0.4s ease-out ${i * 40}ms both`,
+                      }}
+                    >
+                      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity"
+                        style={{ background: 'radial-gradient(circle at 50% 50%, rgba(6,182,212,0.15) 0%, transparent 70%)' }}
+                      />
+                      <div className="flex items-center gap-3 relative z-10">
+                        <div className="w-12 h-12 rounded-full bg-cyan-500/20 flex items-center justify-center flex-shrink-0">
+                          <span className="text-cyan-300 font-arabic text-lg leading-none">{item.letters}</span>
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2">
+                            <span className="text-white font-medium">{item.name}</span>
+                            <span className="text-white/50 font-arabic text-sm">{item.arabic}</span>
+                          </div>
+                          <span className="text-cyan-400/70 text-xs">{item.latin}</span>
+                        </div>
+                        <span className="text-white/40 text-xs">#{item.surah}</span>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
           )}
 
           {/* Explore Tab */}

@@ -36,6 +36,15 @@ import { shareVerse } from '../../utils/shareUtils';
 import { useAuth } from '../../contexts/AuthContext';
 import logger from '../../utils/logger';
 import { trackSurahRead, trackFeatureUse, trackAudioPlay, trackTafseerView } from '../../utils/analyticsTracker';
+import { getCachedSurah, getDownloadedAudio } from '../../data/offlineStorage';
+
+// 14 Sajdah (Prostration) Ayat — where a Muslim must perform sujood when reading
+const SAJDAH_AYAT = {
+  7: [206], 13: [15], 16: [50], 17: [109], 19: [58],
+  22: [18, 77], 25: [60], 27: [26], 32: [15], 38: [24],
+  41: [38], 53: [62], 84: [21], 96: [19],
+};
+import { useGamification } from '../../hooks/useGamification';
 
 // Browser detection for Safari-specific optimizations
 const isSafari = typeof navigator !== 'undefined' && /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
@@ -706,7 +715,7 @@ const MemorizeFloatingBubble = memo(function MemorizeFloatingBubble({
 
 // Bookmark Floating Bubble
 const BookmarkFloatingBubble = memo(function BookmarkFloatingBubble({
-  isVisible, onClose, surahId, surahName, ayahNumber, verseArabic
+  isVisible, onClose, surahId, surahName, ayahNumber, verseArabic, onBookmarkSuccess
 }) {
   return (
     <FloatingFeatureBubble
@@ -724,6 +733,7 @@ const BookmarkFloatingBubble = memo(function BookmarkFloatingBubble({
         ayahNumber={ayahNumber}
         verseArabic={verseArabic}
         onClose={onClose}
+        onBookmarkSuccess={onBookmarkSuccess}
       />
     </FloatingFeatureBubble>
   );
@@ -731,7 +741,7 @@ const BookmarkFloatingBubble = memo(function BookmarkFloatingBubble({
 
 // Share Floating Bubble
 const ShareFloatingBubble = memo(function ShareFloatingBubble({
-  isVisible, onClose, surahId, surahName, ayahNumber, verseArabic, verseTranslation, multipleVerses, onOpenArtGenerator
+  isVisible, onClose, surahId, surahName, ayahNumber, verseArabic, verseTranslation, multipleVerses, onOpenArtGenerator, onShareSuccess
 }) {
   return (
     <FloatingFeatureBubble
@@ -752,6 +762,7 @@ const ShareFloatingBubble = memo(function ShareFloatingBubble({
         multipleVerses={multipleVerses}
         onClose={onClose}
         onOpenArtGenerator={onOpenArtGenerator}
+        onShareSuccess={onShareSuccess}
       />
     </FloatingFeatureBubble>
   );
@@ -999,7 +1010,7 @@ const MemorizePanel = memo(function MemorizePanel({ onSettingsChange, currentSet
 });
 
 // Bookmarks Panel
-const BookmarksPanel = memo(function BookmarksPanel({ surahId, surahName, ayahNumber, verseArabic, onClose }) {
+const BookmarksPanel = memo(function BookmarksPanel({ surahId, surahName, ayahNumber, verseArabic, onClose, onBookmarkSuccess }) {
   const [bookmarks, setBookmarks] = useLocalStorage('quran_bookmarks', []);
   const [notes, setNotes] = useState('');
   const [showNoteInput, setShowNoteInput] = useState(false);
@@ -1011,6 +1022,7 @@ const BookmarksPanel = memo(function BookmarksPanel({ surahId, surahName, ayahNu
     setBookmarks([newBookmark, ...bookmarks]);
     setNotes('');
     setShowNoteInput(false);
+    if (onBookmarkSuccess) onBookmarkSuccess();
   };
 
   const removeBookmark = (id) => setBookmarks(bookmarks.filter(b => b.id !== id));
@@ -1180,7 +1192,7 @@ const YouTubePanel = memo(function YouTubePanel({ surahId, surahName, onClose })
 });
 
 // Share Panel
-const SharePanel = memo(function SharePanel({ surahId, surahName, ayahNumber, verseArabic, verseTranslation, multipleVerses, onClose, onOpenArtGenerator }) {
+const SharePanel = memo(function SharePanel({ surahId, surahName, ayahNumber, verseArabic, verseTranslation, multipleVerses, onClose, onOpenArtGenerator, onShareSuccess }) {
   const [shareStatus, setShareStatus] = useState(null);
   const [downloadStatus, setDownloadStatus] = useState(null);
   const [selectedStyle, setSelectedStyle] = useState('classic');
@@ -1216,6 +1228,7 @@ const SharePanel = memo(function SharePanel({ surahId, surahName, ayahNumber, ve
         await shareVerse({ surahName, surahId, ayahNumber, arabic: verseArabic, translation: verseTranslation });
       }
       setShareStatus('copied');
+      if (onShareSuccess) onShareSuccess();
       setTimeout(() => setShareStatus(null), 2000);
     } catch {
       setShareStatus('error');
@@ -1480,6 +1493,13 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
   // Auth state for premium features
   const { isPremium, isAuthenticated, login } = useAuth();
 
+  // Gamification system
+  const gamification = useGamification();
+  const gamificationRef = useRef(gamification);
+  useEffect(() => { gamificationRef.current = gamification; }, [gamification]);
+  const surahRef = useRef(surah);
+  useEffect(() => { surahRef.current = surah; }, [surah]);
+
   // Premium feature: HD TTS is free for Surah Al-Fatiha (trial), requires premium for others
   const canUseHDTTS = isPremium || surah?.id === 1;
 
@@ -1552,6 +1572,43 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
   const audioCacheRef = useRef(new Map()); // Map<cacheKey, {audio: Audio, blob: Blob}>
   const prefetchAbortRef = useRef(null); // AbortController for canceling prefetch
   const prefetchingRef = useRef(new Set()); // Currently prefetching URLs
+
+  // Offline status for this surah
+  const [offlineStatus, setOfflineStatus] = useState(null); // { hasArabic, hasTranslation, translationLabel, hasAudio, reciterName }
+
+  useEffect(() => {
+    if (!surah?.id) return;
+    let cancelled = false;
+
+    (async () => {
+      try {
+        const [cachedArabic, cachedTranslation] = await Promise.all([
+          getCachedSurah(surah.id, 'quran-uthmani'),
+          getCachedSurah(surah.id, selectedTranslation),
+        ]);
+        const audioList = await getDownloadedAudio();
+        const audioInfo = audioList.find(a => a.surahId === surah.id);
+
+        if (cancelled) return;
+
+        const hasArabic = !!cachedArabic;
+        const hasTranslation = !!cachedTranslation;
+        const hasAudio = !!audioInfo;
+
+        if (hasArabic || hasTranslation || hasAudio) {
+          const tLabel = TRANSLATIONS[selectedTranslation]?.language || selectedTranslation;
+          const rName = audioInfo ? (RECITERS[audioInfo.reciterId]?.name || audioInfo.reciterId) : null;
+          setOfflineStatus({ hasArabic, hasTranslation, translationLabel: tLabel, hasAudio, reciterName: rName });
+        } else {
+          setOfflineStatus(null);
+        }
+      } catch {
+        if (!cancelled) setOfflineStatus(null);
+      }
+    })();
+
+    return () => { cancelled = true; };
+  }, [surah?.id, selectedTranslation]);
 
   // Progressive loading state for large surahs (prevents Safari crashes)
   const [visibleVerseCount, setVisibleVerseCount] = useState(INITIAL_VERSE_CHUNK);
@@ -2659,6 +2716,10 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
         console.log('[Combined] Not playing combined anymore, stopping');
         return;
       }
+      // Track verse listened via gamification
+      const g = gamificationRef.current;
+      if (g?.isActive) g.recordAction('listen_verse', { surahId: surah?.id, ayahNum });
+
       if (ayahNum < total) {
         console.log('[Combined] Advancing to next verse:', ayahNum + 1);
         setCombinedPhase('arabic');
@@ -2667,6 +2728,8 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
         console.log('[Combined] setCurrentAyah called with:', ayahNum + 1);
       } else {
         console.log('[Combined] Last verse reached, stopping');
+        // Track surah listened
+        if (g?.isActive) g.recordAction('listen_surah', { surahId: surah?.id });
         setIsPlayingCombined(false);
         isPlayingCombinedRef.current = false;
         setIsPlaying(false);
@@ -2917,11 +2980,19 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
       }
 
       console.log('[Arabic-Ended] Not combined mode, using normal flow');
+      // Track verse listened via gamification
+      const g = gamificationRef.current;
+      if (g?.isActive) g.recordAction('listen_verse', { surahId: surahRef.current?.id, ayahNum: current });
+
       // Normal mode
       if (repeat === 'verse') { audio.currentTime = 0; audio.play().catch(() => {}); }
       else if (current < total) { setCurrentAyah(prev => prev + 1); }
       else if (repeat === 'surah') { setCurrentAyah(1); }
-      else { setIsPlaying(false); }
+      else {
+        // Last verse finished — track surah listened
+        if (g?.isActive) g.recordAction('listen_surah', { surahId: surahRef.current?.id });
+        setIsPlaying(false);
+      }
     };
 
     audio.addEventListener('canplay', handleCanPlay);
@@ -3073,6 +3144,9 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
       // Track surah completion in Google Analytics
       trackSurahCompletion(surah.id, surah.name);
 
+      // Track surah completion in gamification
+      if (gamification.isActive) gamification.recordAction('surah_complete', { surahId: surah.id });
+
       // Show mood prompt every 30 surahs
       if (surahsReadCount % 30 === 0) {
         setShowMoodEntry(true);
@@ -3112,7 +3186,10 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
       }
     }
     // Track progress when user plays a verse
-    if (surah?.id) markAyahRead(surah.id, ayahNum);
+    if (surah?.id) {
+      markAyahRead(surah.id, ayahNum);
+      if (gamification.isActive) gamification.recordAction('verse_read', { surahId: surah.id, ayahNum });
+    }
   }, [currentAyah, isPlaying, isPlayingTranslation, surah?.id]);
 
   // Safe function to start Arabic playback (stops translation first)
@@ -3136,6 +3213,7 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
     // Debounce to track only after viewing for 2 seconds
     const timer = setTimeout(() => {
       markAyahRead(surah.id, currentAyah);
+      if (gamification.isActive) gamification.recordAction('verse_read', { surahId: surah.id, ayahNum: currentAyah });
     }, 2000);
     return () => clearTimeout(timer);
   }, [surah?.id, currentAyah]);
@@ -3328,6 +3406,7 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
         surahName={surah.name}
         ayahNumber={currentAyah}
         verseArabic={currentVerse?.arabic}
+        onBookmarkSuccess={() => { if (gamification.isActive) gamification.recordAction('bookmark'); }}
       />
 
       <ShareFloatingBubble
@@ -3340,6 +3419,7 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
         verseTranslation={shareVerseData?.multiple ? shareVerseData.verses[0]?.translation : (shareVerseData?.translation || currentVerse?.translation)}
         multipleVerses={shareVerseData?.multiple ? shareVerseData.verses : null}
         onOpenArtGenerator={() => setShowArtGenerator(true)}
+        onShareSuccess={() => { if (gamification.isActive) gamification.recordAction('share'); }}
       />
 
       {/* Lazy-loaded feature overlays */}
@@ -3948,6 +4028,20 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
                   textShadow: !overlayConfig.isDark ? '0 1px 2px rgba(255,255,255,0.2)' : '0 2px 8px rgba(0,0,0,0.3)'
                 }}>{surah.name}</h1>
 
+                {/* Offline availability hint */}
+                {offlineStatus && (
+                  <div className="flex items-center justify-center gap-1 mt-0.5">
+                    <Icons.Download className="w-2.5 h-2.5" style={{ opacity: 0.5 }} />
+                    <span className="text-[9px] sm:text-[10px]" style={{ opacity: 0.5 }}>
+                      Offline: {[
+                        offlineStatus.hasArabic && 'Arabic',
+                        offlineStatus.hasTranslation && offlineStatus.translationLabel,
+                        offlineStatus.hasAudio && (offlineStatus.reciterName || 'Audio'),
+                      ].filter(Boolean).join(' + ')}
+                    </span>
+                  </div>
+                )}
+
                 <div className="flex items-center justify-center gap-1 sm:gap-2 mt-1 sm:mt-2 flex-wrap">
                   <button onClick={toggleSettings} className={`p-1.5 sm:p-2 rounded-full transition-all ${showSettings ? 'bg-white/30' : 'bg-white/15 hover:bg-white/25'}`}>
                     <Icons.Settings className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
@@ -4113,6 +4207,7 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
                         return null;
                       }
                       const ayahNum = verse.number || index + 1;
+                      const isSajdah = SAJDAH_AYAT[surah?.id]?.includes(ayahNum);
                       const isCurrentAyah = currentAyah === ayahNum;
                       const arabicWords = (verse.arabic || '').split(' ').filter(w => w.trim());
                       const wordMeanings = wordsMap[ayahNum] || [];
@@ -4134,7 +4229,8 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
                         borderWidth: '1px',
                         borderStyle: 'solid',
                         transform: isCurrentAyah ? 'scale(1.01)' : 'scale(1)',
-                        boxShadow: isCurrentAyah ? '0 0 20px rgba(255,255,255,0.15)' : isSelected ? '0 0 15px rgba(16,185,129,0.3)' : 'none',
+                        boxShadow: isCurrentAyah ? '0 0 20px rgba(255,255,255,0.15)' : isSelected ? '0 0 15px rgba(16,185,129,0.3)' : isSajdah ? '0 0 12px rgba(239,68,68,0.1)' : 'none',
+                        ...(isSajdah ? { borderLeft: '3px solid rgba(239,68,68,0.5)' } : {}),
                       };
 
                       return (
@@ -4186,8 +4282,18 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
                             <span className={readerStyleConfig.ayahBadge} style={{ background: verseColors.badgeBg, color: verseColors.badgeColor, border: `1px solid ${verseColors.activeBorder}` }}>{ayahNum}</span>
                           )}
 
+                          {/* Sajdah (Prostration) indicator */}
+                          {isSajdah && (
+                            <div className="flex items-center gap-1.5 mb-2 px-2.5 py-1 rounded-lg w-fit" style={{ background: 'rgba(239,68,68,0.12)', border: '1px solid rgba(239,68,68,0.25)' }}>
+                              <span className="text-sm">🙇</span>
+                              <span className="text-[10px] font-bold" style={{ color: '#ef4444' }}>سجدة — Sajdah Required</span>
+                            </div>
+                          )}
+
                           {showTranslation && verse.translation && (
-                            <p className="leading-relaxed mb-2" style={{ fontSize: fontSizeMap[fontSize].translation, color: verseColors.translation }}>{verse.translation}</p>
+                            <p className={`leading-relaxed mb-2 ${selectedTranslation.startsWith('ur.') ? 'font-urdu' : ''}`}
+                              dir={selectedTranslation.startsWith('ur.') || selectedTranslation.startsWith('ar.') ? 'rtl' : 'ltr'}
+                              style={{ fontSize: fontSizeMap[fontSize].translation, color: verseColors.translation }}>{verse.translation}</p>
                           )}
 
                           {selectedWordData?.key?.startsWith(`${ayahNum}-`) && (
