@@ -1368,8 +1368,6 @@ function QuranBubbleApp() {
               style={{
                 background: `linear-gradient(145deg, ${btn.bg[0]}, ${btn.bg[1]})`,
                 boxShadow: `0 0 15px ${btn.glow}, 0 3px 10px rgba(0,0,0,0.2), inset 0 -2px 8px rgba(0,0,0,0.2), inset 0 2px 8px rgba(255,255,255,0.25)`,
-                animation: 'gentleFloat 4s ease-in-out infinite',
-                animationDelay: btn.delay,
               }}
               title={btn.title}
             >
@@ -1390,8 +1388,6 @@ function QuranBubbleApp() {
               style={{
                 background: 'linear-gradient(145deg, #06b6d4, #0891b2)',
                 boxShadow: '0 0 15px rgba(6,182,212,0.3), 0 3px 10px rgba(0,0,0,0.2), inset 0 -2px 8px rgba(0,0,0,0.2), inset 0 2px 8px rgba(255,255,255,0.25)',
-                animation: 'gentleFloat 4s ease-in-out infinite',
-                animationDelay: '1.4s',
               }}
               title="Prayer Times & Qibla"
             >

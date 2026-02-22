@@ -42,27 +42,14 @@ const BubbleMenuItem = ({ item, active, onClick, delay = 0, darkMode }) => {
           transform: `scale(${active || isHovered ? 1.15 : 1})`,
         }}
       >
-        {/* Outer glow */}
+        {/* Outer glow - reduced animation */}
         <div
-          className="absolute rounded-full pointer-events-none transition-all duration-500"
+          className="absolute rounded-full pointer-events-none transition-all duration-300"
           style={{
             inset: '-15%',
             background: `radial-gradient(circle at 50% 50%, ${item.gradient[0]}50 0%, transparent 70%)`,
-            opacity: active || isHovered ? 1 : 0,
+            opacity: active || isHovered ? 0.8 : 0,
             filter: 'blur(8px)',
-            animation: active || isHovered ? 'breathe 2s ease-in-out infinite' : 'none',
-          }}
-        />
-
-        {/* Spinning ring */}
-        <div
-          className="absolute rounded-full pointer-events-none transition-all duration-500"
-          style={{
-            inset: '-6%',
-            background: `conic-gradient(from 0deg, ${item.gradient[0]}90, ${item.gradient[1]}90, ${item.gradient[0]}90)`,
-            opacity: active || isHovered ? 0.7 : 0,
-            animation: 'spinSlow 4s linear infinite',
-            filter: 'blur(1px)',
           }}
         />
 
@@ -103,20 +90,6 @@ const BubbleMenuItem = ({ item, active, onClick, delay = 0, darkMode }) => {
               borderRadius: '50%',
             }}
           />
-
-          {/* Clock sweep on hover/active */}
-          {(active || isHovered) && (
-            <div className="absolute inset-0 rounded-full overflow-hidden pointer-events-none">
-              <div
-                style={{
-                  position: 'absolute',
-                  inset: 0,
-                  background: `conic-gradient(from 0deg at 50% 50%, transparent 0deg, rgba(255,255,255,0.3) 0deg, transparent 60deg)`,
-                  animation: 'spinSlow 2s linear infinite',
-                }}
-              />
-            </div>
-          )}
 
           {/* Icon */}
           <div className="absolute inset-0 flex items-center justify-center">
@@ -356,7 +329,7 @@ function FloatingMenu({ view, setView, darkMode, onDonate, onMindMap, onMood, on
                     width: 48,
                     height: 48,
                     transform: `scale(${active ? 1.15 : 1})`,
-                    animation: item.isKids ? 'kidsBounce 2s ease-in-out infinite' : 'none',
+                    /* Animation removed for performance */
                   }}
                 >
                   {/* Outer glow */}
