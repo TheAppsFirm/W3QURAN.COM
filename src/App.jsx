@@ -62,6 +62,7 @@ const AnnouncementBanner = lazyWithRetry(() => import('./components/common/Annou
 const ScholarVideoSync = lazyWithRetry(() => import('./components/common/ScholarVideoSync'));
 const PropheticMap = lazyWithRetry(() => import('./components/common/PropheticMap'));
 const QuranCompanionAI = lazyWithRetry(() => import('./components/common/QuranCompanionAI'));
+const QuranFAQ = lazyWithRetry(() => import('./components/common/QuranFAQ'));
 const GlobalUmmahPulse = lazyWithRetry(() => import('./components/common/GlobalUmmahPulse'));
 const VerseWeatherSync = lazyWithRetry(() => import('./components/common/VerseWeatherSync'));
 const SoundHealingRoom = lazyWithRetry(() => import('./components/common/SoundHealingRoom'));
@@ -283,6 +284,7 @@ function QuranBubbleApp() {
   const [showVideoSync, setShowVideoSync] = useState(false);
   const [showPropheticMap, setShowPropheticMap] = useState(false);
   const [showCompanionAI, setShowCompanionAI] = useState(false);
+  const [showFAQ, setShowFAQ] = useState(false);
 
   // Next prayer time for sidebar badge
   const [nextPrayerInfo, setNextPrayerInfo] = useState(null);
@@ -1303,6 +1305,7 @@ function QuranBubbleApp() {
         onSearch={() => setShowSearchPanel(true)}
         onHifz={() => setShowHifzMode(true)}
         onOffline={() => setShowOfflineManager(true)}
+        onFAQ={() => setShowFAQ(true)}
       />
 
       {/* Bubble Modal */}
@@ -1549,6 +1552,24 @@ function QuranBubbleApp() {
               const surah = SURAHS.find(s => s.id === surahId);
               if (surah) {
                 setShowCompanionAI(false);
+                setOverlayReaderSurah(surah);
+                setInitialVerse(ayahNumber);
+              }
+            }}
+          />
+        </Suspense>
+      )}
+
+      {/* Islamic FAQ */}
+      {showFAQ && (
+        <Suspense fallback={<LoadingSpinner message="Loading FAQ..." />}>
+          <QuranFAQ
+            isVisible={showFAQ}
+            onClose={() => setShowFAQ(false)}
+            onNavigateToVerse={(surahId, ayahNumber) => {
+              const surah = SURAHS.find(s => s.id === surahId);
+              if (surah) {
+                setShowFAQ(false);
                 setOverlayReaderSurah(surah);
                 setInitialVerse(ayahNumber);
               }

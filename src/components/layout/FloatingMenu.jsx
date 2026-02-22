@@ -151,7 +151,7 @@ const BubbleMenuItem = ({ item, active, onClick, delay = 0, darkMode }) => {
   );
 };
 
-function FloatingMenu({ view, setView, darkMode, onDonate, onMindMap, onMood, onVideoSync, onBabyNames, onTalkToQuran, onProgress, onOpenKidsMode, onAIGuide, onSoundHealing, onSearch, onHifz, onOffline }) {
+function FloatingMenu({ view, setView, darkMode, onDonate, onMindMap, onMood, onVideoSync, onBabyNames, onTalkToQuran, onProgress, onOpenKidsMode, onAIGuide, onSoundHealing, onSearch, onHifz, onOffline, onFAQ }) {
   const [showMore, setShowMore] = useState(false);
   const menuRef = useRef(null);
 
@@ -188,10 +188,10 @@ function FloatingMenu({ view, setView, darkMode, onDonate, onMindMap, onMood, on
     { id: 'hifz', label: 'Memorize', icon: Icons.Brain, gradient: ['#8b5cf6', '#6366f1'] },
     { id: 'offline', label: 'Offline', icon: Icons.Download, gradient: ['#3b82f6', '#2563eb'] },
     // Row 2: Spiritual content
+    { id: 'faq', label: 'FAQ', icon: Icons.HelpCircle, gradient: ['#06B6D4', '#0891B2'] },
     { id: 'names', label: '99 Names', icon: Icons.Sparkles, gradient: ['#8b5cf6', '#a855f7'] },
     { id: 'quiz', label: 'Quiz', icon: Icons.HelpCircle, gradient: ['#ec4899', '#f43f5e'] },
     { id: 'listen', label: 'Listen', icon: Icons.Headphones, gradient: ['#22c55e', '#10b981'] },
-    { id: 'stats', label: 'Stats', icon: Icons.PieChart, gradient: ['#10b981', '#14b8a6'] },
     // Row 3: Engagement & settings
     { id: 'settings', label: 'Settings', icon: Icons.Settings, gradient: ['#6366f1', '#8b5cf6'] },
     { id: 'donate', label: 'Donate', icon: Icons.Heart, gradient: ['#ef4444', '#f97316'], isDonate: true },
@@ -222,6 +222,8 @@ function FloatingMenu({ view, setView, darkMode, onDonate, onMindMap, onMood, on
       onHifz();
     } else if (item.id === 'offline' && onOffline) {
       onOffline();
+    } else if (item.id === 'faq' && onFAQ) {
+      onFAQ();
     } else if (item.id === 'listen') {
       setView('listen');
     } else {
