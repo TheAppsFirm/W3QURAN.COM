@@ -88,8 +88,9 @@ function QuizView({ darkMode, onEarnPoints }) {
         <div className="flex items-center gap-3 p-4">
           <button
             onClick={handleBack}
-            className={`p-2 rounded-full transition-all ${darkMode ? 'hover:bg-white/10' : 'hover:bg-gray-100'}`}
+            className={`p-2.5 rounded-full transition-all active:scale-95 ${darkMode ? 'hover:bg-white/10' : 'hover:bg-gray-100'}`}
             title="Go back"
+            style={{ minWidth: 44, minHeight: 44 }}
           >
             <Icons.ChevronLeft className={`w-6 h-6 ${darkMode ? 'text-white' : 'text-gray-600'}`} />
           </button>

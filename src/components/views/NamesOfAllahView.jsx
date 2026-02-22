@@ -79,8 +79,9 @@ function NamesOfAllahView({ darkMode }) {
         <div className="flex items-center gap-3 p-4">
           <button
             onClick={handleBack}
-            className={`p-2 rounded-full transition-all ${darkMode ? 'hover:bg-white/10' : 'hover:bg-gray-100'}`}
+            className={`p-2.5 rounded-full transition-all active:scale-95 ${darkMode ? 'hover:bg-white/10' : 'hover:bg-gray-100'}`}
             title="Go back"
+            style={{ minWidth: 44, minHeight: 44 }}
           >
             <Icons.ChevronLeft className={`w-6 h-6 ${darkMode ? 'text-white' : 'text-gray-600'}`} />
           </button>
@@ -169,8 +170,12 @@ function NamesOfAllahView({ darkMode }) {
       {/* Selected Name Modal */}
       {selectedName && (
         <div
-          className="fixed inset-0 flex items-center justify-center p-4"
-          style={{ zIndex: 9999999 }}
+          className="fixed inset-0 flex items-center justify-center p-4 safe-area-padding"
+          style={{
+            zIndex: 9999999,
+            paddingTop: 'max(1rem, env(safe-area-inset-top, 1rem))',
+            paddingBottom: 'max(1rem, env(safe-area-inset-bottom, 1rem))'
+          }}
           onClick={() => setSelectedName(null)}
         >
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />

@@ -710,6 +710,8 @@ function TasbihView({ darkMode, onBack }) {
       className="fixed inset-0 flex flex-col items-center overflow-hidden select-none z-50"
       style={{
         background: 'linear-gradient(135deg, #0f172a 0%, #1e1b4b 40%, #0f172a 100%)',
+        paddingTop: 'env(safe-area-inset-top, 0px)',
+        paddingBottom: 'env(safe-area-inset-bottom, 0px)',
       }}
     >
       {/* Ambient glow — color changes with selected dhikr */}
@@ -723,14 +725,16 @@ function TasbihView({ darkMode, onBack }) {
       </div>
 
       {/* Header */}
-      <div className="w-full flex items-center justify-between px-4 pt-4 pb-2 relative z-10 shrink-0">
+      <div className="w-full flex items-center justify-between px-3 pt-2 pb-2 relative z-10 shrink-0">
         <button
           onClick={() => onBack ? onBack() : window.history.back()}
-          className="w-10 h-10 rounded-full flex items-center justify-center transition-all hover:scale-110"
+          className="w-11 h-11 rounded-full flex items-center justify-center transition-all hover:scale-110 active:scale-95"
           style={{
             background: 'rgba(255,255,255,0.1)',
             backdropFilter: 'blur(10px)',
             border: '1px solid rgba(255,255,255,0.15)',
+            minWidth: '44px',
+            minHeight: '44px',
           }}
         >
           <Icons.ArrowLeft className="w-5 h-5 text-white/80" />
@@ -742,11 +746,13 @@ function TasbihView({ darkMode, onBack }) {
           <div className="flex gap-2">
             <button
               onClick={reset}
-              className="w-10 h-10 rounded-full flex items-center justify-center transition-all hover:scale-110"
+              className="w-11 h-11 rounded-full flex items-center justify-center transition-all hover:scale-110 active:scale-95"
               style={{
                 background: 'rgba(255,255,255,0.1)',
                 backdropFilter: 'blur(10px)',
                 border: '1px solid rgba(255,255,255,0.15)',
+                minWidth: '44px',
+                minHeight: '44px',
               }}
               title="Reset count"
             >
@@ -755,11 +761,13 @@ function TasbihView({ darkMode, onBack }) {
 
             <button
               onClick={() => setShowResetConfirm(true)}
-              className="w-10 h-10 rounded-full flex items-center justify-center transition-all hover:scale-110"
+              className="w-11 h-11 rounded-full flex items-center justify-center transition-all hover:scale-110 active:scale-95"
               style={{
                 background: 'rgba(239,68,68,0.1)',
                 backdropFilter: 'blur(10px)',
                 border: '1px solid rgba(239,68,68,0.2)',
+                minWidth: '44px',
+                minHeight: '44px',
               }}
               title="Reset all data & sync"
             >
@@ -1092,7 +1100,11 @@ function TasbihView({ darkMode, onBack }) {
 
       {/* Reset Confirmation Dialog */}
       {showResetConfirm && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4" onClick={() => setShowResetConfirm(false)}>
+        <div
+          className="fixed inset-0 z-[60] flex items-center justify-center"
+          style={{ padding: 'max(1rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) max(1rem, env(safe-area-inset-bottom)) max(1rem, env(safe-area-inset-left))' }}
+          onClick={() => setShowResetConfirm(false)}
+        >
           <div className="absolute inset-0 bg-black/60" />
           <div
             className="relative z-10 p-5 rounded-2xl max-w-sm w-full"
@@ -1169,8 +1181,11 @@ function TasbihView({ darkMode, onBack }) {
 
       {/* Payment Result Popup */}
       {paymentResult && (
-        <div className="fixed inset-0 z-[10001] flex items-center justify-center bg-black/80 backdrop-blur-sm">
-          <div className="bg-white rounded-3xl p-8 max-w-sm mx-4 text-center shadow-2xl">
+        <div
+          className="fixed inset-0 z-[10001] flex items-center justify-center bg-black/80 backdrop-blur-sm"
+          style={{ padding: 'max(1rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) max(1rem, env(safe-area-inset-bottom)) max(1rem, env(safe-area-inset-left))' }}
+        >
+          <div className="bg-white rounded-3xl p-8 max-w-sm w-full text-center shadow-2xl">
             {paymentResult === 'success' ? (
               <>
                 <div className="text-7xl mb-4 animate-bounce">🎉</div>

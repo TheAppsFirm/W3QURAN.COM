@@ -260,7 +260,10 @@ const Toast = ({ message, type = 'success', onClose }) => {
   };
 
   return (
-    <div className="fixed top-2 right-2 sm:top-4 sm:right-4 z-[9999] animate-slideDown max-w-[calc(100vw-1rem)] sm:max-w-none">
+    <div
+      className="fixed right-2 sm:right-4 z-[9999] animate-slideDown max-w-[calc(100vw-1rem)] sm:max-w-none"
+      style={{ top: 'max(0.5rem, calc(env(safe-area-inset-top, 0px) + 0.5rem))' }}
+    >
       <div className={`bg-gradient-to-r ${colors[type]} border rounded-2xl shadow-2xl px-4 sm:px-6 py-3 sm:py-4 flex items-center gap-2 sm:gap-3 w-full sm:min-w-[300px]`}>
         <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-white text-lg font-bold">
           {icons[type]}
@@ -2544,7 +2547,7 @@ export default function AdminDashboard({ onClose, initialTab = 'overview', onTab
       </div>
 
       {/* Content */}
-      <div className="h-[calc(100vh-110px)] sm:h-[calc(100vh-120px)] overflow-y-auto p-3 sm:p-4 md:p-6">
+      <div className="h-[calc(100dvh-110px)] sm:h-[calc(100dvh-120px)] overflow-y-auto p-3 sm:p-4 md:p-6">
         {loading ? (
           <div className="flex items-center justify-center h-64">
             <div className="w-8 h-8 border-2 border-purple-500 border-t-transparent rounded-full animate-spin" />

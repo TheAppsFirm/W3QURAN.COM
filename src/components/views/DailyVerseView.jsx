@@ -186,8 +186,9 @@ function DailyVerseView({ darkMode }) {
         <div className="flex items-center gap-3 p-4">
           <button
             onClick={handleBack}
-            className={`p-2 rounded-full transition-all ${darkMode ? 'hover:bg-white/10' : 'hover:bg-gray-100'}`}
+            className={`p-2.5 rounded-full transition-all active:scale-95 ${darkMode ? 'hover:bg-white/10' : 'hover:bg-gray-100'}`}
             title="Go back"
+            style={{ minWidth: 44, minHeight: 44 }}
           >
             <Icons.ChevronLeft className={`w-6 h-6 ${darkMode ? 'text-white' : 'text-gray-600'}`} />
           </button>
@@ -403,7 +404,11 @@ function DailyVerseView({ darkMode }) {
 
         {/* SharePanel overlay */}
         {showSharePanel && (
-          <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 pb-24"
+          <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+            style={{
+              paddingTop: 'max(1rem, env(safe-area-inset-top, 1rem))',
+              paddingBottom: 'max(6rem, calc(env(safe-area-inset-bottom, 1rem) + 5rem))'
+            }}
             onClick={(e) => { if (e.target === e.currentTarget) setShowSharePanel(false); }}>
             <div className="w-full max-w-lg rounded-2xl overflow-hidden max-h-[75vh] overflow-y-auto border-2 border-white/20 bg-[#1a1a2e] m-4 p-5 pb-10"
               style={{ boxShadow: '0 0 40px rgba(0,0,0,0.5), 0 0 80px rgba(0,0,0,0.3)' }}>

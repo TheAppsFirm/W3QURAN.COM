@@ -25,8 +25,11 @@ import { useAuth } from '../../contexts/AuthContext';
 // Payment Result Popup Component
 const PaymentResultPopup = ({ success, canceled, onClose, onRetry, isLoading = false }) => {
   return (
-    <div className="fixed inset-0 z-[10001] flex items-center justify-center bg-black/80 backdrop-blur-sm">
-      <div className="bg-white rounded-3xl p-8 max-w-sm mx-4 text-center shadow-2xl">
+    <div
+      className="fixed inset-0 z-[10001] flex items-center justify-center bg-black/80 backdrop-blur-sm"
+      style={{ padding: 'max(1rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) max(1rem, env(safe-area-inset-bottom)) max(1rem, env(safe-area-inset-left))' }}
+    >
+      <div className="bg-white rounded-3xl p-8 max-w-sm w-full text-center shadow-2xl">
         {success ? (
           <>
             <div className="text-7xl mb-4 animate-bounce">🎉</div>
@@ -407,7 +410,10 @@ const AlphabetLearning = ({ sectionId, onBack }) => {
   };
 
   return (
-    <div className={`fixed inset-0 z-[9999] bg-gradient-to-br ${section.gradient}`}>
+    <div
+      className={`fixed inset-0 z-[9999] bg-gradient-to-br ${section.gradient}`}
+      style={{ paddingTop: 'env(safe-area-inset-top, 0px)', paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}
+    >
       {/* Decorative background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {[...Array(20)].map((_, i) => (
@@ -426,10 +432,11 @@ const AlphabetLearning = ({ sectionId, onBack }) => {
       </div>
 
       {/* Header */}
-      <header className="absolute top-0 left-0 right-0 z-50 p-4 flex items-center justify-between">
+      <header className="absolute top-0 left-0 right-0 z-50 p-4 flex items-center justify-between" style={{ top: 'env(safe-area-inset-top, 0px)' }}>
         <button
           onClick={onBack}
-          className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white hover:bg-white/30 transition-all"
+          className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white hover:bg-white/30 transition-all active:scale-95"
+          style={{ minWidth: '44px', minHeight: '44px' }}
         >
           <Icons.ArrowLeft className="w-5 h-5" />
           <span className="font-medium">Back</span>
@@ -1296,7 +1303,11 @@ const KidsMode = ({ isVisible, onClose }) => {
       className={`fixed inset-0 z-[9999] overflow-hidden transition-all duration-300 ${
         isExiting ? 'opacity-0 scale-95' : 'opacity-100 scale-100'
       }`}
-      style={{ touchAction: 'manipulation' }}
+      style={{
+        touchAction: 'manipulation',
+        paddingTop: 'env(safe-area-inset-top, 0px)',
+        paddingBottom: 'env(safe-area-inset-bottom, 0px)',
+      }}
     >
       {/* Animated gradient background */}
       <div className="absolute inset-0 bg-gradient-to-br from-purple-600 via-pink-500 to-blue-500 animate-gradient-shift" />

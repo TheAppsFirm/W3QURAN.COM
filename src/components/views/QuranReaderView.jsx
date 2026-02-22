@@ -172,14 +172,14 @@ function QuranReaderView({ surah, onBack, darkMode, bookmarks = {}, setBookmarks
           className="p-4 flex items-center justify-between"
           style={{ background: `linear-gradient(135deg, ${palette.colors[0]}, ${palette.colors[1]})` }}
         >
-          <button onClick={handleBack} className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-white">
+          <button onClick={handleBack} className="w-11 h-11 rounded-full bg-white/20 flex items-center justify-center text-white active:scale-95 transition-transform" style={{ minWidth: 44, minHeight: 44 }}>
             <Icons.X className="w-5 h-5" />
           </button>
           <div className="text-center text-white">
             <h2 className="text-xl font-bold">{surah.name}</h2>
             <p className="text-sm opacity-80">{surah.arabic}</p>
           </div>
-          <div className="w-10" />
+          <div className="w-11" />
         </div>
         <div className="flex-1 flex items-center justify-center">
           <div className="text-center">
@@ -205,13 +205,13 @@ function QuranReaderView({ surah, onBack, darkMode, bookmarks = {}, setBookmarks
           className="p-4 flex items-center justify-between"
           style={{ background: `linear-gradient(135deg, ${palette.colors[0]}, ${palette.colors[1]})` }}
         >
-          <button onClick={handleBack} className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-white">
+          <button onClick={handleBack} className="w-11 h-11 rounded-full bg-white/20 flex items-center justify-center text-white active:scale-95 transition-transform" style={{ minWidth: 44, minHeight: 44 }}>
             <Icons.X className="w-5 h-5" />
           </button>
           <div className="text-center text-white">
             <h2 className="text-xl font-bold">{surah.name}</h2>
           </div>
-          <div className="w-10" />
+          <div className="w-11" />
         </div>
         <div className="flex-1 flex items-center justify-center">
           <div className="text-center p-4">
@@ -233,8 +233,9 @@ function QuranReaderView({ surah, onBack, darkMode, bookmarks = {}, setBookmarks
       >
         <button
           onClick={handleBack}
-          className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-white hover:bg-white/30 transition-colors"
+          className="w-11 h-11 rounded-full bg-white/20 flex items-center justify-center text-white hover:bg-white/30 active:scale-95 transition-all"
           aria-label="Go back"
+          style={{ minWidth: 44, minHeight: 44 }}
         >
           <Icons.ArrowLeft className="w-5 h-5" />
         </button>
