@@ -12,9 +12,12 @@ import { useAuth } from '../../contexts/AuthContext';
 // Lazy load NotificationBell
 const NotificationBell = lazy(() => import('../common/AnnouncementBanner').then(m => ({ default: m.NotificationBell })));
 
-// Bubble Button Component for Mood and Mind Map
+// Bubble Button Component - unified styling for all StatsBar buttons
 const BubbleButton = memo(function BubbleButton({ icon: Icon, label, color, color2, onClick }) {
   const [isHovered, setIsHovered] = useState(false);
+
+  // Check if Icon is a function that returns JSX (like for level number) or a component
+  const isCustomRender = typeof Icon === 'function' && !Icon.displayName && !Icon.name?.startsWith('Icon');
 
   return (
     <button
@@ -28,12 +31,12 @@ const BubbleButton = memo(function BubbleButton({ icon: Icon, label, color, colo
       <div
         className="relative transition-all duration-300 w-10 h-10 sm:w-[54px] sm:h-[54px]"
         style={{
-          transform: `scale(${isHovered ? 1.15 : 1})`,
+          transform: `scale(${isHovered ? 1.1 : 1})`,
         }}
       >
         {/* Outer glow */}
         <div
-          className="absolute rounded-full pointer-events-none transition-all duration-500"
+          className="absolute rounded-full pointer-events-none transition-all duration-500 hidden sm:block"
           style={{
             inset: '-15%',
             background: `radial-gradient(circle at 50% 50%, ${color}50 0%, transparent 70%)`,
@@ -79,9 +82,9 @@ const BubbleButton = memo(function BubbleButton({ icon: Icon, label, color, colo
             }}
           />
 
-          {/* Clock sweep on hover */}
+          {/* Clock sweep on hover - desktop only */}
           {isHovered && (
-            <div className="absolute inset-0 rounded-full overflow-hidden pointer-events-none">
+            <div className="absolute inset-0 rounded-full overflow-hidden pointer-events-none hidden sm:block">
               <div
                 style={{
                   position: 'absolute',
@@ -93,9 +96,13 @@ const BubbleButton = memo(function BubbleButton({ icon: Icon, label, color, colo
             </div>
           )}
 
-          {/* Icon */}
+          {/* Icon or custom render */}
           <div className="absolute inset-0 flex items-center justify-center">
-            <Icon className="w-5 h-5 sm:w-7 sm:h-7 text-white drop-shadow-lg" />
+            {isCustomRender ? (
+              <Icon />
+            ) : (
+              <Icon className="w-5 h-5 sm:w-7 sm:h-7 text-white drop-shadow-lg" />
+            )}
           </div>
         </div>
 
@@ -108,9 +115,9 @@ const BubbleButton = memo(function BubbleButton({ icon: Icon, label, color, colo
         />
       </div>
 
-      {/* Label */}
+      {/* Label - hidden on mobile */}
       <span
-        className="text-[9px] font-semibold transition-colors duration-300 hidden sm:block"
+        className="text-[9px] font-semibold transition-colors duration-300 hidden sm:block whitespace-nowrap"
         style={{ color: isHovered ? color : '#64748b' }}
       >
         {label}
@@ -222,7 +229,7 @@ const StatsBar = memo(function StatsBar({
           {/* Right fade indicator */}
           <div className="absolute right-0 top-0 bottom-0 w-4 bg-gradient-to-l from-white/95 to-transparent z-10 pointer-events-none" />
 
-          <div className="flex items-center gap-2 sm:gap-3 overflow-x-auto overflow-y-hidden scrollbar-hide px-2 snap-x snap-mandatory" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', touchAction: 'pan-x' }}>
+          <div className="flex items-center justify-start gap-2 sm:gap-3 overflow-x-auto overflow-y-hidden scrollbar-hide px-2 snap-x snap-mandatory" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', touchAction: 'pan-x' }}>
             {/* Donation button - styled like BubbleButton */}
             <BubbleButton
               icon={Icons.Heart}
@@ -320,141 +327,71 @@ const StatsBar = memo(function StatsBar({
               />
             )}
 
-            {/* Gamification Stats - Styled as bubble buttons */}
+            {/* Gamification Stats - Styled exactly like BubbleButton */}
             {gamification.isActive ? (
               <>
                 {/* Level Bubble */}
-                <button
+                <BubbleButton
+                  icon={() => <span className="text-white text-sm sm:text-lg font-black drop-shadow-lg">{gamification.level}</span>}
+                  label="Level"
+                  color={gamification.levelInfo.current.color}
+                  color2={`${gamification.levelInfo.current.color}cc`}
                   onClick={onShowAchievements}
-                  className="relative flex flex-col items-center gap-0.5 transition-all duration-300 flex-shrink-0 snap-start"
-                  title={`Level ${gamification.level} ${gamification.levelInfo.current.name}`}
-                >
-                  <div
-                    className="relative w-10 h-10 sm:w-[54px] sm:h-[54px] rounded-full overflow-hidden transition-all hover:scale-110"
-                    style={{
-                      background: `linear-gradient(135deg, ${gamification.levelInfo.current.color}, ${gamification.levelInfo.current.color}cc)`,
-                      boxShadow: `0 4px 15px ${gamification.levelInfo.current.color}40, inset 0 -8px 15px ${gamification.levelInfo.current.color}50, inset 0 8px 15px rgba(255,255,255,0.2)`,
-                    }}
-                  >
-                    <div className="absolute pointer-events-none" style={{
-                      width: '70%', height: '35%', top: '8%', left: '15%',
-                      background: 'linear-gradient(180deg, rgba(255,255,255,0.5) 0%, transparent 100%)',
-                      borderRadius: '50%', transform: 'scaleY(0.5)',
-                    }} />
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <span className="text-white text-sm sm:text-lg font-black drop-shadow-lg">{gamification.level}</span>
-                    </div>
-                  </div>
-                  <span className="text-[9px] font-semibold text-gray-500 hidden sm:block">Level</span>
-                </button>
+                />
 
                 {/* XP Bubble */}
-                <button
+                <BubbleButton
+                  icon={Icons.Star}
+                  label={`${gamification.xp} XP`}
+                  color="#F59E0B"
+                  color2="#D97706"
                   onClick={onShowAchievements}
-                  className="relative flex flex-col items-center gap-0.5 transition-all duration-300 flex-shrink-0 snap-start"
-                  title={`${gamification.xp} XP`}
-                >
-                  <div
-                    className="relative w-10 h-10 sm:w-[54px] sm:h-[54px] rounded-full overflow-hidden transition-all hover:scale-110"
-                    style={{
-                      background: 'linear-gradient(135deg, #F59E0B, #D97706)',
-                      boxShadow: '0 4px 15px rgba(245, 158, 11, 0.4), inset 0 -8px 15px rgba(217, 119, 6, 0.3), inset 0 8px 15px rgba(255,255,255,0.2)',
-                    }}
-                  >
-                    <div className="absolute pointer-events-none" style={{
-                      width: '70%', height: '35%', top: '8%', left: '15%',
-                      background: 'linear-gradient(180deg, rgba(255,255,255,0.5) 0%, transparent 100%)',
-                      borderRadius: '50%', transform: 'scaleY(0.5)',
-                    }} />
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <Icons.Star className="w-5 h-5 sm:w-7 sm:h-7 text-white drop-shadow-lg" />
-                    </div>
-                  </div>
-                  <span className="text-[9px] font-semibold text-gray-500 hidden sm:block">{gamification.xp} XP</span>
-                </button>
+                />
 
                 {/* Streak Bubble */}
-                <button
+                <BubbleButton
+                  icon={Icons.Fire}
+                  label={`${gamification.streak.current} Days`}
+                  color={gamification.streak.current > 0 ? '#F97316' : '#94A3B8'}
+                  color2={gamification.streak.current > 0 ? '#EA580C' : '#64748B'}
                   onClick={onShowAchievements}
-                  className="relative flex flex-col items-center gap-0.5 transition-all duration-300 flex-shrink-0 snap-start"
-                  title={`${gamification.streak.current}-day streak`}
-                >
-                  <div
-                    className={`relative w-10 h-10 sm:w-[54px] sm:h-[54px] rounded-full overflow-hidden transition-all hover:scale-110 ${gamification.streak.current === 0 ? 'opacity-50' : ''}`}
-                    style={{
-                      background: gamification.streak.current > 0
-                        ? 'linear-gradient(135deg, #F97316, #EA580C)'
-                        : 'linear-gradient(135deg, #94A3B8, #64748B)',
-                      boxShadow: gamification.streak.current > 0
-                        ? '0 4px 15px rgba(249, 115, 22, 0.4), inset 0 -8px 15px rgba(234, 88, 12, 0.3), inset 0 8px 15px rgba(255,255,255,0.2)'
-                        : '0 4px 15px rgba(148, 163, 184, 0.3), inset 0 -8px 15px rgba(100, 116, 139, 0.3), inset 0 8px 15px rgba(255,255,255,0.2)',
-                    }}
-                  >
-                    <div className="absolute pointer-events-none" style={{
-                      width: '70%', height: '35%', top: '8%', left: '15%',
-                      background: 'linear-gradient(180deg, rgba(255,255,255,0.5) 0%, transparent 100%)',
-                      borderRadius: '50%', transform: 'scaleY(0.5)',
-                    }} />
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <Icons.Fire className="w-5 h-5 sm:w-7 sm:h-7 text-white drop-shadow-lg" />
-                    </div>
-                  </div>
-                  <span className="text-[9px] font-semibold text-gray-500 hidden sm:block">{gamification.streak.current} Days</span>
-                </button>
+                />
 
                 {/* Trophy Bubble */}
-                <button
+                <BubbleButton
+                  icon={Icons.Trophy}
+                  label={`${gamification.achievements.length} Won`}
+                  color="#A855F7"
+                  color2="#9333EA"
                   onClick={onShowAchievements}
-                  className="relative flex flex-col items-center gap-0.5 transition-all duration-300 flex-shrink-0 snap-start"
-                  title={`${gamification.achievements.length} achievements`}
-                >
-                  <div
-                    className="relative w-10 h-10 sm:w-[54px] sm:h-[54px] rounded-full overflow-hidden transition-all hover:scale-110"
-                    style={{
-                      background: 'linear-gradient(135deg, #A855F7, #9333EA)',
-                      boxShadow: '0 4px 15px rgba(168, 85, 247, 0.4), inset 0 -8px 15px rgba(147, 51, 234, 0.3), inset 0 8px 15px rgba(255,255,255,0.2)',
-                    }}
-                  >
-                    <div className="absolute pointer-events-none" style={{
-                      width: '70%', height: '35%', top: '8%', left: '15%',
-                      background: 'linear-gradient(180deg, rgba(255,255,255,0.5) 0%, transparent 100%)',
-                      borderRadius: '50%', transform: 'scaleY(0.5)',
-                    }} />
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <Icons.Trophy className="w-5 h-5 sm:w-7 sm:h-7 text-white drop-shadow-lg" />
-                    </div>
-                  </div>
-                  <span className="text-[9px] font-semibold text-gray-500 hidden sm:block">{gamification.achievements.length} Won</span>
-                </button>
+                />
               </>
             ) : (
               <>
-                {/* Inactive state - show faded bubbles */}
-                {[
-                  { icon: Icons.Star, color1: '#F59E0B', color2: '#D97706', label: 'XP' },
-                  { icon: Icons.Fire, color1: '#94A3B8', color2: '#64748B', label: 'Streak' },
-                  { icon: Icons.Trophy, color1: '#A855F7', color2: '#9333EA', label: 'Awards' },
-                ].map((item, i) => (
-                  <div key={i} className="relative flex flex-col items-center gap-0.5 transition-all duration-300 flex-shrink-0 snap-start opacity-40">
-                    <div
-                      className="relative w-10 h-10 sm:w-[54px] sm:h-[54px] rounded-full overflow-hidden"
-                      style={{
-                        background: `linear-gradient(135deg, ${item.color1}, ${item.color2})`,
-                        boxShadow: `0 4px 15px ${item.color1}20, inset 0 -8px 15px ${item.color2}20, inset 0 8px 15px rgba(255,255,255,0.1)`,
-                      }}
-                    >
-                      <div className="absolute pointer-events-none" style={{
-                        width: '70%', height: '35%', top: '8%', left: '15%',
-                        background: 'linear-gradient(180deg, rgba(255,255,255,0.3) 0%, transparent 100%)',
-                        borderRadius: '50%', transform: 'scaleY(0.5)',
-                      }} />
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <item.icon className="w-5 h-5 sm:w-7 sm:h-7 text-white drop-shadow-lg" />
-                      </div>
-                    </div>
-                    <span className="text-[9px] font-semibold text-gray-400 hidden sm:block">{item.label}</span>
-                  </div>
-                ))}
+                {/* Inactive state - show faded bubbles using same BubbleButton styling */}
+                <div className="opacity-50 flex items-center gap-2 sm:gap-3">
+                  <BubbleButton
+                    icon={Icons.Star}
+                    label="XP"
+                    color="#F59E0B"
+                    color2="#D97706"
+                    onClick={() => {}}
+                  />
+                  <BubbleButton
+                    icon={Icons.Fire}
+                    label="Streak"
+                    color="#94A3B8"
+                    color2="#64748B"
+                    onClick={() => {}}
+                  />
+                  <BubbleButton
+                    icon={Icons.Trophy}
+                    label="Awards"
+                    color="#A855F7"
+                    color2="#9333EA"
+                    onClick={() => {}}
+                  />
+                </div>
               </>
             )}
           </div>
