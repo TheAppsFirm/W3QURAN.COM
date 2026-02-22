@@ -52,11 +52,16 @@ body {
 }
 
 /* Performance optimizations for overlays and modals */
-.modal-overlay,
-.fixed.inset-0,
-[class*="absolute"][class*="inset-0"][class*="flex"][class*="items-center"][class*="justify-center"] {
+/* Containment for modals - but NOT for navigation elements */
+.modal-overlay {
   contain: layout style;
   will-change: opacity;
+}
+
+/* Ensure floating menu and navigation are never affected by containment */
+nav[aria-label="Main navigation"],
+nav[aria-label="Main navigation"] * {
+  contain: none !important;
 }
 
 /* Optimize text rendering for better INP */
