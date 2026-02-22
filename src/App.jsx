@@ -887,9 +887,10 @@ function QuranBubbleApp() {
 
   return (
     <div
-      className={`h-screen flex flex-col overflow-hidden transition-colors duration-500 ${
+      className={`flex flex-col overflow-hidden transition-colors duration-500 ${
         darkMode ? 'animated-bg-dark' : 'animated-bg'
       }`}
+      style={{ height: '100dvh', minHeight: '-webkit-fill-available' }}
     >
       {/* Blocked User Screen */}
       {blocked && (
