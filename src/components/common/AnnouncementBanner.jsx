@@ -96,7 +96,7 @@ export const NotificationBell = ({ userTier = 'free' }) => {
   return (
     <>
       {/* Bell Button - Styled like BubbleButton with label */}
-      <div className="relative flex flex-col items-center gap-0.5 transition-all duration-300">
+      <div className="relative flex flex-col items-center gap-0.5 transition-all duration-300 flex-shrink-0 snap-start">
         <button
           onClick={() => {
             fetchAnnouncements(); // Fetch fresh data when opening

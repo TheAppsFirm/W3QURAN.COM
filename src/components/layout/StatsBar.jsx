@@ -240,11 +240,9 @@ const StatsBar = memo(function StatsBar({
             />
 
             {/* Notification Bell */}
-            <div className="flex-shrink-0 snap-start">
-              <Suspense fallback={null}>
-                <NotificationBell userTier={isPremium ? 'premium' : 'free'} />
-              </Suspense>
-            </div>
+            <Suspense fallback={null}>
+              <NotificationBell userTier={isPremium ? 'premium' : 'free'} />
+            </Suspense>
 
             {/* Layout Selector - with label like BubbleButton */}
             {showControls && (
@@ -368,8 +366,8 @@ const StatsBar = memo(function StatsBar({
               </>
             ) : (
               <>
-                {/* Inactive state - show faded bubbles using same BubbleButton styling */}
-                <div className="opacity-50 flex items-center gap-2 sm:gap-3">
+                {/* Inactive state - show faded bubbles, no wrapper div to preserve spacing */}
+                <div className="opacity-50">
                   <BubbleButton
                     icon={Icons.Star}
                     label="XP"
@@ -377,6 +375,8 @@ const StatsBar = memo(function StatsBar({
                     color2="#D97706"
                     onClick={() => {}}
                   />
+                </div>
+                <div className="opacity-50">
                   <BubbleButton
                     icon={Icons.Fire}
                     label="Streak"
@@ -384,6 +384,8 @@ const StatsBar = memo(function StatsBar({
                     color2="#64748B"
                     onClick={() => {}}
                   />
+                </div>
+                <div className="opacity-50">
                   <BubbleButton
                     icon={Icons.Trophy}
                     label="Awards"
