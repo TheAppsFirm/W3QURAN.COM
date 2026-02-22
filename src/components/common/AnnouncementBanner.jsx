@@ -95,32 +95,41 @@ export const NotificationBell = ({ userTier = 'free' }) => {
 
   return (
     <>
-      {/* Bell Button - Styled like other buttons */}
-      <button
-        onClick={() => {
-          fetchAnnouncements(); // Fetch fresh data when opening
-          setIsOpen(true);
-        }}
-        className="relative flex items-center justify-center w-10 h-10 sm:w-11 sm:h-11 rounded-full shadow-lg hover:shadow-xl hover:scale-105 transition-all cursor-pointer"
-        style={{
-          background: 'linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%)',
-          boxShadow: '0 4px 15px rgba(139, 92, 246, 0.4), inset 0 -4px 10px rgba(168, 85, 247, 0.3), inset 0 4px 10px rgba(255,255,255,0.2)',
-        }}
-        title="Notifications"
-      >
-        {/* Glass highlight */}
-        <div className="absolute pointer-events-none" style={{
-          width: '70%', height: '35%', top: '8%', left: '15%',
-          background: 'linear-gradient(180deg, rgba(255,255,255,0.4) 0%, transparent 100%)',
-          borderRadius: '50%', transform: 'scaleY(0.5)',
-        }} />
-        <Icons.Bell className="w-5 h-5 text-white relative z-10" />
-        {unreadCount > 0 && (
-          <span className="absolute -top-0.5 -right-0.5 w-5 h-5 bg-gradient-to-r from-red-500 to-pink-500 rounded-full flex items-center justify-center text-[10px] font-bold text-white shadow-lg border-2 border-white">
-            {unreadCount > 9 ? '9+' : unreadCount}
-          </span>
-        )}
-      </button>
+      {/* Bell Button - Styled like BubbleButton with label */}
+      <div className="relative flex flex-col items-center gap-0.5 transition-all duration-300">
+        <button
+          onClick={() => {
+            fetchAnnouncements(); // Fetch fresh data when opening
+            setIsOpen(true);
+          }}
+          className="relative flex items-center justify-center w-10 h-10 sm:w-[54px] sm:h-[54px] rounded-full shadow-lg hover:shadow-xl hover:scale-110 transition-all cursor-pointer overflow-hidden"
+          style={{
+            background: 'linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%)',
+            boxShadow: '0 4px 15px rgba(139, 92, 246, 0.4), inset 0 -8px 15px rgba(168, 85, 247, 0.3), inset 0 8px 15px rgba(255,255,255,0.2)',
+          }}
+          title="Notifications"
+        >
+          {/* Glass highlight */}
+          <div className="absolute pointer-events-none" style={{
+            width: '70%', height: '35%', top: '8%', left: '15%',
+            background: 'linear-gradient(180deg, rgba(255,255,255,0.5) 0%, transparent 100%)',
+            borderRadius: '50%', transform: 'scaleY(0.5)',
+          }} />
+          {/* Small bright spot */}
+          <div className="absolute pointer-events-none" style={{
+            width: '18%', height: '12%', top: '15%', left: '22%',
+            background: 'radial-gradient(ellipse, rgba(255,255,255,0.9) 0%, transparent 70%)',
+            borderRadius: '50%',
+          }} />
+          <Icons.Bell className="w-5 h-5 sm:w-7 sm:h-7 text-white drop-shadow-lg relative z-10" />
+          {unreadCount > 0 && (
+            <span className="absolute -top-0.5 -right-0.5 w-5 h-5 bg-gradient-to-r from-red-500 to-pink-500 rounded-full flex items-center justify-center text-[10px] font-bold text-white shadow-lg border-2 border-white z-20">
+              {unreadCount > 9 ? '9+' : unreadCount}
+            </span>
+          )}
+        </button>
+        <span className="text-[9px] font-semibold text-gray-500 hidden sm:block">Alerts</span>
+      </div>
 
       {/* Centered Modal - Clean & Easy to Read */}
       {isOpen && createPortal(

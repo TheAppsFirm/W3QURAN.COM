@@ -223,24 +223,14 @@ const StatsBar = memo(function StatsBar({
           <div className="absolute right-0 top-0 bottom-0 w-4 bg-gradient-to-l from-white/95 to-transparent z-10 pointer-events-none" />
 
           <div className="flex items-center gap-2 sm:gap-3 overflow-x-auto overflow-y-hidden scrollbar-hide px-2 snap-x snap-mandatory" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', touchAction: 'pan-x' }}>
-            {/* Donation button */}
-            <button
+            {/* Donation button - styled like BubbleButton */}
+            <BubbleButton
+              icon={Icons.Heart}
+              label="Donate"
+              color="#10B981"
+              color2="#14B8A6"
               onClick={onDonate}
-              className="relative flex items-center gap-1.5 px-3 py-2 rounded-full shadow-lg hover:shadow-xl hover:scale-105 transition-all cursor-pointer overflow-hidden flex-shrink-0 snap-start"
-              style={{
-                background: 'linear-gradient(135deg, #10b981 0%, #14b8a6 100%)',
-                boxShadow: '0 4px 15px rgba(16, 185, 129, 0.4), inset 0 -6px 15px rgba(20, 184, 166, 0.3), inset 0 6px 15px rgba(255,255,255,0.2)',
-              }}
-              title="Donate"
-            >
-              <div className="absolute pointer-events-none" style={{
-                width: '80%', height: '40%', top: '5%', left: '10%',
-                background: 'linear-gradient(180deg, rgba(255,255,255,0.4) 0%, transparent 100%)',
-                borderRadius: '50%', transform: 'scaleY(0.5)',
-              }} />
-              <span className="text-base relative z-10">💝</span>
-              <span className="text-white font-bold tracking-wide text-xs relative z-10 hidden sm:inline">DONATE</span>
-            </button>
+            />
 
             {/* Notification Bell */}
             <div className="flex-shrink-0 snap-start">
@@ -249,46 +239,52 @@ const StatsBar = memo(function StatsBar({
               </Suspense>
             </div>
 
-            {/* Layout Selector */}
+            {/* Layout Selector - with label like BubbleButton */}
             {showControls && (
-              <button
-                ref={layoutBtnRef}
-                onClick={(e) => { e.stopPropagation(); setShowLayoutMenu(!showLayoutMenu); setShowZoomMenu(false); }}
-                className="relative flex items-center justify-center w-10 h-10 sm:w-[54px] sm:h-[54px] rounded-full text-white font-medium transition-all hover:scale-110 overflow-hidden flex-shrink-0 snap-start"
-                style={{
-                  background: 'linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%)',
-                  boxShadow: '0 4px 15px rgba(139, 92, 246, 0.3), inset 0 -8px 15px rgba(99, 102, 241, 0.3), inset 0 8px 15px rgba(255,255,255,0.2)',
-                }}
-                title={currentLayout.label}
-              >
-                <div className="absolute pointer-events-none" style={{
-                  width: '70%', height: '35%', top: '8%', left: '15%',
-                  background: 'linear-gradient(180deg, rgba(255,255,255,0.5) 0%, transparent 100%)',
-                  borderRadius: '50%', transform: 'scaleY(0.5)',
-                }} />
-                <span className="text-base sm:text-lg relative z-10">{currentLayout.icon}</span>
-              </button>
+              <div className="relative flex flex-col items-center gap-0.5 transition-all duration-300 flex-shrink-0 snap-start">
+                <button
+                  ref={layoutBtnRef}
+                  onClick={(e) => { e.stopPropagation(); setShowLayoutMenu(!showLayoutMenu); setShowZoomMenu(false); }}
+                  className="relative flex items-center justify-center w-10 h-10 sm:w-[54px] sm:h-[54px] rounded-full text-white font-medium transition-all hover:scale-110 overflow-hidden"
+                  style={{
+                    background: 'linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%)',
+                    boxShadow: '0 4px 15px rgba(139, 92, 246, 0.3), inset 0 -8px 15px rgba(99, 102, 241, 0.3), inset 0 8px 15px rgba(255,255,255,0.2)',
+                  }}
+                  title={currentLayout.label}
+                >
+                  <div className="absolute pointer-events-none" style={{
+                    width: '70%', height: '35%', top: '8%', left: '15%',
+                    background: 'linear-gradient(180deg, rgba(255,255,255,0.5) 0%, transparent 100%)',
+                    borderRadius: '50%', transform: 'scaleY(0.5)',
+                  }} />
+                  <span className="text-base sm:text-lg relative z-10">{currentLayout.icon}</span>
+                </button>
+                <span className="text-[9px] font-semibold text-gray-500 hidden sm:block">Layout</span>
+              </div>
             )}
 
-            {/* Zoom Controls */}
+            {/* Zoom Controls - with label like BubbleButton */}
             {showControls && (
-              <button
-                ref={zoomBtnRef}
-                onClick={(e) => { e.stopPropagation(); setShowZoomMenu(!showZoomMenu); setShowLayoutMenu(false); }}
-                className="relative flex items-center justify-center w-10 h-10 sm:w-[54px] sm:h-[54px] rounded-full text-white font-medium transition-all hover:scale-110 overflow-hidden flex-shrink-0 snap-start"
-                style={{
-                  background: 'linear-gradient(135deg, #14b8a6 0%, #10b981 100%)',
-                  boxShadow: '0 4px 15px rgba(20, 184, 166, 0.3), inset 0 -8px 15px rgba(16, 185, 129, 0.3), inset 0 8px 15px rgba(255,255,255,0.2)',
-                }}
-                title="Zoom"
-              >
-                <div className="absolute pointer-events-none" style={{
-                  width: '70%', height: '35%', top: '8%', left: '15%',
-                  background: 'linear-gradient(180deg, rgba(255,255,255,0.5) 0%, transparent 100%)',
-                  borderRadius: '50%', transform: 'scaleY(0.5)',
-                }} />
-                <Icons.ZoomIn className="w-5 h-5 sm:w-7 sm:h-7 text-white drop-shadow-lg relative z-10" />
-              </button>
+              <div className="relative flex flex-col items-center gap-0.5 transition-all duration-300 flex-shrink-0 snap-start">
+                <button
+                  ref={zoomBtnRef}
+                  onClick={(e) => { e.stopPropagation(); setShowZoomMenu(!showZoomMenu); setShowLayoutMenu(false); }}
+                  className="relative flex items-center justify-center w-10 h-10 sm:w-[54px] sm:h-[54px] rounded-full text-white font-medium transition-all hover:scale-110 overflow-hidden"
+                  style={{
+                    background: 'linear-gradient(135deg, #14b8a6 0%, #10b981 100%)',
+                    boxShadow: '0 4px 15px rgba(20, 184, 166, 0.3), inset 0 -8px 15px rgba(16, 185, 129, 0.3), inset 0 8px 15px rgba(255,255,255,0.2)',
+                  }}
+                  title="Zoom"
+                >
+                  <div className="absolute pointer-events-none" style={{
+                    width: '70%', height: '35%', top: '8%', left: '15%',
+                    background: 'linear-gradient(180deg, rgba(255,255,255,0.5) 0%, transparent 100%)',
+                    borderRadius: '50%', transform: 'scaleY(0.5)',
+                  }} />
+                  <Icons.ZoomIn className="w-5 h-5 sm:w-7 sm:h-7 text-white drop-shadow-lg relative z-10" />
+                </button>
+                <span className="text-[9px] font-semibold text-gray-500 hidden sm:block">Zoom</span>
+              </div>
             )}
 
             {/* World Map Bubble Button */}
