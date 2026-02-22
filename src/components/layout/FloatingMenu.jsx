@@ -192,7 +192,6 @@ function FloatingMenu({ view, setView, darkMode, onDonate, onMindMap, onMood, on
     { id: 'names', label: '99 Names', icon: Icons.Sparkles, gradient: ['#8b5cf6', '#a855f7'] },
     { id: 'quiz', label: 'Quiz', icon: Icons.HelpCircle, gradient: ['#ec4899', '#f43f5e'] },
     { id: 'listen', label: 'Listen', icon: Icons.Headphones, gradient: ['#22c55e', '#10b981'] },
-    { id: 'stats', label: 'Stats', icon: Icons.PieChart, gradient: ['#10b981', '#14b8a6'] },
     // Row 3: Engagement & settings
     { id: 'settings', label: 'Settings', icon: Icons.Settings, gradient: ['#6366f1', '#8b5cf6'] },
     { id: 'donate', label: 'Donate', icon: Icons.Heart, gradient: ['#ef4444', '#f97316'], isDonate: true },

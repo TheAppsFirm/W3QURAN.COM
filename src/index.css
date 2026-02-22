@@ -2,93 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Mobile viewport height fix - prevents address bar from affecting layout */
-html, body {
-  height: 100%;
-  height: 100dvh;
-  overflow: hidden;
-  overscroll-behavior: none;
-  -webkit-overflow-scrolling: touch;
-}
-
-/* Fallback for browsers that don't support dvh */
-@supports not (height: 100dvh) {
-  html, body {
-    height: -webkit-fill-available;
-  }
-}
-
-/* Prevent pull-to-refresh and bouncing on iOS */
-body {
-  position: fixed;
-  width: 100%;
-  touch-action: pan-x pan-y;
-}
-
-#root {
-  height: 100%;
-  height: 100dvh;
-  overflow: hidden;
-}
-
-/* Mobile Performance Optimizations */
-@media (max-width: 768px) {
-  * {
-    /* Reduce animation complexity on mobile */
-    animation-duration: 0.2s !important;
-  }
-
-  /* Disable expensive effects on mobile */
-  .no-mobile-blur {
-    filter: none !important;
-    backdrop-filter: none !important;
-  }
-}
-
-/* GPU acceleration hints */
-.gpu-accelerated {
-  transform: translateZ(0);
-  backface-visibility: hidden;
-}
-
-/* Reduce motion for users who prefer it */
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-}
-
-/* Safe area utility classes for modals/overlays */
-.safe-area-padding {
-  padding-top: env(safe-area-inset-top, 0px);
-  padding-right: env(safe-area-inset-right, 0px);
-  padding-bottom: env(safe-area-inset-bottom, 0px);
-  padding-left: env(safe-area-inset-left, 0px);
-}
-
-.safe-area-top {
-  padding-top: env(safe-area-inset-top, 0px);
-}
-
-.safe-area-bottom {
-  padding-bottom: env(safe-area-inset-bottom, 0px);
-}
-
-/* Ensure all full-screen overlays respect safe areas */
-.fixed.inset-0[class*="z-[9999]"],
-.fixed.inset-0[class*="z-[10001]"] {
-  padding-top: env(safe-area-inset-top, 0px);
-  padding-bottom: env(safe-area-inset-bottom, 0px);
-}
-
-/* Minimum touch target size for accessibility */
-.touch-target {
-  min-width: 44px;
-  min-height: 44px;
-}
-
 /* Leaflet Map Fixes - ensure map renders properly */
 .leaflet-container {
   background: #0f172a !important;
@@ -506,16 +419,6 @@ nav[aria-label="Main navigation"] * {
   50% {
     transform: scale(1.05);
     opacity: 1;
-  }
-}
-
-/* Very subtle pulse - barely noticeable, good for mobile */
-@keyframes subtlePulse {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.95;
   }
 }
 
