@@ -30,21 +30,6 @@ html, body, #root {
   overflow: hidden;
 }
 
-/* Fix for Chrome mobile - ensure fixed elements render correctly */
-#root {
-  position: relative;
-  isolation: isolate;
-}
-
-/* Ensure navigation elements are always visible (Chrome fix) */
-nav[aria-label="Main navigation"],
-.fixed[class*="z-[55]"],
-.fixed[class*="z-40"] {
-  transform: translateZ(0);
-  -webkit-transform: translateZ(0);
-  will-change: transform;
-}
-
 body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
