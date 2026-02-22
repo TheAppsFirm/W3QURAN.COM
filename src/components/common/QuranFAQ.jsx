@@ -45,7 +45,7 @@ const FAQCard = memo(function FAQCard({ faq, language, expanded, onToggle, onNav
             className={`font-semibold transition-colors ${
               expanded ? 'text-white' : 'text-white/90'
             } ${language === 'ar' || language === 'ur' ? 'text-right' : ''} ${language === 'ar' ? 'font-arabic' : ''}`}
-            style={language === 'ur' ? { fontFamily: "'Noto Nastaliq Urdu', 'Jameel Noori Nastaleeq', serif" } : undefined}
+            style={language === 'ur' ? { fontFamily: "'Noto Nastaliq Urdu', 'Jameel Noori Nastaleeq', serif", lineHeight: '1.8' } : undefined}
           >
             {question}
           </p>
@@ -71,7 +71,7 @@ const FAQCard = memo(function FAQCard({ faq, language, expanded, onToggle, onNav
             className={`text-white/80 leading-relaxed ${
               language === 'ar' || language === 'ur' ? 'text-right' : ''
             } ${language === 'ar' ? 'font-arabic' : ''}`}
-            style={language === 'ur' ? { fontFamily: "'Noto Nastaliq Urdu', 'Jameel Noori Nastaleeq', serif", lineHeight: '2' } : undefined}
+            style={language === 'ur' ? { fontFamily: "'Noto Nastaliq Urdu', 'Jameel Noori Nastaleeq', serif", lineHeight: '2.2' } : undefined}
           >
             {answer}
           </div>
