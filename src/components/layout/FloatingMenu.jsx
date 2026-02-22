@@ -281,7 +281,14 @@ function FloatingMenu({ view, setView, darkMode, onDonate, onMindMap, onMood, on
 
       {/* Main Bottom Menu - Bubble styled */}
       <div
-        className="fixed bottom-4 sm:bottom-5 left-1/2 -translate-x-1/2 z-[55] safe-area-bottom"
+        style={{
+          position: 'fixed',
+          bottom: '16px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          zIndex: 9999,
+          WebkitTransform: 'translateX(-50%)',
+        }}
       >
         <div
           className="flex items-center justify-center gap-3 sm:gap-4 rounded-full px-5 sm:px-6 py-3 shadow-2xl border backdrop-blur-xl"

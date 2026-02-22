@@ -1355,7 +1355,18 @@ function QuranBubbleApp() {
 
       {/* Floating Sidebar — 4 Quick Access Buttons */}
       {view === 'surahs' && (
-        <div className="fixed right-2 sm:right-3 z-40 flex flex-col items-center gap-2 sm:gap-2.5 bottom-24 sm:bottom-28 md:bottom-[100px]">
+        <div
+          style={{
+            position: 'fixed',
+            right: '8px',
+            bottom: '96px',
+            zIndex: 9998,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '8px',
+          }}
+        >
           {[
             { key: 'daily', emoji: '☀️', title: 'Daily Verse', bg: ['#f59e0b', '#eab308'], glow: 'rgba(245,158,11,0.3)', delay: '0s', onClick: () => setView('daily') },
             { key: 'ai', emoji: '🤝', title: 'AI Guide', bg: ['#14b8a6', '#0d9488'], glow: 'rgba(20,184,166,0.3)', delay: '0.7s', onClick: () => setShowCompanionAI(true) },
