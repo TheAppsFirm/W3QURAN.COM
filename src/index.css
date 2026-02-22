@@ -2,6 +2,80 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Leaflet Map Fixes - ensure map renders properly */
+.leaflet-container {
+  background: #0f172a !important;
+  z-index: 1;
+  font-family: inherit;
+}
+
+/* Ensure Leaflet tile layer is visible */
+.leaflet-tile-pane {
+  z-index: 200 !important;
+}
+
+.leaflet-overlay-pane {
+  z-index: 400 !important;
+}
+
+.leaflet-marker-pane {
+  z-index: 600 !important;
+}
+
+.leaflet-tooltip-pane {
+  z-index: 650 !important;
+}
+
+.leaflet-popup-pane {
+  z-index: 700 !important;
+}
+
+.leaflet-control-container {
+  z-index: 800 !important;
+}
+
+/* Fix for Leaflet tiles not showing */
+.leaflet-tile {
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+.leaflet-tile-loaded {
+  opacity: 1 !important;
+}
+
+/* Ensure map takes full container size */
+.leaflet-container .leaflet-pane,
+.leaflet-container .leaflet-tile-pane,
+.leaflet-container .leaflet-overlay-pane,
+.leaflet-container .leaflet-shadow-pane,
+.leaflet-container .leaflet-marker-pane,
+.leaflet-container .leaflet-popup-pane {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+/* Override containment for Leaflet - containment breaks map tile positioning */
+.leaflet-container,
+.leaflet-container * {
+  contain: none !important;
+}
+
+/* Ensure Leaflet container has proper dimensions when inside flex layouts */
+.leaflet-container {
+  flex: 1 1 auto;
+  min-height: 300px;
+  height: 100%;
+  width: 100%;
+}
+
+/* Make sure parent containers pass height to Leaflet */
+.leaflet-container.w-full.h-full {
+  position: relative;
+  display: block;
+}
+
 /* CSS Custom Properties for theming */
 :root {
   --primary-gradient: linear-gradient(135deg, #8b5cf6 0%, #06b6d4 100%);
@@ -43,12 +117,25 @@ body {
   text-align: right;
 }
 
+/* Urdu Font — Nastaleeq style */
+.font-urdu {
+  font-family: 'Noto Nastaliq Urdu', 'Jameel Noori Nastaleeq', 'Nastaliq', 'Urdu Typesetting', serif;
+  direction: rtl;
+  text-align: right;
+  line-height: 2.2;
+}
+
 /* Performance optimizations for overlays and modals */
-.modal-overlay,
-.fixed.inset-0,
-[class*="absolute"][class*="inset-0"][class*="flex"][class*="items-center"][class*="justify-center"] {
+/* Containment for modals - but NOT for navigation elements */
+.modal-overlay {
   contain: layout style;
   will-change: opacity;
+}
+
+/* Ensure floating menu and navigation are never affected by containment */
+nav[aria-label="Main navigation"],
+nav[aria-label="Main navigation"] * {
+  contain: none !important;
 }
 
 /* Optimize text rendering for better INP */
@@ -252,6 +339,33 @@ body {
   from {
     opacity: 0;
     transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes xpFloat {
+  0% {
+    opacity: 0;
+    transform: translateY(10px) scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
   }
   to {
     opacity: 1;
@@ -1061,6 +1175,48 @@ body {
   }
 }
 
+/* Mobile performance optimizations - reduce animation overhead */
+@media (max-width: 768px) {
+  /* Reduce backdrop-filter blur on mobile (expensive) */
+  .glass, .glass-dark {
+    backdrop-filter: blur(6px) !important;
+    -webkit-backdrop-filter: blur(6px) !important;
+  }
+
+  /* Slow down continuous animations to reduce CPU usage */
+  [style*="animation"][style*="infinite"] {
+    animation-duration: calc(var(--animation-duration, 1s) * 1.5) !important;
+  }
+
+  /* Disable expensive filter animations on mobile */
+  @keyframes colorShift {
+    0%, 100% { opacity: 1; }
+  }
+
+  /* Reduce particle animations */
+  .fixed.inset-0.pointer-events-none [class*="animate"] {
+    animation-play-state: paused !important;
+  }
+
+  /* Add CSS containment for better paint performance */
+  .bubble-item, .bubble-inner, [class*="Bubble"] {
+    contain: layout style paint;
+  }
+
+  /* Reduce box-shadow complexity on mobile */
+  [style*="box-shadow"][style*="inset"] {
+    will-change: transform;
+  }
+}
+
+/* Low-power mode / battery saver - minimal animations */
+@media (prefers-reduced-motion: no-preference) and (max-width: 480px) {
+  /* On very small screens, further reduce animations */
+  .shimmer, [class*="shimmer"] {
+    animation: none !important;
+  }
+}
+
 /* Focus visible styles for accessibility */
 :focus-visible {
   outline: 2px solid #8b5cf6;
@@ -1080,6 +1236,74 @@ body {
   /* App is designed for dark mode, but we respect system preference for readable content */
   .content-area {
     color: inherit;
+  }
+}
+
+/* Connection line pulse (moved from AnimationStyles JS component) */
+@keyframes connectionPulse {
+  0%, 100% { stroke-opacity: 0.12; }
+  50% { stroke-opacity: 0.28; }
+}
+
+.connection-line {
+  animation: connectionPulse 4s ease-in-out infinite;
+}
+
+/* Aurora background animation (moved from AnimationStyles JS component) */
+@keyframes aurora {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* Floating ambient orbs (moved from AnimationStyles JS component) */
+@keyframes floatOrb {
+  0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.4; }
+  25% { transform: translate(10px, -20px) scale(1.1); opacity: 0.6; }
+  50% { transform: translate(-5px, -10px) scale(0.9); opacity: 0.5; }
+  75% { transform: translate(-15px, 5px) scale(1.05); opacity: 0.45; }
+}
+
+/* Bubble hover effect */
+.bubble-item {
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.bubble-item:hover {
+  transform: scale(1.08) translateY(-5px);
+  z-index: 10;
+}
+
+/* Utility classes */
+.touch-target {
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.bubble-container {
+  scroll-behavior: smooth;
+}
+
+/* Animated background gradient */
+.animated-bg {
+  background: linear-gradient(-45deg, #f0fdfa, #ecfeff, #f0f9ff, #eff6ff, #eef2ff, #fdf4ff);
+  background-size: 400% 400%;
+  animation: aurora 20s ease infinite;
+}
+
+/* Dark mode animated background */
+.animated-bg-dark {
+  background: linear-gradient(-45deg, #0f172a, #1e1b4b, #172554, #1e3a5f, #1e1b4b, #0f172a);
+  background-size: 400% 400%;
+  animation: aurora 20s ease infinite;
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .bubble-item, .connection-line, .animated-bg, .animated-bg-dark {
+    animation: none !important;
+  }
+  .bubble-item:hover {
+    transform: scale(1.02);
   }
 }
 
