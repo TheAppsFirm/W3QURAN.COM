@@ -416,18 +416,36 @@ function TasbihView({ darkMode, onBack }) {
   const syncingRef = useRef(false);
   const syncTimerRef = useRef(null);
   const hasSyncedRef = useRef(false);
+  const mountedRef = useRef(true);
+  const downloadCompleteRef = useRef(false);
   const dataRef = useRef(data);
   dataRef.current = data; // always keep ref fresh
+
+  // Cleanup on unmount
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
+    };
+  }, []);
 
   // Download from server once on mount
   useEffect(() => {
     if (!isAuthenticated || hasSyncedRef.current) return;
     hasSyncedRef.current = true;
+
+    const controller = new AbortController();
+
     (async () => {
       try {
-        const res = await fetch('/api/user/sync?type=tasbih', { credentials: 'include' });
-        if (!res.ok) return;
+        const res = await fetch('/api/user/sync?type=tasbih', {
+          credentials: 'include',
+          signal: controller.signal
+        });
+        if (!res.ok || !mountedRef.current) return;
         const { data: serverResponse } = await res.json();
+        if (!mountedRef.current) return;
+
         if (serverResponse?.tasbih?.data) {
           const server = serverResponse.tasbih.data;
           const counterData = server.counter || server;
@@ -442,18 +460,25 @@ function TasbihView({ darkMode, onBack }) {
             });
           }
         }
+        downloadCompleteRef.current = true;
       } catch {
-        // Use local data
+        // Use local data (also catches AbortError)
+        downloadCompleteRef.current = true;
       }
     })();
+
+    return () => controller.abort();
   }, [isAuthenticated]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Debounced upload — 3s after last data change
+  // Debounced upload — 3s after last data change (only after download completes)
   useEffect(() => {
     if (!isAuthenticated) return;
+    // Don't upload until initial download is complete to prevent race condition
+    if (!downloadCompleteRef.current) return;
+
     if (syncTimerRef.current) clearTimeout(syncTimerRef.current);
     syncTimerRef.current = setTimeout(() => {
-      if (syncingRef.current) return;
+      if (syncingRef.current || !mountedRef.current) return;
       syncingRef.current = true;
       const current = dataRef.current;
       let adhkarProgress = DEFAULT_ADHKAR_PROGRESS;
@@ -463,7 +488,9 @@ function TasbihView({ darkMode, onBack }) {
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ dataType: 'tasbih', data: { counter: current, adhkar: adhkarProgress } }),
-      }).catch(() => {}).finally(() => { syncingRef.current = false; });
+      }).catch(() => {}).finally(() => {
+        if (mountedRef.current) syncingRef.current = false;
+      });
     }, 3000);
     return () => { if (syncTimerRef.current) clearTimeout(syncTimerRef.current); };
   }, [data, isAuthenticated]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -491,7 +518,9 @@ function TasbihView({ darkMode, onBack }) {
       // Refresh user to get updated premium status
       if (refreshUser) {
         setIsRefreshingUser(true);
-        refreshUser().catch(() => {}).finally(() => setIsRefreshingUser(false));
+        refreshUser().catch(() => {}).finally(() => {
+          if (mountedRef.current) setIsRefreshingUser(false);
+        });
       }
     } else if (paymentCanceled) {
       paymentHandledRef.current = true;

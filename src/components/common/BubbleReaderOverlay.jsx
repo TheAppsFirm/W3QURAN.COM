@@ -1699,7 +1699,11 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
   }, [layoutStyle, surah]);
 
   // Log surah open event and track reading start time
+  // Use refs for cleanup to avoid stale closure issues
   const readingStartTime = useRef(Date.now());
+  const readingAyahRef = useRef(currentAyah); // Separate ref for reading tracking (currentAyahRef is defined later for audio)
+  readingAyahRef.current = currentAyah; // Keep ref updated
+
   useEffect(() => {
     if (surah?.id) {
       logger.surahOpen(surah.id, surah.name);
@@ -1708,14 +1712,16 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
     }
     return () => {
       if (surah?.id) {
-        logger.surahClose(surah.id, currentAyah);
+        // Use ref to get current ayah value (avoids stale closure)
+        const finalAyah = readingAyahRef.current;
+        logger.surahClose(surah.id, finalAyah);
         // Track surah reading with duration and completion
         const durationSeconds = Math.round((Date.now() - readingStartTime.current) / 1000);
-        const completionPercent = Math.round((currentAyah / (surah.ayahs || 1)) * 100);
+        const completionPercent = Math.round((finalAyah / (surah.ayahs || 1)) * 100);
         trackSurahRead(surah.id, durationSeconds, completionPercent);
       }
     };
-  }, [surah?.id]);
+  }, [surah?.id, surah?.ayahs, surah?.name]);
 
   // Reset visible verse count when surah changes
   useEffect(() => {
@@ -1724,25 +1730,28 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
   }, [surah?.id]);
 
   // Progressive loading: IntersectionObserver to load more verses on scroll
+  // Use refs to avoid recreating observer on state changes
+  const visibleVerseCountRef = useRef(visibleVerseCount);
+  const isLoadingRef = useRef(isLoadingMoreVerses);
+  visibleVerseCountRef.current = visibleVerseCount;
+  isLoadingRef.current = isLoadingMoreVerses;
+
   useEffect(() => {
     if (!isLargeSurah || !loadMoreTriggerRef.current) return;
+
+    const totalVerseCount = surah?.ayahs || 0;
 
     const observer = new IntersectionObserver(
       (entries) => {
         const [entry] = entries;
-        if (entry.isIntersecting && !isLoadingMoreVerses) {
-          const totalVerseCount = surah?.ayahs || 0;
-          if (visibleVerseCount < totalVerseCount) {
+        // Use refs to get current values without adding to deps
+        if (entry.isIntersecting && !isLoadingRef.current) {
+          if (visibleVerseCountRef.current < totalVerseCount) {
             setIsLoadingMoreVerses(true);
             // Use requestAnimationFrame to batch DOM updates
             requestAnimationFrame(() => {
               setVisibleVerseCount(prev => {
                 const newCount = Math.min(prev + VERSE_CHUNK_SIZE, totalVerseCount);
-                logger.performance(`Progressive load: ${prev} -> ${newCount} verses`, {
-                  surahId: surah?.id,
-                  totalVerses: totalVerseCount,
-                  isSafari: isMobileSafari
-                });
                 return newCount;
               });
               setIsLoadingMoreVerses(false);
@@ -1759,7 +1768,7 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
     return () => {
       if (trigger) observer.unobserve(trigger);
     };
-  }, [isLargeSurah, visibleVerseCount, isLoadingMoreVerses, surah?.id, surah?.ayahs]);
+  }, [isLargeSurah, surah?.id, surah?.ayahs]); // Removed visibleVerseCount and isLoadingMoreVerses
 
   // Get language code from translation for TTS
   const ttsLanguage = useMemo(() => {

@@ -32,15 +32,18 @@ export const searchQuran = async (query, options = {}) => {
     return { results: [], total: 0, query };
   }
 
-  const cacheKey = `${query}_${language}_${limit}`;
+  // Use :: delimiter to avoid cache key collisions (query might contain underscores)
+  const cacheKey = `search::${query}::${language}::${limit}`;
   if (searchCache[cacheKey]) {
     return searchCache[cacheKey];
   }
 
   try {
-    // Use Quran.com search API
+    // Use Quran.com search API with AbortController for cleanup
+    const controller = new AbortController();
     const response = await fetch(
-      `${QURAN_COM_API}/search?q=${encodeURIComponent(query)}&size=${limit}&language=${language}`
+      `${QURAN_COM_API}/search?q=${encodeURIComponent(query)}&size=${limit}&language=${language}`,
+      { signal: controller.signal }
     );
 
     if (!response.ok) {
@@ -78,7 +81,10 @@ export const searchQuran = async (query, options = {}) => {
 
     return result;
   } catch (error) {
-    console.error('Search error:', error);
+    // Only log in development mode
+    if (import.meta.env.DEV) {
+      console.error('Search error:', error);
+    }
     return { results: [], total: 0, query, error: error.message };
   }
 };
@@ -91,7 +97,8 @@ export const searchArabic = async (query, limit = 50) => {
     return { results: [], total: 0, query };
   }
 
-  const cacheKey = `arabic_${query}_${limit}`;
+  // Use :: delimiter to avoid cache key collisions
+  const cacheKey = `search::arabic::${query}::${limit}`;
   if (searchCache[cacheKey]) {
     return searchCache[cacheKey];
   }
@@ -136,7 +143,10 @@ export const searchArabic = async (query, limit = 50) => {
 
     return result;
   } catch (error) {
-    console.error('Arabic search error:', error);
+    // Only log in development mode
+    if (import.meta.env.DEV) {
+      console.error('Arabic search error:', error);
+    }
     return { results: [], total: 0, query, error: error.message };
   }
 };
@@ -149,7 +159,8 @@ export const searchUrdu = async (query, limit = 50) => {
     return { results: [], total: 0, query };
   }
 
-  const cacheKey = `urdu_${query}_${limit}`;
+  // Use :: delimiter to avoid cache key collisions
+  const cacheKey = `search::urdu::${query}::${limit}`;
   if (searchCache[cacheKey]) {
     return searchCache[cacheKey];
   }
@@ -194,7 +205,10 @@ export const searchUrdu = async (query, limit = 50) => {
 
     return result;
   } catch (error) {
-    console.error('Urdu search error:', error);
+    // Only log in development mode
+    if (import.meta.env.DEV) {
+      console.error('Urdu search error:', error);
+    }
     return { results: [], total: 0, query, error: error.message };
   }
 };
@@ -286,8 +300,8 @@ export const addRecentSearch = (query) => {
 
   try {
     localStorage.setItem('quran_recent_searches', JSON.stringify(updated));
-  } catch (error) {
-    console.error('Error saving recent search:', error);
+  } catch {
+    // Silently fail - localStorage may be full or unavailable
   }
 };
 

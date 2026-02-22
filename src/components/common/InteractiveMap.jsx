@@ -340,13 +340,14 @@ const InteractiveMap = memo(function InteractiveMap({
     setUnlockedLocations(data.unlockedLocations || ['makkah']);
   }, [isVisible]);
 
-  // Journey animation
+  // Journey animation - with proper RAF cleanup
   useEffect(() => {
     if (!activeJourney) return;
 
     setJourneyProgress(0);
     const duration = 3000; // 3 seconds
     const startTime = Date.now();
+    let rafId = null;
 
     const animate = () => {
       const elapsed = Date.now() - startTime;
@@ -354,11 +355,16 @@ const InteractiveMap = memo(function InteractiveMap({
       setJourneyProgress(progress);
 
       if (progress < 1) {
-        requestAnimationFrame(animate);
+        rafId = requestAnimationFrame(animate);
       }
     };
 
-    requestAnimationFrame(animate);
+    rafId = requestAnimationFrame(animate);
+
+    // Cleanup: cancel animation frame if activeJourney changes or unmounts
+    return () => {
+      if (rafId) cancelAnimationFrame(rafId);
+    };
   }, [activeJourney]);
 
   const handleMapReady = useCallback((map) => {

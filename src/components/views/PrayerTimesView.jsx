@@ -266,24 +266,42 @@ function PrayerTimesView({ darkMode }) {
     };
   }, []);
 
+  // Store iOS compass handler ref for cleanup
+  const iosCompassHandlerRef = useRef(null);
+
   // Request compass permission (iOS)
   const requestCompassPermission = async () => {
     if (typeof DeviceOrientationEvent.requestPermission === 'function') {
       try {
         const permission = await DeviceOrientationEvent.requestPermission();
         if (permission === 'granted') {
-          window.addEventListener('deviceorientation', (event) => {
+          // Remove old handler if exists
+          if (iosCompassHandlerRef.current) {
+            window.removeEventListener('deviceorientation', iosCompassHandlerRef.current);
+          }
+          // Create and store new handler
+          iosCompassHandlerRef.current = (event) => {
             if (event.webkitCompassHeading !== undefined) {
               setCompassHeading(event.webkitCompassHeading);
               setHasCompass(true);
             }
-          });
+          };
+          window.addEventListener('deviceorientation', iosCompassHandlerRef.current);
         }
-      } catch (err) {
-        console.error('Compass permission denied');
+      } catch {
+        // Compass permission denied - silently fail
       }
     }
   };
+
+  // Cleanup iOS compass handler on unmount
+  useEffect(() => {
+    return () => {
+      if (iosCompassHandlerRef.current) {
+        window.removeEventListener('deviceorientation', iosCompassHandlerRef.current);
+      }
+    };
+  }, []);
 
   // Prayer data with icons
   const prayers = useMemo(() => {

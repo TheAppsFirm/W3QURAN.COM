@@ -2,6 +2,80 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Leaflet Map Fixes - ensure map renders properly */
+.leaflet-container {
+  background: #0f172a !important;
+  z-index: 1;
+  font-family: inherit;
+}
+
+/* Ensure Leaflet tile layer is visible */
+.leaflet-tile-pane {
+  z-index: 200 !important;
+}
+
+.leaflet-overlay-pane {
+  z-index: 400 !important;
+}
+
+.leaflet-marker-pane {
+  z-index: 600 !important;
+}
+
+.leaflet-tooltip-pane {
+  z-index: 650 !important;
+}
+
+.leaflet-popup-pane {
+  z-index: 700 !important;
+}
+
+.leaflet-control-container {
+  z-index: 800 !important;
+}
+
+/* Fix for Leaflet tiles not showing */
+.leaflet-tile {
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+.leaflet-tile-loaded {
+  opacity: 1 !important;
+}
+
+/* Ensure map takes full container size */
+.leaflet-container .leaflet-pane,
+.leaflet-container .leaflet-tile-pane,
+.leaflet-container .leaflet-overlay-pane,
+.leaflet-container .leaflet-shadow-pane,
+.leaflet-container .leaflet-marker-pane,
+.leaflet-container .leaflet-popup-pane {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+/* Override containment for Leaflet - containment breaks map tile positioning */
+.leaflet-container,
+.leaflet-container * {
+  contain: none !important;
+}
+
+/* Ensure Leaflet container has proper dimensions when inside flex layouts */
+.leaflet-container {
+  flex: 1 1 auto;
+  min-height: 300px;
+  height: 100%;
+  width: 100%;
+}
+
+/* Make sure parent containers pass height to Leaflet */
+.leaflet-container.w-full.h-full {
+  position: relative;
+  display: block;
+}
+
 /* CSS Custom Properties for theming */
 :root {
   --primary-gradient: linear-gradient(135deg, #8b5cf6 0%, #06b6d4 100%);
@@ -1093,6 +1167,48 @@ body {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+}
+
+/* Mobile performance optimizations - reduce animation overhead */
+@media (max-width: 768px) {
+  /* Reduce backdrop-filter blur on mobile (expensive) */
+  .glass, .glass-dark {
+    backdrop-filter: blur(6px) !important;
+    -webkit-backdrop-filter: blur(6px) !important;
+  }
+
+  /* Slow down continuous animations to reduce CPU usage */
+  [style*="animation"][style*="infinite"] {
+    animation-duration: calc(var(--animation-duration, 1s) * 1.5) !important;
+  }
+
+  /* Disable expensive filter animations on mobile */
+  @keyframes colorShift {
+    0%, 100% { opacity: 1; }
+  }
+
+  /* Reduce particle animations */
+  .fixed.inset-0.pointer-events-none [class*="animate"] {
+    animation-play-state: paused !important;
+  }
+
+  /* Add CSS containment for better paint performance */
+  .bubble-item, .bubble-inner, [class*="Bubble"] {
+    contain: layout style paint;
+  }
+
+  /* Reduce box-shadow complexity on mobile */
+  [style*="box-shadow"][style*="inset"] {
+    will-change: transform;
+  }
+}
+
+/* Low-power mode / battery saver - minimal animations */
+@media (prefers-reduced-motion: no-preference) and (max-width: 480px) {
+  /* On very small screens, further reduce animations */
+  .shimmer, [class*="shimmer"] {
+    animation: none !important;
   }
 }
 

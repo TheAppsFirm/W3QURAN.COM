@@ -25,21 +25,25 @@ const apiCache = new Map();
  *
  * @param {string} url - API URL to fetch
  * @param {string} cacheKey - Unique key for caching
+ * @param {Object} [options] - Fetch options
+ * @param {AbortSignal} [options.signal] - AbortController signal for cancellation
  * @returns {Promise<any>} - Parsed response data
  * @throws {Error} - On API error or non-OK response
  *
  * @example
+ * const controller = new AbortController();
  * const data = await fetchWithCache(
  *   'https://api.alquran.cloud/v1/surah/1',
- *   'surah-1'
+ *   'surah-1',
+ *   { signal: controller.signal }
  * );
  */
-export async function fetchWithCache(url, cacheKey) {
+export async function fetchWithCache(url, cacheKey, options = {}) {
   if (apiCache.has(cacheKey)) {
     return apiCache.get(cacheKey);
   }
 
-  const response = await fetch(url);
+  const response = await fetch(url, { signal: options.signal });
   if (!response.ok) {
     throw new Error(`API Error: ${response.status}`);
   }
@@ -59,15 +63,17 @@ export async function fetchWithCache(url, cacheKey) {
  *
  * @param {string} url - API URL to fetch
  * @param {string} cacheKey - Unique key for caching
+ * @param {Object} [options] - Fetch options
+ * @param {AbortSignal} [options.signal] - AbortController signal for cancellation
  * @returns {Promise<any>} - Parsed response data
  * @throws {Error} - On API error
  */
-export async function fetchWithCacheSimple(url, cacheKey) {
+export async function fetchWithCacheSimple(url, cacheKey, options = {}) {
   if (apiCache.has(cacheKey)) {
     return apiCache.get(cacheKey);
   }
 
-  const response = await fetch(url);
+  const response = await fetch(url, { signal: options.signal });
   if (!response.ok) {
     throw new Error(`API Error: ${response.status}`);
   }

@@ -263,26 +263,26 @@ const StatsGrid = memo(function StatsGrid({ stats }) {
   );
 });
 
-// Leaderboard Row Component
+// Leaderboard Row Component - Compact pill design on mobile
 const LeaderboardRow = memo(function LeaderboardRow({ entry, isCurrentUser }) {
   const levelColor = LEVELS.find(l => l.level === entry.level)?.color || '#6B7280';
 
   return (
     <div
-      className={`flex items-center gap-3 p-3 rounded-xl transition-all ${
+      className={`flex items-center gap-1.5 sm:gap-3 p-1.5 sm:p-3 rounded-full sm:rounded-xl transition-all ${
         isCurrentUser
           ? 'bg-gradient-to-r from-amber-500/20 to-orange-500/20 border border-amber-500/30'
           : 'bg-white/5 border border-white/5'
       }`}
     >
       {/* Rank */}
-      <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 ${
+      <div className={`w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-[10px] sm:text-xs font-bold flex-shrink-0 ${
         entry.rank === 1 ? 'bg-yellow-500/30 text-yellow-400' :
         entry.rank === 2 ? 'bg-gray-300/30 text-gray-300' :
         entry.rank === 3 ? 'bg-amber-700/30 text-amber-600' :
         'bg-white/10 text-white/60'
       }`}>
-        {entry.rank <= 3 ? ['', '1st', '2nd', '3rd'][entry.rank] : `#${entry.rank}`}
+        {entry.rank <= 3 ? ['', '🥇', '🥈', '🥉'][entry.rank] : entry.rank}
       </div>
 
       {/* Avatar */}
@@ -290,35 +290,36 @@ const LeaderboardRow = memo(function LeaderboardRow({ entry, isCurrentUser }) {
         <img
           src={entry.picture}
           alt=""
-          className="w-10 h-10 rounded-full border-2 flex-shrink-0 object-cover"
+          className="w-7 h-7 sm:w-10 sm:h-10 rounded-full border-2 flex-shrink-0 object-cover"
           style={{ borderColor: levelColor }}
           referrerPolicy="no-referrer"
         />
       ) : (
         <div
-          className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold flex-shrink-0"
+          className="w-7 h-7 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-white text-xs sm:text-base font-bold flex-shrink-0"
           style={{ background: `linear-gradient(135deg, ${levelColor}, ${levelColor}aa)` }}
         >
           {(entry.displayName || 'U')[0]}
         </div>
       )}
 
-      {/* Name + Level */}
+      {/* Name + Level - Hidden level on mobile */}
       <div className="flex-1 min-w-0">
-        <p className="text-white font-medium truncate text-sm">
+        <p className="text-white font-medium truncate text-xs sm:text-sm">
           {entry.displayName}
-          {isCurrentUser && <span className="text-amber-400 text-xs ml-1">(You)</span>}
+          {isCurrentUser && <span className="text-amber-400 text-[10px] sm:text-xs ml-1">(You)</span>}
         </p>
-        <p className="text-xs" style={{ color: levelColor }}>Lv. {entry.level}</p>
+        <p className="text-[10px] sm:text-xs hidden sm:block" style={{ color: levelColor }}>Lv. {entry.level}</p>
       </div>
 
-      {/* XP + Streak */}
-      <div className="text-right flex-shrink-0">
-        <p className="text-white font-bold text-sm">{entry.xp.toLocaleString()} XP</p>
+      {/* XP + Streak - Compact on mobile */}
+      <div className="text-right flex-shrink-0 flex sm:flex-col items-center sm:items-end gap-1 sm:gap-0">
+        <p className="text-white font-bold text-[10px] sm:text-sm">{entry.xp.toLocaleString()}</p>
         {entry.currentStreak > 0 && (
-          <div className="flex items-center gap-1 justify-end text-orange-400 text-xs">
-            <Icons.Fire className="w-3 h-3" />
-            {entry.currentStreak}d
+          <div className="flex items-center gap-0.5 text-orange-400 text-[10px] sm:text-xs">
+            <Icons.Fire className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
+            <span className="hidden sm:inline">{entry.currentStreak}d</span>
+            <span className="sm:hidden">{entry.currentStreak}</span>
           </div>
         )}
       </div>

@@ -110,6 +110,32 @@ const MapController = memo(function MapController({ center }) {
   return null;
 });
 
+// Component to handle map size invalidation - fixes tiles not rendering
+const MapSizeInvalidator = memo(function MapSizeInvalidator() {
+  const map = useMap();
+
+  useEffect(() => {
+    // Invalidate size on mount after a short delay
+    const timer = setTimeout(() => {
+      map.invalidateSize();
+    }, 100);
+
+    // Also invalidate on window resize
+    const handleResize = () => {
+      map.invalidateSize();
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [map]);
+
+  return null;
+});
+
 // Animated pulsing marker for city activity (grouped)
 const CityMarker = memo(function CityMarker({ position, city, onClick }) {
   const totalVisitors = (city.readers || 0) + (city.browsing || 0);
@@ -191,8 +217,6 @@ const VisitorMarker = memo(function VisitorMarker({ visitor }) {
 
 // Real World Map Component using Leaflet
 const RealWorldMap = memo(function RealWorldMap({ cities, liveVisitors, onCityClick, selectedCity }) {
-  const mapRef = useRef(null);
-
   // Holy cities always shown
   const holyCities = [
     { name: 'Makkah', lat: 21.4225, lng: 39.8262, icon: kaabaIcon, description: 'The Holiest City' },
@@ -201,15 +225,17 @@ const RealWorldMap = memo(function RealWorldMap({ cities, liveVisitors, onCityCl
 
   return (
     <MapContainer
-      ref={mapRef}
       center={[25, 45]} // Center on Middle East
       zoom={2}
       minZoom={2}
       maxZoom={12}
-      style={{ height: '100%', width: '100%', background: '#0f172a' }}
+      className="w-full h-full"
+      style={{ minHeight: '300px', background: '#0f172a' }}
       zoomControl={false}
       attributionControl={false}
     >
+      {/* Component to fix map tile rendering */}
+      <MapSizeInvalidator />
       {/* Dark themed map tiles */}
       <TileLayer
         url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
@@ -509,10 +535,10 @@ const GlobalUmmahPulse = memo(function GlobalUmmahPulse({ isVisible, onClose }) 
           </div>
         </div>
 
-        {/* Content */}
-        <div className="flex-1 overflow-hidden flex flex-col sm:flex-row">
-          {/* Map Area */}
-          <div className="flex-1 relative min-h-[300px] sm:min-h-0">
+        {/* Content - map needs overflow visible for tiles */}
+        <div className="flex-1 flex flex-col sm:flex-row min-h-[400px]" style={{ overflow: 'visible' }}>
+          {/* Map Area - ensure minimum height for Leaflet to render */}
+          <div className="flex-1 relative min-h-[300px] sm:min-h-[400px]" style={{ minHeight: '300px', overflow: 'visible' }}>
             <RealWorldMap
               cities={cities}
               liveVisitors={liveVisitors}

@@ -214,7 +214,7 @@ const StatsBar = memo(function StatsBar({
 
   return (
     <>
-      <div className="bg-white/95 backdrop-blur-xl px-3 sm:px-4 py-3 sm:py-4 shadow-lg border-b border-gray-100 relative" style={{ zIndex: 100 }}>
+      <div className="bg-white/95 backdrop-blur-xl px-3 sm:px-4 py-3 sm:py-4 shadow-lg border-b border-gray-100 relative" style={{ zIndex: 100, paddingTop: 'max(env(safe-area-inset-top, 0px), 12px)' }}>
         <div className="max-w-6xl mx-auto flex items-center justify-between gap-2 sm:gap-4">
           {/* Left side - Donation & Notifications */}
           <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
@@ -233,7 +233,7 @@ const StatsBar = memo(function StatsBar({
                 borderRadius: '50%', transform: 'scaleY(0.5)',
               }} />
               <span className="text-base sm:text-xl relative z-10">💝</span>
-              <span className="text-white font-bold tracking-wide text-xs sm:text-sm relative z-10">DONATE</span>
+              <span className="text-white font-bold tracking-wide text-xs sm:text-sm relative z-10 hidden sm:inline">DONATE</span>
             </button>
 
             {/* Notification Bell */}
@@ -244,67 +244,65 @@ const StatsBar = memo(function StatsBar({
 
           {/* Center - Layout & Zoom Controls + Mood & Mind Map */}
           {showControls && (
-            <div className="relative flex-1 min-w-0">
+            <div className="relative flex-1 min-w-0 flex justify-center">
               {/* Left fade indicator */}
               <div className="absolute left-0 top-0 bottom-0 w-6 bg-gradient-to-r from-white/95 to-transparent z-10 pointer-events-none sm:hidden" />
               {/* Right fade indicator */}
               <div className="absolute right-0 top-0 bottom-0 w-6 bg-gradient-to-l from-white/95 to-transparent z-10 pointer-events-none sm:hidden" />
 
-              <div className="flex items-center gap-2 sm:gap-3 overflow-x-auto overflow-y-hidden scrollbar-hide px-1 snap-x snap-mandatory" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', touchAction: 'pan-x' }}>
-              {/* Layout Selector - Bubble Style */}
+              <div className="flex items-center justify-center gap-2 sm:gap-3 overflow-x-auto overflow-y-hidden scrollbar-hide px-1 snap-x snap-mandatory" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', touchAction: 'pan-x' }}>
+              {/* Layout Selector - Same size as BubbleButton */}
               <button
                 ref={layoutBtnRef}
                 onClick={(e) => { e.stopPropagation(); setShowLayoutMenu(!showLayoutMenu); setShowZoomMenu(false); }}
-                className="relative flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-full text-white font-medium transition-all hover:shadow-lg hover:scale-105 overflow-hidden flex-shrink-0 snap-start"
+                className="relative flex items-center justify-center w-10 h-10 sm:w-[54px] sm:h-[54px] rounded-full text-white font-medium transition-all hover:scale-110 overflow-hidden flex-shrink-0 snap-start"
                 style={{
                   background: 'linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%)',
-                  boxShadow: '0 4px 15px rgba(139, 92, 246, 0.4), inset 0 -6px 15px rgba(99, 102, 241, 0.3), inset 0 6px 15px rgba(255,255,255,0.2)',
+                  boxShadow: '0 4px 15px rgba(139, 92, 246, 0.3), inset 0 -8px 15px rgba(99, 102, 241, 0.3), inset 0 8px 15px rgba(255,255,255,0.2)',
                 }}
+                title={currentLayout.label}
               >
                 {/* Glass highlight */}
                 <div
                   className="absolute pointer-events-none"
                   style={{
-                    width: '80%',
-                    height: '40%',
-                    top: '5%',
-                    left: '10%',
-                    background: 'linear-gradient(180deg, rgba(255,255,255,0.3) 0%, transparent 100%)',
+                    width: '70%',
+                    height: '35%',
+                    top: '8%',
+                    left: '15%',
+                    background: 'linear-gradient(180deg, rgba(255,255,255,0.5) 0%, transparent 100%)',
                     borderRadius: '50%',
                     transform: 'scaleY(0.5)',
                   }}
                 />
                 <span className="text-base sm:text-lg relative z-10">{currentLayout.icon}</span>
-                <span className="text-xs sm:text-sm hidden sm:inline relative z-10">{currentLayout.label}</span>
-                <Icons.ChevronDown className={`w-3 h-3 sm:w-4 sm:h-4 transition-transform relative z-10 ${showLayoutMenu ? 'rotate-180' : ''}`} />
               </button>
 
-              {/* Zoom Controls - Bubble Style */}
+              {/* Zoom Controls - Same size as BubbleButton */}
               <button
                 ref={zoomBtnRef}
                 onClick={(e) => { e.stopPropagation(); setShowZoomMenu(!showZoomMenu); setShowLayoutMenu(false); }}
-                className="relative flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-full text-white font-medium transition-all hover:shadow-lg hover:scale-105 overflow-hidden flex-shrink-0 snap-start"
+                className="relative flex items-center justify-center w-10 h-10 sm:w-[54px] sm:h-[54px] rounded-full text-white font-medium transition-all hover:scale-110 overflow-hidden flex-shrink-0 snap-start"
                 style={{
                   background: 'linear-gradient(135deg, #14b8a6 0%, #10b981 100%)',
-                  boxShadow: '0 4px 15px rgba(20, 184, 166, 0.4), inset 0 -6px 15px rgba(16, 185, 129, 0.3), inset 0 6px 15px rgba(255,255,255,0.2)',
+                  boxShadow: '0 4px 15px rgba(20, 184, 166, 0.3), inset 0 -8px 15px rgba(16, 185, 129, 0.3), inset 0 8px 15px rgba(255,255,255,0.2)',
                 }}
+                title="Zoom"
               >
                 {/* Glass highlight */}
                 <div
                   className="absolute pointer-events-none"
                   style={{
-                    width: '80%',
-                    height: '40%',
-                    top: '5%',
-                    left: '10%',
-                    background: 'linear-gradient(180deg, rgba(255,255,255,0.3) 0%, transparent 100%)',
+                    width: '70%',
+                    height: '35%',
+                    top: '8%',
+                    left: '15%',
+                    background: 'linear-gradient(180deg, rgba(255,255,255,0.5) 0%, transparent 100%)',
                     borderRadius: '50%',
                     transform: 'scaleY(0.5)',
                   }}
                 />
-                <Icons.ZoomIn className="w-4 h-4 sm:w-5 sm:h-5 relative z-10" />
-                <span className="text-xs sm:text-sm hidden sm:inline relative z-10">Zoom</span>
-                <Icons.ChevronDown className={`w-3 h-3 sm:w-4 sm:h-4 transition-transform relative z-10 ${showZoomMenu ? 'rotate-180' : ''}`} />
+                <Icons.ZoomIn className="w-5 h-5 sm:w-7 sm:h-7 text-white drop-shadow-lg relative z-10" />
               </button>
 
               {/* World Map Bubble Button */}
@@ -367,29 +365,29 @@ const StatsBar = memo(function StatsBar({
                   <span className="text-white text-xs sm:text-sm font-black drop-shadow-sm">{gamification.level}</span>
                 </div>
 
-                {/* Stats row */}
-                <div className="flex items-center gap-2.5 sm:gap-3 pl-2 pr-3.5 sm:pr-4 py-1.5 sm:py-2">
-                  {/* Level name */}
+                {/* Stats row - Only XP on mobile for more menu room */}
+                <div className="flex items-center gap-1.5 sm:gap-3 pl-1.5 sm:pl-2 pr-2 sm:pr-4 py-1 sm:py-2">
+                  {/* Level name - desktop only */}
                   <span className="font-semibold text-[10px] sm:text-xs hidden sm:block"
                     style={{ color: gamification.levelInfo.current.color }}>
                     {gamification.levelInfo.current.name}
                   </span>
 
-                  {/* Divider */}
+                  {/* Divider - desktop only */}
                   <div className="hidden sm:block w-px h-4 bg-gray-200" />
 
-                  {/* XP */}
-                  <div className="flex items-center gap-1" title={`${gamification.xp} XP`}>
-                    <div className="w-5 h-5 sm:w-5.5 sm:h-5.5 rounded-full flex items-center justify-center"
+                  {/* XP - Always visible, compact on mobile */}
+                  <div className="flex items-center gap-0.5 sm:gap-1" title={`${gamification.xp} XP`}>
+                    <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-full flex items-center justify-center"
                       style={{ background: 'linear-gradient(135deg, #FEF3C7, #FDE68A)', boxShadow: 'inset 0 -1px 2px #D9770620' }}>
-                      <Icons.Star className="w-3 h-3 text-amber-600" />
+                      <Icons.Star className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-amber-600" />
                     </div>
-                    <span className="font-bold text-gray-700 text-[11px] sm:text-xs">{gamification.xp}</span>
+                    <span className="font-bold text-gray-700 text-[10px] sm:text-xs">{gamification.xp}<span className="hidden sm:inline"> XP</span></span>
                   </div>
 
-                  {/* Streak */}
-                  <div className="flex items-center gap-1" title={`${gamification.streak.current}-day streak`}>
-                    <div className={`w-5 h-5 sm:w-5.5 sm:h-5.5 rounded-full flex items-center justify-center ${
+                  {/* Streak - desktop only */}
+                  <div className="hidden sm:flex items-center gap-1" title={`${gamification.streak.current}-day streak`}>
+                    <div className={`w-5 h-5 rounded-full flex items-center justify-center ${
                       gamification.streak.current > 0 ? '' : 'opacity-40'
                     }`}
                       style={{
@@ -405,9 +403,9 @@ const StatsBar = memo(function StatsBar({
                     </span>
                   </div>
 
-                  {/* Achievements */}
-                  <div className="flex items-center gap-1" title={`${gamification.achievements.length} achievements`}>
-                    <div className="w-5 h-5 sm:w-5.5 sm:h-5.5 rounded-full flex items-center justify-center"
+                  {/* Achievements - desktop only */}
+                  <div className="hidden sm:flex items-center gap-1" title={`${gamification.achievements.length} achievements`}>
+                    <div className="w-5 h-5 rounded-full flex items-center justify-center"
                       style={{ background: 'linear-gradient(135deg, #EDE9FE, #DDD6FE)', boxShadow: 'inset 0 -1px 2px #7C3AED15' }}>
                       <Icons.Trophy className="w-3 h-3 text-purple-500" />
                     </div>

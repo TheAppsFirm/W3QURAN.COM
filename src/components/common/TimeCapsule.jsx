@@ -490,20 +490,31 @@ const CapsuleCard = memo(function CapsuleCard({ capsule, onDelete, onNavigate })
   const config = CAPSULE_TYPES[capsule.type] || CAPSULE_TYPES.text;
   const Icon = Icons[config.icon] || Icons.Edit;
 
-  // Load media on expand
+  // Load media on expand - with proper blob URL cleanup
   useEffect(() => {
+    let currentAudioUrl = null;
+    let currentPhotoUrl = null;
+
     if (expanded && capsule.mediaId) {
       getMedia(capsule.mediaId).then((media) => {
         if (media?.blob) {
           const url = URL.createObjectURL(media.blob);
           if (capsule.type === 'voice') {
+            currentAudioUrl = url;
             setAudioUrl(url);
           } else if (capsule.type === 'photo') {
+            currentPhotoUrl = url;
             setPhotoUrl(url);
           }
         }
       });
     }
+
+    // Cleanup: revoke blob URLs when effect re-runs or component unmounts
+    return () => {
+      if (currentAudioUrl) URL.revokeObjectURL(currentAudioUrl);
+      if (currentPhotoUrl) URL.revokeObjectURL(currentPhotoUrl);
+    };
   }, [expanded, capsule.mediaId, capsule.type]);
 
   const date = new Date(capsule.createdAt);

@@ -827,16 +827,31 @@ const createMarkerIcon = (color, size = 28, isSelected = false, iconType = 'defa
   });
 };
 
-// Animated Polyline Component
+// Animated Polyline Component - Uses requestAnimationFrame for smooth animation
 const AnimatedPolyline = memo(({ positions, color, isActive, onClick, name }) => {
   const [offset, setOffset] = useState(0);
+  const rafRef = useRef(null);
+  const lastTimeRef = useRef(0);
 
   useEffect(() => {
-    if (!isActive) return;
-    const interval = setInterval(() => {
-      setOffset(prev => (prev + 1) % 100);
-    }, 50);
-    return () => clearInterval(interval);
+    if (!isActive) {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      return;
+    }
+
+    // Use requestAnimationFrame with throttling to 30fps (33ms) for better performance
+    const animate = (timestamp) => {
+      if (timestamp - lastTimeRef.current >= 33) { // ~30fps instead of 20fps at 50ms
+        setOffset(prev => (prev + 2) % 100); // Move by 2 to compensate for slower rate
+        lastTimeRef.current = timestamp;
+      }
+      rafRef.current = requestAnimationFrame(animate);
+    };
+
+    rafRef.current = requestAnimationFrame(animate);
+    return () => {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    };
   }, [isActive]);
 
   return (

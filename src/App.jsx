@@ -677,15 +677,21 @@ function QuranBubbleApp() {
   }, [isAuthenticated]);
 
   // Track visitor on page load and send heartbeat every 30 seconds
+  // Use ref to store mutable values that don't trigger re-renders
+  const userLocationRef = useRef({ lat: null, lng: null });
+  const userIdRef = useRef(null);
+
   useEffect(() => {
     let heartbeatInterval = null;
-    let userLocation = { lat: null, lng: null };
 
-    // Get user ID
-    let userId = localStorage.getItem('w3quran_user_id');
-    if (!userId) {
-      userId = 'user_' + Math.random().toString(36).slice(2) + Date.now().toString(36);
-      localStorage.setItem('w3quran_user_id', userId);
+    // Get user ID (initialize once)
+    if (!userIdRef.current) {
+      let userId = localStorage.getItem('w3quran_user_id');
+      if (!userId) {
+        userId = 'user_' + Math.random().toString(36).slice(2) + Date.now().toString(36);
+        localStorage.setItem('w3quran_user_id', userId);
+      }
+      userIdRef.current = userId;
     }
 
     // Try to get user's location
@@ -693,14 +699,14 @@ function QuranBubbleApp() {
       if ('geolocation' in navigator) {
         navigator.geolocation.getCurrentPosition(
           (position) => {
-            userLocation = {
+            userLocationRef.current = {
               lat: position.coords.latitude,
               lng: position.coords.longitude,
             };
           },
           () => {
             // Use default if permission denied
-            userLocation = { lat: null, lng: null };
+            userLocationRef.current = { lat: null, lng: null };
           },
           { timeout: 5000, maximumAge: 300000 }
         );
@@ -718,14 +724,14 @@ function QuranBubbleApp() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             type: 'visit',
-            userId,
+            userId: userIdRef.current,
             userAgent: navigator.userAgent,
             referrer: document.referrer || 'direct',
-            lat: userLocation.lat,
-            lng: userLocation.lng,
+            lat: userLocationRef.current.lat,
+            lng: userLocationRef.current.lng,
           }),
         });
-      } catch (error) {
+      } catch {
         // Silently fail
       }
     };
@@ -752,9 +758,9 @@ function QuranBubbleApp() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             type: 'heartbeat',
-            userId,
-            lat: userLocation.lat,
-            lng: userLocation.lng,
+            userId: userIdRef.current,
+            lat: userLocationRef.current.lat,
+            lng: userLocationRef.current.lng,
             status,
             surahId,
             page: path || '/',
@@ -763,10 +769,10 @@ function QuranBubbleApp() {
         // Only parse JSON if response is valid JSON
         const contentType = response.headers.get('content-type');
         if (contentType && contentType.includes('application/json')) {
-          const result = await response.json();
-          console.log('[Heartbeat]', status, result);
+          await response.json();
+          // Heartbeat logged - response processed silently
         }
-      } catch (error) {
+      } catch {
         // Silently fail - don't break the app
       }
     };
