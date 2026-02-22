@@ -12,6 +12,30 @@ import { useAuth } from '../../contexts/AuthContext';
 // Lazy load NotificationBell
 const NotificationBell = lazy(() => import('../common/AnnouncementBanner').then(m => ({ default: m.NotificationBell })));
 
+// Layout options - defined outside component to prevent recreation
+const LAYOUTS = [
+  // Standard layouts
+  { id: 'grid', icon: '⊞', label: 'Grid', category: 'standard' },
+  { id: 'list', icon: '☰', label: 'List', category: 'standard' },
+  { id: 'compact', icon: '▦', label: 'Compact', category: 'standard' },
+  // Kids layouts
+  { id: 'kids-rainbow', icon: '🌈', label: 'Rainbow', category: 'kids' },
+  { id: 'kids-art', icon: '🎨', label: 'Art Studio', category: 'kids' },
+  { id: 'kids-blocks', icon: '🧱', label: 'Blocks', category: 'kids' },
+  { id: 'kids-bubbles', icon: '🫧', label: 'Bubbles', category: 'kids' },
+  // Creative layouts
+  { id: 'spiral', icon: '🌀', label: 'Spiral', category: 'creative' },
+  { id: 'clock', icon: '🕐', label: 'Clock', category: 'creative' },
+  { id: 'honeycomb', icon: '⬡', label: 'Honeycomb', category: 'creative' },
+  { id: 'wave', icon: '🌊', label: 'Wave', category: 'creative' },
+  // Organization layouts
+  { id: 'juzz', icon: '📚', label: 'Juzz', category: 'organize' },
+  { id: 'alphabet', icon: 'ا', label: 'Arabic', category: 'organize' },
+  { id: 'revelation', icon: '📜', label: 'Revelation', category: 'organize' },
+  { id: 'book', icon: '📖', label: 'Book', category: 'organize' },
+  { id: 'length', icon: '📏', label: 'By Length', category: 'organize' },
+];
+
 // Bubble Button Component - unified styling for all StatsBar buttons
 const BubbleButton = memo(function BubbleButton({ icon: Icon, label, color, color2, onClick }) {
   const [isHovered, setIsHovered] = useState(false);
@@ -24,8 +48,7 @@ const BubbleButton = memo(function BubbleButton({ icon: Icon, label, color, colo
       onClick={onClick}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className="relative flex flex-col items-center gap-0.5 transition-all duration-300 flex-shrink-0 snap-start"
-      title={label}
+      className="relative flex flex-col items-center sm:gap-0.5 transition-all duration-300 flex-shrink-0"
     >
       {/* Bubble - w-10 h-10 (40px) on mobile, w-[54px] h-[54px] on desktop */}
       <div
@@ -82,19 +105,6 @@ const BubbleButton = memo(function BubbleButton({ icon: Icon, label, color, colo
             }}
           />
 
-          {/* Clock sweep on hover - desktop only */}
-          {isHovered && (
-            <div className="absolute inset-0 rounded-full overflow-hidden pointer-events-none hidden sm:block">
-              <div
-                style={{
-                  position: 'absolute',
-                  inset: 0,
-                  background: `conic-gradient(from 0deg at 50% 50%, transparent 0deg, rgba(255,255,255,0.3) 0deg, transparent 60deg)`,
-                  animation: 'spinSlow 2s linear infinite',
-                }}
-              />
-            </div>
-          )}
 
           {/* Icon or custom render */}
           <div className="absolute inset-0 flex items-center justify-center">
@@ -153,31 +163,7 @@ const StatsBar = memo(function StatsBar({
   const [layoutMenuPos, setLayoutMenuPos] = useState({ top: 0, left: 0 });
   const [zoomMenuPos, setZoomMenuPos] = useState({ top: 0, left: 0 });
 
-  // All layout options available to everyone
-  const layouts = [
-    // Standard layouts
-    { id: 'grid', icon: '⊞', label: 'Grid', category: 'standard' },
-    { id: 'list', icon: '☰', label: 'List', category: 'standard' },
-    { id: 'compact', icon: '▦', label: 'Compact', category: 'standard' },
-    // Kids layouts (fun & interactive) - moved up for easy access
-    { id: 'kids-rainbow', icon: '🌈', label: 'Rainbow', category: 'kids' },
-    { id: 'kids-art', icon: '🎨', label: 'Art Studio', category: 'kids' },
-    { id: 'kids-blocks', icon: '🧱', label: 'Blocks', category: 'kids' },
-    { id: 'kids-bubbles', icon: '🫧', label: 'Bubbles', category: 'kids' },
-    // Creative layouts
-    { id: 'spiral', icon: '🌀', label: 'Spiral', category: 'creative' },
-    { id: 'clock', icon: '🕐', label: 'Clock', category: 'creative' },
-    { id: 'honeycomb', icon: '⬡', label: 'Honeycomb', category: 'creative' },
-    { id: 'wave', icon: '🌊', label: 'Wave', category: 'creative' },
-    // Organization layouts
-    { id: 'juzz', icon: '📚', label: 'Juzz', category: 'organize' },
-    { id: 'alphabet', icon: 'ا', label: 'Arabic', category: 'organize' },
-    { id: 'revelation', icon: '📜', label: 'Revelation', category: 'organize' },
-    { id: 'book', icon: '📖', label: 'Book', category: 'organize' },
-    { id: 'length', icon: '📏', label: 'By Length', category: 'organize' },
-  ];
-
-  const currentLayout = layouts.find(l => l.id === surahLayout) || layouts[0];
+  const currentLayout = LAYOUTS.find(l => l.id === surahLayout) || LAYOUTS[0];
 
   // Update dropdown positions when opened
   useEffect(() => {
@@ -229,174 +215,83 @@ const StatsBar = memo(function StatsBar({
           {/* Right fade indicator */}
           <div className="absolute right-0 top-0 bottom-0 w-4 bg-gradient-to-l from-white/95 to-transparent z-10 pointer-events-none" />
 
-          <div className="flex items-center justify-start gap-2 sm:gap-3 overflow-x-auto overflow-y-hidden scrollbar-hide px-2 snap-x snap-mandatory" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', touchAction: 'pan-x' }}>
-            {/* Donation button - styled like BubbleButton */}
-            <BubbleButton
-              icon={Icons.Heart}
-              label="Donate"
-              color="#10B981"
-              color2="#14B8A6"
-              onClick={onDonate}
-            />
+          {/* All buttons in a single unified list - ensures consistent spacing */}
+          <ul className="flex items-center gap-0.5 sm:gap-3 md:gap-4 lg:gap-5 overflow-x-auto overflow-y-hidden scrollbar-hide px-2 list-none m-0 p-0" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', touchAction: 'pan-x' }}>
+            {/* Donate */}
+            <li className="flex-shrink-0"><BubbleButton icon={Icons.Heart} label="Donate" color="#10B981" color2="#14B8A6" onClick={onDonate} /></li>
 
-            {/* Notification Bell */}
-            <Suspense fallback={null}>
-              <NotificationBell userTier={isPremium ? 'premium' : 'free'} />
-            </Suspense>
+            {/* Alerts */}
+            <li className="flex-shrink-0"><Suspense fallback={null}><NotificationBell userTier={isPremium ? 'premium' : 'free'} /></Suspense></li>
 
-            {/* Layout Selector - with label like BubbleButton */}
+            {/* Layout */}
             {showControls && (
-              <div className="relative flex flex-col items-center gap-0.5 transition-all duration-300 flex-shrink-0 snap-start">
+              <li className="flex-shrink-0">
                 <button
                   ref={layoutBtnRef}
                   onClick={(e) => { e.stopPropagation(); setShowLayoutMenu(!showLayoutMenu); setShowZoomMenu(false); }}
-                  className="relative flex items-center justify-center w-10 h-10 sm:w-[54px] sm:h-[54px] rounded-full text-white font-medium transition-all hover:scale-110 overflow-hidden"
-                  style={{
-                    background: 'linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%)',
-                    boxShadow: '0 4px 15px rgba(139, 92, 246, 0.3), inset 0 -8px 15px rgba(99, 102, 241, 0.3), inset 0 8px 15px rgba(255,255,255,0.2)',
-                  }}
-                  title={currentLayout.label}
+                  className="relative flex flex-col items-center sm:gap-0.5"
                 >
-                  <div className="absolute pointer-events-none" style={{
-                    width: '70%', height: '35%', top: '8%', left: '15%',
-                    background: 'linear-gradient(180deg, rgba(255,255,255,0.5) 0%, transparent 100%)',
-                    borderRadius: '50%', transform: 'scaleY(0.5)',
-                  }} />
-                  <span className="text-base sm:text-lg relative z-10">{currentLayout.icon}</span>
+                  <div className="relative w-10 h-10 sm:w-[54px] sm:h-[54px] rounded-full overflow-hidden transition-all hover:scale-110"
+                    style={{
+                      background: 'linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%)',
+                      boxShadow: '0 4px 15px rgba(139, 92, 246, 0.3), inset 0 -8px 15px rgba(99, 102, 241, 0.3), inset 0 8px 15px rgba(255,255,255,0.2)',
+                    }}>
+                    <div className="absolute pointer-events-none" style={{ width: '70%', height: '35%', top: '8%', left: '15%', background: 'linear-gradient(180deg, rgba(255,255,255,0.5) 0%, transparent 100%)', borderRadius: '50%', transform: 'scaleY(0.5)' }} />
+                    <div className="absolute pointer-events-none" style={{ width: '18%', height: '12%', top: '15%', left: '22%', background: 'radial-gradient(ellipse, rgba(255,255,255,0.9) 0%, transparent 70%)', borderRadius: '50%' }} />
+                    <div className="absolute inset-0 flex items-center justify-center"><span className="text-base sm:text-lg text-white drop-shadow-lg">{currentLayout.icon}</span></div>
+                  </div>
+                  <span className="text-[9px] font-semibold text-gray-500 hidden sm:block">Layout</span>
                 </button>
-                <span className="text-[9px] font-semibold text-gray-500 hidden sm:block">Layout</span>
-              </div>
+              </li>
             )}
 
-            {/* Zoom Controls - with label like BubbleButton */}
+            {/* Zoom */}
             {showControls && (
-              <div className="relative flex flex-col items-center gap-0.5 transition-all duration-300 flex-shrink-0 snap-start">
+              <li className="flex-shrink-0">
                 <button
                   ref={zoomBtnRef}
                   onClick={(e) => { e.stopPropagation(); setShowZoomMenu(!showZoomMenu); setShowLayoutMenu(false); }}
-                  className="relative flex items-center justify-center w-10 h-10 sm:w-[54px] sm:h-[54px] rounded-full text-white font-medium transition-all hover:scale-110 overflow-hidden"
-                  style={{
-                    background: 'linear-gradient(135deg, #14b8a6 0%, #10b981 100%)',
-                    boxShadow: '0 4px 15px rgba(20, 184, 166, 0.3), inset 0 -8px 15px rgba(16, 185, 129, 0.3), inset 0 8px 15px rgba(255,255,255,0.2)',
-                  }}
-                  title="Zoom"
+                  className="relative flex flex-col items-center sm:gap-0.5"
                 >
-                  <div className="absolute pointer-events-none" style={{
-                    width: '70%', height: '35%', top: '8%', left: '15%',
-                    background: 'linear-gradient(180deg, rgba(255,255,255,0.5) 0%, transparent 100%)',
-                    borderRadius: '50%', transform: 'scaleY(0.5)',
-                  }} />
-                  <Icons.ZoomIn className="w-5 h-5 sm:w-7 sm:h-7 text-white drop-shadow-lg relative z-10" />
+                  <div className="relative w-10 h-10 sm:w-[54px] sm:h-[54px] rounded-full overflow-hidden transition-all hover:scale-110"
+                    style={{
+                      background: 'linear-gradient(135deg, #14b8a6 0%, #10b981 100%)',
+                      boxShadow: '0 4px 15px rgba(20, 184, 166, 0.3), inset 0 -8px 15px rgba(16, 185, 129, 0.3), inset 0 8px 15px rgba(255,255,255,0.2)',
+                    }}>
+                    <div className="absolute pointer-events-none" style={{ width: '70%', height: '35%', top: '8%', left: '15%', background: 'linear-gradient(180deg, rgba(255,255,255,0.5) 0%, transparent 100%)', borderRadius: '50%', transform: 'scaleY(0.5)' }} />
+                    <div className="absolute pointer-events-none" style={{ width: '18%', height: '12%', top: '15%', left: '22%', background: 'radial-gradient(ellipse, rgba(255,255,255,0.9) 0%, transparent 70%)', borderRadius: '50%' }} />
+                    <div className="absolute inset-0 flex items-center justify-center"><Icons.ZoomIn className="w-5 h-5 sm:w-7 sm:h-7 text-white drop-shadow-lg" /></div>
+                  </div>
+                  <span className="text-[9px] font-semibold text-gray-500 hidden sm:block">Zoom</span>
                 </button>
-                <span className="text-[9px] font-semibold text-gray-500 hidden sm:block">Zoom</span>
-              </div>
+              </li>
             )}
 
-            {/* World Map Bubble Button */}
-            {showControls && onWorldMap && (
-              <BubbleButton
-                icon={Icons.Globe3D}
-                label="Map"
-                color="#0EA5E9"
-                color2="#0284C7"
-                onClick={onWorldMap}
-              />
-            )}
+            {/* Map */}
+            {showControls && onWorldMap && (<li className="flex-shrink-0"><BubbleButton icon={Icons.Globe3D} label="Map" color="#0EA5E9" color2="#0284C7" onClick={onWorldMap} /></li>)}
 
-            {/* Global Ummah Pulse Bubble Button */}
-            {showControls && onGlobalPulse && (
-              <BubbleButton
-                icon={Icons.GlobalPulse}
-                label="Ummah"
-                color="#10B981"
-                color2="#059669"
-                onClick={onGlobalPulse}
-              />
-            )}
+            {/* Ummah */}
+            {showControls && onGlobalPulse && (<li className="flex-shrink-0"><BubbleButton icon={Icons.GlobalPulse} label="Ummah" color="#10B981" color2="#059669" onClick={onGlobalPulse} /></li>)}
 
-            {/* Weather Sync Bubble Button */}
-            {showControls && onWeatherSync && (
-              <BubbleButton
-                icon={Icons.CloudSun}
-                label="Weather"
-                color="#3B82F6"
-                color2="#2563EB"
-                onClick={onWeatherSync}
-              />
-            )}
+            {/* Weather */}
+            {showControls && onWeatherSync && (<li className="flex-shrink-0"><BubbleButton icon={Icons.CloudSun} label="Weather" color="#3B82F6" color2="#2563EB" onClick={onWeatherSync} /></li>)}
 
-            {/* Gamification Stats - Styled exactly like BubbleButton */}
+            {/* Gamification Stats */}
             {gamification.isActive ? (
               <>
-                {/* Level Bubble */}
-                <BubbleButton
-                  icon={() => <span className="text-white text-sm sm:text-lg font-black drop-shadow-lg">{gamification.level}</span>}
-                  label="Level"
-                  color={gamification.levelInfo.current.color}
-                  color2={`${gamification.levelInfo.current.color}cc`}
-                  onClick={onShowAchievements}
-                />
-
-                {/* XP Bubble */}
-                <BubbleButton
-                  icon={Icons.Star}
-                  label={`${gamification.xp} XP`}
-                  color="#F59E0B"
-                  color2="#D97706"
-                  onClick={onShowAchievements}
-                />
-
-                {/* Streak Bubble */}
-                <BubbleButton
-                  icon={Icons.Fire}
-                  label={`${gamification.streak.current} Days`}
-                  color={gamification.streak.current > 0 ? '#F97316' : '#94A3B8'}
-                  color2={gamification.streak.current > 0 ? '#EA580C' : '#64748B'}
-                  onClick={onShowAchievements}
-                />
-
-                {/* Trophy Bubble */}
-                <BubbleButton
-                  icon={Icons.Trophy}
-                  label={`${gamification.achievements.length} Won`}
-                  color="#A855F7"
-                  color2="#9333EA"
-                  onClick={onShowAchievements}
-                />
+                <li className="flex-shrink-0"><BubbleButton icon={() => <span className="text-white text-sm sm:text-lg font-black drop-shadow-lg">{gamification.level}</span>} label="Level" color={gamification.levelInfo.current.color} color2={`${gamification.levelInfo.current.color}cc`} onClick={onShowAchievements} /></li>
+                <li className="flex-shrink-0"><BubbleButton icon={Icons.Star} label={`${gamification.xp} XP`} color="#F59E0B" color2="#D97706" onClick={onShowAchievements} /></li>
+                <li className="flex-shrink-0"><BubbleButton icon={Icons.Fire} label={`${gamification.streak.current} Days`} color={gamification.streak.current > 0 ? '#F97316' : '#94A3B8'} color2={gamification.streak.current > 0 ? '#EA580C' : '#64748B'} onClick={onShowAchievements} /></li>
+                <li className="flex-shrink-0"><BubbleButton icon={Icons.Trophy} label={`${gamification.achievements.length} Won`} color="#A855F7" color2="#9333EA" onClick={onShowAchievements} /></li>
               </>
             ) : (
               <>
-                {/* Inactive state - show faded bubbles, no wrapper div to preserve spacing */}
-                <div className="opacity-50">
-                  <BubbleButton
-                    icon={Icons.Star}
-                    label="XP"
-                    color="#F59E0B"
-                    color2="#D97706"
-                    onClick={() => {}}
-                  />
-                </div>
-                <div className="opacity-50">
-                  <BubbleButton
-                    icon={Icons.Fire}
-                    label="Streak"
-                    color="#94A3B8"
-                    color2="#64748B"
-                    onClick={() => {}}
-                  />
-                </div>
-                <div className="opacity-50">
-                  <BubbleButton
-                    icon={Icons.Trophy}
-                    label="Awards"
-                    color="#A855F7"
-                    color2="#9333EA"
-                    onClick={() => {}}
-                  />
-                </div>
+                <li className="flex-shrink-0 opacity-50"><BubbleButton icon={Icons.Star} label="XP" color="#F59E0B" color2="#D97706" onClick={() => {}} /></li>
+                <li className="flex-shrink-0 opacity-50"><BubbleButton icon={Icons.Fire} label="Streak" color="#94A3B8" color2="#64748B" onClick={() => {}} /></li>
+                <li className="flex-shrink-0 opacity-50"><BubbleButton icon={Icons.Trophy} label="Awards" color="#A855F7" color2="#9333EA" onClick={() => {}} /></li>
               </>
             )}
-          </div>
+          </ul>
         </div>
 
         {/* XP Progress bar to next level */}
@@ -462,7 +357,7 @@ const StatsBar = memo(function StatsBar({
             <div className="text-white/60 text-[10px] font-bold uppercase tracking-wider px-3 py-2 flex items-center gap-2">
               <span>📋</span> Standard
             </div>
-            {layouts.filter(l => l.category === 'standard').map((layout) => (
+            {LAYOUTS.filter(l => l.category === 'standard').map((layout) => (
               <button
                 key={layout.id}
                 onClick={() => { setSurahLayout(layout.id); setShowLayoutMenu(false); }}
@@ -482,7 +377,7 @@ const StatsBar = memo(function StatsBar({
             <div className="text-white/60 text-[10px] font-bold uppercase tracking-wider px-3 py-2 mt-2 flex items-center gap-2 border-t border-white/10 pt-3">
               <span>👶</span> Kids Mode
             </div>
-            {layouts.filter(l => l.category === 'kids').map((layout) => (
+            {LAYOUTS.filter(l => l.category === 'kids').map((layout) => (
               <button
                 key={layout.id}
                 onClick={() => { setSurahLayout(layout.id); setShowLayoutMenu(false); }}
@@ -502,7 +397,7 @@ const StatsBar = memo(function StatsBar({
             <div className="text-white/60 text-[10px] font-bold uppercase tracking-wider px-3 py-2 mt-2 flex items-center gap-2 border-t border-white/10 pt-3">
               <span>✨</span> Creative
             </div>
-            {layouts.filter(l => l.category === 'creative').map((layout) => (
+            {LAYOUTS.filter(l => l.category === 'creative').map((layout) => (
               <button
                 key={layout.id}
                 onClick={() => { setSurahLayout(layout.id); setShowLayoutMenu(false); }}
@@ -522,7 +417,7 @@ const StatsBar = memo(function StatsBar({
             <div className="text-white/60 text-[10px] font-bold uppercase tracking-wider px-3 py-2 mt-2 flex items-center gap-2 border-t border-white/10 pt-3">
               <span>📁</span> Organize
             </div>
-            {layouts.filter(l => l.category === 'organize').map((layout) => (
+            {LAYOUTS.filter(l => l.category === 'organize').map((layout) => (
               <button
                 key={layout.id}
                 onClick={() => { setSurahLayout(layout.id); setShowLayoutMenu(false); }}

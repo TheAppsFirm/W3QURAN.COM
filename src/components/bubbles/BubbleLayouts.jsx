@@ -355,7 +355,7 @@ export const ClockLayout = memo(function ClockLayout({
           width: 140 * zoom,
           height: 140 * zoom,
           background: 'radial-gradient(circle, rgba(139,92,246,0.4) 0%, rgba(99,102,241,0.2) 40%, transparent 70%)',
-          animation: 'breathe 3s ease-in-out infinite',
+          animation: 'subtlePulse 8s ease-in-out infinite',
           boxShadow: '0 0 60px rgba(139,92,246,0.3), inset 0 0 40px rgba(255,255,255,0.1)',
         }}
       />
@@ -393,8 +393,8 @@ export const ClockLayout = memo(function ClockLayout({
               style={{
                 left: x,
                 top: y,
-                animation: `gentleFloat ${3 + (index % 3)}s ease-in-out infinite`,
-                animationDelay: `${index * 0.08}s`,
+                animation: 'subtlePulse 8s ease-in-out infinite',
+                // animationDelay removed
               }}
             >
               <StyledBubble
@@ -459,8 +459,8 @@ export const GridLayout = memo(function GridLayout({
             style={{
               width: bubbleSize,
               height: bubbleSize + 20,
-              animation: `gentleFloat ${2.5 + (index % 4) * 0.5}s ease-in-out infinite`,
-              animationDelay: `${(index % 10) * 0.1}s`,
+              animation: 'subtlePulse 8s ease-in-out infinite',
+              // animationDelay removed
             }}
             onClick={(e) => onSurahClick(surah, { x: e.clientX, y: e.clientY })}
           >
@@ -628,8 +628,8 @@ export const JuzzGroupLayout = memo(function JuzzGroupLayout({
                   <div
                     key={surah.id}
                     style={{
-                      animation: `gentleFloat ${2.5 + (index % 3) * 0.3}s ease-in-out infinite`,
-                      animationDelay: `${index * 0.05}s`,
+                      animation: 'subtlePulse 8s ease-in-out infinite',
+                      // animationDelay removed
                     }}
                   >
                     <StyledBubble
@@ -738,7 +738,7 @@ export const AlphabetLayout = memo(function AlphabetLayout({
                     style={{
                       width: size,
                       height: size + 15,
-                      animation: `gentleFloat ${2.5 + (index % 3) * 0.3}s ease-in-out infinite`,
+                      animation: 'subtlePulse 8s ease-in-out infinite',
                     }}
                     onClick={(e) => onSurahClick(surah, { x: e.clientX, y: e.clientY })}
                   >
@@ -829,7 +829,7 @@ export const RevelationLayout = memo(function RevelationLayout({
                 style={{
                   width: size,
                   height: size + 20,
-                  animation: `gentleFloat ${2.5 + (index % 4) * 0.3}s ease-in-out infinite`,
+                  animation: 'subtlePulse 8s ease-in-out infinite',
                 }}
                 onClick={(e) => onSurahClick(surah, { x: e.clientX, y: e.clientY })}
               >
@@ -899,7 +899,7 @@ export const RevelationLayout = memo(function RevelationLayout({
                 style={{
                   width: size,
                   height: size + 20,
-                  animation: `gentleFloat ${2.5 + (index % 4) * 0.3}s ease-in-out infinite`,
+                  animation: 'subtlePulse 8s ease-in-out infinite',
                 }}
                 onClick={(e) => onSurahClick(surah, { x: e.clientX, y: e.clientY })}
               >
@@ -1424,7 +1424,7 @@ export const WaveLayout = memo(function WaveLayout({
                 width: size,
                 height: size + 20,
                 transform: `translateY(${waveOffset}px)`,
-                animation: `gentleFloat ${2 + (index % 5) * 0.5}s ease-in-out infinite`,
+                animation: 'subtlePulse 8s ease-in-out infinite',
               }}
             >
               <div
@@ -1687,8 +1687,8 @@ export const KidsLayout = memo(function KidsLayout({
               style={{
                 width: size,
                 height: size + 35,
-                animation: `gentleFloat ${2.5 + (index % 4) * 0.4}s ease-in-out infinite`,
-                animationDelay: `${index * 0.05}s`,
+                animation: 'subtlePulse 8s ease-in-out infinite',
+                // animationDelay removed
               }}
             >
               {/* Surah number badge - OUTSIDE the bubble to not get cut */}
@@ -1999,8 +1999,8 @@ export const ArtLayout = memo(function ArtLayout({
               style={{
                 width: size,
                 height: size + 35,
-                animation: `gentleFloat ${2.5 + (index % 4) * 0.4}s ease-in-out infinite`,
-                animationDelay: `${index * 0.03}s`,
+                animation: 'subtlePulse 8s ease-in-out infinite',
+                // animationDelay removed
               }}
             >
               {/* Art frame decoration */}

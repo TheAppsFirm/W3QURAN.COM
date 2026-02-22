@@ -31,6 +31,35 @@ body {
   overflow: hidden;
 }
 
+/* Mobile Performance Optimizations */
+@media (max-width: 768px) {
+  * {
+    /* Reduce animation complexity on mobile */
+    animation-duration: 0.2s !important;
+  }
+
+  /* Disable expensive effects on mobile */
+  .no-mobile-blur {
+    filter: none !important;
+    backdrop-filter: none !important;
+  }
+}
+
+/* GPU acceleration hints */
+.gpu-accelerated {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 /* Safe area utility classes for modals/overlays */
 .safe-area-padding {
   padding-top: env(safe-area-inset-top, 0px);
@@ -477,6 +506,16 @@ nav[aria-label="Main navigation"] * {
   50% {
     transform: scale(1.05);
     opacity: 1;
+  }
+}
+
+/* Very subtle pulse - barely noticeable, good for mobile */
+@keyframes subtlePulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.95;
   }
 }
 

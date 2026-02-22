@@ -28,7 +28,7 @@ const BubbleMenuItem = ({ item, active, onClick, delay = 0, darkMode }) => {
       onMouseLeave={() => setIsHovered(false)}
       className="relative flex flex-col items-center gap-0.5 sm:gap-1 transition-all duration-300"
       style={{
-        animation: `bubblePopIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) ${delay}ms both`,
+        // No jumping animation - smooth appearance
       }}
       aria-label={`Go to ${item.label}`}
       aria-current={active ? 'page' : undefined}
@@ -357,7 +357,6 @@ function FloatingMenu({ view, setView, darkMode, onDonate, onMindMap, onMood, on
                     width: 48,
                     height: 48,
                     transform: `scale(${active ? 1.15 : 1})`,
-                    animation: item.isKids ? 'kidsBounce 2s ease-in-out infinite' : 'none',
                   }}
                 >
                   {/* Outer glow */}
@@ -439,15 +438,6 @@ function FloatingMenu({ view, setView, darkMode, onDonate, onMindMap, onMood, on
         @keyframes slideUp {
           from { opacity: 0; transform: translateX(-50%) translateY(20px) scale(0.95); }
           to { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
-        }
-        @keyframes bubblePopIn {
-          0% { opacity: 0; transform: scale(0); }
-          70% { transform: scale(1.1); }
-          100% { opacity: 1; transform: scale(1); }
-        }
-        @keyframes kidsBounce {
-          0%, 100% { transform: scale(1) translateY(0); }
-          50% { transform: scale(1.05) translateY(-2px); }
         }
       `}</style>
     </nav>

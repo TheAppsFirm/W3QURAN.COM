@@ -45,6 +45,7 @@ export const NotificationBell = ({ userTier = 'free' }) => {
   const [announcements, setAnnouncements] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [dismissed, setDismissed] = useState({});
+  const [isHovered, setIsHovered] = useState(false);
 
   // Load dismissed state
   useEffect(() => {
@@ -86,50 +87,105 @@ export const NotificationBell = ({ userTier = 'free' }) => {
 
   const unreadCount = announcements.filter(a => !dismissed[a.id]).length;
 
-  const typeColors = {
-    info: 'from-blue-500 to-cyan-500',
-    warning: 'from-amber-500 to-orange-500',
-    success: 'from-emerald-500 to-teal-500',
-    promo: 'from-purple-500 to-pink-500',
-  };
-
   return (
     <>
-      {/* Bell Button - Styled like BubbleButton with label */}
-      <div className="relative flex flex-col items-center gap-0.5 transition-all duration-300 flex-shrink-0 snap-start">
-        <button
-          onClick={() => {
-            fetchAnnouncements(); // Fetch fresh data when opening
-            setIsOpen(true);
-          }}
-          className="relative flex items-center justify-center w-10 h-10 sm:w-[54px] sm:h-[54px] rounded-full shadow-lg hover:shadow-xl hover:scale-110 transition-all cursor-pointer overflow-hidden"
+      {/* Bell Button - Styled exactly like BubbleButton */}
+      <button
+        onClick={() => {
+          fetchAnnouncements(); // Fetch fresh data when opening
+          setIsOpen(true);
+        }}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        className="relative flex flex-col items-center sm:gap-0.5 transition-all duration-300 flex-shrink-0"
+        title="Notifications"
+      >
+        {/* Bubble - w-10 h-10 (40px) on mobile, w-[54px] h-[54px] on desktop */}
+        <div
+          className="relative transition-all duration-300 w-10 h-10 sm:w-[54px] sm:h-[54px]"
           style={{
-            background: 'linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%)',
-            boxShadow: '0 4px 15px rgba(139, 92, 246, 0.4), inset 0 -8px 15px rgba(168, 85, 247, 0.3), inset 0 8px 15px rgba(255,255,255,0.2)',
+            transform: `scale(${isHovered ? 1.1 : 1})`,
           }}
-          title="Notifications"
         >
-          {/* Glass highlight */}
-          <div className="absolute pointer-events-none" style={{
-            width: '70%', height: '35%', top: '8%', left: '15%',
-            background: 'linear-gradient(180deg, rgba(255,255,255,0.5) 0%, transparent 100%)',
-            borderRadius: '50%', transform: 'scaleY(0.5)',
-          }} />
-          {/* Small bright spot */}
-          <div className="absolute pointer-events-none" style={{
-            width: '18%', height: '12%', top: '15%', left: '22%',
-            background: 'radial-gradient(ellipse, rgba(255,255,255,0.9) 0%, transparent 70%)',
-            borderRadius: '50%',
-          }} />
-          <Icons.Bell className="w-5 h-5 sm:w-7 sm:h-7 text-white drop-shadow-lg relative z-10" />
+          {/* Outer glow */}
+          <div
+            className="absolute rounded-full pointer-events-none transition-all duration-500 hidden sm:block"
+            style={{
+              inset: '-15%',
+              background: 'radial-gradient(circle at 50% 50%, rgba(139, 92, 246, 0.5) 0%, transparent 70%)',
+              opacity: isHovered ? 1 : 0,
+              filter: 'blur(8px)',
+            }}
+          />
+
+          {/* Main bubble */}
+          <div
+            className="absolute inset-0 rounded-full overflow-hidden transition-all duration-300"
+            style={{
+              background: 'linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%)',
+              boxShadow: isHovered
+                ? '0 0 20px rgba(139, 92, 246, 0.5), 0 6px 20px rgba(0,0,0,0.3), inset 0 -10px 20px rgba(168, 85, 247, 0.4), inset 0 10px 20px rgba(255,255,255,0.25)'
+                : '0 4px 15px rgba(139, 92, 246, 0.3), inset 0 -8px 15px rgba(168, 85, 247, 0.3), inset 0 8px 15px rgba(255,255,255,0.2)',
+            }}
+          >
+            {/* Glass highlight */}
+            <div
+              className="absolute pointer-events-none"
+              style={{
+                width: '70%',
+                height: '35%',
+                top: '8%',
+                left: '15%',
+                background: 'linear-gradient(180deg, rgba(255,255,255,0.5) 0%, transparent 100%)',
+                borderRadius: '50%',
+                transform: 'scaleY(0.5)',
+              }}
+            />
+
+            {/* Small bright spot */}
+            <div
+              className="absolute pointer-events-none"
+              style={{
+                width: '18%',
+                height: '12%',
+                top: '15%',
+                left: '22%',
+                background: 'radial-gradient(ellipse, rgba(255,255,255,0.9) 0%, transparent 70%)',
+                borderRadius: '50%',
+              }}
+            />
+
+
+            {/* Icon */}
+            <div className="absolute inset-0 flex items-center justify-center">
+              <Icons.Bell className="w-5 h-5 sm:w-7 sm:h-7 text-white drop-shadow-lg" />
+            </div>
+          </div>
+
+          {/* Outer border */}
+          <div
+            className="absolute inset-0 rounded-full pointer-events-none transition-all duration-300"
+            style={{
+              border: `1.5px solid ${isHovered ? 'rgba(255,255,255,0.5)' : 'rgba(255,255,255,0.2)'}`,
+            }}
+          />
+
+          {/* Unread badge */}
           {unreadCount > 0 && (
             <span className="absolute -top-0.5 -right-0.5 w-5 h-5 bg-gradient-to-r from-red-500 to-pink-500 rounded-full flex items-center justify-center text-[10px] font-bold text-white shadow-lg border-2 border-white z-20">
               {unreadCount > 9 ? '9+' : unreadCount}
             </span>
           )}
-        </button>
-        <span className="text-[9px] font-semibold text-gray-500 hidden sm:block">Alerts</span>
-      </div>
+        </div>
+
+        {/* Label - hidden on mobile */}
+        <span
+          className="text-[9px] font-semibold transition-colors duration-300 hidden sm:block whitespace-nowrap"
+          style={{ color: isHovered ? '#8b5cf6' : '#64748b' }}
+        >
+          Alerts
+        </span>
+      </button>
 
       {/* Centered Modal - Clean & Easy to Read */}
       {isOpen && createPortal(
