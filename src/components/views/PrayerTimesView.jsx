@@ -3,7 +3,7 @@
  * Enhanced Prayer Times with Worldwide API support, Hijri Calendar, Ramadan Mode, Qibla Direction
  */
 
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { Icons } from '../common/Icons';
 import { useLocalStorage } from '../../hooks';
 
