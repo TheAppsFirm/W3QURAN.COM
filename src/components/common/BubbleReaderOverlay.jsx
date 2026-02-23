@@ -95,8 +95,10 @@ const sanitizeHTML = (html) => {
   return temp.innerHTML;
 };
 
-// Audio CDN
+// Audio CDNs with fallback
 const AUDIO_CDN = 'https://cdn.islamic.network/quran/audio/128';
+const AUDIO_CDN_BACKUP = 'https://cdn.islamic.network/quran/audio/64'; // Lower bitrate fallback
+const MAX_AUDIO_RETRIES = 2;
 
 // Reciters
 const RECITERS = {
@@ -2953,19 +2955,45 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
     playCombinedTranslationRef.current = playCombinedTranslation;
   }, [playCombinedTranslation]);
 
+  // Audio retry counter ref
+  const audioRetryCountRef = useRef(0);
+
   // Audio setup - runs once on mount, uses refs for callbacks
   useEffect(() => {
     const audio = new Audio();
     audio.preload = 'auto';
     audioRef.current = audio;
 
-    const handleCanPlay = () => { setAudioLoading(false); setAudioError(null); };
+    const handleCanPlay = () => {
+      setAudioLoading(false);
+      setAudioError(null);
+      audioRetryCountRef.current = 0; // Reset retry count on success
+    };
     const handleLoadStart = () => { setAudioLoading(true); setAudioError(null); };
     const handleError = (e) => {
+      const retryCount = audioRetryCountRef.current;
+      const currentSrc = audio.src || '';
+
+      // Retry with backup CDN if we haven't exceeded max retries
+      if (retryCount < MAX_AUDIO_RETRIES) {
+        audioRetryCountRef.current = retryCount + 1;
+        console.log(`[Audio] Retry ${retryCount + 1}/${MAX_AUDIO_RETRIES} - switching to backup CDN`);
+
+        // Try backup CDN (lower bitrate)
+        const newSrc = currentSrc.replace(AUDIO_CDN, AUDIO_CDN_BACKUP);
+        if (newSrc !== currentSrc) {
+          audio.src = newSrc;
+          audio.load();
+          return; // Don't show error yet, retry in progress
+        }
+      }
+
+      // All retries failed
       logger.audioError(surah?.id, currentAyahRef.current, e?.message || 'Failed to load audio');
-      setAudioError('Failed to load audio');
+      setAudioError('Failed to load audio. Please check your connection.');
       setAudioLoading(false);
       setIsPlaying(false);
+      audioRetryCountRef.current = 0; // Reset for next attempt
     };
     const handleEnded = () => {
       const repeat = repeatModeRef.current;
