@@ -95,10 +95,8 @@ const sanitizeHTML = (html) => {
   return temp.innerHTML;
 };
 
-// Audio CDNs with fallback
+// Audio CDN (with 64kbps fallback on error - handled in error handler)
 const AUDIO_CDN = 'https://cdn.islamic.network/quran/audio/128';
-const AUDIO_CDN_BACKUP = 'https://cdn.islamic.network/quran/audio/64'; // Lower bitrate fallback
-const MAX_AUDIO_RETRIES = 2;
 
 // Reciters
 const RECITERS = {
@@ -2974,21 +2972,17 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
       const retryCount = audioRetryCountRef.current;
       const currentSrc = audio.src || '';
 
-      // Retry with backup CDN if we haven't exceeded max retries
-      if (retryCount < MAX_AUDIO_RETRIES) {
-        audioRetryCountRef.current = retryCount + 1;
-        console.log(`[Audio] Retry ${retryCount + 1}/${MAX_AUDIO_RETRIES} - switching to backup CDN`);
-
-        // Try backup CDN (lower bitrate)
-        const newSrc = currentSrc.replace(AUDIO_CDN, AUDIO_CDN_BACKUP);
-        if (newSrc !== currentSrc) {
-          audio.src = newSrc;
-          audio.load();
-          return; // Don't show error yet, retry in progress
-        }
+      // Try backup CDN on first failure (only if using primary CDN)
+      if (retryCount === 0 && currentSrc.includes('/audio/128/')) {
+        audioRetryCountRef.current = 1;
+        console.log('[Audio] Primary CDN failed, trying backup CDN (64kbps)');
+        const backupSrc = currentSrc.replace('/audio/128/', '/audio/64/');
+        audio.src = backupSrc;
+        audio.load();
+        return; // Don't show error yet, retry in progress
       }
 
-      // All retries failed
+      // Backup CDN also failed - show error
       logger.audioError(surah?.id, currentAyahRef.current, e?.message || 'Failed to load audio');
       setAudioError('Failed to load audio. Please check your connection.');
       setAudioLoading(false);
