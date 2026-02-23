@@ -30,6 +30,8 @@ const SeertEventCard = ({
   onPrevious,
   hasNext = false,
   hasPrevious = false,
+  onComplete,
+  isCompleted = false,
 }) => {
   const [currentPage, setCurrentPage] = useState(0);
   const [isReading, setIsReading] = useState(false);
@@ -244,11 +246,20 @@ const SeertEventCard = ({
         setShowMoral(true);
         setIsAnimating(false);
       }, 200);
-    } else if (hasNext) {
-      // Go to next event
-      onNext?.();
-      setCurrentPage(0);
-      setShowMoral(false);
+    } else if (showMoral) {
+      // Story completed - trigger completion callback
+      if (!isCompleted && onComplete) {
+        onComplete(event.id);
+      }
+      if (hasNext) {
+        // Go to next event
+        onNext?.();
+        setCurrentPage(0);
+        setShowMoral(false);
+      } else {
+        // No more stories - close the card
+        onClose?.();
+      }
     }
   };
 
@@ -340,9 +351,16 @@ const SeertEventCard = ({
       >
         {/* Header with event info */}
         <div
-          className="p-4 sm:p-6 text-white"
+          className="p-4 sm:p-6 text-white relative"
           style={{ background: event.color || '#10B981' }}
         >
+          {/* Completed badge */}
+          {isCompleted && (
+            <div className="absolute top-2 right-2 flex items-center gap-1 px-2 py-1 bg-white/20 rounded-full text-xs">
+              <span>⭐</span>
+              <span>{language === 'ur' ? 'مکمل' : language === 'ar' ? 'مكتمل' : 'Completed'}</span>
+            </div>
+          )}
           <div className="flex items-center gap-4">
             <div className="text-4xl sm:text-5xl">{event.emoji}</div>
             <div className="flex-1">
