@@ -1,10 +1,14 @@
 /**
  * StepCard.jsx
  * Detailed step information modal for Hajj/Umrah
+ * Features 3D animated scenes showing pilgrims performing rituals
  */
 
-import React, { useState, useCallback, useRef, useEffect } from 'react';
+import React, { useState, useCallback, useRef, useEffect, lazy, Suspense } from 'react';
 import { Icons } from '../../common/Icons';
+
+// Lazy load the 3D scene component
+const HajjScene3D = lazy(() => import('./HajjScene3D'));
 
 const StepCard = ({ step, language, onClose, onComplete, isCompleted }) => {
   const [activeTab, setActiveTab] = useState('info'); // info, duas, rules
@@ -158,6 +162,29 @@ const StepCard = ({ step, language, onClose, onComplete, isCompleted }) => {
               </div>
             </div>
           </div>
+        </div>
+
+        {/* 3D Animated Scene */}
+        <div className="flex-shrink-0">
+          <Suspense
+            fallback={
+              <div
+                className="w-full flex items-center justify-center bg-gradient-to-b from-slate-800 to-slate-900"
+                style={{ height: '35vh', minHeight: 180, maxHeight: 320 }}
+              >
+                <div className="flex flex-col items-center gap-2">
+                  <div className="w-10 h-10 border-3 border-white/20 border-t-emerald-400 rounded-full animate-spin" />
+                  <p className="text-white/60 text-xs">
+                    {language === 'ar' ? 'جاري تحميل المشهد...' :
+                     language === 'ur' ? 'منظر لوڈ ہو رہا ہے...' :
+                     'Loading 3D Scene...'}
+                  </p>
+                </div>
+              </div>
+            }
+          >
+            <HajjScene3D stepId={step.id} sceneId={step.scene} isActive={true} />
+          </Suspense>
         </div>
 
         {/* Tabs */}

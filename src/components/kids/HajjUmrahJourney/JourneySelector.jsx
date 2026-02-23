@@ -9,8 +9,11 @@ import { useAuth } from '../../../contexts/AuthContext';
 import KidsPremiumGate from '../KidsPremiumGate';
 
 const JourneySelector = ({ language, onSelectJourney, onBack, onChangeLanguage }) => {
-  const { user } = useAuth();
+  const { user, isPremium, isAdmin } = useAuth();
   const [showPremiumGate, setShowPremiumGate] = useState(false);
+
+  // Admin or premium users have full access
+  const hasFullAccess = isPremium || isAdmin;
 
   const isRTL = language === 'ar' || language === 'ur';
 
@@ -48,8 +51,8 @@ const JourneySelector = ({ language, onSelectJourney, onBack, onChangeLanguage }
   };
 
   const handleHajjClick = () => {
-    // Check if user has premium access
-    if (user?.isPremium) {
+    // Check if user has premium or admin access
+    if (hasFullAccess) {
       onSelectJourney('hajj');
     } else {
       setShowPremiumGate(true);
@@ -227,8 +230,8 @@ const JourneySelector = ({ language, onSelectJourney, onBack, onChangeLanguage }
             </span>
           </div>
 
-          {/* Lock icon for non-premium users */}
-          {!user?.isPremium && (
+          {/* Lock icon for non-premium/non-admin users */}
+          {!hasFullAccess && (
             <div className="absolute inset-0 bg-black/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
               <div className="w-16 h-16 rounded-full bg-black/40 flex items-center justify-center">
                 <Icons.Lock className="w-8 h-8 text-white" />
