@@ -104,22 +104,32 @@ const MilestoneStation = ({ event, isActive, onClick, language = 'en' }) => {
           }
         `}
         style={{
-          minWidth: '90px',
-          maxWidth: '130px',
+          minWidth: '100px',
+          maxWidth: '150px',
           direction: isRTL ? 'rtl' : 'ltr',
         }}
       >
         <p
-          className="text-xs font-bold text-gray-800 leading-tight"
+          className="text-xs font-bold text-gray-800"
           style={{
             fontFamily: isRTL
               ? "'Noto Nastaliq Urdu', 'Jameel Noori Nastaleeq', 'Scheherazade New', serif"
               : 'inherit',
+            lineHeight: isRTL ? '1.8' : '1.4',
+            marginBottom: '4px',
           }}
         >
           {getEventName()}
         </p>
-        <p className="text-[10px] text-gray-500 mt-0.5">{event.year}</p>
+        <p
+          className="text-[10px] text-gray-500"
+          style={{
+            direction: 'ltr',
+            lineHeight: '1.3',
+          }}
+        >
+          {event.year}
+        </p>
       </div>
 
       {/* "Tap to read" hint when active */}
