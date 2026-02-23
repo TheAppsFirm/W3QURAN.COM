@@ -259,6 +259,22 @@ export const logger = {
 // Global error handlers
 if (typeof window !== 'undefined') {
   window.addEventListener('error', (event) => {
+    // Skip third-party script errors (Google Ads, Analytics, etc.)
+    const filename = event.filename || '';
+    if (!filename ||
+        filename.includes('<anonymous>') ||
+        filename.includes('googleads') ||
+        filename.includes('gtag') ||
+        filename.includes('doubleclick') ||
+        filename.includes('google-analytics') ||
+        filename.includes('googlesyndication') ||
+        filename.includes('gstatic') ||
+        filename.includes('facebook') ||
+        filename.includes('twitter') ||
+        filename.includes('analytics')) {
+      return; // Don't log third-party errors
+    }
+
     logger.crash(event.error || new Error(event.message), {
       filename: event.filename,
       lineno: event.lineno,
@@ -267,6 +283,11 @@ if (typeof window !== 'undefined') {
   });
 
   window.addEventListener('unhandledrejection', (event) => {
+    // Skip if reason is from third-party
+    const reason = event.reason?.message || String(event.reason) || '';
+    if (reason.includes('Script error') || reason.includes('cross-origin')) {
+      return;
+    }
     logger.crash(event.reason, { type: 'unhandledRejection' });
   });
 
