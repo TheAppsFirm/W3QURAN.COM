@@ -167,7 +167,9 @@ const BeautifulRoad = ({ scrollPosition, viewportWidth }) => {
         className="absolute bottom-44 left-0"
         style={{
           width: '400%',
-          transform: `translateX(${-scrollPosition * 0.08}px)`,
+          transform: `translate3d(${-scrollPosition * 0.08}px, 0, 0)`,
+          willChange: 'transform',
+          backfaceVisibility: 'hidden',
         }}
       >
         {/* Mosque/city silhouettes at intervals */}
@@ -202,7 +204,9 @@ const BeautifulRoad = ({ scrollPosition, viewportWidth }) => {
         className="absolute bottom-36 left-0 h-36"
         style={{
           width: '250%',
-          transform: `translateX(${-scrollPosition * 0.12}px)`,
+          transform: `translate3d(${-scrollPosition * 0.12}px, 0, 0)`,
+          willChange: 'transform',
+          backfaceVisibility: 'hidden',
         }}
       >
         {[0, 1, 2, 3, 4, 5, 6, 7].map((i) => (
@@ -227,7 +231,9 @@ const BeautifulRoad = ({ scrollPosition, viewportWidth }) => {
         className="absolute bottom-24 left-0 h-20"
         style={{
           width: '350%',
-          transform: `translateX(${-scrollPosition * 0.25}px)`,
+          transform: `translate3d(${-scrollPosition * 0.25}px, 0, 0)`,
+          willChange: 'transform',
+          backfaceVisibility: 'hidden',
         }}
       >
         <svg width="100%" height="80" viewBox="0 0 1400 80" preserveAspectRatio="none">
@@ -243,7 +249,9 @@ const BeautifulRoad = ({ scrollPosition, viewportWidth }) => {
         className="absolute bottom-20 left-0"
         style={{
           width: '600%',
-          transform: `translateX(${-scrollPosition * 0.5}px)`,
+          transform: `translate3d(${-scrollPosition * 0.5}px, 0, 0)`,
+          willChange: 'transform',
+          backfaceVisibility: 'hidden',
         }}
       >
         {Array.from({ length: 25 }, (_, i) => (
@@ -286,7 +294,9 @@ const BeautifulRoad = ({ scrollPosition, viewportWidth }) => {
         className="absolute bottom-20 left-0 h-12"
         style={{
           width: '400%',
-          transform: `translateX(${-scrollPosition * 0.4}px)`,
+          transform: `translate3d(${-scrollPosition * 0.4}px, 0, 0)`,
+          willChange: 'transform',
+          backfaceVisibility: 'hidden',
         }}
       >
         <svg width="100%" height="50" viewBox="0 0 1600 50" preserveAspectRatio="none">
@@ -304,10 +314,12 @@ const BeautifulRoad = ({ scrollPosition, viewportWidth }) => {
 
         {/* Center dashed line */}
         <div
-          className="absolute top-1/2 -translate-y-1/2 flex"
+          className="absolute top-1/2 flex"
           style={{
-            transform: `translateX(${-scrollPosition % 60}px) translateY(-50%)`,
+            transform: `translate3d(${-scrollPosition % 60}px, -50%, 0)`,
             width: `${viewportWidth + 200}px`,
+            willChange: 'transform',
+            backfaceVisibility: 'hidden',
           }}
         >
           {Array.from({ length: Math.ceil((viewportWidth + 200) / 60) }, (_, i) => (
@@ -652,12 +664,14 @@ const ProphetLifeJourney = ({ onBack }) => {
 
       {/* Scrolling stations container - ABOVE the bike */}
       <div
-        className="absolute left-0 flex items-end gap-0 transition-transform"
+        className="absolute left-0 flex items-end gap-0"
         style={{
           bottom: '140px', // Moved much higher
-          // Center first station at motorbike position by offsetting by half station width
-          transform: `translateX(${-scrollPosition + MOTORBIKE_POSITION - STATION_WIDTH / 2}px)`,
+          // Use translate3d for GPU acceleration - prevents jerking
+          transform: `translate3d(${-scrollPosition + MOTORBIKE_POSITION - STATION_WIDTH / 2}px, 0, 0)`,
           width: `${TOTAL_WIDTH}px`,
+          willChange: 'transform',
+          backfaceVisibility: 'hidden',
         }}
       >
         {SEERAH_EVENTS.map((event, index) => (

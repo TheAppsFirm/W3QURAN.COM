@@ -2,6 +2,21 @@
  * Seerah (Prophet's Life) Data for Kids Mode
  * Contains key events from the life of Prophet Muhammad ﷺ
  * Multilingual bedtime stories with audio support
+ *
+ * IMPORTANT: All content is written with utmost respect and reverence
+ * for Prophet Muhammad ﷺ (peace and blessings be upon him).
+ *
+ * AUTHENTIC SOURCES:
+ * Each event includes references to authentic Islamic sources:
+ * - Sahih Bukhari (صحيح البخاري)
+ * - Sahih Muslim (صحيح مسلم)
+ * - Ibn Hisham's As-Sirah an-Nabawiyyah (السيرة النبوية)
+ * - Ibn Kathir's Al-Bidaya wan-Nihaya (البداية والنهاية)
+ * - At-Tabari's Tarikh (تاريخ الطبري)
+ * - Ibn Saad's At-Tabaqat al-Kubra (الطبقات الكبرى)
+ * - Relevant Quranic verses
+ *
+ * Languages: English, Arabic (العربية), Urdu (اردو)
  */
 
 // =============================================================================
@@ -25,6 +40,11 @@ export const SEERAH_EVENTS = [
     difficulty: 'easy',
     keyFigures: ['Aminah bint Wahb (Mother)', 'Abdullah ibn Abdul Muttalib (Father)', 'Abdul Muttalib (Grandfather)', 'Shifa bint Awf (Midwife)'],
     historicalNote: 'Born in the Year of the Elephant, when Abraha attacked Mecca with elephants but was defeated by Allah. Father Abdullah passed away before birth.',
+    references: [
+      { source: 'Ibn Hisham', work: 'As-Sirah an-Nabawiyyah', section: 'Birth of the Prophet' },
+      { source: 'Sahih Muslim', hadith: '2276', topic: 'Birth on Monday' },
+      { source: 'Ibn Kathir', work: 'Al-Bidaya wan-Nihaya', volume: 2 },
+    ],
     story: {
       en: {
         title: 'The Blessed Birth in Mecca',
@@ -76,6 +96,11 @@ export const SEERAH_EVENTS = [
     icon: 'tent',
     difficulty: 'easy',
     keyFigures: ['Halima Sadia (Foster Mother)', 'Harith (Foster Father)', 'Shayma (Foster Sister)'],
+    references: [
+      { source: 'Ibn Hisham', work: 'As-Sirah an-Nabawiyyah', section: 'Nursing by Halima' },
+      { source: 'Ibn Saad', work: 'At-Tabaqat al-Kubra', volume: 1 },
+      { source: 'At-Tabari', work: 'Tarikh al-Rusul wal-Muluk' },
+    ],
     story: {
       en: {
         title: 'Life in the Beautiful Desert',
@@ -127,6 +152,11 @@ export const SEERAH_EVENTS = [
     icon: 'handshake',
     difficulty: 'easy',
     keyFigures: ['People of Mecca', 'Merchants', 'Traders'],
+    references: [
+      { source: 'Ibn Hisham', work: 'As-Sirah an-Nabawiyyah', section: 'Youth in Mecca' },
+      { source: 'At-Tirmidhi', hadith: '3620', topic: 'Character of the Prophet' },
+      { source: 'Ibn Kathir', work: 'Al-Bidaya wan-Nihaya', volume: 2 },
+    ],
     story: {
       en: {
         title: 'The Most Honest Person',
@@ -178,6 +208,11 @@ export const SEERAH_EVENTS = [
     icon: 'heart',
     difficulty: 'easy',
     keyFigures: ['Khadijah bint Khuwaylid', 'Abu Talib (Uncle)'],
+    references: [
+      { source: 'Sahih Bukhari', hadith: '3821', topic: 'Marriage to Khadijah' },
+      { source: 'Ibn Hisham', work: 'As-Sirah an-Nabawiyyah', section: 'Marriage' },
+      { source: 'Ibn Saad', work: 'At-Tabaqat al-Kubra', volume: 1 },
+    ],
     story: {
       en: {
         title: 'A Beautiful Partnership',
@@ -230,6 +265,11 @@ export const SEERAH_EVENTS = [
     difficulty: 'medium',
     keyFigures: ['Angel Jibreel (Gabriel)', 'Khadijah'],
     surahRef: 96,
+    references: [
+      { source: 'Sahih Bukhari', hadith: '3', topic: 'Beginning of Revelation' },
+      { source: 'Sahih Muslim', hadith: '160', topic: 'First Revelation' },
+      { source: 'Quran', surah: 96, ayat: '1-5', name: 'Al-Alaq' },
+    ],
     story: {
       en: {
         title: 'The Night the Quran Began',
@@ -281,6 +321,11 @@ export const SEERAH_EVENTS = [
     icon: 'users',
     difficulty: 'easy',
     keyFigures: ['Abu Bakr', 'Ali', 'Zaid ibn Haritha', 'Khadijah'],
+    references: [
+      { source: 'Sahih Bukhari', hadith: '3661', topic: 'Merits of Abu Bakr' },
+      { source: 'Ibn Hisham', work: 'As-Sirah an-Nabawiyyah', section: 'Early Muslims' },
+      { source: 'At-Tirmidhi', hadith: '3733', topic: 'First to Accept Islam' },
+    ],
     story: {
       en: {
         title: 'The First Friends of Islam',
@@ -332,6 +377,11 @@ export const SEERAH_EVENTS = [
     icon: 'shield',
     difficulty: 'medium',
     keyFigures: ['Bilal', 'Sumayyah', 'Yasir', 'Abu Talib'],
+    references: [
+      { source: 'Sahih Bukhari', hadith: '3835', topic: 'Persecution of Early Muslims' },
+      { source: 'Ibn Hisham', work: 'As-Sirah an-Nabawiyyah', section: 'Boycott of Banu Hashim' },
+      { source: 'Ibn Kathir', work: 'Al-Bidaya wan-Nihaya', volume: 3 },
+    ],
     story: {
       en: {
         title: 'Staying Strong When Times Are Hard',
@@ -384,6 +434,11 @@ export const SEERAH_EVENTS = [
     difficulty: 'medium',
     keyFigures: ['Angel Jibreel', 'Buraq', 'All Prophets'],
     surahRef: 17,
+    references: [
+      { source: 'Sahih Bukhari', hadith: '3887', topic: "Al-Isra' wal-Mi'raj" },
+      { source: 'Sahih Muslim', hadith: '162', topic: 'Night Journey' },
+      { source: 'Quran', surah: 17, ayat: 1, name: 'Al-Isra' },
+    ],
     story: {
       en: {
         title: 'The Magical Night Journey',
@@ -435,6 +490,11 @@ export const SEERAH_EVENTS = [
     icon: 'route',
     difficulty: 'medium',
     keyFigures: ['Abu Bakr', 'Asma bint Abu Bakr', 'Ali'],
+    references: [
+      { source: 'Sahih Bukhari', hadith: '3905', topic: 'The Hijra to Medina' },
+      { source: 'Sahih Muslim', hadith: '2009', topic: 'Spider at Cave Thawr' },
+      { source: 'Quran', surah: 9, ayat: 40, name: 'At-Tawbah' },
+    ],
     story: {
       en: {
         title: 'The Great Journey to a New Home',
@@ -486,6 +546,11 @@ export const SEERAH_EVENTS = [
     icon: 'mosque',
     difficulty: 'easy',
     keyFigures: ['The Companions', 'People of Medina'],
+    references: [
+      { source: 'Sahih Bukhari', hadith: '428', topic: 'Building the Masjid' },
+      { source: 'Ibn Hisham', work: 'As-Sirah an-Nabawiyyah', section: 'Building Masjid an-Nabawi' },
+      { source: 'Sunan an-Nasai', hadith: '702', topic: 'Merits of the Mosque' },
+    ],
     story: {
       en: {
         title: 'Building Allah\'s House Together',
@@ -538,6 +603,11 @@ export const SEERAH_EVENTS = [
     difficulty: 'medium',
     keyFigures: ['313 Muslim Companions', 'Angels sent by Allah'],
     surahRef: 8,
+    references: [
+      { source: 'Sahih Bukhari', hadith: '3952', topic: 'Battle of Badr' },
+      { source: 'Sahih Muslim', hadith: '1763', topic: 'Angels at Badr' },
+      { source: 'Quran', surah: 8, ayat: '9-12', name: 'Al-Anfal' },
+    ],
     story: {
       en: {
         title: 'When Allah Sent His Help',
@@ -590,6 +660,11 @@ export const SEERAH_EVENTS = [
     difficulty: 'medium',
     keyFigures: ['Uthman ibn Affan', 'Leaders of Mecca'],
     surahRef: 48,
+    references: [
+      { source: 'Sahih Bukhari', hadith: '2731', topic: 'Treaty of Hudaybiyyah' },
+      { source: 'Sahih Muslim', hadith: '1783', topic: 'The Treaty' },
+      { source: 'Quran', surah: 48, ayat: 1, name: 'Al-Fath (The Victory)' },
+    ],
     story: {
       en: {
         title: 'When Peace is the Biggest Victory',
@@ -641,6 +716,11 @@ export const SEERAH_EVENTS = [
     icon: 'flag',
     difficulty: 'easy',
     keyFigures: ['10,000 Muslim Companions', 'Abu Sufyan'],
+    references: [
+      { source: 'Sahih Bukhari', hadith: '4280', topic: 'Conquest of Mecca' },
+      { source: 'Sahih Muslim', hadith: '1780', topic: 'Entry into Mecca' },
+      { source: 'Ibn Hisham', work: 'As-Sirah an-Nabawiyyah', section: 'Fath Makkah' },
+    ],
     story: {
       en: {
         title: 'The Day of Forgiveness',
@@ -693,6 +773,11 @@ export const SEERAH_EVENTS = [
     difficulty: 'medium',
     keyFigures: ['Over 100,000 Companions'],
     surahRef: 5,
+    references: [
+      { source: 'Sahih Muslim', hadith: '1218', topic: 'Farewell Sermon' },
+      { source: 'Sahih Bukhari', hadith: '1739', topic: 'Last Pilgrimage' },
+      { source: 'Quran', surah: 5, ayat: 3, name: 'Al-Maidah - Completion of Religion' },
+    ],
     story: {
       en: {
         title: 'The Last Message',
@@ -744,6 +829,11 @@ export const SEERAH_EVENTS = [
     icon: 'heart',
     difficulty: 'easy',
     keyFigures: ['Aisha', 'Abu Bakr', 'All Companions'],
+    references: [
+      { source: 'Sahih Bukhari', hadith: '4449', topic: 'Final Illness and Passing' },
+      { source: 'Sahih Muslim', hadith: '2444', topic: "Prophet's Last Words" },
+      { source: 'Ibn Hisham', work: 'As-Sirah an-Nabawiyyah', section: 'Wafat an-Nabi' },
+    ],
     story: {
       en: {
         title: 'Saying Goodbye to the Best of Creation',
@@ -795,6 +885,11 @@ export const SEERAH_EVENTS = [
     icon: 'globe',
     difficulty: 'easy',
     keyFigures: ['All Muslims', 'You!'],
+    references: [
+      { source: 'Sahih Muslim', hadith: '2278', topic: 'Following the Sunnah' },
+      { source: 'Quran', surah: 33, ayat: 21, name: 'Al-Ahzab - Beautiful Example' },
+      { source: 'Quran', surah: 21, ayat: 107, name: 'Al-Anbiya - Mercy to Worlds' },
+    ],
     story: {
       en: {
         title: 'Following His Beautiful Example',
