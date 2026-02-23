@@ -25,6 +25,9 @@ export async function shareContent({ title, text, url }) {
 
   // Fallback to clipboard
   try {
+    if (!navigator.clipboard || !navigator.clipboard.writeText) {
+      return { success: false, method: 'clipboard', error: 'Clipboard API not available' };
+    }
     const shareText = url ? `${text}\n\n${url}` : text;
     await navigator.clipboard.writeText(shareText);
     return { success: true, method: 'clipboard' };

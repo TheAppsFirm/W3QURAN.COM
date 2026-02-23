@@ -137,7 +137,7 @@ const pauseKalimaAudio = () => {
 // Resume kalima audio
 const resumeKalimaAudio = () => {
   if (currentKalimaAudio && currentKalimaAudio.paused) {
-    currentKalimaAudio.play();
+    currentKalimaAudio.play().catch(() => {});
     notifyKalimaListeners({ playing: true });
   }
 };

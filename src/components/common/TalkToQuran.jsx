@@ -541,6 +541,13 @@ export default function TalkToQuran({ isVisible, onClose, onNavigate }) {
       audioChunksRef.current = [];
       setRecordingTime(0);
 
+      // Check if mediaDevices API is available
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        setError('Voice recording not supported on this browser. Please type your question instead.');
+        setShowTextInput(true);
+        return;
+      }
+
       // Request microphone access
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: {
