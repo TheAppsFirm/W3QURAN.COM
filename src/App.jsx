@@ -69,6 +69,7 @@ const SoundHealingRoom = lazyWithRetry(() => import('./components/common/SoundHe
 const QuranicBabyNames = lazyWithRetry(() => import('./components/common/QuranicBabyNames'));
 const TalkToQuran = lazyWithRetry(() => import('./components/common/TalkToQuran'));
 const KidsMode = lazyWithRetry(() => import('./components/kids/KidsMode'));
+const HajjUmrahJourney = lazyWithRetry(() => import('./components/kids/HajjUmrahJourney'));
 const AnalyticsPanel = lazyWithRetry(() => import('./components/widgets/AnalyticsPanel'));
 const BubbleReaderOverlay = lazyWithRetry(() => import('./components/common/BubbleReaderOverlay'));
 const GamificationHub = lazyWithRetry(() => import('./components/common/GamificationHub'));
@@ -285,6 +286,7 @@ function QuranBubbleApp() {
   const [showPropheticMap, setShowPropheticMap] = useState(false);
   const [showCompanionAI, setShowCompanionAI] = useState(false);
   const [showFAQ, setShowFAQ] = useState(false);
+  const [showHajjUmrah, setShowHajjUmrah] = useState(false);
 
   // Next prayer time for sidebar badge
   const [nextPrayerInfo, setNextPrayerInfo] = useState(null);
@@ -938,6 +940,7 @@ function QuranBubbleApp() {
           onWorldMap={() => setShowPropheticMap(true)}
           onGlobalPulse={() => setShowGlobalPulse(true)}
           onWeatherSync={() => setShowWeatherSync(true)}
+          onHajjUmrah={() => setShowHajjUmrah(true)}
         />
       )}
 
@@ -1609,6 +1612,15 @@ function QuranBubbleApp() {
                 setInitialVerse(ayahNumber);
               }
             }}
+          />
+        </Suspense>
+      )}
+
+      {/* Hajj & Umrah Journey */}
+      {showHajjUmrah && (
+        <Suspense fallback={<LoadingSpinner message="Loading Hajj Journey..." />}>
+          <HajjUmrahJourney
+            onBack={() => setShowHajjUmrah(false)}
           />
         </Suspense>
       )}

@@ -153,6 +153,7 @@ const StatsBar = memo(function StatsBar({
   onWorldMap,
   onGlobalPulse,
   onWeatherSync,
+  onHajjUmrah,
 }) {
   const gamification = useGamification();
   const { isPremium } = useAuth();
@@ -275,6 +276,9 @@ const StatsBar = memo(function StatsBar({
 
             {/* Weather */}
             {showControls && onWeatherSync && (<li className="flex-shrink-0"><BubbleButton icon={Icons.CloudSun} label="Weather" color="#3B82F6" color2="#2563EB" onClick={onWeatherSync} /></li>)}
+
+            {/* Hajj & Umrah */}
+            {onHajjUmrah && (<li className="flex-shrink-0"><BubbleButton icon={() => <span className="text-xl sm:text-2xl">🕋</span>} label="Hajj" color="#F59E0B" color2="#D97706" onClick={onHajjUmrah} /></li>)}
 
             {/* Gamification Stats */}
             {gamification.isActive ? (
