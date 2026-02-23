@@ -19,6 +19,7 @@ import KidsDuaJourney from './KidsDuaJourney';
 import KidsSurahLearning from './KidsSurahLearning';
 import KidsLoginGate from './KidsLoginGate';
 import KidsPremiumGate from './KidsPremiumGate';
+import HajjUmrahJourney from './HajjUmrahJourney';
 import { SURAHS } from '../../data';
 import { useAuth } from '../../contexts/AuthContext';
 
@@ -769,7 +770,7 @@ const KidsMode = ({ isVisible, onClose }) => {
     }
   };
 
-  // Handle special journey selection (Kids Dua, Prophet's Life)
+  // Handle special journey selection (Kids Dua, Prophet's Life, Hajj & Umrah)
   const handleSpecialJourneySelect = (journeyId, mode) => {
     if (journeyId === 'kids-dua' && mode === 'dua') {
       setSelectedTheme('dua');
@@ -780,6 +781,10 @@ const KidsMode = ({ isVisible, onClose }) => {
       setSelectedThemeMode('seert');
       // Prophet's Life doesn't need age selection - go directly
       setSurahJourneyLevel('young'); // Default level for Seerah
+      setSelectedSurahs(true);
+    } else if (journeyId === 'hajj-umrah' && mode === 'hajj-umrah') {
+      setSelectedTheme('hajj-umrah');
+      setSelectedThemeMode('hajj-umrah');
       setSelectedSurahs(true);
     }
   };
@@ -1097,6 +1102,19 @@ const KidsMode = ({ isVisible, onClose }) => {
         }`}
       >
         <KidsDuaJourney onBack={handleBackToMenu} isPremium={isPremium} />
+      </div>
+    );
+  }
+
+  // Hajj & Umrah Journey
+  if (selectedSurahs && selectedTheme === 'hajj-umrah' && selectedThemeMode === 'hajj-umrah') {
+    return (
+      <div
+        className={`fixed inset-0 z-[9999] overflow-hidden transition-all duration-300 ${
+          isExiting ? 'opacity-0 scale-95' : 'opacity-100 scale-100'
+        }`}
+      >
+        <HajjUmrahJourney onBack={handleBackToMenu} />
       </div>
     );
   }

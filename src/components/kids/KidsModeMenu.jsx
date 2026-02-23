@@ -134,6 +134,19 @@ const SPECIAL_JOURNEYS = [
     mode: 'seert',
     premium: false,
   },
+  {
+    id: 'hajj-umrah',
+    name: "Hajj & Umrah",
+    nameAr: 'الحج والعمرة',
+    emoji: '🕋',
+    description: 'Learn pilgrimage rituals step by step!',
+    gradient: 'from-amber-400 via-yellow-500 to-orange-500',
+    shadowColor: 'shadow-amber-500/50',
+    glowColor: 'amber',
+    bgPattern: 'kaaba',
+    mode: 'hajj-umrah',
+    premium: false,
+  },
 ];
 
 // Sparkle component for magical effects
