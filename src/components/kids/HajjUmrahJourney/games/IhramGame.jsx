@@ -8,10 +8,10 @@
  * 3. Recite Talbiyah
  */
 
-import React, { useState, useCallback, memo } from 'react';
+import React, { useState, useCallback, memo, useEffect, useRef } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { useRef } from 'react';
 import * as THREE from 'three';
+import { initAudio, playClick, playDuaReveal, playGameComplete, stopAllSounds } from './audioUtils';
 
 // Colors
 const SKIN = '#F5C67A';
@@ -281,6 +281,41 @@ const IhramGame = ({ language = 'en', onComplete, onBack }) => {
 
   const isRTL = language === 'ar' || language === 'ur';
 
+  // Initialize audio
+  useEffect(() => {
+    initAudio();
+    return () => stopAllSounds();
+  }, []);
+
+  // Keyboard controls
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (isAnimating) return;
+
+      // Enter or Space to activate current step
+      if (e.code === 'Enter' || e.code === 'Space') {
+        e.preventDefault();
+        if (currentStage === 'start') {
+          handleStepAction('niyyah');
+        } else if (currentStage === 'niyyah_done') {
+          handleStepAction('ihram');
+        } else if (currentStage === 'ihram_done') {
+          handleStepAction('talbiyah');
+        } else if (currentStage === 'complete') {
+          onComplete?.();
+        }
+      }
+
+      // Escape to go back
+      if (e.code === 'Escape') {
+        onBack?.();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [currentStage, isAnimating, onBack, onComplete]);
+
   // Steps data
   const steps = [
     {
@@ -331,11 +366,13 @@ const IhramGame = ({ language = 'en', onComplete, onBack }) => {
   const handleStepAction = useCallback((stepId) => {
     const step = steps.find(s => s.id === stepId);
 
+    playClick(); // Play click sound
     setIsAnimating(true);
 
     if (stepId === 'niyyah') {
       setCurrentStage('niyyah');
       setCurrentDua(step.dua);
+      playDuaReveal();
       setShowDua(true);
 
       setTimeout(() => {
@@ -353,12 +390,14 @@ const IhramGame = ({ language = 'en', onComplete, onBack }) => {
     } else if (stepId === 'talbiyah') {
       setCurrentStage('talbiyah');
       setCurrentDua(step.dua);
+      playDuaReveal();
       setShowDua(true);
 
       setTimeout(() => {
         setShowDua(false);
         setCurrentStage('complete');
         setIsAnimating(false);
+        playGameComplete(); // Celebration sound
       }, 6000);
     }
   }, [steps]);

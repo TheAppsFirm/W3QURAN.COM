@@ -8,9 +8,20 @@
  * - Complete 7 rounds around Kaaba
  */
 
-import React, { useRef, useState, useCallback, useEffect, memo } from 'react';
-import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import React, { useRef, useState, useCallback, useEffect, memo, useMemo } from 'react';
+import { Canvas, useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
+import {
+  initAudio,
+  startWalkingSound,
+  stopWalkingSound,
+  playRoundComplete,
+  playGameComplete,
+  playDuaReveal,
+  startAmbientSound,
+  stopAmbientSound,
+  stopAllSounds,
+} from './audioUtils';
 
 // Colors
 const KAABA_BLACK = '#1a1a1a';
@@ -210,40 +221,109 @@ const NPCPilgrims = memo(() => {
 });
 
 // ============================================================
-// ATMOSPHERE
+// FLOATING PARTICLES (Spiritual ambiance)
+// ============================================================
+const FloatingParticles = memo(() => {
+  const particlesRef = useRef();
+  const count = 50;
+
+  const positions = useMemo(() => {
+    const pos = new Float32Array(count * 3);
+    for (let i = 0; i < count; i++) {
+      pos[i * 3] = (Math.random() - 0.5) * 8;
+      pos[i * 3 + 1] = Math.random() * 4;
+      pos[i * 3 + 2] = (Math.random() - 0.5) * 8;
+    }
+    return pos;
+  }, []);
+
+  useFrame((state) => {
+    if (!particlesRef.current) return;
+    const t = state.clock.elapsedTime;
+    const pos = particlesRef.current.geometry.attributes.position.array;
+
+    for (let i = 0; i < count; i++) {
+      pos[i * 3 + 1] += Math.sin(t + i) * 0.002;
+      if (pos[i * 3 + 1] > 5) pos[i * 3 + 1] = 0;
+    }
+    particlesRef.current.geometry.attributes.position.needsUpdate = true;
+  });
+
+  return (
+    <points ref={particlesRef}>
+      <bufferGeometry>
+        <bufferAttribute
+          attach="attributes-position"
+          count={count}
+          array={positions}
+          itemSize={3}
+        />
+      </bufferGeometry>
+      <pointsMaterial
+        size={0.05}
+        color="#FDE68A"
+        transparent
+        opacity={0.6}
+        sizeAttenuation
+      />
+    </points>
+  );
+});
+
+// ============================================================
+// ATMOSPHERE (Enhanced)
 // ============================================================
 const Atmosphere = memo(() => (
   <>
+    {/* Sky dome */}
     <mesh position={[0, 6, 0]}>
-      <sphereGeometry args={[10, 16, 8, 0, Math.PI * 2, 0, Math.PI / 2]} />
-      <meshBasicMaterial color="#1a365d" side={THREE.BackSide} />
+      <sphereGeometry args={[10, 32, 16, 0, Math.PI * 2, 0, Math.PI / 2]} />
+      <meshBasicMaterial color="#0f172a" side={THREE.BackSide} />
     </mesh>
 
-    {/* Stars */}
-    {Array.from({ length: 40 }).map((_, i) => {
+    {/* Gradient overlay for depth */}
+    <mesh position={[0, 3, 0]}>
+      <sphereGeometry args={[9.5, 16, 8, 0, Math.PI * 2, 0, Math.PI / 2]} />
+      <meshBasicMaterial color="#1e3a5f" side={THREE.BackSide} transparent opacity={0.5} />
+    </mesh>
+
+    {/* Stars - more of them, varied sizes */}
+    {Array.from({ length: 80 }).map((_, i) => {
       const theta = Math.random() * Math.PI * 2;
-      const phi = Math.random() * Math.PI * 0.4;
-      const r = 9;
+      const phi = Math.random() * Math.PI * 0.5;
+      const r = 8 + Math.random();
+      const size = 0.01 + Math.random() * 0.03;
       return (
         <mesh
           key={i}
           position={[
             r * Math.sin(phi) * Math.cos(theta),
-            r * Math.cos(phi) + 2,
+            r * Math.cos(phi) + 1,
             r * Math.sin(phi) * Math.sin(theta)
           ]}
         >
-          <sphereGeometry args={[0.02 + Math.random() * 0.02, 4, 4]} />
-          <meshBasicMaterial color="#FEF3C7" />
+          <sphereGeometry args={[size, 6, 6]} />
+          <meshBasicMaterial color={i % 5 === 0 ? '#FEF3C7' : '#ffffff'} />
         </mesh>
       );
     })}
 
-    {/* Moon */}
-    <mesh position={[4, 5, -4]}>
-      <sphereGeometry args={[0.4, 16, 16]} />
-      <meshBasicMaterial color="#FEF9C3" />
-    </mesh>
+    {/* Moon with glow */}
+    <group position={[4, 5, -4]}>
+      <mesh>
+        <sphereGeometry args={[0.4, 32, 32]} />
+        <meshBasicMaterial color="#FEF9C3" />
+      </mesh>
+      {/* Moon glow */}
+      <mesh>
+        <sphereGeometry args={[0.6, 16, 16]} />
+        <meshBasicMaterial color="#FEF3C7" transparent opacity={0.2} />
+      </mesh>
+      <pointLight intensity={0.3} color="#FEF3C7" distance={5} />
+    </group>
+
+    {/* Floating particles */}
+    <FloatingParticles />
   </>
 ));
 
@@ -269,6 +349,7 @@ const TawafGame = ({ language = 'en', onComplete, onBack }) => {
   const [gameComplete, setGameComplete] = useState(false);
   const lastCrossRef = useRef(0);
   const intervalRef = useRef(null);
+  const keyPressedRef = useRef(false);
 
   const isRTL = language === 'ar' || language === 'ur';
 
@@ -294,6 +375,24 @@ const TawafGame = ({ language = 'en', onComplete, onBack }) => {
     next: { en: 'Next Step', ur: 'اگلا مرحلہ', ar: 'الخطوة التالية' },
   };
 
+  // Initialize audio on first interaction
+  useEffect(() => {
+    initAudio();
+    startAmbientSound();
+    return () => {
+      stopAllSounds();
+    };
+  }, []);
+
+  // Handle walking sound
+  useEffect(() => {
+    if (isMoving && !gameComplete) {
+      startWalkingSound(false);
+    } else {
+      stopWalkingSound();
+    }
+  }, [isMoving, gameComplete]);
+
   // Move player
   const movePlayer = useCallback(() => {
     setAngle((prev) => {
@@ -307,9 +406,13 @@ const TawafGame = ({ language = 'en', onComplete, onBack }) => {
       if (prevNorm > 5 && newNorm < 1) {
         setRounds((r) => {
           const newRounds = r + 1;
+          playRoundComplete(); // Play sound on round complete
           if (newRounds >= 7) {
             setGameComplete(true);
+            stopWalkingSound();
+            playGameComplete();
           } else if (newRounds === 3 || newRounds === 5) {
+            playDuaReveal();
             setShowDua(true);
             setTimeout(() => setShowDua(false), 4000);
           }
@@ -337,14 +440,47 @@ const TawafGame = ({ language = 'en', onComplete, onBack }) => {
     }
   }, []);
 
-  // Cleanup
+  // Keyboard controls
   useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (gameComplete) return;
+      // Space, Arrow keys, or W to walk
+      if (['Space', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'KeyW', 'KeyA', 'KeyS', 'KeyD'].includes(e.code)) {
+        e.preventDefault();
+        if (!keyPressedRef.current) {
+          keyPressedRef.current = true;
+          setIsMoving(true);
+          intervalRef.current = setInterval(movePlayer, 50);
+        }
+      }
+      // Escape to go back
+      if (e.code === 'Escape') {
+        onBack?.();
+      }
+    };
+
+    const handleKeyUp = (e) => {
+      if (['Space', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'KeyW', 'KeyA', 'KeyS', 'KeyD'].includes(e.code)) {
+        keyPressedRef.current = false;
+        setIsMoving(false);
+        if (intervalRef.current) {
+          clearInterval(intervalRef.current);
+          intervalRef.current = null;
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keyup', handleKeyUp);
+
     return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('keyup', handleKeyUp);
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
       }
     };
-  }, []);
+  }, [gameComplete, movePlayer, onBack]);
 
   return (
     <div
@@ -410,7 +546,9 @@ const TawafGame = ({ language = 'en', onComplete, onBack }) => {
                 className="text-white text-center"
                 style={{ fontFamily: isRTL ? "'Noto Nastaliq Urdu', serif" : 'inherit' }}
               >
-                👆 {text.instruction[language]}
+                ⌨️ {language === 'ar' ? 'اضغط مفتاح المسافة أو الأسهم للمشي' :
+                    language === 'ur' ? 'چلنے کے لیے Space یا Arrow keys دبائیں' :
+                    'Hold SPACE or Arrow Keys to walk'}
               </p>
             </div>
           </div>

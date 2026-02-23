@@ -8,9 +8,18 @@
  * - Complete 7 laps
  */
 
-import React, { useRef, useState, useCallback, useEffect, memo } from 'react';
+import React, { useRef, useState, useCallback, useEffect, memo, useMemo } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
+import {
+  initAudio,
+  startWalkingSound,
+  stopWalkingSound,
+  playRoundComplete,
+  playGameComplete,
+  playDuaReveal,
+  stopAllSounds,
+} from './audioUtils';
 
 // Colors
 const ROCK_LIGHT = '#A8998A';
@@ -309,6 +318,23 @@ const SaiGame = ({ language = 'en', onComplete, onBack }) => {
   // Check if in green zone (running zone)
   const isInGreenZone = Math.abs(positionX) < 1.25;
 
+  // Initialize audio
+  useEffect(() => {
+    initAudio();
+    return () => {
+      stopAllSounds();
+    };
+  }, []);
+
+  // Handle walking/running sound
+  useEffect(() => {
+    if (isMoving && !gameComplete) {
+      startWalkingSound(isInGreenZone);
+    } else {
+      stopWalkingSound();
+    }
+  }, [isMoving, isInGreenZone, gameComplete]);
+
   // Text content
   const text = {
     title: { en: "Sa'i", ur: 'سعی', ar: 'السعي' },
@@ -355,13 +381,17 @@ const SaiGame = ({ language = 'en', onComplete, onBack }) => {
       if (newX >= 3.5 && dir > 0) {
         setLaps((l) => {
           const newLaps = l + 1;
+          playRoundComplete(); // Play sound
           if (newLaps >= 7) {
             setGameComplete(true);
+            stopWalkingSound();
+            playGameComplete();
           }
           return newLaps;
         });
         setDirection(-1);
         setCurrentDua('marwah');
+        playDuaReveal();
         setShowDua(true);
         setTimeout(() => setShowDua(false), 3000);
         return 3.5;
@@ -372,6 +402,7 @@ const SaiGame = ({ language = 'en', onComplete, onBack }) => {
         setLaps((l) => l); // Don't increment on return to Safa
         setDirection(1);
         setCurrentDua('safa');
+        playDuaReveal();
         setShowDua(true);
         setTimeout(() => setShowDua(false), 3000);
         return -3.5;
@@ -423,13 +454,60 @@ const SaiGame = ({ language = 'en', onComplete, onBack }) => {
     window.removeEventListener('mouseup', handleMouseUp);
   };
 
-  // Cleanup
+  // Keyboard controls
   useEffect(() => {
+    let keyInterval = null;
+    let currentDir = 0;
+
+    const handleKeyDown = (e) => {
+      if (gameComplete) return;
+
+      // Arrow keys or A/D to move
+      if (e.code === 'ArrowRight' || e.code === 'KeyD') {
+        e.preventDefault();
+        currentDir = 1;
+        if (!keyInterval) {
+          setIsMoving(true);
+          keyInterval = setInterval(() => movePlayer(currentDir), 30);
+        }
+      } else if (e.code === 'ArrowLeft' || e.code === 'KeyA') {
+        e.preventDefault();
+        currentDir = -1;
+        if (!keyInterval) {
+          setIsMoving(true);
+          keyInterval = setInterval(() => movePlayer(currentDir), 30);
+        }
+      }
+
+      // Escape to go back
+      if (e.code === 'Escape') {
+        onBack?.();
+      }
+    };
+
+    const handleKeyUp = (e) => {
+      if (['ArrowRight', 'ArrowLeft', 'KeyA', 'KeyD'].includes(e.code)) {
+        setIsMoving(false);
+        if (keyInterval) {
+          clearInterval(keyInterval);
+          keyInterval = null;
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keyup', handleKeyUp);
+
     return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('keyup', handleKeyUp);
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseup', handleMouseUp);
+      if (keyInterval) {
+        clearInterval(keyInterval);
+      }
     };
-  }, []);
+  }, [gameComplete, movePlayer, onBack]);
 
   // Calculate progress percentage
   const progressPercent = ((laps + (direction > 0 ? (positionX + 3.5) / 7 : 0)) / 7) * 100;
@@ -516,7 +594,9 @@ const SaiGame = ({ language = 'en', onComplete, onBack }) => {
                 className="text-white text-center"
                 style={{ fontFamily: isRTL ? "'Noto Nastaliq Urdu', serif" : 'inherit' }}
               >
-                👆 {text.instruction[language]}
+                ⌨️ {language === 'ar' ? 'استخدم الأسهم ← → للمشي' :
+                    language === 'ur' ? 'چلنے کے لیے ← → Arrow keys استعمال کریں' :
+                    'Use ← → Arrow Keys to walk'}
               </p>
             </div>
           </div>
