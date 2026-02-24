@@ -151,6 +151,7 @@ const StatsBar = memo(function StatsBar({
   onShowAchievements,
   // Callbacks for bubble features
   onWorldMap,
+  onTimeMachine,
   onGlobalPulse,
   onWeatherSync,
 }) {
@@ -269,6 +270,9 @@ const StatsBar = memo(function StatsBar({
 
             {/* Map */}
             {showControls && onWorldMap && (<li className="flex-shrink-0"><BubbleButton icon={Icons.Globe3D} label="Map" color="#0EA5E9" color2="#0284C7" onClick={onWorldMap} /></li>)}
+
+            {/* Time Machine */}
+            {showControls && onTimeMachine && (<li className="flex-shrink-0"><BubbleButton icon={Icons.Clock} label="Timeline" color="#F59E0B" color2="#D97706" onClick={onTimeMachine} /></li>)}
 
             {/* Ummah */}
             {showControls && onGlobalPulse && (<li className="flex-shrink-0"><BubbleButton icon={Icons.GlobalPulse} label="Ummah" color="#10B981" color2="#059669" onClick={onGlobalPulse} /></li>)}
