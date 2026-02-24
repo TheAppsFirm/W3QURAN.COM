@@ -100,11 +100,12 @@ const Mataf = memo(() => (
 ));
 
 // ============================================================
-// PLAYER AVATAR (User controlled)
+// REALISTIC PILGRIM IN IHRAM (User controlled)
 // ============================================================
 const PlayerAvatar = ({ angle, isMoving }) => {
   const groupRef = useRef();
-  const bodyRef = useRef();
+  const legsRef = useRef();
+  const armsRef = useRef();
   const radius = 2;
 
   useFrame((state) => {
@@ -117,62 +118,180 @@ const PlayerAvatar = ({ angle, isMoving }) => {
 
     groupRef.current.position.x = x;
     groupRef.current.position.z = z;
-    groupRef.current.rotation.y = angle + Math.PI / 2;
 
-    // Walking animation when moving
-    if (isMoving && bodyRef.current) {
-      groupRef.current.position.y = Math.abs(Math.sin(t * 8)) * 0.03;
+    // Face direction of movement (tangent to circle, counter-clockwise)
+    // Fixed: subtract PI to face correct direction
+    groupRef.current.rotation.y = angle - Math.PI / 2;
+
+    // Walking animation
+    if (isMoving) {
+      groupRef.current.position.y = Math.abs(Math.sin(t * 8)) * 0.02;
+      // Leg swing animation
+      if (legsRef.current) {
+        legsRef.current.children[0].rotation.x = Math.sin(t * 8) * 0.4;
+        legsRef.current.children[1].rotation.x = -Math.sin(t * 8) * 0.4;
+      }
+      // Arm swing
+      if (armsRef.current) {
+        armsRef.current.children[0].rotation.x = -Math.sin(t * 8) * 0.3;
+        armsRef.current.children[1].rotation.x = Math.sin(t * 8) * 0.3;
+      }
     } else {
       groupRef.current.position.y = 0;
     }
   });
 
   return (
-    <group ref={groupRef} scale={1.8}>
-      {/* Body in Ihram */}
-      <mesh ref={bodyRef} position={[0, 0.25, 0]}>
-        <cylinderGeometry args={[0.08, 0.1, 0.35, 12]} />
-        <meshStandardMaterial color={WHITE_CLOTH} roughness={0.5} />
-      </mesh>
-      <mesh position={[0, -0.05, 0]}>
-        <cylinderGeometry args={[0.1, 0.12, 0.4, 12]} />
-        <meshStandardMaterial color="#E2E8F0" roughness={0.5} />
+    <group ref={groupRef} scale={1.6}>
+      {/* === IHRAM CLOTHES === */}
+
+      {/* Izar (lower garment) - wrapped around waist to ankles */}
+      <mesh position={[0, 0.05, 0]}>
+        <cylinderGeometry args={[0.12, 0.08, 0.55, 16]} />
+        <meshStandardMaterial color={WHITE_CLOTH} roughness={0.4} />
       </mesh>
 
-      {/* Head */}
-      <group position={[0, 0.55, 0]}>
-        <mesh>
-          <sphereGeometry args={[0.1, 16, 16]} />
+      {/* Izar fold detail */}
+      <mesh position={[0.08, 0.15, 0.08]} rotation={[0, 0.3, 0]}>
+        <boxGeometry args={[0.02, 0.35, 0.08]} />
+        <meshStandardMaterial color="#E8E8E8" roughness={0.5} />
+      </mesh>
+
+      {/* Rida (upper garment) - draped over left shoulder */}
+      <group position={[0, 0.4, 0]}>
+        {/* Main chest/back coverage */}
+        <mesh position={[0, 0, 0]}>
+          <boxGeometry args={[0.28, 0.25, 0.12]} />
+          <meshStandardMaterial color={WHITE_CLOTH} roughness={0.4} />
+        </mesh>
+
+        {/* Left shoulder drape */}
+        <mesh position={[-0.12, 0.08, 0]} rotation={[0, 0, 0.3]}>
+          <boxGeometry args={[0.1, 0.2, 0.1]} />
+          <meshStandardMaterial color={WHITE_CLOTH} roughness={0.4} />
+        </mesh>
+
+        {/* Cloth hanging from left shoulder */}
+        <mesh position={[-0.18, -0.1, 0.05]} rotation={[0.2, 0, 0.2]}>
+          <boxGeometry args={[0.08, 0.3, 0.06]} />
+          <meshStandardMaterial color="#F0F0F0" roughness={0.5} />
+        </mesh>
+
+        {/* Right shoulder exposed (Idtiba for Tawaf) */}
+        <mesh position={[0.14, 0.05, 0]}>
+          <sphereGeometry args={[0.06, 8, 8]} />
           <meshStandardMaterial color={SKIN} roughness={0.7} />
-        </mesh>
-        {/* Eyes */}
-        <mesh position={[-0.03, 0.02, 0.08]}>
-          <sphereGeometry args={[0.015, 8, 8]} />
-          <meshStandardMaterial color="#1E293B" />
-        </mesh>
-        <mesh position={[0.03, 0.02, 0.08]}>
-          <sphereGeometry args={[0.015, 8, 8]} />
-          <meshStandardMaterial color="#1E293B" />
-        </mesh>
-        {/* Smile */}
-        <mesh position={[0, -0.025, 0.085]}>
-          <torusGeometry args={[0.02, 0.006, 6, 8, Math.PI]} />
-          <meshStandardMaterial color="#C0392B" />
         </mesh>
       </group>
 
-      {/* Arms raised in dua */}
-      <mesh position={[-0.12, 0.35, 0.05]} rotation={[-0.5, 0, 0.4]}>
-        <capsuleGeometry args={[0.025, 0.15, 4, 8]} />
-        <meshStandardMaterial color={SKIN} roughness={0.7} />
-      </mesh>
-      <mesh position={[0.12, 0.35, 0.05]} rotation={[-0.5, 0, -0.4]}>
-        <capsuleGeometry args={[0.025, 0.15, 4, 8]} />
-        <meshStandardMaterial color={SKIN} roughness={0.7} />
-      </mesh>
+      {/* === HEAD === */}
+      <group position={[0, 0.65, 0]}>
+        {/* Head */}
+        <mesh>
+          <sphereGeometry args={[0.1, 16, 16]} />
+          <meshStandardMaterial color={SKIN} roughness={0.6} />
+        </mesh>
 
-      {/* Glow indicator */}
-      <pointLight position={[0, 0.5, 0]} intensity={0.5} color="#10B981" distance={1} />
+        {/* Hair (short/shaved for Hajj) */}
+        <mesh position={[0, 0.05, 0]}>
+          <sphereGeometry args={[0.095, 16, 16, 0, Math.PI * 2, 0, Math.PI / 2]} />
+          <meshStandardMaterial color="#2D2D2D" roughness={0.9} />
+        </mesh>
+
+        {/* Face features */}
+        {/* Eyes */}
+        <mesh position={[-0.035, 0.02, 0.085]}>
+          <sphereGeometry args={[0.012, 8, 8]} />
+          <meshStandardMaterial color="#1E293B" />
+        </mesh>
+        <mesh position={[0.035, 0.02, 0.085]}>
+          <sphereGeometry args={[0.012, 8, 8]} />
+          <meshStandardMaterial color="#1E293B" />
+        </mesh>
+
+        {/* Eyebrows */}
+        <mesh position={[-0.035, 0.045, 0.08]} rotation={[0, 0, 0.1]}>
+          <boxGeometry args={[0.03, 0.006, 0.01]} />
+          <meshStandardMaterial color="#2D2D2D" />
+        </mesh>
+        <mesh position={[0.035, 0.045, 0.08]} rotation={[0, 0, -0.1]}>
+          <boxGeometry args={[0.03, 0.006, 0.01]} />
+          <meshStandardMaterial color="#2D2D2D" />
+        </mesh>
+
+        {/* Nose */}
+        <mesh position={[0, -0.01, 0.095]}>
+          <boxGeometry args={[0.02, 0.03, 0.02]} />
+          <meshStandardMaterial color={SKIN} roughness={0.6} />
+        </mesh>
+
+        {/* Beard (light) */}
+        <mesh position={[0, -0.05, 0.06]}>
+          <sphereGeometry args={[0.06, 8, 8, 0, Math.PI * 2, Math.PI / 2, Math.PI / 2]} />
+          <meshStandardMaterial color="#3D3D3D" roughness={0.9} />
+        </mesh>
+      </group>
+
+      {/* === ARMS === */}
+      <group ref={armsRef}>
+        {/* Left arm */}
+        <group position={[-0.18, 0.35, 0]}>
+          <mesh rotation={[0, 0, 0.3]}>
+            <capsuleGeometry args={[0.03, 0.2, 4, 8]} />
+            <meshStandardMaterial color={SKIN} roughness={0.7} />
+          </mesh>
+          {/* Hand */}
+          <mesh position={[-0.08, -0.12, 0]}>
+            <sphereGeometry args={[0.025, 8, 8]} />
+            <meshStandardMaterial color={SKIN} roughness={0.7} />
+          </mesh>
+        </group>
+
+        {/* Right arm (exposed for Idtiba) */}
+        <group position={[0.18, 0.35, 0]}>
+          <mesh rotation={[0, 0, -0.3]}>
+            <capsuleGeometry args={[0.03, 0.2, 4, 8]} />
+            <meshStandardMaterial color={SKIN} roughness={0.7} />
+          </mesh>
+          {/* Hand */}
+          <mesh position={[0.08, -0.12, 0]}>
+            <sphereGeometry args={[0.025, 8, 8]} />
+            <meshStandardMaterial color={SKIN} roughness={0.7} />
+          </mesh>
+        </group>
+      </group>
+
+      {/* === LEGS === */}
+      <group ref={legsRef} position={[0, -0.2, 0]}>
+        {/* Left leg */}
+        <group position={[-0.05, 0, 0]}>
+          <mesh>
+            <capsuleGeometry args={[0.035, 0.25, 4, 8]} />
+            <meshStandardMaterial color={SKIN} roughness={0.7} />
+          </mesh>
+          {/* Foot */}
+          <mesh position={[0, -0.15, 0.02]}>
+            <boxGeometry args={[0.04, 0.02, 0.08]} />
+            <meshStandardMaterial color="#8B7355" roughness={0.8} />
+          </mesh>
+        </group>
+
+        {/* Right leg */}
+        <group position={[0.05, 0, 0]}>
+          <mesh>
+            <capsuleGeometry args={[0.035, 0.25, 4, 8]} />
+            <meshStandardMaterial color={SKIN} roughness={0.7} />
+          </mesh>
+          {/* Foot */}
+          <mesh position={[0, -0.15, 0.02]}>
+            <boxGeometry args={[0.04, 0.02, 0.08]} />
+            <meshStandardMaterial color="#8B7355" roughness={0.8} />
+          </mesh>
+        </group>
+      </group>
+
+      {/* Player glow indicator */}
+      <pointLight position={[0, 0.5, 0]} intensity={0.4} color="#10B981" distance={1.5} />
     </group>
   );
 };
@@ -353,6 +472,66 @@ const TawafGame = ({ language = 'en', onComplete, onBack }) => {
 
   const isRTL = language === 'ar' || language === 'ur';
 
+  // Duas for each round of Tawaf
+  const roundDuas = [
+    {
+      round: 1,
+      name: { en: 'Beginning Tawaf', ur: 'طواف کا آغاز', ar: 'بداية الطواف' },
+      arabic: 'بِسْمِ اللَّهِ وَاللَّهُ أَكْبَرُ',
+      transliteration: 'Bismillahi Wallahu Akbar',
+      en: 'In the name of Allah, Allah is the Greatest',
+      ur: 'اللہ کے نام سے، اللہ سب سے بڑا ہے',
+    },
+    {
+      round: 2,
+      name: { en: 'Round 2', ur: 'دوسرا چکر', ar: 'الشوط الثاني' },
+      arabic: 'سُبْحَانَ اللَّهِ وَالْحَمْدُ لِلَّهِ وَلَا إِلَهَ إِلَّا اللَّهُ وَاللَّهُ أَكْبَرُ',
+      transliteration: 'SubhanAllah wal-hamdulillah wa la ilaha illAllah wallahu Akbar',
+      en: 'Glory be to Allah, praise be to Allah, there is no god but Allah, Allah is Greatest',
+      ur: 'اللہ پاک ہے، حمد اللہ کے لیے ہے، اللہ کے سوا کوئی معبود نہیں، اللہ سب سے بڑا ہے',
+    },
+    {
+      round: 3,
+      name: { en: 'Round 3', ur: 'تیسرا چکر', ar: 'الشوط الثالث' },
+      arabic: 'اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَفْوَ وَالْعَافِيَةَ فِي الدُّنْيَا وَالْآخِرَةِ',
+      transliteration: "Allahumma inni as'aluka al-'afwa wal-'afiyah fid-dunya wal-akhirah",
+      en: 'O Allah, I ask You for forgiveness and well-being in this world and the Hereafter',
+      ur: 'اے اللہ میں تجھ سے دنیا اور آخرت میں معافی اور عافیت مانگتا ہوں',
+    },
+    {
+      round: 4,
+      name: { en: 'Round 4', ur: 'چوتھا چکر', ar: 'الشوط الرابع' },
+      arabic: 'رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ',
+      transliteration: 'Rabbana atina fid-dunya hasanah wa fil-akhirati hasanah wa qina adhaban-nar',
+      en: 'Our Lord, give us good in this world and the Hereafter, and protect us from the Fire',
+      ur: 'اے ہمارے رب! ہمیں دنیا اور آخرت میں بھلائی دے اور آگ سے بچا',
+    },
+    {
+      round: 5,
+      name: { en: 'Round 5', ur: 'پانچواں چکر', ar: 'الشوط الخامس' },
+      arabic: 'رَبِّ اغْفِرْ وَارْحَمْ وَأَنْتَ خَيْرُ الرَّاحِمِينَ',
+      transliteration: 'Rabbighfir warham wa anta khairur-rahimin',
+      en: 'My Lord, forgive and have mercy, You are the Best of those who show mercy',
+      ur: 'اے میرے رب معاف فرما اور رحم کر، تو سب سے بہتر رحم کرنے والا ہے',
+    },
+    {
+      round: 6,
+      name: { en: 'Round 6', ur: 'چھٹا چکر', ar: 'الشوط السادس' },
+      arabic: 'اللَّهُمَّ إِنَّكَ عَفُوٌّ تُحِبُّ الْعَفْوَ فَاعْفُ عَنِّي',
+      transliteration: "Allahumma innaka 'Afuwwun tuhibbul-'afwa fa'fu 'anni",
+      en: 'O Allah, You are Forgiving and love forgiveness, so forgive me',
+      ur: 'اے اللہ تو معاف کرنے والا ہے اور معافی کو پسند کرتا ہے، پس مجھے معاف فرما',
+    },
+    {
+      round: 7,
+      name: { en: 'Final Round', ur: 'آخری چکر', ar: 'الشوط الأخير' },
+      arabic: 'لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ',
+      transliteration: 'La ilaha illAllahu wahdahu la sharika lah, lahul-mulku wa lahul-hamd wa huwa ala kulli shayin qadir',
+      en: 'There is no god but Allah alone with no partner. His is the dominion and praise, and He is able to do all things',
+      ur: 'اللہ کے سوا کوئی معبود نہیں، وہ اکیلا ہے، اس کا کوئی شریک نہیں، بادشاہی اسی کی ہے اور حمد اسی کے لیے ہے',
+    },
+  ];
+
   // Text content
   const text = {
     title: { en: 'Tawaf', ur: 'طواف', ar: 'الطواف' },
@@ -367,13 +546,12 @@ const TawafGame = ({ language = 'en', onComplete, onBack }) => {
       ur: 'طواف مکمل! 🎉',
       ar: 'اكتمل الطواف! 🎉',
     },
-    dua: {
-      arabic: 'رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ',
-      en: 'Our Lord, give us good in this world and good in the Hereafter, and protect us from the torment of the Fire.',
-      ur: 'اے ہمارے رب! ہمیں دنیا میں بھی بھلائی دے اور آخرت میں بھی بھلائی دے اور ہمیں آگ کے عذاب سے بچا۔',
-    },
+    skip: { en: 'Skip', ur: 'چھوڑیں', ar: 'تخطي' },
     next: { en: 'Next Step', ur: 'اگلا مرحلہ', ar: 'الخطوة التالية' },
   };
+
+  // Get current round dua
+  const currentRoundDua = roundDuas[Math.min(rounds, 6)];
 
   // Initialize audio on first interaction
   useEffect(() => {
@@ -402,8 +580,8 @@ const TawafGame = ({ language = 'en', onComplete, onBack }) => {
       const prevNorm = ((lastCrossRef.current % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
       const newNorm = ((newAngle % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
 
-      // Detect crossing (from ~6.28 to ~0)
-      if (prevNorm > 5 && newNorm < 1) {
+      // Detect crossing counter-clockwise (from small positive to large ~6.28)
+      if (prevNorm < 1 && newNorm > 5) {
         setRounds((r) => {
           const newRounds = r + 1;
           playRoundComplete(); // Play sound on round complete
@@ -509,12 +687,50 @@ const TawafGame = ({ language = 'en', onComplete, onBack }) => {
           </h1>
         </div>
 
-        {/* Round counter */}
-        <div className="flex items-center gap-2 px-4 py-2 bg-emerald-500/90 rounded-full">
-          <span className="text-white font-bold">{Math.min(rounds, 7)}/7</span>
-          <span className="text-white/80 text-sm">{text.rounds[language]}</span>
+        <div className="flex items-center gap-2">
+          {/* Skip button */}
+          {!gameComplete && (
+            <button
+              onClick={() => {
+                stopAllSounds();
+                playGameComplete();
+                setGameComplete(true);
+              }}
+              className="px-3 py-1 rounded-full bg-white/20 text-white/80 text-sm hover:bg-white/30 transition-all"
+              style={{ fontFamily: isRTL ? "'Noto Nastaliq Urdu', serif" : 'inherit' }}
+            >
+              {text.skip[language]} ⏭️
+            </button>
+          )}
+
+          {/* Round counter */}
+          <div className="flex items-center gap-2 px-4 py-2 bg-emerald-500/90 rounded-full">
+            <span className="text-white font-bold">{Math.min(rounds, 7)}/7</span>
+          </div>
         </div>
       </div>
+
+      {/* Current Round Dua Display */}
+      {!gameComplete && (
+        <div className="px-4 py-2 bg-emerald-900/80 backdrop-blur-sm">
+          <p className="text-emerald-300 text-xs text-center mb-1">
+            {currentRoundDua.name[language]} - {language === 'ar' ? 'الدعاء' : language === 'ur' ? 'دعا' : 'Dua'}:
+          </p>
+          <p
+            className="text-white text-sm text-center leading-relaxed"
+            style={{ fontFamily: "'Scheherazade New', serif" }}
+            dir="rtl"
+          >
+            {currentRoundDua.arabic}
+          </p>
+          <p
+            className="text-white/70 text-xs text-center mt-1"
+            style={{ fontFamily: isRTL ? "'Noto Nastaliq Urdu', serif" : 'inherit' }}
+          >
+            {currentRoundDua[language] || currentRoundDua.en}
+          </p>
+        </div>
+      )}
 
       {/* 3D Canvas */}
       <div

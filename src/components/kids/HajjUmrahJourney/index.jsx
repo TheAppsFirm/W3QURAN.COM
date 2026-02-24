@@ -3,30 +3,35 @@
  * Main entry point for Hajj & Umrah Journey feature
  *
  * Features:
- * - Umrah Journey (FREE): 5 steps - Interactive 3D Game
- * - Hajj Journey (PREMIUM): 14 steps over 5 days - Interactive 3D Game
- * - Keyboard controls for desktop users
+ * - Umrah Journey: 4 steps - Bird's Eye 3D Experience with Audio & Duas
+ * - Hajj Journey: 11 steps - Bird's Eye 3D Experience with Audio & Duas
+ * - Auto-play mode
  * - Multilingual: English, Urdu, Arabic
- * - Authentic hadith references
  */
 
 import React, { useState, useEffect, useCallback, lazy, Suspense } from 'react';
-import { Icons } from '../../common/Icons';
 import JourneySelector from './JourneySelector';
 import LanguageSelect from './LanguageSelect';
 
-// Lazy load game components
-const UmrahGameJourney = lazy(() => import('./games/UmrahGameJourney'));
+// Lazy load the unified journey component
+const PilgrimageJourneyUnified = lazy(() => import('./games/PilgrimageJourneyUnified'));
 
 // Loading component
-const LoadingScreen = () => (
-  <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-gradient-to-br from-slate-900 to-slate-800">
-    <div className="text-center">
-      <div className="w-16 h-16 mx-auto mb-4 border-4 border-white/20 border-t-emerald-400 rounded-full animate-spin" />
-      <p className="text-white/70">Loading...</p>
+const LoadingScreen = ({ language }) => {
+  const isRTL = language === 'ar' || language === 'ur';
+
+  return (
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-gradient-to-br from-slate-900 to-slate-800">
+      <div className="text-center">
+        <div className="text-6xl mb-6 animate-bounce">🕋</div>
+        <div className="w-16 h-16 mx-auto mb-4 border-4 border-white/20 border-t-emerald-400 rounded-full animate-spin" />
+        <p className="text-white/70" style={{ fontFamily: isRTL ? "'Noto Nastaliq Urdu', serif" : 'inherit' }}>
+          {language === 'ar' ? 'جارٍ التحميل...' : language === 'ur' ? 'لوڈ ہو رہا ہے...' : 'Loading...'}
+        </p>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 // Get saved language preference
 const getSavedLanguage = () => {
@@ -50,9 +55,9 @@ const saveLanguage = (lang) => {
 // MAIN COMPONENT
 // ============================================================
 const HajjUmrahJourney = ({ onBack }) => {
-  // Screens: language, selector, umrah, hajj
   const [screen, setScreen] = useState('language');
   const [language, setLanguage] = useState(getSavedLanguage() || 'en');
+  const [journeyType, setJourneyType] = useState(null);
 
   // Check for saved language on mount
   useEffect(() => {
@@ -70,21 +75,29 @@ const HajjUmrahJourney = ({ onBack }) => {
     setScreen('selector');
   }, []);
 
-  // Handle journey selection - go directly to game
+  // Handle journey selection
   const handleJourneySelect = useCallback((journey) => {
-    setScreen(journey); // 'umrah' or 'hajj' - directly to game
+    setJourneyType(journey);
+    setScreen('journey');
   }, []);
 
   // Handle back navigation
   const handleBack = useCallback(() => {
-    if (screen === 'umrah' || screen === 'hajj') {
+    if (screen === 'journey') {
       setScreen('selector');
+      setJourneyType(null);
     } else if (screen === 'selector') {
       setScreen('language');
     } else {
       onBack?.();
     }
   }, [screen, onBack]);
+
+  // Handle journey completion
+  const handleComplete = useCallback(() => {
+    setScreen('selector');
+    setJourneyType(null);
+  }, []);
 
   // Render based on current screen
   switch (screen) {
@@ -106,23 +119,14 @@ const HajjUmrahJourney = ({ onBack }) => {
         />
       );
 
-    case 'umrah':
+    case 'journey':
       return (
-        <Suspense fallback={<LoadingScreen />}>
-          <UmrahGameJourney
+        <Suspense fallback={<LoadingScreen language={language} />}>
+          <PilgrimageJourneyUnified
+            journeyType={journeyType}
             language={language}
             onBack={handleBack}
-          />
-        </Suspense>
-      );
-
-    case 'hajj':
-      // TODO: Create HajjGameJourney
-      return (
-        <Suspense fallback={<LoadingScreen />}>
-          <UmrahGameJourney
-            language={language}
-            onBack={handleBack}
+            onComplete={handleComplete}
           />
         </Suspense>
       );

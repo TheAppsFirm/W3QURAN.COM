@@ -349,6 +349,7 @@ const SaiGame = ({ language = 'en', onComplete, onBack }) => {
       ar: '🏃 اركض أسرع في المنطقة الخضراء!',
     },
     laps: { en: 'Laps', ur: 'چکر', ar: 'أشواط' },
+    skip: { en: 'Skip', ur: 'چھوڑیں', ar: 'تخطي' },
     safa: { en: 'Safa', ur: 'صفا', ar: 'الصفا' },
     marwah: { en: 'Marwah', ur: 'مروہ', ar: 'المروة' },
     complete: {
@@ -539,10 +540,27 @@ const SaiGame = ({ language = 'en', onComplete, onBack }) => {
           </h1>
         </div>
 
-        {/* Lap counter */}
-        <div className="flex items-center gap-2 px-4 py-2 bg-emerald-500/90 rounded-full shadow-lg">
-          <span className="text-white font-bold">{Math.min(laps, 7)}/7</span>
-          <span className="text-white/80 text-sm">{text.laps[language]}</span>
+        <div className="flex items-center gap-2">
+          {/* Skip button */}
+          {!gameComplete && (
+            <button
+              onClick={() => {
+                stopAllSounds();
+                playGameComplete();
+                setGameComplete(true);
+              }}
+              className="px-3 py-1 rounded-full bg-white/50 text-gray-700 text-sm hover:bg-white/70 transition-all"
+              style={{ fontFamily: isRTL ? "'Noto Nastaliq Urdu', serif" : 'inherit' }}
+            >
+              {text.skip[language]} ⏭️
+            </button>
+          )}
+
+          {/* Lap counter */}
+          <div className="flex items-center gap-2 px-4 py-2 bg-emerald-500/90 rounded-full shadow-lg">
+            <span className="text-white font-bold">{Math.min(laps, 7)}/7</span>
+            <span className="text-white/80 text-sm">{text.laps[language]}</span>
+          </div>
         </div>
       </div>
 

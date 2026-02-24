@@ -38,28 +38,19 @@ const LanguageSelect = ({ onSelectLanguage, onBack }) => {
         background: 'linear-gradient(135deg, #F59E0B 0%, #D97706 50%, #B45309 100%)',
       }}
     >
-      {/* Decorative elements */}
+      {/* Decorative stars */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {/* Kaaba silhouette */}
-        <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 opacity-10">
-          <svg width="400" height="300" viewBox="0 0 400 300">
-            <rect x="100" y="50" width="200" height="250" fill="white" />
-            <rect x="150" y="100" width="100" height="150" fill="white" opacity="0.5" />
-          </svg>
-        </div>
-
-        {/* Stars */}
-        {Array.from({ length: 20 }, (_, i) => (
+        {Array.from({ length: 30 }, (_, i) => (
           <div
             key={i}
             className="absolute rounded-full bg-white animate-pulse"
             style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 50}%`,
-              width: `${2 + Math.random() * 3}px`,
-              height: `${2 + Math.random() * 3}px`,
-              opacity: 0.3 + Math.random() * 0.4,
-              animationDelay: `${Math.random() * 2}s`,
+              left: `${10 + (i * 3) % 80}%`,
+              top: `${5 + (i * 7) % 45}%`,
+              width: `${2 + (i % 3)}px`,
+              height: `${2 + (i % 3)}px`,
+              opacity: 0.3 + (i % 5) * 0.1,
+              animationDelay: `${(i % 5) * 0.5}s`,
             }}
           />
         ))}

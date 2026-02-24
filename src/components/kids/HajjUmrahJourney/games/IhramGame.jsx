@@ -461,7 +461,13 @@ const IhramGame = ({ language = 'en', onComplete, onBack }) => {
           </p>
         </div>
 
-        <div className="w-12" /> {/* Spacer */}
+        {/* Skip button */}
+        <button
+          onClick={onComplete}
+          className="px-4 py-2 rounded-full bg-white/80 backdrop-blur-sm text-gray-600 text-sm shadow-lg"
+        >
+          {language === 'ar' ? 'تخطي' : language === 'ur' ? 'چھوڑیں' : 'Skip'} →
+        </button>
       </div>
 
       {/* 3D Scene */}
