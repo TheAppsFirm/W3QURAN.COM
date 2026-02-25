@@ -29,7 +29,7 @@ const JourneySelector = ({ language, onSelectJourney, onBack, onChangeLanguage }
     hajj: {
       title: { en: 'Hajj', ur: 'حج', ar: 'الحج' },
       subtitle: { en: 'The Greater Pilgrimage', ur: 'بڑا حج', ar: 'الحج الأكبر' },
-      steps: { en: '11 Steps', ur: '11 مراحل', ar: '11 خطوة' },
+      steps: { en: '12 Steps', ur: '12 مراحل', ar: '12 خطوة' },
       features: { en: 'Bird\'s Eye • Auto Play • Duas', ur: 'فضائی منظر • آٹو پلے • دعائیں', ar: 'منظر علوي • تشغيل تلقائي • أدعية' },
     },
     features: {
@@ -115,7 +115,7 @@ const JourneySelector = ({ language, onSelectJourney, onBack, onChangeLanguage }
           </div>
 
           <div className="relative text-center text-white">
-            <div className="text-5xl mb-4">🕌</div>
+            <div className="text-5xl mb-4">🕋</div>
             <h2
               className="text-2xl font-bold mb-1"
               style={{ fontFamily: isRTL ? "'Noto Nastaliq Urdu', serif" : 'inherit' }}

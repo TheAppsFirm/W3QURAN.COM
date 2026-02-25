@@ -6,8 +6,9 @@
 
 import React, { useRef, useMemo, useState, useEffect, Suspense } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
-import { Sky, Stars, Sparkles, Cloud, Float, Environment } from '@react-three/drei';
+import { Sky, Stars, Sparkles, Cloud, Float, Environment, useGLTF, useAnimations } from '@react-three/drei';
 import * as THREE from 'three';
+import { clone as skeletonClone } from 'three/addons/utils/SkeletonUtils.js';
 
 // ============================================================
 // ENHANCED LIGHTING SETUP
@@ -277,91 +278,178 @@ export const CameraShake = ({ intensity = 0.005, active = false }) => {
 // ============================================================
 // PILGRIM MODEL
 // ============================================================
-// Simple pilgrim model (always works, no GLB dependency)
-const SimplePilgrim = ({
-  position = [0, 0, 0],
-  scale = 1,
-  isMoving = false,
-  lookDirection = 0
-}) => {
-  const groupRef = useRef();
-  const legsRef = useRef();
+// Pilgrim in Ihram — detailed model with complete anatomy and authentic clothing
+// Proportions: ~1.75m man with 7.5 head heights, scale=1 → ~1.4 units tall
+// Ihram: Izar (lower wrap waist→below knee) + Rida (upper drape, right shoulder bare)
+// GLB-based pilgrim model with walking/running animations
+const PILGRIM_MODEL_URL = '/models/hajj/pilgrim.glb';
 
-  useFrame((state) => {
+const GLBPilgrim = ({ position = [0, 0, 0], scale = 1, isMoving = false, isRunning = false, lookDirection = 0 }) => {
+  const groupRef = useRef();
+  const modelRef = useRef();
+  const { scene, animations } = useGLTF(PILGRIM_MODEL_URL, true); // true = Draco decoder
+
+  // SkeletonUtils.clone properly handles skinned meshes + bones
+  const clonedScene = useMemo(() => skeletonClone(scene), [scene]);
+  const { actions } = useAnimations(animations, modelRef);
+
+  // Find animation names
+  const walkName = useMemo(() => {
+    const names = Object.keys(actions);
+    return names.find(n => n.toLowerCase().includes('walk')) || names[0];
+  }, [actions]);
+  const runName = useMemo(() => {
+    const names = Object.keys(actions);
+    return names.find(n => n.toLowerCase().includes('run'));
+  }, [actions]);
+
+  // Handle animation state changes
+  useEffect(() => {
+    if (!actions || Object.keys(actions).length === 0) return;
+
+    // Fade out all animations
+    Object.values(actions).forEach(a => { if (a) a.fadeOut(0.3); });
+
+    if (isMoving) {
+      const animName = (isRunning && runName) ? runName : walkName;
+      if (animName && actions[animName]) {
+        actions[animName].reset().fadeIn(0.3).play();
+      }
+    }
+  }, [isMoving, isRunning, actions, walkName, runName]);
+
+  // Clipping plane ref — updated every frame to follow model's WORLD transform
+  const idtibaPlaneRef = useRef(new THREE.Plane(new THREE.Vector3(-1, 0, 0), 0));
+  // Reusable vectors to avoid allocations in useFrame
+  const _worldQuat = useMemo(() => new THREE.Quaternion(), []);
+  const _worldPos = useMemo(() => new THREE.Vector3(), []);
+  const _normal = useMemo(() => new THREE.Vector3(), []);
+
+  // Handle rotation + update clipping plane to follow actual world orientation
+  useFrame(() => {
     if (groupRef.current) {
       groupRef.current.rotation.y = lookDirection;
-    }
-    // Walking animation
-    if (isMoving && legsRef.current) {
-      const t = state.clock.elapsedTime * 8;
-      legsRef.current.children[0].rotation.x = Math.sin(t) * 0.4;
-      legsRef.current.children[1].rotation.x = Math.sin(t + Math.PI) * 0.4;
+
+      // Get the ACTUAL world rotation (includes parent group rotation from WalkingPilgrim)
+      groupRef.current.getWorldQuaternion(_worldQuat);
+      groupRef.current.getWorldPosition(_worldPos);
+
+      // Base normal (-1, 0, 0) clips the model's local right side (positive X)
+      // Rotate it by the actual world quaternion so it follows the model everywhere
+      _normal.set(-1, 0, 0).applyQuaternion(_worldQuat);
+
+      idtibaPlaneRef.current.normal.copy(_normal);
+      // Plane passes through the model's world center
+      idtibaPlaneRef.current.constant = -_normal.dot(_worldPos);
     }
   });
 
-  const s = scale;
+  // Setup: hide Kopiah + Slippers, apply Idtiba clipping, enable shadows
+  const { gl } = useThree();
+  useEffect(() => {
+    gl.localClippingEnabled = true;
+
+    const ihramMeshes = [];
+
+    clonedScene.traverse((child) => {
+      if (!child.isMesh) return;
+
+      child.castShadow = true;
+      child.receiveShadow = true;
+
+      const matName = child.material?.name?.toLowerCase() || '';
+
+      // Hide Kopiah — no cap during Ihram
+      // Hide Slippers — pilgrims are barefoot during Tawaf
+      if (matName.includes('kopiah') || matName.includes('slipper')) {
+        child.visible = false;
+        return;
+      }
+
+      // Collect Ihram meshes to determine upper vs lower
+      if (matName.includes('ihram')) {
+        child.geometry.computeBoundingBox();
+        const bb = child.geometry.boundingBox;
+        const centerY = (bb.min.y + bb.max.y) / 2;
+        ihramMeshes.push({ mesh: child, centerY, matName });
+      }
+    });
+
+    // Find the upper Ihram (Rida) — group with higher average Y
+    if (ihramMeshes.length > 0) {
+      const groups = {};
+      ihramMeshes.forEach(({ mesh, centerY, matName }) => {
+        if (!groups[matName]) groups[matName] = { meshes: [], totalY: 0, count: 0 };
+        groups[matName].meshes.push(mesh);
+        groups[matName].totalY += centerY;
+        groups[matName].count++;
+      });
+
+      let upperGroup = null;
+      let highestY = -Infinity;
+      Object.entries(groups).forEach(([name, g]) => {
+        const avgY = g.totalY / g.count;
+        if (avgY > highestY) {
+          highestY = avgY;
+          upperGroup = g;
+        }
+      });
+
+      // Apply the shared clipping plane ref to Rida meshes
+      if (upperGroup) {
+        upperGroup.meshes.forEach(mesh => {
+          mesh.material = mesh.material.clone();
+          mesh.material.clippingPlanes = [idtibaPlaneRef.current];
+          mesh.material.clipShadows = true;
+        });
+      }
+    }
+  }, [clonedScene, gl]);
+
+  // Scale: the GLB model is roughly human-sized, we adjust to match scene
+  const modelScale = scale * 0.45;
+
   return (
     <group ref={groupRef} position={position}>
-      {/* Body - Ihram garment */}
-      <mesh position={[0, 0.5 * s, 0]} castShadow>
-        <cylinderGeometry args={[0.15 * s, 0.2 * s, 0.8 * s, 12]} />
-        <meshStandardMaterial color="#FAFAFA" roughness={0.6} />
-      </mesh>
-
-      {/* Upper body */}
-      <mesh position={[0, 0.95 * s, 0]} castShadow>
-        <cylinderGeometry args={[0.12 * s, 0.15 * s, 0.4 * s, 12]} />
-        <meshStandardMaterial color="#FAFAFA" roughness={0.6} />
-      </mesh>
-
-      {/* Head */}
-      <mesh position={[0, 1.25 * s, 0]} castShadow>
-        <sphereGeometry args={[0.12 * s, 16, 16]} />
-        <meshStandardMaterial color="#D4A574" roughness={0.6} />
-      </mesh>
-
-      {/* Beard */}
-      <mesh position={[0, 1.18 * s, 0.08 * s]}>
-        <boxGeometry args={[0.1 * s, 0.06 * s, 0.04 * s]} />
-        <meshStandardMaterial color="#2D2D2D" roughness={0.9} />
-      </mesh>
-
-      {/* Arms */}
-      <mesh position={[-0.2 * s, 0.85 * s, 0.05 * s]} rotation={[0.2, 0, 0.3]} castShadow>
-        <capsuleGeometry args={[0.04 * s, 0.25 * s, 4, 8]} />
-        <meshStandardMaterial color="#D4A574" roughness={0.6} />
-      </mesh>
-      <mesh position={[0.2 * s, 0.85 * s, 0.05 * s]} rotation={[0.2, 0, -0.3]} castShadow>
-        <capsuleGeometry args={[0.04 * s, 0.25 * s, 4, 8]} />
-        <meshStandardMaterial color="#D4A574" roughness={0.6} />
-      </mesh>
-
-      {/* Legs */}
-      <group ref={legsRef} position={[0, 0.15 * s, 0]}>
-        <mesh position={[-0.07 * s, -0.1 * s, 0]} castShadow>
-          <capsuleGeometry args={[0.05 * s, 0.2 * s, 4, 8]} />
-          <meshStandardMaterial color="#FAFAFA" roughness={0.6} />
-        </mesh>
-        <mesh position={[0.07 * s, -0.1 * s, 0]} castShadow>
-          <capsuleGeometry args={[0.05 * s, 0.2 * s, 4, 8]} />
-          <meshStandardMaterial color="#FAFAFA" roughness={0.6} />
-        </mesh>
+      <group ref={modelRef}>
+        <primitive object={clonedScene} scale={[modelScale, modelScale, modelScale]} />
       </group>
+    </group>
+  );
+};
 
-      {/* Feet */}
-      <mesh position={[-0.07 * s, 0.02 * s, 0.03 * s]}>
-        <boxGeometry args={[0.06 * s, 0.02 * s, 0.1 * s]} />
-        <meshStandardMaterial color="#8B4513" roughness={0.8} />
+// Wrapper component — renders GLB model with Suspense fallback
+const SimplePilgrim = (props) => {
+  return (
+    <Suspense fallback={<FallbackPilgrim position={props.position} scale={props.scale} />}>
+      <GLBPilgrim {...props} />
+    </Suspense>
+  );
+};
+
+// Minimal fallback shown while GLB loads
+const FallbackPilgrim = ({ position = [0, 0, 0], scale = 1 }) => {
+  const s = scale;
+  return (
+    <group position={position}>
+      {/* Simple capsule body placeholder */}
+      <mesh position={[0, 0.6 * s, 0]} castShadow>
+        <capsuleGeometry args={[0.12 * s, 0.6 * s, 4, 8]} />
+        <meshStandardMaterial color="#F5F2EC" roughness={0.8} />
       </mesh>
-      <mesh position={[0.07 * s, 0.02 * s, 0.03 * s]}>
-        <boxGeometry args={[0.06 * s, 0.02 * s, 0.1 * s]} />
-        <meshStandardMaterial color="#8B4513" roughness={0.8} />
+      {/* Head */}
+      <mesh position={[0, 1.1 * s, 0]} castShadow>
+        <sphereGeometry args={[0.1 * s, 8, 8]} />
+        <meshStandardMaterial color="#C4926A" roughness={0.5} />
       </mesh>
     </group>
   );
 };
 
-// Export SimplePilgrim as the main pilgrim model
+// Preload the model for faster initial display
+useGLTF.preload(PILGRIM_MODEL_URL, true);
+
+// Export as main pilgrim model
 export const RealisticPilgrim = SimplePilgrim;
 export const EnhancedPilgrim = SimplePilgrim;
 export const PilgrimModel = SimplePilgrim;
