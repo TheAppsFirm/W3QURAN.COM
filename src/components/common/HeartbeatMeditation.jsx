@@ -316,10 +316,14 @@ const ActiveSession = memo(function ActiveSession({
   const stopAllAudio = useCallback(() => {
     if (ambientAudioRef.current) {
       ambientAudioRef.current.pause();
+      ambientAudioRef.current.removeAttribute('src');
+      ambientAudioRef.current.load();
       ambientAudioRef.current = null;
     }
     if (dhikrAudioRef.current) {
       dhikrAudioRef.current.pause();
+      dhikrAudioRef.current.removeAttribute('src');
+      dhikrAudioRef.current.load();
       dhikrAudioRef.current = null;
     }
   }, []);
@@ -352,6 +356,8 @@ const ActiveSession = memo(function ActiveSession({
     return () => {
       if (ambientAudioRef.current) {
         ambientAudioRef.current.pause();
+        ambientAudioRef.current.removeAttribute('src');
+        ambientAudioRef.current.load();
         ambientAudioRef.current = null;
       }
     };
@@ -426,10 +432,14 @@ const ActiveSession = memo(function ActiveSession({
     return () => {
       if (ambientAudioRef.current) {
         ambientAudioRef.current.pause();
+        ambientAudioRef.current.removeAttribute('src');
+        ambientAudioRef.current.load();
         ambientAudioRef.current = null;
       }
       if (dhikrAudioRef.current) {
         dhikrAudioRef.current.pause();
+        dhikrAudioRef.current.removeAttribute('src');
+        dhikrAudioRef.current.load();
         dhikrAudioRef.current = null;
       }
     };

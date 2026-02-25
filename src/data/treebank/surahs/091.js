@@ -33,7 +33,10 @@ export const TREEBANK_DATA = {
       hi: "क़सम है सूरज की और उसकी चमक की",
       bn: "শপথ সূর্যের এবং তার উজ্জ্বলতার",
       tr: "Güneşe ve aydınlığına yemin olsun",
-      id: "Demi matahari dan sinarnya"
+      id: "Demi matahari dan sinarnya",
+    structure: {
+      relationships: [],
+    },
     },
     words: [
       {
@@ -186,7 +189,12 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "وَ (oath) + الْقَمَرِ (sworn object) + إِذَا تَلَاهَا (temporal clause)"
+    dependencyStructure: "وَ (oath) + الْقَمَرِ (sworn object) + إِذَا تَلَاهَا (temporal clause)",
+    structure: {
+      relationships: [
+      { from: 2, to: 3, label: 'شرط + فعل' }
+      ],
+    },
   },
 
   3: {
@@ -269,7 +277,12 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "وَ (oath) + النَّهَارِ (sworn object) + إِذَا جَلَّاهَا (temporal clause)"
+    dependencyStructure: "وَ (oath) + النَّهَارِ (sworn object) + إِذَا جَلَّاهَا (temporal clause)",
+    structure: {
+      relationships: [
+      { from: 2, to: 3, label: 'شرط + فعل' }
+      ],
+    },
   },
 
   4: {
@@ -351,7 +364,12 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "وَ (oath) + اللَّيْلِ (sworn object) + إِذَا يَغْشَاهَا (temporal clause)"
+    dependencyStructure: "وَ (oath) + اللَّيْلِ (sworn object) + إِذَا يَغْشَاهَا (temporal clause)",
+    structure: {
+      relationships: [
+      { from: 2, to: 3, label: 'شرط + فعل' }
+      ],
+    },
   },
 
   5: {
@@ -447,7 +465,12 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "وَ (oath) + السَّمَاءِ (sworn object) + وَمَا بَنَاهَا (relative clause)"
+    dependencyStructure: "وَ (oath) + السَّمَاءِ (sworn object) + وَمَا بَنَاهَا (relative clause)",
+    structure: {
+      relationships: [
+      { from: 2, to: 3, label: 'موصول + صلة' }
+      ],
+    },
   },
 
   6: {
@@ -530,7 +553,12 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "وَ (oath) + الْأَرْضِ (sworn object) + وَمَا طَحَاهَا (relative clause)"
+    dependencyStructure: "وَ (oath) + الْأَرْضِ (sworn object) + وَمَا طَحَاهَا (relative clause)",
+    structure: {
+      relationships: [
+      { from: 2, to: 3, label: 'موصول + صلة' }
+      ],
+    },
   },
 
   7: {
@@ -624,7 +652,12 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "وَ (oath) + نَفْسٍ (sworn object) + وَمَا سَوَّاهَا (relative clause)"
+    dependencyStructure: "وَ (oath) + نَفْسٍ (sworn object) + وَمَا سَوَّاهَا (relative clause)",
+    structure: {
+      relationships: [
+      { from: 2, to: 3, label: 'موصول + صلة' }
+      ],
+    },
   },
 
   8: {
@@ -636,7 +669,10 @@ export const TREEBANK_DATA = {
       hi: "फिर उसे उसकी बुराई और नेकी की समझ दी",
       bn: "অতঃপর তাকে তার পাপাচার ও তাকওয়ার জ্ঞান দিয়েছেন",
       tr: "Sonra ona kötülüğü ve takvayı ilham etti",
-      id: "Lalu Dia mengilhamkan kepadanya kedurhakaan dan ketakwaannya"
+      id: "Lalu Dia mengilhamkan kepadanya kedurhakaan dan ketakwaannya",
+    structure: {
+      relationships: [],
+    },
     },
     words: [
       {
@@ -846,7 +882,12 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "قَدْ (certainty) + أَفْلَحَ (verb) + مَن زَكَّاهَا (subject clause) - THE MAIN MESSAGE"
+    dependencyStructure: "قَدْ (certainty) + أَفْلَحَ (verb) + مَن زَكَّاهَا (subject clause) - THE MAIN MESSAGE",
+    structure: {
+      relationships: [
+      { from: 3, to: 4, label: 'موصول + صلة' }
+      ],
+    },
   },
 
   10: {
@@ -961,7 +1002,12 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "وَقَدْ (certainty) + خَابَ (verb) + مَن دَسَّاهَا (subject clause)"
+    dependencyStructure: "وَقَدْ (certainty) + خَابَ (verb) + مَن دَسَّاهَا (subject clause)",
+    structure: {
+      relationships: [
+      { from: 3, to: 4, label: 'موصول + صلة' }
+      ],
+    },
   },
 
   11: {
@@ -973,7 +1019,10 @@ export const TREEBANK_DATA = {
       hi: "समूद ने अपनी सरकशी में झुठलाया",
       bn: "সামুদ তাদের অবাধ্যতায় মিথ্যা বলেছে",
       tr: "Semud azgınlığıyla yalanladı",
-      id: "Kaum Tsamud telah mendustakan karena kesombongannya"
+      id: "Kaum Tsamud telah mendustakan karena kesombongannya",
+    structure: {
+      relationships: [{ from: 1, to: 2, label: 'فعل + فاعل' }],
+    },
     },
     words: [
       {
@@ -1069,7 +1118,10 @@ export const TREEBANK_DATA = {
       hi: "जब उनका सबसे बदबख़्त आदमी उठा",
       bn: "যখন তাদের সবচেয়ে দুর্ভাগা ব্যক্তি উঠল",
       tr: "Hani en bedbahtları ileri atıldı",
-      id: "Ketika orang yang paling celaka di antara mereka bangkit"
+      id: "Ketika orang yang paling celaka di antara mereka bangkit",
+    structure: {
+      relationships: [{ from: 2, to: 3, label: 'موصوف + صفت' }],
+    },
     },
     words: [
       {
@@ -1318,7 +1370,12 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "فَقَالَ لَهُمْ (verb+object) + رَسُولُ اللَّهِ (subject) + نَاقَةَ اللَّهِ وَسُقْيَاهَا (warning)"
+    dependencyStructure: "فَقَالَ لَهُمْ (verb+object) + رَسُولُ اللَّهِ (subject) + نَاقَةَ اللَّهِ وَسُقْيَاهَا (warning)",
+    structure: {
+      relationships: [
+      { from: 2, to: 3, label: 'جار + مجرور' }
+      ],
+    },
   },
 
   14: {
@@ -1501,7 +1558,12 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "فَكَذَّبُوهُ (denial) + فَعَقَرُوهَا (crime) + فَدَمْدَمَ... بِذَنبِهِمْ (punishment) + فَسَوَّاهَا (result)"
+    dependencyStructure: "فَكَذَّبُوهُ (denial) + فَعَقَرُوهَا (crime) + فَدَمْدَمَ... بِذَنبِهِمْ (punishment) + فَسَوَّاهَا (result)",
+    structure: {
+      relationships: [
+      { from: 4, to: 5, label: 'جار + مجرور' }
+      ],
+    },
   },
 
   15: {
@@ -1595,7 +1657,12 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "وَلَا (negative) + يَخَافُ (verb) + عُقْبَاهَا (object) - Divine conclusion"
+    dependencyStructure: "وَلَا (negative) + يَخَافُ (verb) + عُقْبَاهَا (object) - Divine conclusion",
+    structure: {
+      relationships: [
+      { from: 1, to: 2, label: 'نفی + فعل' }
+      ],
+    },
   }
 };
 

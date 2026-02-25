@@ -315,6 +315,9 @@ const SURAH_114_TREEBANK = {
         { word: 'بِرَبِّ', role: 'prep-phrase', dependsOn: 'أَعُوذُ' },
         { word: 'النَّاسِ', role: 'mudaf-ilayh', dependsOn: 'رَبِّ' },
       ],
+      relationships: [
+        { from: 3, to: 4, label: 'مضاف + مضاف إليه' }
+      ],
     },
   },
 
@@ -444,6 +447,9 @@ const SURAH_114_TREEBANK = {
         { word: 'مَلِكِ', role: 'badal/attribute', dependsOn: 'رَبِّ (1:3)' },
         { word: 'النَّاسِ', role: 'mudaf-ilayh', dependsOn: 'مَلِكِ' },
       ],
+      relationships: [
+        { from: 1, to: 2, label: 'مضاف + مضاف إليه' }
+      ],
     },
   },
 
@@ -526,6 +532,9 @@ const SURAH_114_TREEBANK = {
       structure: [
         { word: 'إِلَٰهِ', role: 'badal/attribute', dependsOn: 'رَبِّ (1:3)' },
         { word: 'النَّاسِ', role: 'mudaf-ilayh', dependsOn: 'إِلَٰهِ' },
+      ],
+      relationships: [
+        { from: 1, to: 2, label: 'مضاف + مضاف إليه' }
       ],
     },
   },
@@ -694,6 +703,11 @@ const SURAH_114_TREEBANK = {
         { word: 'الْوَسْوَاسِ', role: 'mudaf-ilayh', dependsOn: 'شَرِّ' },
         { word: 'الْخَنَّاسِ', role: 'sifah', dependsOn: 'الْوَسْوَاسِ' },
       ],
+      relationships: [
+        { from: 1, to: 2, label: 'جار + مجرور' },
+        { from: 2, to: 3, label: 'مضاف + مضاف إليه' },
+        { from: 3, to: 4, label: 'موصوف + صفت' }
+      ],
     },
   },
 
@@ -852,6 +866,11 @@ const SURAH_114_TREEBANK = {
         { word: 'صُدُورِ', role: 'mudaf', dependsOn: 'فِي' },
         { word: 'النَّاسِ', role: 'mudaf-ilayh', dependsOn: 'صُدُورِ' },
       ],
+      relationships: [
+        { from: 1, to: 2, label: 'موصول + صلة' },
+        { from: 3, to: 4, label: 'جار + مجرور' },
+        { from: 4, to: 5, label: 'مضاف + مضاف إليه' }
+      ],
     },
   },
 
@@ -993,6 +1012,9 @@ const SURAH_114_TREEBANK = {
         { word: 'الْجِنَّةِ', role: 'noun', dependsOn: 'مِنَ' },
         { word: 'وَ', role: 'conjunction', connects: ['الْجِنَّةِ', 'النَّاسِ'] },
         { word: 'النَّاسِ', role: 'noun', dependsOn: 'مِنَ' },
+      ],
+      relationships: [
+        { from: 1, to: 2, label: 'جار + مجرور' }
       ],
     },
   },

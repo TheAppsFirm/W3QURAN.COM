@@ -176,7 +176,10 @@ const SURAH_113_TREEBANK = {
         en: 'Command (قُلْ) + Declaration of seeking refuge (أَعُوذُ) with the Lord of Daybreak',
         ur: 'حکم (قُلْ) + پناہ مانگنے کا اعلان (أَعُوذُ) صبح کے رب کی',
       },
-    },
+          relationships: [
+        { from: 3, to: 4, label: 'مضاف + مضاف إليه' }
+      ],
+},
   },
 
   2: { // Ayah 2: مِن شَرِّ مَا خَلَقَ
@@ -273,7 +276,12 @@ const SURAH_113_TREEBANK = {
         en: 'First evil: General - all harmful things in creation',
         ur: 'پہلا شر: عمومی - تخلیق میں تمام نقصان دہ چیزیں',
       },
-    },
+          relationships: [
+        { from: 1, to: 2, label: 'جار + مجرور' },
+        { from: 3, to: 4, label: 'موصول + صلة' },
+        { from: 2, to: 3, label: 'مضاف + مضاف إليه' }
+      ],
+},
   },
 
   3: { // Ayah 3: وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ
@@ -383,7 +391,10 @@ const SURAH_113_TREEBANK = {
         en: 'Second evil: Darkness when it intensifies - time of evil activity',
         ur: 'دوسرا شر: اندھیرا جب چھا جائے - شریر سرگرمیوں کا وقت',
       },
-    },
+          relationships: [
+        { from: 2, to: 3, label: 'مضاف + مضاف إليه' }
+      ],
+},
   },
 
   4: { // Ayah 4: وَمِن شَرِّ النَّفَّاثَاتِ فِي الْعُقَدِ
@@ -496,7 +507,11 @@ const SURAH_113_TREEBANK = {
         en: 'Third evil: Magic/sorcery - those who practice black magic with knots',
         ur: 'تیسرا شر: جادو - وہ لوگ جو گرہوں کے ساتھ کالا جادو کرتے ہیں',
       },
-    },
+          relationships: [
+        { from: 2, to: 3, label: 'مضاف + مضاف إليه' },
+        { from: 4, to: 5, label: 'جار + مجرور' }
+      ],
+},
   },
 
   5: { // Ayah 5: وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ
@@ -608,7 +623,10 @@ const SURAH_113_TREEBANK = {
         en: 'Fourth evil: Envy - the dangerous emotion that harms both envier and envied',
         ur: 'چوتھا شر: حسد - خطرناک جذبہ جو حسد کرنے والے اور جس سے حسد ہو دونوں کو نقصان پہنچاتا ہے',
       },
-    },
+          relationships: [
+        { from: 2, to: 3, label: 'مضاف + مضاف إليه' }
+      ],
+},
   },
 };
 

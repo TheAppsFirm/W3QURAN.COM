@@ -173,7 +173,12 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(أَرَءَيْتَ)[interrogative-verb] → (ٱلَّذِى)[object-relative] → (يُكَذِّبُ)[verb-predicate] → (بِٱلدِّينِ)[prepositional-phrase]"
+    dependencyStructure: "(أَرَءَيْتَ)[interrogative-verb] → (ٱلَّذِى)[object-relative] → (يُكَذِّبُ)[verb-predicate] → (بِٱلدِّينِ)[prepositional-phrase]",
+    structure: {
+      relationships: [
+      { from: 2, to: 3, label: 'موصول + صلة' }
+      ],
+    },
   },
 
   2: {
@@ -304,7 +309,13 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(فَذَٰلِكَ)[demonstrative-subject] → (ٱلَّذِى)[relative-connector] → (يَدُعُّ)[verb] → (ٱلْيَتِيمَ)[direct-object]"
+    dependencyStructure: "(فَذَٰلِكَ)[demonstrative-subject] → (ٱلَّذِى)[relative-connector] → (يَدُعُّ)[verb] → (ٱلْيَتِيمَ)[direct-object]",
+    structure: {
+      relationships: [
+      { from: 2, to: 3, label: 'موصول + صلة' },
+      { from: 3, to: 4, label: 'فعل + مفعول به' }
+      ],
+    },
   },
 
   3: {
@@ -458,7 +469,13 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(وَلَا)[conj+neg] → (يَحُضُّ)[verb] → (عَلَىٰ)[prep] → (طَعَامِ)[noun] → (ٱلْمِسْكِينِ)[genitive]"
+    dependencyStructure: "(وَلَا)[conj+neg] → (يَحُضُّ)[verb] → (عَلَىٰ)[prep] → (طَعَامِ)[noun] → (ٱلْمِسْكِينِ)[genitive]",
+    structure: {
+      relationships: [
+      { from: 1, to: 2, label: 'نفی + فعل' },
+      { from: 3, to: 4, label: 'جار + مجرور' }
+      ],
+    },
   },
 
   4: {
@@ -470,7 +487,10 @@ export const TREEBANK_DATA = {
       hi: "तो विनाश है उन नमाज़ियों के लिए",
       bn: "অতএব সেই নামাযীদের জন্য দুর্ভোগ",
       tr: "Yazıklar olsun o namaz kılanlara",
-      id: "Maka kecelakaanlah bagi orang-orang yang shalat"
+      id: "Maka kecelakaanlah bagi orang-orang yang shalat",
+    structure: {
+      relationships: [],
+    },
     },
     words: [
       {
@@ -692,7 +712,13 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(ٱلَّذِينَ)[relative] → (هُمْ)[subject] → (عَن صَلَاتِهِمْ)[prep-phrase] → (سَاهُونَ)[predicate]"
+    dependencyStructure: "(ٱلَّذِينَ)[relative] → (هُمْ)[subject] → (عَن صَلَاتِهِمْ)[prep-phrase] → (سَاهُونَ)[predicate]",
+    structure: {
+      relationships: [
+      { from: 3, to: 4, label: 'جار + مجرور' },
+      { from: 4, to: 5, label: 'موصوف + صفت' }
+      ],
+    },
   },
 
   6: {
@@ -704,7 +730,10 @@ export const TREEBANK_DATA = {
       hi: "जो दिखावा करते हैं",
       bn: "যারা লোক দেখানো কাজ করে",
       tr: "Onlar gösteriş yapanlardır",
-      id: "Yang berbuat riya"
+      id: "Yang berbuat riya",
+    structure: {
+      relationships: [],
+    },
     },
     words: [
       {
@@ -883,7 +912,12 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(وَيَمْنَعُونَ)[conj+verb] → (ٱلْمَاعُونَ)[direct-object]"
+    dependencyStructure: "(وَيَمْنَعُونَ)[conj+verb] → (ٱلْمَاعُونَ)[direct-object]",
+    structure: {
+      relationships: [
+      { from: 1, to: 2, label: 'فعل + مفعول به' }
+      ],
+    },
   }
 };
 

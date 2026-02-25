@@ -181,6 +181,10 @@ const SURAH_110_TREEBANK = {
         { word: 'اللَّهِ', role: 'mudaf-ilayh', dependsOn: 'نَصْرُ' },
         { word: 'وَالْفَتْحُ', role: 'coordinated-subject', joined_to: 'نَصْرُ' },
       ],
+      relationships: [
+        { from: 1, to: 2, label: 'شرط + فعل' },
+        { from: 3, to: 4, label: 'مضاف + مضاف إليه' }
+      ],
     },
   },
 
@@ -395,6 +399,10 @@ const SURAH_110_TREEBANK = {
         { word: 'يَدْخُلُونَ', role: 'hal-clause', describes: 'النَّاسَ' },
         { word: 'فِي دِينِ اللَّهِ', role: 'prep-phrase', dependsOn: 'يَدْخُلُونَ' },
         { word: 'أَفْوَاجًا', role: 'hal-manner', describes: 'يَدْخُلُونَ' },
+      ],
+      relationships: [
+        { from: 4, to: 5, label: 'جار + مجرور' },
+        { from: 5, to: 6, label: 'مضاف + مضاف إليه' }
       ],
     },
   },
@@ -623,6 +631,10 @@ const SURAH_110_TREEBANK = {
         { word: 'بِحَمْدِ رَبِّكَ', role: 'prep-phrase', dependsOn: 'سَبِّحْ' },
         { word: 'وَاسْتَغْفِرْهُ', role: 'command-2', coordinated: 'سَبِّحْ' },
         { word: 'إِنَّهُ كَانَ تَوَّابًا', role: 'reason-clause', justifies: 'اسْتَغْفِرْهُ' },
+      ],
+      relationships: [
+        { from: 2, to: 3, label: 'مضاف + مضاف إليه' },
+        { from: 1, to: 4, label: 'عطف' }
       ],
     },
   },

@@ -18,9 +18,9 @@ export const ONTOLOGY = {
       color: '#8B5CF6',
       icon: 'Star',
       concepts: [
-        { term: "السَّمَاءِ ذَاتِ الْبُرُوجِ", meaning: "Sky with constellations", explanation: "Stars as 'towers' or 'mansions' - celestial magnificence", verseRef: "85:1" },
-        { term: "الْيَوْمِ الْمَوْعُودِ", meaning: "The Promised Day", explanation: "Day of Judgment - the promise that will be fulfilled", verseRef: "85:2" },
-        { term: "شَاهِدٍ وَمَشْهُودٍ", meaning: "Witness and witnessed", explanation: "Friday, Day of Arafah, or the witnessing on Judgment Day", verseRef: "85:3" }
+        { term: "السَّمَاءِ ذَاتِ الْبُرُوجِ", meaning: { en: "Sky with constellations", ur: "برجوں والے آسمان کی قسم" }, explanation: { en: "Stars as 'towers' or 'mansions' - celestial magnificence", ur: "ستارے بطور 'برج' - آسمانی شان و شوکت" }, verseRef: "85:1" },
+        { term: "الْيَوْمِ الْمَوْعُودِ", meaning: { en: "The Promised Day", ur: "وعدے کے دن کی (قیامت)" }, explanation: { en: "Day of Judgment - the promise that will be fulfilled", ur: "قیامت - وہ وعدہ جو پورا ہوگا" }, verseRef: "85:2" },
+        { term: "شَاهِدٍ وَمَشْهُودٍ", meaning: { en: "Witness and witnessed", ur: "گواہی دینے والے اور گواہی دیے جانے والے کی" }, explanation: { en: "Friday, Day of Arafah, or the witnessing on Judgment Day", ur: "جمعہ، یومِ عرفہ، یا قیامت کی گواہی" }, verseRef: "85:3" }
       ]
     },
 
@@ -30,10 +30,10 @@ export const ONTOLOGY = {
       color: '#EF4444',
       icon: 'AlertTriangle',
       concepts: [
-        { term: "قُتِلَ أَصْحَابُ الْأُخْدُودِ", meaning: "Destroyed were trench makers", explanation: "Tyrants who burned believers alive - cursed by Allah", verseRef: "85:4" },
-        { term: "النَّارِ ذَاتِ الْوَقُودِ", meaning: "Fire full of fuel", explanation: "Massive fire pit prepared for persecution", verseRef: "85:5" },
-        { term: "هُمْ عَلَيْهَا قُعُودٌ", meaning: "They sat by it", explanation: "Tyrants watching their crime - cold-blooded cruelty", verseRef: "85:6" },
-        { term: "مَا يَفْعَلُونَ بِالْمُؤْمِنِينَ", meaning: "What they did to believers", explanation: "Their crime against believing men and women", verseRef: "85:7" }
+        { term: "قُتِلَ أَصْحَابُ الْأُخْدُودِ", meaning: { en: "Destroyed were trench makers", ur: "مارے گئے خندق والے (ظالم)" }, explanation: { en: "Tyrants who burned believers alive - cursed by Allah", ur: "ظالم جنہوں نے مومنوں کو زندہ جلایا - Allah کی لعنت" }, verseRef: "85:4" },
+        { term: "النَّارِ ذَاتِ الْوَقُودِ", meaning: { en: "Fire full of fuel", ur: "خوب ایندھن والی آگ" }, explanation: { en: "Massive fire pit prepared for persecution", ur: "ظلم کے لیے تیار کیا گیا بڑا آگ کا گڑھا" }, verseRef: "85:5" },
+        { term: "هُمْ عَلَيْهَا قُعُودٌ", meaning: { en: "They sat by it", ur: "وہ اس کے کنارے بیٹھے تھے" }, explanation: { en: "Tyrants watching their crime - cold-blooded cruelty", ur: "ظالم اپنا جرم دیکھ رہے تھے - سنگ دلی سے" }, verseRef: "85:6" },
+        { term: "مَا يَفْعَلُونَ بِالْمُؤْمِنِينَ", meaning: { en: "What they did to believers", ur: "جو وہ مومنوں کے ساتھ کر رہے تھے" }, explanation: { en: "Their crime against believing men and women", ur: "مومن مردوں اور عورتوں کے خلاف ان کا جرم" }, verseRef: "85:7" }
       ]
     },
 
@@ -43,8 +43,8 @@ export const ONTOLOGY = {
       color: '#10B981',
       icon: 'Heart',
       concepts: [
-        { term: "مَا نَقَمُوا مِنْهُمْ إِلَّا أَن يُؤْمِنُوا", meaning: "Resented only for believing", explanation: "Only 'crime' was iman - ultimate injustice", verseRef: "85:8" },
-        { term: "بِاللَّهِ الْعَزِيزِ الْحَمِيدِ", meaning: "In Allah Mighty, Praiseworthy", explanation: "The One worthy of belief - tyrants opposed truth", verseRef: "85:8" }
+        { term: "مَا نَقَمُوا مِنْهُمْ إِلَّا أَن يُؤْمِنُوا", meaning: { en: "Resented only for believing", ur: "ان سے بس اسی بات پر ناراض تھے کہ وہ ایمان لے آئے" }, explanation: { en: "Only 'crime' was iman - ultimate injustice", ur: "واحد 'جرم' ایمان تھا - سب سے بڑا ظلم" }, verseRef: "85:8" },
+        { term: "بِاللَّهِ الْعَزِيزِ الْحَمِيدِ", meaning: { en: "In Allah Mighty, Praiseworthy", ur: "Allah پر جو غالب اور قابلِ تعریف ہے" }, explanation: { en: "The One worthy of belief - tyrants opposed truth", ur: "وہ ذات جو ایمان کی مستحق ہے - ظالموں نے حق کی مخالفت کی" }, verseRef: "85:8" }
       ]
     },
 
@@ -54,9 +54,9 @@ export const ONTOLOGY = {
       color: '#F59E0B',
       icon: 'Scale',
       concepts: [
-        { term: "فَتَنُوا... ثُمَّ لَمْ يَتُوبُوا", meaning: "Persecuted then didn't repent", explanation: "Door of tawbah was open even for them - they refused", verseRef: "85:10" },
-        { term: "عَذَابُ جَهَنَّمَ... الْحَرِيقِ", meaning: "Hell's punishment of burning", explanation: "They burned believers; they will burn - poetic justice", verseRef: "85:10" },
-        { term: "جَنَّاتٌ تَجْرِي... الْفَوْزُ الْكَبِيرُ", meaning: "Gardens with rivers - great success", explanation: "Believers' ultimate reward despite worldly suffering", verseRef: "85:11" }
+        { term: "فَتَنُوا... ثُمَّ لَمْ يَتُوبُوا", meaning: { en: "Persecuted then didn't repent", ur: "ستایا پھر توبہ بھی نہ کی" }, explanation: { en: "Door of tawbah was open even for them - they refused", ur: "توبہ کا دروازہ ان کے لیے بھی کھلا تھا - انہوں نے انکار کیا" }, verseRef: "85:10" },
+        { term: "عَذَابُ جَهَنَّمَ... الْحَرِيقِ", meaning: { en: "Hell's punishment of burning", ur: "جہنم کا عذاب اور جلانے کی سزا" }, explanation: { en: "They burned believers; they will burn - poetic justice", ur: "انہوں نے مومنوں کو جلایا؛ خود جلیں گے - انصاف" }, verseRef: "85:10" },
+        { term: "جَنَّاتٌ تَجْرِي... الْفَوْزُ الْكَبِيرُ", meaning: { en: "Gardens with rivers - great success", ur: "نہروں والے باغات - بڑی کامیابی" }, explanation: { en: "Believers' ultimate reward despite worldly suffering", ur: "دنیاوی تکلیف کے باوجود مومنوں کا حتمی انعام" }, verseRef: "85:11" }
       ]
     },
 
@@ -66,11 +66,11 @@ export const ONTOLOGY = {
       color: '#F59E0B',
       icon: 'Crown',
       concepts: [
-        { term: "بَطْشَ رَبِّكَ لَشَدِيدٌ", meaning: "Lord's grip is severe", explanation: "Allah's seizing of tyrants - sudden, powerful", verseRef: "85:12" },
-        { term: "يُبْدِئُ وَيُعِيدُ", meaning: "Originates and repeats", explanation: "Creates initially and resurrects - complete power", verseRef: "85:13" },
-        { term: "الْغَفُورُ الْوَدُودُ", meaning: "Forgiving, Loving", explanation: "Even after batsh, door of forgiveness remains open", verseRef: "85:14" },
-        { term: "ذُو الْعَرْشِ الْمَجِيدُ", meaning: "Owner of Glorious Throne", explanation: "Ultimate sovereignty and honor", verseRef: "85:15" },
-        { term: "فَعَّالٌ لِّمَا يُرِيدُ", meaning: "Doer of whatever He wills", explanation: "Continuous, unrestricted divine action", verseRef: "85:16" }
+        { term: "بَطْشَ رَبِّكَ لَشَدِيدٌ", meaning: { en: "Lord's grip is severe", ur: "تمہارے رب کی پکڑ بہت سخت ہے" }, explanation: { en: "Allah's seizing of tyrants - sudden, powerful", ur: "Allah کا ظالموں کو پکڑنا - اچانک، طاقتور" }, verseRef: "85:12" },
+        { term: "يُبْدِئُ وَيُعِيدُ", meaning: { en: "Originates and repeats", ur: "وہ پہلی بار پیدا کرتا ہے اور دوبارہ پیدا کرے گا" }, explanation: { en: "Creates initially and resurrects - complete power", ur: "ابتدائی تخلیق اور دوبارہ پیدائش - مکمل قدرت" }, verseRef: "85:13" },
+        { term: "الْغَفُورُ الْوَدُودُ", meaning: { en: "Forgiving, Loving", ur: "بخشنے والا، محبت کرنے والا" }, explanation: { en: "Even after batsh, door of forgiveness remains open", ur: "سخت پکڑ کے بعد بھی مغفرت کا دروازہ کھلا ہے" }, verseRef: "85:14" },
+        { term: "ذُو الْعَرْشِ الْمَجِيدُ", meaning: { en: "Owner of Glorious Throne", ur: "عرشِ عظیم کا مالک" }, explanation: { en: "Ultimate sovereignty and honor", ur: "حتمی حاکمیت اور عزت" }, verseRef: "85:15" },
+        { term: "فَعَّالٌ لِّمَا يُرِيدُ", meaning: { en: "Doer of whatever He wills", ur: "جو چاہے کرنے والا" }, explanation: { en: "Continuous, unrestricted divine action", ur: "مسلسل، بلا روک ٹوک الہٰی عمل" }, verseRef: "85:16" }
       ]
     },
 
@@ -80,8 +80,8 @@ export const ONTOLOGY = {
       color: '#3B82F6',
       icon: 'Book',
       concepts: [
-        { term: "حَدِيثُ الْجُنُودِ", meaning: "Story of the forces", explanation: "Mighty armies of the past - where are they now?", verseRef: "85:17" },
-        { term: "فِرْعَوْنَ وَثَمُودَ", meaning: "Pharaoh and Thamud", explanation: "Two great powers destroyed - warning to Quraysh", verseRef: "85:18" }
+        { term: "حَدِيثُ الْجُنُودِ", meaning: { en: "Story of the forces", ur: "لشکروں کی کہانی" }, explanation: { en: "Mighty armies of the past - where are they now?", ur: "ماضی کے طاقتور لشکر - اب کہاں ہیں؟" }, verseRef: "85:17" },
+        { term: "فِرْعَوْنَ وَثَمُودَ", meaning: { en: "Pharaoh and Thamud", ur: "فرعون اور ثمود" }, explanation: { en: "Two great powers destroyed - warning to Quraysh", ur: "دو بڑی طاقتیں تباہ ہوئیں - قریش کے لیے تنبیہ" }, verseRef: "85:18" }
       ]
     },
 
@@ -91,28 +91,28 @@ export const ONTOLOGY = {
       color: '#3B82F6',
       icon: 'Shield',
       concepts: [
-        { term: "قُرْآنٌ مَّجِيدٌ", meaning: "Glorious Quran", explanation: "Despite denial, Quran is honored and glorious", verseRef: "85:21" },
-        { term: "لَوْحٍ مَّحْفُوظٍ", meaning: "Preserved Tablet", explanation: "Al-Lawh al-Mahfuz - eternal divine record", verseRef: "85:22" }
+        { term: "قُرْآنٌ مَّجِيدٌ", meaning: { en: "Glorious Quran", ur: "عظمت والا Quran" }, explanation: { en: "Despite denial, Quran is honored and glorious", ur: "انکار کے باوجود Quran معزز اور عظیم ہے" }, verseRef: "85:21" },
+        { term: "لَوْحٍ مَّحْفُوظٍ", meaning: { en: "Preserved Tablet", ur: "لوحِ محفوظ" }, explanation: { en: "Al-Lawh al-Mahfuz - eternal divine record", ur: "لوحِ محفوظ - ابدی الہٰی ریکارڈ" }, verseRef: "85:22" }
       ]
     }
   },
 
   relationships: [
-    { from: "أصحاب الأخدود", to: "عذاب الحريق", type: "consequence", description: "Burned believers; will be burned" },
-    { from: "لم يتوبوا", to: "الغفور الودود", type: "contrast", description: "Forgiveness available but refused" },
-    { from: "فرعون وثمود", to: "بطش ربك", type: "example", description: "Historical proof of Allah's grip" },
-    { from: "في تكذيب", to: "محيط", type: "consequence", description: "Deniers surrounded by Allah" },
-    { from: "قرآن مجيد", to: "لوح محفوظ", type: "source", description: "Quran preserved in eternal tablet" }
+    { from: "أصحاب الأخدود", to: "عذاب الحريق", type: "consequence", description: { en: "Burned believers; will be burned", ur: "مومنوں کو جلایا؛ خود جلائے جائیں گے" } },
+    { from: "لم يتوبوا", to: "الغفور الودود", type: "contrast", description: { en: "Forgiveness available but refused", ur: "مغفرت دستیاب تھی مگر انکار کیا" } },
+    { from: "فرعون وثمود", to: "بطش ربك", type: "example", description: { en: "Historical proof of Allah's grip", ur: "Allah کی پکڑ کا تاریخی ثبوت" } },
+    { from: "في تكذيب", to: "محيط", type: "consequence", description: { en: "Deniers surrounded by Allah", ur: "جھٹلانے والے Allah کے گھیرے میں ہیں" } },
+    { from: "قرآن مجيد", to: "لوح محفوظ", type: "source", description: { en: "Quran preserved in eternal tablet", ur: "Quran ابدی تختی میں محفوظ" } }
   ],
 
   thematicFlow: {
     stages: [
-      { stage: 1, theme: "Cosmic Oath", verses: "85:1-3", description: "Sky, Promised Day, witness" },
-      { stage: 2, theme: "People of Trench", verses: "85:4-9", description: "Tyrants burned believers for faith" },
-      { stage: 3, theme: "Divine Justice", verses: "85:10-11", description: "Torturers to Hell, believers to Paradise" },
-      { stage: 4, theme: "Divine Attributes", verses: "85:12-16", description: "Severe grip, yet Forgiving and Loving" },
-      { stage: 5, theme: "Historical Warning", verses: "85:17-20", description: "Pharaoh, Thamud - all encompassed" },
-      { stage: 6, theme: "Quran Eternal", verses: "85:21-22", description: "Glorious Quran in Preserved Tablet" }
+      { stage: 1, theme: "Cosmic Oath", verses: "85:1-3", description: { en: "Sky, Promised Day, witness", ur: "آسمان، وعدے کا دن، گواہ" } },
+      { stage: 2, theme: "People of Trench", verses: "85:4-9", description: { en: "Tyrants burned believers for faith", ur: "ظالموں نے ایمان کی وجہ سے مومنوں کو جلایا" } },
+      { stage: 3, theme: "Divine Justice", verses: "85:10-11", description: { en: "Torturers to Hell, believers to Paradise", ur: "ظالم جہنم میں، مومن جنت میں" } },
+      { stage: 4, theme: "Divine Attributes", verses: "85:12-16", description: { en: "Severe grip, yet Forgiving and Loving", ur: "سخت پکڑ، مگر بخشنے والا اور محبت کرنے والا" } },
+      { stage: 5, theme: "Historical Warning", verses: "85:17-20", description: { en: "Pharaoh, Thamud - all encompassed", ur: "فرعون، ثمود - سب گھیرے میں" } },
+      { stage: 6, theme: "Quran Eternal", verses: "85:21-22", description: { en: "Glorious Quran in Preserved Tablet", ur: "عظمت والا Quran لوحِ محفوظ میں" } }
     ]
   },
 
@@ -127,19 +127,19 @@ export const ONTOLOGY = {
   },
 
   uniqueInsight: {
-    title: "From Fire to Fire",
-    insight: "Surah Al-Buruj presents a powerful inversion: tyrants created a fire (نَارِ ذَاتِ الْوَقُودِ) to destroy believers. But verse 10 announces they face عَذَابُ الْحَرِيقِ - the punishment of burning. The exact tool of their oppression becomes their punishment. Meanwhile, believers who were thrown into fire enter جَنَّاتٌ - gardens with rivers, the opposite of fire. The surah's message: persecution can kill the body but not the soul. The oppressors' fire was temporary; Allah's fire is eternal. What appears as defeat was actually the believers' ultimate victory."
+    title: { en: "From Fire to Fire", ur: "آگ سے آگ تک" },
+    insight: { en: "Surah Al-Buruj presents a powerful inversion: tyrants created a fire (نَارِ ذَاتِ الْوَقُودِ) to destroy believers. But verse 10 announces they face عَذَابُ الْحَرِيقِ - the punishment of burning. The exact tool of their oppression becomes their punishment. Meanwhile, believers who were thrown into fire enter جَنَّاتٌ - gardens with rivers, the opposite of fire. The surah's message: persecution can kill the body but not the soul. The oppressors' fire was temporary; Allah's fire is eternal. What appears as defeat was actually the believers' ultimate victory.", ur: "سورت البروج ایک طاقتور الٹ پیش کرتی ہے: ظالموں نے آگ (نَارِ ذَاتِ الْوَقُودِ) بنائی مومنوں کو ختم کرنے کے لیے۔ لیکن آیت 10 اعلان کرتی ہے کہ انہیں عَذَابُ الْحَرِیقِ - جلنے کی سزا ملے گی۔ ظلم کا وہی آلہ ان کی سزا بنے گا۔ ادھر مومن جنہیں آگ میں ڈالا گیا وہ جنات (نہروں والے باغات) میں داخل ہوں گے - آگ کا الٹ۔ سورت کا پیغام: ظلم جسم مار سکتا ہے روح نہیں۔ ظالموں کی آگ عارضی تھی؛ Allah کی آگ ابدی ہے۔ جو شکست نظر آتی تھی وہ دراصل مومنوں کی حتمی فتح تھی۔" }
   },
 
   historicalContext: {
-    note: "Refers to the People of the Trench (أصحاب الأخدود) - a king who persecuted believers by burning them alive in a pit. Identified with Dhū Nuwās of Yemen or similar persecutions. Story detailed in Sahih Muslim."
+    note: { en: "Refers to the People of the Trench (أصحاب الأخدود) - a king who persecuted believers by burning them alive in a pit. Identified with Dhū Nuwās of Yemen or similar persecutions. Story detailed in Sahih Muslim.", ur: "اصحاب الاخدود کا حوالہ - ایک بادشاہ نے مومنوں کو گڑھے میں زندہ جلا کر ستایا۔ یمن کے ذو نواس یا اسی طرح کے ظلم سے منسوب۔ تفصیل صحیح مسلم میں ہے۔" }
   },
 
   linguisticFeatures: {
     features: [
-      { feature: "فَعّال intensive", example: "فَعَّالٌ لِّمَا يُرِيدُ", effect: "Continuous doing - Allah always acts" },
-      { feature: "Passive curse", example: "قُتِلَ", effect: "Divine passive - destroyed by Allah" },
-      { feature: "Pairing opposites", example: "شَاهِدٍ وَمَشْهُودٍ", effect: "Active-passive from same root" }
+      { feature: "فَعّال intensive", example: { en: "فَعَّالٌ لِّمَا يُرِيدُ", ur: "جو چاہے کرنے والا" }, effect: { en: "Continuous doing - Allah always acts", ur: "مسلسل عمل - Allah ہمیشہ کرتا ہے" } },
+      { feature: "Passive curse", example: { en: "قُتِلَ", ur: "مارے گئے (ملعون ہوئے)" }, effect: { en: "Divine passive - destroyed by Allah", ur: "الہٰی مجہول - Allah کی طرف سے تباہ" } },
+      { feature: "Pairing opposites", example: { en: "شَاهِدٍ وَمَشْهُودٍ", ur: "گواہ اور گواہی دیا جانے والا" }, effect: { en: "Active-passive from same root", ur: "ایک ہی جڑ سے فاعل اور مفعول" } }
     ]
   }
 };

@@ -149,7 +149,13 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(أَ)[int] → (لَم)[neg] → (نَشْرَحْ)[verb] → (لَكَ)[beneficiary] → (صَدْرَكَ)[object]"
+    dependencyStructure: "(أَ)[int] → (لَم)[neg] → (نَشْرَحْ)[verb] → (لَكَ)[beneficiary] → (صَدْرَكَ)[object]",
+    structure: {
+      relationships: [
+      { from: 1, to: 2, label: 'نفی + فعل' },
+      { from: 2, to: 4, label: 'فعل + مفعول به' }
+      ],
+    },
   },
 
   2: {
@@ -249,7 +255,12 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(وَ)[conj] → (وَضَعْنَا)[verb] → (عَنكَ)[source] → (وِزْرَكَ)[object]"
+    dependencyStructure: "(وَ)[conj] → (وَضَعْنَا)[verb] → (عَنكَ)[source] → (وِزْرَكَ)[object]",
+    structure: {
+      relationships: [
+      { from: 1, to: 3, label: 'فعل + مفعول به' }
+      ],
+    },
   },
 
   3: {
@@ -350,7 +361,13 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(الَّذِي)[relative] → (أَنقَضَ)[verb] → (ظَهْرَكَ)[object]"
+    dependencyStructure: "(الَّذِي)[relative] → (أَنقَضَ)[verb] → (ظَهْرَكَ)[object]",
+    structure: {
+      relationships: [
+      { from: 1, to: 2, label: 'موصول + صلة' },
+      { from: 2, to: 3, label: 'فعل + مفعول به' }
+      ],
+    },
   },
 
   4: {
@@ -451,7 +468,12 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(وَ)[conj] → (رَفَعْنَا)[verb] → (لَكَ)[beneficiary] → (ذِكْرَكَ)[object]"
+    dependencyStructure: "(وَ)[conj] → (رَفَعْنَا)[verb] → (لَكَ)[beneficiary] → (ذِكْرَكَ)[object]",
+    structure: {
+      relationships: [
+      { from: 1, to: 3, label: 'فعل + مفعول به' }
+      ],
+    },
   },
 
   5: {
@@ -584,7 +606,12 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(فَ)[result] → (إِنَّ)[emphasis] → (مَعَ)[prep] → (العُسْرِ)[genitive] ← (يُسْرًا)[subject]"
+    dependencyStructure: "(فَ)[result] → (إِنَّ)[emphasis] → (مَعَ)[prep] → (العُسْرِ)[genitive] ← (يُسْرًا)[subject]",
+    structure: {
+      relationships: [
+      { from: 2, to: 3, label: 'جار + مجرور' }
+      ],
+    },
   },
 
   6: {
@@ -706,7 +733,12 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(إِنَّ)[emphasis] → (مَعَ)[prep] → (العُسْرِ)[genitive] ← (يُسْرًا)[subject]"
+    dependencyStructure: "(إِنَّ)[emphasis] → (مَعَ)[prep] → (العُسْرِ)[genitive] ← (يُسْرًا)[subject]",
+    structure: {
+      relationships: [
+      { from: 2, to: 3, label: 'جار + مجرور' }
+      ],
+    },
   },
 
   7: {
@@ -812,7 +844,14 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(فَ)[result] → (إِذَا)[conditional] → (فَرَغْتَ)[protasis] → (فَ)[result] → (انصَبْ)[apodosis/command]"
+    dependencyStructure: "(فَ)[result] → (إِذَا)[conditional] → (فَرَغْتَ)[protasis] → (فَ)[result] → (انصَبْ)[apodosis/command]",
+    structure: {
+      relationships: [
+      { from: 1, to: 2, label: 'شرط + فعل' },
+      { from: 2, to: 3, label: 'شرط + فعل' },
+      { from: 2, to: 3, label: 'عطف' }
+      ],
+    },
   },
 
   8: {
@@ -824,7 +863,10 @@ export const TREEBANK_DATA = {
       hi: "और अपने रब की तरफ़ रग़बत करो",
       bn: "এবং তোমার প্রভুর দিকে মনোযোগ দাও",
       tr: "Ve yalnız Rabbine yönel",
-      id: "Dan kepada Tuhanmulah hendaknya engkau berharap"
+      id: "Dan kepada Tuhanmulah hendaknya engkau berharap",
+    structure: {
+      relationships: [],
+    },
     },
     words: [
       {

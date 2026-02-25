@@ -31,7 +31,10 @@ export const TREEBANK_DATA = {
       hi: "विनाश है हर ताना मारने और बुराई करने वाले के लिए",
       bn: "ধ্বংস প্রত্যেক পরনিন্দাকারী ও দোষদর্শীর জন্য",
       tr: "Her ayıplayıcı, kusur arayıcıya yazıklar olsun",
-      id: "Kecelakaanlah bagi setiap pengumpat lagi pencela"
+      id: "Kecelakaanlah bagi setiap pengumpat lagi pencela",
+    structure: {
+      relationships: [],
+    },
     },
     words: [
       {
@@ -288,7 +291,13 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(ٱلَّذِى)[relative] → (جَمَعَ)[verb] → (مَالًا)[object] + (وَعَدَّدَهُۥ)[conj+verb+pronoun]"
+    dependencyStructure: "(ٱلَّذِى)[relative] → (جَمَعَ)[verb] → (مَالًا)[object] + (وَعَدَّدَهُۥ)[conj+verb+pronoun]",
+    structure: {
+      relationships: [
+      { from: 1, to: 2, label: 'موصول + صلة' },
+      { from: 2, to: 3, label: 'فعل + مفعول به' }
+      ],
+    },
   },
 
   3: {
@@ -416,7 +425,12 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(يَحْسَبُ)[main-verb] → (أَنَّ)[subordinator] → (مَالَهُۥٓ)[subject] → (أَخْلَدَهُۥ)[predicate]"
+    dependencyStructure: "(يَحْسَبُ)[main-verb] → (أَنَّ)[subordinator] → (مَالَهُۥٓ)[subject] → (أَخْلَدَهُۥ)[predicate]",
+    structure: {
+      relationships: [
+      { from: 1, to: 3, label: 'فعل + فاعل' }
+      ],
+    },
   },
 
   4: {
@@ -550,7 +564,12 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(كَلَّا)[rejection] → (لَيُنۢبَذَنَّ)[emphatic-verb] → (فِى ٱلْحُطَمَةِ)[destination]"
+    dependencyStructure: "(كَلَّا)[rejection] → (لَيُنۢبَذَنَّ)[emphatic-verb] → (فِى ٱلْحُطَمَةِ)[destination]",
+    structure: {
+      relationships: [
+      { from: 3, to: 4, label: 'جار + مجرور' }
+      ],
+    },
   },
 
   5: {
@@ -664,7 +683,12 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(وَمَآ)[interrogative] → (أَدْرَىٰكَ)[verb] → (مَا ٱلْحُطَمَةُ)[clause]"
+    dependencyStructure: "(وَمَآ)[interrogative] → (أَدْرَىٰكَ)[verb] → (مَا ٱلْحُطَمَةُ)[clause]",
+    structure: {
+      relationships: [
+      { from: 2, to: 4, label: 'فعل + فاعل' }
+      ],
+    },
   },
 
   6: {
@@ -760,7 +784,12 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(نَارُ)[subject] → (ٱللَّهِ)[genitive] → (ٱلْمُوقَدَةُ)[adjective]"
+    dependencyStructure: "(نَارُ)[subject] → (ٱللَّهِ)[genitive] → (ٱلْمُوقَدَةُ)[adjective]",
+    structure: {
+      relationships: [
+      { from: 2, to: 3, label: 'موصوف + صفت' }
+      ],
+    },
   },
 
   7: {
@@ -889,7 +918,13 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(ٱلَّتِى)[relative] → (تَطَّلِعُ)[verb] → (عَلَى ٱلْأَفْـِٔدَةِ)[prep-phrase]"
+    dependencyStructure: "(ٱلَّتِى)[relative] → (تَطَّلِعُ)[verb] → (عَلَى ٱلْأَفْـِٔدَةِ)[prep-phrase]",
+    structure: {
+      relationships: [
+      { from: 1, to: 2, label: 'موصول + صلة' },
+      { from: 3, to: 4, label: 'جار + مجرور' }
+      ],
+    },
   },
 
   8: {
@@ -988,7 +1023,12 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(إِنَّهَا)[emphatic+subject] → (عَلَيْهِم)[prep-phrase] → (مُّؤْصَدَةٌ)[predicate]"
+    dependencyStructure: "(إِنَّهَا)[emphatic+subject] → (عَلَيْهِم)[prep-phrase] → (مُّؤْصَدَةٌ)[predicate]",
+    structure: {
+      relationships: [
+      { from: 2, to: 3, label: 'جار + مجرور' }
+      ],
+    },
   },
 
   9: {
@@ -1090,7 +1130,13 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(فِى)[prep] → (عَمَدٍ)[noun] → (مُّمَدَّدَةٍ)[adjective]"
+    dependencyStructure: "(فِى)[prep] → (عَمَدٍ)[noun] → (مُّمَدَّدَةٍ)[adjective]",
+    structure: {
+      relationships: [
+      { from: 1, to: 2, label: 'جار + مجرور' },
+      { from: 2, to: 3, label: 'موصوف + صفت' }
+      ],
+    },
   }
 };
 

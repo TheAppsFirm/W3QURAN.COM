@@ -293,6 +293,7 @@ function QuranBubbleApp() {
   // Next prayer time for sidebar badge
   const [nextPrayerInfo, setNextPrayerInfo] = useState(null);
   useEffect(() => {
+    let cancelled = false;
     const fetchNextPrayer = async () => {
       try {
         const saved = localStorage.getItem('quran_app_prayer_location');
@@ -304,9 +305,9 @@ function QuranBubbleApp() {
         const d = new Date();
         const dateStr = `${d.getDate()}-${d.getMonth() + 1}-${d.getFullYear()}`;
         const res = await fetch(`https://api.aladhan.com/v1/timings/${dateStr}?latitude=${loc.latitude}&longitude=${loc.longitude}&method=${method}`);
-        if (!res.ok) return;
+        if (!res.ok || cancelled) return;
         const data = await res.json();
-        if (data.code !== 200) return;
+        if (data.code !== 200 || cancelled) return;
         const t = data.data.timings;
         const nowMins = d.getHours() * 60 + d.getMinutes();
         for (const p of ['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha']) {
@@ -314,18 +315,18 @@ function QuranBubbleApp() {
           if (h * 60 + m > nowMins) {
             const h12 = h % 12 || 12;
             const ampm = h >= 12 ? 'PM' : 'AM';
-            setNextPrayerInfo({ name: p, time: `${h12}:${String(m).padStart(2,'0')} ${ampm}` });
+            if (!cancelled) setNextPrayerInfo({ name: p, time: `${h12}:${String(m).padStart(2,'0')} ${ampm}` });
             return;
           }
         }
         const [fh, fm] = t.Fajr.split(':').map(Number);
         const fh12 = fh % 12 || 12;
-        setNextPrayerInfo({ name: 'Fajr', time: `${fh12}:${String(fm).padStart(2,'0')} AM` });
+        if (!cancelled) setNextPrayerInfo({ name: 'Fajr', time: `${fh12}:${String(fm).padStart(2,'0')} AM` });
       } catch { /* silent */ }
     };
     fetchNextPrayer();
     const iv = setInterval(fetchNextPrayer, 60000);
-    return () => clearInterval(iv);
+    return () => { cancelled = true; clearInterval(iv); };
   }, []);
   const [showGlobalPulse, setShowGlobalPulse] = useState(false);
   const [showWeatherSync, setShowWeatherSync] = useState(false);
@@ -370,6 +371,13 @@ function QuranBubbleApp() {
     setOverlayReaderSurah(null);
     setInitialVerse(1);
     setInitialPanel(null);
+  }, []);
+
+  // Kill all global audio sources - prevents double-playing across features
+  const stopAllGlobalAudio = useCallback(() => {
+    window.speechSynthesis?.cancel();
+    // Stop any HTML5 audio elements that might be playing
+    document.querySelectorAll('audio').forEach(a => { a.pause(); a.currentTime = 0; });
   }, []);
 
   // Smart donation popup trigger for free users
@@ -455,11 +463,11 @@ function QuranBubbleApp() {
             case 'mood': setShowMoodTracker(true); break;
             case 'videoSync': setShowVideoSync(true); break;
             case 'propheticMap': setShowPropheticMap(true); break;
-            case 'timeMachine': setShowTimeMachine(true); break;
+            case 'timeMachine': stopAllGlobalAudio(); setShowTimeMachine(true); break;
             case 'companionAI': setShowCompanionAI(true); break;
             case 'globalPulse': setShowGlobalPulse(true); break;
             case 'weatherSync': setShowWeatherSync(true); break;
-            case 'soundHealing': setShowSoundHealing(true); break;
+            case 'soundHealing': stopAllGlobalAudio(); setShowSoundHealing(true); break;
             case 'babyNames': setShowBabyNames(true); break;
           }
         }
@@ -673,6 +681,8 @@ function QuranBubbleApp() {
   }, [updateURL, maybeShowDonation]);
 
   const handleCloseTimeMachine = useCallback(() => {
+    // Force-kill any lingering audio/TTS from TimeMachine
+    window.speechSynthesis?.cancel();
     setShowTimeMachine(false);
     updateURL('/');
     maybeShowDonation('time_machine');
@@ -695,6 +705,7 @@ function QuranBubbleApp() {
   }, [updateURL]);
 
   const handleCloseSoundHealing = useCallback(() => {
+    window.speechSynthesis?.cancel();
     setShowSoundHealing(false);
     updateURL('/');
     maybeShowDonation('sound_healing');
@@ -975,7 +986,7 @@ function QuranBubbleApp() {
           onDonate={handleOpenDonate}
           onShowAchievements={() => setShowGamificationHub(true)}
           onWorldMap={() => setShowPropheticMap(true)}
-          onTimeMachine={() => setShowTimeMachine(true)}
+          onTimeMachine={() => { stopAllGlobalAudio(); setShowTimeMachine(true); }}
           onGlobalPulse={() => setShowGlobalPulse(true)}
           onWeatherSync={() => setShowWeatherSync(true)}
         />
@@ -1341,7 +1352,7 @@ function QuranBubbleApp() {
         onProgress={() => setShowProgressDashboard(true)}
         onOpenKidsMode={() => setShowKidsMode(true)}
         onAIGuide={() => setShowCompanionAI(true)}
-        onSoundHealing={() => setShowSoundHealing(true)}
+        onSoundHealing={() => { stopAllGlobalAudio(); setShowSoundHealing(true); }}
         onSearch={() => setShowSearchPanel(true)}
         onHifz={() => setShowHifzMode(true)}
         onOffline={() => setShowOfflineManager(true)}

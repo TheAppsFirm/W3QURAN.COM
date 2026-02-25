@@ -225,7 +225,14 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(أَلَمْ تَرَ)[rhetorical-question] → (كَيْفَ)[manner] → (فَعَلَ)[verb] → (رَبُّكَ)[subject] → (بِأَصْحَٰبِ ٱلْفِيلِ)[object]"
+    dependencyStructure: "(أَلَمْ تَرَ)[rhetorical-question] → (كَيْفَ)[manner] → (فَعَلَ)[verb] → (رَبُّكَ)[subject] → (بِأَصْحَٰبِ ٱلْفِيلِ)[object]",
+    structure: {
+      relationships: [
+      { from: 1, to: 2, label: 'نفی + فعل' },
+      { from: 2, to: 5, label: 'فعل + فاعل' },
+      { from: 4, to: 5, label: 'فعل + فاعل' }
+      ],
+    },
   },
 
   2: {
@@ -378,7 +385,13 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(أَلَمْ يَجْعَلْ)[rhetorical-question] → (كَيْدَهُمْ)[object-1] → (فِى تَضْلِيلٍ)[object-2-prepositional]"
+    dependencyStructure: "(أَلَمْ يَجْعَلْ)[rhetorical-question] → (كَيْدَهُمْ)[object-1] → (فِى تَضْلِيلٍ)[object-2-prepositional]",
+    structure: {
+      relationships: [
+      { from: 1, to: 2, label: 'نفی + فعل' },
+      { from: 4, to: 5, label: 'جار + مجرور' }
+      ],
+    },
   },
 
   3: {
@@ -515,7 +528,14 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(وَأَرْسَلَ)[verb] → (عَلَيْهِمْ)[prep-phrase] → (طَيْرًا)[object] → (أَبَابِيلَ)[adjective]"
+    dependencyStructure: "(وَأَرْسَلَ)[verb] → (عَلَيْهِمْ)[prep-phrase] → (طَيْرًا)[object] → (أَبَابِيلَ)[adjective]",
+    structure: {
+      relationships: [
+      { from: 1, to: 3, label: 'فعل + مفعول به' },
+      { from: 2, to: 3, label: 'جار + مجرور' },
+      { from: 3, to: 4, label: 'موصوف + صفت' }
+      ],
+    },
   },
 
   4: {
@@ -648,7 +668,12 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(تَرْمِيهِم)[verb-clause] → (بِحِجَارَةٍ)[prep-phrase] → (مِّن سِجِّيلٍ)[specifier]"
+    dependencyStructure: "(تَرْمِيهِم)[verb-clause] → (بِحِجَارَةٍ)[prep-phrase] → (مِّن سِجِّيلٍ)[specifier]",
+    structure: {
+      relationships: [
+      { from: 3, to: 4, label: 'جار + مجرور' }
+      ],
+    },
   },
 
   5: {
@@ -763,7 +788,12 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(فَجَعَلَهُمْ)[result-verb] → (كَعَصْفٍ)[comparison] → (مَّأْكُولٍ)[adjective]"
+    dependencyStructure: "(فَجَعَلَهُمْ)[result-verb] → (كَعَصْفٍ)[comparison] → (مَّأْكُولٍ)[adjective]",
+    structure: {
+      relationships: [
+      { from: 2, to: 3, label: 'موصوف + صفت' }
+      ],
+    },
   }
 };
 

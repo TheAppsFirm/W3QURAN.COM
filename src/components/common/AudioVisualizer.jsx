@@ -266,6 +266,31 @@ const AudioVisualizer = memo(function AudioVisualizer({
     }
   }, [audioElement, isVisible, isPlaying]);
 
+  // Cleanup AudioContext and nodes on unmount
+  useEffect(() => {
+    return () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+      try {
+        if (sourceRef.current) {
+          sourceRef.current.disconnect();
+          sourceRef.current = null;
+        }
+        if (analyserRef.current) {
+          analyserRef.current.disconnect();
+          analyserRef.current = null;
+        }
+        if (audioContextRef.current && audioContextRef.current.state !== 'closed') {
+          audioContextRef.current.close();
+          audioContextRef.current = null;
+        }
+      } catch {
+        // Nodes may already be disconnected
+      }
+    };
+  }, []);
+
   // Generate demo frequencies when not playing
   useEffect(() => {
     if (!isPlaying && isVisible) {

@@ -181,7 +181,13 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(اقْرَأْ)[imperative] → (بِاسْمِ)[prep phrase] ← (رَبِّكَ)[genitive] ← (الَّذِي)[relative] → (خَلَقَ)[verb]"
+    dependencyStructure: "(اقْرَأْ)[imperative] → (بِاسْمِ)[prep phrase] ← (رَبِّكَ)[genitive] ← (الَّذِي)[relative] → (خَلَقَ)[verb]",
+    structure: {
+      relationships: [
+      { from: 2, to: 3, label: 'مضاف + مضاف إليه' },
+      { from: 4, to: 5, label: 'موصول + صلة' }
+      ],
+    },
   },
 
   2: {
@@ -293,7 +299,13 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(خَلَقَ)[verb] → (الإِنسَانَ)[object] → (مِن)[prep] → (عَلَقٍ)[genitive]"
+    dependencyStructure: "(خَلَقَ)[verb] → (الإِنسَانَ)[object] → (مِن)[prep] → (عَلَقٍ)[genitive]",
+    structure: {
+      relationships: [
+      { from: 1, to: 2, label: 'فعل + مفعول به' },
+      { from: 3, to: 4, label: 'جار + مجرور' }
+      ],
+    },
   },
 
   3: {
@@ -386,7 +398,13 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(اقْرَأْ)[imperative] | (وَ)[conj] → (رَبُّكَ)[subject] ← (الأَكْرَمُ)[predicate]"
+    dependencyStructure: "(اقْرَأْ)[imperative] | (وَ)[conj] → (رَبُّكَ)[subject] ← (الأَكْرَمُ)[predicate]",
+    structure: {
+      relationships: [
+      { from: 1, to: 2, label: 'فعل + فاعل' },
+      { from: 2, to: 3, label: 'مبتدأ + خبر' }
+      ],
+    },
   },
 
   4: {
@@ -483,7 +501,12 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(الَّذِي)[relative] → (عَلَّمَ)[verb] → (بِالقَلَمِ)[instrument]"
+    dependencyStructure: "(الَّذِي)[relative] → (عَلَّمَ)[verb] → (بِالقَلَمِ)[instrument]",
+    structure: {
+      relationships: [
+      { from: 1, to: 2, label: 'موصول + صلة' }
+      ],
+    },
   },
 
   5: {
@@ -603,7 +626,13 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(عَلَّمَ)[verb] → (الإِنسَانَ)[object1] → (مَا)[object2] → (لَم)[neg] → (يَعْلَمْ)[verb]"
+    dependencyStructure: "(عَلَّمَ)[verb] → (الإِنسَانَ)[object1] → (مَا)[object2] → (لَم)[neg] → (يَعْلَمْ)[verb]",
+    structure: {
+      relationships: [
+      { from: 1, to: 2, label: 'فعل + مفعول به' },
+      { from: 4, to: 5, label: 'نفی + فعل' }
+      ],
+    },
   },
 
   6: {
@@ -716,7 +745,12 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(كَلَّا)[rejection] | (إِنَّ)[emphasis] → (الإِنسَانَ)[subject] ← (لَ)[emphasis] → (يَطْغَىٰ)[predicate]"
+    dependencyStructure: "(كَلَّا)[rejection] | (إِنَّ)[emphasis] → (الإِنسَانَ)[subject] ← (لَ)[emphasis] → (يَطْغَىٰ)[predicate]",
+    structure: {
+      relationships: [
+      { from: 2, to: 3, label: 'توکید' }
+      ],
+    },
   },
 
   7: {
@@ -728,7 +762,10 @@ export const TREEBANK_DATA = {
       hi: "जब वो ख़ुद को बेनियाज़ समझता है",
       bn: "কারণ সে নিজেকে স্বয়ংসম্পূর্ণ মনে করে",
       tr: "Kendini müstağni gördüğü için",
-      id: "Karena dia melihat dirinya serba cukup"
+      id: "Karena dia melihat dirinya serba cukup",
+    structure: {
+      relationships: [{ from: 2, to: 3, label: 'فعل + فاعل' }],
+    },
     },
     words: [
       {
@@ -917,7 +954,12 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(إِنَّ)[emphasis] → (إِلَى)[prep] → (رَبِّكَ)[genitive] ← (الرُّجْعَىٰ)[subject]"
+    dependencyStructure: "(إِنَّ)[emphasis] → (إِلَى)[prep] → (رَبِّكَ)[genitive] ← (الرُّجْعَىٰ)[subject]",
+    structure: {
+      relationships: [
+      { from: 2, to: 3, label: 'جار + مجرور' }
+      ],
+    },
   },
 
   9: {
@@ -1009,7 +1051,13 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(أَ)[interrogative] → (رَأَيْتَ)[verb] → (الَّذِي)[relative] → (يَنْهَىٰ)[verb]"
+    dependencyStructure: "(أَ)[interrogative] → (رَأَيْتَ)[verb] → (الَّذِي)[relative] → (يَنْهَىٰ)[verb]",
+    structure: {
+      relationships: [
+      { from: 1, to: 2, label: 'فعل + مفعول به' },
+      { from: 2, to: 3, label: 'موصول + صلة' }
+      ],
+    },
   },
 
   10: {
@@ -1105,7 +1153,12 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(عَبْدًا)[object] → (إِذَا)[condition] → (صَلَّىٰ)[verb]"
+    dependencyStructure: "(عَبْدًا)[object] → (إِذَا)[condition] → (صَلَّىٰ)[verb]",
+    structure: {
+      relationships: [
+      { from: 2, to: 3, label: 'شرط + فعل' }
+      ],
+    },
   },
 
   11: {
@@ -1227,7 +1280,13 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(أَ)[int] → (رَأَيْتَ)[verb] → (إِن)[condition] → (كَانَ)[verb] → (عَلَى)[prep] → (الهُدَىٰ)[genitive]"
+    dependencyStructure: "(أَ)[int] → (رَأَيْتَ)[verb] → (إِن)[condition] → (كَانَ)[verb] → (عَلَى)[prep] → (الهُدَىٰ)[genitive]",
+    structure: {
+      relationships: [
+      { from: 2, to: 3, label: 'شرط + فعل' },
+      { from: 4, to: 5, label: 'جار + مجرور' }
+      ],
+    },
   },
 
   12: {
@@ -1239,7 +1298,10 @@ export const TREEBANK_DATA = {
       hi: "या परहेज़गारी का हुक्म दे",
       bn: "বা সৎকর্মের আদেশ দেয়",
       tr: "Ya da takvayı emrederse",
-      id: "Atau dia menyuruh bertakwa"
+      id: "Atau dia menyuruh bertakwa",
+    structure: {
+      relationships: [],
+    },
     },
     words: [
       {
@@ -1432,7 +1494,13 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(أَ)[int] → (رَأَيْتَ)[verb] → (إِن)[condition] → (كَذَّبَ)[verb1] + (تَوَلَّىٰ)[verb2]"
+    dependencyStructure: "(أَ)[int] → (رَأَيْتَ)[verb] → (إِن)[condition] → (كَذَّبَ)[verb1] + (تَوَلَّىٰ)[verb2]",
+    structure: {
+      relationships: [
+      { from: 2, to: 3, label: 'شرط + فعل' },
+      { from: 3, to: 4, label: 'عطف' }
+      ],
+    },
   },
 
   14: {
@@ -1553,7 +1621,13 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(أَ)[int] → (لَم)[neg] → (يَعْلَم)[verb] → (بِأَنَّ)[that] → (اللَّهَ)[subject] → (يَرَىٰ)[predicate]"
+    dependencyStructure: "(أَ)[int] → (لَم)[neg] → (يَعْلَم)[verb] → (بِأَنَّ)[that] → (اللَّهَ)[subject] → (يَرَىٰ)[predicate]",
+    structure: {
+      relationships: [
+      { from: 1, to: 2, label: 'نفی + فعل' },
+      { from: 2, to: 4, label: 'فعل + فاعل' }
+      ],
+    },
   },
 
   15: {
@@ -1717,7 +1791,12 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(كَلَّا)[rejection] | (لَئِن)[conditional] → (لَم)[neg] → (يَنتَهِ)[verb] | (لَ)[emphasis] → (نَسْفَعَن)[verb] → (بِالنَّاصِيَةِ)[object]"
+    dependencyStructure: "(كَلَّا)[rejection] | (لَئِن)[conditional] → (لَم)[neg] → (يَنتَهِ)[verb] | (لَ)[emphasis] → (نَسْفَعَن)[verb] → (بِالنَّاصِيَةِ)[object]",
+    structure: {
+      relationships: [
+      { from: 3, to: 4, label: 'نفی + فعل' }
+      ],
+    },
   },
 
   16: {
@@ -1816,7 +1895,12 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(نَاصِيَةٍ)[badal] ← (كَاذِبَةٍ)[adj1] ← (خَاطِئَةٍ)[adj2]"
+    dependencyStructure: "(نَاصِيَةٍ)[badal] ← (كَاذِبَةٍ)[adj1] ← (خَاطِئَةٍ)[adj2]",
+    structure: {
+      relationships: [
+      { from: 1, to: 2, label: 'موصوف + صفت' }
+      ],
+    },
   },
 
   17: {
@@ -1891,7 +1975,12 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(فَ)[result] → (لِ)[command] → (يَدْعُ)[verb] → (نَادِيَهُ)[object]"
+    dependencyStructure: "(فَ)[result] → (لِ)[command] → (يَدْعُ)[verb] → (نَادِيَهُ)[object]",
+    structure: {
+      relationships: [
+      { from: 1, to: 2, label: 'فعل + مفعول به' }
+      ],
+    },
   },
 
   18: {
@@ -1965,7 +2054,12 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(سَ)[future] → (نَدْعُ)[verb] → (الزَّبَانِيَةَ)[object]"
+    dependencyStructure: "(سَ)[future] → (نَدْعُ)[verb] → (الزَّبَانِيَةَ)[object]",
+    structure: {
+      relationships: [
+      { from: 1, to: 2, label: 'فعل + مفعول به' }
+      ],
+    },
   },
 
   19: {
@@ -2111,7 +2205,14 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(كَلَّا)[rejection] | (لَا)[prohibition] → (تُطِعْهُ)[verb+obj] | (وَ)[conj] → (اسْجُدْ)[command1] + (اقْتَرِب)[command2]"
+    dependencyStructure: "(كَلَّا)[rejection] | (لَا)[prohibition] → (تُطِعْهُ)[verb+obj] | (وَ)[conj] → (اسْجُدْ)[command1] + (اقْتَرِب)[command2]",
+    structure: {
+      relationships: [
+      { from: 2, to: 3, label: 'نفی + فعل' },
+      { from: 3, to: 4, label: 'عطف' },
+      { from: 4, to: 5, label: 'عطف' }
+      ],
+    },
   }
 };
 

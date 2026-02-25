@@ -105,6 +105,11 @@ export const TREEBANK_DATA = {
         }
       }
     ],
+    structure: {
+      relationships: [
+      { from: 1, to: 2, label: 'جار + مجرور' }
+      ],
+    },
     dependencyStructure: "(لِإِيلَٰفِ)[prep+noun] → (قُرَيْشٍ)[genitive-possessive]"
   },
 
@@ -117,7 +122,10 @@ export const TREEBANK_DATA = {
       hi: "उनकी आदत सर्दी और गर्मी की यात्रा से",
       bn: "তাদের শীত ও গ্রীষ্মকালীন সফরের অভ্যাস",
       tr: "Kış ve yaz yolculuklarındaki güvenlikleri için",
-      id: "Kebiasaan mereka bepergian pada musim dingin dan musim panas"
+      id: "Kebiasaan mereka bepergian pada musim dingin dan musim panas",
+    structure: {
+      relationships: [],
+    },
     },
     words: [
       {
@@ -252,7 +260,10 @@ export const TREEBANK_DATA = {
       hi: "तो उन्हें इस घर के रब की इबादत करनी चाहिए",
       bn: "অতএব তারা যেন এই ঘরের রবের ইবাদত করে",
       tr: "Bu Evin Rabbine kulluk etsinler",
-      id: "Maka hendaklah mereka menyembah Tuhan pemilik rumah ini"
+      id: "Maka hendaklah mereka menyembah Tuhan pemilik rumah ini",
+    structure: {
+      relationships: [],
+    },
     },
     words: [
       {
@@ -579,7 +590,14 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(ٱلَّذِىٓ)[relative] → (أَطْعَمَهُم)[verb] → (مِّن جُوعٍ)[prep-phrase] + (وَءَامَنَهُم)[conj+verb] → (مِّنْ خَوْفٍ)[prep-phrase]"
+    dependencyStructure: "(ٱلَّذِىٓ)[relative] → (أَطْعَمَهُم)[verb] → (مِّن جُوعٍ)[prep-phrase] + (وَءَامَنَهُم)[conj+verb] → (مِّنْ خَوْفٍ)[prep-phrase]",
+    structure: {
+      relationships: [
+      { from: 1, to: 2, label: 'موصول + صلة' },
+      { from: 3, to: 4, label: 'جار + مجرور' },
+      { from: 6, to: 7, label: 'جار + مجرور' }
+      ],
+    },
   }
 };
 

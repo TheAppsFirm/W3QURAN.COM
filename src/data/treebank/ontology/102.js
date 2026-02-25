@@ -17,20 +17,20 @@ export const ONTOLOGY = {
       nameArabic: "الإلهاء بالدنيا",
       color: '#F59E0B',
       icon: 'AlertTriangle',
-      description: "How competition for more distracts from the Hereafter",
+      description: { en: "How competition for more distracts from the Hereafter", ur: "زیادہ کی دوڑ کس طرح آخرت سے غافل کرتی ہے" },
       concepts: [
         {
           term: "التَّكَاثُر",
           transliteration: "At-Takaathur",
-          meaning: "Competition for increase / Mutual rivalry",
-          explanation: "Form VI (تَفَاعُل) shows mutual/reciprocal action - competing WITH EACH OTHER for more: wealth, children, status, possessions.",
+          meaning: { en: "Competition for increase / Mutual rivalry", ur: "ایک دوسرے سے بڑھ کر جمع کرنے کی دوڑ" },
+          explanation: { en: "Form VI (تَفَاعُل) shows mutual/reciprocal action - competing WITH EACH OTHER for more: wealth, children, status, possessions.", ur: "باب تفاعل باہمی عمل ظاہر کرتا ہے - ایک دوسرے سے مقابلہ: مال، اولاد، حیثیت، سامان میں زیادتی کی دوڑ۔" },
           verseRef: "102:1"
         },
         {
           term: "أَلْهَى",
           transliteration: "Alhaa",
-          meaning: "Diverted / Distracted",
-          explanation: "Form IV causative - the competition CAUSED distraction from remembering Allah and preparing for death.",
+          meaning: { en: "Diverted / Distracted", ur: "غافل کر دیا / مشغول کر دیا" },
+          explanation: { en: "Form IV causative - the competition CAUSED distraction from remembering Allah and preparing for death.", ur: "باب افعال سببیت کے لیے - مقابلے نے Allah کی یاد اور موت کی تیاری سے غفلت کا سبب بنایا۔" },
           verseRef: "102:1"
         }
       ]
@@ -41,13 +41,13 @@ export const ONTOLOGY = {
       nameArabic: "حقيقة الموت",
       color: '#EF4444',
       icon: 'Moon',
-      description: "Death ends all competition",
+      description: { en: "Death ends all competition", ur: "موت تمام مقابلے ختم کر دیتی ہے" },
       concepts: [
         {
           term: "زُرْتُمُ المَقَابِر",
           transliteration: "Zurtum al-Maqaabir",
-          meaning: "You visited the graveyards",
-          explanation: "Powerful euphemism - 'visiting' graves = dying. Those who competed are now visited (as corpses) in the graveyard.",
+          meaning: { en: "You visited the graveyards", ur: "تم نے قبرستانوں کی زیارت کی" },
+          explanation: { en: "Powerful euphemism - 'visiting' graves = dying. Those who competed are now visited (as corpses) in the graveyard.", ur: "طاقتور کنایہ - قبروں کی 'زیارت' = موت۔ جو مقابلے میں تھے اب (لاشوں کے طور پر) قبرستان میں ملاقات کو آئے۔" },
           verseRef: "102:2"
         }
       ]
@@ -58,27 +58,27 @@ export const ONTOLOGY = {
       nameArabic: "مراتب اليقين",
       color: '#3B82F6',
       icon: 'Eye',
-      description: "The Islamic epistemology of certainty",
+      description: { en: "The Islamic epistemology of certainty", ur: "یقین کے اسلامی مراتب" },
       concepts: [
         {
           term: "عِلْمَ اليَقِين",
           transliteration: "'Ilm al-Yaqeen",
-          meaning: "Knowledge of Certainty",
-          explanation: "First level: Certainty through information/evidence. Like being told fire burns.",
+          meaning: { en: "Knowledge of Certainty", ur: "علم الیقین (خبر سے یقین)" },
+          explanation: { en: "First level: Certainty through information/evidence. Like being told fire burns.", ur: "پہلا درجہ: معلومات/شواہد سے حاصل یقین۔ جیسے بتایا جائے کہ آگ جلاتی ہے۔" },
           verseRef: "102:5"
         },
         {
           term: "عَيْنَ اليَقِين",
           transliteration: "'Ayn al-Yaqeen",
-          meaning: "Eye of Certainty",
-          explanation: "Second level: Certainty through direct observation. Like seeing the fire yourself.",
+          meaning: { en: "Eye of Certainty", ur: "عین الیقین (آنکھوں دیکھا یقین)" },
+          explanation: { en: "Second level: Certainty through direct observation. Like seeing the fire yourself.", ur: "دوسرا درجہ: براہ راست مشاہدے سے یقین۔ جیسے آگ خود دیکھ لیں۔" },
           verseRef: "102:7"
         },
         {
           term: "حَقَّ اليَقِين",
           transliteration: "Haqq al-Yaqeen",
-          meaning: "Reality of Certainty",
-          explanation: "Third level (mentioned in 56:95, 69:51): Direct experience. Like being burned by the fire. This level is implied as what happens after seeing Hell.",
+          meaning: { en: "Reality of Certainty", ur: "حق الیقین (تجربے کا یقین)" },
+          explanation: { en: "Third level (mentioned in 56:95, 69:51): Direct experience. Like being burned by the fire. This level is implied as what happens after seeing Hell.", ur: "تیسرا درجہ (56:95، 69:51 میں ذکر): براہ راست تجربہ۔ جیسے آگ سے جل جانا۔ یہ درجہ جہنم دیکھنے کے بعد کے تجربے کی طرف اشارہ ہے۔" },
           verseRef: "Referenced in 56:95"
         }
       ]
@@ -89,13 +89,13 @@ export const ONTOLOGY = {
       nameArabic: "المسؤولية عن النعم",
       color: '#8B5CF6',
       icon: 'Scale',
-      description: "Being questioned about every blessing",
+      description: { en: "Being questioned about every blessing", ur: "ہر نعمت کے بارے میں سوال ہونا" },
       concepts: [
         {
           term: "لَتُسْأَلُنَّ عَنِ النَّعِيم",
           transliteration: "La-Tus'alunna 'an an-Na'eem",
-          meaning: "You will surely be asked about blessings",
-          explanation: "Every blessing - health, wealth, time, cold water, shade - will be accounted for: Did you earn it lawfully? Did you thank Allah? Did you use it properly?",
+          meaning: { en: "You will surely be asked about blessings", ur: "تم سے ضرور نعمتوں کے بارے میں پوچھا جائے گا" },
+          explanation: { en: "Every blessing - health, wealth, time, cold water, shade - will be accounted for: Did you earn it lawfully? Did you thank Allah? Did you use it properly?", ur: "ہر نعمت - صحت، دولت، وقت، ٹھنڈا پانی، سایہ - کا حساب ہوگا: کیا حلال طریقے سے حاصل کی؟ کیا Allah کا شکر ادا کیا؟ کیا صحیح استعمال کیا؟" },
           verseRef: "102:8"
         }
       ]
@@ -107,28 +107,28 @@ export const ONTOLOGY = {
       from: "التَّكَاثُر",
       to: "الإلهاء",
       type: "causation",
-      description: "Competition CAUSES distraction",
+      description: { en: "Competition CAUSES distraction", ur: "مقابلے نے غفلت پیدا کی" },
       explanation: "The rat race for more keeps people from focusing on what matters"
     },
     {
       from: "الإلهاء",
       to: "المَقَابِر",
       type: "consequence",
-      description: "Distraction continues until death",
+      description: { en: "Distraction continues until death", ur: "غفلت موت تک جاری رہتی ہے" },
       explanation: "People only 'wake up' when they die - but then it's too late"
     },
     {
       from: "عِلْم اليَقِين",
       to: "عَيْن اليَقِين",
       type: "progression",
-      description: "From intellectual certainty to visual certainty",
+      description: { en: "From intellectual certainty to visual certainty", ur: "علمی یقین سے بصری یقین کی طرف" },
       explanation: "What they should have believed, they will now see"
     },
     {
       from: "النَّعِيم",
       to: "التَّكَاثُر",
       type: "irony",
-      description: "What they competed for, they'll be questioned about",
+      description: { en: "What they competed for, they'll be questioned about", ur: "جس کے لیے مقابلہ کیا، اسی کے بارے میں سوال ہوگا" },
       explanation: "The very blessings they sought to multiply become the subject of interrogation"
     }
   ],
@@ -136,37 +136,37 @@ export const ONTOLOGY = {
   thematicFlow: {
     title: "From Distraction to Accountability",
     titleArabic: "من الإلهاء إلى المساءلة",
-    description: "The surah traces the path from worldly competition to divine questioning",
+    description: { en: "The surah traces the path from worldly competition to divine questioning", ur: "سورت دنیاوی مقابلے سے الٰہی سوال تک کا راستہ بیان کرتی ہے" },
     stages: [
       {
         stage: 1,
         theme: "The Distraction",
         verses: "102:1-2",
-        description: "Competition diverts you until death"
+        description: { en: "Competition diverts you until death", ur: "مقابلے نے تمہیں موت تک غافل رکھا" }
       },
       {
         stage: 2,
         theme: "The Warning",
         verses: "102:3-4",
-        description: "Repeated warning: You WILL know"
+        description: { en: "Repeated warning: You WILL know", ur: "بار بار تنبیہ: تمہیں ضرور پتا چلے گا" }
       },
       {
         stage: 3,
         theme: "The Conditional",
         verses: "102:5",
-        description: "If only you had certain knowledge..."
+        description: { en: "If only you had certain knowledge...", ur: "کاش تمہیں یقینی علم ہوتا..." }
       },
       {
         stage: 4,
         theme: "The Vision",
         verses: "102:6-7",
-        description: "You will definitely see Hell"
+        description: { en: "You will definitely see Hell", ur: "تم ضرور جہنم دیکھو گے" }
       },
       {
         stage: 5,
         theme: "The Questioning",
         verses: "102:8",
-        description: "You will be asked about every blessing"
+        description: { en: "You will be asked about every blessing", ur: "تم سے ہر نعمت کے بارے میں پوچھا جائے گا" }
       }
     ]
   },
@@ -279,8 +279,8 @@ export const ONTOLOGY = {
   },
 
   uniqueInsight: {
-    title: "The Graveyard Test",
-    insight: "The surah presents an ironic test of priority: People spend their entire lives competing for 'more' - more money, more children, more status - only to end up in graves where none of it matters. The Arabic word زُرْتُمُ (you visited) is particularly pointed: in life, we 'visit' graves briefly; in death, we become permanent residents. Those who competed in counting blessings will now have their blessings counted against them (لَتُسْأَلُنَّ عَنِ النَّعِيم).",
+    title: { en: "The Graveyard Test", ur: "قبرستان کا امتحان" },
+    insight: { en: "The surah presents an ironic test of priority: People spend their entire lives competing for 'more' - more money, more children, more status - only to end up in graves where none of it matters. The Arabic word زُرْتُمُ (you visited) is particularly pointed: in life, we 'visit' graves briefly; in death, we become permanent residents. Those who competed in counting blessings will now have their blessings counted against them (لَتُسْأَلُنَّ عَنِ النَّعِيم).", ur: "سورت ترجیحات کا ایک طنزیہ امتحان پیش کرتی ہے: لوگ ساری زندگی 'مزید' کے لیے مقابلہ کرتے ہیں - مزید پیسہ، مزید اولاد، مزید حیثیت - آخر کار قبروں میں پہنچتے ہیں جہاں کسی چیز کی اہمیت نہیں۔ عربی لفظ زُرْتُمُ (تم نے زیارت کی) خاص طور پر نشاندار ہے: زندگی میں ہم قبروں کی مختصر 'زیارت' کرتے ہیں؛ موت میں مستقل رہائشی بن جاتے ہیں۔ جنہوں نے نعمتیں گننے میں مقابلہ کیا ان کی نعمتوں کا حساب ان کے خلاف لیا جائے گا (لَتُسْأَلُنَّ عَنِ النَّعِيم)۔" },
     modernRelevance: "In an age of social media comparison, lifestyle inflation, and 'keeping up with the Joneses', this surah's warning is urgent: the competition never ends until death, and then the real accounting begins."
   },
 

@@ -40,7 +40,26 @@ export const TREEBANK_DATA = {
       { id: "35:1:23", position: 23, arabic: "شَيْءٍ", transliteration: "shayʾin", meaning: { en: "things", ur: "چیز" }, pos: ["N"], posLabel: "N", grammarRole: "mudaf_ilayh", features: { case: "genitive" }, grammarExplanations: { en: "Genitive in idafa", ur: "مضاف الیہ" } },
       { id: "35:1:24", position: 24, arabic: "قَدِيرٌ", transliteration: "qadīrun", root: "ق د ر", meaning: { en: "competent", ur: "قادر" }, pos: ["ADJ"], posLabel: "ADJ", grammarRole: "predicate", features: { case: "nominative", pattern: "فَعِيل" }, grammarExplanations: { en: "Predicate of إن", ur: "خبر إن" } }
     ],
-    structure: { diagram: ["NOM-SENT", "APPOS", "APPOS", "V-CLAUSE", "EMPH-CLAUSE"], explanation: "Praise to Allah + two descriptions (Creator, Maker of angels) + His power" }
+    structure: { diagram: ["NOM-SENT", "APPOS", "APPOS", "V-CLAUSE", "EMPH-CLAUSE"], explanation: "Praise to Allah + two descriptions (Creator, Maker of angels) + His power" ,
+       relationships: [
+        { from: 1, to: 2, label: 'مبتدأ + خبر' },
+        { from: 2, to: 3, label: 'بدل' },
+        { from: 3, to: 4, label: 'مضاف + مضاف إليه' },
+        { from: 4, to: 5, label: 'مضاف + مضاف إليه' },
+        { from: 5, to: 6, label: 'بدل' },
+        { from: 8, to: 9, label: 'موصوف + صفت' },
+        { from: 10, to: 11, label: 'موصوف + صفت' },
+        { from: 9, to: 10, label: 'مضاف + مضاف إليه' },
+        { from: 14, to: 17, label: 'فعل + مفعول به' },
+        { from: 15, to: 16, label: 'جار + مجرور' },
+        { from: 17, to: 18, label: 'موصول + صلة' },
+        { from: 19, to: 20, label: 'توکید' },
+        { from: 20, to: 24, label: 'مبتدأ + خبر' },
+        { from: 21, to: 22, label: 'جار + مجرور' },
+        { from: 23, to: 24, label: 'موصوف + صفت' },
+        { from: 22, to: 23, label: 'مضاف + مضاف إليه' }
+      ],
+    }
   },
 
   2: {
@@ -68,7 +87,22 @@ export const TREEBANK_DATA = {
       { id: "35:2:18", position: 18, arabic: "الْعَزِيزُ", transliteration: "al-ʿazīzu", root: "ع ز ز", meaning: { en: "the Exalted in Might", ur: "غالب" }, pos: ["ADJ"], posLabel: "ADJ", grammarRole: "predicate", features: { case: "nominative", definite: true, pattern: "فَعِيل" }, grammarExplanations: { en: "First predicate", ur: "خبر اول" } },
       { id: "35:2:19", position: 19, arabic: "الْحَكِيمُ", transliteration: "al-ḥakīmu", root: "ح ك م", meaning: { en: "the Wise", ur: "حکمت والا" }, pos: ["ADJ"], posLabel: "ADJ", grammarRole: "predicate", features: { case: "nominative", definite: true, pattern: "فَعِيل" }, grammarExplanations: { en: "Second predicate", ur: "خبر ثانی" } }
     ],
-    structure: { diagram: ["COND-CLAUSE", "RESULT", "COND-CLAUSE", "RESULT", "NOM-SENT"], explanation: "Two conditional sentences about divine decree + divine attributes" }
+    structure: { diagram: ["COND-CLAUSE", "RESULT", "COND-CLAUSE", "RESULT", "NOM-SENT"], explanation: "Two conditional sentences about divine decree + divine attributes" ,
+       relationships: [
+        { from: 1, to: 2, label: 'شرط + فعل' },
+        { from: 2, to: 3, label: 'فعل + فاعل' },
+        { from: 3, to: 18, label: 'مبتدأ + خبر' },
+        { from: 5, to: 6, label: 'جار + مجرور' },
+        { from: 8, to: 18, label: 'مبتدأ + خبر' },
+        { from: 9, to: 10, label: 'جار + مجرور' },
+        { from: 10, to: 11, label: 'شرط + فعل' },
+        { from: 11, to: 13, label: 'فعل + فاعل' },
+        { from: 13, to: 18, label: 'مبتدأ + خبر' },
+        { from: 14, to: 15, label: 'جار + مجرور' },
+        { from: 15, to: 16, label: 'جار + مجرور' },
+        { from: 17, to: 18, label: 'مبتدأ + خبر' }
+      ],
+    }
   },
 
   3: {
@@ -99,7 +133,19 @@ export const TREEBANK_DATA = {
       { id: "35:3:21", position: 21, arabic: "فَأَنَّىٰ", transliteration: "fa-annā", meaning: { en: "so how", ur: "تو کیسے" }, pos: ["CONJ", "INTERROG"], posLabel: "CONJ+INTERROG", grammarRole: "interrogative", grammarExplanations: { en: "Conjunction + interrogative", ur: "فاء + استفہام" } },
       { id: "35:3:22", position: 22, arabic: "تُؤْفَكُونَ", transliteration: "tuʾfakūna", root: "أ ف ك", meaning: { en: "are you deluded", ur: "بہکائے جاتے ہو" }, pos: ["V"], posLabel: "V", grammarRole: "verb", features: { aspect: "imperfect", voice: "passive", number: "plural" }, grammarExplanations: { en: "Passive imperfect verb", ur: "فعل مضارع مجہول" } }
     ],
-    structure: { diagram: ["VOC", "IMPERATIVE", "INTERROG", "TAWHEED", "INTERROG"], explanation: "Address to mankind + rhetorical question about creator + declaration of tawheed" }
+    structure: { diagram: ["VOC", "IMPERATIVE", "INTERROG", "TAWHEED", "INTERROG"], explanation: "Address to mankind + rhetorical question about creator + declaration of tawheed" ,
+       relationships: [
+        { from: 1, to: 2, label: 'نداء' },
+        { from: 2, to: 3, label: 'نداء' },
+        { from: 4, to: 5, label: 'فعل + مفعول به' },
+        { from: 5, to: 6, label: 'مضاف + مضاف إليه' },
+        { from: 7, to: 8, label: 'جار + مجرور' },
+        { from: 9, to: 10, label: 'جار + مجرور' },
+        { from: 10, to: 11, label: 'موصوف + صفت' },
+        { from: 11, to: 12, label: 'مضاف + مضاف إليه' },
+        { from: 14, to: 15, label: 'جار + مجرور' }
+      ],
+    }
   },
 
   4: {
@@ -119,7 +165,16 @@ export const TREEBANK_DATA = {
       { id: "35:4:10", position: 10, arabic: "تُرْجَعُ", transliteration: "turjaʿu", root: "ر ج ع", meaning: { en: "are returned", ur: "لوٹائے جاتے ہیں" }, pos: ["V"], posLabel: "V", grammarRole: "verb", features: { aspect: "imperfect", voice: "passive" }, grammarExplanations: { en: "Passive imperfect verb", ur: "فعل مضارع مجہول" } },
       { id: "35:4:11", position: 11, arabic: "الْأُمُورُ", transliteration: "al-umūru", root: "أ م ر", meaning: { en: "all matters", ur: "تمام معاملات" }, pos: ["N"], posLabel: "N", grammarRole: "subject", features: { case: "nominative", number: "plural", definite: true }, grammarExplanations: { en: "Subject of passive verb", ur: "نائب فاعل" } }
     ],
-    structure: { diagram: ["COND-CLAUSE", "RESULT", "V-CLAUSE"], explanation: "Consolation to Prophet - denial is normal + all returns to Allah" }
+    structure: { diagram: ["COND-CLAUSE", "RESULT", "V-CLAUSE"], explanation: "Consolation to Prophet - denial is normal + all returns to Allah" ,
+       relationships: [
+        { from: 1, to: 2, label: 'شرط + فعل' },
+        { from: 2, to: 5, label: 'فعل + فاعل' },
+        { from: 4, to: 5, label: 'فعل + فاعل' },
+        { from: 6, to: 7, label: 'جار + مجرور' },
+        { from: 8, to: 9, label: 'جار + مجرور' },
+        { from: 10, to: 11, label: 'فعل + فاعل' }
+      ],
+    }
   },
 
   5: {
@@ -143,7 +198,18 @@ export const TREEBANK_DATA = {
       { id: "35:5:14", position: 14, arabic: "بِاللَّهِ", transliteration: "bi-Allāhi", root: "أ ل ه", meaning: { en: "about Allah", ur: "اللہ کے بارے میں" }, pos: ["PREP", "PN"], posLabel: "PREP+PN", grammarRole: "preposition", features: { case: "genitive" }, grammarExplanations: { en: "Preposition + object", ur: "جار مجرور" } },
       { id: "35:5:15", position: 15, arabic: "الْغَرُورُ", transliteration: "al-gharūru", root: "غ ر ر", meaning: { en: "the Deceiver", ur: "دھوکہ باز" }, pos: ["N"], posLabel: "N", grammarRole: "subject", features: { case: "nominative", definite: true, pattern: "فَعُول" }, grammarExplanations: { en: "Subject of یغرنّ (Satan)", ur: "فاعل (شیطان)" } }
     ],
-    structure: { diagram: ["VOC", "EMPH-CLAUSE", "PROH", "PROH"], explanation: "Address to mankind + truth of promise + two prohibitions against deception" }
+    structure: { diagram: ["VOC", "EMPH-CLAUSE", "PROH", "PROH"], explanation: "Address to mankind + truth of promise + two prohibitions against deception" ,
+       relationships: [
+        { from: 1, to: 2, label: 'نداء' },
+        { from: 2, to: 3, label: 'نداء' },
+        { from: 4, to: 5, label: 'توکید' },
+        { from: 5, to: 7, label: 'مبتدأ + خبر' },
+        { from: 5, to: 6, label: 'مضاف + مضاف إليه' },
+        { from: 9, to: 10, label: 'فعل + فاعل' },
+        { from: 10, to: 11, label: 'موصوف + صفت' },
+        { from: 13, to: 15, label: 'فعل + فاعل' }
+      ],
+    }
   },
 
   6: {
@@ -165,7 +231,16 @@ export const TREEBANK_DATA = {
       { id: "35:6:12", position: 12, arabic: "أَصْحَابِ", transliteration: "aṣḥābi", root: "ص ح ب", meaning: { en: "the companions", ur: "ساتھیوں" }, pos: ["N"], posLabel: "N", grammarRole: "genitive", features: { case: "genitive", number: "plural" }, grammarExplanations: { en: "Object of preposition", ur: "مجرور" } },
       { id: "35:6:13", position: 13, arabic: "السَّعِيرِ", transliteration: "as-saʿīri", root: "س ع ر", meaning: { en: "of the Blaze", ur: "دوزخ" }, pos: ["N"], posLabel: "N", grammarRole: "mudaf_ilayh", features: { case: "genitive", definite: true }, grammarExplanations: { en: "Genitive in idafa", ur: "مضاف الیہ" } }
     ],
-    structure: { diagram: ["EMPH-CLAUSE", "IMPERATIVE", "RESTR-CLAUSE", "PURPOSE"], explanation: "Declaration of Satan's enmity + command to treat him as enemy + his goal" }
+    structure: { diagram: ["EMPH-CLAUSE", "IMPERATIVE", "RESTR-CLAUSE", "PURPOSE"], explanation: "Declaration of Satan's enmity + command to treat him as enemy + his goal" ,
+       relationships: [
+        { from: 1, to: 2, label: 'توکید' },
+        { from: 2, to: 4, label: 'مبتدأ + خبر' },
+        { from: 3, to: 4, label: 'جار + مجرور' },
+        { from: 8, to: 9, label: 'فعل + مفعول به' },
+        { from: 11, to: 12, label: 'جار + مجرور' },
+        { from: 12, to: 13, label: 'مضاف + مضاف إليه' }
+      ],
+    }
   },
 
   7: {
@@ -187,7 +262,19 @@ export const TREEBANK_DATA = {
       { id: "35:7:12", position: 12, arabic: "وَأَجْرٌ", transliteration: "wa-ajrun", root: "أ ج ر", meaning: { en: "and reward", ur: "اور اجر" }, pos: ["CONJ", "N"], posLabel: "CONJ+N", grammarRole: "subject", features: { case: "nominative" }, grammarExplanations: { en: "Conjoined subject", ur: "معطوف مبتدأ" } },
       { id: "35:7:13", position: 13, arabic: "كَبِيرٌ", transliteration: "kabīrun", root: "ك ب ر", meaning: { en: "great", ur: "بڑا" }, pos: ["ADJ"], posLabel: "ADJ", grammarRole: "adjective", features: { case: "nominative", pattern: "فَعِيل" }, grammarExplanations: { en: "Adjective describing اجر", ur: "صفت" } }
     ],
-    structure: { diagram: ["REL-CLAUSE", "NOM-SENT", "REL-CLAUSE", "NOM-SENT"], explanation: "Contrast between disbelievers' punishment and believers' reward" }
+    structure: { diagram: ["REL-CLAUSE", "NOM-SENT", "REL-CLAUSE", "NOM-SENT"], explanation: "Contrast between disbelievers' punishment and believers' reward" ,
+       relationships: [
+        { from: 1, to: 3, label: 'مبتدأ + خبر' },
+        { from: 1, to: 2, label: 'موصول + صلة' },
+        { from: 2, to: 4, label: 'فعل + فاعل' },
+        { from: 4, to: 10, label: 'مبتدأ + خبر' },
+        { from: 4, to: 5, label: 'موصوف + صفت' },
+        { from: 6, to: 10, label: 'مبتدأ + خبر' },
+        { from: 7, to: 9, label: 'فعل + مفعول به' },
+        { from: 7, to: 8, label: 'عطف' },
+        { from: 12, to: 13, label: 'موصوف + صفت' }
+      ],
+    }
   },
 
   8: {
@@ -221,7 +308,31 @@ export const TREEBANK_DATA = {
       { id: "35:8:24", position: 24, arabic: "بِمَا", transliteration: "bimā", meaning: { en: "of what", ur: "جو کچھ" }, pos: ["PREP", "REL"], posLabel: "PREP+REL", grammarRole: "preposition", grammarExplanations: { en: "Preposition + relative", ur: "جار + موصول" } },
       { id: "35:8:25", position: 25, arabic: "يَصْنَعُونَ", transliteration: "yaṣnaʿūna", root: "ص ن ع", meaning: { en: "they do", ur: "وہ کرتے ہیں" }, pos: ["V"], posLabel: "V", grammarRole: "verb", features: { aspect: "imperfect", number: "plural" }, grammarExplanations: { en: "Imperfect verb", ur: "فعل مضارع" } }
     ],
-    structure: { diagram: ["INTERROG", "EMPH-CLAUSE", "PROH", "EMPH-CLAUSE"], explanation: "Rhetorical question about deluded ones + guidance is from Allah + comfort to Prophet" }
+    structure: { diagram: ["INTERROG", "EMPH-CLAUSE", "PROH", "EMPH-CLAUSE"], explanation: "Rhetorical question about deluded ones + guidance is from Allah + comfort to Prophet" ,
+       relationships: [
+        { from: 2, to: 4, label: 'فعل + فاعل' },
+        { from: 3, to: 4, label: 'جار + مجرور' },
+        { from: 4, to: 10, label: 'مبتدأ + خبر' },
+        { from: 4, to: 5, label: 'مضاف + مضاف إليه' },
+        { from: 2, to: 6, label: 'عطف' },
+        { from: 8, to: 9, label: 'توکید' },
+        { from: 9, to: 10, label: 'مبتدأ + خبر' },
+        { from: 10, to: 11, label: 'فعل + مفعول به' },
+        { from: 11, to: 12, label: 'موصول + صلة' },
+        { from: 12, to: 14, label: 'فعل + مفعول به' },
+        { from: 12, to: 13, label: 'عطف' },
+        { from: 14, to: 15, label: 'موصول + صلة' },
+        { from: 15, to: 18, label: 'فعل + فاعل' },
+        { from: 17, to: 18, label: 'فعل + فاعل' },
+        { from: 18, to: 23, label: 'مبتدأ + خبر' },
+        { from: 19, to: 20, label: 'جار + مجرور' },
+        { from: 17, to: 20, label: 'حال' },
+        { from: 21, to: 22, label: 'توکید' },
+        { from: 22, to: 23, label: 'مبتدأ + خبر' },
+        { from: 22, to: 23, label: 'موصوف + صفت' },
+        { from: 24, to: 25, label: 'جار + مجرور' }
+      ],
+    }
   },
 
   9: {
@@ -247,7 +358,22 @@ export const TREEBANK_DATA = {
       { id: "35:9:16", position: 16, arabic: "كَذَٰلِكَ", transliteration: "kadhālika", meaning: { en: "Thus", ur: "اسی طرح" }, pos: ["DEM"], posLabel: "DEM", grammarRole: "predicate", grammarExplanations: { en: "Demonstrative - predicate", ur: "اشارہ - خبر مقدم" } },
       { id: "35:9:17", position: 17, arabic: "النُّشُورُ", transliteration: "an-nushūru", root: "ن ش ر", meaning: { en: "is the resurrection", ur: "قیامت ہے" }, pos: ["N"], posLabel: "N", grammarRole: "subject", features: { case: "nominative", definite: true }, grammarExplanations: { en: "Subject (delayed)", ur: "مبتدأ مؤخر" } }
     ],
-    structure: { diagram: ["NOM-SENT", "REL-CLAUSE", "V-SEQUENCE", "ANALOGY"], explanation: "Sequence of creation - winds, clouds, rain, life + analogy to resurrection" }
+    structure: { diagram: ["NOM-SENT", "REL-CLAUSE", "V-SEQUENCE", "ANALOGY"], explanation: "Sequence of creation - winds, clouds, rain, life + analogy to resurrection" ,
+       relationships: [
+        { from: 1, to: 2, label: 'مبتدأ + خبر' },
+        { from: 2, to: 3, label: 'موصول + صلة' },
+        { from: 3, to: 4, label: 'فعل + مفعول به' },
+        { from: 3, to: 6, label: 'فعل + مفعول به' },
+        { from: 3, to: 5, label: 'عطف' },
+        { from: 5, to: 7, label: 'عطف' },
+        { from: 8, to: 9, label: 'جار + مجرور' },
+        { from: 9, to: 10, label: 'موصوف + صفت' },
+        { from: 7, to: 11, label: 'عطف' },
+        { from: 12, to: 13, label: 'جار + مجرور' },
+        { from: 14, to: 17, label: 'فعل + فاعل' },
+        { from: 14, to: 15, label: 'مضاف + مضاف إليه' }
+      ],
+    }
   },
 
   10: {
@@ -280,8 +406,1109 @@ export const TREEBANK_DATA = {
       { id: "35:10:23", position: 23, arabic: "هُوَ", transliteration: "huwa", meaning: { en: "it", ur: "وہی" }, pos: ["PRON"], posLabel: "PRON", grammarRole: "emphasis", grammarExplanations: { en: "Pronoun of separation", ur: "ضمیر فصل" } },
       { id: "35:10:24", position: 24, arabic: "يَبُورُ", transliteration: "yabūru", root: "ب و ر", meaning: { en: "will perish", ur: "برباد ہوگی" }, pos: ["V"], posLabel: "V", grammarRole: "predicate", features: { aspect: "imperfect" }, grammarExplanations: { en: "Predicate", ur: "خبر" } }
     ],
-    structure: { diagram: ["COND-CLAUSE", "RESULT", "V-CLAUSE", "V-CLAUSE", "REL-CLAUSE", "NOM-SENT", "NOM-SENT"], explanation: "Honor belongs to Allah + good speech ascends + righteous deeds elevate + evildoers' fate" }
-  }
+    structure: { diagram: ["COND-CLAUSE", "RESULT", "V-CLAUSE", "V-CLAUSE", "REL-CLAUSE", "NOM-SENT", "NOM-SENT"], explanation: "Honor belongs to Allah + good speech ascends + righteous deeds elevate + evildoers' fate" ,
+       relationships: [
+        { from: 1, to: 2, label: 'شرط + فعل' },
+        { from: 2, to: 4, label: 'فعل + مفعول به' },
+        { from: 3, to: 4, label: 'فعل + مفعول به' },
+        { from: 3, to: 6, label: 'فعل + فاعل' },
+        { from: 6, to: 14, label: 'مبتدأ + خبر' },
+        { from: 8, to: 9, label: 'جار + مجرور' },
+        { from: 9, to: 10, label: 'فعل + فاعل' },
+        { from: 9, to: 12, label: 'فعل + فاعل' },
+        { from: 10, to: 14, label: 'مبتدأ + خبر' },
+        { from: 10, to: 11, label: 'موصوف + صفت' },
+        { from: 12, to: 14, label: 'مبتدأ + خبر' },
+        { from: 12, to: 13, label: 'موصوف + صفت' },
+        { from: 14, to: 15, label: 'فعل + فاعل' },
+        { from: 14, to: 17, label: 'فعل + مفعول به' },
+        { from: 15, to: 18, label: 'مبتدأ + خبر' },
+        { from: 16, to: 17, label: 'فعل + مفعول به' },
+        { from: 16, to: 19, label: 'فعل + فاعل' },
+        { from: 19, to: 24, label: 'مبتدأ + خبر' },
+        { from: 19, to: 20, label: 'موصوف + صفت' },
+        { from: 21, to: 24, label: 'مبتدأ + خبر' },
+        { from: 21, to: 22, label: 'مضاف + مضاف إليه' }
+      ],
+    }
+  },
+
+  11: {
+    ayahNumber: 11,
+    text: "وَٱللَّهُ خَلَقَكُم مِّن تُرَابٍۢ ثُمَّ مِن نُّطْفَةٍۢ ثُمَّ جَعَلَكُمْ أَزْوَٰجًۭا ۚ وَمَا تَحْمِلُ مِنْ أُنثَىٰ وَلَا تَضَعُ إِلَّا بِعِلْمِهِۦ ۚ وَمَا يُعَمَّرُ مِن مُّعَمَّرٍۢ وَلَا يُنقَصُ مِنْ عُمُرِهِۦٓ إِلَّا فِى كِتَـٰبٍ ۚ إِنَّ ذَٰلِكَ عَلَى ٱللَّهِ يَسِيرٌۭ",
+    words: [
+      { arabic: "وَٱللَّهُ", transliteration: "wal-lahu", meaning: { en: "And Allah", ur: "اور اللہ" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { role: "conjunction+noun" } },
+      { arabic: "خَلَقَكُم", transliteration: "khalaqakum", meaning: { en: "created you", ur: "پیدا کیا تم" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "مِّن", transliteration: "min", meaning: { en: "from", ur: "سے" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "تُرَابٍۢ", transliteration: "turābin", meaning: { en: "dust", ur: "dust" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "ثُمَّ", transliteration: "thumma", meaning: { en: "then", ur: "پھر" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "مِن", transliteration: "min", meaning: { en: "from", ur: "سے" }, pos: "PREP", posLabel: "PREP", grammar: { role: "preposition" } },
+      { arabic: "نُّطْفَةٍۢ", transliteration: "nuṭ'fatin", meaning: { en: "a semen-drop", ur: "a semen-drop" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "ثُمَّ", transliteration: "thumma", meaning: { en: "then", ur: "پھر" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "جَعَلَكُمْ", transliteration: "jaʿalakum", meaning: { en: "He made you", ur: "وہ made تم" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "أَزْوَٰجًۭا ۚ", transliteration: "azwājan", meaning: { en: "pairs", ur: "pairs" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "وَمَا", transliteration: "wamā", meaning: { en: "And not", ur: "اور نہیں" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { role: "conjunction+noun" } },
+      { arabic: "تَحْمِلُ", transliteration: "taḥmilu", meaning: { en: "conceives", ur: "conceives" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "مِنْ", transliteration: "min", meaning: { en: "any", ur: "any" }, pos: "PREP", posLabel: "PREP", grammar: { role: "preposition" } },
+      { arabic: "أُنثَىٰ", transliteration: "unthā", meaning: { en: "female", ur: "female" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "وَلَا", transliteration: "walā", meaning: { en: "and not", ur: "اور نہیں" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { role: "conjunction+noun" } },
+      { arabic: "تَضَعُ", transliteration: "taḍaʿu", meaning: { en: "gives birth", ur: "gives birth" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "إِلَّا", transliteration: "illā", meaning: { en: "except", ur: "سوائے" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "بِعِلْمِهِۦ ۚ", transliteration: "biʿil'mihi", meaning: { en: "with His knowledge", ur: "ساتھ His knowledge" }, pos: "P+N", posLabel: "P+N", grammar: { role: "preposition+noun" } },
+      { arabic: "وَمَا", transliteration: "wamā", meaning: { en: "And not", ur: "اور نہیں" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { role: "conjunction+noun" } },
+      { arabic: "يُعَمَّرُ", transliteration: "yuʿammaru", meaning: { en: "is granted life", ur: "is granted زندگی" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "مِن", transliteration: "min", meaning: { en: "any", ur: "any" }, pos: "PREP", posLabel: "PREP", grammar: { role: "preposition" } },
+      { arabic: "مُّعَمَّرٍۢ", transliteration: "muʿammarin", meaning: { en: "aged person", ur: "aged person" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "وَلَا", transliteration: "walā", meaning: { en: "and not", ur: "اور نہیں" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { role: "conjunction+noun" } },
+      { arabic: "يُنقَصُ", transliteration: "yunqaṣu", meaning: { en: "is lessened", ur: "is lessened" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "مِنْ", transliteration: "min", meaning: { en: "from", ur: "سے" }, pos: "PREP", posLabel: "PREP", grammar: { role: "preposition" } },
+      { arabic: "عُمُرِهِۦٓ", transliteration: "ʿumurihi", meaning: { en: "his life", ur: "his زندگی" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "إِلَّا", transliteration: "illā", meaning: { en: "but", ur: "لیکن" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "فِى", transliteration: "fī", meaning: { en: "(is) in", ur: "(is) میں" }, pos: "PREP", posLabel: "PREP", grammar: { role: "preposition" } },
+      { arabic: "كِتَـٰبٍ ۚ", transliteration: "kitābin", meaning: { en: "a Register", ur: "a Register" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "إِنَّ", transliteration: "inna", meaning: { en: "Indeed", ur: "بیشک" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "ذَٰلِكَ", transliteration: "dhālika", meaning: { en: "that", ur: "وہ" }, pos: "DEM", posLabel: "DEM", grammar: { role: "demonstrative" } },
+      { arabic: "عَلَى", transliteration: "ʿalā", meaning: { en: "for", ur: "for" }, pos: "PREP", posLabel: "PREP", grammar: { role: "preposition" } },
+      { arabic: "ٱللَّهِ", transliteration: "l-lahi", meaning: { en: "Allah", ur: "اللہ" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "يَسِيرٌۭ", transliteration: "yasīrun", meaning: { en: "(is) easy", ur: "(is) easy" }, pos: "V", posLabel: "V", grammar: { role: "verb" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 4, to: 5, label: 'فعل + فاعل' },
+        { from: 7, to: 8, label: 'فعل + فاعل' },
+        { from: 9, to: 10, label: 'فعل + فاعل' },
+        { from: 13, to: 14, label: 'جار + مجرور' },
+        { from: 16, to: 17, label: 'فعل + فاعل' },
+        { from: 21, to: 22, label: 'جار + مجرور' },
+        { from: 25, to: 26, label: 'جار + مجرور' },
+        { from: 28, to: 29, label: 'جار + مجرور' },
+        { from: 32, to: 33, label: 'جار + مجرور' }
+      ],
+    },
+  },
+  12: {
+    ayahNumber: 12,
+    text: "وَمَا يَسْتَوِى ٱلْبَحْرَانِ هَـٰذَا عَذْبٌۭ فُرَاتٌۭ سَآئِغٌۭ شَرَابُهُۥ وَهَـٰذَا مِلْحٌ أُجَاجٌۭ ۖ وَمِن كُلٍّۢ تَأْكُلُونَ لَحْمًۭا طَرِيًّۭا وَتَسْتَخْرِجُونَ حِلْيَةًۭ تَلْبَسُونَهَا ۖ وَتَرَى ٱلْفُلْكَ فِيهِ مَوَاخِرَ لِتَبْتَغُوا۟ مِن فَضْلِهِۦ وَلَعَلَّكُمْ تَشْكُرُونَ",
+    words: [
+      { arabic: "وَمَا", transliteration: "wamā", meaning: { en: "And not", ur: "اور نہیں" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { role: "conjunction+noun" } },
+      { arabic: "يَسْتَوِى", transliteration: "yastawī", meaning: { en: "are alike", ur: "are alike" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "ٱلْبَحْرَانِ", transliteration: "l-baḥrāni", meaning: { en: "the two seas", ur: "the two seas" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "هَـٰذَا", transliteration: "hādhā", meaning: { en: "This", ur: "This" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "عَذْبٌۭ", transliteration: "ʿadhbun", meaning: { en: "(is) fresh", ur: "(is) fresh" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "فُرَاتٌۭ", transliteration: "furātun", meaning: { en: "sweet", ur: "sweet" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "سَآئِغٌۭ", transliteration: "sāighun", meaning: { en: "pleasant", ur: "pleasant" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "شَرَابُهُۥ", transliteration: "sharābuhu", meaning: { en: "its drink", ur: "its drink" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "وَهَـٰذَا", transliteration: "wahādhā", meaning: { en: "and this", ur: "اور this" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { role: "conjunction+noun" } },
+      { arabic: "مِلْحٌ", transliteration: "mil'ḥun", meaning: { en: "salty", ur: "salty" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "أُجَاجٌۭ ۖ", transliteration: "ujājun", meaning: { en: "(and) bitter", ur: "(اور) bitter" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "وَمِن", transliteration: "wamin", meaning: { en: "And from", ur: "اور سے" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { role: "conjunction+noun" } },
+      { arabic: "كُلٍّۢ", transliteration: "kullin", meaning: { en: "each", ur: "ہر" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "تَأْكُلُونَ", transliteration: "takulūna", meaning: { en: "you eat", ur: "تم eat" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "لَحْمًۭا", transliteration: "laḥman", meaning: { en: "meat", ur: "meat" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "طَرِيًّۭا", transliteration: "ṭariyyan", meaning: { en: "fresh", ur: "fresh" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "وَتَسْتَخْرِجُونَ", transliteration: "watastakhrijūna", meaning: { en: "and you extract", ur: "اور تم extract" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { role: "conjunction+noun" } },
+      { arabic: "حِلْيَةًۭ", transliteration: "ḥil'yatan", meaning: { en: "ornaments", ur: "ornaments" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "تَلْبَسُونَهَا ۖ", transliteration: "talbasūnahā", meaning: { en: "you wear them", ur: "تم wear them" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "وَتَرَى", transliteration: "watarā", meaning: { en: "and you see", ur: "اور تم دیکھنا" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { role: "conjunction+noun" } },
+      { arabic: "ٱلْفُلْكَ", transliteration: "l-ful'ka", meaning: { en: "the ships", ur: "the ships" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "فِيهِ", transliteration: "fīhi", meaning: { en: "in it", ur: "میں it" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "مَوَاخِرَ", transliteration: "mawākhira", meaning: { en: "cleaving", ur: "cleaving" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "لِتَبْتَغُوا۟", transliteration: "litabtaghū", meaning: { en: "so that you may seek", ur: "so وہ تم may seek" }, pos: "P+N", posLabel: "P+N", grammar: { role: "preposition+noun" } },
+      { arabic: "مِن", transliteration: "min", meaning: { en: "of", ur: "of" }, pos: "PREP", posLabel: "PREP", grammar: { role: "preposition" } },
+      { arabic: "فَضْلِهِۦ", transliteration: "faḍlihi", meaning: { en: "His Bounty", ur: "His Bounty" }, pos: "CONJ+V", posLabel: "CONJ+V", grammar: { role: "conjunction+verb" } },
+      { arabic: "وَلَعَلَّكُمْ", transliteration: "walaʿallakum", meaning: { en: "and that you may", ur: "اور وہ تم may" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { role: "conjunction+noun" } },
+      { arabic: "تَشْكُرُونَ", transliteration: "tashkurūna", meaning: { en: "be grateful", ur: "be grateful" }, pos: "V", posLabel: "V", grammar: { role: "verb" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 2, to: 3, label: 'فعل + فاعل' },
+        { from: 14, to: 15, label: 'فعل + فاعل' }
+      ],
+    },
+  },
+  13: {
+    ayahNumber: 13,
+    text: "يُولِجُ ٱلَّيْلَ فِى ٱلنَّهَارِ وَيُولِجُ ٱلنَّهَارَ فِى ٱلَّيْلِ وَسَخَّرَ ٱلشَّمْسَ وَٱلْقَمَرَ كُلٌّۭ يَجْرِى لِأَجَلٍۢ مُّسَمًّۭى ۚ ذَٰلِكُمُ ٱللَّهُ رَبُّكُمْ لَهُ ٱلْمُلْكُ ۚ وَٱلَّذِينَ تَدْعُونَ مِن دُونِهِۦ مَا يَمْلِكُونَ مِن قِطْمِيرٍ",
+    words: [
+      { arabic: "يُولِجُ", transliteration: "yūliju", meaning: { en: "He causes to enter", ur: "وہ causes کو enter" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "ٱلَّيْلَ", transliteration: "al-layla", meaning: { en: "the night", ur: "the رات" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "فِى", transliteration: "fī", meaning: { en: "in (to)", ur: "میں (کو)" }, pos: "PREP", posLabel: "PREP", grammar: { role: "preposition" } },
+      { arabic: "ٱلنَّهَارِ", transliteration: "l-nahāri", meaning: { en: "the day", ur: "the دن" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "وَيُولِجُ", transliteration: "wayūliju", meaning: { en: "and He causes to enter", ur: "اور وہ causes کو enter" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { role: "conjunction+noun" } },
+      { arabic: "ٱلنَّهَارَ", transliteration: "l-nahāra", meaning: { en: "the day", ur: "the دن" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "فِى", transliteration: "fī", meaning: { en: "in (to)", ur: "میں (کو)" }, pos: "PREP", posLabel: "PREP", grammar: { role: "preposition" } },
+      { arabic: "ٱلَّيْلِ", transliteration: "al-layli", meaning: { en: "the night", ur: "the رات" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "وَسَخَّرَ", transliteration: "wasakhara", meaning: { en: "and He has subjected", ur: "اور وہ has subjected" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { role: "conjunction+noun" } },
+      { arabic: "ٱلشَّمْسَ", transliteration: "l-shamsa", meaning: { en: "the sun", ur: "the sun" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "وَٱلْقَمَرَ", transliteration: "wal-qamara", meaning: { en: "and the moon", ur: "اور the moon" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { role: "conjunction+noun" } },
+      { arabic: "كُلٌّۭ", transliteration: "kullun", meaning: { en: "each", ur: "ہر" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "يَجْرِى", transliteration: "yajrī", meaning: { en: "running", ur: "running" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "لِأَجَلٍۢ", transliteration: "li-ajalin", meaning: { en: "for a term", ur: "for a term" }, pos: "P+N", posLabel: "P+N", grammar: { role: "preposition+noun" } },
+      { arabic: "مُّسَمًّۭى ۚ", transliteration: "musamman", meaning: { en: "appointed", ur: "appointed" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "ذَٰلِكُمُ", transliteration: "dhālikumu", meaning: { en: "That (is)", ur: "وہ (is)" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "ٱللَّهُ", transliteration: "l-lahu", meaning: { en: "Allah", ur: "اللہ" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "رَبُّكُمْ", transliteration: "rabbukum", meaning: { en: "your Lord", ur: "your رب" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "لَهُ", transliteration: "lahu", meaning: { en: "for Him", ur: "for Him" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "ٱلْمُلْكُ ۚ", transliteration: "l-mul'ku", meaning: { en: "(is) the Dominion", ur: "(is) the Dominion" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "وَٱلَّذِينَ", transliteration: "wa-alladhīna", meaning: { en: "And those whom", ur: "اور those whom" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { role: "conjunction+noun" } },
+      { arabic: "تَدْعُونَ", transliteration: "tadʿūna", meaning: { en: "you invoke", ur: "تم invoke" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "مِن", transliteration: "min", meaning: { en: "besides Him", ur: "besides Him" }, pos: "PREP", posLabel: "PREP", grammar: { role: "preposition" } },
+      { arabic: "دُونِهِۦ", transliteration: "dūnihi", meaning: { en: "besides Him", ur: "besides Him" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "مَا", transliteration: "mā", meaning: { en: "not", ur: "نہیں" }, pos: "NEG", posLabel: "NEG", grammar: { role: "negation" } },
+      { arabic: "يَمْلِكُونَ", transliteration: "yamlikūna", meaning: { en: "they possess", ur: "وہ لوگ possess" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "مِن", transliteration: "min", meaning: { en: "even", ur: "even" }, pos: "PREP", posLabel: "PREP", grammar: { role: "preposition" } },
+      { arabic: "قِطْمِيرٍ", transliteration: "qiṭ'mīrin", meaning: { en: "(as much as) the membrane of a date-seed", ur: "(as much as) the membrane of a date-seed" }, pos: "V", posLabel: "V", grammar: { role: "verb" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 1, to: 2, label: 'فعل + فاعل' },
+        { from: 3, to: 4, label: 'جار + مجرور' },
+        { from: 7, to: 8, label: 'جار + مجرور' },
+        { from: 15, to: 16, label: 'فعل + فاعل' },
+        { from: 19, to: 20, label: 'مضاف + مضاف إليه' },
+        { from: 23, to: 24, label: 'جار + مجرور' },
+        { from: 25, to: 26, label: 'نفی + فعل' }
+      ],
+    },
+  },
+  14: {
+    ayahNumber: 14,
+    text: "إِن تَدْعُوهُمْ لَا يَسْمَعُوا۟ دُعَآءَكُمْ وَلَوْ سَمِعُوا۟ مَا ٱسْتَجَابُوا۟ لَكُمْ ۖ وَيَوْمَ ٱلْقِيَـٰمَةِ يَكْفُرُونَ بِشِرْكِكُمْ ۚ وَلَا يُنَبِّئُكَ مِثْلُ خَبِيرٍۢ",
+    words: [
+      { arabic: "إِن", transliteration: "in", meaning: { en: "If", ur: "If" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "تَدْعُوهُمْ", transliteration: "tadʿūhum", meaning: { en: "you invoke them", ur: "تم invoke them" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "لَا", transliteration: "lā", meaning: { en: "not", ur: "نہیں" }, pos: "NEG", posLabel: "NEG", grammar: { role: "negation" } },
+      { arabic: "يَسْمَعُوا۟", transliteration: "yasmaʿū", meaning: { en: "they hear", ur: "وہ لوگ سننا" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "دُعَآءَكُمْ", transliteration: "duʿāakum", meaning: { en: "your call", ur: "your call" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "وَلَوْ", transliteration: "walaw", meaning: { en: "and if", ur: "اور if" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { role: "conjunction+noun" } },
+      { arabic: "سَمِعُوا۟", transliteration: "samiʿū", meaning: { en: "they heard", ur: "وہ لوگ heard" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "مَا", transliteration: "mā", meaning: { en: "not", ur: "نہیں" }, pos: "NEG", posLabel: "NEG", grammar: { role: "negation" } },
+      { arabic: "ٱسْتَجَابُوا۟", transliteration: "is'tajābū", meaning: { en: "they (would) respond", ur: "وہ لوگ (would) respond" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "لَكُمْ ۖ", transliteration: "lakum", meaning: { en: "to you", ur: "کو تم" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "وَيَوْمَ", transliteration: "wayawma", meaning: { en: "And (on the) Day", ur: "اور (پر the) دن" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { role: "conjunction+noun" } },
+      { arabic: "ٱلْقِيَـٰمَةِ", transliteration: "l-qiyāmati", meaning: { en: "(of) the Resurrection", ur: "(of) the Resurrection" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "يَكْفُرُونَ", transliteration: "yakfurūna", meaning: { en: "they will deny", ur: "وہ لوگ will deny" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "بِشِرْكِكُمْ ۚ", transliteration: "bishir'kikum", meaning: { en: "your association", ur: "your association" }, pos: "P+N", posLabel: "P+N", grammar: { role: "preposition+noun" } },
+      { arabic: "وَلَا", transliteration: "walā", meaning: { en: "And none", ur: "اور none" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { role: "conjunction+noun" } },
+      { arabic: "يُنَبِّئُكَ", transliteration: "yunabbi-uka", meaning: { en: "can inform you", ur: "can inform تم" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "مِثْلُ", transliteration: "mith'lu", meaning: { en: "like", ur: "like" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "خَبِيرٍۢ", transliteration: "khabīrin", meaning: { en: "(the) All-Aware", ur: "(the) سب-Aware" }, pos: "ADJ", posLabel: "ADJ", grammar: { role: "adjective" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 3, to: 4, label: 'نفی + فعل' },
+        { from: 4, to: 5, label: 'فعل + فاعل' },
+        { from: 8, to: 9, label: 'نفی + فعل' },
+        { from: 9, to: 10, label: 'فعل + فاعل' },
+        { from: 16, to: 17, label: 'فعل + فاعل' },
+        { from: 17, to: 18, label: 'موصوف + صفت' }
+      ],
+    },
+  },
+  15: {
+    ayahNumber: 15,
+    text: "۞ يَـٰٓأَيُّهَا ٱلنَّاسُ أَنتُمُ ٱلْفُقَرَآءُ إِلَى ٱللَّهِ ۖ وَٱللَّهُ هُوَ ٱلْغَنِىُّ ٱلْحَمِيدُ",
+    words: [
+      { arabic: "۞ يَـٰٓأَيُّهَا", transliteration: "yāayyuhā", meaning: { en: "O", ur: "اے" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "ٱلنَّاسُ", transliteration: "l-nāsu", meaning: { en: "mankind", ur: "mankind" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "أَنتُمُ", transliteration: "antumu", meaning: { en: "You", ur: "تم" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "ٱلْفُقَرَآءُ", transliteration: "l-fuqarāu", meaning: { en: "(are) those in need", ur: "(are) those میں need" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "إِلَى", transliteration: "ilā", meaning: { en: "of", ur: "of" }, pos: "PREP", posLabel: "PREP", grammar: { role: "preposition" } },
+      { arabic: "ٱللَّهِ ۖ", transliteration: "l-lahi", meaning: { en: "Allah", ur: "اللہ" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "وَٱللَّهُ", transliteration: "wal-lahu", meaning: { en: "while Allah", ur: "while اللہ" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { role: "conjunction+noun" } },
+      { arabic: "هُوَ", transliteration: "huwa", meaning: { en: "He", ur: "وہ" }, pos: "PRON", posLabel: "PRON", grammar: { role: "subject" } },
+      { arabic: "ٱلْغَنِىُّ", transliteration: "l-ghaniyu", meaning: { en: "(is) Free of need", ur: "(is) Free of need" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "ٱلْحَمِيدُ", transliteration: "l-ḥamīdu", meaning: { en: "the Praiseworthy", ur: "the Praiseworthy" }, pos: "N", posLabel: "N", grammar: { role: "noun" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 5, to: 6, label: 'جار + مجرور' },
+        { from: 9, to: 10, label: 'فعل + فاعل' }
+      ],
+    },
+  },
+  16: {
+    ayahNumber: 16,
+    text: "إِن يَشَأْ يُذْهِبْكُمْ وَيَأْتِ بِخَلْقٍۢ جَدِيدٍۢ",
+    words: [
+      { arabic: "إِن", transliteration: "in", meaning: { en: "If", ur: "If" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "يَشَأْ", transliteration: "yasha", meaning: { en: "He wills", ur: "وہ wills" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "يُذْهِبْكُمْ", transliteration: "yudh'hib'kum", meaning: { en: "He (can) do away with you", ur: "وہ (can) do away ساتھ تم" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "وَيَأْتِ", transliteration: "wayati", meaning: { en: "and bring", ur: "اور bring" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { role: "conjunction+noun" } },
+      { arabic: "بِخَلْقٍۢ", transliteration: "bikhalqin", meaning: { en: "in a creation", ur: "میں a تخلیق" }, pos: "P+N", posLabel: "P+N", grammar: { role: "preposition+noun" } },
+      { arabic: "جَدِيدٍۢ", transliteration: "jadīdin", meaning: { en: "new", ur: "new" }, pos: "N", posLabel: "N", grammar: { role: "noun" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 5, to: 6, label: 'جار + مجرور' }
+      ],
+    },
+  },
+  17: {
+    ayahNumber: 17,
+    text: "وَمَا ذَٰلِكَ عَلَى ٱللَّهِ بِعَزِيزٍۢ",
+    words: [
+      { arabic: "وَمَا", transliteration: "wamā", meaning: { en: "And not", ur: "اور نہیں" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { role: "conjunction+noun" } },
+      { arabic: "ذَٰلِكَ", transliteration: "dhālika", meaning: { en: "that", ur: "وہ" }, pos: "DEM", posLabel: "DEM", grammar: { role: "demonstrative" } },
+      { arabic: "عَلَى", transliteration: "ʿalā", meaning: { en: "(is) on", ur: "(is) پر" }, pos: "PREP", posLabel: "PREP", grammar: { role: "preposition" } },
+      { arabic: "ٱللَّهِ", transliteration: "l-lahi", meaning: { en: "Allah", ur: "اللہ" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "بِعَزِيزٍۢ", transliteration: "biʿazīzin", meaning: { en: "difficult", ur: "difficult" }, pos: "P+N", posLabel: "P+N", grammar: { role: "preposition+noun" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 3, to: 4, label: 'جار + مجرور' }
+      ],
+    },
+  },
+  18: {
+    ayahNumber: 18,
+    text: "وَلَا تَزِرُ وَازِرَةٌۭ وِزْرَ أُخْرَىٰ ۚ وَإِن تَدْعُ مُثْقَلَةٌ إِلَىٰ حِمْلِهَا لَا يُحْمَلْ مِنْهُ شَىْءٌۭ وَلَوْ كَانَ ذَا قُرْبَىٰٓ ۗ إِنَّمَا تُنذِرُ ٱلَّذِينَ يَخْشَوْنَ رَبَّهُم بِٱلْغَيْبِ وَأَقَامُوا۟ ٱلصَّلَوٰةَ ۚ وَمَن تَزَكَّىٰ فَإِنَّمَا يَتَزَكَّىٰ لِنَفْسِهِۦ ۚ وَإِلَى ٱللَّهِ ٱلْمَصِيرُ",
+    words: [
+      { arabic: "وَلَا", transliteration: "walā", meaning: { en: "And not", ur: "اور نہیں" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { role: "conjunction+noun" } },
+      { arabic: "تَزِرُ", transliteration: "taziru", meaning: { en: "will bear", ur: "will bear" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "وَازِرَةٌۭ", transliteration: "wāziratun", meaning: { en: "bearer of burdens", ur: "bearer of burdens" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { role: "conjunction+noun" } },
+      { arabic: "وِزْرَ", transliteration: "wiz'ra", meaning: { en: "burden", ur: "burden" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "أُخْرَىٰ ۚ", transliteration: "ukh'rā", meaning: { en: "(of) another", ur: "(of) another" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "وَإِن", transliteration: "wa-in", meaning: { en: "And if", ur: "اور if" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { role: "conjunction+noun" } },
+      { arabic: "تَدْعُ", transliteration: "tadʿu", meaning: { en: "calls", ur: "calls" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "مُثْقَلَةٌ", transliteration: "muth'qalatun", meaning: { en: "a heavily laden", ur: "a heavily laden" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "إِلَىٰ", transliteration: "ilā", meaning: { en: "to", ur: "کو" }, pos: "PREP", posLabel: "PREP", grammar: { role: "preposition" } },
+      { arabic: "حِمْلِهَا", transliteration: "ḥim'lihā", meaning: { en: "(carry) its load", ur: "(carry) its load" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "لَا", transliteration: "lā", meaning: { en: "not", ur: "نہیں" }, pos: "NEG", posLabel: "NEG", grammar: { role: "negation" } },
+      { arabic: "يُحْمَلْ", transliteration: "yuḥ'mal", meaning: { en: "will be carried", ur: "will be carried" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "مِنْهُ", transliteration: "min'hu", meaning: { en: "of it", ur: "of it" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "شَىْءٌۭ", transliteration: "shayon", meaning: { en: "anything", ur: "anything" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "وَلَوْ", transliteration: "walaw", meaning: { en: "even if", ur: "even if" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { role: "conjunction+noun" } },
+      { arabic: "كَانَ", transliteration: "kāna", meaning: { en: "he be", ur: "وہ be" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "ذَا", transliteration: "dhā", meaning: { en: "near of kin", ur: "near of kin" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "قُرْبَىٰٓ ۗ", transliteration: "qur'bā", meaning: { en: "near of kin", ur: "near of kin" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "إِنَّمَا", transliteration: "innamā", meaning: { en: "Only", ur: "صرف" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "تُنذِرُ", transliteration: "tundhiru", meaning: { en: "you can warn", ur: "تم can warn" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "ٱلَّذِينَ", transliteration: "alladhīna", meaning: { en: "those who", ur: "جو لوگ" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "يَخْشَوْنَ", transliteration: "yakhshawna", meaning: { en: "fear", ur: "ڈرنا" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "رَبَّهُم", transliteration: "rabbahum", meaning: { en: "their Lord ", ur: "their رب " }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "بِٱلْغَيْبِ", transliteration: "bil-ghaybi", meaning: { en: "unseen", ur: "unseen" }, pos: "P+N", posLabel: "P+N", grammar: { role: "preposition+noun" } },
+      { arabic: "وَأَقَامُوا۟", transliteration: "wa-aqāmū", meaning: { en: "and establish", ur: "اور establish" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { role: "conjunction+noun" } },
+      { arabic: "ٱلصَّلَوٰةَ ۚ", transliteration: "l-ṣalata", meaning: { en: "the prayer", ur: "the نماز" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "وَمَن", transliteration: "waman", meaning: { en: "And whoever", ur: "اور whoever" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { role: "conjunction+noun" } },
+      { arabic: "تَزَكَّىٰ", transliteration: "tazakkā", meaning: { en: "purifies himself", ur: "purifies himself" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "فَإِنَّمَا", transliteration: "fa-innamā", meaning: { en: "then only", ur: "پھر صرف" }, pos: "CONJ+V", posLabel: "CONJ+V", grammar: { role: "conjunction+verb" } },
+      { arabic: "يَتَزَكَّىٰ", transliteration: "yatazakkā", meaning: { en: "he purifies", ur: "وہ purifies" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "لِنَفْسِهِۦ ۚ", transliteration: "linafsihi", meaning: { en: "for his own self", ur: "for his own self" }, pos: "P+N", posLabel: "P+N", grammar: { role: "preposition+noun" } },
+      { arabic: "وَإِلَى", transliteration: "wa-ilā", meaning: { en: "And to", ur: "اور کو" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { role: "conjunction+noun" } },
+      { arabic: "ٱللَّهِ", transliteration: "l-lahi", meaning: { en: "Allah", ur: "اللہ" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "ٱلْمَصِيرُ", transliteration: "l-maṣīru", meaning: { en: "(is) the destination", ur: "(is) the destination" }, pos: "N", posLabel: "N", grammar: { role: "noun" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 7, to: 8, label: 'فعل + فاعل' },
+        { from: 9, to: 10, label: 'جار + مجرور' },
+        { from: 11, to: 12, label: 'نفی + فعل' },
+        { from: 12, to: 13, label: 'فعل + فاعل' },
+        { from: 16, to: 17, label: 'فعل + فاعل' },
+        { from: 17, to: 18, label: 'مضاف + مضاف إليه' },
+        { from: 20, to: 21, label: 'فعل + فاعل' },
+        { from: 22, to: 23, label: 'فعل + فاعل' },
+        { from: 33, to: 34, label: 'مضاف + مضاف إليه' }
+      ],
+    },
+  },
+  19: {
+    ayahNumber: 19,
+    text: "وَمَا يَسْتَوِى ٱلْأَعْمَىٰ وَٱلْبَصِيرُ",
+    words: [
+      { arabic: "وَمَا", transliteration: "wamā", meaning: { en: "And not", ur: "اور نہیں" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { role: "conjunction+noun" } },
+      { arabic: "يَسْتَوِى", transliteration: "yastawī", meaning: { en: "equal", ur: "equal" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "ٱلْأَعْمَىٰ", transliteration: "l-aʿmā", meaning: { en: "(are) the blind", ur: "(are) the blind" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "وَٱلْبَصِيرُ", transliteration: "wal-baṣīru", meaning: { en: "and the seeing", ur: "اور the seeing" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { role: "conjunction+noun" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 2, to: 3, label: 'فعل + فاعل' }
+      ],
+    },
+  },
+  20: {
+    ayahNumber: 20,
+    text: "وَلَا ٱلظُّلُمَـٰتُ وَلَا ٱلنُّورُ",
+    words: [
+      { arabic: "وَلَا", transliteration: "walā", meaning: { en: "And not", ur: "اور نہیں" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { role: "conjunction+noun" } },
+      { arabic: "ٱلظُّلُمَـٰتُ", transliteration: "l-ẓulumātu", meaning: { en: "the darkness[es]", ur: "the darkness[es]" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "وَلَا", transliteration: "walā", meaning: { en: "and not", ur: "اور نہیں" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { role: "conjunction+noun" } },
+      { arabic: "ٱلنُّورُ", transliteration: "l-nūru", meaning: { en: "[the] light", ur: "[the] light" }, pos: "N", posLabel: "N", grammar: { role: "noun" } }
+    ],
+    structure: {
+      relationships: [
+
+      ],
+    },
+  },
+  21: {
+    ayahNumber: 21,
+    text: "وَلَا ٱلظِّلُّ وَلَا ٱلْحَرُورُ",
+    words: [
+      { arabic: "وَلَا", transliteration: "walā", meaning: { en: "And not", ur: "اور نہیں" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { role: "conjunction+noun" } },
+      { arabic: "ٱلظِّلُّ", transliteration: "l-ẓilu", meaning: { en: "the shade", ur: "the shade" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "وَلَا", transliteration: "walā", meaning: { en: "and not", ur: "اور نہیں" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { role: "conjunction+noun" } },
+      { arabic: "ٱلْحَرُورُ", transliteration: "l-ḥarūru", meaning: { en: "the heat", ur: "the heat" }, pos: "N", posLabel: "N", grammar: { role: "noun" } }
+    ],
+    structure: {
+      relationships: [
+
+      ],
+    },
+  },
+  22: {
+    ayahNumber: 22,
+    text: "وَمَا يَسْتَوِى ٱلْأَحْيَآءُ وَلَا ٱلْأَمْوَٰتُ ۚ إِنَّ ٱللَّهَ يُسْمِعُ مَن يَشَآءُ ۖ وَمَآ أَنتَ بِمُسْمِعٍۢ مَّن فِى ٱلْقُبُورِ",
+    words: [
+      { arabic: "وَمَا", transliteration: "wamā", meaning: { en: "And not", ur: "اور نہیں" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { role: "conjunction+noun" } },
+      { arabic: "يَسْتَوِى", transliteration: "yastawī", meaning: { en: "equal", ur: "equal" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "ٱلْأَحْيَآءُ", transliteration: "l-aḥyāu", meaning: { en: "(are) the living", ur: "(are) the living" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "وَلَا", transliteration: "walā", meaning: { en: "and not", ur: "اور نہیں" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { role: "conjunction+noun" } },
+      { arabic: "ٱلْأَمْوَٰتُ ۚ", transliteration: "l-amwātu", meaning: { en: "the dead", ur: "the dead" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "إِنَّ", transliteration: "inna", meaning: { en: "Indeed", ur: "بیشک" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "ٱللَّهَ", transliteration: "l-laha", meaning: { en: "Allah", ur: "اللہ" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "يُسْمِعُ", transliteration: "yus'miʿu", meaning: { en: "causes to hear", ur: "causes کو سننا" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "مَن", transliteration: "man", meaning: { en: "whom", ur: "whom" }, pos: "REL", posLabel: "REL", grammar: { role: "relative" } },
+      { arabic: "يَشَآءُ ۖ", transliteration: "yashāu", meaning: { en: "He wills", ur: "وہ wills" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "وَمَآ", transliteration: "wamā", meaning: { en: "and not", ur: "اور نہیں" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { role: "conjunction+noun" } },
+      { arabic: "أَنتَ", transliteration: "anta", meaning: { en: "you", ur: "تم" }, pos: "PRON", posLabel: "PRON", grammar: { role: "subject" } },
+      { arabic: "بِمُسْمِعٍۢ", transliteration: "bimus'miʿin", meaning: { en: "can make hear", ur: "can make سننا" }, pos: "P+N", posLabel: "P+N", grammar: { role: "preposition+noun" } },
+      { arabic: "مَّن", transliteration: "man", meaning: { en: "(those) who", ur: "(those) جو" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "فِى", transliteration: "fī", meaning: { en: "(are) in", ur: "(are) میں" }, pos: "PREP", posLabel: "PREP", grammar: { role: "preposition" } },
+      { arabic: "ٱلْقُبُورِ", transliteration: "l-qubūri", meaning: { en: "the graves", ur: "the graves" }, pos: "N", posLabel: "N", grammar: { role: "noun" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 6, to: 7, label: 'فعل + فاعل' },
+        { from: 9, to: 10, label: 'موصول + صلة' },
+        { from: 13, to: 14, label: 'جار + مجرور' },
+        { from: 15, to: 16, label: 'جار + مجرور' }
+      ],
+    },
+  },
+  23: {
+    ayahNumber: 23,
+    text: "إِنْ أَنتَ إِلَّا نَذِيرٌ",
+    words: [
+      { arabic: "إِنْ", transliteration: "in", meaning: { en: "Not", ur: "نہیں" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "أَنتَ", transliteration: "anta", meaning: { en: "you (are)", ur: "تم (are)" }, pos: "PRON", posLabel: "PRON", grammar: { role: "subject" } },
+      { arabic: "إِلَّا", transliteration: "illā", meaning: { en: "but", ur: "لیکن" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "نَذِيرٌ", transliteration: "nadhīrun", meaning: { en: "a warner", ur: "a warner" }, pos: "V", posLabel: "V", grammar: { role: "verb" } }
+    ],
+    structure: {
+      relationships: [
+
+      ],
+    },
+  },
+  24: {
+    ayahNumber: 24,
+    text: "إِنَّآ أَرْسَلْنَـٰكَ بِٱلْحَقِّ بَشِيرًۭا وَنَذِيرًۭا ۚ وَإِن مِّنْ أُمَّةٍ إِلَّا خَلَا فِيهَا نَذِيرٌۭ",
+    words: [
+      { arabic: "إِنَّآ", transliteration: "innā", meaning: { en: "Indeed, We", ur: "بیشک, ہم" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "أَرْسَلْنَـٰكَ", transliteration: "arsalnāka", meaning: { en: "[We] have sent you", ur: "[ہم] have sent تم" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "بِٱلْحَقِّ", transliteration: "bil-ḥaqi", meaning: { en: "with the truth", ur: "ساتھ the سچ" }, pos: "P+N", posLabel: "P+N", grammar: { role: "preposition+noun" } },
+      { arabic: "بَشِيرًۭا", transliteration: "bashīran", meaning: { en: "(as) a bearer of glad tidings", ur: "(as) a bearer of glad tidings" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "وَنَذِيرًۭا ۚ", transliteration: "wanadhīran", meaning: { en: "and (as) a warner", ur: "اور (as) a warner" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { role: "conjunction+noun" } },
+      { arabic: "وَإِن", transliteration: "wa-in", meaning: { en: "And not", ur: "اور نہیں" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { role: "conjunction+noun" } },
+      { arabic: "مِّنْ", transliteration: "min", meaning: { en: "(was) any", ur: "(was) any" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "أُمَّةٍ", transliteration: "ummatin", meaning: { en: "nation", ur: "nation" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "إِلَّا", transliteration: "illā", meaning: { en: "but", ur: "لیکن" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "خَلَا", transliteration: "khalā", meaning: { en: "had passed", ur: "had passed" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "فِيهَا", transliteration: "fīhā", meaning: { en: "within it", ur: "within it" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "نَذِيرٌۭ", transliteration: "nadhīrun", meaning: { en: "a warner", ur: "a warner" }, pos: "V", posLabel: "V", grammar: { role: "verb" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 3, to: 4, label: 'جار + مجرور' },
+        { from: 10, to: 11, label: 'فعل + فاعل' }
+      ],
+    },
+  },
+  25: {
+    ayahNumber: 25,
+    text: "وَإِن يُكَذِّبُوكَ فَقَدْ كَذَّبَ ٱلَّذِينَ مِن قَبْلِهِمْ جَآءَتْهُمْ رُسُلُهُم بِٱلْبَيِّنَـٰتِ وَبِٱلزُّبُرِ وَبِٱلْكِتَـٰبِ ٱلْمُنِيرِ",
+    words: [
+      { arabic: "وَإِن", transliteration: "wa-in", meaning: { en: "And if", ur: "اور if" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { role: "conjunction+noun" } },
+      { arabic: "يُكَذِّبُوكَ", transliteration: "yukadhibūka", meaning: { en: "they deny you", ur: "وہ لوگ deny تم" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "فَقَدْ", transliteration: "faqad", meaning: { en: "then certainly", ur: "پھر certainly" }, pos: "CONJ+V", posLabel: "CONJ+V", grammar: { role: "conjunction+verb" } },
+      { arabic: "كَذَّبَ", transliteration: "kadhaba", meaning: { en: "denied", ur: "denied" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "ٱلَّذِينَ", transliteration: "alladhīna", meaning: { en: "those who", ur: "جو لوگ" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "مِن", transliteration: "min", meaning: { en: "(were) before them", ur: "(were) پہلے them" }, pos: "PREP", posLabel: "PREP", grammar: { role: "preposition" } },
+      { arabic: "قَبْلِهِمْ", transliteration: "qablihim", meaning: { en: "(were) before them", ur: "(were) پہلے them" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "جَآءَتْهُمْ", transliteration: "jāathum", meaning: { en: "Came to them", ur: "Came کو them" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "رُسُلُهُم", transliteration: "rusuluhum", meaning: { en: "their Messengers", ur: "their Messengers" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "بِٱلْبَيِّنَـٰتِ", transliteration: "bil-bayināti", meaning: { en: "with clear signs", ur: "ساتھ clear نشانیاں" }, pos: "P+N", posLabel: "P+N", grammar: { role: "preposition+noun" } },
+      { arabic: "وَبِٱلزُّبُرِ", transliteration: "wabil-zuburi", meaning: { en: "and with Scriptures", ur: "اور ساتھ Scriptures" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { role: "conjunction+noun" } },
+      { arabic: "وَبِٱلْكِتَـٰبِ", transliteration: "wabil-kitābi", meaning: { en: "and with the Book", ur: "اور ساتھ the کتاب" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { role: "conjunction+noun" } },
+      { arabic: "ٱلْمُنِيرِ", transliteration: "l-munīri", meaning: { en: "[the] enlightening", ur: "[the] enlightening" }, pos: "V", posLabel: "V", grammar: { role: "verb" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 4, to: 5, label: 'فعل + فاعل' },
+        { from: 6, to: 7, label: 'جار + مجرور' }
+      ],
+    },
+  },
+  26: {
+    ayahNumber: 26,
+    text: "ثُمَّ أَخَذْتُ ٱلَّذِينَ كَفَرُوا۟ ۖ فَكَيْفَ كَانَ نَكِيرِ",
+    words: [
+      { arabic: "ثُمَّ", transliteration: "thumma", meaning: { en: "Then", ur: "پھر" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "أَخَذْتُ", transliteration: "akhadhtu", meaning: { en: "I seized", ur: "میں seized" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "ٱلَّذِينَ", transliteration: "alladhīna", meaning: { en: "those who", ur: "جو لوگ" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "كَفَرُوا۟ ۖ", transliteration: "kafarū", meaning: { en: "disbelieved", ur: "disbelieved" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "فَكَيْفَ", transliteration: "fakayfa", meaning: { en: "and how", ur: "اور how" }, pos: "CONJ+V", posLabel: "CONJ+V", grammar: { role: "conjunction+verb" } },
+      { arabic: "كَانَ", transliteration: "kāna", meaning: { en: "was", ur: "was" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "نَكِيرِ", transliteration: "nakīri", meaning: { en: "My rejection", ur: "My rejection" }, pos: "V", posLabel: "V", grammar: { role: "verb" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 2, to: 3, label: 'فعل + فاعل' }
+      ],
+    },
+  },
+  27: {
+    ayahNumber: 27,
+    text: "أَلَمْ تَرَ أَنَّ ٱللَّهَ أَنزَلَ مِنَ ٱلسَّمَآءِ مَآءًۭ فَأَخْرَجْنَا بِهِۦ ثَمَرَٰتٍۢ مُّخْتَلِفًا أَلْوَٰنُهَا ۚ وَمِنَ ٱلْجِبَالِ جُدَدٌۢ بِيضٌۭ وَحُمْرٌۭ مُّخْتَلِفٌ أَلْوَٰنُهَا وَغَرَابِيبُ سُودٌۭ",
+    words: [
+      { arabic: "أَلَمْ", transliteration: "alam", meaning: { en: "Do not", ur: "Do نہیں" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "تَرَ", transliteration: "tara", meaning: { en: "you see", ur: "تم دیکھنا" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "أَنَّ", transliteration: "anna", meaning: { en: "that", ur: "وہ" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "ٱللَّهَ", transliteration: "l-laha", meaning: { en: "Allah", ur: "اللہ" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "أَنزَلَ", transliteration: "anzala", meaning: { en: "sends down", ur: "sends down" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "مِنَ", transliteration: "mina", meaning: { en: "from", ur: "سے" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "ٱلسَّمَآءِ", transliteration: "l-samāi", meaning: { en: "the sky", ur: "the sky" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "مَآءًۭ", transliteration: "māan", meaning: { en: "water", ur: "پانی" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "فَأَخْرَجْنَا", transliteration: "fa-akhrajnā", meaning: { en: "then We bring forth", ur: "پھر ہم bring forth" }, pos: "CONJ+V", posLabel: "CONJ+V", grammar: { role: "conjunction+verb" } },
+      { arabic: "بِهِۦ", transliteration: "bihi", meaning: { en: "therewith", ur: "therewith" }, pos: "P+N", posLabel: "P+N", grammar: { role: "preposition+noun" } },
+      { arabic: "ثَمَرَٰتٍۢ", transliteration: "thamarātin", meaning: { en: "fruits", ur: "fruits" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "مُّخْتَلِفًا", transliteration: "mukh'talifan", meaning: { en: "(of) various", ur: "(of) various" }, pos: "ADJ", posLabel: "ADJ", grammar: { role: "adjective" } },
+      { arabic: "أَلْوَٰنُهَا ۚ", transliteration: "alwānuhā", meaning: { en: "[their] colors", ur: "[their] colors" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "وَمِنَ", transliteration: "wamina", meaning: { en: "And in", ur: "اور میں" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { role: "conjunction+noun" } },
+      { arabic: "ٱلْجِبَالِ", transliteration: "l-jibāli", meaning: { en: "the mountains", ur: "the mountains" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "جُدَدٌۢ", transliteration: "judadun", meaning: { en: "(are) tracts", ur: "(are) tracts" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "بِيضٌۭ", transliteration: "bīḍun", meaning: { en: "white", ur: "white" }, pos: "P+N", posLabel: "P+N", grammar: { role: "preposition+noun" } },
+      { arabic: "وَحُمْرٌۭ", transliteration: "waḥum'run", meaning: { en: "and red", ur: "اور red" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { role: "conjunction+noun" } },
+      { arabic: "مُّخْتَلِفٌ", transliteration: "mukh'talifun", meaning: { en: "(of) various", ur: "(of) various" }, pos: "ADJ", posLabel: "ADJ", grammar: { role: "adjective" } },
+      { arabic: "أَلْوَٰنُهَا", transliteration: "alwānuhā", meaning: { en: "[their] colors", ur: "[their] colors" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "وَغَرَابِيبُ", transliteration: "wagharābību", meaning: { en: "and intensely black", ur: "اور intensely black" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { role: "conjunction+noun" } },
+      { arabic: "سُودٌۭ", transliteration: "sūdun", meaning: { en: "and intensely black", ur: "اور intensely black" }, pos: "N", posLabel: "N", grammar: { role: "noun" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 2, to: 3, label: 'فعل + فاعل' },
+        { from: 6, to: 7, label: 'مضاف + مضاف إليه' },
+        { from: 10, to: 11, label: 'جار + مجرور' },
+        { from: 11, to: 12, label: 'موصوف + صفت' }
+      ],
+    },
+  },
+  28: {
+    ayahNumber: 28,
+    text: "وَمِنَ ٱلنَّاسِ وَٱلدَّوَآبِّ وَٱلْأَنْعَـٰمِ مُخْتَلِفٌ أَلْوَٰنُهُۥ كَذَٰلِكَ ۗ إِنَّمَا يَخْشَى ٱللَّهَ مِنْ عِبَادِهِ ٱلْعُلَمَـٰٓؤُا۟ ۗ إِنَّ ٱللَّهَ عَزِيزٌ غَفُورٌ",
+    words: [
+      { arabic: "وَمِنَ", transliteration: "wamina", meaning: { en: "And among", ur: "اور among" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { role: "conjunction+noun" } },
+      { arabic: "ٱلنَّاسِ", transliteration: "l-nāsi", meaning: { en: "men", ur: "men" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "وَٱلدَّوَآبِّ", transliteration: "wal-dawābi", meaning: { en: "and moving creatures", ur: "اور moving creatures" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { role: "conjunction+noun" } },
+      { arabic: "وَٱلْأَنْعَـٰمِ", transliteration: "wal-anʿāmi", meaning: { en: "and the cattle", ur: "اور the cattle" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { role: "conjunction+noun" } },
+      { arabic: "مُخْتَلِفٌ", transliteration: "mukh'talifun", meaning: { en: "(are) various", ur: "(are) various" }, pos: "ADJ", posLabel: "ADJ", grammar: { role: "adjective" } },
+      { arabic: "أَلْوَٰنُهُۥ", transliteration: "alwānuhu", meaning: { en: "[their] colors", ur: "[their] colors" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "كَذَٰلِكَ ۗ", transliteration: "kadhālika", meaning: { en: "likewise", ur: "likewise" }, pos: "ADJ", posLabel: "ADJ", grammar: { role: "adjective" } },
+      { arabic: "إِنَّمَا", transliteration: "innamā", meaning: { en: "Only", ur: "صرف" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "يَخْشَى", transliteration: "yakhshā", meaning: { en: "fear", ur: "ڈرنا" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "ٱللَّهَ", transliteration: "l-laha", meaning: { en: "Allah", ur: "اللہ" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "مِنْ", transliteration: "min", meaning: { en: "among", ur: "among" }, pos: "PREP", posLabel: "PREP", grammar: { role: "preposition" } },
+      { arabic: "عِبَادِهِ", transliteration: "ʿibādihi", meaning: { en: "His slaves", ur: "His slaves" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "ٱلْعُلَمَـٰٓؤُا۟ ۗ", transliteration: "l-ʿulamāu", meaning: { en: "those who have knowledge", ur: "جو لوگ have knowledge" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "إِنَّ", transliteration: "inna", meaning: { en: "Indeed", ur: "بیشک" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "ٱللَّهَ", transliteration: "l-laha", meaning: { en: "Allah", ur: "اللہ" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "عَزِيزٌ", transliteration: "ʿazīzun", meaning: { en: "(is) All-Mighty", ur: "(is) سب-Mighty" }, pos: "ADJ", posLabel: "ADJ", grammar: { role: "adjective" } },
+      { arabic: "غَفُورٌ", transliteration: "ghafūrun", meaning: { en: "Oft-Forgiving", ur: "Oft-Forgiving" }, pos: "V", posLabel: "V", grammar: { role: "verb" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 6, to: 7, label: 'موصوف + صفت' },
+        { from: 9, to: 10, label: 'فعل + فاعل' },
+        { from: 11, to: 12, label: 'جار + مجرور' },
+        { from: 14, to: 15, label: 'فعل + فاعل' },
+        { from: 15, to: 16, label: 'موصوف + صفت' }
+      ],
+    },
+  },
+  29: {
+    ayahNumber: 29,
+    text: "إِنَّ ٱلَّذِينَ يَتْلُونَ كِتَـٰبَ ٱللَّهِ وَأَقَامُوا۟ ٱلصَّلَوٰةَ وَأَنفَقُوا۟ مِمَّا رَزَقْنَـٰهُمْ سِرًّۭا وَعَلَانِيَةًۭ يَرْجُونَ تِجَـٰرَةًۭ لَّن تَبُورَ",
+    words: [
+      { arabic: "إِنَّ", transliteration: "inna", meaning: { en: "Indeed", ur: "بیشک" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "ٱلَّذِينَ", transliteration: "alladhīna", meaning: { en: "those who", ur: "جو لوگ" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "يَتْلُونَ", transliteration: "yatlūna", meaning: { en: "recite", ur: "recite" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "كِتَـٰبَ", transliteration: "kitāba", meaning: { en: "(the) Book", ur: "(the) کتاب" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "ٱللَّهِ", transliteration: "l-lahi", meaning: { en: "(of) Allah", ur: "(of) اللہ" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "وَأَقَامُوا۟", transliteration: "wa-aqāmū", meaning: { en: "and establish", ur: "اور establish" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { role: "conjunction+noun" } },
+      { arabic: "ٱلصَّلَوٰةَ", transliteration: "l-ṣalata", meaning: { en: "the prayer", ur: "the نماز" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "وَأَنفَقُوا۟", transliteration: "wa-anfaqū", meaning: { en: "and spend", ur: "اور spend" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { role: "conjunction+noun" } },
+      { arabic: "مِمَّا", transliteration: "mimmā", meaning: { en: "out of what", ur: "out of کیا" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "رَزَقْنَـٰهُمْ", transliteration: "razaqnāhum", meaning: { en: "We have provided them", ur: "ہم have provided them" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "سِرًّۭا", transliteration: "sirran", meaning: { en: "secretly", ur: "secretly" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "وَعَلَانِيَةًۭ", transliteration: "waʿalāniyatan", meaning: { en: "and openly", ur: "اور openly" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { role: "conjunction+noun" } },
+      { arabic: "يَرْجُونَ", transliteration: "yarjūna", meaning: { en: "hope", ur: "hope" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "تِجَـٰرَةًۭ", transliteration: "tijāratan", meaning: { en: "(for) a commerce ", ur: "(for) a commerce " }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "لَّن", transliteration: "lan", meaning: { en: "never", ur: "never" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "تَبُورَ", transliteration: "tabūra", meaning: { en: "it will perish", ur: "it will perish" }, pos: "V", posLabel: "V", grammar: { role: "verb" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 1, to: 2, label: 'فعل + فاعل' },
+        { from: 3, to: 4, label: 'فعل + فاعل' },
+        { from: 10, to: 11, label: 'فعل + فاعل' },
+        { from: 13, to: 14, label: 'فعل + فاعل' }
+      ],
+    },
+  },
+  30: {
+    ayahNumber: 30,
+    text: "لِيُوَفِّيَهُمْ أُجُورَهُمْ وَيَزِيدَهُم مِّن فَضْلِهِۦٓ ۚ إِنَّهُۥ غَفُورٌۭ شَكُورٌۭ",
+    words: [
+      { arabic: "لِيُوَفِّيَهُمْ", transliteration: "liyuwaffiyahum", meaning: { en: "That He may give them in full", ur: "وہ وہ may give them میں full" }, pos: "P+N", posLabel: "P+N", grammar: { role: "preposition+noun" } },
+      { arabic: "أُجُورَهُمْ", transliteration: "ujūrahum", meaning: { en: "their rewards", ur: "their rewards" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "وَيَزِيدَهُم", transliteration: "wayazīdahum", meaning: { en: "and increase for them", ur: "اور increase for them" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { role: "conjunction+noun" } },
+      { arabic: "مِّن", transliteration: "min", meaning: { en: "of", ur: "of" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "فَضْلِهِۦٓ ۚ", transliteration: "faḍlihi", meaning: { en: "His Bounty", ur: "His Bounty" }, pos: "CONJ+V", posLabel: "CONJ+V", grammar: { role: "conjunction+verb" } },
+      { arabic: "إِنَّهُۥ", transliteration: "innahu", meaning: { en: "Indeed, He", ur: "بیشک, وہ" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "غَفُورٌۭ", transliteration: "ghafūrun", meaning: { en: "(is) Oft-Forgiving", ur: "(is) Oft-Forgiving" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "شَكُورٌۭ", transliteration: "shakūrun", meaning: { en: "Most Appreciative", ur: "Most Appreciative" }, pos: "ADJ", posLabel: "ADJ", grammar: { role: "adjective" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 1, to: 2, label: 'جار + مجرور' }
+      ],
+    },
+  },
+  31: {
+    ayahNumber: 31,
+    text: "وَٱلَّذِىٓ أَوْحَيْنَآ إِلَيْكَ مِنَ ٱلْكِتَـٰبِ هُوَ ٱلْحَقُّ مُصَدِّقًۭا لِّمَا بَيْنَ يَدَيْهِ ۗ إِنَّ ٱللَّهَ بِعِبَادِهِۦ لَخَبِيرٌۢ بَصِيرٌۭ",
+    words: [
+      { arabic: "وَٱلَّذِىٓ", transliteration: "wa-alladhī", meaning: { en: "And (that) which", ur: "اور (وہ) جو" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { role: "conjunction+noun" } },
+      { arabic: "أَوْحَيْنَآ", transliteration: "awḥaynā", meaning: { en: "We have revealed", ur: "ہم have revealed" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "إِلَيْكَ", transliteration: "ilayka", meaning: { en: "to you", ur: "کو تم" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "مِنَ", transliteration: "mina", meaning: { en: "of", ur: "of" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "ٱلْكِتَـٰبِ", transliteration: "l-kitābi", meaning: { en: "the Book", ur: "the کتاب" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "هُوَ", transliteration: "huwa", meaning: { en: "it", ur: "it" }, pos: "PRON", posLabel: "PRON", grammar: { role: "subject" } },
+      { arabic: "ٱلْحَقُّ", transliteration: "l-ḥaqu", meaning: { en: "(is) the truth", ur: "(is) the سچ" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "مُصَدِّقًۭا", transliteration: "muṣaddiqan", meaning: { en: "confirming", ur: "confirming" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "لِّمَا", transliteration: "limā", meaning: { en: "what (was)", ur: "کیا (was)" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "بَيْنَ", transliteration: "bayna", meaning: { en: "before it", ur: "پہلے it" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "يَدَيْهِ ۗ", transliteration: "yadayhi", meaning: { en: "before it", ur: "پہلے it" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "إِنَّ", transliteration: "inna", meaning: { en: "Indeed", ur: "بیشک" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "ٱللَّهَ", transliteration: "l-laha", meaning: { en: "Allah", ur: "اللہ" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "بِعِبَادِهِۦ", transliteration: "biʿibādihi", meaning: { en: "of His slaves", ur: "of His slaves" }, pos: "P+N", posLabel: "P+N", grammar: { role: "preposition+noun" } },
+      { arabic: "لَخَبِيرٌۢ", transliteration: "lakhabīrun", meaning: { en: "surely, (is) All-Aware", ur: "یقیناً, (is) سب-Aware" }, pos: "ADJ", posLabel: "ADJ", grammar: { role: "adjective" } },
+      { arabic: "بَصِيرٌۭ", transliteration: "baṣīrun", meaning: { en: "All-Seer", ur: "سب-Seer" }, pos: "ADJ", posLabel: "ADJ", grammar: { role: "adjective" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 2, to: 3, label: 'فعل + فاعل' },
+        { from: 4, to: 5, label: 'مضاف + مضاف إليه' },
+        { from: 8, to: 9, label: 'فعل + فاعل' },
+        { from: 12, to: 13, label: 'فعل + فاعل' }
+      ],
+    },
+  },
+  32: {
+    ayahNumber: 32,
+    text: "ثُمَّ أَوْرَثْنَا ٱلْكِتَـٰبَ ٱلَّذِينَ ٱصْطَفَيْنَا مِنْ عِبَادِنَا ۖ فَمِنْهُمْ ظَالِمٌۭ لِّنَفْسِهِۦ وَمِنْهُم مُّقْتَصِدٌۭ وَمِنْهُمْ سَابِقٌۢ بِٱلْخَيْرَٰتِ بِإِذْنِ ٱللَّهِ ۚ ذَٰلِكَ هُوَ ٱلْفَضْلُ ٱلْكَبِيرُ",
+    words: [
+      { arabic: "ثُمَّ", transliteration: "thumma", meaning: { en: "Then", ur: "پھر" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "أَوْرَثْنَا", transliteration: "awrathnā", meaning: { en: "We caused to inherit", ur: "ہم caused کو inherit" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "ٱلْكِتَـٰبَ", transliteration: "l-kitāba", meaning: { en: "the Book", ur: "the کتاب" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "ٱلَّذِينَ", transliteration: "alladhīna", meaning: { en: "those whom", ur: "those whom" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "ٱصْطَفَيْنَا", transliteration: "iṣ'ṭafaynā", meaning: { en: "We have chosen", ur: "ہم have chosen" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "مِنْ", transliteration: "min", meaning: { en: "of", ur: "of" }, pos: "PREP", posLabel: "PREP", grammar: { role: "preposition" } },
+      { arabic: "عِبَادِنَا ۖ", transliteration: "ʿibādinā", meaning: { en: "Our slaves", ur: "Our slaves" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "فَمِنْهُمْ", transliteration: "famin'hum", meaning: { en: "and among them", ur: "اور among them" }, pos: "CONJ+V", posLabel: "CONJ+V", grammar: { role: "conjunction+verb" } },
+      { arabic: "ظَالِمٌۭ", transliteration: "ẓālimun", meaning: { en: "(is he) who wrongs", ur: "(is وہ) جو wrongs" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "لِّنَفْسِهِۦ", transliteration: "linafsihi", meaning: { en: "himself", ur: "himself" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "وَمِنْهُم", transliteration: "wamin'hum", meaning: { en: "and among them", ur: "اور among them" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { role: "conjunction+noun" } },
+      { arabic: "مُّقْتَصِدٌۭ", transliteration: "muq'taṣidun", meaning: { en: "(is he who is) moderate", ur: "(is وہ جو is) moderate" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "وَمِنْهُمْ", transliteration: "wamin'hum", meaning: { en: "and among them", ur: "اور among them" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { role: "conjunction+noun" } },
+      { arabic: "سَابِقٌۢ", transliteration: "sābiqun", meaning: { en: "(is he who is) foremost", ur: "(is وہ جو is) foremost" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "بِٱلْخَيْرَٰتِ", transliteration: "bil-khayrāti", meaning: { en: "in good deeds", ur: "میں اچھا deeds" }, pos: "P+N", posLabel: "P+N", grammar: { role: "preposition+noun" } },
+      { arabic: "بِإِذْنِ", transliteration: "bi-idh'ni", meaning: { en: "by permission", ur: "by permission" }, pos: "P+N", posLabel: "P+N", grammar: { role: "preposition+noun" } },
+      { arabic: "ٱللَّهِ ۚ", transliteration: "l-lahi", meaning: { en: "(of) Allah", ur: "(of) اللہ" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "ذَٰلِكَ", transliteration: "dhālika", meaning: { en: "That", ur: "وہ" }, pos: "DEM", posLabel: "DEM", grammar: { role: "demonstrative" } },
+      { arabic: "هُوَ", transliteration: "huwa", meaning: { en: "is", ur: "is" }, pos: "PRON", posLabel: "PRON", grammar: { role: "subject" } },
+      { arabic: "ٱلْفَضْلُ", transliteration: "l-faḍlu", meaning: { en: "the Bounty", ur: "the Bounty" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "ٱلْكَبِيرُ", transliteration: "l-kabīru", meaning: { en: "the great", ur: "the great" }, pos: "ADJ", posLabel: "ADJ", grammar: { role: "adjective" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 2, to: 3, label: 'فعل + فاعل' },
+        { from: 6, to: 7, label: 'جار + مجرور' },
+        { from: 16, to: 17, label: 'جار + مجرور' },
+        { from: 20, to: 21, label: 'موصوف + صفت' }
+      ],
+    },
+  },
+  33: {
+    ayahNumber: 33,
+    text: "جَنَّـٰتُ عَدْنٍۢ يَدْخُلُونَهَا يُحَلَّوْنَ فِيهَا مِنْ أَسَاوِرَ مِن ذَهَبٍۢ وَلُؤْلُؤًۭا ۖ وَلِبَاسُهُمْ فِيهَا حَرِيرٌۭ",
+    words: [
+      { arabic: "جَنَّـٰتُ", transliteration: "jannātu", meaning: { en: "Gardens", ur: "باغات" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "عَدْنٍۢ", transliteration: "ʿadnin", meaning: { en: "(of) Eternity", ur: "(of) Eternity" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "يَدْخُلُونَهَا", transliteration: "yadkhulūnahā", meaning: { en: "they will enter them", ur: "وہ لوگ will enter them" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "يُحَلَّوْنَ", transliteration: "yuḥallawna", meaning: { en: "They will be adorned", ur: "وہ لوگ will be adorned" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "فِيهَا", transliteration: "fīhā", meaning: { en: "therein", ur: "اس میں" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "مِنْ", transliteration: "min", meaning: { en: "with", ur: "ساتھ" }, pos: "PREP", posLabel: "PREP", grammar: { role: "preposition" } },
+      { arabic: "أَسَاوِرَ", transliteration: "asāwira", meaning: { en: "bracelets", ur: "bracelets" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "مِن", transliteration: "min", meaning: { en: "of", ur: "of" }, pos: "PREP", posLabel: "PREP", grammar: { role: "preposition" } },
+      { arabic: "ذَهَبٍۢ", transliteration: "dhahabin", meaning: { en: "gold", ur: "gold" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "وَلُؤْلُؤًۭا ۖ", transliteration: "walu'lu-an", meaning: { en: "and pearls", ur: "اور pearls" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { role: "conjunction+noun" } },
+      { arabic: "وَلِبَاسُهُمْ", transliteration: "walibāsuhum", meaning: { en: "and their garments", ur: "اور their garments" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { role: "conjunction+noun" } },
+      { arabic: "فِيهَا", transliteration: "fīhā", meaning: { en: "therein", ur: "اس میں" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "حَرِيرٌۭ", transliteration: "ḥarīrun", meaning: { en: "(will be of) silk", ur: "(will be of) silk" }, pos: "V", posLabel: "V", grammar: { role: "verb" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 4, to: 5, label: 'فعل + فاعل' },
+        { from: 6, to: 7, label: 'جار + مجرور' },
+        { from: 8, to: 9, label: 'جار + مجرور' }
+      ],
+    },
+  },
+  34: {
+    ayahNumber: 34,
+    text: "وَقَالُوا۟ ٱلْحَمْدُ لِلَّهِ ٱلَّذِىٓ أَذْهَبَ عَنَّا ٱلْحَزَنَ ۖ إِنَّ رَبَّنَا لَغَفُورٌۭ شَكُورٌ",
+    words: [
+      { arabic: "وَقَالُوا۟", transliteration: "waqālū", meaning: { en: "And they (will) say", ur: "اور وہ لوگ (will) کہو" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { role: "conjunction+noun" } },
+      { arabic: "ٱلْحَمْدُ", transliteration: "l-ḥamdu", meaning: { en: "All praises", ur: "سب praises" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "لِلَّهِ", transliteration: "lillahi", meaning: { en: "(be) to Allah", ur: "(be) کو اللہ" }, pos: "P+N", posLabel: "P+N", grammar: { role: "preposition+noun" } },
+      { arabic: "ٱلَّذِىٓ", transliteration: "alladhī", meaning: { en: "the One Who", ur: "the One جو" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "أَذْهَبَ", transliteration: "adhhaba", meaning: { en: "(has) removed", ur: "(has) removed" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "عَنَّا", transliteration: "ʿannā", meaning: { en: "from us", ur: "سے us" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "ٱلْحَزَنَ ۖ", transliteration: "l-ḥazana", meaning: { en: "the sorrow", ur: "the sorrow" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "إِنَّ", transliteration: "inna", meaning: { en: "Indeed", ur: "بیشک" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "رَبَّنَا", transliteration: "rabbanā", meaning: { en: "our Lord", ur: "our رب" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "لَغَفُورٌۭ", transliteration: "laghafūrun", meaning: { en: "(is) surely Oft-Forgiving", ur: "(is) یقیناً Oft-Forgiving" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "شَكُورٌ", transliteration: "shakūrun", meaning: { en: "Most Appreciative", ur: "Most Appreciative" }, pos: "ADJ", posLabel: "ADJ", grammar: { role: "adjective" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 3, to: 4, label: 'جار + مجرور' },
+        { from: 5, to: 6, label: 'فعل + فاعل' },
+        { from: 6, to: 7, label: 'مضاف + مضاف إليه' },
+        { from: 8, to: 9, label: 'فعل + فاعل' }
+      ],
+    },
+  },
+  35: {
+    ayahNumber: 35,
+    text: "ٱلَّذِىٓ أَحَلَّنَا دَارَ ٱلْمُقَامَةِ مِن فَضْلِهِۦ لَا يَمَسُّنَا فِيهَا نَصَبٌۭ وَلَا يَمَسُّنَا فِيهَا لُغُوبٌۭ",
+    words: [
+      { arabic: "ٱلَّذِىٓ", transliteration: "alladhī", meaning: { en: "The One Who", ur: "The One جو" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "أَحَلَّنَا", transliteration: "aḥallanā", meaning: { en: "has settled us", ur: "has settled us" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "دَارَ", transliteration: "dāra", meaning: { en: "(in) a Home", ur: "(میں) a Home" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "ٱلْمُقَامَةِ", transliteration: "l-muqāmati", meaning: { en: "(of) Eternity", ur: "(of) Eternity" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "مِن", transliteration: "min", meaning: { en: "(out) of", ur: "(out) of" }, pos: "PREP", posLabel: "PREP", grammar: { role: "preposition" } },
+      { arabic: "فَضْلِهِۦ", transliteration: "faḍlihi", meaning: { en: "His Bounty", ur: "His Bounty" }, pos: "CONJ+V", posLabel: "CONJ+V", grammar: { role: "conjunction+verb" } },
+      { arabic: "لَا", transliteration: "lā", meaning: { en: "Not", ur: "نہیں" }, pos: "NEG", posLabel: "NEG", grammar: { role: "negation" } },
+      { arabic: "يَمَسُّنَا", transliteration: "yamassunā", meaning: { en: "touches us", ur: "touches us" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "فِيهَا", transliteration: "fīhā", meaning: { en: "therein", ur: "اس میں" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "نَصَبٌۭ", transliteration: "naṣabun", meaning: { en: "any fatigue", ur: "any fatigue" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "وَلَا", transliteration: "walā", meaning: { en: "and not", ur: "اور نہیں" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { role: "conjunction+noun" } },
+      { arabic: "يَمَسُّنَا", transliteration: "yamassunā", meaning: { en: "touches", ur: "touches" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "فِيهَا", transliteration: "fīhā", meaning: { en: "therein", ur: "اس میں" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "لُغُوبٌۭ", transliteration: "lughūbun", meaning: { en: "weariness", ur: "weariness" }, pos: "N", posLabel: "N", grammar: { role: "noun" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 7, to: 8, label: 'نفی + فعل' },
+        { from: 8, to: 9, label: 'فعل + فاعل' },
+        { from: 12, to: 13, label: 'فعل + فاعل' }
+      ],
+    },
+  },
+  36: {
+    ayahNumber: 36,
+    text: "وَٱلَّذِينَ كَفَرُوا۟ لَهُمْ نَارُ جَهَنَّمَ لَا يُقْضَىٰ عَلَيْهِمْ فَيَمُوتُوا۟ وَلَا يُخَفَّفُ عَنْهُم مِّنْ عَذَابِهَا ۚ كَذَٰلِكَ نَجْزِى كُلَّ كَفُورٍۢ",
+    words: [
+      { arabic: "وَٱلَّذِينَ", transliteration: "wa-alladhīna", meaning: { en: "And those who", ur: "اور جو لوگ" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { role: "conjunction+noun" } },
+      { arabic: "كَفَرُوا۟", transliteration: "kafarū", meaning: { en: "disbelieve", ur: "disbelieve" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "لَهُمْ", transliteration: "lahum", meaning: { en: "for them", ur: "for them" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "نَارُ", transliteration: "nāru", meaning: { en: "(will be the) Fire", ur: "(will be the) آگ" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "جَهَنَّمَ", transliteration: "jahannama", meaning: { en: "(of) Hell", ur: "(of) جہنم" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "لَا", transliteration: "lā", meaning: { en: "Not", ur: "نہیں" }, pos: "NEG", posLabel: "NEG", grammar: { role: "negation" } },
+      { arabic: "يُقْضَىٰ", transliteration: "yuq'ḍā", meaning: { en: "is decreed", ur: "is decreed" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "عَلَيْهِمْ", transliteration: "ʿalayhim", meaning: { en: "for them", ur: "for them" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "فَيَمُوتُوا۟", transliteration: "fayamūtū", meaning: { en: "that they die", ur: "وہ وہ لوگ die" }, pos: "CONJ+V", posLabel: "CONJ+V", grammar: { role: "conjunction+verb" } },
+      { arabic: "وَلَا", transliteration: "walā", meaning: { en: "and not", ur: "اور نہیں" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { role: "conjunction+noun" } },
+      { arabic: "يُخَفَّفُ", transliteration: "yukhaffafu", meaning: { en: "will be lightened", ur: "will be lightened" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "عَنْهُم", transliteration: "ʿanhum", meaning: { en: "for them", ur: "for them" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "مِّنْ", transliteration: "min", meaning: { en: "of", ur: "of" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "عَذَابِهَا ۚ", transliteration: "ʿadhābihā", meaning: { en: "its torment", ur: "its torment" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "كَذَٰلِكَ", transliteration: "kadhālika", meaning: { en: "Thus", ur: "Thus" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "نَجْزِى", transliteration: "najzī", meaning: { en: "We recompense", ur: "ہم recompense" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "كُلَّ", transliteration: "kulla", meaning: { en: "every", ur: "ہر" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "كَفُورٍۢ", transliteration: "kafūrin", meaning: { en: "ungrateful one", ur: "ungrateful one" }, pos: "N", posLabel: "N", grammar: { role: "noun" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 4, to: 5, label: 'فعل + فاعل' },
+        { from: 6, to: 7, label: 'نفی + فعل' },
+        { from: 7, to: 8, label: 'فعل + فاعل' },
+        { from: 11, to: 12, label: 'فعل + فاعل' },
+        { from: 16, to: 17, label: 'فعل + فاعل' }
+      ],
+    },
+  },
+  37: {
+    ayahNumber: 37,
+    text: "وَهُمْ يَصْطَرِخُونَ فِيهَا رَبَّنَآ أَخْرِجْنَا نَعْمَلْ صَـٰلِحًا غَيْرَ ٱلَّذِى كُنَّا نَعْمَلُ ۚ أَوَلَمْ نُعَمِّرْكُم مَّا يَتَذَكَّرُ فِيهِ مَن تَذَكَّرَ وَجَآءَكُمُ ٱلنَّذِيرُ ۖ فَذُوقُوا۟ فَمَا لِلظَّـٰلِمِينَ مِن نَّصِيرٍ",
+    words: [
+      { arabic: "وَهُمْ", transliteration: "wahum", meaning: { en: "And they", ur: "اور وہ لوگ" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { role: "conjunction+noun" } },
+      { arabic: "يَصْطَرِخُونَ", transliteration: "yaṣṭarikhūna", meaning: { en: "will cry", ur: "will cry" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "فِيهَا", transliteration: "fīhā", meaning: { en: "therein", ur: "اس میں" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "رَبَّنَآ", transliteration: "rabbanā", meaning: { en: "Our Lord", ur: "Our رب" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "أَخْرِجْنَا", transliteration: "akhrij'nā", meaning: { en: "Bring us out", ur: "Bring us out" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "نَعْمَلْ", transliteration: "naʿmal", meaning: { en: "we will do", ur: "ہم will do" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "صَـٰلِحًا", transliteration: "ṣāliḥan", meaning: { en: "righteous (deeds)", ur: "نیک (deeds)" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "غَيْرَ", transliteration: "ghayra", meaning: { en: "other than", ur: "other than" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "ٱلَّذِى", transliteration: "alladhī", meaning: { en: "(that) which", ur: "(وہ) جو" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "كُنَّا", transliteration: "kunnā", meaning: { en: "we used", ur: "ہم used" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "نَعْمَلُ ۚ", transliteration: "naʿmalu", meaning: { en: "(to) do", ur: "(کو) do" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "أَوَلَمْ", transliteration: "awalam", meaning: { en: "Did not", ur: "Did نہیں" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "نُعَمِّرْكُم", transliteration: "nuʿammir'kum", meaning: { en: "We give you life long enough", ur: "ہم give تم زندگی long enough" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "مَّا", transliteration: "mā", meaning: { en: "that", ur: "وہ" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "يَتَذَكَّرُ", transliteration: "yatadhakkaru", meaning: { en: "(would) receive admonition", ur: "(would) receive admonition" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "فِيهِ", transliteration: "fīhi", meaning: { en: "therein", ur: "اس میں" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "مَن", transliteration: "man", meaning: { en: "whoever", ur: "whoever" }, pos: "REL", posLabel: "REL", grammar: { role: "relative" } },
+      { arabic: "تَذَكَّرَ", transliteration: "tadhakkara", meaning: { en: "receives admonition", ur: "receives admonition" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "وَجَآءَكُمُ", transliteration: "wajāakumu", meaning: { en: "And came to you", ur: "اور came کو تم" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { role: "conjunction+noun" } },
+      { arabic: "ٱلنَّذِيرُ ۖ", transliteration: "l-nadhīru", meaning: { en: "the warner", ur: "the warner" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "فَذُوقُوا۟", transliteration: "fadhūqū", meaning: { en: "So taste", ur: "So taste" }, pos: "CONJ+V", posLabel: "CONJ+V", grammar: { role: "conjunction+verb" } },
+      { arabic: "فَمَا", transliteration: "famā", meaning: { en: "then not", ur: "پھر نہیں" }, pos: "CONJ+V", posLabel: "CONJ+V", grammar: { role: "conjunction+verb" } },
+      { arabic: "لِلظَّـٰلِمِينَ", transliteration: "lilẓẓālimīna", meaning: { en: "(is) for the wrongdoers", ur: "(is) for the wrongdoers" }, pos: "P+N", posLabel: "P+N", grammar: { role: "preposition+noun" } },
+      { arabic: "مِن", transliteration: "min", meaning: { en: "any", ur: "any" }, pos: "PREP", posLabel: "PREP", grammar: { role: "preposition" } },
+      { arabic: "نَّصِيرٍ", transliteration: "naṣīrin", meaning: { en: "helper", ur: "helper" }, pos: "V", posLabel: "V", grammar: { role: "verb" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 2, to: 3, label: 'فعل + فاعل' },
+        { from: 6, to: 7, label: 'فعل + فاعل' },
+        { from: 13, to: 14, label: 'فعل + فاعل' },
+        { from: 15, to: 16, label: 'فعل + فاعل' },
+        { from: 17, to: 18, label: 'موصول + صلة' }
+      ],
+    },
+  },
+  38: {
+    ayahNumber: 38,
+    text: "إِنَّ ٱللَّهَ عَـٰلِمُ غَيْبِ ٱلسَّمَـٰوَٰتِ وَٱلْأَرْضِ ۚ إِنَّهُۥ عَلِيمٌۢ بِذَاتِ ٱلصُّدُورِ",
+    words: [
+      { arabic: "إِنَّ", transliteration: "inna", meaning: { en: "Indeed", ur: "بیشک" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "ٱللَّهَ", transliteration: "l-laha", meaning: { en: "Allah", ur: "اللہ" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "عَـٰلِمُ", transliteration: "ʿālimu", meaning: { en: "(is the) Knower", ur: "(is the) Knower" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "غَيْبِ", transliteration: "ghaybi", meaning: { en: "(of the) unseen", ur: "(of the) unseen" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "ٱلسَّمَـٰوَٰتِ", transliteration: "l-samāwāti", meaning: { en: "(of) the heavens", ur: "(of) the آسمان" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "وَٱلْأَرْضِ ۚ", transliteration: "wal-arḍi", meaning: { en: "and the earth", ur: "اور زمین" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { role: "conjunction+noun" } },
+      { arabic: "إِنَّهُۥ", transliteration: "innahu", meaning: { en: "Indeed, He", ur: "بیشک, وہ" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "عَلِيمٌۢ", transliteration: "ʿalīmun", meaning: { en: "(is the) All-Knower", ur: "(is the) سب-Knower" }, pos: "ADJ", posLabel: "ADJ", grammar: { role: "adjective" } },
+      { arabic: "بِذَاتِ", transliteration: "bidhāti", meaning: { en: "of what (is) in the breasts", ur: "of کیا (is) میں the breasts" }, pos: "P+N", posLabel: "P+N", grammar: { role: "preposition+noun" } },
+      { arabic: "ٱلصُّدُورِ", transliteration: "l-ṣudūri", meaning: { en: "of what (is) in the breasts", ur: "of کیا (is) میں the breasts" }, pos: "N", posLabel: "N", grammar: { role: "noun" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 1, to: 2, label: 'فعل + فاعل' },
+        { from: 3, to: 4, label: 'مضاف + مضاف إليه' },
+        { from: 4, to: 5, label: 'مضاف + مضاف إليه' },
+        { from: 7, to: 8, label: 'موصوف + صفت' },
+        { from: 9, to: 10, label: 'جار + مجرور' }
+      ],
+    },
+  },
+  39: {
+    ayahNumber: 39,
+    text: "هُوَ ٱلَّذِى جَعَلَكُمْ خَلَـٰٓئِفَ فِى ٱلْأَرْضِ ۚ فَمَن كَفَرَ فَعَلَيْهِ كُفْرُهُۥ ۖ وَلَا يَزِيدُ ٱلْكَـٰفِرِينَ كُفْرُهُمْ عِندَ رَبِّهِمْ إِلَّا مَقْتًۭا ۖ وَلَا يَزِيدُ ٱلْكَـٰفِرِينَ كُفْرُهُمْ إِلَّا خَسَارًۭا",
+    words: [
+      { arabic: "هُوَ", transliteration: "huwa", meaning: { en: "He", ur: "وہ" }, pos: "PRON", posLabel: "PRON", grammar: { role: "subject" } },
+      { arabic: "ٱلَّذِى", transliteration: "alladhī", meaning: { en: "(is) the One Who", ur: "(is) the One جو" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "جَعَلَكُمْ", transliteration: "jaʿalakum", meaning: { en: "made you", ur: "made تم" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "خَلَـٰٓئِفَ", transliteration: "khalāifa", meaning: { en: "successors", ur: "successors" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "فِى", transliteration: "fī", meaning: { en: "in", ur: "میں" }, pos: "PREP", posLabel: "PREP", grammar: { role: "preposition" } },
+      { arabic: "ٱلْأَرْضِ ۚ", transliteration: "l-arḍi", meaning: { en: "the earth", ur: "زمین" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "فَمَن", transliteration: "faman", meaning: { en: "And whoever", ur: "اور whoever" }, pos: "CONJ+V", posLabel: "CONJ+V", grammar: { role: "conjunction+verb" } },
+      { arabic: "كَفَرَ", transliteration: "kafara", meaning: { en: "disbelieves", ur: "disbelieves" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "فَعَلَيْهِ", transliteration: "faʿalayhi", meaning: { en: "then upon him", ur: "پھر پر him" }, pos: "CONJ+V", posLabel: "CONJ+V", grammar: { role: "conjunction+verb" } },
+      { arabic: "كُفْرُهُۥ ۖ", transliteration: "kuf'ruhu", meaning: { en: "(is) his disbelief", ur: "(is) his disbelief" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "وَلَا", transliteration: "walā", meaning: { en: "And not", ur: "اور نہیں" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { role: "conjunction+noun" } },
+      { arabic: "يَزِيدُ", transliteration: "yazīdu", meaning: { en: "increase", ur: "increase" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "ٱلْكَـٰفِرِينَ", transliteration: "l-kāfirīna", meaning: { en: "the disbelievers", ur: "the کافر" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "كُفْرُهُمْ", transliteration: "kuf'ruhum", meaning: { en: "their disbelief", ur: "their disbelief" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "عِندَ", transliteration: "ʿinda", meaning: { en: "near", ur: "near" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "رَبِّهِمْ", transliteration: "rabbihim", meaning: { en: "their Lord", ur: "their رب" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "إِلَّا", transliteration: "illā", meaning: { en: "except", ur: "سوائے" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "مَقْتًۭا ۖ", transliteration: "maqtan", meaning: { en: "(in) hatred", ur: "(میں) hatred" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "وَلَا", transliteration: "walā", meaning: { en: "and not", ur: "اور نہیں" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { role: "conjunction+noun" } },
+      { arabic: "يَزِيدُ", transliteration: "yazīdu", meaning: { en: "increase", ur: "increase" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "ٱلْكَـٰفِرِينَ", transliteration: "l-kāfirīna", meaning: { en: "the disbelievers", ur: "the کافر" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "كُفْرُهُمْ", transliteration: "kuf'ruhum", meaning: { en: "their disbelief", ur: "their disbelief" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "إِلَّا", transliteration: "illā", meaning: { en: "except", ur: "سوائے" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "خَسَارًۭا", transliteration: "khasāran", meaning: { en: "(in) loss", ur: "(میں) loss" }, pos: "N", posLabel: "N", grammar: { role: "noun" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 5, to: 6, label: 'جار + مجرور' },
+        { from: 12, to: 13, label: 'فعل + فاعل' },
+        { from: 20, to: 21, label: 'فعل + فاعل' }
+      ],
+    },
+  },
+  40: {
+    ayahNumber: 40,
+    text: "قُلْ أَرَءَيْتُمْ شُرَكَآءَكُمُ ٱلَّذِينَ تَدْعُونَ مِن دُونِ ٱللَّهِ أَرُونِى مَاذَا خَلَقُوا۟ مِنَ ٱلْأَرْضِ أَمْ لَهُمْ شِرْكٌۭ فِى ٱلسَّمَـٰوَٰتِ أَمْ ءَاتَيْنَـٰهُمْ كِتَـٰبًۭا فَهُمْ عَلَىٰ بَيِّنَتٍۢ مِّنْهُ ۚ بَلْ إِن يَعِدُ ٱلظَّـٰلِمُونَ بَعْضُهُم بَعْضًا إِلَّا غُرُورًا",
+    words: [
+      { arabic: "قُلْ", transliteration: "qul", meaning: { en: "Say", ur: "کہو" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "أَرَءَيْتُمْ", transliteration: "ara-aytum", meaning: { en: "Have you seen", ur: "Have تم seen" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "شُرَكَآءَكُمُ", transliteration: "shurakāakumu", meaning: { en: "your partners", ur: "your partners" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "ٱلَّذِينَ", transliteration: "alladhīna", meaning: { en: "those whom", ur: "those whom" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "تَدْعُونَ", transliteration: "tadʿūna", meaning: { en: "you call", ur: "تم call" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "مِن", transliteration: "min", meaning: { en: "besides", ur: "besides" }, pos: "PREP", posLabel: "PREP", grammar: { role: "preposition" } },
+      { arabic: "دُونِ", transliteration: "dūni", meaning: { en: "besides", ur: "besides" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "ٱللَّهِ", transliteration: "l-lahi", meaning: { en: "Allah", ur: "اللہ" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "أَرُونِى", transliteration: "arūnī", meaning: { en: "Show Me", ur: "Show Me" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "مَاذَا", transliteration: "mādhā", meaning: { en: "what", ur: "کیا" }, pos: "INTG", posLabel: "INTG", grammar: { role: "interrogative" } },
+      { arabic: "خَلَقُوا۟", transliteration: "khalaqū", meaning: { en: "they have created", ur: "وہ لوگ have پیدا کیا" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "مِنَ", transliteration: "mina", meaning: { en: "from", ur: "سے" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "ٱلْأَرْضِ", transliteration: "l-arḍi", meaning: { en: "the earth", ur: "زمین" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "أَمْ", transliteration: "am", meaning: { en: "or", ur: "یا" }, pos: "CONJ", posLabel: "CONJ", grammar: { role: "conjunction" } },
+      { arabic: "لَهُمْ", transliteration: "lahum", meaning: { en: "for them", ur: "for them" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "شِرْكٌۭ", transliteration: "shir'kun", meaning: { en: "(is) a share", ur: "(is) a share" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "فِى", transliteration: "fī", meaning: { en: "in", ur: "میں" }, pos: "PREP", posLabel: "PREP", grammar: { role: "preposition" } },
+      { arabic: "ٱلسَّمَـٰوَٰتِ", transliteration: "l-samāwāti", meaning: { en: "the heavens", ur: "the آسمان" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "أَمْ", transliteration: "am", meaning: { en: "Or", ur: "یا" }, pos: "CONJ", posLabel: "CONJ", grammar: { role: "conjunction" } },
+      { arabic: "ءَاتَيْنَـٰهُمْ", transliteration: "ātaynāhum", meaning: { en: "have We given them", ur: "have ہم given them" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "كِتَـٰبًۭا", transliteration: "kitāban", meaning: { en: "a Book", ur: "a کتاب" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "فَهُمْ", transliteration: "fahum", meaning: { en: "so they", ur: "so وہ لوگ" }, pos: "CONJ+V", posLabel: "CONJ+V", grammar: { role: "conjunction+verb" } },
+      { arabic: "عَلَىٰ", transliteration: "ʿalā", meaning: { en: "(are) on", ur: "(are) پر" }, pos: "PREP", posLabel: "PREP", grammar: { role: "preposition" } },
+      { arabic: "بَيِّنَتٍۢ", transliteration: "bayyinatin", meaning: { en: "a clear proof", ur: "a clear proof" }, pos: "ADJ", posLabel: "ADJ", grammar: { role: "adjective" } },
+      { arabic: "مِّنْهُ ۚ", transliteration: "min'hu", meaning: { en: "therefrom", ur: "therefrom" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "بَلْ", transliteration: "bal", meaning: { en: "Nay", ur: "Nay" }, pos: "CONJ", posLabel: "CONJ", grammar: { role: "conjunction" } },
+      { arabic: "إِن", transliteration: "in", meaning: { en: "not", ur: "نہیں" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "يَعِدُ", transliteration: "yaʿidu", meaning: { en: "promise", ur: "promise" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "ٱلظَّـٰلِمُونَ", transliteration: "l-ẓālimūna", meaning: { en: "the wrongdoers", ur: "the wrongdoers" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "بَعْضُهُم", transliteration: "baʿḍuhum", meaning: { en: "some of them", ur: "some of them" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "بَعْضًا", transliteration: "baʿḍan", meaning: { en: "(to) others", ur: "(کو) others" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "إِلَّا", transliteration: "illā", meaning: { en: "except", ur: "سوائے" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "غُرُورًا", transliteration: "ghurūran", meaning: { en: "delusion", ur: "delusion" }, pos: "N", posLabel: "N", grammar: { role: "noun" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 6, to: 7, label: 'جار + مجرور' },
+        { from: 11, to: 12, label: 'فعل + فاعل' },
+        { from: 12, to: 13, label: 'مضاف + مضاف إليه' },
+        { from: 17, to: 18, label: 'جار + مجرور' },
+        { from: 28, to: 29, label: 'فعل + فاعل' },
+        { from: 29, to: 30, label: 'مضاف + مضاف إليه' }
+      ],
+    },
+  },
+  41: {
+    ayahNumber: 41,
+    text: "۞ إِنَّ ٱللَّهَ يُمْسِكُ ٱلسَّمَـٰوَٰتِ وَٱلْأَرْضَ أَن تَزُولَا ۚ وَلَئِن زَالَتَآ إِنْ أَمْسَكَهُمَا مِنْ أَحَدٍۢ مِّنۢ بَعْدِهِۦٓ ۚ إِنَّهُۥ كَانَ حَلِيمًا غَفُورًۭا",
+    words: [
+      { arabic: "۞ إِنَّ", transliteration: "inna", meaning: { en: "Indeed", ur: "بیشک" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "ٱللَّهَ", transliteration: "l-laha", meaning: { en: "Allah", ur: "اللہ" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "يُمْسِكُ", transliteration: "yum'siku", meaning: { en: "upholds", ur: "upholds" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "ٱلسَّمَـٰوَٰتِ", transliteration: "l-samāwāti", meaning: { en: "the heavens", ur: "the آسمان" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "وَٱلْأَرْضَ", transliteration: "wal-arḍa", meaning: { en: "and the earth", ur: "اور زمین" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { role: "conjunction+noun" } },
+      { arabic: "أَن", transliteration: "an", meaning: { en: "lest", ur: "lest" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "تَزُولَا ۚ", transliteration: "tazūlā", meaning: { en: "they cease", ur: "وہ لوگ cease" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "وَلَئِن", transliteration: "wala-in", meaning: { en: "And if", ur: "اور if" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { role: "conjunction+noun" } },
+      { arabic: "زَالَتَآ", transliteration: "zālatā", meaning: { en: "they should cease", ur: "وہ لوگ should cease" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "إِنْ", transliteration: "in", meaning: { en: "not", ur: "نہیں" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "أَمْسَكَهُمَا", transliteration: "amsakahumā", meaning: { en: "can uphold them", ur: "can uphold them" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "مِنْ", transliteration: "min", meaning: { en: "any", ur: "any" }, pos: "PREP", posLabel: "PREP", grammar: { role: "preposition" } },
+      { arabic: "أَحَدٍۢ", transliteration: "aḥadin", meaning: { en: "one", ur: "one" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "مِّنۢ", transliteration: "min", meaning: { en: "after Him", ur: "بعد Him" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "بَعْدِهِۦٓ ۚ", transliteration: "baʿdihi", meaning: { en: "after Him", ur: "بعد Him" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "إِنَّهُۥ", transliteration: "innahu", meaning: { en: "Indeed, He", ur: "بیشک, وہ" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "كَانَ", transliteration: "kāna", meaning: { en: "is", ur: "is" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "حَلِيمًا", transliteration: "ḥalīman", meaning: { en: "Most Forbearing", ur: "Most Forbearing" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "غَفُورًۭا", transliteration: "ghafūran", meaning: { en: "Oft-Forgiving", ur: "Oft-Forgiving" }, pos: "V", posLabel: "V", grammar: { role: "verb" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 1, to: 2, label: 'فعل + فاعل' },
+        { from: 3, to: 4, label: 'فعل + فاعل' },
+        { from: 9, to: 10, label: 'فعل + فاعل' },
+        { from: 12, to: 13, label: 'جار + مجرور' }
+      ],
+    },
+  },
+  42: {
+    ayahNumber: 42,
+    text: "وَأَقْسَمُوا۟ بِٱللَّهِ جَهْدَ أَيْمَـٰنِهِمْ لَئِن جَآءَهُمْ نَذِيرٌۭ لَّيَكُونُنَّ أَهْدَىٰ مِنْ إِحْدَى ٱلْأُمَمِ ۖ فَلَمَّا جَآءَهُمْ نَذِيرٌۭ مَّا زَادَهُمْ إِلَّا نُفُورًا",
+    words: [
+      { arabic: "وَأَقْسَمُوا۟", transliteration: "wa-aqsamū", meaning: { en: "And they swore", ur: "اور وہ لوگ swore" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { role: "conjunction+noun" } },
+      { arabic: "بِٱللَّهِ", transliteration: "bil-lahi", meaning: { en: "by Allah", ur: "by اللہ" }, pos: "P+N", posLabel: "P+N", grammar: { role: "preposition+noun" } },
+      { arabic: "جَهْدَ", transliteration: "jahda", meaning: { en: "(the) strongest", ur: "(the) strongest" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "أَيْمَـٰنِهِمْ", transliteration: "aymānihim", meaning: { en: "(of) their oaths", ur: "(of) their oaths" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "لَئِن", transliteration: "la-in", meaning: { en: "that if", ur: "وہ if" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "جَآءَهُمْ", transliteration: "jāahum", meaning: { en: "came to them", ur: "came کو them" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "نَذِيرٌۭ", transliteration: "nadhīrun", meaning: { en: "a warner", ur: "a warner" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "لَّيَكُونُنَّ", transliteration: "layakūnunna", meaning: { en: "surely, they would be", ur: "یقیناً, وہ لوگ would be" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "أَهْدَىٰ", transliteration: "ahdā", meaning: { en: "more guided", ur: "more guided" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "مِنْ", transliteration: "min", meaning: { en: "than", ur: "than" }, pos: "PREP", posLabel: "PREP", grammar: { role: "preposition" } },
+      { arabic: "إِحْدَى", transliteration: "iḥ'dā", meaning: { en: "any", ur: "any" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "ٱلْأُمَمِ ۖ", transliteration: "l-umami", meaning: { en: "(of) the nations", ur: "(of) the nations" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "فَلَمَّا", transliteration: "falammā", meaning: { en: "But when", ur: "لیکن when" }, pos: "CONJ+V", posLabel: "CONJ+V", grammar: { role: "conjunction+verb" } },
+      { arabic: "جَآءَهُمْ", transliteration: "jāahum", meaning: { en: "came to them", ur: "came کو them" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "نَذِيرٌۭ", transliteration: "nadhīrun", meaning: { en: "a warner", ur: "a warner" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "مَّا", transliteration: "mā", meaning: { en: "not", ur: "نہیں" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "زَادَهُمْ", transliteration: "zādahum", meaning: { en: "it increased them", ur: "it increased them" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "إِلَّا", transliteration: "illā", meaning: { en: "but", ur: "لیکن" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "نُفُورًا", transliteration: "nufūran", meaning: { en: "(in) aversion", ur: "(میں) aversion" }, pos: "V", posLabel: "V", grammar: { role: "verb" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 2, to: 3, label: 'جار + مجرور' },
+        { from: 10, to: 11, label: 'جار + مجرور' },
+        { from: 11, to: 12, label: 'مضاف + مضاف إليه' },
+        { from: 15, to: 16, label: 'فعل + فاعل' }
+      ],
+    },
+  },
+  43: {
+    ayahNumber: 43,
+    text: "ٱسْتِكْبَارًۭا فِى ٱلْأَرْضِ وَمَكْرَ ٱلسَّيِّئِ ۚ وَلَا يَحِيقُ ٱلْمَكْرُ ٱلسَّيِّئُ إِلَّا بِأَهْلِهِۦ ۚ فَهَلْ يَنظُرُونَ إِلَّا سُنَّتَ ٱلْأَوَّلِينَ ۚ فَلَن تَجِدَ لِسُنَّتِ ٱللَّهِ تَبْدِيلًۭا ۖ وَلَن تَجِدَ لِسُنَّتِ ٱللَّهِ تَحْوِيلًا",
+    words: [
+      { arabic: "ٱسْتِكْبَارًۭا", transliteration: "is'tik'bāran", meaning: { en: "(Due to) arrogance", ur: "(Due کو) arrogance" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "فِى", transliteration: "fī", meaning: { en: "in", ur: "میں" }, pos: "PREP", posLabel: "PREP", grammar: { role: "preposition" } },
+      { arabic: "ٱلْأَرْضِ", transliteration: "l-arḍi", meaning: { en: "the land", ur: "the land" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "وَمَكْرَ", transliteration: "wamakra", meaning: { en: "and plotting", ur: "اور plotting" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { role: "conjunction+noun" } },
+      { arabic: "ٱلسَّيِّئِ ۚ", transliteration: "l-sayi-i", meaning: { en: "(of) the evil", ur: "(of) the برا" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "وَلَا", transliteration: "walā", meaning: { en: "but not", ur: "لیکن نہیں" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { role: "conjunction+noun" } },
+      { arabic: "يَحِيقُ", transliteration: "yaḥīqu", meaning: { en: "encompasses", ur: "encompasses" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "ٱلْمَكْرُ", transliteration: "l-makru", meaning: { en: "the plot", ur: "the plot" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "ٱلسَّيِّئُ", transliteration: "l-sayi-u", meaning: { en: "(of) the evil", ur: "(of) the برا" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "إِلَّا", transliteration: "illā", meaning: { en: "except", ur: "سوائے" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "بِأَهْلِهِۦ ۚ", transliteration: "bi-ahlihi", meaning: { en: "its own people", ur: "its own لوگ" }, pos: "P+N", posLabel: "P+N", grammar: { role: "preposition+noun" } },
+      { arabic: "فَهَلْ", transliteration: "fahal", meaning: { en: "Then do", ur: "پھر do" }, pos: "CONJ+V", posLabel: "CONJ+V", grammar: { role: "conjunction+verb" } },
+      { arabic: "يَنظُرُونَ", transliteration: "yanẓurūna", meaning: { en: "they wait", ur: "وہ لوگ wait" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "إِلَّا", transliteration: "illā", meaning: { en: "except", ur: "سوائے" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "سُنَّتَ", transliteration: "sunnata", meaning: { en: "(the) way", ur: "(the) راستہ" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "ٱلْأَوَّلِينَ ۚ", transliteration: "l-awalīna", meaning: { en: "(of) the former (people)", ur: "(of) the former (لوگ)" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "فَلَن", transliteration: "falan", meaning: { en: "But never", ur: "لیکن never" }, pos: "CONJ+V", posLabel: "CONJ+V", grammar: { role: "conjunction+verb" } },
+      { arabic: "تَجِدَ", transliteration: "tajida", meaning: { en: "you will find", ur: "تم will find" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "لِسُنَّتِ", transliteration: "lisunnati", meaning: { en: "in (the) way", ur: "میں (the) راستہ" }, pos: "P+N", posLabel: "P+N", grammar: { role: "preposition+noun" } },
+      { arabic: "ٱللَّهِ", transliteration: "l-lahi", meaning: { en: "(of) Allah", ur: "(of) اللہ" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "تَبْدِيلًۭا ۖ", transliteration: "tabdīlan", meaning: { en: "any change", ur: "any change" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "وَلَن", transliteration: "walan", meaning: { en: "and never", ur: "اور never" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { role: "conjunction+noun" } },
+      { arabic: "تَجِدَ", transliteration: "tajida", meaning: { en: "you will find", ur: "تم will find" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "لِسُنَّتِ", transliteration: "lisunnati", meaning: { en: "in (the) way", ur: "میں (the) راستہ" }, pos: "P+N", posLabel: "P+N", grammar: { role: "preposition+noun" } },
+      { arabic: "ٱللَّهِ", transliteration: "l-lahi", meaning: { en: "(of) Allah", ur: "(of) اللہ" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "تَحْوِيلًا", transliteration: "taḥwīlan", meaning: { en: "any alteration", ur: "any alteration" }, pos: "V", posLabel: "V", grammar: { role: "verb" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 2, to: 3, label: 'جار + مجرور' },
+        { from: 7, to: 8, label: 'فعل + فاعل' },
+        { from: 8, to: 9, label: 'مضاف + مضاف إليه' },
+        { from: 13, to: 14, label: 'فعل + فاعل' },
+        { from: 15, to: 16, label: 'مضاف + مضاف إليه' },
+        { from: 19, to: 20, label: 'جار + مجرور' },
+        { from: 24, to: 25, label: 'جار + مجرور' }
+      ],
+    },
+  },
+  44: {
+    ayahNumber: 44,
+    text: "أَوَلَمْ يَسِيرُوا۟ فِى ٱلْأَرْضِ فَيَنظُرُوا۟ كَيْفَ كَانَ عَـٰقِبَةُ ٱلَّذِينَ مِن قَبْلِهِمْ وَكَانُوٓا۟ أَشَدَّ مِنْهُمْ قُوَّةًۭ ۚ وَمَا كَانَ ٱللَّهُ لِيُعْجِزَهُۥ مِن شَىْءٍۢ فِى ٱلسَّمَـٰوَٰتِ وَلَا فِى ٱلْأَرْضِ ۚ إِنَّهُۥ كَانَ عَلِيمًۭا قَدِيرًۭا",
+    words: [
+      { arabic: "أَوَلَمْ", transliteration: "awalam", meaning: { en: "Have they not", ur: "Have وہ لوگ نہیں" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "يَسِيرُوا۟", transliteration: "yasīrū", meaning: { en: "traveled", ur: "traveled" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "فِى", transliteration: "fī", meaning: { en: "in", ur: "میں" }, pos: "PREP", posLabel: "PREP", grammar: { role: "preposition" } },
+      { arabic: "ٱلْأَرْضِ", transliteration: "l-arḍi", meaning: { en: "the land", ur: "the land" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "فَيَنظُرُوا۟", transliteration: "fayanẓurū", meaning: { en: "and seen", ur: "اور seen" }, pos: "CONJ+V", posLabel: "CONJ+V", grammar: { role: "conjunction+verb" } },
+      { arabic: "كَيْفَ", transliteration: "kayfa", meaning: { en: "how", ur: "how" }, pos: "INTG", posLabel: "INTG", grammar: { role: "interrogative" } },
+      { arabic: "كَانَ", transliteration: "kāna", meaning: { en: "was", ur: "was" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "عَـٰقِبَةُ", transliteration: "ʿāqibatu", meaning: { en: "(the) end", ur: "(the) end" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "ٱلَّذِينَ", transliteration: "alladhīna", meaning: { en: "(of) those who", ur: "(of) جو لوگ" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "مِن", transliteration: "min", meaning: { en: "(were) before them", ur: "(were) پہلے them" }, pos: "PREP", posLabel: "PREP", grammar: { role: "preposition" } },
+      { arabic: "قَبْلِهِمْ", transliteration: "qablihim", meaning: { en: "(were) before them", ur: "(were) پہلے them" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "وَكَانُوٓا۟", transliteration: "wakānū", meaning: { en: "And they were", ur: "اور وہ لوگ were" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { role: "conjunction+noun" } },
+      { arabic: "أَشَدَّ", transliteration: "ashadda", meaning: { en: "stronger", ur: "stronger" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "مِنْهُمْ", transliteration: "min'hum", meaning: { en: "than them", ur: "than them" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "قُوَّةًۭ ۚ", transliteration: "quwwatan", meaning: { en: "(in) power", ur: "(میں) power" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "وَمَا", transliteration: "wamā", meaning: { en: "But not", ur: "لیکن نہیں" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { role: "conjunction+noun" } },
+      { arabic: "كَانَ", transliteration: "kāna", meaning: { en: "is", ur: "is" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "ٱللَّهُ", transliteration: "l-lahu", meaning: { en: "Allah", ur: "اللہ" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "لِيُعْجِزَهُۥ", transliteration: "liyuʿ'jizahu", meaning: { en: "that can escape (from) Him", ur: "وہ can escape (سے) Him" }, pos: "P+N", posLabel: "P+N", grammar: { role: "preposition+noun" } },
+      { arabic: "مِن", transliteration: "min", meaning: { en: "any", ur: "any" }, pos: "PREP", posLabel: "PREP", grammar: { role: "preposition" } },
+      { arabic: "شَىْءٍۢ", transliteration: "shayin", meaning: { en: "thing", ur: "thing" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "فِى", transliteration: "fī", meaning: { en: "in", ur: "میں" }, pos: "PREP", posLabel: "PREP", grammar: { role: "preposition" } },
+      { arabic: "ٱلسَّمَـٰوَٰتِ", transliteration: "l-samāwāti", meaning: { en: "the heavens", ur: "the آسمان" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "وَلَا", transliteration: "walā", meaning: { en: "and not", ur: "اور نہیں" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { role: "conjunction+noun" } },
+      { arabic: "فِى", transliteration: "fī", meaning: { en: "in", ur: "میں" }, pos: "PREP", posLabel: "PREP", grammar: { role: "preposition" } },
+      { arabic: "ٱلْأَرْضِ ۚ", transliteration: "l-arḍi", meaning: { en: "the earth", ur: "زمین" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "إِنَّهُۥ", transliteration: "innahu", meaning: { en: "Indeed, He", ur: "بیشک, وہ" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "كَانَ", transliteration: "kāna", meaning: { en: "is", ur: "is" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "عَلِيمًۭا", transliteration: "ʿalīman", meaning: { en: "All-Knower", ur: "سب-Knower" }, pos: "ADJ", posLabel: "ADJ", grammar: { role: "adjective" } },
+      { arabic: "قَدِيرًۭا", transliteration: "qadīran", meaning: { en: "All-Powerful", ur: "سب-Powerful" }, pos: "ADJ", posLabel: "ADJ", grammar: { role: "adjective" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 3, to: 4, label: 'جار + مجرور' },
+        { from: 10, to: 11, label: 'جار + مجرور' },
+        { from: 22, to: 23, label: 'جار + مجرور' },
+        { from: 25, to: 26, label: 'جار + مجرور' },
+        { from: 28, to: 29, label: 'موصوف + صفت' }
+      ],
+    },
+  },
+  45: {
+    ayahNumber: 45,
+    text: "وَلَوْ يُؤَاخِذُ ٱللَّهُ ٱلنَّاسَ بِمَا كَسَبُوا۟ مَا تَرَكَ عَلَىٰ ظَهْرِهَا مِن دَآبَّةٍۢ وَلَـٰكِن يُؤَخِّرُهُمْ إِلَىٰٓ أَجَلٍۢ مُّسَمًّۭى ۖ فَإِذَا جَآءَ أَجَلُهُمْ فَإِنَّ ٱللَّهَ كَانَ بِعِبَادِهِۦ بَصِيرًۢا",
+    words: [
+      { arabic: "وَلَوْ", transliteration: "walaw", meaning: { en: "And if", ur: "اور if" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { role: "conjunction+noun" } },
+      { arabic: "يُؤَاخِذُ", transliteration: "yuākhidhu", meaning: { en: "Allah (were to) punish", ur: "اللہ (were کو) punish" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "ٱللَّهُ", transliteration: "l-lahu", meaning: { en: "Allah (were to) punish", ur: "اللہ (were کو) punish" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "ٱلنَّاسَ", transliteration: "l-nāsa", meaning: { en: "the people", ur: "the لوگ" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "بِمَا", transliteration: "bimā", meaning: { en: "for what", ur: "for کیا" }, pos: "P+N", posLabel: "P+N", grammar: { role: "preposition+noun" } },
+      { arabic: "كَسَبُوا۟", transliteration: "kasabū", meaning: { en: "they have earned", ur: "وہ لوگ have earned" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "مَا", transliteration: "mā", meaning: { en: "not", ur: "نہیں" }, pos: "NEG", posLabel: "NEG", grammar: { role: "negation" } },
+      { arabic: "تَرَكَ", transliteration: "taraka", meaning: { en: "He would leave", ur: "وہ would leave" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "عَلَىٰ", transliteration: "ʿalā", meaning: { en: "on", ur: "پر" }, pos: "PREP", posLabel: "PREP", grammar: { role: "preposition" } },
+      { arabic: "ظَهْرِهَا", transliteration: "ẓahrihā", meaning: { en: "its back", ur: "its back" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "مِن", transliteration: "min", meaning: { en: "any", ur: "any" }, pos: "PREP", posLabel: "PREP", grammar: { role: "preposition" } },
+      { arabic: "دَآبَّةٍۢ", transliteration: "dābbatin", meaning: { en: "creature", ur: "creature" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "وَلَـٰكِن", transliteration: "walākin", meaning: { en: "But", ur: "لیکن" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { role: "conjunction+noun" } },
+      { arabic: "يُؤَخِّرُهُمْ", transliteration: "yu-akhiruhum", meaning: { en: "He gives them respite", ur: "وہ gives them respite" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "إِلَىٰٓ", transliteration: "ilā", meaning: { en: "till", ur: "till" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "أَجَلٍۢ", transliteration: "ajalin", meaning: { en: "a term", ur: "a term" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "مُّسَمًّۭى ۖ", transliteration: "musamman", meaning: { en: "appointed", ur: "appointed" }, pos: "V", posLabel: "V", grammar: { role: "verb" } },
+      { arabic: "فَإِذَا", transliteration: "fa-idhā", meaning: { en: "And when", ur: "اور when" }, pos: "CONJ+V", posLabel: "CONJ+V", grammar: { role: "conjunction+verb" } },
+      { arabic: "جَآءَ", transliteration: "jāa", meaning: { en: "comes", ur: "comes" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "أَجَلُهُمْ", transliteration: "ajaluhum", meaning: { en: "their term", ur: "their term" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "فَإِنَّ", transliteration: "fa-inna", meaning: { en: "then indeed", ur: "پھر بیشک" }, pos: "CONJ+V", posLabel: "CONJ+V", grammar: { role: "conjunction+verb" } },
+      { arabic: "ٱللَّهَ", transliteration: "l-laha", meaning: { en: "Allah", ur: "اللہ" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "كَانَ", transliteration: "kāna", meaning: { en: "is", ur: "is" }, pos: "N", posLabel: "N", grammar: { role: "noun" } },
+      { arabic: "بِعِبَادِهِۦ", transliteration: "biʿibādihi", meaning: { en: "of His slaves", ur: "of His slaves" }, pos: "P+N", posLabel: "P+N", grammar: { role: "preposition+noun" } },
+      { arabic: "بَصِيرًۢا", transliteration: "baṣīran", meaning: { en: "All-Seer", ur: "سب-Seer" }, pos: "ADJ", posLabel: "ADJ", grammar: { role: "adjective" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 2, to: 3, label: 'فعل + فاعل' },
+        { from: 3, to: 4, label: 'مضاف + مضاف إليه' },
+        { from: 7, to: 8, label: 'نفی + فعل' },
+        { from: 9, to: 10, label: 'جار + مجرور' },
+        { from: 11, to: 12, label: 'جار + مجرور' },
+        { from: 14, to: 15, label: 'فعل + فاعل' }
+      ],
+    },
+  },
 };
 
 export default TREEBANK_DATA;

@@ -833,8 +833,24 @@ function TimeMachine({ isVisible, onClose, onNavigateToVerse }) {
   const handleClose = useCallback(() => {
     stopNarration();
     stopRecitation();
+    // Belt-and-suspenders: kill any lingering speechSynthesis globally
+    window.speechSynthesis?.cancel();
     onClose();
   }, [onClose, stopNarration, stopRecitation]);
+
+  // Force-stop all audio when component becomes invisible or unmounts
+  useEffect(() => {
+    if (!isVisible) {
+      stopNarration();
+      stopRecitation();
+      window.speechSynthesis?.cancel();
+    }
+    return () => {
+      stopNarration();
+      stopRecitation();
+      window.speechSynthesis?.cancel();
+    };
+  }, [isVisible, stopNarration, stopRecitation]);
 
   const bgStyle = useMemo(() => {
     if (phase === 'intro' || phase === 'complete') return { background: 'linear-gradient(135deg, #0f0326 0%, #0f172a 50%, #1e1b4b 100%)' };

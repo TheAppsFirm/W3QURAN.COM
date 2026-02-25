@@ -19,6 +19,15 @@ const STORES = {
 let db = null;
 
 /**
+ * Check if an error is a quota exceeded error
+ */
+const isQuotaError = (error) => {
+  return error?.name === 'QuotaExceededError' ||
+    error?.code === 22 || // Legacy Safari
+    error?.message?.toLowerCase().includes('quota');
+};
+
+/**
  * Initialize IndexedDB
  */
 export const initDB = () => {
@@ -133,7 +142,13 @@ export const saveSurahOffline = async (surahId, translationId, data) => {
     });
 
     transaction.oncomplete = () => resolve(true);
-    transaction.onerror = () => reject(transaction.error);
+    transaction.onerror = () => {
+      if (isQuotaError(transaction.error)) {
+        reject(new Error('STORAGE_FULL'));
+      } else {
+        reject(transaction.error);
+      }
+    };
   });
 };
 
@@ -185,7 +200,13 @@ export const saveTafseerOffline = async (surahId, ayahNumber, tafseerSource, dat
     });
 
     transaction.oncomplete = () => resolve(true);
-    transaction.onerror = () => reject(transaction.error);
+    transaction.onerror = () => {
+      if (isQuotaError(transaction.error)) {
+        reject(new Error('STORAGE_FULL'));
+      } else {
+        reject(transaction.error);
+      }
+    };
   });
 };
 

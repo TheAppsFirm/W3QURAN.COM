@@ -31,7 +31,10 @@ export const TREEBANK_DATA = {
       hi: "खड़खड़ाने वाली",
       bn: "মহা বিপর্যয়",
       tr: "Karia",
-      id: "Hari Kiamat"
+      id: "Hari Kiamat",
+    structure: {
+      relationships: [],
+    },
     },
     words: [
       {
@@ -83,7 +86,10 @@ export const TREEBANK_DATA = {
       hi: "खड़खड़ाने वाली क्या है?",
       bn: "মহা বিপর্যয় কী?",
       tr: "Karia nedir?",
-      id: "Apakah hari Kiamat itu?"
+      id: "Apakah hari Kiamat itu?",
+    structure: {
+      relationships: [],
+    },
     },
     words: [
       {
@@ -137,7 +143,10 @@ export const TREEBANK_DATA = {
       hi: "और तुम्हें क्या पता कि खड़खड़ाने वाली क्या है?",
       bn: "তোমাকে কিসে জানাবে মহা বিপর্যয় কী?",
       tr: "Karianın ne olduğunu sana ne bildirdi?",
-      id: "Tahukah kamu apakah hari Kiamat itu?"
+      id: "Tahukah kamu apakah hari Kiamat itu?",
+    structure: {
+      relationships: [],
+    },
     },
     words: [
       {
@@ -382,7 +391,13 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(يَوْمَ)[adverb] → (يَكُونُ)[verb] → (ٱلنَّاسُ)[subject] → (كَٱلْفَرَاشِ)[predicate] → (ٱلْمَبْثُوثِ)[adjective]"
+    dependencyStructure: "(يَوْمَ)[adverb] → (يَكُونُ)[verb] → (ٱلنَّاسُ)[subject] → (كَٱلْفَرَاشِ)[predicate] → (ٱلْمَبْثُوثِ)[adjective]",
+    structure: {
+      relationships: [
+      { from: 2, to: 3, label: 'فعل + فاعل' },
+      { from: 4, to: 5, label: 'موصوف + صفت' }
+      ],
+    },
   },
 
   5: {
@@ -512,7 +527,13 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(وَتَكُونُ)[verb] → (ٱلْجِبَالُ)[subject] → (كَٱلْعِهْنِ)[predicate] → (ٱلْمَنفُوشِ)[adjective]"
+    dependencyStructure: "(وَتَكُونُ)[verb] → (ٱلْجِبَالُ)[subject] → (كَٱلْعِهْنِ)[predicate] → (ٱلْمَنفُوشِ)[adjective]",
+    structure: {
+      relationships: [
+      { from: 1, to: 2, label: 'فعل + فاعل' },
+      { from: 3, to: 4, label: 'موصوف + صفت' }
+      ],
+    },
   },
 
   6: {
@@ -634,7 +655,13 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(فَأَمَّا)[conditional] → (مَن)[relative] → (ثَقُلَتْ)[verb] → (مَوَٰزِينُهُۥ)[subject]"
+    dependencyStructure: "(فَأَمَّا)[conditional] → (مَن)[relative] → (ثَقُلَتْ)[verb] → (مَوَٰزِينُهُۥ)[subject]",
+    structure: {
+      relationships: [
+      { from: 2, to: 3, label: 'موصول + صلة' },
+      { from: 3, to: 4, label: 'فعل + فاعل' }
+      ],
+    },
   },
 
   7: {
@@ -755,7 +782,13 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(فَهُوَ)[subject] → (فِى)[prep] → (عِيشَةٍ)[noun] → (رَّاضِيَةٍ)[adjective]"
+    dependencyStructure: "(فَهُوَ)[subject] → (فِى)[prep] → (عِيشَةٍ)[noun] → (رَّاضِيَةٍ)[adjective]",
+    structure: {
+      relationships: [
+      { from: 2, to: 3, label: 'جار + مجرور' },
+      { from: 3, to: 4, label: 'موصوف + صفت' }
+      ],
+    },
   },
 
   8: {
@@ -864,7 +897,13 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(وَأَمَّا)[conditional] → (مَنْ)[relative] → (خَفَّتْ)[verb] → (مَوَٰزِينُهُۥ)[subject]"
+    dependencyStructure: "(وَأَمَّا)[conditional] → (مَنْ)[relative] → (خَفَّتْ)[verb] → (مَوَٰزِينُهُۥ)[subject]",
+    structure: {
+      relationships: [
+      { from: 2, to: 3, label: 'موصول + صلة' },
+      { from: 3, to: 4, label: 'فعل + فاعل' }
+      ],
+    },
   },
 
   9: {
@@ -876,7 +915,10 @@ export const TREEBANK_DATA = {
       hi: "उसकी जगह हाविया है",
       bn: "তার আশ্রয় হবে হাবিয়া",
       tr: "Onun anası Haviye'dir",
-      id: "Maka tempat kembalinya adalah jurang neraka"
+      id: "Maka tempat kembalinya adalah jurang neraka",
+    structure: {
+      relationships: [],
+    },
     },
     words: [
       {
@@ -960,7 +1002,10 @@ export const TREEBANK_DATA = {
       hi: "और तुम्हें क्या पता कि वो क्या है?",
       bn: "তোমাকে কিসে জানাবে সেটা কী?",
       tr: "Haviyenin ne olduğunu sana ne bildirdi?",
-      id: "Tahukah kamu apakah jurang neraka itu?"
+      id: "Tahukah kamu apakah jurang neraka itu?",
+    structure: {
+      relationships: [],
+    },
     },
     words: [
       {
@@ -1130,7 +1175,12 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(نَارٌ)[subject] → (حَامِيَةٌۢ)[adjective]"
+    dependencyStructure: "(نَارٌ)[subject] → (حَامِيَةٌۢ)[adjective]",
+    structure: {
+      relationships: [
+      { from: 1, to: 2, label: 'موصوف + صفت' }
+      ],
+    },
   }
 };
 

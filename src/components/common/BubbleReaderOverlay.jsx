@@ -1521,6 +1521,7 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
   const [autoScroll, setAutoScroll] = useLocalStorage('reader_autoscroll', true);
 
   const [shareStatus, setShareStatus] = useState(null);
+  const [copyStatus, setCopyStatus] = useState(null); // tracks which ayah+type was just copied e.g. "3-arabic"
   const [isAnimating, setIsAnimating] = useState(true);
   const [showSettings, setShowSettings] = useState(false);
   const [selectedWordData, setSelectedWordData] = useState(null);
@@ -3166,6 +3167,8 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
     const duration = Math.round((Date.now() - startTime.current) / 60000);
     logReadingSession(surah.id, verses.length > 0 ? 1 : 0, duration);
     if (audioRef.current) { audioRef.current.pause(); audioRef.current.src = ''; }
+    window.speechSynthesis?.cancel();
+    setIsPlaying(false);
 
     // Show mood entry only every 30 surahs (if read for more than 1 minute)
     if (duration >= 1) {
@@ -3261,12 +3264,9 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
   const [shareVerseData, setShareVerseData] = useState(null);
 
   const handleShareVerse = useCallback((verse, ayahNum) => {
-    // Set the verse data and open the share panel
-    setShareVerseData({
-      ayahNumber: ayahNum,
-      arabic: verse.arabic,
-      translation: verse.translation
-    });
+    // Navigate to the verse so currentVerse/currentAyah are in sync with share
+    setCurrentAyah(ayahNum);
+    setShareVerseData(null);
     setLeftFeature('share');
   }, []);
 
@@ -3328,6 +3328,32 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
   const toggleTranslation = useCallback(() => setShowTranslation(prev => !prev), [setShowTranslation]);
   const togglePlayPause = useCallback(() => setIsPlaying(prev => !prev), []);
   const cycleRepeatMode = useCallback(() => setRepeatMode(prev => prev === 'none' ? 'verse' : prev === 'verse' ? 'surah' : 'none'), [setRepeatMode]);
+
+  // Copy verse text to clipboard
+  const handleCopyVerse = useCallback((ayahNum, text, type) => {
+    const label = type === 'arabic' ? '' : ` (${surah?.name} ${surah?.id}:${ayahNum})`;
+    const copyText = text + label;
+    const onSuccess = () => {
+      setCopyStatus(`${ayahNum}-${type}`);
+      setTimeout(() => setCopyStatus(null), 1500);
+    };
+    if (navigator.clipboard?.writeText) {
+      navigator.clipboard.writeText(copyText).then(onSuccess).catch(() => {
+        // Fallback for insecure contexts
+        try {
+          const ta = document.createElement('textarea');
+          ta.value = copyText;
+          ta.style.position = 'fixed';
+          ta.style.opacity = '0';
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand('copy');
+          document.body.removeChild(ta);
+          onSuccess();
+        } catch { /* silent */ }
+      });
+    }
+  }, [surah?.id, surah?.name]);
 
   // Memoize stopPropagation handler
   const stopPropagation = useCallback((e) => e.stopPropagation(), []);
@@ -3445,9 +3471,9 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
         onClose={closeShareFeature}
         surahId={surah.id}
         surahName={surah.name}
-        ayahNumber={shareVerseData?.multiple ? shareVerseData.verses[0]?.ayahNumber : (shareVerseData?.ayahNumber || currentAyah)}
-        verseArabic={shareVerseData?.multiple ? shareVerseData.verses[0]?.arabic : (shareVerseData?.arabic || currentVerse?.arabic)}
-        verseTranslation={shareVerseData?.multiple ? shareVerseData.verses[0]?.translation : (shareVerseData?.translation || currentVerse?.translation)}
+        ayahNumber={shareVerseData?.multiple ? shareVerseData.verses[0]?.ayahNumber : currentAyah}
+        verseArabic={shareVerseData?.multiple ? shareVerseData.verses[0]?.arabic : currentVerse?.arabic}
+        verseTranslation={shareVerseData?.multiple ? shareVerseData.verses[0]?.translation : currentVerse?.translation}
         multipleVerses={shareVerseData?.multiple ? shareVerseData.verses : null}
         onOpenArtGenerator={() => setShowArtGenerator(true)}
         onShareSuccess={() => { if (gamification.isActive) gamification.recordAction('share'); }}
@@ -3459,11 +3485,11 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
       {showArtGenerator && <VerseArtGenerator
         isVisible={showArtGenerator}
         onClose={() => setShowArtGenerator(false)}
-        verseArabic={shareVerseData?.arabic || currentVerse?.arabic}
-        verseTranslation={shareVerseData?.translation || currentVerse?.translation}
+        verseArabic={currentVerse?.arabic}
+        verseTranslation={currentVerse?.translation}
         surahName={surah.name}
         surahId={surah.id}
-        ayahNumber={shareVerseData?.ayahNumber || currentAyah}
+        ayahNumber={currentAyah}
       />}
 
       {/* Emotional Journey Tracker */}
@@ -3638,7 +3664,7 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
 
       {/* Left Info Bubble - Expands in place to show Surah Details */}
       <div
-        className={`fixed left-4 sm:left-6 top-1/2 -translate-y-1/2 z-[55] transition-all duration-500 ${isAnimating ? 'opacity-0 scale-50' : 'opacity-100 scale-100'}`}
+        className={`fixed left-4 sm:left-6 bottom-36 sm:bottom-40 z-[55] transition-all duration-500 ${isAnimating ? 'opacity-0 scale-50' : 'opacity-100 scale-100'}`}
         onClick={stopPropagation}
         style={{ animation: showSurahDetails ? 'none' : 'floatBubble 4s ease-in-out infinite' }}
       >
@@ -4427,6 +4453,14 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
                             <button onClick={() => handleShareVerse(verse, ayahNum)} className={`p-1.5 rounded-full transition-all hover:scale-110 ${shareStatus === ayahNum ? 'bg-emerald-500/80' : 'bg-white/15'}`} title="Share verse">
                               {shareStatus === ayahNum ? <Icons.Check className="w-3 h-3" /> : <Icons.Share className="w-3 h-3" />}
                             </button>
+                            <button onClick={() => handleCopyVerse(ayahNum, verse.arabic, 'arabic')} className={`p-1.5 rounded-full transition-all hover:scale-110 ${copyStatus === `${ayahNum}-arabic` ? 'bg-amber-500/80' : 'bg-white/15'}`} title="Copy Arabic text">
+                              {copyStatus === `${ayahNum}-arabic` ? <Icons.Check className="w-3 h-3" /> : <Icons.Copy className="w-3 h-3" />}
+                            </button>
+                            {showTranslation && verse.translation && (
+                              <button onClick={() => handleCopyVerse(ayahNum, verse.translation, 'translation')} className={`p-1.5 rounded-full transition-all hover:scale-110 ${copyStatus === `${ayahNum}-translation` ? 'bg-amber-500/80' : 'bg-white/15'}`} title="Copy translation">
+                                {copyStatus === `${ayahNum}-translation` ? <Icons.Check className="w-3 h-3" /> : <Icons.Type className="w-3 h-3" />}
+                              </button>
+                            )}
                             {/* Grammar Analysis & Ontology Button - shows for surahs with treebank OR ontology data */}
                             {(hasTreebankData(surah?.id) || hasOntologyData(surah?.id)) && (
                               <button
@@ -4480,8 +4514,31 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
               <div className="flex-shrink-0 pt-1">
                 {audioError && <p className="text-center text-red-300 text-[10px] mb-1">{audioError}</p>}
 
-                {/* Audio Mode Toggle */}
+                {/* Audio Mode Toggle + Ayah Selector */}
                 <div className="flex items-center justify-center gap-1.5 mb-2">
+                  {/* Ayah Jump Dropdown */}
+                  <select
+                    value={audioMode === 'translation' ? translationAyah : currentAyah}
+                    onChange={(e) => {
+                      const val = Number(e.target.value);
+                      if (audioMode === 'translation') {
+                        setTranslationAyah(val);
+                      }
+                      setCurrentAyah(val);
+                      setTimeout(() => {
+                        const el = versesContainerRef.current?.querySelector(`[data-ayah="${val}"]`);
+                        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                      }, 100);
+                    }}
+                    disabled={!totalVerses}
+                    className="bg-white/20 text-white border border-white/25 rounded-full px-2 py-1 text-xs font-medium outline-none cursor-pointer disabled:opacity-50"
+                    title="Jump to verse"
+                  >
+                    {totalVerses > 0 ? Array.from({ length: totalVerses }, (_, i) => (
+                      <option key={i + 1} value={i + 1} className="bg-gray-800 text-white">Ayah {i + 1}</option>
+                    )) : <option className="bg-gray-800 text-white">-</option>}
+                  </select>
+
                   <button
                     onClick={() => {
                       setAudioMode('arabic');
@@ -4602,9 +4659,7 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
                   </button>
                 </div>
                 <div className="text-center mt-0.5 text-xs text-white/70">
-                  {audioMode === 'arabic' ? (
-                    <span>{currentAyah} / {totalVerses}</span>
-                  ) : audioMode === 'translation' ? (
+                  {audioMode === 'translation' ? (
                     <div className="flex flex-col items-center gap-0.5">
                       <span className="text-cyan-300">{translationAyah} / {totalVerses} {isPlayingTranslation && '(Playing)'}</span>
                       {isPlayingTranslation && translationAudioSource && (

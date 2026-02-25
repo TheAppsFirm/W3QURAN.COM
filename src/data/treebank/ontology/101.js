@@ -17,13 +17,13 @@ export const ONTOLOGY = {
       nameArabic: "أسماء يوم القيامة",
       color: '#F59E0B',
       icon: 'AlertTriangle',
-      description: "القارعة is one of 50+ Quranic names for the Day of Judgment",
+      description: { en: "القارعة is one of 50+ Quranic names for the Day of Judgment", ur: "القارعة قرآن میں یومِ قیامت کے 50 سے زیادہ ناموں میں سے ایک ہے" },
       concepts: [
         {
           term: "القَارِعَة",
           transliteration: "Al-Qaari'ah",
-          meaning: "The Striking Calamity / The Knocker",
-          explanation: "From قَرَعَ (to knock/strike). It strikes hearts with terror, strikes the earth with destruction.",
+          meaning: { en: "The Striking Calamity / The Knocker", ur: "کھٹکھٹانے والی / کوبنے والی آفت" },
+          explanation: { en: "From قَرَعَ (to knock/strike). It strikes hearts with terror, strikes the earth with destruction.", ur: "قَرَعَ (کھٹکھٹانا/مارنا) سے۔ دلوں کو دہشت سے مارتی ہے، زمین کو تباہی سے۔" },
           verseRef: "101:1-3",
           otherNames: ["الحَاقَّة (The Reality)", "القِيَامَة (The Resurrection)", "الصَّاخَّة (The Deafening Blast)", "الطَّامَّة الكُبْرَى (The Greatest Catastrophe)"]
         }
@@ -35,21 +35,21 @@ export const ONTOLOGY = {
       nameArabic: "الفوضى الكونية",
       color: '#EF4444',
       icon: 'Globe',
-      description: "Vivid imagery of universal destruction",
+      description: { en: "Vivid imagery of universal destruction", ur: "کائناتی تباہی کی واضح تصویر کشی" },
       concepts: [
         {
           term: "النَّاسُ كَالفَرَاشِ المَبْثُوث",
           transliteration: "An-Naas kal-Faraash al-Mabthooth",
-          meaning: "People like scattered moths",
-          explanation: "Moths are confused, directionless, attracted to fire (their destruction). People will be similarly disoriented.",
+          meaning: { en: "People like scattered moths", ur: "لوگ بکھرے ہوئے پتنگوں کی طرح" },
+          explanation: { en: "Moths are confused, directionless, attracted to fire (their destruction). People will be similarly disoriented.", ur: "پتنگے پریشان، بے سمت اور آگ (اپنی تباہی) کی طرف کھنچے ہوتے ہیں۔ لوگ بھی اسی طرح حواس باختہ ہوں گے۔" },
           verseRef: "101:4",
           imagery: "Billions of humans scattered like insects around a light"
         },
         {
           term: "الجِبَالُ كَالعِهْنِ المَنفُوش",
           transliteration: "Al-Jibaal kal-'Ihn al-Manfoosh",
-          meaning: "Mountains like fluffed wool",
-          explanation: "عِهْن = colored wool. Mountains of various colors become light as carded wool. Complete transformation of the solid to the ethereal.",
+          meaning: { en: "Mountains like fluffed wool", ur: "پہاڑ دھنکی ہوئی اون کی طرح" },
+          explanation: { en: "عِهْن = colored wool. Mountains of various colors become light as carded wool. Complete transformation of the solid to the ethereal.", ur: "عِهْن = رنگین اون۔ مختلف رنگوں کے پہاڑ دھنکی ہوئی اون کی طرح ہلکے ہو جاتے ہیں۔ ٹھوس کا لطیف میں مکمل تبدیلی۔" },
           verseRef: "101:5",
           imagery: "Massive rock formations becoming lighter than air"
         }
@@ -61,21 +61,21 @@ export const ONTOLOGY = {
       nameArabic: "الحساب الإلهي",
       color: '#8B5CF6',
       icon: 'Scale',
-      description: "The weighing of deeds",
+      description: { en: "The weighing of deeds", ur: "اعمال کا وزن کرنا" },
       concepts: [
         {
           term: "المَوَازِين",
           transliteration: "Al-Mawaazeen",
-          meaning: "The Scales",
-          explanation: "Plural of مِيزان (scale). Real scales that weigh deeds - their weight determined by sincerity, not quantity.",
+          meaning: { en: "The Scales", ur: "ترازو (میزان)" },
+          explanation: { en: "Plural of مِيزان (scale). Real scales that weigh deeds - their weight determined by sincerity, not quantity.", ur: "مِیزان کی جمع (ترازو)۔ حقیقی ترازو جو اعمال تولتے ہیں - ان کا وزن اخلاص سے متعین ہوتا ہے، مقدار سے نہیں۔" },
           verseRef: "101:6, 8",
           theological: "Ahl as-Sunnah believe in literal scales on Judgment Day"
         },
         {
           term: "ثَقُلَت vs خَفَّت",
           transliteration: "Thaqulat vs Khaffat",
-          meaning: "Heavy vs Light",
-          explanation: "Two possible outcomes: scales heavy with good deeds → Paradise; scales light → Hell.",
+          meaning: { en: "Heavy vs Light", ur: "بھاری بمقابلہ ہلکا" },
+          explanation: { en: "Two possible outcomes: scales heavy with good deeds → Paradise; scales light → Hell.", ur: "دو ممکنہ نتائج: نیکیوں سے بھاری پلڑا ← جنت؛ ہلکا پلڑا ← جہنم۔" },
           verseRef: "101:6-9"
         }
       ]
@@ -86,27 +86,27 @@ export const ONTOLOGY = {
       nameArabic: "المآلات الأبدية",
       color: '#10B981',
       icon: 'Compass',
-      description: "The two final abodes",
+      description: { en: "The two final abodes", ur: "دو حتمی ٹھکانے" },
       concepts: [
         {
           term: "عِيشَةٌ رَاضِيَة",
           transliteration: "'Eeshatan Raadiyah",
-          meaning: "A pleasant/satisfying life",
-          explanation: "Active participle - a life that inherently satisfies. Paradise described through its quality of living.",
+          meaning: { en: "A pleasant/satisfying life", ur: "خوشگوار اور مطمئن زندگی" },
+          explanation: { en: "Active participle - a life that inherently satisfies. Paradise described through its quality of living.", ur: "اسم فاعل - ایسی زندگی جو فطری طور پر مطمئن کرے۔ جنت کو اس کے معیارِ زندگی سے بیان کیا گیا۔" },
           verseRef: "101:7"
         },
         {
           term: "هَاوِيَة",
           transliteration: "Haawiyah",
-          meaning: "The Abyss / Bottomless Pit",
-          explanation: "From هَوَى (to fall). A pit one falls into endlessly. One of the names/levels of Hell.",
+          meaning: { en: "The Abyss / Bottomless Pit", ur: "گہری کھائی / بے تہ گڑھا" },
+          explanation: { en: "From هَوَى (to fall). A pit one falls into endlessly. One of the names/levels of Hell.", ur: "هَوَى (گرنا) سے۔ ایسا گڑھا جس میں لامتناہی گرتا رہے۔ جہنم کے ناموں/درجات میں سے ایک۔" },
           verseRef: "101:9-11"
         },
         {
           term: "نَارٌ حَامِيَة",
           transliteration: "Naarun Haamiyah",
-          meaning: "Blazing hot fire",
-          explanation: "The final description - a fire of extreme heat. The surah ends with this terrifying image.",
+          meaning: { en: "Blazing hot fire", ur: "شدید تپتی آگ" },
+          explanation: { en: "The final description - a fire of extreme heat. The surah ends with this terrifying image.", ur: "آخری توصیف - انتہائی حرارت کی آگ۔ سورت اس خوفناک منظر پر ختم ہوتی ہے۔" },
           verseRef: "101:11"
         }
       ]
@@ -118,28 +118,28 @@ export const ONTOLOGY = {
       from: "القَارِعَة",
       to: "الفَرَاش المَبْثُوث",
       type: "effect",
-      description: "The Striking causes people to scatter",
+      description: { en: "The Striking causes people to scatter", ur: "کھٹکھٹانے والی لوگوں کے بکھرنے کا سبب بنتی ہے" },
       explanation: "The calamity is so overwhelming that humanity becomes disoriented"
     },
     {
       from: "القَارِعَة",
       to: "العِهْن المَنفُوش",
       type: "effect",
-      description: "The Striking transforms mountains",
+      description: { en: "The Striking transforms mountains", ur: "کھٹکھٹانے والی پہاڑوں کو بدل دیتی ہے" },
       explanation: "Even the most solid things become light and scattered"
     },
     {
       from: "المَوَازِين ثَقُلَت",
       to: "عِيشَةٌ رَاضِيَة",
       type: "causation",
-      description: "Heavy scales lead to Paradise",
+      description: { en: "Heavy scales lead to Paradise", ur: "بھاری پلڑے جنت کی طرف لے جاتے ہیں" },
       explanation: "Good deeds outweighing bad = eternal bliss"
     },
     {
       from: "المَوَازِين خَفَّت",
       to: "هَاوِيَة",
       type: "causation",
-      description: "Light scales lead to the Abyss",
+      description: { en: "Light scales lead to the Abyss", ur: "ہلکے پلڑے ہاویہ (گہری کھائی) کی طرف لے جاتے ہیں" },
       explanation: "Lack of good deeds = eternal torment"
     }
   ],
@@ -147,31 +147,31 @@ export const ONTOLOGY = {
   thematicFlow: {
     title: "From Announcement to Destination",
     titleArabic: "من الإعلان إلى المصير",
-    description: "The surah moves from naming the Day to describing its outcomes",
+    description: { en: "The surah moves from naming the Day to describing its outcomes", ur: "سورت اس دن کے نام سے اس کے نتائج کی تصویر کشی کی طرف بڑھتی ہے" },
     stages: [
       {
         stage: 1,
         theme: "The Name",
         verses: "101:1-3",
-        description: "القارعة announced, then questioned - building suspense"
+        description: { en: "القارعة announced, then questioned - building suspense", ur: "القارعة کا اعلان، پھر سوال - تجسس پیدا کرنا" }
       },
       {
         stage: 2,
         theme: "The Scene",
         verses: "101:4-5",
-        description: "Vivid imagery of chaos - people and mountains transformed"
+        description: { en: "Vivid imagery of chaos - people and mountains transformed", ur: "افراتفری کی واضح تصویر - لوگ اور پہاڑ بدل گئے" }
       },
       {
         stage: 3,
         theme: "The Judgment",
         verses: "101:6-9",
-        description: "Two groups divided by the weight of their scales"
+        description: { en: "Two groups divided by the weight of their scales", ur: "دو گروہ اپنے پلڑوں کے وزن سے تقسیم" }
       },
       {
         stage: 4,
         theme: "The Punishment",
         verses: "101:10-11",
-        description: "هاوية defined as blazing fire"
+        description: { en: "هاوية defined as blazing fire", ur: "ہاویہ کی تعریف تپتی آگ سے" }
       }
     ]
   },
@@ -181,22 +181,22 @@ export const ONTOLOGY = {
     features: [
       {
         name: "Opening Suspense",
-        description: "القَارِعَة (v.1) → مَا القَارِعَة (v.2) → وَمَا أَدْرَاكَ (v.3)",
+        description: { en: "القَارِعَة (v.1) → مَا القَارِعَة (v.2) → وَمَا أَدْرَاكَ (v.3)", ur: "القَارِعَة (آ.1) ← مَا القَارِعَة (آ.2) ← وَمَا أَدْرَاكَ (آ.3)" },
         effect: "Three levels of building anticipation before explanation"
       },
       {
         name: "Contrasting Similes",
-        description: "People like moths (v.4) vs Mountains like wool (v.5)",
+        description: { en: "People like moths (v.4) vs Mountains like wool (v.5)", ur: "لوگ پتنگوں کی طرح (آ.4) بمقابلہ پہاڑ اون کی طرح (آ.5)" },
         effect: "Living beings become insect-like; solid rock becomes ethereal"
       },
       {
         name: "The أُمّ Idiom",
-        description: "فَأُمُّهُ هَاوِيَة - 'His mother is the Abyss'",
+        description: { en: "فَأُمُّهُ هَاوِيَة - 'His mother is the Abyss'", ur: "فَأُمُّهُ هَاوِيَة - 'اس کی ماں ہاویہ ہے'" },
         effect: "Dark irony: where one seeks refuge (mother) becomes source of torment"
       },
       {
         name: "Sound Symmetry",
-        description: "ثَقُلَت/خَفَّت (heavy/light) - phonetic contrast matching meaning",
+        description: { en: "ثَقُلَت/خَفَّت (heavy/light) - phonetic contrast matching meaning", ur: "ثَقُلَت/خَفَّت (بھاری/ہلکا) - آواز کا تضاد معنی سے ملتا ہے" },
         effect: "Heavy word sounds heavier; light word sounds lighter"
       }
     ]
@@ -281,8 +281,8 @@ export const ONTOLOGY = {
   },
 
   uniqueInsight: {
-    title: "The Mother Paradox",
-    insight: "The phrase فَأُمُّهُ هَاوِيَة ('his mother is the Abyss') contains profound irony. In Arabic, one's 'mother' represents ultimate refuge - where you return in distress. But for the one with light scales, their 'mother' (refuge) is the bottomless pit of Hell. The very concept of comfort is inverted. This person sought refuge in worldly things (wealth, status), and their ultimate refuge reflects that hollowness.",
+    title: { en: "The Mother Paradox", ur: "ماں کا تضاد" },
+    insight: { en: "The phrase فَأُمُّهُ هَاوِيَة ('his mother is the Abyss') contains profound irony. In Arabic, one's 'mother' represents ultimate refuge - where you return in distress. But for the one with light scales, their 'mother' (refuge) is the bottomless pit of Hell. The very concept of comfort is inverted. This person sought refuge in worldly things (wealth, status), and their ultimate refuge reflects that hollowness.", ur: "فَأُمُّهُ هَاوِيَة ('اس کی ماں ہاویہ ہے') میں گہری ستم ظریفی ہے۔ عربی میں 'ماں' آخری پناہ گاہ ہے - جہاں مصیبت میں لوٹا جائے۔ لیکن ہلکے پلڑے والے کی 'ماں' (پناہ) جہنم کی بے تہ کھائی ہے۔ سکون کا تصور ہی الٹ گیا۔ اس شخص نے دنیاوی چیزوں (مال، رتبے) میں پناہ ڈھونڈی، اور اس کی حتمی پناہ اسی کھوکھلے پن کی عکاسی کرتی ہے۔" },
     modernRelevance: "What do we run to for comfort? If it's not Allah, our 'mother' may be our destruction."
   },
 
@@ -318,15 +318,15 @@ export const ONTOLOGY = {
     images: [
       {
         image: "الفَرَاش المَبْثُوث (scattered moths)",
-        analysis: "Moths fly towards light (fire) - their attraction is their destruction. Similarly, humans will be drawn to judgment they tried to avoid."
+        analysis: { en: "Moths fly towards light (fire) - their attraction is their destruction. Similarly, humans will be drawn to judgment they tried to avoid.", ur: "پتنگے روشنی (آگ) کی طرف اڑتے ہیں - ان کی کشش ان کی تباہی ہے۔ اسی طرح انسان اس فیصلے کی طرف کھنچے جائیں گے جس سے بچنے کی کوشش کرتے تھے۔" }
       },
       {
         image: "العِهْن المَنفُوش (fluffed colored wool)",
-        analysis: "عِهْن specifically means COLORED wool. Mountains of different colors (brown, red, black) becoming like multicolored fluff - beauty in destruction."
+        analysis: { en: "عِهْن specifically means COLORED wool. Mountains of different colors (brown, red, black) becoming like multicolored fluff - beauty in destruction.", ur: "عِهْن خاص طور پر رنگین اون ہے۔ مختلف رنگوں (بھورے، سرخ، سیاہ) کے پہاڑ رنگ برنگے پھاہے کی طرح - تباہی میں خوبصورتی۔" }
       },
       {
         image: "هَاوِيَة (bottomless pit)",
-        analysis: "Active participle - constantly falling. There is no bottom, no end to the falling. Eternal descent."
+        analysis: { en: "Active participle - constantly falling. There is no bottom, no end to the falling. Eternal descent.", ur: "اسم فاعل - مسلسل گرنا۔ کوئی تہ نہیں، گرنے کا کوئی انت نہیں۔ ابدی سقوط۔" }
       }
     ]
   }

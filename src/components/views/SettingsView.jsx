@@ -38,7 +38,7 @@ const CREDIT_PACKS = [
 ];
 
 function SettingsView({ darkMode, setDarkMode, onNavigate }) {
-  const { user, subscription, isPremium, isAdmin, loading: authLoading } = useAuth();
+  const { user, subscription, isPremium, isAdmin, loading: authLoading, refreshUser } = useAuth();
   const [upgradeLoading, setUpgradeLoading] = useState(null);
   const [upgradeError, setUpgradeError] = useState(null);
   const [syncStatus, setSyncStatus] = useState(null); // 'syncing' | 'success' | 'error'
@@ -53,14 +53,13 @@ function SettingsView({ darkMode, setDarkMode, onNavigate }) {
     const payment = params.get('payment');
     if (payment === 'success' || payment === 'canceled') {
       setPaymentStatus(payment);
-      // Clear URL param after showing message
       window.history.replaceState({}, '', '/settings');
-      // Auto-hide after 5 seconds
-      setTimeout(() => setPaymentStatus(null), 5000);
-      // Refresh credits on success to show updated subscription
+      const timer = setTimeout(() => setPaymentStatus(null), 5000);
       if (payment === 'success') {
         fetchCredits();
+        refreshUser(); // Refresh auth state so premium status updates immediately
       }
+      return () => clearTimeout(timer);
     }
   }, []);
 
@@ -95,6 +94,11 @@ function SettingsView({ darkMode, setDarkMode, onNavigate }) {
         credentials: 'include',
         body: JSON.stringify({ product, source: 'general' }),
       });
+      if (!res.ok) {
+        setUpgradeError('Server error. Please try again.');
+        setUpgradeLoading(null);
+        return;
+      }
       const data = await res.json();
       if (data.url) {
         window.location.href = data.url;
@@ -577,6 +581,7 @@ function SettingsView({ darkMode, setDarkMode, onNavigate }) {
                           await fetch('/api/user/sync', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
+                            credentials: 'include',
                             body: JSON.stringify({ dataType: 'bookmarks', data: JSON.parse(bookmarks) }),
                           });
                         }
@@ -586,6 +591,7 @@ function SettingsView({ darkMode, setDarkMode, onNavigate }) {
                           await fetch('/api/user/sync', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
+                            credentials: 'include',
                             body: JSON.stringify({ dataType: 'progress', data: JSON.parse(progress) }),
                           });
                         }

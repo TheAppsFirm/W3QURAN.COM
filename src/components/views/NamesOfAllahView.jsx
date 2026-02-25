@@ -3,7 +3,7 @@
  * Single Responsibility: Display the 99 Names of Allah with share/listen functionality
  */
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { Icons } from '../common/Icons';
 import { NAMES_OF_ALLAH, PALETTES } from '../../data';
 import { shareName } from '../../utils/shareUtils';
@@ -40,6 +40,13 @@ function NamesOfAllahView({ darkMode }) {
 
     setTimeout(() => setShareStatus(null), 2000);
   }, [selectedName]);
+
+  // Cancel speech on unmount
+  useEffect(() => {
+    return () => {
+      if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+    };
+  }, []);
 
   // Handle listen - use browser's text-to-speech for Arabic
   const handleListen = useCallback(() => {

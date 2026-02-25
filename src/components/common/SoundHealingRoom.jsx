@@ -369,13 +369,23 @@ class BinauralBeatGenerator {
   }
 
   stop() {
-    if (this.leftOscillator) {
-      this.leftOscillator.stop();
-      this.leftOscillator = null;
-    }
-    if (this.rightOscillator) {
-      this.rightOscillator.stop();
-      this.rightOscillator = null;
+    try {
+      if (this.leftOscillator) {
+        this.leftOscillator.stop();
+        this.leftOscillator.disconnect();
+        this.leftOscillator = null;
+      }
+      if (this.rightOscillator) {
+        this.rightOscillator.stop();
+        this.rightOscillator.disconnect();
+        this.rightOscillator = null;
+      }
+      if (this.gainNode) {
+        this.gainNode.disconnect();
+        this.gainNode = null;
+      }
+    } catch {
+      // Nodes may already be disconnected
     }
     this.isPlaying = false;
   }
@@ -653,6 +663,7 @@ const SoundHealingRoom = memo(function SoundHealingRoom({ isVisible, onClose }) 
   const dhikrAudioRef = useRef(null);
   const timerRef = useRef(null);
   const dhikrIntervalRef = useRef(null);
+  const dhikrStartTimeoutRef = useRef(null);
 
   // Initialize binaural generator
   useEffect(() => {
@@ -664,9 +675,16 @@ const SoundHealingRoom = memo(function SoundHealingRoom({ isVisible, onClose }) 
       }
       if (ambientAudioRef.current) {
         ambientAudioRef.current.pause();
+        ambientAudioRef.current.removeAttribute('src');
+        ambientAudioRef.current.load();
       }
       if (dhikrAudioRef.current) {
         dhikrAudioRef.current.pause();
+        dhikrAudioRef.current.removeAttribute('src');
+        dhikrAudioRef.current.load();
+      }
+      if (dhikrStartTimeoutRef.current) {
+        clearTimeout(dhikrStartTimeoutRef.current);
       }
       if (timerRef.current) {
         clearInterval(timerRef.current);
@@ -729,9 +747,9 @@ const SoundHealingRoom = memo(function SoundHealingRoom({ isVisible, onClose }) 
       ambientAudioRef.current.play().catch(() => {});
     }
 
-    // Play first dhikr immediately
+    // Play first dhikr after short delay (tracked for cleanup)
     if (dhikrEnabled) {
-      setTimeout(() => playDhikr(mode, 0), 2000);
+      dhikrStartTimeoutRef.current = setTimeout(() => playDhikr(mode, 0), 2000);
     }
 
     // Start dhikr interval (longer intervals for full audio tracks)
@@ -768,12 +786,21 @@ const SoundHealingRoom = memo(function SoundHealingRoom({ isVisible, onClose }) 
 
     if (ambientAudioRef.current) {
       ambientAudioRef.current.pause();
+      ambientAudioRef.current.removeAttribute('src');
+      ambientAudioRef.current.load();
       ambientAudioRef.current = null;
     }
 
     if (dhikrAudioRef.current) {
       dhikrAudioRef.current.pause();
+      dhikrAudioRef.current.removeAttribute('src');
+      dhikrAudioRef.current.load();
       dhikrAudioRef.current = null;
+    }
+
+    if (dhikrStartTimeoutRef.current) {
+      clearTimeout(dhikrStartTimeoutRef.current);
+      dhikrStartTimeoutRef.current = null;
     }
 
     if (timerRef.current) {

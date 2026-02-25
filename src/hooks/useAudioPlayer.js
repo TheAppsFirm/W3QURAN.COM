@@ -4,7 +4,7 @@
  * Uses Al-Quran Cloud API for audio URLs
  */
 
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 
 // Audio CDN base URL from Al-Quran Cloud - using Alafasy by default
 const AUDIO_CDN = 'https://cdn.islamic.network/quran/audio/128';

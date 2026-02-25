@@ -1208,7 +1208,7 @@ const AnalyticsPanel = () => {
     fetchAnalytics();
     fetchAiInsights();
     fetchFunnelData();
-  }, [fetchAnalytics, fetchFunnelData]);
+  }, [fetchAnalytics, fetchAiInsights, fetchFunnelData]);
 
   // Scroll chat to bottom when new messages arrive
   useEffect(() => {
@@ -2096,8 +2096,8 @@ const PaymentsPanel = () => {
 export default function AdminDashboard({ onClose, initialTab = 'overview', onTabChange }) {
   const { user, isAuthenticated, isAdmin, loading: authLoading } = useAuth();
 
-  // Check if user is admin (either via isAdmin flag or email check as fallback)
-  const isAdminUser = isAdmin || user?.email === 'ziadevtmc@gmail.com';
+  // Admin check from server-side isAdmin flag only (no client-side email bypass)
+  const isAdminUser = isAdmin;
 
   const [stats, setStats] = useState(null);
   const [users, setUsers] = useState([]);

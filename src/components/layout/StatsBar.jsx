@@ -191,19 +191,13 @@ const StatsBar = memo(function StatsBar({
 
   // Close dropdowns when clicking outside
   useEffect(() => {
+    if (!showLayoutMenu && !showZoomMenu) return;
     const handleClickOutside = () => {
       setShowLayoutMenu(false);
       setShowZoomMenu(false);
     };
-    if (showLayoutMenu || showZoomMenu) {
-      const timer = setTimeout(() => {
-        document.addEventListener('click', handleClickOutside);
-      }, 10);
-      return () => {
-        clearTimeout(timer);
-        document.removeEventListener('click', handleClickOutside);
-      };
-    }
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
   }, [showLayoutMenu, showZoomMenu]);
 
   return (
