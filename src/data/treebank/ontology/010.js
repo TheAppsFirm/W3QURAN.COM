@@ -16,6 +16,7 @@ export const ONTOLOGY = {
       color: '#EF4444',
       icon: 'Users',
       name: "Divine Origin of Quran",
+      nameUr: "قرآن کی الٰہی اصل",
       nameArabic: "المصدر الإلهي للقرآن",
       concepts: [
         { term: "الر تِلْكَ آيَاتُ الْكِتَابِ الْحَكِيمِ", meaning: { en: "Alif Lam Ra - These are verses of the Wise Book", ur: "الف لام را - یہ حکمت والی کتاب کی آیات ہیں" }, explanation: { en: "Opening declaration of Quran's wisdom", ur: "قرآن کی حکمت کا ابتدائی اعلان" }, verseRef: "10:1" },
@@ -32,6 +33,7 @@ export const ONTOLOGY = {
       color: '#14B8A6',
       icon: 'Crown',
       name: "Signs of Allah's Oneness",
+      nameUr: "توحید کی نشانیاں",
       nameArabic: "آيات التوحيد",
       concepts: [
         { term: "إِنَّ رَبَّكُمُ اللَّهُ الَّذِي خَلَقَ السَّمَاوَاتِ وَالْأَرْضَ", meaning: { en: "Your Lord is Allah who created heavens and earth", ur: "بے شک تمہارا رب اللہ ہے جس نے آسمانوں اور زمین کو پیدا کیا" }, explanation: { en: "Creator of universe", ur: "کائنات کا خالق" }, verseRef: "10:3" },
@@ -49,6 +51,7 @@ export const ONTOLOGY = {
       color: '#EF4444',
       icon: 'Users',
       name: "Story of Musa and Pharaoh",
+      nameUr: "موسیٰ اور فرعون کا قصہ",
       nameArabic: "قصة موسى وفرعون",
       concepts: [
         { term: "ثُمَّ بَعَثْنَا مِن بَعْدِهِم مُّوسَىٰ وَهَارُونَ", meaning: { en: "Then We sent Musa and Harun after them", ur: "پھر ہم نے ان کے بعد موسیٰ اور ہارون کو بھیجا" }, explanation: { en: "Mission of Musa and Harun", ur: "موسیٰ اور ہارون کی بعثت" }, verseRef: "10:75" },
@@ -70,6 +73,7 @@ export const ONTOLOGY = {
       color: '#14B8A6',
       icon: 'Crown',
       name: "Story of Nuh",
+      nameUr: "نوح کا قصہ",
       nameArabic: "قصة نوح",
       concepts: [
         { term: "وَاتْلُ عَلَيْهِمْ نَبَأَ نُوحٍ", meaning: { en: "Recite to them the story of Nuh", ur: "ان کو نوح کا واقعہ سنا دو" }, explanation: { en: "Command to narrate Nuh's story", ur: "نوح کا قصہ بیان کرنے کا حکم" }, verseRef: "10:71" },
@@ -85,6 +89,7 @@ export const ONTOLOGY = {
       color: '#F59E0B',
       icon: 'Star',
       name: "Story of Yunus",
+      nameUr: "یونس کا قصہ",
       nameArabic: "قصة يونس",
       concepts: [
         { term: "فَلَوْلَا كَانَتْ قَرْيَةٌ آمَنَتْ فَنَفَعَهَا إِيمَانُهَا إِلَّا قَوْمَ يُونُسَ", meaning: { en: "If only a city had believed and benefited - except people of Yunus", ur: "کوئی بستی ایسی کیوں نہ ہوئی جو ایمان لاتی اور اس کا ایمان اسے فائدہ دیتا - سوائے قوم یونس کے" }, explanation: { en: "Unique case: entire city repented", ur: "منفرد واقعہ: پوری بستی نے توبہ کی" }, verseRef: "10:98" },
@@ -97,6 +102,7 @@ export const ONTOLOGY = {
       color: '#EC4899',
       icon: 'Globe',
       name: "Human Nature",
+      nameUr: "انسانی فطرت",
       nameArabic: "طبيعة الإنسان",
       concepts: [
         { term: "وَإِذَا مَسَّ الْإِنسَانَ الضُّرُّ دَعَانَا", meaning: { en: "When harm touches man, he calls upon Us", ur: "جب انسان کو تکلیف پہنچتی ہے تو وہ ہمیں پکارتا ہے" }, explanation: { en: "Turning to Allah in hardship", ur: "مصیبت میں اللہ کی طرف رجوع" }, verseRef: "10:12" },
@@ -114,6 +120,7 @@ export const ONTOLOGY = {
       color: '#14B8A6',
       icon: 'Crown',
       name: "Day of Judgment",
+      nameUr: "یومِ قیامت",
       nameArabic: "يوم القيامة",
       concepts: [
         { term: "إِلَيْهِ مَرْجِعُكُمْ جَمِيعًا", meaning: { en: "To Him is your return, all of you", ur: "اسی کی طرف تم سب کو لوٹنا ہے" }, explanation: { en: "Universal return to Allah", ur: "سب کی اللہ کی طرف واپسی" }, verseRef: "10:4" },
@@ -131,6 +138,7 @@ export const ONTOLOGY = {
       color: '#10B981',
       icon: 'Book',
       name: "Guidance and Misguidance",
+      nameUr: "ہدایت اور گمراہی",
       nameArabic: "الهداية والضلال",
       concepts: [
         { term: "مَن يَهْدِ اللَّهُ فَهُوَ الْمُهْتَدِي", meaning: { en: "Whoever Allah guides is truly guided", ur: "جسے اللہ ہدایت دے وہی ہدایت پانے والا ہے" }, explanation: { en: "Source of true guidance", ur: "حقیقی ہدایت کا سرچشمہ" }, verseRef: "10:35" },
@@ -145,6 +153,7 @@ export const ONTOLOGY = {
       color: '#06B6D4',
       icon: 'Compass',
       name: "Consolation to the Prophet",
+      nameUr: "نبی ﷺ کو تسلی",
       nameArabic: "تسلية النبي",
       concepts: [
         { term: "وَلَا يَحْزُنكَ قَوْلُهُمْ", meaning: { en: "Let not their speech grieve you", ur: "ان کی باتیں آپ کو غمگین نہ کریں" }, explanation: { en: "Comfort against mockery", ur: "تمسخر کے خلاف تسلی" }, verseRef: "10:65" },
@@ -160,6 +169,7 @@ export const ONTOLOGY = {
       color: '#10B981',
       icon: 'Book',
       name: "Arguments of Rejecters",
+      nameUr: "منکرین کے دلائل",
       nameArabic: "حجج المكذبين",
       concepts: [
         { term: "لَوْلَا أُنزِلَ عَلَيْهِ آيَةٌ مِّن رَّبِّهِ", meaning: { en: "Why is a sign not sent down from his Lord?", ur: "ان پر ان کے رب کی طرف سے کوئی نشانی کیوں نہیں اتری؟" }, explanation: { en: "Demand for miraculous sign", ur: "معجزاتی نشانی کا مطالبہ" }, verseRef: "10:20" },
@@ -174,6 +184,7 @@ export const ONTOLOGY = {
       color: '#8B5CF6',
       icon: 'Heart',
       name: "Supplication and Worship",
+      nameUr: "دعا اور عبادت",
       nameArabic: "الدعاء والعبادة",
       concepts: [
         { term: "قُلْ أَرَأَيْتُمْ إِنْ أَتَاكُمْ عَذَابُهُ بَيَاتًا أَوْ نَهَارًا", meaning: { en: "Say: Have you seen if His punishment came by night or day?", ur: "کہو: بتاؤ اگر اللہ کا عذاب تم پر رات کو یا دن کو آ جائے؟" }, explanation: { en: "Sudden punishment warning", ur: "اچانک عذاب کی تنبیہ" }, verseRef: "10:50" },
@@ -189,6 +200,7 @@ export const ONTOLOGY = {
       color: '#10B981',
       icon: 'Book',
       name: "Refutation of False Deities",
+      nameUr: "جھوٹے معبودوں کی تردید",
       nameArabic: "إبطال الآلهة الباطلة",
       concepts: [
         { term: "وَيَعْبُدُونَ مِن دُونِ اللَّهِ مَا لَا يَضُرُّهُمْ وَلَا يَنفَعُهُمْ", meaning: { en: "They worship besides Allah what neither harms nor benefits", ur: "وہ اللہ کے سوا ایسی چیزوں کی عبادت کرتے ہیں جو نہ نقصان پہنچا سکیں نہ فائدہ" }, explanation: { en: "Uselessness of idols", ur: "بتوں کی بے فائدگی" }, verseRef: "10:18" },
@@ -208,6 +220,7 @@ export const ONTOLOGY = {
       color: '#10B981',
       icon: 'Book',
       name: "Quran as Healing",
+      nameUr: "قرآن بطور شفا",
       nameArabic: "القرآن شفاء",
       concepts: [
         { term: "يَا أَيُّهَا النَّاسُ قَدْ جَاءَتْكُم مَّوْعِظَةٌ مِّن رَّبِّكُمْ", meaning: { en: "O people, there has come to you advice from your Lord", ur: "اے لوگو! تمہارے پاس تمہارے رب کی طرف سے نصیحت آ گئی ہے" }, explanation: { en: "Quran as admonition", ur: "قرآن بطور نصیحت" }, verseRef: "10:57" },

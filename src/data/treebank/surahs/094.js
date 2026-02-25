@@ -865,7 +865,10 @@ export const TREEBANK_DATA = {
       tr: "Ve yalnız Rabbine yönel",
       id: "Dan kepada Tuhanmulah hendaknya engkau berharap",
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' }
+      ],
     },
     },
     words: [

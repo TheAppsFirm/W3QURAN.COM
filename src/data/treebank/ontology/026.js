@@ -14,6 +14,7 @@ export const ONTOLOGY = {
   categories: {
     quranIntroduction: {
       name: "Introduction to the Quran",
+      nameUr: "قرآن کا تعارف",
       nameArabic: "مقدمة القرآن",
       color: "#F59E0B",
       icon: "Book",
@@ -29,6 +30,7 @@ export const ONTOLOGY = {
 
     prophetMuhammadComfort: {
       name: "Comfort to Prophet Muhammad",
+      nameUr: "نبی محمد ﷺ کو تسلی",
       nameArabic: "تسلية النبي",
       color: "#8B5CF6",
       icon: "Heart",
@@ -44,6 +46,7 @@ export const ONTOLOGY = {
 
     divineRefrain: {
       name: "The Repeated Refrain",
+      nameUr: "بار بار دہرایا جانے والا نکتہ",
       nameArabic: "اللازمة المتكررة",
       color: "#F59E0B",
       icon: "Star",
@@ -56,6 +59,7 @@ export const ONTOLOGY = {
 
     musaStoryPart1: {
       name: "Story of Musa - Divine Call",
+      nameUr: "قصۂ موسیٰ - الٰہی پکار",
       nameArabic: "قصة موسى - النداء الإلهي",
       color: "#3B82F6",
       icon: "Book",
@@ -73,6 +77,7 @@ export const ONTOLOGY = {
 
     musaStoryPart2: {
       name: "Story of Musa - Divine Assurance",
+      nameUr: "قصۂ موسیٰ - الٰہی اطمینان",
       nameArabic: "قصة موسى - الطمأنينة الإلهية",
       color: "#8B5CF6",
       icon: "Shield",
@@ -86,6 +91,7 @@ export const ONTOLOGY = {
 
     musaStoryPart3: {
       name: "Story of Musa - Confronting Pharaoh",
+      nameUr: "قصۂ موسیٰ - فرعون سے ٹکراؤ",
       nameArabic: "قصة موسى - مواجهة فرعون",
       color: "#EF4444",
       icon: "Zap",
@@ -103,6 +109,7 @@ export const ONTOLOGY = {
 
     musaStoryPart4: {
       name: "Story of Musa - Rebutting Pharaoh",
+      nameUr: "قصۂ موسیٰ - فرعون کی تردید",
       nameArabic: "قصة موسى - رد موسى على فرعون",
       color: "#3B82F6",
       icon: "MessageCircle",
@@ -121,6 +128,7 @@ export const ONTOLOGY = {
 
     musaStoryPart5: {
       name: "Story of Musa - Signs and Magicians",
+      nameUr: "قصۂ موسیٰ - نشانیاں اور جادوگر",
       nameArabic: "قصة موسى - الآيات والسحرة",
       color: "#8B5CF6",
       icon: "Sparkles",
@@ -138,6 +146,7 @@ export const ONTOLOGY = {
 
     musaStoryPart6: {
       name: "Story of Musa - The Contest",
+      nameUr: "قصۂ موسیٰ - مقابلہ",
       nameArabic: "قصة موسى - المباراة",
       color: "#F59E0B",
       icon: "Zap",
@@ -156,6 +165,7 @@ export const ONTOLOGY = {
 
     musaStoryPart7: {
       name: "Story of Musa - Magicians' Submission",
+      nameUr: "قصۂ موسیٰ - جادوگروں کا ایمان",
       nameArabic: "قصة موسى - إسلام السحرة",
       color: "#22C55E",
       icon: "Heart",
@@ -173,6 +183,7 @@ export const ONTOLOGY = {
 
     musaStoryPart8: {
       name: "Story of Musa - Magicians' Firmness",
+      nameUr: "قصۂ موسیٰ - جادوگروں کی استقامت",
       nameArabic: "قصة موسى - ثبات السحرة",
       color: "#10B981",
       icon: "Shield",
@@ -186,6 +197,7 @@ export const ONTOLOGY = {
 
     musaStoryPart9: {
       name: "Story of Musa - Exodus",
+      nameUr: "قصۂ موسیٰ - ہجرت",
       nameArabic: "قصة موسى - الخروج",
       color: "#06B6D4",
       icon: "Globe",
@@ -204,6 +216,7 @@ export const ONTOLOGY = {
 
     musaStoryPart10: {
       name: "Story of Musa - Sea Crossing",
+      nameUr: "قصۂ موسیٰ - سمندر پار کرنا",
       nameArabic: "قصة موسى - عبور البحر",
       color: "#06B6D4",
       icon: "Sparkles",
@@ -223,6 +236,7 @@ export const ONTOLOGY = {
 
     ibrahimStory: {
       name: "Story of Ibrahim",
+      nameUr: "قصۂ ابراہیم",
       nameArabic: "قصة إبراهيم",
       color: "#3B82F6",
       icon: "Book",
@@ -241,6 +255,7 @@ export const ONTOLOGY = {
 
     ibrahimPraise: {
       name: "Ibrahim's Praise of Allah",
+      nameUr: "ابراہیم کی اللہ کی حمد",
       nameArabic: "ثناء إبراهيم على الله",
       color: "#F59E0B",
       icon: "Star",
@@ -255,6 +270,7 @@ export const ONTOLOGY = {
 
     ibrahimDua: {
       name: "Ibrahim's Supplication",
+      nameUr: "ابراہیم کی دعا",
       nameArabic: "دعاء إبراهيم",
       color: "#8B5CF6",
       icon: "Heart",
@@ -271,6 +287,7 @@ export const ONTOLOGY = {
 
     paradiseAndHell: {
       name: "Paradise and Hell",
+      nameUr: "جنت اور جہنم",
       nameArabic: "الجنة والنار",
       color: "#22C55E",
       icon: "Sparkles",
@@ -286,6 +303,7 @@ export const ONTOLOGY = {
 
     hellDialogue: {
       name: "Dialogue in Hell",
+      nameUr: "جہنم میں مکالمہ",
       nameArabic: "حوار في جهنم",
       color: "#EF4444",
       icon: "AlertTriangle",
@@ -302,6 +320,7 @@ export const ONTOLOGY = {
 
     nuhStory: {
       name: "Story of Nuh",
+      nameUr: "قصۂ نوح",
       nameArabic: "قصة نوح",
       color: "#3B82F6",
       icon: "Book",
@@ -328,6 +347,7 @@ export const ONTOLOGY = {
 
     hudStory: {
       name: "Story of Hud",
+      nameUr: "قصۂ ہود",
       nameArabic: "قصة هود",
       color: "#3B82F6",
       icon: "Book",
@@ -353,6 +373,7 @@ export const ONTOLOGY = {
 
     salihStory: {
       name: "Story of Salih",
+      nameUr: "قصۂ صالح",
       nameArabic: "قصة صالح",
       color: "#3B82F6",
       icon: "Book",
@@ -377,6 +398,7 @@ export const ONTOLOGY = {
 
     lutStory: {
       name: "Story of Lut",
+      nameUr: "قصۂ لوط",
       nameArabic: "قصة لوط",
       color: "#EF4444",
       icon: "AlertTriangle",
@@ -399,6 +421,7 @@ export const ONTOLOGY = {
 
     shuaybStory: {
       name: "Story of Shu'ayb",
+      nameUr: "قصۂ شعیب",
       nameArabic: "قصة شعيب",
       color: "#10B981",
       icon: "Scale",
@@ -423,6 +446,7 @@ export const ONTOLOGY = {
 
     quranRevelation: {
       name: "Quran's Revelation",
+      nameUr: "قرآن کا نزول",
       nameArabic: "نزول القرآن",
       color: "#F59E0B",
       icon: "Book",
@@ -438,6 +462,7 @@ export const ONTOLOGY = {
 
     nonArabMessenger: {
       name: "Hypothetical Non-Arab Messenger",
+      nameUr: "فرضی غیر عرب رسول",
       nameArabic: "لو كان المرسل أعجمياً",
       color: "#8B5CF6",
       icon: "MessageCircle",
@@ -452,6 +477,7 @@ export const ONTOLOGY = {
 
     warningAndDestruction: {
       name: "Warning and Destruction",
+      nameUr: "تنبیہ اور تباہی",
       nameArabic: "الإنذار والإهلاك",
       color: "#EF4444",
       icon: "AlertTriangle",
@@ -468,6 +494,7 @@ export const ONTOLOGY = {
 
     quranNotFromDevils: {
       name: "Quran Not from Devils",
+      nameUr: "قرآن شیاطین کی طرف سے نہیں",
       nameArabic: "ليس القرآن من الشياطين",
       color: "#8B5CF6",
       icon: "Shield",
@@ -480,6 +507,7 @@ export const ONTOLOGY = {
 
     warningAgainstIdolatry: {
       name: "Warning Against Idolatry",
+      nameUr: "بت پرستی سے خبردار",
       nameArabic: "التحذير من الشرك",
       color: "#EF4444",
       icon: "AlertTriangle",
@@ -498,6 +526,7 @@ export const ONTOLOGY = {
 
     poetsContrast: {
       name: "The Poets - Final Section",
+      nameUr: "شعراء - آخری حصہ",
       nameArabic: "الشعراء - الخاتمة",
       color: "#EC4899",
       icon: "MessageCircle",
@@ -513,6 +542,7 @@ export const ONTOLOGY = {
 
     exceptedPoets: {
       name: "Excepted Righteous Poets",
+      nameUr: "مستثنیٰ نیکوکار شعراء",
       nameArabic: "استثناء الشعراء الصالحين",
       color: "#22C55E",
       icon: "Heart",

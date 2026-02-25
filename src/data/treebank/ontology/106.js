@@ -14,6 +14,7 @@ export const ONTOLOGY = {
   categories: {
     tribalUnity: {
       name: "Tribal Unity and Familiarity",
+      nameUr: "قبائلی اتحاد اور مانوسیت",
       nameArabic: "إيلاف قريش",
       color: '#3B82F6',
       icon: 'Users',
@@ -38,6 +39,7 @@ export const ONTOLOGY = {
 
     tradeJourneys: {
       name: "Annual Trade Journeys",
+      nameUr: "سالانہ تجارتی سفر",
       nameArabic: "رحلتي الشتاء والصيف",
       color: '#06B6D4',
       icon: 'Compass',
@@ -62,6 +64,7 @@ export const ONTOLOGY = {
 
     divineObligations: {
       name: "Worship as Gratitude",
+      nameUr: "شکرانے کی عبادت",
       nameArabic: "العبادة شكراً للنعم",
       color: '#8B5CF6',
       icon: 'Heart',
@@ -79,6 +82,7 @@ export const ONTOLOGY = {
 
     divineBlessings: {
       name: "Two Fundamental Blessings",
+      nameUr: "دو بنیادی نعمتیں",
       nameArabic: "نعمتا الطعام والأمن",
       color: '#10B981',
       icon: 'Sparkles',

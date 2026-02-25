@@ -14,6 +14,7 @@ export const ONTOLOGY = {
   categories: {
     cosmicOaths: {
       name: "The Celestial Oath",
+      nameUr: "آسمانی قسم",
       nameArabic: "القسم السماوي",
       color: '#8B5CF6',
       icon: 'Star',
@@ -26,6 +27,7 @@ export const ONTOLOGY = {
 
     peopleOfTrench: {
       name: "People of the Trench",
+      nameUr: "اصحابِ اخدود (خندق والے)",
       nameArabic: "أصحاب الأخدود",
       color: '#EF4444',
       icon: 'AlertTriangle',
@@ -39,6 +41,7 @@ export const ONTOLOGY = {
 
     believersCrime: {
       name: "The 'Crime' of Belief",
+      nameUr: "ایمان کا 'جرم'",
       nameArabic: "جريمة الإيمان",
       color: '#10B981',
       icon: 'Heart',
@@ -50,6 +53,7 @@ export const ONTOLOGY = {
 
     divineJustice: {
       name: "Divine Retribution",
+      nameUr: "الٰہی انتقام",
       nameArabic: "العدل الإلهي",
       color: '#F59E0B',
       icon: 'Scale',
@@ -62,6 +66,7 @@ export const ONTOLOGY = {
 
     divineAttributes: {
       name: "Allah's Attributes",
+      nameUr: "اللہ کی صفات",
       nameArabic: "صفات الله",
       color: '#F59E0B',
       icon: 'Crown',
@@ -76,6 +81,7 @@ export const ONTOLOGY = {
 
     historicalWarning: {
       name: "Historical Examples",
+      nameUr: "تاریخی عبرتیں",
       nameArabic: "العبرة التاريخية",
       color: '#3B82F6',
       icon: 'Book',
@@ -87,6 +93,7 @@ export const ONTOLOGY = {
 
     quranPreservation: {
       name: "Preserved Quran",
+      nameUr: "محفوظ قرآن",
       nameArabic: "القرآن المحفوظ",
       color: '#3B82F6',
       icon: 'Shield',

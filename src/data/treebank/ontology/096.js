@@ -14,6 +14,7 @@ export const ONTOLOGY = {
   categories: {
     divineCommand: {
       name: "The Command to Read",
+      nameUr: "پڑھنے کا حکم",
       nameArabic: "الأمر بالقراءة",
       color: '#3B82F6',
       icon: 'Book',
@@ -38,6 +39,7 @@ export const ONTOLOGY = {
 
     humanCreation: {
       name: "Human Creation",
+      nameUr: "انسانی تخلیق",
       nameArabic: "خلق الإنسان",
       color: '#06B6D4',
       icon: 'Users',
@@ -62,6 +64,7 @@ export const ONTOLOGY = {
 
     divineTeaching: {
       name: "Divine Knowledge",
+      nameUr: "الٰہی علم",
       nameArabic: "التعليم الإلهي",
       color: '#F59E0B',
       icon: 'Sparkles',
@@ -86,6 +89,7 @@ export const ONTOLOGY = {
 
     humanArrogance: {
       name: "Human Transgression",
+      nameUr: "انسانی سرکشی",
       nameArabic: "طغيان الإنسان",
       color: '#EF4444',
       icon: 'AlertTriangle',
@@ -117,6 +121,7 @@ export const ONTOLOGY = {
 
     abuJahlIncident: {
       name: "The Opposition",
+      nameUr: "مخالفت",
       nameArabic: "المعارضة",
       color: '#EF4444',
       icon: 'Shield',
@@ -148,6 +153,7 @@ export const ONTOLOGY = {
 
     divineWarning: {
       name: "Divine Punishment",
+      nameUr: "الٰہی سزا",
       nameArabic: "العقوبة الإلهية",
       color: '#EF4444',
       icon: 'Zap',
@@ -179,6 +185,7 @@ export const ONTOLOGY = {
 
     divineGuidance: {
       name: "The Path Forward",
+      nameUr: "آگے کا راستہ",
       nameArabic: "السبيل",
       color: '#10B981',
       icon: 'Compass',

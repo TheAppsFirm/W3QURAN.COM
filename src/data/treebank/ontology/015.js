@@ -20,6 +20,7 @@ export const ONTOLOGY = {
       color: '#EC4899',
       icon: 'Globe',
       name: "Quran's Divine Preservation",
+      nameUr: "قرآن کی الٰہی حفاظت",
       nameArabic: "حفظ القرآن الإلهي",
       description: { en: "Allah's guarantee to protect the Quran from corruption", ur: "قرآن کو بگاڑ سے محفوظ رکھنے کی اللہ کی ضمانت" },
       concepts: [
@@ -51,6 +52,7 @@ export const ONTOLOGY = {
       color: '#10B981',
       icon: 'Book',
       name: "Creation of Humanity",
+      nameUr: "انسان کی تخلیق",
       nameArabic: "خلق الإنسان",
       description: { en: "The miraculous creation of Adam from clay", ur: "مٹی سے آدم کی معجزانہ تخلیق" },
       concepts: [
@@ -82,6 +84,7 @@ export const ONTOLOGY = {
       color: '#EC4899',
       icon: 'Globe',
       name: "Iblis's Arrogance and Promise",
+      nameUr: "ابلیس کا تکبر اور عہد",
       nameArabic: "كبر إبليس ووعده",
       description: { en: "The devil's refusal, reasoning, and vow to mislead humanity", ur: "شیطان کا انکار، اس کی دلیل اور انسانیت کو گمراہ کرنے کی قسم" },
       concepts: [
@@ -127,6 +130,7 @@ export const ONTOLOGY = {
       color: '#8B5CF6',
       icon: 'Heart',
       name: "Destroyed Nations",
+      nameUr: "تباہ شدہ قومیں",
       nameArabic: "الأمم المهلكة",
       description: { en: "Stories of nations who rejected their messengers and were destroyed", ur: "ان قوموں کے واقعات جنہوں نے اپنے رسولوں کو جھٹلایا اور تباہ ہوئیں" },
       concepts: [
@@ -165,6 +169,7 @@ export const ONTOLOGY = {
       color: '#14B8A6',
       icon: 'Crown',
       name: "Angels and Revelation",
+      nameUr: "فرشتے اور وحی",
       nameArabic: "الملائكة والوحي",
       description: { en: "The role of angels in delivering divine messages", ur: "الٰہی پیغامات پہنچانے میں فرشتوں کا کردار" },
       concepts: [
@@ -196,6 +201,7 @@ export const ONTOLOGY = {
       color: '#EF4444',
       icon: 'Users',
       name: "Consolation for the Prophet",
+      nameUr: "نبی ﷺ کی تسلی",
       nameArabic: "تسلية النبي",
       description: { en: "Divine comfort to Prophet Muhammad facing rejection", ur: "نبی محمد ﷺ کو انکار کا سامنا کرتے ہوئے الٰہی تسلی" },
       concepts: [
@@ -234,6 +240,7 @@ export const ONTOLOGY = {
       color: '#F59E0B',
       icon: 'Star',
       name: "Divine Creative Power",
+      nameUr: "الٰہی تخلیقی قدرت",
       nameArabic: "القدرة الخالقة",
       description: { en: "Signs of Allah's creative power in the universe", ur: "کائنات میں اللہ کی تخلیقی قدرت کی نشانیاں" },
       concepts: [
@@ -272,6 +279,7 @@ export const ONTOLOGY = {
       color: '#06B6D4',
       icon: 'Compass',
       name: "Creation of Jinn",
+      nameUr: "جنات کی تخلیق",
       nameArabic: "خلق الجن",
       description: { en: "The creation of jinn from fire before humans", ur: "انسانوں سے پہلے آگ سے جنات کی تخلیق" },
       concepts: [

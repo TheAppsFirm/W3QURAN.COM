@@ -14,6 +14,7 @@ export const ONTOLOGY = {
   categories: {
     divineAttributes: {
       name: "Divine Attributes",
+      nameUr: "الٰہی صفات",
       nameAr: "صفات الإلهية",
       color: '#F59E0B',
       icon: 'Star',
@@ -27,6 +28,7 @@ export const ONTOLOGY = {
     },
     propheticMission: {
       name: "Mission of the Prophet",
+      nameUr: "نبی ﷺ کی رسالت",
       nameAr: "رسالة النبي",
       color: '#3B82F6',
       icon: 'Book',
@@ -41,6 +43,7 @@ export const ONTOLOGY = {
     },
     scriptureKnowledge: {
       name: "Scripture Without Action",
+      nameUr: "بے عمل علم",
       nameAr: "العلم بلا عمل",
       color: '#EF4444',
       icon: 'AlertTriangle',
@@ -53,6 +56,7 @@ export const ONTOLOGY = {
     },
     fridayPrayer: {
       name: "Friday Prayer Obligations",
+      nameUr: "نمازِ جمعہ کے احکام",
       nameAr: "أحكام الجمعة",
       color: '#8B5CF6',
       icon: 'Users',
@@ -66,6 +70,7 @@ export const ONTOLOGY = {
     },
     worldlyDistraction: {
       name: "Worldly Distractions",
+      nameUr: "دنیاوی مشغولیات",
       nameAr: "الملهيات الدنيوية",
       color: '#EC4899',
       icon: 'AlertTriangle',

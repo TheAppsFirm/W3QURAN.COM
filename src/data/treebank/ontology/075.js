@@ -14,6 +14,7 @@ export const ONTOLOGY = {
   categories: {
     divineOaths: {
       name: "Divine Oaths",
+      nameUr: "الہٰی قسمیں",
       nameArabic: "القسم الإلهي",
       color: '#F59E0B',
       icon: 'Star',
@@ -25,6 +26,7 @@ export const ONTOLOGY = {
 
     resurrectionProof: {
       name: "Proof of Resurrection",
+      nameUr: "قیامت کا ثبوت",
       nameArabic: "برهان البعث",
       color: '#3B82F6',
       icon: 'Globe',
@@ -39,6 +41,7 @@ export const ONTOLOGY = {
 
     humanDefiance: {
       name: "Human Defiance",
+      nameUr: "انسان کی سرکشی",
       nameArabic: "عناد الإنسان",
       color: '#EF4444',
       icon: 'AlertTriangle',
@@ -52,6 +55,7 @@ export const ONTOLOGY = {
 
     cosmicSigns: {
       name: "Cosmic Signs of Resurrection",
+      nameUr: "قیامت کی کائناتی نشانیاں",
       nameArabic: "علامات كونية للقيامة",
       color: '#8B5CF6',
       icon: 'Sun',
@@ -65,6 +69,7 @@ export const ONTOLOGY = {
 
     noEscape: {
       name: "No Escape",
+      nameUr: "کوئی فرار نہیں",
       nameArabic: "لا مفر",
       color: '#EF4444',
       icon: 'Shield',
@@ -76,6 +81,7 @@ export const ONTOLOGY = {
 
     selfWitness: {
       name: "Self as Witness",
+      nameUr: "انسان خود پر گواہ",
       nameArabic: "الإنسان شاهد على نفسه",
       color: '#06B6D4',
       icon: 'Eye',
@@ -88,6 +94,7 @@ export const ONTOLOGY = {
 
     quranRevelation: {
       name: "Quran Revelation",
+      nameUr: "نزولِ قرآن",
       nameArabic: "نزول القرآن",
       color: '#3B82F6',
       icon: 'Book',
@@ -101,6 +108,7 @@ export const ONTOLOGY = {
 
     twoFaces: {
       name: "Two Types of Faces",
+      nameUr: "دو قسم کے چہرے",
       nameArabic: "نوعان من الوجوه",
       color: '#10B981',
       icon: 'Users',
@@ -114,6 +122,7 @@ export const ONTOLOGY = {
 
     deathScene: {
       name: "The Death Scene",
+      nameUr: "موت کا منظر",
       nameArabic: "مشهد الموت",
       color: '#EC4899',
       icon: 'Heart',
@@ -128,6 +137,7 @@ export const ONTOLOGY = {
 
     disbelieverProfile: {
       name: "Profile of Disbeliever",
+      nameUr: "کافر کا حال",
       nameArabic: "صورة الكافر",
       color: '#EF4444',
       icon: 'AlertTriangle',

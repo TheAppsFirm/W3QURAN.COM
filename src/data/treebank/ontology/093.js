@@ -14,6 +14,7 @@ export const ONTOLOGY = {
   categories: {
     divineOaths: {
       name: "Divine Oaths",
+      nameUr: "الٰہی قسمیں",
       nameArabic: "القسم الإلهي",
       color: '#F59E0B',
       icon: 'Sun',
@@ -38,6 +39,7 @@ export const ONTOLOGY = {
 
     divineReassurance: {
       name: "Divine Reassurance",
+      nameUr: "الٰہی تسلی",
       nameArabic: "التطمين الإلهي",
       color: '#8B5CF6',
       icon: 'Heart',
@@ -62,6 +64,7 @@ export const ONTOLOGY = {
 
     futurePromises: {
       name: "Promises of the Future",
+      nameUr: "مستقبل کے وعدے",
       nameArabic: "وعود المستقبل",
       color: '#10B981',
       icon: 'Sparkles',
@@ -86,6 +89,7 @@ export const ONTOLOGY = {
 
     pastBlessings: {
       name: "Past Blessings Recalled",
+      nameUr: "ماضی کی نعمتوں کی یاد",
       nameArabic: "النعم الماضية",
       color: '#3B82F6',
       icon: 'Star',
@@ -117,6 +121,7 @@ export const ONTOLOGY = {
 
     ethicalCommands: {
       name: "Ethical Commands",
+      nameUr: "اخلاقی احکامات",
       nameArabic: "الأوامر الأخلاقية",
       color: '#22C55E',
       icon: 'Users',

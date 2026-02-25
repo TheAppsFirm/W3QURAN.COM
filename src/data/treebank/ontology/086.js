@@ -14,6 +14,7 @@ export const ONTOLOGY = {
   categories: {
     cosmicOaths: {
       name: "The Cosmic Oaths",
+      nameUr: "کائناتی قسمیں",
       nameArabic: "القسم الكوني",
       color: '#8B5CF6',
       icon: 'Star',
@@ -25,6 +26,7 @@ export const ONTOLOGY = {
 
     divineWatch: {
       name: "Divine Guardianship",
+      nameUr: "الٰہی نگہبانی",
       nameArabic: "الحفظ الإلهي",
       color: '#F59E0B',
       icon: 'Eye',
@@ -35,6 +37,7 @@ export const ONTOLOGY = {
 
     humanCreation: {
       name: "Human Origin",
+      nameUr: "انسانی تخلیق",
       nameArabic: "خلق الإنسان",
       color: '#06B6D4',
       icon: 'Users',
@@ -47,6 +50,7 @@ export const ONTOLOGY = {
 
     judgmentDay: {
       name: "Day of Secrets",
+      nameUr: "رازوں کے کھلنے کا دن",
       nameArabic: "يوم السرائر",
       color: '#EF4444',
       icon: 'AlertTriangle',
@@ -58,6 +62,7 @@ export const ONTOLOGY = {
 
     naturalOaths: {
       name: "Sky and Earth Testimony",
+      nameUr: "آسمان و زمین کی گواہی",
       nameArabic: "شهادة السماء والأرض",
       color: '#06B6D4',
       icon: 'Globe',
@@ -69,6 +74,7 @@ export const ONTOLOGY = {
 
     quranNature: {
       name: "Nature of Quran",
+      nameUr: "قرآن کی حقیقت",
       nameArabic: "طبيعة القرآن",
       color: '#3B82F6',
       icon: 'Book',
@@ -80,6 +86,7 @@ export const ONTOLOGY = {
 
     divineCounter: {
       name: "Allah's Counter-Plan",
+      nameUr: "اللہ کی تدبیر",
       nameArabic: "كيد الله",
       color: '#F59E0B',
       icon: 'Shield',

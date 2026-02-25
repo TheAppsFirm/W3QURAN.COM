@@ -14,6 +14,7 @@ export const ONTOLOGY = {
   categories: {
     socialSins: {
       name: "Sins of the Tongue and Gesture",
+      nameUr: "زبان اور اشارے کے گناہ",
       nameArabic: "آفات اللسان والإشارة",
       color: '#EF4444',
       icon: 'MessageCircle',
@@ -38,6 +39,7 @@ export const ONTOLOGY = {
 
     materialismSins: {
       name: "Sins of Wealth Obsession",
+      nameUr: "مال کی محبت کے گناہ",
       nameArabic: "حب المال",
       color: '#F59E0B',
       icon: 'AlertTriangle',
@@ -62,6 +64,7 @@ export const ONTOLOGY = {
 
     divineJustice: {
       name: "Poetic Divine Justice",
+      nameUr: "شاعرانہ الٰہی انصاف",
       nameArabic: "العدالة الإلهية",
       color: '#8B5CF6',
       icon: 'Scale',
@@ -86,6 +89,7 @@ export const ONTOLOGY = {
 
     hellDescription: {
       name: "Nature of Hell-Fire",
+      nameUr: "جہنم کی آگ کی نوعیت",
       nameArabic: "وصف النار",
       color: '#DC2626',
       icon: 'Zap',

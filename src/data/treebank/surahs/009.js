@@ -420,7 +420,25 @@ const SURAH_9_TREEBANK = {
       { id: '9:12:17', arabic: 'لَعَلَّهُمْ', transliteration: 'laʿallahum', pos: ['N'], posLabel: 'N', root: null, meaning: { en: 'so that they may', ur: 'تاکہ وہ may' } },
       { id: '9:12:18', arabic: 'يَنتَهُونَ', transliteration: 'yantahūna', pos: ['V'], posLabel: 'V', root: null, meaning: { en: 'cease', ur: 'cease' } }
     ],
-    structure: { relationships: [] }
+    structure: { relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' },
+        { from: 4, to: 5, label: 'تعلق' },
+        { from: 5, to: 6, label: 'تعلق' },
+        { from: 6, to: 7, label: 'تعلق' },
+        { from: 7, to: 8, label: 'تعلق' },
+        { from: 8, to: 9, label: 'تعلق' },
+        { from: 9, to: 10, label: 'تعلق' },
+        { from: 10, to: 11, label: 'تعلق' },
+        { from: 11, to: 12, label: 'تعلق' },
+        { from: 12, to: 13, label: 'تعلق' },
+        { from: 13, to: 14, label: 'تعلق' },
+        { from: 14, to: 15, label: 'تعلق' },
+        { from: 15, to: 16, label: 'تعلق' },
+        { from: 16, to: 17, label: 'تعلق' },
+        { from: 17, to: 18, label: 'تعلق' }
+      ] }
   },
   13: {
     text: 'أَلَا تُقَٰتِلُونَ قَوْمًۭا نَّكَثُوٓا۟ أَيْمَٰنَهُمْ وَهَمُّوا۟ بِإِخْرَاجِ ٱلرَّسُولِ وَهُم بَدَءُوكُمْ أَوَّلَ مَرَّةٍ ۚ أَتَخْشَوْنَهُمْ ۚ فَٱللَّهُ أَحَقُّ أَن تَخْشَوْهُ إِن كُنتُم مُّؤْمِنِينَ',
@@ -450,7 +468,27 @@ const SURAH_9_TREEBANK = {
       { id: '9:13:19', arabic: 'كُنتُم', transliteration: 'kuntum', pos: ['N'], posLabel: 'N', root: null, meaning: { en: 'you are', ur: 'تم ہیں' } },
       { id: '9:13:20', arabic: 'مُّؤْمِنِينَ', transliteration: 'mu\'minīna', pos: ['N'], posLabel: 'N', root: null, meaning: { en: 'believers', ur: 'مومنین' } }
     ],
-    structure: { relationships: [] }
+    structure: { relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' },
+        { from: 4, to: 5, label: 'تعلق' },
+        { from: 5, to: 6, label: 'تعلق' },
+        { from: 6, to: 7, label: 'تعلق' },
+        { from: 7, to: 8, label: 'تعلق' },
+        { from: 8, to: 9, label: 'تعلق' },
+        { from: 9, to: 10, label: 'تعلق' },
+        { from: 10, to: 11, label: 'تعلق' },
+        { from: 11, to: 12, label: 'تعلق' },
+        { from: 12, to: 13, label: 'تعلق' },
+        { from: 13, to: 14, label: 'تعلق' },
+        { from: 14, to: 15, label: 'تعلق' },
+        { from: 15, to: 16, label: 'تعلق' },
+        { from: 16, to: 17, label: 'تعلق' },
+        { from: 17, to: 18, label: 'تعلق' },
+        { from: 18, to: 19, label: 'تعلق' },
+        { from: 19, to: 20, label: 'تعلق' }
+      ] }
   },
   14: {
     text: 'قَٰتِلُوهُمْ يُعَذِّبْهُمُ ٱللَّهُ بِأَيْدِيكُمْ وَيُخْزِهِمْ وَيَنصُرْكُمْ عَلَيْهِمْ وَيَشْفِ صُدُورَ قَوْمٍۢ مُّؤْمِنِينَ',
@@ -492,7 +530,10 @@ const SURAH_9_TREEBANK = {
       { id: '9:15:10', arabic: 'عَلِيمٌ', transliteration: 'ʿalīmun', pos: ['ADJ'], posLabel: 'ADJ', root: 'ع ل م', meaning: { en: '(is) All-Knower', ur: '(ہے) سب-Knower' } },
       { id: '9:15:11', arabic: 'حَكِيمٌ', transliteration: 'ḥakīmun', pos: ['ADJ'], posLabel: 'ADJ', root: 'ح ك م', meaning: { en: 'All-Wise', ur: 'حکمت والا' } }
     ],
-    structure: { relationships: [] }
+    structure: { relationships: [
+        { from: 6, to: 7, label: 'جار + مجرور' },
+        { from: 9, to: 10, label: 'موصوف + صفت' }
+      ] }
   },
   16: {
     text: 'أَمْ حَسِبْتُمْ أَن تُتْرَكُوا۟ وَلَمَّا يَعْلَمِ ٱللَّهُ ٱلَّذِينَ جَٰهَدُوا۟ مِنكُمْ وَلَمْ يَتَّخِذُوا۟ مِن دُونِ ٱللَّهِ وَلَا رَسُولِهِۦ وَلَا ٱلْمُؤْمِنِينَ وَلِيجَةًۭ ۚ وَٱللَّهُ خَبِيرٌۢ بِمَا تَعْمَلُونَ',
@@ -554,7 +595,25 @@ const SURAH_9_TREEBANK = {
       { id: '9:17:17', arabic: 'هُمْ', transliteration: 'hum', pos: ['PRON'], posLabel: 'PRON', root: null, meaning: { en: 'they', ur: 'وہ' } },
       { id: '9:17:18', arabic: 'خَـٰلِدُونَ', transliteration: 'khālidūna', pos: ['N'], posLabel: 'N', root: 'خ ل د', meaning: { en: '(will) abide forever', ur: '() abide forever' } }
     ],
-    structure: { relationships: [] }
+    structure: { relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' },
+        { from: 4, to: 5, label: 'تعلق' },
+        { from: 5, to: 6, label: 'تعلق' },
+        { from: 6, to: 7, label: 'تعلق' },
+        { from: 7, to: 8, label: 'تعلق' },
+        { from: 8, to: 9, label: 'تعلق' },
+        { from: 9, to: 10, label: 'تعلق' },
+        { from: 10, to: 11, label: 'تعلق' },
+        { from: 11, to: 12, label: 'تعلق' },
+        { from: 12, to: 13, label: 'تعلق' },
+        { from: 13, to: 14, label: 'تعلق' },
+        { from: 14, to: 15, label: 'تعلق' },
+        { from: 15, to: 16, label: 'تعلق' },
+        { from: 16, to: 17, label: 'تعلق' },
+        { from: 17, to: 18, label: 'تعلق' }
+      ] }
   },
   18: {
     text: 'إِنَّمَا يَعْمُرُ مَسَٰجِدَ ٱللَّهِ مَنْ ءَامَنَ بِٱللَّهِ وَٱلْيَوْمِ ٱلْءَاخِرِ وَأَقَامَ ٱلصَّلَوٰةَ وَءَاتَى ٱلزَّكَوٰةَ وَلَمْ يَخْشَ إِلَّا ٱللَّهَ ۖ فَعَسَىٰٓ أُو۟لَٰٓئِكَ أَن يَكُونُوا۟ مِنَ ٱلْمُهْتَدِينَ',
@@ -621,7 +680,31 @@ const SURAH_9_TREEBANK = {
       { id: '9:19:23', arabic: 'ٱلْقَوْمَ', transliteration: 'l-qawma', pos: ['N'], posLabel: 'N', root: null, meaning: { en: 'the people ', ur: 'لوگ ' } },
       { id: '9:19:24', arabic: 'ٱلظَّـٰلِمِينَ', transliteration: 'l-ẓālimīna', pos: ['N'], posLabel: 'N', root: null, meaning: { en: 'the wrongdoers', ur: 'ظالم' } }
     ],
-    structure: { relationships: [] }
+    structure: { relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' },
+        { from: 4, to: 5, label: 'تعلق' },
+        { from: 5, to: 6, label: 'تعلق' },
+        { from: 6, to: 7, label: 'تعلق' },
+        { from: 7, to: 8, label: 'تعلق' },
+        { from: 8, to: 9, label: 'تعلق' },
+        { from: 9, to: 10, label: 'تعلق' },
+        { from: 10, to: 11, label: 'تعلق' },
+        { from: 11, to: 12, label: 'تعلق' },
+        { from: 12, to: 13, label: 'تعلق' },
+        { from: 13, to: 14, label: 'تعلق' },
+        { from: 14, to: 15, label: 'تعلق' },
+        { from: 15, to: 16, label: 'تعلق' },
+        { from: 16, to: 17, label: 'تعلق' },
+        { from: 17, to: 18, label: 'تعلق' },
+        { from: 18, to: 19, label: 'تعلق' },
+        { from: 19, to: 20, label: 'تعلق' },
+        { from: 20, to: 21, label: 'تعلق' },
+        { from: 21, to: 22, label: 'تعلق' },
+        { from: 22, to: 23, label: 'تعلق' },
+        { from: 23, to: 24, label: 'تعلق' }
+      ] }
   },
   20: {
     text: 'ٱلَّذِينَ ءَامَنُوا۟ وَهَاجَرُوا۟ وَجَٰهَدُوا۟ فِى سَبِيلِ ٱللَّهِ بِأَمْوَٰلِهِمْ وَأَنفُسِهِمْ أَعْظَمُ دَرَجَةً عِندَ ٱللَّهِ ۚ وَأُو۟لَٰٓئِكَ هُمُ ٱلْفَآئِزُونَ',
@@ -667,7 +750,9 @@ const SURAH_9_TREEBANK = {
       { id: '9:21:9', arabic: 'نَعِيمٌۭ', transliteration: 'naʿīmun', pos: ['N'], posLabel: 'N', root: null, meaning: { en: '(is) bliss', ur: '(ہے) bliss' } },
       { id: '9:21:10', arabic: 'مُّقِيمٌ', transliteration: 'muqīmun', pos: ['ADJ'], posLabel: 'ADJ', root: null, meaning: { en: 'enduring', ur: 'enduring' } }
     ],
-    structure: { relationships: [] }
+    structure: { relationships: [
+        { from: 9, to: 10, label: 'موصوف + صفت' }
+      ] }
   },
   22: {
     text: 'خَٰلِدِينَ فِيهَآ أَبَدًا ۚ إِنَّ ٱللَّهَ عِندَهُۥٓ أَجْرٌ عَظِيمٌۭ',
@@ -685,7 +770,15 @@ const SURAH_9_TREEBANK = {
       { id: '9:22:7', arabic: 'أَجْرٌ', transliteration: 'ajrun', pos: ['N'], posLabel: 'N', root: null, meaning: { en: '(is) a reward', ur: '(ہے) ایک اجر/ثواب' } },
       { id: '9:22:8', arabic: 'عَظِيمٌۭ', transliteration: 'ʿaẓīmun', pos: ['N'], posLabel: 'N', root: 'ع ظ م', meaning: { en: 'great', ur: 'بڑا/عظیم' } }
     ],
-    structure: { relationships: [] }
+    structure: { relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' },
+        { from: 4, to: 5, label: 'تعلق' },
+        { from: 5, to: 6, label: 'تعلق' },
+        { from: 6, to: 7, label: 'تعلق' },
+        { from: 7, to: 8, label: 'تعلق' }
+      ] }
   },
   23: {
     text: 'يَٰٓأَيُّهَا ٱلَّذِينَ ءَامَنُوا۟ لَا تَتَّخِذُوٓا۟ ءَابَآءَكُمْ وَإِخْوَٰنَكُمْ أَوْلِيَآءَ إِنِ ٱسْتَحَبُّوا۟ ٱلْكُفْرَ عَلَى ٱلْإِيمَٰنِ ۚ وَمَن يَتَوَلَّهُم مِّنكُمْ فَأُو۟لَٰٓئِكَ هُمُ ٱلظَّٰلِمُونَ',
@@ -840,7 +933,9 @@ const SURAH_9_TREEBANK = {
       { id: '9:27:11', arabic: 'غَفُورٌۭ', transliteration: 'ghafūrun', pos: ['N'], posLabel: 'N', root: 'غ ف ر', meaning: { en: '(is) Oft-Forgiving', ur: '(ہے) Oft-بخشنے والا' } },
       { id: '9:27:12', arabic: 'رَّحِيمٌۭ', transliteration: 'raḥīmun', pos: ['N'], posLabel: 'N', root: null, meaning: { en: 'Most Merciful', ur: 'نہایت مہربان' } }
     ],
-    structure: { relationships: [] }
+    structure: { relationships: [
+        { from: 7, to: 8, label: 'جار + مجرور' }
+      ] }
   },
   28: {
     text: 'يَٰٓأَيُّهَا ٱلَّذِينَ ءَامَنُوٓا۟ إِنَّمَا ٱلْمُشْرِكُونَ نَجَسٌۭ فَلَا يَقْرَبُوا۟ ٱلْمَسْجِدَ ٱلْحَرَامَ بَعْدَ عَامِهِمْ هَٰذَا ۚ وَإِنْ خِفْتُمْ عَيْلَةًۭ فَسَوْفَ يُغْنِيكُمُ ٱللَّهُ مِن فَضْلِهِۦٓ إِن شَآءَ ۚ إِنَّ ٱللَّهَ عَلِيمٌ حَكِيمٌۭ',
@@ -982,7 +1077,30 @@ const SURAH_9_TREEBANK = {
       { id: '9:31:22', arabic: 'عَمَّا', transliteration: 'ʿammā', pos: ['N'], posLabel: 'N', root: null, meaning: { en: 'from what', ur: 'سے کیا/جو' } },
       { id: '9:31:23', arabic: 'يُشْرِكُونَ', transliteration: 'yush\'rikūna', pos: ['V'], posLabel: 'V', root: null, meaning: { en: 'they associate (with Him)', ur: 'وہ associate (ساتھ Him)' } }
     ],
-    structure: { relationships: [] }
+    structure: { relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' },
+        { from: 4, to: 5, label: 'تعلق' },
+        { from: 5, to: 6, label: 'تعلق' },
+        { from: 6, to: 7, label: 'تعلق' },
+        { from: 7, to: 8, label: 'تعلق' },
+        { from: 8, to: 9, label: 'تعلق' },
+        { from: 9, to: 10, label: 'تعلق' },
+        { from: 10, to: 11, label: 'تعلق' },
+        { from: 11, to: 12, label: 'تعلق' },
+        { from: 12, to: 13, label: 'تعلق' },
+        { from: 13, to: 14, label: 'تعلق' },
+        { from: 14, to: 15, label: 'تعلق' },
+        { from: 15, to: 16, label: 'تعلق' },
+        { from: 16, to: 17, label: 'تعلق' },
+        { from: 17, to: 18, label: 'تعلق' },
+        { from: 18, to: 19, label: 'تعلق' },
+        { from: 19, to: 20, label: 'تعلق' },
+        { from: 20, to: 21, label: 'تعلق' },
+        { from: 21, to: 22, label: 'تعلق' },
+        { from: 22, to: 23, label: 'تعلق' }
+      ] }
   },
   32: {
     text: 'يُرِيدُونَ أَن يُطْفِـُٔوا۟ نُورَ ٱللَّهِ بِأَفْوَٰهِهِمْ وَيَأْبَى ٱللَّهُ إِلَّآ أَن يُتِمَّ نُورَهُۥ وَلَوْ كَرِهَ ٱلْكَٰفِرُونَ',
@@ -1144,7 +1262,43 @@ const SURAH_9_TREEBANK = {
       { id: '9:36:35', arabic: 'مَعَ', transliteration: 'maʿa', pos: ['N'], posLabel: 'N', root: null, meaning: { en: '(is) with', ur: '(ہے) ساتھ' } },
       { id: '9:36:36', arabic: 'ٱلْمُتَّقِينَ', transliteration: 'l-mutaqīna', pos: ['N'], posLabel: 'N', root: null, meaning: { en: 'the righteous', ur: ' نیک' } }
     ],
-    structure: { relationships: [] }
+    structure: { relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' },
+        { from: 4, to: 5, label: 'تعلق' },
+        { from: 5, to: 6, label: 'تعلق' },
+        { from: 6, to: 7, label: 'تعلق' },
+        { from: 7, to: 8, label: 'تعلق' },
+        { from: 8, to: 9, label: 'تعلق' },
+        { from: 9, to: 10, label: 'تعلق' },
+        { from: 10, to: 11, label: 'تعلق' },
+        { from: 11, to: 12, label: 'تعلق' },
+        { from: 12, to: 13, label: 'تعلق' },
+        { from: 13, to: 14, label: 'تعلق' },
+        { from: 14, to: 15, label: 'تعلق' },
+        { from: 15, to: 16, label: 'تعلق' },
+        { from: 16, to: 17, label: 'تعلق' },
+        { from: 17, to: 18, label: 'تعلق' },
+        { from: 18, to: 19, label: 'تعلق' },
+        { from: 19, to: 20, label: 'تعلق' },
+        { from: 20, to: 21, label: 'تعلق' },
+        { from: 21, to: 22, label: 'تعلق' },
+        { from: 22, to: 23, label: 'تعلق' },
+        { from: 23, to: 24, label: 'تعلق' },
+        { from: 24, to: 25, label: 'تعلق' },
+        { from: 25, to: 26, label: 'تعلق' },
+        { from: 26, to: 27, label: 'تعلق' },
+        { from: 27, to: 28, label: 'تعلق' },
+        { from: 28, to: 29, label: 'تعلق' },
+        { from: 29, to: 30, label: 'تعلق' },
+        { from: 30, to: 31, label: 'تعلق' },
+        { from: 31, to: 32, label: 'تعلق' },
+        { from: 32, to: 33, label: 'تعلق' },
+        { from: 33, to: 34, label: 'تعلق' },
+        { from: 34, to: 35, label: 'تعلق' },
+        { from: 35, to: 36, label: 'تعلق' }
+      ] }
   },
   37: {
     text: 'إِنَّمَا ٱلنَّسِىٓءُ زِيَادَةٌۭ فِى ٱلْكُفْرِ ۖ يُضَلُّ بِهِ ٱلَّذِينَ كَفَرُوا۟ يُحِلُّونَهُۥ عَامًۭا وَيُحَرِّمُونَهُۥ عَامًۭا لِّيُوَاطِـُٔوا۟ عِدَّةَ مَا حَرَّمَ ٱللَّهُ فَيُحِلُّوا۟ مَا حَرَّمَ ٱللَّهُ ۚ زُيِّنَ لَهُمْ سُوٓءُ أَعْمَٰلِهِمْ ۗ وَٱللَّهُ لَا يَهْدِى ٱلْقَوْمَ ٱلْكَٰفِرِينَ',
@@ -1327,7 +1481,22 @@ const SURAH_9_TREEBANK = {
       { id: '9:41:14', arabic: 'كُنتُمْ', transliteration: 'kuntum', pos: ['N'], posLabel: 'N', root: 'ك و ن', meaning: { en: 'you', ur: 'تم' } },
       { id: '9:41:15', arabic: 'تَعْلَمُونَ', transliteration: 'taʿlamūna', pos: ['V'], posLabel: 'V', root: null, meaning: { en: 'know', ur: 'جاننا' } }
     ],
-    structure: { relationships: [] }
+    structure: { relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' },
+        { from: 4, to: 5, label: 'تعلق' },
+        { from: 5, to: 6, label: 'تعلق' },
+        { from: 6, to: 7, label: 'تعلق' },
+        { from: 7, to: 8, label: 'تعلق' },
+        { from: 8, to: 9, label: 'تعلق' },
+        { from: 9, to: 10, label: 'تعلق' },
+        { from: 10, to: 11, label: 'تعلق' },
+        { from: 11, to: 12, label: 'تعلق' },
+        { from: 12, to: 13, label: 'تعلق' },
+        { from: 13, to: 14, label: 'تعلق' },
+        { from: 14, to: 15, label: 'تعلق' }
+      ] }
   },
   42: {
     text: 'لَوْ كَانَ عَرَضًۭا قَرِيبًۭا وَسَفَرًۭا قَاصِدًۭا لَّٱتَّبَعُوكَ وَلَٰكِنۢ بَعُدَتْ عَلَيْهِمُ ٱلشُّقَّةُ ۚ وَسَيَحْلِفُونَ بِٱللَّهِ لَوِ ٱسْتَطَعْنَا لَخَرَجْنَا مَعَكُمْ يُهْلِكُونَ أَنفُسَهُمْ وَٱللَّهُ يَعْلَمُ إِنَّهُمْ لَكَٰذِبُونَ',
@@ -1360,7 +1529,30 @@ const SURAH_9_TREEBANK = {
       { id: '9:42:22', arabic: 'إِنَّهُمْ', transliteration: 'innahum', pos: ['N'], posLabel: 'N', root: null, meaning: { en: '(that) indeed, they', ur: '(کہ) بےشک, وہ' } },
       { id: '9:42:23', arabic: 'لَكَـٰذِبُونَ', transliteration: 'lakādhibūna', pos: ['N'], posLabel: 'N', root: null, meaning: { en: '(are) surely liars', ur: '(ہیں) بےشک liars' } }
     ],
-    structure: { relationships: [] }
+    structure: { relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' },
+        { from: 4, to: 5, label: 'تعلق' },
+        { from: 5, to: 6, label: 'تعلق' },
+        { from: 6, to: 7, label: 'تعلق' },
+        { from: 7, to: 8, label: 'تعلق' },
+        { from: 8, to: 9, label: 'تعلق' },
+        { from: 9, to: 10, label: 'تعلق' },
+        { from: 10, to: 11, label: 'تعلق' },
+        { from: 11, to: 12, label: 'تعلق' },
+        { from: 12, to: 13, label: 'تعلق' },
+        { from: 13, to: 14, label: 'تعلق' },
+        { from: 14, to: 15, label: 'تعلق' },
+        { from: 15, to: 16, label: 'تعلق' },
+        { from: 16, to: 17, label: 'تعلق' },
+        { from: 17, to: 18, label: 'تعلق' },
+        { from: 18, to: 19, label: 'تعلق' },
+        { from: 19, to: 20, label: 'تعلق' },
+        { from: 20, to: 21, label: 'تعلق' },
+        { from: 21, to: 22, label: 'تعلق' },
+        { from: 22, to: 23, label: 'تعلق' }
+      ] }
   },
   43: {
     text: 'عَفَا ٱللَّهُ عَنكَ لِمَ أَذِنتَ لَهُمْ حَتَّىٰ يَتَبَيَّنَ لَكَ ٱلَّذِينَ صَدَقُوا۟ وَتَعْلَمَ ٱلْكَٰذِبِينَ',
@@ -1383,7 +1575,20 @@ const SURAH_9_TREEBANK = {
       { id: '9:43:12', arabic: 'وَتَعْلَمَ', transliteration: 'wataʿlama', pos: ['CONJ', 'V'], posLabel: 'CONJ+V', root: null, meaning: { en: 'and you knew', ur: 'اور تم جانا' } },
       { id: '9:43:13', arabic: 'ٱلْكَـٰذِبِينَ', transliteration: 'l-kādhibīna', pos: ['N'], posLabel: 'N', root: null, meaning: { en: 'the liars', ur: ' liars' } }
     ],
-    structure: { relationships: [] }
+    structure: { relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' },
+        { from: 4, to: 5, label: 'تعلق' },
+        { from: 5, to: 6, label: 'تعلق' },
+        { from: 6, to: 7, label: 'تعلق' },
+        { from: 7, to: 8, label: 'تعلق' },
+        { from: 8, to: 9, label: 'تعلق' },
+        { from: 9, to: 10, label: 'تعلق' },
+        { from: 10, to: 11, label: 'تعلق' },
+        { from: 11, to: 12, label: 'تعلق' },
+        { from: 12, to: 13, label: 'تعلق' }
+      ] }
   },
   44: {
     text: 'لَا يَسْتَـْٔذِنُكَ ٱلَّذِينَ يُؤْمِنُونَ بِٱللَّهِ وَٱلْيَوْمِ ٱلْءَاخِرِ أَن يُجَٰهِدُوا۟ بِأَمْوَٰلِهِمْ وَأَنفُسِهِمْ ۗ وَٱللَّهُ عَلِيمٌۢ بِٱلْمُتَّقِينَ',
@@ -1456,7 +1661,22 @@ const SURAH_9_TREEBANK = {
       { id: '9:46:14', arabic: 'مَعَ', transliteration: 'maʿa', pos: ['N'], posLabel: 'N', root: null, meaning: { en: 'with', ur: 'ساتھ' } },
       { id: '9:46:15', arabic: 'ٱلْقَـٰعِدِينَ', transliteration: 'l-qāʿidīna', pos: ['N'], posLabel: 'N', root: null, meaning: { en: 'those who sit', ur: 'جو لوگ sit' } }
     ],
-    structure: { relationships: [] }
+    structure: { relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' },
+        { from: 4, to: 5, label: 'تعلق' },
+        { from: 5, to: 6, label: 'تعلق' },
+        { from: 6, to: 7, label: 'تعلق' },
+        { from: 7, to: 8, label: 'تعلق' },
+        { from: 8, to: 9, label: 'تعلق' },
+        { from: 9, to: 10, label: 'تعلق' },
+        { from: 10, to: 11, label: 'تعلق' },
+        { from: 11, to: 12, label: 'تعلق' },
+        { from: 12, to: 13, label: 'تعلق' },
+        { from: 13, to: 14, label: 'تعلق' },
+        { from: 14, to: 15, label: 'تعلق' }
+      ] }
   },
   47: {
     text: 'لَوْ خَرَجُوا۟ فِيكُم مَّا زَادُوكُمْ إِلَّا خَبَالًۭا وَلَأَوْضَعُوا۟ خِلَٰلَكُمْ يَبْغُونَكُمُ ٱلْفِتْنَةَ وَفِيكُمْ سَمَّٰعُونَ لَهُمْ ۗ وَٱللَّهُ عَلِيمٌۢ بِٱلظَّٰلِمِينَ',
@@ -1483,7 +1703,24 @@ const SURAH_9_TREEBANK = {
       { id: '9:47:16', arabic: 'عَلِيمٌۢ', transliteration: 'ʿalīmun', pos: ['N'], posLabel: 'N', root: 'ع ل م', meaning: { en: '(is) All-Knower', ur: '(ہے) سب-Knower' } },
       { id: '9:47:17', arabic: 'بِٱلظَّـٰلِمِينَ', transliteration: 'bil-ẓālimīna', pos: ['P', 'N'], posLabel: 'P+N', root: null, meaning: { en: 'of the wrongdoers', ur: 'کا ظالم' } }
     ],
-    structure: { relationships: [] }
+    structure: { relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' },
+        { from: 4, to: 5, label: 'تعلق' },
+        { from: 5, to: 6, label: 'تعلق' },
+        { from: 6, to: 7, label: 'تعلق' },
+        { from: 7, to: 8, label: 'تعلق' },
+        { from: 8, to: 9, label: 'تعلق' },
+        { from: 9, to: 10, label: 'تعلق' },
+        { from: 10, to: 11, label: 'تعلق' },
+        { from: 11, to: 12, label: 'تعلق' },
+        { from: 12, to: 13, label: 'تعلق' },
+        { from: 13, to: 14, label: 'تعلق' },
+        { from: 14, to: 15, label: 'تعلق' },
+        { from: 15, to: 16, label: 'تعلق' },
+        { from: 16, to: 17, label: 'تعلق' }
+      ] }
   },
   48: {
     text: 'لَقَدِ ٱبْتَغَوُا۟ ٱلْفِتْنَةَ مِن قَبْلُ وَقَلَّبُوا۟ لَكَ ٱلْأُمُورَ حَتَّىٰ جَآءَ ٱلْحَقُّ وَظَهَرَ أَمْرُ ٱللَّهِ وَهُمْ كَٰرِهُونَ',
@@ -1534,7 +1771,22 @@ const SURAH_9_TREEBANK = {
       { id: '9:49:14', arabic: 'لَمُحِيطَةٌۢ', transliteration: 'lamuḥīṭatun', pos: ['N'], posLabel: 'N', root: null, meaning: { en: '(will) surely surround', ur: '() بےشک surround' } },
       { id: '9:49:15', arabic: 'بِٱلْكَـٰفِرِينَ', transliteration: 'bil-kāfirīna', pos: ['P', 'N'], posLabel: 'P+N', root: null, meaning: { en: 'the disbelievers', ur: ' کافر' } }
     ],
-    structure: { relationships: [] }
+    structure: { relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' },
+        { from: 4, to: 5, label: 'تعلق' },
+        { from: 5, to: 6, label: 'تعلق' },
+        { from: 6, to: 7, label: 'تعلق' },
+        { from: 7, to: 8, label: 'تعلق' },
+        { from: 8, to: 9, label: 'تعلق' },
+        { from: 9, to: 10, label: 'تعلق' },
+        { from: 10, to: 11, label: 'تعلق' },
+        { from: 11, to: 12, label: 'تعلق' },
+        { from: 12, to: 13, label: 'تعلق' },
+        { from: 13, to: 14, label: 'تعلق' },
+        { from: 14, to: 15, label: 'تعلق' }
+      ] }
   },
   50: {
     text: 'إِن تُصِبْكَ حَسَنَةٌۭ تَسُؤْهُمْ ۖ وَإِن تُصِبْكَ مُصِيبَةٌۭ يَقُولُوا۟ قَدْ أَخَذْنَآ أَمْرَنَا مِن قَبْلُ وَيَتَوَلَّوا۟ وَّهُمْ فَرِحُونَ',
@@ -1584,7 +1836,21 @@ const SURAH_9_TREEBANK = {
       { id: '9:51:13', arabic: 'فَلْيَتَوَكَّلِ', transliteration: 'falyatawakkali', pos: ['CONJ', 'N'], posLabel: 'CONJ+N', root: null, meaning: { en: '[so] let the believers put (their) trust', ur: '[پس] let  مومنین put (ان کا) trust' } },
       { id: '9:51:14', arabic: 'ٱلْمُؤْمِنُونَ', transliteration: 'l-mu\'minūna', pos: ['N'], posLabel: 'N', root: null, meaning: { en: '[so] let the believers put (their) trust', ur: '[پس] let  مومنین put (ان کا) trust' } }
     ],
-    structure: { relationships: [] }
+    structure: { relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' },
+        { from: 4, to: 5, label: 'تعلق' },
+        { from: 5, to: 6, label: 'تعلق' },
+        { from: 6, to: 7, label: 'تعلق' },
+        { from: 7, to: 8, label: 'تعلق' },
+        { from: 8, to: 9, label: 'تعلق' },
+        { from: 9, to: 10, label: 'تعلق' },
+        { from: 10, to: 11, label: 'تعلق' },
+        { from: 11, to: 12, label: 'تعلق' },
+        { from: 12, to: 13, label: 'تعلق' },
+        { from: 13, to: 14, label: 'تعلق' }
+      ] }
   },
   52: {
     text: 'قُلْ هَلْ تَرَبَّصُونَ بِنَآ إِلَّآ إِحْدَى ٱلْحُسْنَيَيْنِ ۖ وَنَحْنُ نَتَرَبَّصُ بِكُمْ أَن يُصِيبَكُمُ ٱللَّهُ بِعَذَابٍۢ مِّنْ عِندِهِۦٓ أَوْ بِأَيْدِينَا ۖ فَتَرَبَّصُوٓا۟ إِنَّا مَعَكُم مُّتَرَبِّصُونَ',
@@ -1638,7 +1904,19 @@ const SURAH_9_TREEBANK = {
       { id: '9:53:11', arabic: 'قَوْمًۭا', transliteration: 'qawman', pos: ['N'], posLabel: 'N', root: null, meaning: { en: 'a people', ur: 'ایک لوگ' } },
       { id: '9:53:12', arabic: 'فَـٰسِقِينَ', transliteration: 'fāsiqīna', pos: ['CONJ', 'N'], posLabel: 'CONJ+N', root: null, meaning: { en: 'defiantly disobedient', ur: 'defiantly disobedient' } }
     ],
-    structure: { relationships: [] }
+    structure: { relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' },
+        { from: 4, to: 5, label: 'تعلق' },
+        { from: 5, to: 6, label: 'تعلق' },
+        { from: 6, to: 7, label: 'تعلق' },
+        { from: 7, to: 8, label: 'تعلق' },
+        { from: 8, to: 9, label: 'تعلق' },
+        { from: 9, to: 10, label: 'تعلق' },
+        { from: 10, to: 11, label: 'تعلق' },
+        { from: 11, to: 12, label: 'تعلق' }
+      ] }
   },
   54: {
     text: 'وَمَا مَنَعَهُمْ أَن تُقْبَلَ مِنْهُمْ نَفَقَٰتُهُمْ إِلَّآ أَنَّهُمْ كَفَرُوا۟ بِٱللَّهِ وَبِرَسُولِهِۦ وَلَا يَأْتُونَ ٱلصَّلَوٰةَ إِلَّا وَهُمْ كُسَالَىٰ وَلَا يُنفِقُونَ إِلَّا وَهُمْ كَٰرِهُونَ',
@@ -1670,7 +1948,10 @@ const SURAH_9_TREEBANK = {
       { id: '9:54:21', arabic: 'وَهُمْ', transliteration: 'wahum', pos: ['CONJ', 'N'], posLabel: 'CONJ+N', root: null, meaning: { en: 'while they', ur: 'جبکہ وہ' } },
       { id: '9:54:22', arabic: 'كَـٰرِهُونَ', transliteration: 'kārihūna', pos: ['N'], posLabel: 'N', root: null, meaning: { en: '(are) unwilling', ur: '(ہیں) unwilling' } }
     ],
-    structure: { relationships: [] }
+    structure: { relationships: [
+        { from: 12, to: 13, label: 'نفی + فعل' },
+        { from: 18, to: 19, label: 'نفی + فعل' }
+      ] }
   },
   55: {
     text: 'فَلَا تُعْجِبْكَ أَمْوَٰلُهُمْ وَلَآ أَوْلَٰدُهُمْ ۚ إِنَّمَا يُرِيدُ ٱللَّهُ لِيُعَذِّبَهُم بِهَا فِى ٱلْحَيَوٰةِ ٱلدُّنْيَا وَتَزْهَقَ أَنفُسُهُمْ وَهُمْ كَٰفِرُونَ',
@@ -1717,7 +1998,17 @@ const SURAH_9_TREEBANK = {
       { id: '9:56:9', arabic: 'قَوْمٌۭ', transliteration: 'qawmun', pos: ['N'], posLabel: 'N', root: null, meaning: { en: '(are) a people', ur: '(ہیں) ایک لوگ' } },
       { id: '9:56:10', arabic: 'يَفْرَقُونَ', transliteration: 'yafraqūna', pos: ['V'], posLabel: 'V', root: null, meaning: { en: '(who) are afraid', ur: '(جو) ہیں afraid' } }
     ],
-    structure: { relationships: [] }
+    structure: { relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' },
+        { from: 4, to: 5, label: 'تعلق' },
+        { from: 5, to: 6, label: 'تعلق' },
+        { from: 6, to: 7, label: 'تعلق' },
+        { from: 7, to: 8, label: 'تعلق' },
+        { from: 8, to: 9, label: 'تعلق' },
+        { from: 9, to: 10, label: 'تعلق' }
+      ] }
   },
   57: {
     text: 'لَوْ يَجِدُونَ مَلْجَـًٔا أَوْ مَغَٰرَٰتٍ أَوْ مُدَّخَلًۭا لَّوَلَّوْا۟ إِلَيْهِ وَهُمْ يَجْمَحُونَ',
@@ -1764,7 +2055,23 @@ const SURAH_9_TREEBANK = {
       { id: '9:58:15', arabic: 'هُمْ', transliteration: 'hum', pos: ['PRON'], posLabel: 'PRON', root: null, meaning: { en: 'they', ur: 'وہ' } },
       { id: '9:58:16', arabic: 'يَسْخَطُونَ', transliteration: 'yaskhaṭūna', pos: ['V'], posLabel: 'V', root: null, meaning: { en: '(are) enraged', ur: '(ہیں) enraged' } }
     ],
-    structure: { relationships: [] }
+    structure: { relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' },
+        { from: 4, to: 5, label: 'تعلق' },
+        { from: 5, to: 6, label: 'تعلق' },
+        { from: 6, to: 7, label: 'تعلق' },
+        { from: 7, to: 8, label: 'تعلق' },
+        { from: 8, to: 9, label: 'تعلق' },
+        { from: 9, to: 10, label: 'تعلق' },
+        { from: 10, to: 11, label: 'تعلق' },
+        { from: 11, to: 12, label: 'تعلق' },
+        { from: 12, to: 13, label: 'تعلق' },
+        { from: 13, to: 14, label: 'تعلق' },
+        { from: 14, to: 15, label: 'تعلق' },
+        { from: 15, to: 16, label: 'تعلق' }
+      ] }
   },
   59: {
     text: 'وَلَوْ أَنَّهُمْ رَضُوا۟ مَآ ءَاتَىٰهُمُ ٱللَّهُ وَرَسُولُهُۥ وَقَالُوا۟ حَسْبُنَا ٱللَّهُ سَيُؤْتِينَا ٱللَّهُ مِن فَضْلِهِۦ وَرَسُولُهُۥٓ إِنَّآ إِلَى ٱللَّهِ رَٰغِبُونَ',
@@ -1825,7 +2132,9 @@ const SURAH_9_TREEBANK = {
       { id: '9:60:21', arabic: 'عَلِيمٌ', transliteration: 'ʿalīmun', pos: ['ADJ'], posLabel: 'ADJ', root: 'ع ل م', meaning: { en: '(is) All-Knowing', ur: '(ہے) سب جاننے والا' } },
       { id: '9:60:22', arabic: 'حَكِيمٌۭ', transliteration: 'ḥakīmun', pos: ['N'], posLabel: 'N', root: 'ح ك م', meaning: { en: 'All-Wise', ur: 'حکمت والا' } }
     ],
-    structure: { relationships: [] }
+    structure: { relationships: [
+        { from: 20, to: 21, label: 'موصوف + صفت' }
+      ] }
   },
   61: {
     text: 'وَمِنْهُمُ ٱلَّذِينَ يُؤْذُونَ ٱلنَّبِىَّ وَيَقُولُونَ هُوَ أُذُنٌۭ ۚ قُلْ أُذُنُ خَيْرٍۢ لَّكُمْ يُؤْمِنُ بِٱللَّهِ وَيُؤْمِنُ لِلْمُؤْمِنِينَ وَرَحْمَةٌۭ لِّلَّذِينَ ءَامَنُوا۟ مِنكُمْ ۚ وَٱلَّذِينَ يُؤْذُونَ رَسُولَ ٱللَّهِ لَهُمْ عَذَابٌ أَلِيمٌۭ',
@@ -1883,7 +2192,19 @@ const SURAH_9_TREEBANK = {
       { id: '9:62:11', arabic: 'كَانُوا۟', transliteration: 'kānū', pos: ['N'], posLabel: 'N', root: 'ك و ن', meaning: { en: 'they are', ur: 'وہ ہیں' } },
       { id: '9:62:12', arabic: 'مُؤْمِنِينَ', transliteration: 'mu\'minīna', pos: ['N'], posLabel: 'N', root: 'أ م ن', meaning: { en: 'believers', ur: 'مومنین' } }
     ],
-    structure: { relationships: [] }
+    structure: { relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' },
+        { from: 4, to: 5, label: 'تعلق' },
+        { from: 5, to: 6, label: 'تعلق' },
+        { from: 6, to: 7, label: 'تعلق' },
+        { from: 7, to: 8, label: 'تعلق' },
+        { from: 8, to: 9, label: 'تعلق' },
+        { from: 9, to: 10, label: 'تعلق' },
+        { from: 10, to: 11, label: 'تعلق' },
+        { from: 11, to: 12, label: 'تعلق' }
+      ] }
   },
   63: {
     text: 'أَلَمْ يَعْلَمُوٓا۟ أَنَّهُۥ مَن يُحَادِدِ ٱللَّهَ وَرَسُولَهُۥ فَأَنَّ لَهُۥ نَارَ جَهَنَّمَ خَٰلِدًۭا فِيهَا ۚ ذَٰلِكَ ٱلْخِزْىُ ٱلْعَظِيمُ',
@@ -1936,7 +2257,24 @@ const SURAH_9_TREEBANK = {
       { id: '9:64:16', arabic: 'مَّا', transliteration: 'mā', pos: ['N'], posLabel: 'N', root: null, meaning: { en: 'what', ur: 'کیا/جو' } },
       { id: '9:64:17', arabic: 'تَحْذَرُونَ', transliteration: 'taḥdharūna', pos: ['V'], posLabel: 'V', root: null, meaning: { en: 'you fear', ur: 'تم ڈرنا' } }
     ],
-    structure: { relationships: [] }
+    structure: { relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' },
+        { from: 4, to: 5, label: 'تعلق' },
+        { from: 5, to: 6, label: 'تعلق' },
+        { from: 6, to: 7, label: 'تعلق' },
+        { from: 7, to: 8, label: 'تعلق' },
+        { from: 8, to: 9, label: 'تعلق' },
+        { from: 9, to: 10, label: 'تعلق' },
+        { from: 10, to: 11, label: 'تعلق' },
+        { from: 11, to: 12, label: 'تعلق' },
+        { from: 12, to: 13, label: 'تعلق' },
+        { from: 13, to: 14, label: 'تعلق' },
+        { from: 14, to: 15, label: 'تعلق' },
+        { from: 15, to: 16, label: 'تعلق' },
+        { from: 16, to: 17, label: 'تعلق' }
+      ] }
   },
   65: {
     text: 'وَلَئِن سَأَلْتَهُمْ لَيَقُولُنَّ إِنَّمَا كُنَّا نَخُوضُ وَنَلْعَبُ ۚ قُلْ أَبِٱللَّهِ وَءَايَٰتِهِۦ وَرَسُولِهِۦ كُنتُمْ تَسْتَهْزِءُونَ',
@@ -2040,7 +2378,23 @@ const SURAH_9_TREEBANK = {
       { id: '9:68:15', arabic: 'عَذَابٌۭ', transliteration: 'ʿadhābun', pos: ['N'], posLabel: 'N', root: 'ع ذ ب', meaning: { en: '(is) a punishment', ur: '(ہے) ایک عذاب' } },
       { id: '9:68:16', arabic: 'مُّقِيمٌۭ', transliteration: 'muqīmun', pos: ['N'], posLabel: 'N', root: null, meaning: { en: 'enduring', ur: 'enduring' } }
     ],
-    structure: { relationships: [] }
+    structure: { relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' },
+        { from: 4, to: 5, label: 'تعلق' },
+        { from: 5, to: 6, label: 'تعلق' },
+        { from: 6, to: 7, label: 'تعلق' },
+        { from: 7, to: 8, label: 'تعلق' },
+        { from: 8, to: 9, label: 'تعلق' },
+        { from: 9, to: 10, label: 'تعلق' },
+        { from: 10, to: 11, label: 'تعلق' },
+        { from: 11, to: 12, label: 'تعلق' },
+        { from: 12, to: 13, label: 'تعلق' },
+        { from: 13, to: 14, label: 'تعلق' },
+        { from: 14, to: 15, label: 'تعلق' },
+        { from: 15, to: 16, label: 'تعلق' }
+      ] }
   },
   69: {
     text: 'كَٱلَّذِينَ مِن قَبْلِكُمْ كَانُوٓا۟ أَشَدَّ مِنكُمْ قُوَّةًۭ وَأَكْثَرَ أَمْوَٰلًۭا وَأَوْلَٰدًۭا فَٱسْتَمْتَعُوا۟ بِخَلَٰقِهِمْ فَٱسْتَمْتَعْتُم بِخَلَٰقِكُمْ كَمَا ٱسْتَمْتَعَ ٱلَّذِينَ مِن قَبْلِكُم بِخَلَٰقِهِمْ وَخُضْتُمْ كَٱلَّذِى خَاضُوٓا۟ ۚ أُو۟لَٰٓئِكَ حَبِطَتْ أَعْمَٰلُهُمْ فِى ٱلدُّنْيَا وَٱلْءَاخِرَةِ ۖ وَأُو۟لَٰٓئِكَ هُمُ ٱلْخَٰسِرُونَ',
@@ -2207,7 +2561,18 @@ const SURAH_9_TREEBANK = {
       { id: '9:73:10', arabic: 'وَبِئْسَ', transliteration: 'wabi\'sa', pos: ['CONJ', 'N'], posLabel: 'CONJ+N', root: null, meaning: { en: 'and wretched', ur: 'اور wretched' } },
       { id: '9:73:11', arabic: 'ٱلْمَصِيرُ', transliteration: 'l-maṣīru', pos: ['N'], posLabel: 'N', root: null, meaning: { en: '(is) the destination', ur: '(ہے)  destination' } }
     ],
-    structure: { relationships: [] }
+    structure: { relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' },
+        { from: 4, to: 5, label: 'تعلق' },
+        { from: 5, to: 6, label: 'تعلق' },
+        { from: 6, to: 7, label: 'تعلق' },
+        { from: 7, to: 8, label: 'تعلق' },
+        { from: 8, to: 9, label: 'تعلق' },
+        { from: 9, to: 10, label: 'تعلق' },
+        { from: 10, to: 11, label: 'تعلق' }
+      ] }
   },
   74: {
     text: 'يَحْلِفُونَ بِٱللَّهِ مَا قَالُوا۟ وَلَقَدْ قَالُوا۟ كَلِمَةَ ٱلْكُفْرِ وَكَفَرُوا۟ بَعْدَ إِسْلَٰمِهِمْ وَهَمُّوا۟ بِمَا لَمْ يَنَالُوا۟ ۚ وَمَا نَقَمُوٓا۟ إِلَّآ أَنْ أَغْنَىٰهُمُ ٱللَّهُ وَرَسُولُهُۥ مِن فَضْلِهِۦ ۚ فَإِن يَتُوبُوا۟ يَكُ خَيْرًۭا لَّهُمْ ۖ وَإِن يَتَوَلَّوْا۟ يُعَذِّبْهُمُ ٱللَّهُ عَذَابًا أَلِيمًۭا فِى ٱلدُّنْيَا وَٱلْءَاخِرَةِ ۚ وَمَا لَهُمْ فِى ٱلْأَرْضِ مِن وَلِىٍّۢ وَلَا نَصِيرٍۢ',
@@ -2263,7 +2628,10 @@ const SURAH_9_TREEBANK = {
       { id: '9:74:45', arabic: 'وَلَا', transliteration: 'walā', pos: ['CONJ', 'NEG'], posLabel: 'CONJ+NEG', root: null, meaning: { en: 'and not', ur: 'اور نہیں' } },
       { id: '9:74:46', arabic: 'نَصِيرٍۢ', transliteration: 'naṣīrin', pos: ['N'], posLabel: 'N', root: null, meaning: { en: 'a helper', ur: 'ایک helper' } }
     ],
-    structure: { relationships: [] }
+    structure: { relationships: [
+        { from: 23, to: 24, label: 'جار + مجرور' },
+        { from: 43, to: 44, label: 'جار + مجرور' }
+      ] }
   },
   75: {
     text: '۞ وَمِنْهُم مَّنْ عَٰهَدَ ٱللَّهَ لَئِنْ ءَاتَىٰنَا مِن فَضْلِهِۦ لَنَصَّدَّقَنَّ وَلَنَكُونَنَّ مِنَ ٱلصَّٰلِحِينَ',
@@ -2285,7 +2653,9 @@ const SURAH_9_TREEBANK = {
       { id: '9:75:11', arabic: 'مِنَ', transliteration: 'mina', pos: ['N'], posLabel: 'N', root: null, meaning: { en: 'among', ur: 'میں سے' } },
       { id: '9:75:12', arabic: 'ٱلصَّـٰلِحِينَ', transliteration: 'l-ṣāliḥīna', pos: ['N'], posLabel: 'N', root: null, meaning: { en: 'the righteous', ur: ' نیک' } }
     ],
-    structure: { relationships: [] }
+    structure: { relationships: [
+        { from: 7, to: 8, label: 'جار + مجرور' }
+      ] }
   },
   76: {
     text: 'فَلَمَّآ ءَاتَىٰهُم مِّن فَضْلِهِۦ بَخِلُوا۟ بِهِۦ وَتَوَلَّوا۟ وَّهُم مُّعْرِضُونَ',
@@ -2304,7 +2674,16 @@ const SURAH_9_TREEBANK = {
       { id: '9:76:8', arabic: 'وَّهُم', transliteration: 'wahum', pos: ['N'], posLabel: 'N', root: null, meaning: { en: 'while they', ur: 'جبکہ وہ' } },
       { id: '9:76:9', arabic: 'مُّعْرِضُونَ', transliteration: 'muʿ\'riḍūna', pos: ['N'], posLabel: 'N', root: null, meaning: { en: '(were) averse', ur: '(تھے) averse' } }
     ],
-    structure: { relationships: [] }
+    structure: { relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' },
+        { from: 4, to: 5, label: 'تعلق' },
+        { from: 5, to: 6, label: 'تعلق' },
+        { from: 6, to: 7, label: 'تعلق' },
+        { from: 7, to: 8, label: 'تعلق' },
+        { from: 8, to: 9, label: 'تعلق' }
+      ] }
   },
   77: {
     text: 'فَأَعْقَبَهُمْ نِفَاقًۭا فِى قُلُوبِهِمْ إِلَىٰ يَوْمِ يَلْقَوْنَهُۥ بِمَآ أَخْلَفُوا۟ ٱللَّهَ مَا وَعَدُوهُ وَبِمَا كَانُوا۟ يَكْذِبُونَ',
@@ -2452,7 +2831,34 @@ const SURAH_9_TREEBANK = {
       { id: '9:81:26', arabic: 'كَانُوا۟', transliteration: 'kānū', pos: ['N'], posLabel: 'N', root: 'ك و ن', meaning: { en: 'they could', ur: 'وہ could' } },
       { id: '9:81:27', arabic: 'يَفْقَهُونَ', transliteration: 'yafqahūna', pos: ['V'], posLabel: 'V', root: null, meaning: { en: 'understand', ur: 'understand' } }
     ],
-    structure: { relationships: [] }
+    structure: { relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' },
+        { from: 4, to: 5, label: 'تعلق' },
+        { from: 5, to: 6, label: 'تعلق' },
+        { from: 6, to: 7, label: 'تعلق' },
+        { from: 7, to: 8, label: 'تعلق' },
+        { from: 8, to: 9, label: 'تعلق' },
+        { from: 9, to: 10, label: 'تعلق' },
+        { from: 10, to: 11, label: 'تعلق' },
+        { from: 11, to: 12, label: 'تعلق' },
+        { from: 12, to: 13, label: 'تعلق' },
+        { from: 13, to: 14, label: 'تعلق' },
+        { from: 14, to: 15, label: 'تعلق' },
+        { from: 15, to: 16, label: 'تعلق' },
+        { from: 16, to: 17, label: 'تعلق' },
+        { from: 17, to: 18, label: 'تعلق' },
+        { from: 18, to: 19, label: 'تعلق' },
+        { from: 19, to: 20, label: 'تعلق' },
+        { from: 20, to: 21, label: 'تعلق' },
+        { from: 21, to: 22, label: 'تعلق' },
+        { from: 22, to: 23, label: 'تعلق' },
+        { from: 23, to: 24, label: 'تعلق' },
+        { from: 24, to: 25, label: 'تعلق' },
+        { from: 25, to: 26, label: 'تعلق' },
+        { from: 26, to: 27, label: 'تعلق' }
+      ] }
   },
   82: {
     text: 'فَلْيَضْحَكُوا۟ قَلِيلًۭا وَلْيَبْكُوا۟ كَثِيرًۭا جَزَآءًۢ بِمَا كَانُوا۟ يَكْسِبُونَ',
@@ -2470,7 +2876,15 @@ const SURAH_9_TREEBANK = {
       { id: '9:82:7', arabic: 'كَانُوا۟', transliteration: 'kānū', pos: ['N'], posLabel: 'N', root: 'ك و ن', meaning: { en: 'they used to', ur: 'وہ used کو/تک' } },
       { id: '9:82:8', arabic: 'يَكْسِبُونَ', transliteration: 'yaksibūna', pos: ['V'], posLabel: 'V', root: null, meaning: { en: 'earn', ur: 'earn' } }
     ],
-    structure: { relationships: [] }
+    structure: { relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' },
+        { from: 4, to: 5, label: 'تعلق' },
+        { from: 5, to: 6, label: 'تعلق' },
+        { from: 6, to: 7, label: 'تعلق' },
+        { from: 7, to: 8, label: 'تعلق' }
+      ] }
   },
   83: {
     text: 'فَإِن رَّجَعَكَ ٱللَّهُ إِلَىٰ طَآئِفَةٍۢ مِّنْهُمْ فَٱسْتَـْٔذَنُوكَ لِلْخُرُوجِ فَقُل لَّن تَخْرُجُوا۟ مَعِىَ أَبَدًۭا وَلَن تُقَٰتِلُوا۟ مَعِىَ عَدُوًّا ۖ إِنَّكُمْ رَضِيتُم بِٱلْقُعُودِ أَوَّلَ مَرَّةٍۢ فَٱقْعُدُوا۟ مَعَ ٱلْخَٰلِفِينَ',
@@ -2587,7 +3001,25 @@ const SURAH_9_TREEBANK = {
       { id: '9:86:17', arabic: 'مَّعَ', transliteration: 'maʿa', pos: ['N'], posLabel: 'N', root: null, meaning: { en: 'with', ur: 'ساتھ' } },
       { id: '9:86:18', arabic: 'ٱلْقَـٰعِدِينَ', transliteration: 'l-qāʿidīna', pos: ['N'], posLabel: 'N', root: null, meaning: { en: 'those who sit', ur: 'جو لوگ sit' } }
     ],
-    structure: { relationships: [] }
+    structure: { relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' },
+        { from: 4, to: 5, label: 'تعلق' },
+        { from: 5, to: 6, label: 'تعلق' },
+        { from: 6, to: 7, label: 'تعلق' },
+        { from: 7, to: 8, label: 'تعلق' },
+        { from: 8, to: 9, label: 'تعلق' },
+        { from: 9, to: 10, label: 'تعلق' },
+        { from: 10, to: 11, label: 'تعلق' },
+        { from: 11, to: 12, label: 'تعلق' },
+        { from: 12, to: 13, label: 'تعلق' },
+        { from: 13, to: 14, label: 'تعلق' },
+        { from: 14, to: 15, label: 'تعلق' },
+        { from: 15, to: 16, label: 'تعلق' },
+        { from: 16, to: 17, label: 'تعلق' },
+        { from: 17, to: 18, label: 'تعلق' }
+      ] }
   },
   87: {
     text: 'رَضُوا۟ بِأَن يَكُونُوا۟ مَعَ ٱلْخَوَالِفِ وَطُبِعَ عَلَىٰ قُلُوبِهِمْ فَهُمْ لَا يَفْقَهُونَ',
@@ -2682,7 +3114,24 @@ const SURAH_9_TREEBANK = {
       { id: '9:90:16', arabic: 'عَذَابٌ', transliteration: 'ʿadhābun', pos: ['N'], posLabel: 'N', root: 'ع ذ ب', meaning: { en: 'a punishment', ur: 'ایک عذاب' } },
       { id: '9:90:17', arabic: 'أَلِيمٌۭ', transliteration: 'alīmun', pos: ['N'], posLabel: 'N', root: 'أ ل م', meaning: { en: 'painful', ur: 'دردناک' } }
     ],
-    structure: { relationships: [] }
+    structure: { relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' },
+        { from: 4, to: 5, label: 'تعلق' },
+        { from: 5, to: 6, label: 'تعلق' },
+        { from: 6, to: 7, label: 'تعلق' },
+        { from: 7, to: 8, label: 'تعلق' },
+        { from: 8, to: 9, label: 'تعلق' },
+        { from: 9, to: 10, label: 'تعلق' },
+        { from: 10, to: 11, label: 'تعلق' },
+        { from: 11, to: 12, label: 'تعلق' },
+        { from: 12, to: 13, label: 'تعلق' },
+        { from: 13, to: 14, label: 'تعلق' },
+        { from: 14, to: 15, label: 'تعلق' },
+        { from: 15, to: 16, label: 'تعلق' },
+        { from: 16, to: 17, label: 'تعلق' }
+      ] }
   },
   91: {
     text: 'لَّيْسَ عَلَى ٱلضُّعَفَآءِ وَلَا عَلَى ٱلْمَرْضَىٰ وَلَا عَلَى ٱلَّذِينَ لَا يَجِدُونَ مَا يُنفِقُونَ حَرَجٌ إِذَا نَصَحُوا۟ لِلَّهِ وَرَسُولِهِۦ ۚ مَا عَلَى ٱلْمُحْسِنِينَ مِن سَبِيلٍۢ ۚ وَٱللَّهُ غَفُورٌۭ رَّحِيمٌۭ',
@@ -2872,7 +3321,21 @@ const SURAH_9_TREEBANK = {
       { id: '9:96:13', arabic: 'ٱلْقَوْمِ', transliteration: 'l-qawmi', pos: ['N'], posLabel: 'N', root: null, meaning: { en: 'the people', ur: 'لوگ' } },
       { id: '9:96:14', arabic: 'ٱلْفَـٰسِقِينَ', transliteration: 'l-fāsiqīna', pos: ['N'], posLabel: 'N', root: 'ف س ق', meaning: { en: '(who are) defiantly disobedient', ur: '(جو ہیں) defiantly disobedient' } }
     ],
-    structure: { relationships: [] }
+    structure: { relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' },
+        { from: 4, to: 5, label: 'تعلق' },
+        { from: 5, to: 6, label: 'تعلق' },
+        { from: 6, to: 7, label: 'تعلق' },
+        { from: 7, to: 8, label: 'تعلق' },
+        { from: 8, to: 9, label: 'تعلق' },
+        { from: 9, to: 10, label: 'تعلق' },
+        { from: 10, to: 11, label: 'تعلق' },
+        { from: 11, to: 12, label: 'تعلق' },
+        { from: 12, to: 13, label: 'تعلق' },
+        { from: 13, to: 14, label: 'تعلق' }
+      ] }
   },
   97: {
     text: 'ٱلْأَعْرَابُ أَشَدُّ كُفْرًۭا وَنِفَاقًۭا وَأَجْدَرُ أَلَّا يَعْلَمُوا۟ حُدُودَ مَآ أَنزَلَ ٱللَّهُ عَلَىٰ رَسُولِهِۦ ۗ وَٱللَّهُ عَلِيمٌ حَكِيمٌۭ',
@@ -2996,7 +3459,32 @@ const SURAH_9_TREEBANK = {
       { id: '9:100:24', arabic: 'ٱلْفَوْزُ', transliteration: 'l-fawzu', pos: ['N'], posLabel: 'N', root: null, meaning: { en: '(is) the success', ur: '(ہے)  success' } },
       { id: '9:100:25', arabic: 'ٱلْعَظِيمُ', transliteration: 'l-ʿaẓīmu', pos: ['N'], posLabel: 'N', root: null, meaning: { en: 'the great', ur: ' عظیم' } }
     ],
-    structure: { relationships: [] }
+    structure: { relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' },
+        { from: 4, to: 5, label: 'تعلق' },
+        { from: 5, to: 6, label: 'تعلق' },
+        { from: 6, to: 7, label: 'تعلق' },
+        { from: 7, to: 8, label: 'تعلق' },
+        { from: 8, to: 9, label: 'تعلق' },
+        { from: 9, to: 10, label: 'تعلق' },
+        { from: 10, to: 11, label: 'تعلق' },
+        { from: 11, to: 12, label: 'تعلق' },
+        { from: 12, to: 13, label: 'تعلق' },
+        { from: 13, to: 14, label: 'تعلق' },
+        { from: 14, to: 15, label: 'تعلق' },
+        { from: 15, to: 16, label: 'تعلق' },
+        { from: 16, to: 17, label: 'تعلق' },
+        { from: 17, to: 18, label: 'تعلق' },
+        { from: 18, to: 19, label: 'تعلق' },
+        { from: 19, to: 20, label: 'تعلق' },
+        { from: 20, to: 21, label: 'تعلق' },
+        { from: 21, to: 22, label: 'تعلق' },
+        { from: 22, to: 23, label: 'تعلق' },
+        { from: 23, to: 24, label: 'تعلق' },
+        { from: 24, to: 25, label: 'تعلق' }
+      ] }
   },
   101: {
     text: 'وَمِمَّنْ حَوْلَكُم مِّنَ ٱلْأَعْرَابِ مُنَٰفِقُونَ ۖ وَمِنْ أَهْلِ ٱلْمَدِينَةِ ۖ مَرَدُوا۟ عَلَى ٱلنِّفَاقِ لَا تَعْلَمُهُمْ ۖ نَحْنُ نَعْلَمُهُمْ ۚ سَنُعَذِّبُهُم مَّرَّتَيْنِ ثُمَّ يُرَدُّونَ إِلَىٰ عَذَابٍ عَظِيمٍۢ',
@@ -3055,7 +3543,9 @@ const SURAH_9_TREEBANK = {
       { id: '9:102:16', arabic: 'غَفُورٌۭ', transliteration: 'ghafūrun', pos: ['N'], posLabel: 'N', root: 'غ ف ر', meaning: { en: '(is) Oft-Forgiving', ur: '(ہے) Oft-بخشنے والا' } },
       { id: '9:102:17', arabic: 'رَّحِيمٌ', transliteration: 'raḥīmun', pos: ['ADJ'], posLabel: 'ADJ', root: null, meaning: { en: 'Most Merciful', ur: 'نہایت مہربان' } }
     ],
-    structure: { relationships: [] }
+    structure: { relationships: [
+        { from: 16, to: 17, label: 'موصوف + صفت' }
+      ] }
   },
   103: {
     text: 'خُذْ مِنْ أَمْوَٰلِهِمْ صَدَقَةًۭ تُطَهِّرُهُمْ وَتُزَكِّيهِم بِهَا وَصَلِّ عَلَيْهِمْ ۖ إِنَّ صَلَوٰتَكَ سَكَنٌۭ لَّهُمْ ۗ وَٱللَّهُ سَمِيعٌ عَلِيمٌ',
@@ -3155,7 +3645,9 @@ const SURAH_9_TREEBANK = {
       { id: '9:106:11', arabic: 'عَلِيمٌ', transliteration: 'ʿalīmun', pos: ['ADJ'], posLabel: 'ADJ', root: 'ع ل م', meaning: { en: '(is) All-Knower', ur: '(ہے) سب-Knower' } },
       { id: '9:106:12', arabic: 'حَكِيمٌۭ', transliteration: 'ḥakīmun', pos: ['N'], posLabel: 'N', root: 'ح ك م', meaning: { en: 'All-Wise', ur: 'حکمت والا' } }
     ],
-    structure: { relationships: [] }
+    structure: { relationships: [
+        { from: 10, to: 11, label: 'موصوف + صفت' }
+      ] }
   },
   107: {
     text: 'وَٱلَّذِينَ ٱتَّخَذُوا۟ مَسْجِدًۭا ضِرَارًۭا وَكُفْرًۭا وَتَفْرِيقًۢا بَيْنَ ٱلْمُؤْمِنِينَ وَإِرْصَادًۭا لِّمَنْ حَارَبَ ٱللَّهَ وَرَسُولَهُۥ مِن قَبْلُ ۚ وَلَيَحْلِفُنَّ إِنْ أَرَدْنَآ إِلَّا ٱلْحُسْنَىٰ ۖ وَٱللَّهُ يَشْهَدُ إِنَّهُمْ لَكَٰذِبُونَ',
@@ -3357,7 +3849,23 @@ const SURAH_9_TREEBANK = {
       { id: '9:112:15', arabic: 'وَبَشِّرِ', transliteration: 'wabashiri', pos: ['CONJ', 'N'], posLabel: 'CONJ+N', root: null, meaning: { en: 'And give glad tidings', ur: 'اور دینا glad tidings' } },
       { id: '9:112:16', arabic: 'ٱلْمُؤْمِنِينَ', transliteration: 'l-mu\'minīna', pos: ['N'], posLabel: 'N', root: null, meaning: { en: '(to) the believers', ur: '(کو/تک)  مومنین' } }
     ],
-    structure: { relationships: [] }
+    structure: { relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' },
+        { from: 4, to: 5, label: 'تعلق' },
+        { from: 5, to: 6, label: 'تعلق' },
+        { from: 6, to: 7, label: 'تعلق' },
+        { from: 7, to: 8, label: 'تعلق' },
+        { from: 8, to: 9, label: 'تعلق' },
+        { from: 9, to: 10, label: 'تعلق' },
+        { from: 10, to: 11, label: 'تعلق' },
+        { from: 11, to: 12, label: 'تعلق' },
+        { from: 12, to: 13, label: 'تعلق' },
+        { from: 13, to: 14, label: 'تعلق' },
+        { from: 14, to: 15, label: 'تعلق' },
+        { from: 15, to: 16, label: 'تعلق' }
+      ] }
   },
   113: {
     text: 'مَا كَانَ لِلنَّبِىِّ وَٱلَّذِينَ ءَامَنُوٓا۟ أَن يَسْتَغْفِرُوا۟ لِلْمُشْرِكِينَ وَلَوْ كَانُوٓا۟ أُو۟لِى قُرْبَىٰ مِنۢ بَعْدِ مَا تَبَيَّنَ لَهُمْ أَنَّهُمْ أَصْحَٰبُ ٱلْجَحِيمِ',
@@ -3387,7 +3895,27 @@ const SURAH_9_TREEBANK = {
       { id: '9:113:19', arabic: 'أَصْحَـٰبُ', transliteration: 'aṣḥābu', pos: ['V'], posLabel: 'V', root: null, meaning: { en: '(are the) companions', ur: '(ہیں ) companions' } },
       { id: '9:113:20', arabic: 'ٱلْجَحِيمِ', transliteration: 'l-jaḥīmi', pos: ['N'], posLabel: 'N', root: null, meaning: { en: '(of) the Hellfire', ur: '(کا)  Hellfire' } }
     ],
-    structure: { relationships: [] }
+    structure: { relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' },
+        { from: 4, to: 5, label: 'تعلق' },
+        { from: 5, to: 6, label: 'تعلق' },
+        { from: 6, to: 7, label: 'تعلق' },
+        { from: 7, to: 8, label: 'تعلق' },
+        { from: 8, to: 9, label: 'تعلق' },
+        { from: 9, to: 10, label: 'تعلق' },
+        { from: 10, to: 11, label: 'تعلق' },
+        { from: 11, to: 12, label: 'تعلق' },
+        { from: 12, to: 13, label: 'تعلق' },
+        { from: 13, to: 14, label: 'تعلق' },
+        { from: 14, to: 15, label: 'تعلق' },
+        { from: 15, to: 16, label: 'تعلق' },
+        { from: 16, to: 17, label: 'تعلق' },
+        { from: 17, to: 18, label: 'تعلق' },
+        { from: 18, to: 19, label: 'تعلق' },
+        { from: 19, to: 20, label: 'تعلق' }
+      ] }
   },
   114: {
     text: 'وَمَا كَانَ ٱسْتِغْفَارُ إِبْرَٰهِيمَ لِأَبِيهِ إِلَّا عَن مَّوْعِدَةٍۢ وَعَدَهَآ إِيَّاهُ فَلَمَّا تَبَيَّنَ لَهُۥٓ أَنَّهُۥ عَدُوٌّۭ لِّلَّهِ تَبَرَّأَ مِنْهُ ۚ إِنَّ إِبْرَٰهِيمَ لَأَوَّٰهٌ حَلِيمٌۭ',
@@ -3447,7 +3975,9 @@ const SURAH_9_TREEBANK = {
       { id: '9:115:17', arabic: 'شَىْءٍ', transliteration: 'shayin', pos: ['N'], posLabel: 'N', root: null, meaning: { en: 'thing', ur: 'thing' } },
       { id: '9:115:18', arabic: 'عَلِيمٌ', transliteration: 'ʿalīmun', pos: ['ADJ'], posLabel: 'ADJ', root: 'ع ل م', meaning: { en: '(is) All-Knower', ur: '(ہے) سب-Knower' } }
     ],
-    structure: { relationships: [] }
+    structure: { relationships: [
+        { from: 17, to: 18, label: 'موصوف + صفت' }
+      ] }
   },
   116: {
     text: 'إِنَّ ٱللَّهَ لَهُۥ مُلْكُ ٱلسَّمَٰوَٰتِ وَٱلْأَرْضِ ۖ يُحْىِۦ وَيُمِيتُ ۚ وَمَا لَكُم مِّن دُونِ ٱللَّهِ مِن وَلِىٍّۢ وَلَا نَصِيرٍۢ',
@@ -3474,7 +4004,9 @@ const SURAH_9_TREEBANK = {
       { id: '9:116:16', arabic: 'وَلَا', transliteration: 'walā', pos: ['CONJ', 'NEG'], posLabel: 'CONJ+NEG', root: null, meaning: { en: 'and not', ur: 'اور نہیں' } },
       { id: '9:116:17', arabic: 'نَصِيرٍۢ', transliteration: 'naṣīrin', pos: ['N'], posLabel: 'N', root: null, meaning: { en: 'any helper', ur: 'any helper' } }
     ],
-    structure: { relationships: [] }
+    structure: { relationships: [
+        { from: 14, to: 15, label: 'جار + مجرور' }
+      ] }
   },
   117: {
     text: 'لَّقَد تَّابَ ٱللَّهُ عَلَى ٱلنَّبِىِّ وَٱلْمُهَٰجِرِينَ وَٱلْأَنصَارِ ٱلَّذِينَ ٱتَّبَعُوهُ فِى سَاعَةِ ٱلْعُسْرَةِ مِنۢ بَعْدِ مَا كَادَ يَزِيغُ قُلُوبُ فَرِيقٍۢ مِّنْهُمْ ثُمَّ تَابَ عَلَيْهِمْ ۚ إِنَّهُۥ بِهِمْ رَءُوفٌۭ رَّحِيمٌۭ',
@@ -3552,7 +4084,38 @@ const SURAH_9_TREEBANK = {
       { id: '9:118:30', arabic: 'ٱلتَّوَّابُ', transliteration: 'l-tawābu', pos: ['N'], posLabel: 'N', root: null, meaning: { en: '(is) the Acceptor of repentance', ur: '(ہے)  Acceptor کا repentance' } },
       { id: '9:118:31', arabic: 'ٱلرَّحِيمُ', transliteration: 'l-raḥīmu', pos: ['N'], posLabel: 'N', root: null, meaning: { en: 'the Most Merciful', ur: ' نہایت مہربان' } }
     ],
-    structure: { relationships: [] }
+    structure: { relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' },
+        { from: 4, to: 5, label: 'تعلق' },
+        { from: 5, to: 6, label: 'تعلق' },
+        { from: 6, to: 7, label: 'تعلق' },
+        { from: 7, to: 8, label: 'تعلق' },
+        { from: 8, to: 9, label: 'تعلق' },
+        { from: 9, to: 10, label: 'تعلق' },
+        { from: 10, to: 11, label: 'تعلق' },
+        { from: 11, to: 12, label: 'تعلق' },
+        { from: 12, to: 13, label: 'تعلق' },
+        { from: 13, to: 14, label: 'تعلق' },
+        { from: 14, to: 15, label: 'تعلق' },
+        { from: 15, to: 16, label: 'تعلق' },
+        { from: 16, to: 17, label: 'تعلق' },
+        { from: 17, to: 18, label: 'تعلق' },
+        { from: 18, to: 19, label: 'تعلق' },
+        { from: 19, to: 20, label: 'تعلق' },
+        { from: 20, to: 21, label: 'تعلق' },
+        { from: 21, to: 22, label: 'تعلق' },
+        { from: 22, to: 23, label: 'تعلق' },
+        { from: 23, to: 24, label: 'تعلق' },
+        { from: 24, to: 25, label: 'تعلق' },
+        { from: 25, to: 26, label: 'تعلق' },
+        { from: 26, to: 27, label: 'تعلق' },
+        { from: 27, to: 28, label: 'تعلق' },
+        { from: 28, to: 29, label: 'تعلق' },
+        { from: 29, to: 30, label: 'تعلق' },
+        { from: 30, to: 31, label: 'تعلق' }
+      ] }
   },
   119: {
     text: 'يَٰٓأَيُّهَا ٱلَّذِينَ ءَامَنُوا۟ ٱتَّقُوا۟ ٱللَّهَ وَكُونُوا۟ مَعَ ٱلصَّٰدِقِينَ',
@@ -3570,7 +4133,15 @@ const SURAH_9_TREEBANK = {
       { id: '9:119:7', arabic: 'مَعَ', transliteration: 'maʿa', pos: ['N'], posLabel: 'N', root: null, meaning: { en: 'with', ur: 'ساتھ' } },
       { id: '9:119:8', arabic: 'ٱلصَّـٰدِقِينَ', transliteration: 'l-ṣādiqīna', pos: ['N'], posLabel: 'N', root: null, meaning: { en: 'those who are truthful', ur: 'جو لوگ ہیں truthful' } }
     ],
-    structure: { relationships: [] }
+    structure: { relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' },
+        { from: 4, to: 5, label: 'تعلق' },
+        { from: 5, to: 6, label: 'تعلق' },
+        { from: 6, to: 7, label: 'تعلق' },
+        { from: 7, to: 8, label: 'تعلق' }
+      ] }
   },
   120: {
     text: 'مَا كَانَ لِأَهْلِ ٱلْمَدِينَةِ وَمَنْ حَوْلَهُم مِّنَ ٱلْأَعْرَابِ أَن يَتَخَلَّفُوا۟ عَن رَّسُولِ ٱللَّهِ وَلَا يَرْغَبُوا۟ بِأَنفُسِهِمْ عَن نَّفْسِهِۦ ۚ ذَٰلِكَ بِأَنَّهُمْ لَا يُصِيبُهُمْ ظَمَأٌۭ وَلَا نَصَبٌۭ وَلَا مَخْمَصَةٌۭ فِى سَبِيلِ ٱللَّهِ وَلَا يَطَـُٔونَ مَوْطِئًۭا يَغِيظُ ٱلْكُفَّارَ وَلَا يَنَالُونَ مِنْ عَدُوٍّۢ نَّيْلًا إِلَّا كُتِبَ لَهُم بِهِۦ عَمَلٌۭ صَٰلِحٌ ۚ إِنَّ ٱللَّهَ لَا يُضِيعُ أَجْرَ ٱلْمُحْسِنِينَ',
@@ -3660,7 +4231,10 @@ const SURAH_9_TREEBANK = {
       { id: '9:121:17', arabic: 'كَانُوا۟', transliteration: 'kānū', pos: ['N'], posLabel: 'N', root: 'ك و ن', meaning: { en: 'they used (to)', ur: 'وہ used (کو/تک)' } },
       { id: '9:121:18', arabic: 'يَعْمَلُونَ', transliteration: 'yaʿmalūna', pos: ['V'], posLabel: 'V', root: null, meaning: { en: 'do', ur: 'کرنا' } }
     ],
-    structure: { relationships: [] }
+    structure: { relationships: [
+        { from: 1, to: 2, label: 'نفی + فعل' },
+        { from: 7, to: 8, label: 'نفی + فعل' }
+      ] }
   },
   122: {
     text: '۞ وَمَا كَانَ ٱلْمُؤْمِنُونَ لِيَنفِرُوا۟ كَآفَّةًۭ ۚ فَلَوْلَا نَفَرَ مِن كُلِّ فِرْقَةٍۢ مِّنْهُمْ طَآئِفَةٌۭ لِّيَتَفَقَّهُوا۟ فِى ٱلدِّينِ وَلِيُنذِرُوا۟ قَوْمَهُمْ إِذَا رَجَعُوٓا۟ إِلَيْهِمْ لَعَلَّهُمْ يَحْذَرُونَ',
@@ -3718,7 +4292,23 @@ const SURAH_9_TREEBANK = {
       { id: '9:123:15', arabic: 'مَعَ', transliteration: 'maʿa', pos: ['N'], posLabel: 'N', root: null, meaning: { en: '(is) with', ur: '(ہے) ساتھ' } },
       { id: '9:123:16', arabic: 'ٱلْمُتَّقِينَ', transliteration: 'l-mutaqīna', pos: ['N'], posLabel: 'N', root: null, meaning: { en: 'those who fear (Him)', ur: 'جو لوگ ڈرنا (Him)' } }
     ],
-    structure: { relationships: [] }
+    structure: { relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' },
+        { from: 4, to: 5, label: 'تعلق' },
+        { from: 5, to: 6, label: 'تعلق' },
+        { from: 6, to: 7, label: 'تعلق' },
+        { from: 7, to: 8, label: 'تعلق' },
+        { from: 8, to: 9, label: 'تعلق' },
+        { from: 9, to: 10, label: 'تعلق' },
+        { from: 10, to: 11, label: 'تعلق' },
+        { from: 11, to: 12, label: 'تعلق' },
+        { from: 12, to: 13, label: 'تعلق' },
+        { from: 13, to: 14, label: 'تعلق' },
+        { from: 14, to: 15, label: 'تعلق' },
+        { from: 15, to: 16, label: 'تعلق' }
+      ] }
   },
   124: {
     text: 'وَإِذَا مَآ أُنزِلَتْ سُورَةٌۭ فَمِنْهُم مَّن يَقُولُ أَيُّكُمْ زَادَتْهُ هَٰذِهِۦٓ إِيمَٰنًۭا ۚ فَأَمَّا ٱلَّذِينَ ءَامَنُوا۟ فَزَادَتْهُمْ إِيمَٰنًۭا وَهُمْ يَسْتَبْشِرُونَ',
@@ -3849,7 +4439,21 @@ const SURAH_9_TREEBANK = {
       { id: '9:128:13', arabic: 'رَءُوفٌۭ', transliteration: 'raūfun', pos: ['N'], posLabel: 'N', root: null, meaning: { en: '(he is) kind', ur: '(وہ ہے) kind' } },
       { id: '9:128:14', arabic: 'رَّحِيمٌۭ', transliteration: 'raḥīmun', pos: ['N'], posLabel: 'N', root: null, meaning: { en: '(and) merciful', ur: '(اور) رحم والا' } }
     ],
-    structure: { relationships: [] }
+    structure: { relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' },
+        { from: 4, to: 5, label: 'تعلق' },
+        { from: 5, to: 6, label: 'تعلق' },
+        { from: 6, to: 7, label: 'تعلق' },
+        { from: 7, to: 8, label: 'تعلق' },
+        { from: 8, to: 9, label: 'تعلق' },
+        { from: 9, to: 10, label: 'تعلق' },
+        { from: 10, to: 11, label: 'تعلق' },
+        { from: 11, to: 12, label: 'تعلق' },
+        { from: 12, to: 13, label: 'تعلق' },
+        { from: 13, to: 14, label: 'تعلق' }
+      ] }
   },
   129: {
     text: 'فَإِن تَوَلَّوْا۟ فَقُلْ حَسْبِىَ ٱللَّهُ لَآ إِلَٰهَ إِلَّا هُوَ ۖ عَلَيْهِ تَوَكَّلْتُ ۖ وَهُوَ رَبُّ ٱلْعَرْشِ ٱلْعَظِيمِ',
@@ -3874,7 +4478,22 @@ const SURAH_9_TREEBANK = {
       { id: '9:129:14', arabic: 'ٱلْعَرْشِ', transliteration: 'l-ʿarshi', pos: ['N'], posLabel: 'N', root: null, meaning: { en: '(of) the Throne', ur: '(کا)  Throne' } },
       { id: '9:129:15', arabic: 'ٱلْعَظِيمِ', transliteration: 'l-ʿaẓīmi', pos: ['N'], posLabel: 'N', root: null, meaning: { en: 'the Great', ur: ' عظیم' } }
     ],
-    structure: { relationships: [] }
+    structure: { relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' },
+        { from: 4, to: 5, label: 'تعلق' },
+        { from: 5, to: 6, label: 'تعلق' },
+        { from: 6, to: 7, label: 'تعلق' },
+        { from: 7, to: 8, label: 'تعلق' },
+        { from: 8, to: 9, label: 'تعلق' },
+        { from: 9, to: 10, label: 'تعلق' },
+        { from: 10, to: 11, label: 'تعلق' },
+        { from: 11, to: 12, label: 'تعلق' },
+        { from: 12, to: 13, label: 'تعلق' },
+        { from: 13, to: 14, label: 'تعلق' },
+        { from: 14, to: 15, label: 'تعلق' }
+      ] }
   }
 };
 

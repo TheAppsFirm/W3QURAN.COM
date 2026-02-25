@@ -14,6 +14,7 @@ export const ONTOLOGY = {
   categories: {
     propheticCommands: {
       name: "Early Commands to Prophet",
+      nameUr: "نبی ﷺ کو ابتدائی احکام",
       nameArabic: "أوامر النبي الأولى",
       color: '#F59E0B',
       icon: 'Crown',
@@ -30,6 +31,7 @@ export const ONTOLOGY = {
 
     dayOfJudgment: {
       name: "Day of Judgment",
+      nameUr: "یومِ قیامت",
       nameArabic: "يوم القيامة",
       color: '#EF4444',
       icon: 'Scale',
@@ -41,6 +43,7 @@ export const ONTOLOGY = {
 
     waleedIbnMugheera: {
       name: "The Obstinate Denier",
+      nameUr: "ضدی منکر",
       nameArabic: "المعاند الكفور",
       color: '#EC4899',
       icon: 'AlertTriangle',
@@ -56,6 +59,7 @@ export const ONTOLOGY = {
 
     waleedsDeliberation: {
       name: "The Denier's Process",
+      nameUr: "ولید کے انکار کا طریقہ",
       nameArabic: "عملية إنكار الوليد",
       color: '#8B5CF6',
       icon: 'Eye',
@@ -72,6 +76,7 @@ export const ONTOLOGY = {
 
     saqar: {
       name: "Description of Saqar (Hell)",
+      nameUr: "سقر (جہنم) کا بیان",
       nameArabic: "وصف سقر",
       color: '#EF4444',
       icon: 'Zap',
@@ -85,6 +90,7 @@ export const ONTOLOGY = {
 
     nineteenAngels: {
       name: "The Nineteen Angels",
+      nameUr: "انیس فرشتے",
       nameArabic: "تسعة عشر ملكاً",
       color: '#06B6D4',
       icon: 'Shield',
@@ -97,6 +103,7 @@ export const ONTOLOGY = {
 
     cosmicOaths: {
       name: "Cosmic Oaths",
+      nameUr: "کائناتی قسمیں",
       nameArabic: "القسم الكوني",
       color: '#8B5CF6',
       icon: 'Moon',
@@ -110,6 +117,7 @@ export const ONTOLOGY = {
 
     fourReasonsForHell: {
       name: "Four Reasons for Hell",
+      nameUr: "جہنم میں داخلے کی چار وجوہات",
       nameArabic: "أربعة أسباب لدخول جهنم",
       color: '#EF4444',
       icon: 'AlertTriangle',
@@ -123,6 +131,7 @@ export const ONTOLOGY = {
 
     noIntercession: {
       name: "No Intercession",
+      nameUr: "کوئی سفارش نہیں",
       nameArabic: "لا شفاعة",
       color: '#EC4899',
       icon: 'Scale',
@@ -134,6 +143,7 @@ export const ONTOLOGY = {
 
     fleeingFromReminder: {
       name: "Fleeing from Reminder",
+      nameUr: "نصیحت سے فرار",
       nameArabic: "الفرار من التذكرة",
       color: '#3B82F6',
       icon: 'MessageCircle',
@@ -145,6 +155,7 @@ export const ONTOLOGY = {
 
     divineAttributes: {
       name: "Divine Attributes",
+      nameUr: "الہٰی صفات",
       nameArabic: "الصفات الإلهية",
       color: '#F59E0B',
       icon: 'Star',

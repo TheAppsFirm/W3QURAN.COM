@@ -53,7 +53,10 @@ export const TREEBANK_DATA = {
     ],
     structure: { diagram: ["EMPH-CLAUSE"], explanation: "The answer to the oath - confirming Muhammad's prophethood with double emphasis" },
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' }
+      ],
     },
   },
 

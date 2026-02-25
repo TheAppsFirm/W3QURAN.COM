@@ -14,6 +14,7 @@ export const ONTOLOGY = {
   categories: {
     divineOaths: {
       name: "Oaths by Divine Agents",
+      nameUr: "الہٰی عوامل کی قسمیں",
       nameArabic: "القسم بالعوامل الإلهية",
       color: '#8B5CF6',
       icon: 'Sun',
@@ -29,6 +30,7 @@ export const ONTOLOGY = {
 
     promiseCertainty: {
       name: "Certainty of Promise",
+      nameUr: "وعدے کی یقینیت",
       nameArabic: "يقينية الوعد",
       color: '#F59E0B',
       icon: 'Star',
@@ -39,6 +41,7 @@ export const ONTOLOGY = {
 
     cosmicEvents: {
       name: "Cosmic Events of That Day",
+      nameUr: "اس دن کے کائناتی واقعات",
       nameArabic: "الأحداث الكونية",
       color: '#06B6D4',
       icon: 'Globe',
@@ -52,6 +55,7 @@ export const ONTOLOGY = {
 
     dayOfSeparation: {
       name: "Day of Separation",
+      nameUr: "فیصلے کا دن",
       nameArabic: "يوم الفصل",
       color: '#EF4444',
       icon: 'Scale',
@@ -64,6 +68,7 @@ export const ONTOLOGY = {
 
     historicalWarnings: {
       name: "Historical Warnings",
+      nameUr: "تاریخی تنبیہات",
       nameArabic: "التحذيرات التاريخية",
       color: '#EC4899',
       icon: 'Book',
@@ -76,6 +81,7 @@ export const ONTOLOGY = {
 
     creationProofs: {
       name: "Proofs from Creation",
+      nameUr: "تخلیق سے دلائل",
       nameArabic: "براهين من الخلق",
       color: '#3B82F6',
       icon: 'Users',
@@ -89,6 +95,7 @@ export const ONTOLOGY = {
 
     earthProofs: {
       name: "Earth as Evidence",
+      nameUr: "زمین بطور دلیل",
       nameArabic: "الأرض كدليل",
       color: '#22C55E',
       icon: 'Globe',
@@ -101,6 +108,7 @@ export const ONTOLOGY = {
 
     hellDescription: {
       name: "Description of Hell",
+      nameUr: "جہنم کا بیان",
       nameArabic: "وصف جهنم",
       color: '#EF4444',
       icon: 'Zap',
@@ -115,6 +123,7 @@ export const ONTOLOGY = {
 
     silencedDeniers: {
       name: "Silenced Deniers",
+      nameUr: "خاموش کیے گئے جھٹلانے والے",
       nameArabic: "إسكات المكذبين",
       color: '#EC4899',
       icon: 'AlertTriangle',
@@ -127,6 +136,7 @@ export const ONTOLOGY = {
 
     paradiseDescription: {
       name: "Paradise for Righteous",
+      nameUr: "متقین کے لیے جنت",
       nameArabic: "الجنة للمتقين",
       color: '#10B981',
       icon: 'Sparkles',
@@ -140,6 +150,7 @@ export const ONTOLOGY = {
 
     worldlyEnjoyment: {
       name: "Worldly Enjoyment Warning",
+      nameUr: "دنیوی لذت کی تنبیہ",
       nameArabic: "تحذير التمتع الدنيوي",
       color: '#F59E0B',
       icon: 'AlertTriangle',
@@ -151,6 +162,7 @@ export const ONTOLOGY = {
 
     finalRefusal: {
       name: "Final Refusal to Submit",
+      nameUr: "سرتسلیم خم کرنے سے حتمی انکار",
       nameArabic: "الرفض النهائي للخضوع",
       color: '#EF4444',
       icon: 'MessageCircle',

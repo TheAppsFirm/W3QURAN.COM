@@ -21,6 +21,7 @@ export const ONTOLOGY = {
   categories: {
     divineCreation: {
       name: "Divine Creation & Sovereignty",
+      nameUr: "الٰہی تخلیق اور حاکمیت",
       nameArabic: "الخلق والسيادة الإلهية",
       color: '#F59E0B',
       icon: 'Crown',
@@ -35,6 +36,7 @@ export const ONTOLOGY = {
 
     divineKnowledge: {
       name: "Allah's Complete Knowledge",
+      nameUr: "اللہ کا مکمل علم",
       nameArabic: "علم الله الكامل",
       color: '#8B5CF6',
       icon: 'Eye',
@@ -51,6 +53,7 @@ export const ONTOLOGY = {
 
     ibrahimJourney: {
       name: "Ibrahim's Search for Truth",
+      nameUr: "ابراہیم کی تلاشِ حق",
       nameArabic: "رحلة إبراهيم للحق",
       color: '#10B981',
       icon: 'Compass',
@@ -69,6 +72,7 @@ export const ONTOLOGY = {
 
     propheticLineage: {
       name: "Chain of Prophets",
+      nameUr: "انبیاء کا سلسلہ",
       nameArabic: "سلسلة الأنبياء",
       color: '#22C55E',
       icon: 'Star',
@@ -85,6 +89,7 @@ export const ONTOLOGY = {
 
     polytheismRefutation: {
       name: "Refutation of Polytheism",
+      nameUr: "شرک کی تردید",
       nameArabic: "تفنيد الشرك",
       color: '#EF4444',
       icon: 'AlertTriangle',
@@ -102,6 +107,7 @@ export const ONTOLOGY = {
 
     signsCosmic: {
       name: "Cosmic Signs of Allah",
+      nameUr: "اللہ کی کائناتی نشانیاں",
       nameArabic: "الآيات الكونية",
       color: '#06B6D4',
       icon: 'Sun',
@@ -118,6 +124,7 @@ export const ONTOLOGY = {
 
     signsPlants: {
       name: "Agricultural Signs",
+      nameUr: "زراعت کی نشانیاں",
       nameArabic: "آيات الزراعة",
       color: '#10B981',
       icon: 'Globe',
@@ -133,6 +140,7 @@ export const ONTOLOGY = {
 
     cattleLaws: {
       name: "Cattle and Food Laws",
+      nameUr: "مویشیوں اور کھانے کے احکام",
       nameArabic: "أحكام الأنعام والطعام",
       color: '#F59E0B',
       icon: 'Scale',
@@ -151,6 +159,7 @@ export const ONTOLOGY = {
 
     paganPractices: {
       name: "Pagan Practices Refuted",
+      nameUr: "جاہلی رسوم کی تردید",
       nameArabic: "العادات الجاهلية المردودة",
       color: '#EF4444',
       icon: 'AlertTriangle',
@@ -168,6 +177,7 @@ export const ONTOLOGY = {
 
     prophetMission: {
       name: "Prophet's Mission",
+      nameUr: "نبی کی رسالت",
       nameArabic: "رسالة النبي",
       color: '#22C55E',
       icon: 'Star',
@@ -183,6 +193,7 @@ export const ONTOLOGY = {
 
     accountability: {
       name: "Individual Accountability",
+      nameUr: "انفرادی جوابدہی",
       nameArabic: "المسؤولية الفردية",
       color: '#3B82F6',
       icon: 'Scale',
@@ -198,6 +209,7 @@ export const ONTOLOGY = {
 
     humanSuccession: {
       name: "Human Succession on Earth",
+      nameUr: "زمین پر انسان کی خلافت",
       nameArabic: "خلافة الإنسان",
       color: '#06B6D4',
       icon: 'Users',
@@ -212,6 +224,7 @@ export const ONTOLOGY = {
 
     deathAngels: {
       name: "Death and Angels",
+      nameUr: "موت اور فرشتے",
       nameArabic: "الموت والملائكة",
       color: '#8B5CF6',
       icon: 'Moon',
@@ -225,6 +238,7 @@ export const ONTOLOGY = {
 
     quranRevelation: {
       name: "Quran Revelation",
+      nameUr: "نزولِ قرآن",
       nameArabic: "نزول القرآن",
       color: '#3B82F6',
       icon: 'Book',
@@ -240,6 +254,7 @@ export const ONTOLOGY = {
 
     previousNations: {
       name: "Previous Nations' Fate",
+      nameUr: "پچھلی قوموں کا انجام",
       nameArabic: "مصير الأمم السابقة",
       color: '#EF4444',
       icon: 'AlertTriangle',
@@ -254,6 +269,7 @@ export const ONTOLOGY = {
 
     disbelieversExcuses: {
       name: "Disbelievers' Excuses",
+      nameUr: "کافروں کے بہانے",
       nameArabic: "أعذار الكافرين",
       color: '#EC4899',
       icon: 'MessageCircle',
@@ -268,6 +284,7 @@ export const ONTOLOGY = {
 
     guidanceMisguidance: {
       name: "Guidance and Misguidance",
+      nameUr: "ہدایت اور گمراہی",
       nameArabic: "الهداية والضلال",
       color: '#3B82F6',
       icon: 'Compass',
@@ -282,6 +299,7 @@ export const ONTOLOGY = {
 
     commandments: {
       name: "Core Commandments",
+      nameUr: "بنیادی احکامات",
       color: '#22C55E',
       icon: 'Shield',
       nameArabic: "الوصايا الأساسية",

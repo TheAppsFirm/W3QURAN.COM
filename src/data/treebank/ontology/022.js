@@ -14,6 +14,7 @@ export const ONTOLOGY = {
   categories: {
     dayOfJudgmentEarthquake: {
       name: "The Earthquake of the Hour",
+      nameUr: "قیامت کا زلزلہ",
       nameArabic: "زلزلة الساعة",
       color: "#EF4444",
       icon: "AlertTriangle",
@@ -28,6 +29,7 @@ export const ONTOLOGY = {
 
     creationProofs: {
       name: "Proofs of Resurrection",
+      nameUr: "قیامت کے دلائل",
       nameArabic: "براهين البعث",
       color: "#06B6D4",
       icon: "Globe",
@@ -45,6 +47,7 @@ export const ONTOLOGY = {
 
     earthRevivalSign: {
       name: "Earth Revival as Resurrection Sign",
+      nameUr: "زمین کی بحالی بطور دلیلِ قیامت",
       nameArabic: "إحياء الأرض دليل البعث",
       color: "#22C55E",
       icon: "Sun",
@@ -60,6 +63,7 @@ export const ONTOLOGY = {
 
     typesOfWorshippers: {
       name: "Types of Worshippers",
+      nameUr: "عبادت گزاروں کی اقسام",
       nameArabic: "أصناف العابدين",
       color: "#F59E0B",
       icon: "Users",
@@ -74,6 +78,7 @@ export const ONTOLOGY = {
 
     divineProtection: {
       name: "Divine Protection of Believers",
+      nameUr: "مومنوں کی الٰہی حفاظت",
       nameArabic: "حماية الله للمؤمنين",
       color: "#8B5CF6",
       icon: "Shield",
@@ -85,6 +90,7 @@ export const ONTOLOGY = {
 
     permissionToFight: {
       name: "Permission for Self-Defense",
+      nameUr: "دفاعِ نفس کی اجازت",
       nameArabic: "الإذن بالقتال",
       color: "#EF4444",
       icon: "Shield",
@@ -99,6 +105,7 @@ export const ONTOLOGY = {
 
     protectionOfWorship: {
       name: "Protection of All Places of Worship",
+      nameUr: "تمام عبادت گاہوں کی حفاظت",
       nameArabic: "حماية دور العبادة",
       color: "#10B981",
       icon: "Shield",
@@ -113,6 +120,7 @@ export const ONTOLOGY = {
 
     hajjPilgrimage: {
       name: "Hajj - The Pilgrimage",
+      nameUr: "حج - زیارتِ بیت اللہ",
       nameArabic: "مناسك الحج",
       color: "#F59E0B",
       icon: "Star",
@@ -128,6 +136,7 @@ export const ONTOLOGY = {
 
     sacrifice: {
       name: "Sacrifice and Its Reality",
+      nameUr: "قربانی اور اس کی حقیقت",
       nameArabic: "الأضحية وحقيقتها",
       color: "#10B981",
       icon: "Heart",
@@ -142,6 +151,7 @@ export const ONTOLOGY = {
 
     sacredHouse: {
       name: "The Sacred House (Kaaba)",
+      nameUr: "بیت الحرام (کعبہ)",
       nameArabic: "البيت الحرام",
       color: "#F59E0B",
       icon: "Star",
@@ -159,6 +169,7 @@ export const ONTOLOGY = {
 
     sacredSymbols: {
       name: "Sacred Symbols of Allah",
+      nameUr: "اللہ کی مقدس نشانیاں",
       nameArabic: "شعائر الله",
       color: "#8B5CF6",
       icon: "Sparkles",
@@ -174,6 +185,7 @@ export const ONTOLOGY = {
 
     divineKnowledge: {
       name: "Allah's Complete Knowledge",
+      nameUr: "اللہ کا مکمل علم",
       nameArabic: "علم الله الشامل",
       color: "#F59E0B",
       icon: "Eye",
@@ -186,6 +198,7 @@ export const ONTOLOGY = {
 
     falseDeitiesWeakness: {
       name: "Weakness of False Deities",
+      nameUr: "جھوٹے معبودوں کی کمزوری",
       nameArabic: "ضعف الآلهة الباطلة",
       color: "#EF4444",
       icon: "AlertTriangle",
@@ -201,6 +214,7 @@ export const ONTOLOGY = {
 
     divineMessengers: {
       name: "Divine Messengers and Angels",
+      nameUr: "الٰہی رسول اور فرشتے",
       nameArabic: "الرسل والملائكة",
       color: "#3B82F6",
       icon: "Star",
@@ -212,6 +226,7 @@ export const ONTOLOGY = {
 
     ummatulWasat: {
       name: "The Muslim Ummah",
+      nameUr: "مسلم امت",
       nameArabic: "الأمة المسلمة",
       color: "#10B981",
       icon: "Users",
@@ -227,6 +242,7 @@ export const ONTOLOGY = {
 
     previousNationsPunishment: {
       name: "Punishment of Previous Nations",
+      nameUr: "پچھلی قوموں کی سزا",
       nameArabic: "عذاب الأمم السابقة",
       color: "#EF4444",
       icon: "AlertTriangle",
@@ -243,6 +259,7 @@ export const ONTOLOGY = {
 
     shaitanDeception: {
       name: "Satan's Deception",
+      nameUr: "شیطان کا دھوکا",
       nameArabic: "إضلال الشيطان",
       color: "#EF4444",
       icon: "AlertTriangle",
@@ -257,6 +274,7 @@ export const ONTOLOGY = {
 
     finalGuidance: {
       name: "Final Guidance",
+      nameUr: "آخری ہدایت",
       nameArabic: "الهداية الأخيرة",
       color: "#3B82F6",
       icon: "Compass",

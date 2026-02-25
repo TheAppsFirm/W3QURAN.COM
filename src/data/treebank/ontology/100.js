@@ -14,6 +14,7 @@ export const ONTOLOGY = {
   categories: {
     divineOath: {
       name: "The Oath by War Horses",
+      nameUr: "جنگی گھوڑوں کی قسم",
       nameArabic: "القسم بالخيل",
       color: '#8B5CF6',
       icon: 'Zap',
@@ -59,6 +60,7 @@ export const ONTOLOGY = {
 
     humanIngratitude: {
       name: "Human Ingratitude",
+      nameUr: "انسانی ناشکری",
       nameArabic: "كفران الإنسان",
       color: '#EF4444',
       icon: 'AlertTriangle',
@@ -83,6 +85,7 @@ export const ONTOLOGY = {
 
     judgmentDay: {
       name: "Resurrection and Exposure",
+      nameUr: "قیامت اور انکشاف",
       nameArabic: "البعث والكشف",
       color: '#F59E0B',
       icon: 'Eye',

@@ -20,7 +20,9 @@ export const TREEBANK_DATA = {
       { position: 2, arabic: "يَتَسَاءَلُونَ", transliteration: "yatasāʾalūna", root: "س أ ل", meaning: { en: "do they ask one another", ur: "وہ آپس میں پوچھتے ہیں", ar: "يَسأَلُ بَعضُهُم بَعضاً" }, pos: "V", posLabel: "V", grammarRole: "predicate", form: "VI", aspect: "IMPF" }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' }
+      ],
     },
   },
 
@@ -64,7 +66,9 @@ export const TREEBANK_DATA = {
       { position: 2, arabic: "سَيَعْلَمُونَ", transliteration: "sayaʿlamūna", root: "ع ل م", meaning: { en: "they will come to know", ur: "وہ جان لیں گے", ar: "سَيَعلَمُونَ" }, pos: "V", posLabel: "V", grammarRole: "predicate", aspect: "IMPF", prefix: "س" }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' }
+      ],
     },
   },
 
@@ -77,7 +81,10 @@ export const TREEBANK_DATA = {
       { position: 3, arabic: "سَيَعْلَمُونَ", transliteration: "sayaʿlamūna", root: "ع ل م", meaning: { en: "they will come to know", ur: "وہ جان لیں گے", ar: "سَيَعلَمُونَ" }, pos: "V", posLabel: "V", grammarRole: "predicate", emphasis: "repetition for warning" }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' }
+      ],
     },
   },
 
@@ -106,7 +113,9 @@ export const TREEBANK_DATA = {
       { position: 2, arabic: "أَوْتَادًا", transliteration: "ʾawtādan", root: "و ت د", meaning: { en: "as stakes", ur: "میخیں", ar: "أَوتاداً" }, pos: "N", posLabel: "N", grammarRole: "complement", scientific: "mountains as stabilizers" }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' }
+      ],
     },
   },
 
@@ -346,7 +355,9 @@ export const TREEBANK_DATA = {
       { position: 2, arabic: "مَآبًا", transliteration: "maʾāban", root: "أ و ب", meaning: { en: "a place of return", ur: "ٹھکانا", ar: "مَآباً" }, pos: "N", posLabel: "N", grammarRole: "complement" }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' }
+      ],
     },
   },
 
@@ -359,7 +370,10 @@ export const TREEBANK_DATA = {
       { position: 3, arabic: "أَحْقَابًا", transliteration: "ʾaḥqāban", root: "ح ق ب", meaning: { en: "for ages", ur: "مدتوں تک", ar: "أَحقاباً" }, pos: "N", posLabel: "N", grammarRole: "temporal", meaning_note: "endless periods" }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' }
+      ],
     },
   },
 
@@ -391,7 +405,10 @@ export const TREEBANK_DATA = {
       { position: 3, arabic: "وَغَسَّاقًا", transliteration: "wa-ghassāqan", root: "غ س ق", meaning: { en: "and purulence", ur: "اور پیپ", ar: "وغَسّاقاً" }, pos: "N", posLabel: "N", grammarRole: "object" }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' }
+      ],
     },
   },
 
@@ -485,7 +502,10 @@ export const TREEBANK_DATA = {
       { position: 3, arabic: "مَفَازًا", transliteration: "mafāzan", root: "ف و ز", meaning: { en: "a place of success", ur: "کامیابی ہے", ar: "مَفازاً" }, pos: "N", posLabel: "N", grammarRole: "predicate" }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' }
+      ],
     },
   },
 
@@ -497,7 +517,9 @@ export const TREEBANK_DATA = {
       { position: 2, arabic: "وَأَعْنَابًا", transliteration: "wa-ʾaʿnāban", root: "ع ن ب", meaning: { en: "and grapevines", ur: "اور انگور", ar: "وأَعناباً" }, pos: "N", posLabel: "N", grammarRole: "conjunction" }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' }
+      ],
     },
   },
 

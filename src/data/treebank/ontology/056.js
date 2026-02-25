@@ -14,6 +14,7 @@ export const ONTOLOGY = {
   categories: {
     threeGroups: {
       name: "Three Groups of Humanity",
+      nameUr: "انسانوں کے تین گروہ",
       nameAr: "أصناف البشر الثلاثة",
       color: '#8B5CF6',
       icon: 'Users',
@@ -25,6 +26,7 @@ export const ONTOLOGY = {
     },
     sabiqunRewards: {
       name: "Rewards of the Foremost",
+      nameUr: "سبقت لے جانے والوں کا اجر",
       nameAr: "جزاء السابقين",
       color: '#10B981',
       icon: 'Sparkles',
@@ -39,6 +41,7 @@ export const ONTOLOGY = {
     },
     rightHandRewards: {
       name: "Rewards of the Right",
+      nameUr: "دائیں ہاتھ والوں کا اجر",
       nameAr: "جزاء أصحاب اليمين",
       color: '#10B981',
       icon: 'Gift',
@@ -53,6 +56,7 @@ export const ONTOLOGY = {
     },
     leftHandPunishment: {
       name: "Punishment of the Left",
+      nameUr: "بائیں ہاتھ والوں کا عذاب",
       nameAr: "عذاب أصحاب الشمال",
       color: '#EF4444',
       icon: 'Flame',
@@ -67,6 +71,7 @@ export const ONTOLOGY = {
     },
     proofsOfResurrection: {
       name: "Proofs of Resurrection",
+      nameUr: "قیامت کے دلائل",
       nameAr: "براهين البعث",
       color: '#06B6D4',
       icon: 'Sun',
@@ -80,6 +85,7 @@ export const ONTOLOGY = {
     },
     quranGlory: {
       name: "Glory of the Quran",
+      nameUr: "قرآن کی عظمت",
       nameAr: "عظمة القرآن",
       color: '#3B82F6',
       icon: 'Book',
@@ -93,6 +99,7 @@ export const ONTOLOGY = {
     },
     deathMoment: {
       name: "The Moment of Death",
+      nameUr: "موت کا لمحہ",
       nameAr: "لحظة الموت",
       color: '#EF4444',
       icon: 'AlertTriangle',

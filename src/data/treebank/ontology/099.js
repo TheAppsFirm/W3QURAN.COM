@@ -14,6 +14,7 @@ export const ONTOLOGY = {
   categories: {
     cosmicEvent: {
       name: "The Final Earthquake",
+      nameUr: "عظیم زلزلہ",
       nameArabic: "الزلزلة الكبرى",
       color: '#EF4444',
       icon: 'Globe',
@@ -38,6 +39,7 @@ export const ONTOLOGY = {
 
     earthAsWitness: {
       name: "Earth as Divine Witness",
+      nameUr: "زمین بطور الٰہی گواہ",
       nameArabic: "الأرض شاهدة",
       color: '#06B6D4',
       icon: 'Eye',
@@ -62,6 +64,7 @@ export const ONTOLOGY = {
 
     humanScattering: {
       name: "Human Classification",
+      nameUr: "انسانوں کی درجہ بندی",
       nameArabic: "تصنيف البشر",
       color: '#8B5CF6',
       icon: 'Users',
@@ -86,6 +89,7 @@ export const ONTOLOGY = {
 
     atomicJustice: {
       name: "Atomic-Level Accountability",
+      nameUr: "ذرّہ برابر جوابدہی",
       nameArabic: "حساب مثقال الذرة",
       color: '#F59E0B',
       icon: 'Scale',

@@ -14,6 +14,7 @@ export const ONTOLOGY = {
   categories: {
     divineUnity: {
       name: "Divine Unity and Attributes",
+      nameUr: "توحید اور اللہ کی صفات",
       nameAr: "التوحيد وصفات الله",
       color: '#F59E0B',
       icon: 'Star',
@@ -27,6 +28,7 @@ export const ONTOLOGY = {
     },
     familyOfImran: {
       name: "Family of Imran",
+      nameUr: "آلِ عمران",
       nameAr: "آل عمران",
       color: '#8B5CF6',
       icon: 'Users',
@@ -40,6 +42,7 @@ export const ONTOLOGY = {
     },
     isaIbnMaryam: {
       name: "Jesus Son of Mary",
+      nameUr: "عیسیٰ ابن مریم",
       nameAr: "عيسى ابن مريم",
       color: '#10B981',
       icon: 'Sparkles',
@@ -57,6 +60,7 @@ export const ONTOLOGY = {
     },
     muhkamMutashabih: {
       name: "Clear and Allegorical Verses",
+      nameUr: "محکم اور متشابہ آیات",
       nameAr: "المحكم والمتشابه",
       color: '#3B82F6',
       icon: 'Book',
@@ -69,6 +73,7 @@ export const ONTOLOGY = {
     },
     battleOfUhud: {
       name: "Battle of Uhud",
+      nameUr: "غزوۂ اُحد",
       nameAr: "غزوة أحد",
       color: '#EF4444',
       icon: 'Shield',
@@ -85,6 +90,7 @@ export const ONTOLOGY = {
     },
     steadfastnessAndPatience: {
       name: "Steadfastness and Patience",
+      nameUr: "ثابت قدمی اور صبر",
       nameAr: "الصبر والثبات",
       color: '#06B6D4',
       icon: 'Heart',
@@ -99,6 +105,7 @@ export const ONTOLOGY = {
     },
     peopleOfTheBook: {
       name: "People of the Book",
+      nameUr: "اہلِ کتاب",
       nameAr: "أهل الكتاب",
       color: '#F59E0B',
       icon: 'Book',
@@ -112,6 +119,7 @@ export const ONTOLOGY = {
     },
     hypocrisyAndDisbelief: {
       name: "Hypocrisy and Disbelief",
+      nameUr: "نفاق اور کفر",
       nameAr: "النفاق والكفر",
       color: '#EF4444',
       icon: 'AlertTriangle',
@@ -124,6 +132,7 @@ export const ONTOLOGY = {
     },
     trueFaith: {
       name: "True Faith and Its Signs",
+      nameUr: "سچا ایمان اور اس کی نشانیاں",
       nameAr: "الإيمان الصادق وعلاماته",
       color: '#10B981',
       icon: 'Heart',
@@ -138,6 +147,7 @@ export const ONTOLOGY = {
     },
     worldlyAttachments: {
       name: "Worldly Attachments",
+      nameUr: "دنیاوی لگاؤ",
       nameAr: "الزخرف الدنيوي",
       color: '#EC4899',
       icon: 'Eye',
@@ -151,6 +161,7 @@ export const ONTOLOGY = {
     },
     divineWisdom: {
       name: "Divine Wisdom and Signs",
+      nameUr: "الٰہی حکمت اور نشانیاں",
       nameAr: "الحكمة الإلهية والآيات",
       color: '#8B5CF6',
       icon: 'Sun',
@@ -163,6 +174,7 @@ export const ONTOLOGY = {
     },
     delegationOfNajran: {
       name: "Delegation of Najran",
+      nameUr: "وفدِ نجران",
       nameAr: "وفد نجران",
       color: '#3B82F6',
       icon: 'MessageCircle',
@@ -175,6 +187,7 @@ export const ONTOLOGY = {
     },
     victory: {
       name: "Victory and Defeat",
+      nameUr: "فتح اور شکست",
       nameAr: "النصر والهزيمة",
       color: '#22C55E',
       icon: 'Zap',
@@ -187,6 +200,7 @@ export const ONTOLOGY = {
     },
     ribaPrahibition: {
       name: "Usury Prohibition",
+      nameUr: "سود کی حرمت",
       nameAr: "تحريم الربا",
       color: '#EF4444',
       icon: 'AlertTriangle',
@@ -198,6 +212,7 @@ export const ONTOLOGY = {
     },
     prophetMuhammad: {
       name: "Prophet Muhammad",
+      nameUr: "نبی محمد ﷺ",
       nameAr: "النبي محمد",
       color: '#22C55E',
       icon: 'Star',

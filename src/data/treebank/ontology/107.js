@@ -14,6 +14,7 @@ export const ONTOLOGY = {
   categories: {
     denialOfFaith: {
       name: "Denial of Judgment Day",
+      nameUr: "یومِ جزا کا انکار",
       nameArabic: "تكذيب الدين",
       color: '#EF4444',
       icon: 'AlertTriangle',
@@ -38,6 +39,7 @@ export const ONTOLOGY = {
 
     socialCruelty: {
       name: "Social Cruelty",
+      nameUr: "سماجی ظلم",
       nameArabic: "القسوة الاجتماعية",
       color: '#DC2626',
       icon: 'Users',
@@ -62,6 +64,7 @@ export const ONTOLOGY = {
 
     religiousHypocrisy: {
       name: "Religious Hypocrisy",
+      nameUr: "مذہبی ریاکاری",
       nameArabic: "الرياء في العبادة",
       color: '#F59E0B',
       icon: 'Eye',
@@ -86,6 +89,7 @@ export const ONTOLOGY = {
 
     smallKindnesses: {
       name: "Refusing Small Kindnesses",
+      nameUr: "چھوٹی بھلائیوں سے انکار",
       nameArabic: "منع الماعون",
       color: '#10B981',
       icon: 'Heart',

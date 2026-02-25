@@ -14,6 +14,7 @@ export const ONTOLOGY = {
   categories: {
     worldlyDistraction: {
       name: "Worldly Distraction",
+      nameUr: "دنیاوی غفلت",
       nameArabic: "الإلهاء بالدنيا",
       color: '#F59E0B',
       icon: 'AlertTriangle',
@@ -38,6 +39,7 @@ export const ONTOLOGY = {
 
     deathReality: {
       name: "Reality of Death",
+      nameUr: "موت کی حقیقت",
       nameArabic: "حقيقة الموت",
       color: '#EF4444',
       icon: 'Moon',
@@ -55,6 +57,7 @@ export const ONTOLOGY = {
 
     levelsOfCertainty: {
       name: "Three Levels of Certainty",
+      nameUr: "یقین کے تین درجے",
       nameArabic: "مراتب اليقين",
       color: '#3B82F6',
       icon: 'Eye',
@@ -86,6 +89,7 @@ export const ONTOLOGY = {
 
     accountability: {
       name: "Accountability for Blessings",
+      nameUr: "نعمتوں کی جوابدہی",
       nameArabic: "المسؤولية عن النعم",
       color: '#8B5CF6',
       icon: 'Scale',

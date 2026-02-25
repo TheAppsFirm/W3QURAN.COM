@@ -36,7 +36,9 @@ export const TREEBANK_DATA = {
       { position: 2, arabic: "فَأَنذِرْ", transliteration: "fa-ʾandhir", root: "ن ذ ر", meaning: { en: "and warn", ur: "اور ڈراؤ", ar: "فَأَنذِر" }, pos: "V", posLabel: "V", grammarRole: "command", form: "IV", mission: "warning" }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' }
+      ],
     },
   },
 
@@ -48,7 +50,9 @@ export const TREEBANK_DATA = {
       { position: 2, arabic: "فَكَبِّرْ", transliteration: "fa-kabbir", root: "ك ب ر", meaning: { en: "glorify", ur: "بڑائی بیان کرو", ar: "فَكَبِّر" }, pos: "V", posLabel: "V", grammarRole: "command", form: "II" }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' }
+      ],
     },
   },
 
@@ -60,7 +64,9 @@ export const TREEBANK_DATA = {
       { position: 2, arabic: "فَطَهِّرْ", transliteration: "fa-ṭahhir", root: "ط ه ر", meaning: { en: "purify", ur: "پاک رکھو", ar: "فَطَهِّر" }, pos: "V", posLabel: "V", grammarRole: "command", form: "II" }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' }
+      ],
     },
   },
 
@@ -72,7 +78,9 @@ export const TREEBANK_DATA = {
       { position: 2, arabic: "فَاهْجُرْ", transliteration: "fa-hjur", root: "ه ج ر", meaning: { en: "avoid", ur: "چھوڑ دو", ar: "فَاهجُر" }, pos: "V", posLabel: "V", grammarRole: "command" }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' }
+      ],
     },
   },
 
@@ -99,7 +107,9 @@ export const TREEBANK_DATA = {
       { position: 2, arabic: "فَاصْبِرْ", transliteration: "fa-ṣbir", root: "ص ب ر", meaning: { en: "be patient", ur: "صبر کرو", ar: "فَاصبِر" }, pos: "V", posLabel: "V", grammarRole: "command" }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' }
+      ],
     },
   },
 
@@ -224,7 +234,11 @@ export const TREEBANK_DATA = {
       { position: 4, arabic: "أَزِيدَ", transliteration: "ʾazīda", root: "ز ي د", meaning: { en: "I should increase", ur: "میں اور بڑھاؤں", ar: "أَزِيدَ" }, pos: "V", posLabel: "V", grammarRole: "subjunctive" }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' }
+      ],
     },
   },
 
@@ -267,7 +281,10 @@ export const TREEBANK_DATA = {
       { position: 3, arabic: "وَقَدَّرَ", transliteration: "wa-qaddara", root: "ق د ر", meaning: { en: "and calculated", ur: "اور اندازہ لگایا", ar: "وقَدَّرَ" }, pos: "V", posLabel: "V", grammarRole: "predicate", form: "II" }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' }
+      ],
     },
   },
 
@@ -280,7 +297,10 @@ export const TREEBANK_DATA = {
       { position: 3, arabic: "قَدَّرَ", transliteration: "qaddara", root: "ق د ر", meaning: { en: "he calculated", ur: "اس نے اندازہ لگایا", ar: "قَدَّرَ" }, pos: "V", posLabel: "V", grammarRole: "predicate" }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' }
+      ],
     },
   },
 
@@ -294,7 +314,11 @@ export const TREEBANK_DATA = {
       { position: 4, arabic: "قَدَّرَ", transliteration: "qaddara", meaning: { en: "he calculated", ur: "اس نے اندازہ لگایا", ar: "قَدَّرَ" }, pos: "V", posLabel: "V", grammarRole: "predicate" }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' }
+      ],
     },
   },
 
@@ -306,7 +330,9 @@ export const TREEBANK_DATA = {
       { position: 2, arabic: "نَظَرَ", transliteration: "naẓara", root: "ن ظ ر", meaning: { en: "he looked", ur: "اس نے دیکھا", ar: "نَظَرَ" }, pos: "V", posLabel: "V", grammarRole: "predicate" }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' }
+      ],
     },
   },
 
@@ -319,7 +345,10 @@ export const TREEBANK_DATA = {
       { position: 3, arabic: "وَبَسَرَ", transliteration: "wa-basara", root: "ب س ر", meaning: { en: "and scowled", ur: "اور ترش رو ہوا", ar: "وبَسَرَ" }, pos: "V", posLabel: "V", grammarRole: "predicate" }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' }
+      ],
     },
   },
 
@@ -332,7 +361,10 @@ export const TREEBANK_DATA = {
       { position: 3, arabic: "وَاسْتَكْبَرَ", transliteration: "wa-stakbara", root: "ك ب ر", meaning: { en: "and was arrogant", ur: "اور تکبر کیا", ar: "واستَكبَرَ" }, pos: "V", posLabel: "V", grammarRole: "predicate", form: "X" }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' }
+      ],
     },
   },
 
@@ -425,7 +457,9 @@ export const TREEBANK_DATA = {
       { position: 2, arabic: "لِّلْبَشَرِ", transliteration: "lil-bashari", root: "ب ش ر", meaning: { en: "for mankind", ur: "انسانوں کو", ar: "لِلبَشَر" }, pos: "PREP+N", posLabel: "PREP+N", grammarRole: "benefactive" }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' }
+      ],
     },
   },
 
@@ -438,7 +472,10 @@ export const TREEBANK_DATA = {
       { position: 3, arabic: "عَشَرَ", transliteration: "ʿashara", meaning: { en: "", ur: "", ar: "عَشَرَ" }, pos: "NUM", posLabel: "NUM", grammarRole: "subject", famous: "19 angels over Hell" }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' }
+      ],
     },
   },
 
@@ -480,7 +517,9 @@ export const TREEBANK_DATA = {
       { position: 2, arabic: "وَالْقَمَرِ", transliteration: "wal-qamari", root: "ق م ر", meaning: { en: "By the moon", ur: "قسم ہے چاند کی", ar: "والقَمَر" }, pos: "PREP+N", posLabel: "PREP+N", grammarRole: "oath" }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' }
+      ],
     },
   },
 
@@ -493,7 +532,9 @@ export const TREEBANK_DATA = {
       { position: 3, arabic: "أَدْبَرَ", transliteration: "ʾadbara", root: "د ب ر", meaning: { en: "it departs", ur: "پیٹھ پھیرے", ar: "أَدبَرَ" }, pos: "V", posLabel: "V", grammarRole: "predicate", form: "IV" }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'قسم' }
+      ],
     },
   },
 
@@ -521,7 +562,10 @@ export const TREEBANK_DATA = {
       { position: 3, arabic: "الْكُبَرِ", transliteration: "l-kubari", root: "ك ب ر", meaning: { en: "the greatest", ur: "بڑی چیزوں میں سے", ar: "الكُبَر" }, pos: "N", posLabel: "N", grammarRole: "genitive" }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' }
+      ],
     },
   },
 
@@ -533,7 +577,9 @@ export const TREEBANK_DATA = {
       { position: 2, arabic: "لِّلْبَشَرِ", transliteration: "lil-bashari", root: "ب ش ر", meaning: { en: "for mankind", ur: "انسانوں کے لیے", ar: "لِلبَشَر" }, pos: "PREP+N", posLabel: "PREP+N", grammarRole: "benefactive" }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' }
+      ],
     },
   },
 
@@ -837,7 +883,10 @@ export const TREEBANK_DATA = {
       { position: 3, arabic: "تَذْكِرَةٌ", transliteration: "tadhkiratun", root: "ذ ك ر", meaning: { en: "is a reminder", ur: "نصیحت ہے", ar: "تَذكِرَة" }, pos: "N", posLabel: "N", grammarRole: "predicate" }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' }
+      ],
     },
   },
 

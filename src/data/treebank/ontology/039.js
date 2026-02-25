@@ -16,6 +16,7 @@ export const ONTOLOGY = {
   categories: {
     sincerityInWorship: {
       name: "Sincerity in Worship (Ikhlas)",
+      nameUr: "عبادت میں اخلاص",
       nameArabic: "الإخلاص في العبادة",
       color: "#F59E0B",
       icon: "Star",
@@ -31,6 +32,7 @@ export const ONTOLOGY = {
 
     falsehoodOfPolytheism: {
       name: "Refutation of Polytheism",
+      nameUr: "شرک کی تردید",
       nameArabic: "بطلان الشرك",
       color: "#EF4444",
       icon: "AlertTriangle",
@@ -47,6 +49,7 @@ export const ONTOLOGY = {
 
     intercessionDenied: {
       name: "Intercession Denied for Polytheists",
+      nameUr: "مشرکوں کے لیے شفاعت سے انکار",
       nameArabic: "رد الشفاعة للمشركين",
       color: "#EF4444",
       icon: "Shield",
@@ -62,6 +65,7 @@ export const ONTOLOGY = {
 
     divineMercy: {
       name: "Allah's Boundless Mercy",
+      nameUr: "اللہ کی بے حد رحمت",
       nameArabic: "سعة رحمة الله",
       color: "#8B5CF6",
       icon: "Heart",
@@ -78,6 +82,7 @@ export const ONTOLOGY = {
 
     cosmicSigns: {
       name: "Signs in Creation",
+      nameUr: "تخلیق میں نشانیاں",
       nameArabic: "آيات في الخلق",
       color: "#06B6D4",
       icon: "Globe",
@@ -95,6 +100,7 @@ export const ONTOLOGY = {
 
     humanCreation: {
       name: "Human Creation and Nature",
+      nameUr: "انسانی تخلیق اور فطرت",
       nameArabic: "خلق الإنسان وطبيعته",
       color: "#06B6D4",
       icon: "Users",
@@ -112,6 +118,7 @@ export const ONTOLOGY = {
 
     quranDescription: {
       name: "Description of the Quran",
+      nameUr: "قرآن کا بیان",
       nameArabic: "وصف القرآن",
       color: "#3B82F6",
       icon: "Book",
@@ -129,6 +136,7 @@ export const ONTOLOGY = {
 
     twoGroups: {
       name: "The Two Groups (Zumar)",
+      nameUr: "دو گروہ (زُمَر)",
       nameArabic: "الزمران",
       color: "#EF4444",
       icon: "Users",
@@ -145,6 +153,7 @@ export const ONTOLOGY = {
 
     judgmentDayScenes: {
       name: "Judgment Day Scenes",
+      nameUr: "قیامت کے مناظر",
       nameArabic: "مشاهد يوم القيامة",
       color: "#EF4444",
       icon: "Scale",
@@ -162,6 +171,7 @@ export const ONTOLOGY = {
 
     sleepAndDeath: {
       name: "Sleep as Death's Brother",
+      nameUr: "نیند موت کی بہن",
       nameArabic: "النوم أخو الموت",
       color: "#8B5CF6",
       icon: "Moon",
@@ -176,6 +186,7 @@ export const ONTOLOGY = {
 
     regretOfSinners: {
       name: "Regret of Sinners",
+      nameUr: "گناہگاروں کا پچھتاوا",
       nameArabic: "ندم المذنبين",
       color: "#EF4444",
       icon: "AlertTriangle",
@@ -192,6 +203,7 @@ export const ONTOLOGY = {
 
     believerVsDisbeliever: {
       name: "Believer vs Disbeliever",
+      nameUr: "مومن بمقابلہ کافر",
       nameArabic: "المؤمن والكافر",
       color: "#3B82F6",
       icon: "Scale",
@@ -208,6 +220,7 @@ export const ONTOLOGY = {
 
     divineAttributes: {
       name: "Divine Names and Attributes",
+      nameUr: "اللہ کے نام اور صفات",
       nameArabic: "أسماء الله وصفاته",
       color: "#F59E0B",
       icon: "Crown",
@@ -225,6 +238,7 @@ export const ONTOLOGY = {
 
     paradiseDescription: {
       name: "Paradise Description",
+      nameUr: "جنت کا بیان",
       nameArabic: "وصف الجنة",
       color: "#10B981",
       icon: "Sparkles",
@@ -243,6 +257,7 @@ export const ONTOLOGY = {
 
     angelsAndThrone: {
       name: "Angels and the Throne",
+      nameUr: "فرشتے اور عرش",
       nameArabic: "الملائكة والعرش",
       color: "#F59E0B",
       icon: "Star",
@@ -256,6 +271,7 @@ export const ONTOLOGY = {
 
     warningToDisbelievers: {
       name: "Warning to Disbelievers",
+      nameUr: "کافروں کو تنبیہ",
       nameArabic: "تحذير الكافرين",
       color: "#EF4444",
       icon: "AlertTriangle",

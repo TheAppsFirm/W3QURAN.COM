@@ -14,6 +14,7 @@ export const ONTOLOGY = {
   categories: {
     divineCorrection: {
       name: "Divine Correction of Prophet",
+      nameUr: "نبی کی الٰہی اصلاح",
       nameArabic: "التعديل الإلهي",
       color: '#8B5CF6',
       icon: 'MessageCircle',
@@ -26,6 +27,7 @@ export const ONTOLOGY = {
 
     sincerityVsStatus: {
       name: "Sincerity vs Social Status",
+      nameUr: "اخلاص بمقابلہ سماجی حیثیت",
       nameArabic: "الإخلاص مقابل المكانة",
       color: '#10B981',
       icon: 'Heart',
@@ -39,6 +41,7 @@ export const ONTOLOGY = {
 
     quranHonor: {
       name: "Quran's Honor",
+      nameUr: "قرآن کی عظمت",
       nameArabic: "مكانة القرآن",
       color: '#F59E0B',
       icon: 'Book',
@@ -51,6 +54,7 @@ export const ONTOLOGY = {
 
     humanIngratitude: {
       name: "Human Ingratitude",
+      nameUr: "انسانی ناشکری",
       nameArabic: "كفران الإنسان",
       color: '#EF4444',
       icon: 'AlertTriangle',
@@ -62,6 +66,7 @@ export const ONTOLOGY = {
 
     creationStages: {
       name: "Human Creation Stages",
+      nameUr: "انسانی تخلیق کے مراحل",
       nameArabic: "مراحل خلق الإنسان",
       color: '#06B6D4',
       icon: 'Users',
@@ -76,6 +81,7 @@ export const ONTOLOGY = {
 
     provisionSigns: {
       name: "Signs in Provision",
+      nameUr: "رزق میں نشانیاں",
       nameArabic: "آيات في الرزق",
       color: '#22C55E',
       icon: 'Sun',
@@ -89,6 +95,7 @@ export const ONTOLOGY = {
 
     judgmentDay: {
       name: "Day of Judgment",
+      nameUr: "یومِ قیامت",
       nameArabic: "يوم القيامة",
       color: '#EF4444',
       icon: 'Zap',
@@ -101,6 +108,7 @@ export const ONTOLOGY = {
 
     twoFaces: {
       name: "Two Types of Faces",
+      nameUr: "دو قسم کے چہرے",
       nameArabic: "نوعان من الوجوه",
       color: '#3B82F6',
       icon: 'Scale',

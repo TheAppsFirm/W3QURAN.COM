@@ -14,6 +14,7 @@ export const ONTOLOGY = {
   categories: {
     fightingInAllahsCause: {
       name: "Fighting in Allah's Cause",
+      nameUr: "اللہ کی راہ میں جہاد",
       nameAr: "القتال في سبيل الله",
       color: '#EF4444',
       icon: 'Shield',
@@ -30,6 +31,7 @@ export const ONTOLOGY = {
     },
     disbelieversCondemned: {
       name: "Fate of Disbelievers",
+      nameUr: "کافروں کا انجام",
       nameAr: "مصير الكافرين",
       color: '#EF4444',
       icon: 'AlertTriangle',
@@ -46,6 +48,7 @@ export const ONTOLOGY = {
     },
     hypocritesExposed: {
       name: "Hypocrites Exposed",
+      nameUr: "منافقین کا بے نقاب ہونا",
       nameAr: "كشف المنافقين",
       color: '#EF4444',
       icon: 'AlertTriangle',
@@ -65,6 +68,7 @@ export const ONTOLOGY = {
     },
     paradiseDescription: {
       name: "Paradise Description",
+      nameUr: "جنت کا بیان",
       nameAr: "وصف الجنة",
       color: '#8B5CF6',
       icon: 'Sparkles',
@@ -81,6 +85,7 @@ export const ONTOLOGY = {
     },
     worldlyLifeTest: {
       name: "Worldly Life as Test",
+      nameUr: "دنیاوی زندگی بطور آزمائش",
       nameAr: "الدنيا ابتلاء",
       color: '#F59E0B',
       icon: 'Star',
@@ -97,6 +102,7 @@ export const ONTOLOGY = {
     },
     prophetMuhammad: {
       name: "The Prophet Muhammad",
+      nameUr: "نبی محمد ﷺ",
       nameAr: "النبي محمد",
       color: '#F59E0B',
       icon: 'Crown',
@@ -110,6 +116,7 @@ export const ONTOLOGY = {
     },
     believersBlessings: {
       name: "Blessings for Believers",
+      nameUr: "مومنین کے لیے نعمتیں",
       nameAr: "نعم المؤمنين",
       color: '#8B5CF6',
       icon: 'Heart',
@@ -123,6 +130,7 @@ export const ONTOLOGY = {
     },
     hourAndJudgment: {
       name: "The Hour and Judgment",
+      nameUr: "قیامت اور حساب",
       nameAr: "الساعة والحساب",
       color: '#EF4444',
       icon: 'Shield',

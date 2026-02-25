@@ -14,6 +14,7 @@ export const ONTOLOGY = {
   categories: {
     cosmicUpheaval: {
       name: "Cosmic Transformation",
+      nameUr: "کائناتی تبدیلی",
       nameArabic: "التحول الكوني",
       color: '#06B6D4',
       icon: 'Globe',
@@ -27,6 +28,7 @@ export const ONTOLOGY = {
 
     humanJourney: {
       name: "Human Toiling",
+      nameUr: "انسانی محنت و مشقت",
       nameArabic: "كدح الإنسان",
       color: '#10B981',
       icon: 'Users',
@@ -38,6 +40,7 @@ export const ONTOLOGY = {
 
     twoRecords: {
       name: "Two Groups Receiving Records",
+      nameUr: "نامۂ اعمال پانے والے دو گروہ",
       nameArabic: "فريقان والكتاب",
       color: '#3B82F6',
       icon: 'Book',
@@ -52,6 +55,7 @@ export const ONTOLOGY = {
 
     causeOfDoom: {
       name: "Cause of Their Doom",
+      nameUr: "ان کی ہلاکت کا سبب",
       nameArabic: "سبب الهلاك",
       color: '#EF4444',
       icon: 'AlertTriangle',
@@ -64,6 +68,7 @@ export const ONTOLOGY = {
 
     twilightOaths: {
       name: "Twilight Oaths",
+      nameUr: "شفق کی قسمیں",
       nameArabic: "قسم الغروب",
       color: '#8B5CF6',
       icon: 'Moon',
@@ -76,6 +81,7 @@ export const ONTOLOGY = {
 
     stagesOfExistence: {
       name: "Life Stages",
+      nameUr: "زندگی کے مراحل",
       nameArabic: "أطوار الحياة",
       color: '#22C55E',
       icon: 'Compass',
@@ -86,6 +92,7 @@ export const ONTOLOGY = {
 
     rejecters: {
       name: "The Deniers",
+      nameUr: "جھٹلانے والے",
       nameArabic: "المكذبون",
       color: '#EF4444',
       icon: 'AlertTriangle',
@@ -98,6 +105,7 @@ export const ONTOLOGY = {
 
     finalDestinies: {
       name: "Final Outcomes",
+      nameUr: "حتمی انجام",
       nameArabic: "المصير النهائي",
       color: '#F59E0B',
       icon: 'Scale',

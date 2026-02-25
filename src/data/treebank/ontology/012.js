@@ -38,6 +38,7 @@ export const ONTOLOGY = {
   categories: {
     yusufsChildhood: {
       name: "Yusuf's Childhood & The Dream",
+      nameUr: "یوسف کا بچپن اور خواب",
       nameArabic: "طفولة يوسف والرؤيا",
       color: "#8B5CF6",
       verses: "12:1-6",
@@ -90,6 +91,7 @@ export const ONTOLOGY = {
 
     brothersJealousy: {
       name: "The Brothers' Plot",
+      nameUr: "بھائیوں کی سازش",
       nameArabic: "مكيدة الإخوة",
       color: "#EF4444",
       verses: "12:7-18",
@@ -149,6 +151,7 @@ export const ONTOLOGY = {
 
     egyptAndAziz: {
       name: "Egypt & The Aziz's House",
+      nameUr: "مصر اور عزیز کا گھر",
       nameArabic: "مصر وبيت العزيز",
       color: "#F59E0B",
       verses: "12:19-22",
@@ -214,6 +217,7 @@ export const ONTOLOGY = {
 
     temptationOfZulaykha: {
       name: "The Temptation of Zulaykha",
+      nameUr: "زلیخا کا فتنہ",
       nameArabic: "فتنة زليخا",
       color: "#EC4899",
       verses: "12:23-34",
@@ -330,6 +334,7 @@ export const ONTOLOGY = {
 
     prisonYears: {
       name: "The Prison & Dream Interpretation",
+      nameUr: "قید خانہ اور خوابوں کی تعبیر",
       nameArabic: "السجن وتفسير الأحلام",
       color: "#06B6D4",
       verses: "12:35-42",
@@ -402,6 +407,7 @@ export const ONTOLOGY = {
 
     kingsVisionAndRelease: {
       name: "The King's Dream & Yusuf's Release",
+      nameUr: "بادشاہ کا خواب اور یوسف کی رہائی",
       nameArabic: "رؤيا الملك وإطلاق يوسف",
       color: "#10B981",
       verses: "12:43-57",
@@ -482,6 +488,7 @@ export const ONTOLOGY = {
 
     brothersReturn: {
       name: "The Brothers Come to Egypt",
+      nameUr: "بھائیوں کی مصر آمد",
       nameArabic: "عودة الإخوة إلى مصر",
       color: "#A855F7",
       verses: "12:58-87",
@@ -590,6 +597,7 @@ export const ONTOLOGY = {
 
     grandReunion: {
       name: "The Grand Reunion",
+      nameUr: "عظیم ملاقات",
       nameArabic: "اللقاء الكبير",
       color: "#22C55E",
       verses: "12:88-101",
@@ -713,6 +721,7 @@ export const ONTOLOGY = {
 
     closingReflections: {
       name: "Final Reflections & Lessons",
+      nameUr: "اختتامی تاملات اور اسباق",
       nameArabic: "خاتمة وعبر",
       color: "#6366F1",
       verses: "12:102-111",

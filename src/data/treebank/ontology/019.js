@@ -17,6 +17,7 @@ export const ONTOLOGY = {
       color: '#10B981',
       icon: 'Book',
       name: "Zakariya and Yahya",
+      nameUr: "زکریا اور یحییٰ علیہما السلام",
       nameArabic: "زكريا ويحيى",
       concepts: [
         { term: "كهيعص", meaning: { en: "Kaf Ha Ya Ain Sad", ur: "کاف ہا یا عین صاد" }, explanation: { en: "Disconnected letters (Muqatta'at) - divine mysteries", ur: "حروفِ مقطعات - الٰہی رموز و اسرار" }, verseRef: "19:1" },
@@ -43,6 +44,7 @@ export const ONTOLOGY = {
       color: '#3B82F6',
       icon: 'Shield',
       name: "Yahya's Virtues",
+      nameUr: "یحییٰ علیہ السلام کی فضیلتیں",
       nameArabic: "صفات يحيى",
       concepts: [
         { term: "يَا يَحْيَىٰ خُذِ الْكِتَابَ بِقُوَّةٍ", meaning: { en: "O Yahya, take the Scripture with determination", ur: "اے یحیٰی، کتاب کو مضبوطی سے تھام لو" }, explanation: { en: "Command to hold firmly to divine guidance", ur: "الٰہی ہدایت کو مضبوطی سے پکڑنے کا حکم" }, verseRef: "19:12" },
@@ -62,6 +64,7 @@ export const ONTOLOGY = {
       color: '#EC4899',
       icon: 'Globe',
       name: "Story of Maryam",
+      nameUr: "مریم علیہا السلام کا قصہ",
       nameArabic: "قصة مريم",
       concepts: [
         { term: "وَاذْكُرْ فِي الْكِتَابِ مَرْيَمَ", meaning: { en: "And mention in the Book, Mary", ur: "اور کتاب میں مریم کا ذکر کرو" }, explanation: { en: "Command to relate Maryam's story", ur: "مریم کا قصہ بیان کرنے کا حکم" }, verseRef: "19:16" },
@@ -86,6 +89,7 @@ export const ONTOLOGY = {
       color: '#F59E0B',
       icon: 'Star',
       name: "Birth of Isa",
+      nameUr: "عیسیٰ علیہ السلام کی ولادت",
       nameArabic: "ولادة عيسى",
       concepts: [
         { term: "فَحَمَلَتْهُ فَانتَبَذَتْ بِهِ مَكَانًا قَصِيًّا", meaning: { en: "She conceived him and withdrew with him to a remote place", ur: "اس نے اسے حمل میں رکھا اور دور ایک جگہ چلی گئیں" }, explanation: { en: "Maryam's seclusion during pregnancy", ur: "حمل کے دوران مریم کی علیحدگی" }, verseRef: "19:22" },
@@ -107,6 +111,7 @@ export const ONTOLOGY = {
       color: '#EF4444',
       icon: 'Users',
       name: "Isa Speaks in the Cradle",
+      nameUr: "عیسیٰ علیہ السلام کا گہوارے میں کلام",
       nameArabic: "عيسى يتكلم في المهد",
       concepts: [
         { term: "فَأَتَتْ بِهِ قَوْمَهَا تَحْمِلُهُ", meaning: { en: "She brought him to her people, carrying him", ur: "وہ اسے اٹھا کر اپنی قوم کے پاس لائیں" }, explanation: { en: "Maryam returns facing accusation", ur: "مریم الزامات کا سامنا کرتے ہوئے واپس آئیں" }, verseRef: "19:27" },
@@ -133,6 +138,7 @@ export const ONTOLOGY = {
       color: '#8B5CF6',
       icon: 'Heart',
       name: "The Truth About Isa",
+      nameUr: "عیسیٰ علیہ السلام کی حقیقت",
       nameArabic: "حقيقة عيسى",
       concepts: [
         { term: "ذَٰلِكَ عِيسَى ابْنُ مَرْيَمَ", meaning: { en: "That is Jesus, the son of Mary", ur: "یہ ہے عیسیٰ ابنِ مریم" }, explanation: { en: "Identity through mother, not father", ur: "شناخت ماں کے ذریعے، باپ کے ذریعے نہیں" }, verseRef: "19:34" },
@@ -153,6 +159,7 @@ export const ONTOLOGY = {
       color: '#14B8A6',
       icon: 'Crown',
       name: "Day of Judgment",
+      nameUr: "یومِ قیامت",
       nameArabic: "يوم القيامة",
       concepts: [
         { term: "أَسْمِعْ بِهِمْ وَأَبْصِرْ يَوْمَ يَأْتُونَنَا", meaning: { en: "How clearly they will hear and see the Day they come to Us", ur: "جس دن وہ ہمارے پاس آئیں گے کتنا صاف سنیں گے اور دیکھیں گے" }, explanation: { en: "Perfect awareness on Judgment Day", ur: "یومِ قیامت پر مکمل آگاہی" }, verseRef: "19:38" },
@@ -170,6 +177,7 @@ export const ONTOLOGY = {
       color: '#3B82F6',
       icon: 'Shield',
       name: "Ibrahim and His Father",
+      nameUr: "ابراہیم علیہ السلام اور ان کے والد",
       nameArabic: "إبراهيم وأبيه",
       concepts: [
         { term: "وَاذْكُرْ فِي الْكِتَابِ إِبْرَاهِيمَ", meaning: { en: "And mention in the Book, Ibrahim", ur: "اور کتاب میں ابراہیم کا ذکر کرو" }, explanation: { en: "Beginning of Ibrahim's story", ur: "ابراہیم کے قصے کا آغاز" }, verseRef: "19:41" },
@@ -197,6 +205,7 @@ export const ONTOLOGY = {
       color: '#EC4899',
       icon: 'Globe',
       name: "Ibrahim's Blessings",
+      nameUr: "ابراہیم علیہ السلام کی برکات",
       nameArabic: "نعم إبراهيم",
       concepts: [
         { term: "فَلَمَّا اعْتَزَلَهُمْ وَمَا يَعْبُدُونَ مِن دُونِ اللَّهِ", meaning: { en: "When he had left them and those they worship other than Allah", ur: "جب اس نے ان سے اور ان کے اللہ کے سوا معبودوں سے کنارہ کشی کی" }, explanation: { en: "Result of his separation", ur: "اس کی علیحدگی کا نتیجہ" }, verseRef: "19:49" },
@@ -211,6 +220,7 @@ export const ONTOLOGY = {
       color: '#3B82F6',
       icon: 'Shield',
       name: "Story of Musa",
+      nameUr: "موسیٰ علیہ السلام کا قصہ",
       nameArabic: "قصة موسى",
       concepts: [
         { term: "وَاذْكُرْ فِي الْكِتَابِ مُوسَىٰ", meaning: { en: "And mention in the Book, Moses", ur: "اور کتاب میں موسیٰ کا ذکر کرو" }, explanation: { en: "Beginning of Musa's mention", ur: "موسیٰ کے ذکر کا آغاز" }, verseRef: "19:51" },
@@ -226,6 +236,7 @@ export const ONTOLOGY = {
       color: '#10B981',
       icon: 'Book',
       name: "Story of Ismail",
+      nameUr: "اسماعیل علیہ السلام کا قصہ",
       nameArabic: "قصة إسماعيل",
       concepts: [
         { term: "وَاذْكُرْ فِي الْكِتَابِ إِسْمَاعِيلَ", meaning: { en: "And mention in the Book, Ishmael", ur: "اور کتاب میں اسماعیل کا ذکر کرو" }, explanation: { en: "Beginning of Ismail's mention", ur: "اسماعیل کے ذکر کا آغاز" }, verseRef: "19:54" },
@@ -240,6 +251,7 @@ export const ONTOLOGY = {
       color: '#10B981',
       icon: 'Book',
       name: "Story of Idris",
+      nameUr: "ادریس علیہ السلام کا قصہ",
       nameArabic: "قصة إدريس",
       concepts: [
         { term: "وَاذْكُرْ فِي الْكِتَابِ إِدْرِيسَ", meaning: { en: "And mention in the Book, Idris", ur: "اور کتاب میں ادریس کا ذکر کرو" }, explanation: { en: "Beginning of Idris's mention", ur: "ادریس کے ذکر کا آغاز" }, verseRef: "19:56" },
@@ -252,6 +264,7 @@ export const ONTOLOGY = {
       color: '#F59E0B',
       icon: 'Star',
       name: "Prophets Honored",
+      nameUr: "انبیاء کی تکریم",
       nameArabic: "تكريم الأنبياء",
       concepts: [
         { term: "أُولَٰئِكَ الَّذِينَ أَنْعَمَ اللَّهُ عَلَيْهِم", meaning: { en: "Those were the ones upon whom Allah bestowed favor", ur: "یہ وہ لوگ ہیں جن پر اللہ نے انعام کیا" }, explanation: { en: "Summary of blessed prophets", ur: "برکت والے انبیاء کا خلاصہ" }, verseRef: "19:58" },
@@ -267,6 +280,7 @@ export const ONTOLOGY = {
       color: '#EC4899',
       icon: 'Globe',
       name: "Corrupt Successors",
+      nameUr: "بگڑے ہوئے جانشین",
       nameArabic: "الخلف الفاسد",
       concepts: [
         { term: "فَخَلَفَ مِن بَعْدِهِمْ خَلْفٌ", meaning: { en: "Then there succeeded after them successors", ur: "پھر ان کے بعد ایسے جانشین آئے" }, explanation: { en: "Later generations who deviated", ur: "بعد کی نسلیں جو بھٹک گئیں" }, verseRef: "19:59" },
@@ -283,6 +297,7 @@ export const ONTOLOGY = {
       color: '#8B5CF6',
       icon: 'Heart',
       name: "Description of Paradise",
+      nameUr: "جنت کا بیان",
       nameArabic: "وصف الجنة",
       concepts: [
         { term: "جَنَّاتِ عَدْنٍ الَّتِي وَعَدَ الرَّحْمَٰنُ عِبَادَهُ بِالْغَيْبِ", meaning: { en: "Gardens of Eden which the Most Merciful has promised His servants in the unseen", ur: "ہمیشہ رہنے والے باغات جن کا رحمٰن نے اپنے بندوں سے بغیر دیکھے وعدہ کیا ہے" }, explanation: { en: "Paradise - promised yet unseen", ur: "جنت - وعدہ شدہ مگر نادیدہ" }, verseRef: "19:61" },
@@ -297,6 +312,7 @@ export const ONTOLOGY = {
       color: '#8B5CF6',
       icon: 'Heart',
       name: "Angel Jibril's Response",
+      nameUr: "جبریل علیہ السلام کا جواب",
       nameArabic: "رد جبريل",
       concepts: [
         { term: "وَمَا نَتَنَزَّلُ إِلَّا بِأَمْرِ رَبِّكَ", meaning: { en: "We descend not except by order of your Lord", ur: "ہم تیرے رب کے حکم کے بغیر نازل نہیں ہوتے" }, explanation: { en: "Angels only descend by command", ur: "فرشتے صرف حکم سے نازل ہوتے ہیں" }, verseRef: "19:64" },
@@ -313,6 +329,7 @@ export const ONTOLOGY = {
       color: '#EF4444',
       icon: 'Users',
       name: "Disbelievers' Denial",
+      nameUr: "کافروں کا انکار",
       nameArabic: "إنكار الكافرين",
       concepts: [
         { term: "وَيَقُولُ الْإِنسَانُ أَإِذَا مَا مِتُّ لَسَوْفَ أُخْرَجُ حَيًّا", meaning: { en: "And man says: When I have died, will I be brought forth alive?", ur: "اور انسان کہتا ہے: جب میں مر جاؤں گا تو کیا زندہ نکالا جاؤں گا؟" }, explanation: { en: "Denial of resurrection", ur: "قیامت کا انکار" }, verseRef: "19:66" },
@@ -329,6 +346,7 @@ export const ONTOLOGY = {
       color: '#14B8A6',
       icon: 'Crown',
       name: "All Pass Over Hell",
+      nameUr: "جہنم پر سے گزرنا",
       nameArabic: "الورود على النار",
       concepts: [
         { term: "وَإِن مِّنكُمْ إِلَّا وَارِدُهَا", meaning: { en: "And there is none of you except he will come to it", ur: "اور تم میں سے ہر ایک اس پر سے گزرے گا" }, explanation: { en: "All will pass by/over Hell", ur: "سب جہنم پر سے گزریں گے" }, verseRef: "19:71" },
@@ -342,6 +360,7 @@ export const ONTOLOGY = {
       color: '#8B5CF6',
       icon: 'Heart',
       name: "Arrogant Disbelievers",
+      nameUr: "متکبر کافر",
       nameArabic: "تكبر الكافرين",
       concepts: [
         { term: "وَإِذَا تُتْلَىٰ عَلَيْهِمْ آيَاتُنَا بَيِّنَاتٍ", meaning: { en: "And when Our verses are recited to them as clear evidences", ur: "اور جب ان پر ہماری واضح آیات تلاوت کی جاتی ہیں" }, explanation: { en: "Clear signs presented", ur: "واضح نشانیاں پیش کی گئیں" }, verseRef: "19:73" },
@@ -356,6 +375,7 @@ export const ONTOLOGY = {
       color: '#10B981',
       icon: 'Book',
       name: "Extended Respite",
+      nameUr: "مہلت میں اضافہ",
       nameArabic: "الإمهال",
       concepts: [
         { term: "قُلْ مَن كَانَ فِي الضَّلَالَةِ فَلْيَمْدُدْ لَهُ الرَّحْمَٰنُ مَدًّا", meaning: { en: "Say: Whoever is in error - let the Most Merciful extend for him an extension", ur: "کہو: جو گمراہی میں ہے رحمٰن اسے مہلت دیتا رہے" }, explanation: { en: "Allah gives time to disbelievers", ur: "اللہ کافروں کو مہلت دیتا ہے" }, verseRef: "19:75" },
@@ -369,6 +389,7 @@ export const ONTOLOGY = {
       color: '#06B6D4',
       icon: 'Compass',
       name: "Increase in Guidance",
+      nameUr: "ہدایت میں اضافہ",
       nameArabic: "زيادة الهداية",
       concepts: [
         { term: "وَيَزِيدُ اللَّهُ الَّذِينَ اهْتَدَوْا هُدًى", meaning: { en: "And Allah increases those who are guided in guidance", ur: "اور اللہ ہدایت یافتہ لوگوں کی ہدایت بڑھاتا ہے" }, explanation: { en: "Guidance increases guidance", ur: "ہدایت سے ہدایت بڑھتی ہے" }, verseRef: "19:76" },
@@ -381,6 +402,7 @@ export const ONTOLOGY = {
       color: '#14B8A6',
       icon: 'Crown',
       name: "The Mocker of Resurrection",
+      nameUr: "قیامت کا مذاق اڑانے والا",
       nameArabic: "المستهزئ بالبعث",
       concepts: [
         { term: "أَفَرَأَيْتَ الَّذِي كَفَرَ بِآيَاتِنَا", meaning: { en: "Have you seen he who disbelieved in Our signs", ur: "کیا تم نے اس شخص کو دیکھا جس نے ہماری آیات کا انکار کیا" }, explanation: { en: "Case study of a disbeliever", ur: "ایک کافر کی مثال" }, verseRef: "19:77" },
@@ -398,6 +420,7 @@ export const ONTOLOGY = {
       color: '#EC4899',
       icon: 'Globe',
       name: "False Gods",
+      nameUr: "جھوٹے معبود",
       nameArabic: "الآلهة الباطلة",
       concepts: [
         { term: "وَاتَّخَذُوا مِن دُونِ اللَّهِ آلِهَةً لِّيَكُونُوا لَهُمْ عِزًّا", meaning: { en: "And they have taken besides Allah gods that they would be for them honor", ur: "اور انہوں نے اللہ کے سوا معبود بنا لیے تاکہ وہ ان کے لیے عزت کا ذریعہ ہوں" }, explanation: { en: "False gods for supposed strength", ur: "فرضی طاقت کے لیے جھوٹے معبود" }, verseRef: "19:81" },
@@ -414,6 +437,7 @@ export const ONTOLOGY = {
       color: '#10B981',
       icon: 'Book',
       name: "Day of Gathering",
+      nameUr: "حشر کا دن",
       nameArabic: "يوم الحشر",
       concepts: [
         { term: "يَوْمَ نَحْشُرُ الْمُتَّقِينَ إِلَى الرَّحْمَٰنِ وَفْدًا", meaning: { en: "The Day We will gather the righteous to the Most Merciful as a delegation", ur: "جس دن ہم متقیوں کو رحمٰن کے پاس وفد کی طرح جمع کریں گے" }, explanation: { en: "Honorable gathering for believers", ur: "مومنوں کا باعزت اجتماع" }, verseRef: "19:85" },
@@ -427,6 +451,7 @@ export const ONTOLOGY = {
       color: '#EC4899',
       icon: 'Globe',
       name: "Rejection of Sonship",
+      nameUr: "اللہ کی اولاد ہونے کا رد",
       nameArabic: "رد دعوى الولد",
       concepts: [
         { term: "وَقَالُوا اتَّخَذَ الرَّحْمَٰنُ وَلَدًا", meaning: { en: "And they say: The Most Merciful has taken a son", ur: "اور وہ کہتے ہیں: رحمٰن نے بیٹا بنایا ہے" }, explanation: { en: "The false claim", ur: "جھوٹا دعویٰ" }, verseRef: "19:88" },
@@ -447,6 +472,7 @@ export const ONTOLOGY = {
       color: '#EF4444',
       icon: 'Users',
       name: "Love for Believers",
+      nameUr: "مومنوں سے محبت",
       nameArabic: "المحبة للمؤمنين",
       concepts: [
         { term: "إِنَّ الَّذِينَ آمَنُوا وَعَمِلُوا الصَّالِحَاتِ", meaning: { en: "Indeed, those who have believed and done righteous deeds", ur: "بے شک جو لوگ ایمان لائے اور نیک عمل کیے" }, explanation: { en: "Two conditions for Allah's love", ur: "اللہ کی محبت کی دو شرطیں" }, verseRef: "19:96" },
@@ -458,6 +484,7 @@ export const ONTOLOGY = {
       color: '#EF4444',
       icon: 'Users',
       name: "Purpose of the Quran",
+      nameUr: "قرآن کا مقصد",
       nameArabic: "الحكمة من القرآن",
       concepts: [
         { term: "فَإِنَّمَا يَسَّرْنَاهُ بِلِسَانِكَ", meaning: { en: "So We have made it easy in your tongue", ur: "پس ہم نے اسے تمہاری زبان میں آسان کر دیا ہے" }, explanation: { en: "Quran made easy in Arabic", ur: "قرآن عربی میں آسان بنایا گیا" }, verseRef: "19:97" },

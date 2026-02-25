@@ -37,6 +37,7 @@ export const ONTOLOGY = {
   categories: {
     openingAndWarning: {
       name: "Opening and Warning to Disbelievers",
+      nameUr: "ابتدائیہ اور کافروں کو تنبیہ",
       nameArabic: "الافتتاح والإنذار",
       color: "#8B5CF6",
       icon: "AlertTriangle",
@@ -125,6 +126,7 @@ export const ONTOLOGY = {
 
     previousNations: {
       name: "Previous Nations' Rejection",
+      nameUr: "پچھلی قوموں کا انکار",
       nameArabic: "تكذيب الأمم السابقة",
       color: "#EF4444",
       icon: "Users",
@@ -184,6 +186,7 @@ export const ONTOLOGY = {
 
     dawudStory: {
       name: "The Story of Dawud",
+      nameUr: "داؤد کا قصہ",
       nameArabic: "قصة داود",
       color: "#F59E0B",
       icon: "Crown",
@@ -394,6 +397,7 @@ export const ONTOLOGY = {
 
     sulaymanStory: {
       name: "The Story of Sulayman",
+      nameUr: "سلیمان کا قصہ",
       nameArabic: "قصة سليمان",
       color: "#10B981",
       icon: "Crown",
@@ -539,6 +543,7 @@ export const ONTOLOGY = {
 
     ayyubStory: {
       name: "The Story of Ayyub",
+      nameUr: "ایوب کا قصہ",
       nameArabic: "قصة أيوب",
       color: "#06B6D4",
       icon: "Heart",
@@ -621,6 +626,7 @@ export const ONTOLOGY = {
 
     otherProphets: {
       name: "Other Prophets Mentioned",
+      nameUr: "دیگر مذکور انبیاء",
       nameArabic: "أنبياء آخرون",
       color: "#A855F7",
       icon: "Star",
@@ -673,6 +679,7 @@ export const ONTOLOGY = {
 
     paradiseDescription: {
       name: "Description of Paradise",
+      nameUr: "جنت کا بیان",
       nameArabic: "وصف الجنة",
       color: "#22C55E",
       icon: "Sparkles",
@@ -733,6 +740,7 @@ export const ONTOLOGY = {
 
     hellfireDescription: {
       name: "Description of Hellfire",
+      nameUr: "جہنم کا بیان",
       nameArabic: "وصف جهنم",
       color: "#EF4444",
       icon: "AlertTriangle",
@@ -855,6 +863,7 @@ export const ONTOLOGY = {
 
     propheticMission: {
       name: "The Prophet's Mission",
+      nameUr: "نبی ﷺ کا مشن",
       nameArabic: "رسالة النبي",
       color: "#3B82F6",
       icon: "Book",
@@ -923,6 +932,7 @@ export const ONTOLOGY = {
 
     iblisStory: {
       name: "The Story of Iblis",
+      nameUr: "ابلیس کا قصہ",
       nameArabic: "قصة إبليس",
       color: "#DC2626",
       icon: "Zap",
@@ -1058,6 +1068,7 @@ export const ONTOLOGY = {
 
     closingMessage: {
       name: "Closing Message",
+      nameUr: "اختتامی پیغام",
       nameArabic: "الخاتمة",
       color: "#6366F1",
       icon: "Star",

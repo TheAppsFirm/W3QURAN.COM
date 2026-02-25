@@ -14,6 +14,7 @@ export const ONTOLOGY = {
   categories: {
     etiquetteWithProphet: {
       name: "Etiquette with the Prophet",
+      nameUr: "نبی ﷺ سے آداب",
       nameAr: "أدب مع الرسول",
       color: '#3B82F6',
       icon: 'Book',
@@ -27,6 +28,7 @@ export const ONTOLOGY = {
     },
     verifyingNews: {
       name: "Verifying News and Information",
+      nameUr: "خبروں اور اطلاعات کی تصدیق",
       nameAr: "التثبت من الأخبار",
       color: '#3B82F6',
       icon: 'Compass',
@@ -39,6 +41,7 @@ export const ONTOLOGY = {
     },
     faithBeautified: {
       name: "Faith Beautified in Hearts",
+      nameUr: "دلوں میں ایمان کی آرائش",
       nameAr: "تزيين الإيمان",
       color: '#8B5CF6',
       icon: 'Sparkles',
@@ -51,6 +54,7 @@ export const ONTOLOGY = {
     },
     conflictResolution: {
       name: "Conflict Resolution Among Believers",
+      nameUr: "مومنین کے درمیان تنازعات کا حل",
       nameAr: "إصلاح ذات البين",
       color: '#10B981',
       icon: 'Users',
@@ -64,6 +68,7 @@ export const ONTOLOGY = {
     },
     brotherhood: {
       name: "Brotherhood of Believers",
+      nameUr: "مومنین کا بھائی چارہ",
       nameAr: "أخوة المؤمنين",
       color: '#10B981',
       icon: 'Heart',
@@ -75,6 +80,7 @@ export const ONTOLOGY = {
     },
     socialProhibitions: {
       name: "Social Prohibitions",
+      nameUr: "معاشرتی ممانعتیں",
       nameAr: "المنهيات الاجتماعية",
       color: '#EF4444',
       icon: 'AlertTriangle',
@@ -90,6 +96,7 @@ export const ONTOLOGY = {
     },
     avoidingSuspicion: {
       name: "Avoiding Suspicion and Backbiting",
+      nameUr: "بدگمانی اور غیبت سے اجتناب",
       nameAr: "اجتناب الظن والغيبة",
       color: '#EF4444',
       icon: 'Shield',
@@ -104,6 +111,7 @@ export const ONTOLOGY = {
     },
     humanUnity: {
       name: "Unity of Humanity",
+      nameUr: "انسانیت کی وحدت",
       nameAr: "وحدة البشرية",
       color: '#10B981',
       icon: 'Users',

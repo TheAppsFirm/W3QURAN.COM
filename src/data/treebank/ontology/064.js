@@ -14,6 +14,7 @@ export const ONTOLOGY = {
   categories: {
     divineAttributes: {
       name: "Divine Attributes",
+      nameUr: "الٰہی صفات",
       nameAr: "صفات الإلهية",
       color: '#F59E0B',
       icon: 'Star',
@@ -32,6 +33,7 @@ export const ONTOLOGY = {
     },
     creationSigns: {
       name: "Signs of Creation",
+      nameUr: "تخلیق کی نشانیاں",
       nameAr: "آيات الخلق",
       color: '#06B6D4',
       icon: 'Globe',
@@ -44,6 +46,7 @@ export const ONTOLOGY = {
     },
     dayOfJudgment: {
       name: "Day of Judgment",
+      nameUr: "یومِ قیامت",
       nameAr: "يوم القيامة",
       color: '#EF4444',
       icon: 'Scale',
@@ -56,6 +59,7 @@ export const ONTOLOGY = {
     },
     socialGuidance: {
       name: "Family and Social Relations",
+      nameUr: "خاندانی اور سماجی تعلقات",
       nameAr: "العلاقات الأسرية",
       color: '#EC4899',
       icon: 'Users',
@@ -68,6 +72,7 @@ export const ONTOLOGY = {
     },
     obligations: {
       name: "Religious Obligations",
+      nameUr: "دینی فرائض",
       nameAr: "الفرائض",
       color: '#10B981',
       icon: 'Book',

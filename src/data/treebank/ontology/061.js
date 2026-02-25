@@ -14,6 +14,7 @@ export const ONTOLOGY = {
   categories: {
     divineAttributes: {
       name: "Divine Attributes",
+      nameUr: "الٰہی صفات",
       nameAr: "صفات الإلهية",
       color: '#F59E0B',
       icon: 'Star',
@@ -24,6 +25,7 @@ export const ONTOLOGY = {
     },
     sincerity: {
       name: "Sincerity in Faith",
+      nameUr: "ایمان میں اخلاص",
       nameAr: "الإخلاص في الإيمان",
       color: '#8B5CF6',
       icon: 'Heart',
@@ -35,6 +37,7 @@ export const ONTOLOGY = {
     },
     propheticChain: {
       name: "Prophetic Continuity",
+      nameUr: "انبیاء کا تسلسل",
       nameAr: "تسلسل الأنبياء",
       color: '#3B82F6',
       icon: 'Book',
@@ -48,6 +51,7 @@ export const ONTOLOGY = {
     },
     islamicStruggle: {
       name: "Sacred Struggle",
+      nameUr: "مقدس جہاد",
       nameAr: "الجهاد المقدس",
       color: '#EF4444',
       icon: 'Shield',
@@ -61,6 +65,7 @@ export const ONTOLOGY = {
     },
     rewardsOfStruggle: {
       name: "Rewards for Believers",
+      nameUr: "مومنوں کا اجر",
       nameAr: "جزاء المؤمنين",
       color: '#10B981',
       icon: 'Sparkles',
@@ -74,6 +79,7 @@ export const ONTOLOGY = {
     },
     supportingAllah: {
       name: "Being Allah's Supporters",
+      nameUr: "اللہ کے مددگار بننا",
       nameAr: "أنصار الله",
       color: '#06B6D4',
       icon: 'Users',

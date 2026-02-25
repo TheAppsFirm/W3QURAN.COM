@@ -18,6 +18,7 @@ export const ONTOLOGY = {
       color: '#3B82F6',
       icon: 'Shield',
       name: "Spoils of War (Anfal)",
+      nameUr: "مالِ غنیمت (انفال)",
       nameArabic: "الأنفال",
       concepts: [
         { term: "يَسْأَلُونَكَ عَنِ الْأَنفَالِ", meaning: { en: "They ask you about the spoils", ur: "یہ آپ سے مالِ غنیمت کے بارے میں پوچھتے ہیں" }, explanation: { en: "Opening question about war booty - central theme", ur: "مالِ غنیمت کے بارے میں افتتاحی سوال - مرکزی موضوع" }, verseRef: "8:1" },
@@ -32,6 +33,7 @@ export const ONTOLOGY = {
       color: '#EC4899',
       icon: 'Globe',
       name: "Battle of Badr",
+      nameUr: "غزوۂ بدر",
       nameArabic: "غزوة بدر",
       concepts: [
         { term: "يَوْمَ الْفُرْقَانِ", meaning: { en: "Day of Criterion", ur: "حق و باطل میں فرق کرنے والا دن" }, explanation: { en: "Badr as the decisive day separating truth from falsehood", ur: "بدر فیصلہ کن دن تھا جس نے حق کو باطل سے جدا کیا" }, verseRef: "8:41" },
@@ -47,6 +49,7 @@ export const ONTOLOGY = {
       color: '#F59E0B',
       icon: 'Star',
       name: "Divine Support in Battle",
+      nameUr: "جنگ میں الٰہی مدد",
       nameArabic: "النصر الإلهي",
       concepts: [
         { term: "إِذْ تَسْتَغِيثُونَ رَبَّكُمْ", meaning: { en: "When you were calling upon your Lord for help", ur: "جب تم اپنے رب سے فریاد کر رہے تھے" }, explanation: { en: "Believers' desperate plea before battle", ur: "جنگ سے پہلے مومنوں کی بے بس التجا" }, verseRef: "8:9" },
@@ -63,6 +66,7 @@ export const ONTOLOGY = {
       color: '#EF4444',
       icon: 'Users',
       name: "Qualities of True Believers",
+      nameUr: "سچے مومنوں کی صفات",
       nameArabic: "صفات المؤمنين الحقيقيين",
       concepts: [
         { term: "إِنَّمَا الْمُؤْمِنُونَ الَّذِينَ إِذَا ذُكِرَ اللَّهُ وَجِلَتْ قُلُوبُهُمْ", meaning: { en: "The believers are only those who, when Allah is mentioned, their hearts tremble", ur: "مومن تو وہ ہیں کہ جب Allah کا ذکر ہو تو ان کے دل کانپ اٹھیں" }, explanation: { en: "Heart's response to Allah's remembrance", ur: "Allah کے ذکر پر دل کا لرزنا" }, verseRef: "8:2" },
@@ -78,6 +82,7 @@ export const ONTOLOGY = {
       color: '#10B981',
       icon: 'Book',
       name: "Obedience to Allah and Messenger",
+      nameUr: "اللہ اور رسول کی اطاعت",
       nameArabic: "طاعة الله والرسول",
       concepts: [
         { term: "يَا أَيُّهَا الَّذِينَ آمَنُوا أَطِيعُوا اللَّهَ وَرَسُولَهُ", meaning: { en: "O you who believe, obey Allah and His Messenger", ur: "اے ایمان والو! Allah اور اس کے رسول کی اطاعت کرو" }, explanation: { en: "Command for dual obedience", ur: "دوہری اطاعت کا حکم" }, verseRef: "8:20" },
@@ -92,6 +97,7 @@ export const ONTOLOGY = {
       color: '#F59E0B',
       icon: 'Star',
       name: "Steadfastness in Battle",
+      nameUr: "جنگ میں ثابت قدمی",
       nameArabic: "الثبات في القتال",
       concepts: [
         { term: "يَا أَيُّهَا الَّذِينَ آمَنُوا إِذَا لَقِيتُمُ الَّذِينَ كَفَرُوا زَحْفًا فَلَا تُوَلُّوهُمُ الْأَدْبَارَ", meaning: { en: "O believers, when you meet the disbelievers advancing, do not turn your backs", ur: "اے ایمان والو! جب کافروں سے میدان میں سامنا ہو تو ان سے پیٹھ نہ پھیرو" }, explanation: { en: "Prohibition of fleeing battle", ur: "میدانِ جنگ سے بھاگنے کی ممانعت" }, verseRef: "8:15" },
@@ -107,6 +113,7 @@ export const ONTOLOGY = {
       color: '#8B5CF6',
       icon: 'Heart',
       name: "Ethics of Warfare",
+      nameUr: "جنگ کے اخلاقیات",
       nameArabic: "أخلاقيات الحرب",
       concepts: [
         { term: "وَأَعِدُّوا لَهُم مَّا اسْتَطَعْتُم مِّن قُوَّةٍ", meaning: { en: "And prepare against them what you can of power", ur: "اور ان کے مقابلے کے لیے جتنی طاقت ہو سکے تیار رکھو" }, explanation: { en: "Military preparation as duty", ur: "فوجی تیاری بطور فریضہ" }, verseRef: "8:60" },
@@ -122,6 +129,7 @@ export const ONTOLOGY = {
       color: '#10B981',
       icon: 'Book',
       name: "Treatment of Prisoners",
+      nameUr: "قیدیوں سے سلوک",
       nameArabic: "معاملة الأسرى",
       concepts: [
         { term: "مَا كَانَ لِنَبِيٍّ أَن يَكُونَ لَهُ أَسْرَىٰ حَتَّىٰ يُثْخِنَ فِي الْأَرْضِ", meaning: { en: "It is not for a prophet to have prisoners until he has established dominance", ur: "کسی نبی کو قیدی رکھنا زیبا نہیں جب تک زمین میں اچھی طرح غلبہ نہ حاصل کر لے" }, explanation: { en: "Historical context of prisoner policy", ur: "قیدیوں کی پالیسی کا تاریخی پسِ منظر" }, verseRef: "8:67" },
@@ -136,6 +144,7 @@ export const ONTOLOGY = {
       color: '#EF4444',
       icon: 'Users',
       name: "Hypocrites and Disbelievers",
+      nameUr: "منافقین اور کافر",
       nameArabic: "المنافقون والكافرون",
       concepts: [
         { term: "إِنَّ شَرَّ الدَّوَابِّ عِندَ اللَّهِ الَّذِينَ كَفَرُوا", meaning: { en: "Indeed, the worst of creatures to Allah are those who disbelieve", ur: "بے شک Allah کے نزدیک بدترین جانور وہ لوگ ہیں جنہوں نے کفر کیا" }, explanation: { en: "Disbelievers' status before Allah", ur: "Allah کے نزدیک کافروں کا مقام" }, verseRef: "8:55" },
@@ -151,6 +160,7 @@ export const ONTOLOGY = {
       color: '#06B6D4',
       icon: 'Compass',
       name: "Loyalty and Alliance (Walaa)",
+      nameUr: "ولاء اور اتحاد",
       nameArabic: "الولاء والبراء",
       concepts: [
         { term: "إِنَّ الَّذِينَ آمَنُوا وَهَاجَرُوا وَجَاهَدُوا", meaning: { en: "Those who believed, emigrated, and fought", ur: "جو لوگ ایمان لائے، ہجرت کی اور جہاد کیا" }, explanation: { en: "The Muhajirun's sacrifice", ur: "مہاجرین کی قربانی" }, verseRef: "8:72" },
@@ -166,6 +176,7 @@ export const ONTOLOGY = {
       color: '#F59E0B',
       icon: 'Star',
       name: "Satan's Deception",
+      nameUr: "شیطان کا دھوکہ",
       nameArabic: "خداع الشيطان",
       concepts: [
         { term: "وَإِذْ زَيَّنَ لَهُمُ الشَّيْطَانُ أَعْمَالَهُمْ", meaning: { en: "And when Satan made their deeds pleasing to them", ur: "اور جب شیطان نے ان کے اعمال ان کے لیے خوشنما بنا دیے" }, explanation: { en: "Satan beautifies evil for disbelievers", ur: "شیطان کافروں کے لیے برائی کو خوبصورت بناتا ہے" }, verseRef: "8:48" },
@@ -181,6 +192,7 @@ export const ONTOLOGY = {
       color: '#F59E0B',
       icon: 'Star',
       name: "Divine Wisdom and Planning",
+      nameUr: "الٰہی حکمت اور تدبیر",
       nameArabic: "الحكمة والتدبير الإلهي",
       concepts: [
         { term: "وَلَوْ تَوَاعَدتُّمْ لَاخْتَلَفْتُمْ فِي الْمِيعَادِ", meaning: { en: "If you had made an appointment, you would have missed it", ur: "اگر تم آپس میں وعدہ کرتے تو وقت پر نہ پہنچ پاتے" }, explanation: { en: "Divine orchestration of Badr", ur: "بدر کی الہٰی تدبیر" }, verseRef: "8:42" },
@@ -196,6 +208,7 @@ export const ONTOLOGY = {
       color: '#14B8A6',
       icon: 'Crown',
       name: "Test and Trial",
+      nameUr: "آزمائش اور فتنہ",
       nameArabic: "الابتلاء والفتنة",
       concepts: [
         { term: "وَاتَّقُوا فِتْنَةً لَّا تُصِيبَنَّ الَّذِينَ ظَلَمُوا مِنكُمْ خَاصَّةً", meaning: { en: "Fear a trial that will not affect only the wrongdoers", ur: "ایسے فتنے سے بچو جو صرف ظالموں تک محدود نہیں رہے گا" }, explanation: { en: "Collective trials affect all", ur: "اجتماعی آزمائشیں سب کو متاثر کرتی ہیں" }, verseRef: "8:25" },
@@ -211,6 +224,7 @@ export const ONTOLOGY = {
       color: '#F59E0B',
       icon: 'Star',
       name: "Criterion (Furqan)",
+      nameUr: "فرقان (حق و باطل کی تمیز)",
       nameArabic: "الفرقان",
       concepts: [
         { term: "إِن تَتَّقُوا اللَّهَ يَجْعَل لَّكُمْ فُرْقَانًا", meaning: { en: "If you fear Allah, He will grant you a criterion", ur: "اگر تم Allah سے ڈرو گے تو وہ تمہیں حق و باطل میں فرق کرنے کی صلاحیت دے گا" }, explanation: { en: "Taqwa leads to discernment", ur: "تقویٰ بصیرت کی طرف لے جاتی ہے" }, verseRef: "8:29" },
@@ -224,6 +238,7 @@ export const ONTOLOGY = {
       color: '#10B981',
       icon: 'Book',
       name: "Seeking Refuge in Allah",
+      nameUr: "اللہ کی پناہ مانگنا",
       nameArabic: "اللجوء إلى الله",
       concepts: [
         { term: "وَمَا كَانَ اللَّهُ لِيُعَذِّبَهُمْ وَأَنتَ فِيهِمْ", meaning: { en: "Allah would not punish them while you are among them", ur: "جب تک آپ ان میں موجود ہیں Allah انہیں عذاب نہیں دے گا" }, explanation: { en: "Prophet's presence as mercy", ur: "نبی ﷺ کی موجودگی بطور رحمت" }, verseRef: "8:33" },

@@ -22,7 +22,10 @@ export const TREEBANK_DATA = {
       { position: 3, arabic: "انشَقَّتْ", transliteration: "inshaqqat", root: "ش ق ق", meaning: { en: "splits apart", ur: "پھٹ جائے گا", ar: "تَفَتَّقَت" }, pos: "V", posLabel: "V", grammarRole: "verb", features: { form: "VII", aspect: "perfect" }, advanced: { rootFamily: ["شَقّ", "انشقاق", "مَشقوق"], linguisticMiracle: "Form VII - internal breaking, sky splits from within" } }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' }
+      ],
     },
   },
 
@@ -35,7 +38,10 @@ export const TREEBANK_DATA = {
       { position: 3, arabic: "وَحُقَّتْ", transliteration: "wa-ḥuqqat", root: "ح ق ق", meaning: { en: "and was obligated", ur: "اور واجب تھا", ar: "وَوَجَبَ" }, pos: "V", posLabel: "V", grammarRole: "verb", features: { voice: "passive" }, advanced: { linguisticMiracle: "Sky's obedience is its rightful duty" } }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' }
+      ],
     },
   },
 
@@ -48,7 +54,10 @@ export const TREEBANK_DATA = {
       { position: 3, arabic: "مُدَّتْ", transliteration: "muddat", root: "م د د", meaning: { en: "is stretched", ur: "پھیلا دی جائے", ar: "بُسِطَت" }, pos: "V", posLabel: "V", grammarRole: "verb", features: { voice: "passive" }, advanced: { linguisticMiracle: "Earth flattened - mountains removed, valleys filled" } }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' }
+      ],
     },
   },
 
@@ -78,7 +87,10 @@ export const TREEBANK_DATA = {
       { position: 3, arabic: "وَحُقَّتْ", transliteration: "wa-ḥuqqat", root: "ح ق ق", meaning: { en: "as it must", ur: "اور واجب تھا", ar: "وَوَجَبَ" }, pos: "V", posLabel: "V", grammarRole: "verb", advanced: { linguisticMiracle: "Repeated for sky (v2) and earth (v5) - cosmic obedience" } }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' }
+      ],
     },
   },
 

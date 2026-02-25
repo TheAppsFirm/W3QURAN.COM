@@ -14,6 +14,7 @@ export const ONTOLOGY = {
   categories: {
     humanOrigins: {
       name: "Human Origins and Purpose",
+      nameUr: "انسان کی اصل اور مقصد",
       nameArabic: "أصل الإنسان وغايته",
       color: '#06B6D4',
       icon: 'Globe',
@@ -27,6 +28,7 @@ export const ONTOLOGY = {
 
     freeWill: {
       name: "Free Will and Choice",
+      nameUr: "آزاد ارادہ اور انتخاب",
       nameArabic: "الإرادة الحرة والاختيار",
       color: '#3B82F6',
       icon: 'Compass',
@@ -38,6 +40,7 @@ export const ONTOLOGY = {
 
     disbelieversDestiny: {
       name: "Destiny of Disbelievers",
+      nameUr: "کافروں کا انجام",
       nameArabic: "مصير الكافرين",
       color: '#EF4444',
       icon: 'AlertTriangle',
@@ -50,6 +53,7 @@ export const ONTOLOGY = {
 
     paradiseDrinks: {
       name: "Drinks of Paradise",
+      nameUr: "جنت کے مشروبات",
       nameArabic: "مشروبات الجنة",
       color: '#10B981',
       icon: 'Sparkles',
@@ -65,6 +69,7 @@ export const ONTOLOGY = {
 
     righteousCharacter: {
       name: "Character of the Righteous",
+      nameUr: "نیک لوگوں کی صفات",
       nameArabic: "صفات الأبرار",
       color: '#8B5CF6',
       icon: 'Heart',
@@ -78,6 +83,7 @@ export const ONTOLOGY = {
 
     ikhlas: {
       name: "Sincerity (Ikhlas)",
+      nameUr: "اخلاص",
       nameArabic: "الإخلاص",
       color: '#F59E0B',
       icon: 'Star',
@@ -90,6 +96,7 @@ export const ONTOLOGY = {
 
     divineProtection: {
       name: "Divine Protection and Reward",
+      nameUr: "الہٰی حفاظت اور اجر",
       nameArabic: "الحماية والجزاء الإلهي",
       color: '#06B6D4',
       icon: 'Shield',
@@ -102,6 +109,7 @@ export const ONTOLOGY = {
 
     paradiseDetails: {
       name: "Details of Paradise",
+      nameUr: "جنت کی تفصیلات",
       nameArabic: "تفاصيل الجنة",
       color: '#10B981',
       icon: 'Crown',
@@ -122,6 +130,7 @@ export const ONTOLOGY = {
 
     quranAndPatience: {
       name: "Quran and Patience",
+      nameUr: "قرآن اور صبر",
       nameArabic: "القرآن والصبر",
       color: '#3B82F6',
       icon: 'Book',
@@ -134,6 +143,7 @@ export const ONTOLOGY = {
 
     worship: {
       name: "Worship Commands",
+      nameUr: "عبادت کے احکام",
       nameArabic: "أوامر العبادة",
       color: '#8B5CF6',
       icon: 'Moon',
@@ -146,6 +156,7 @@ export const ONTOLOGY = {
 
     worldlyVsEternal: {
       name: "Worldly vs Eternal",
+      nameUr: "دنیا بمقابلہ آخرت",
       nameArabic: "الدنيا مقابل الآخرة",
       color: '#EC4899',
       icon: 'Scale',
@@ -157,6 +168,7 @@ export const ONTOLOGY = {
 
     divineWill: {
       name: "Divine Will",
+      nameUr: "الہٰی مشیئت",
       nameArabic: "المشيئة الإلهية",
       color: '#F59E0B',
       icon: 'Eye',

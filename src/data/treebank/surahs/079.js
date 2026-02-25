@@ -21,7 +21,9 @@ export const TREEBANK_DATA = {
       { position: 2, arabic: "غَرْقًا", transliteration: "gharqan", root: "غ ر ق", meaning: { en: "violently", ur: "پوری طرح", ar: "بِشِدَّة" }, pos: "N", posLabel: "N", grammarRole: "adverb of manner", advanced: { linguisticMiracle: "Drowning/sinking - pulled from depths of body" } }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'قسم' }
+      ],
     },
   },
 
@@ -33,7 +35,9 @@ export const TREEBANK_DATA = {
       { position: 2, arabic: "نَشْطًا", transliteration: "nashṭan", root: "ن ش ط", meaning: { en: "gently", ur: "آسانی سے", ar: "بِسُهولَة" }, pos: "N", posLabel: "N", grammarRole: "adverb of manner" }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'قسم' }
+      ],
     },
   },
 
@@ -45,7 +49,9 @@ export const TREEBANK_DATA = {
       { position: 2, arabic: "سَبْحًا", transliteration: "sabḥan", root: "س ب ح", meaning: { en: "swimming/gliding", ur: "تیرتے ہوئے", ar: "سِباحَةً" }, pos: "N", posLabel: "N", grammarRole: "cognate accusative" }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'قسم' }
+      ],
     },
   },
 
@@ -57,7 +63,9 @@ export const TREEBANK_DATA = {
       { position: 2, arabic: "سَبْقًا", transliteration: "sabqan", root: "س ب ق", meaning: { en: "racing", ur: "آگے نکل کر", ar: "سِباقاً" }, pos: "N", posLabel: "N", grammarRole: "cognate accusative", advanced: { linguisticMiracle: "Angels racing to execute commands" } }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'قسم' }
+      ],
     },
   },
 
@@ -69,7 +77,9 @@ export const TREEBANK_DATA = {
       { position: 2, arabic: "أَمْرًا", transliteration: "amran", root: "أ م ر", meaning: { en: "affairs", ur: "کاموں کا", ar: "الأُمور" }, pos: "N", posLabel: "N", grammarRole: "object" }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'قسم' }
+      ],
     },
   },
 
@@ -212,7 +222,10 @@ export const TREEBANK_DATA = {
       { position: 3, arabic: "بِالسَّاهِرَةِ", transliteration: "bil-sāhirati", root: "س ه ر", meaning: { en: "on the earth's surface", ur: "زمین کی سطح پر", ar: "على وَجهِ الأَرض" }, pos: "N", posLabel: "N", grammarRole: "prepositional phrase", advanced: { linguisticMiracle: "Sahirah = earth surface (awake land) - all standing" } }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' }
+      ],
     },
   },
 
@@ -329,7 +342,9 @@ export const TREEBANK_DATA = {
       { position: 2, arabic: "وَعَصَىٰ", transliteration: "wa-ʿaṣā", root: "ع ص ي", meaning: { en: "and disobeyed", ur: "اور نافرمانی کی", ar: "وَخالَفَ" }, pos: "V", posLabel: "V", grammarRole: "verb" }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' }
+      ],
     },
   },
 
@@ -342,7 +357,9 @@ export const TREEBANK_DATA = {
       { position: 3, arabic: "يَسْعَىٰ", transliteration: "yasʿā", root: "س ع ي", meaning: { en: "striving", ur: "کوشش کرتا ہوا", ar: "مُجتَهِداً" }, pos: "V", posLabel: "V", grammarRole: "adverb of state", advanced: { linguisticMiracle: "Turned away striving (against truth)" } }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 2, to: 3, label: 'حال' }
+      ],
     },
   },
 
@@ -354,7 +371,9 @@ export const TREEBANK_DATA = {
       { position: 2, arabic: "فَنَادَىٰ", transliteration: "fanādā", root: "ن د و", meaning: { en: "and proclaimed", ur: "پھر پکارا", ar: "فَأَعلَنَ" }, pos: "V", posLabel: "V", grammarRole: "verb" }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' }
+      ],
     },
   },
 
@@ -424,7 +443,9 @@ export const TREEBANK_DATA = {
       { position: 6, arabic: "بَنَاهَا", transliteration: "banāhā", root: "ب ن ي", meaning: { en: "He constructed it", ur: "اسے بنایا", ar: "أَقامَها" }, pos: "V+PRON", posLabel: "V+PRON", grammarRole: "verb + object", advanced: { linguisticMiracle: "Sky's construction proves resurrection's ease" } }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 2, to: 3, label: 'تمييز' }
+      ],
     },
   },
 
@@ -471,7 +492,11 @@ export const TREEBANK_DATA = {
       { position: 4, arabic: "دَحَاهَا", transliteration: "daḥāhā", root: "د ح و", meaning: { en: "He spread it", ur: "اسے بچھایا", ar: "بَسَطَها" }, pos: "V+PRON", posLabel: "V+PRON", grammarRole: "verb + object", advanced: { linguisticMiracle: "Dahw = spreading oval shape (like egg)" } }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' }
+      ],
     },
   },
 
@@ -501,7 +526,9 @@ export const TREEBANK_DATA = {
       { position: 2, arabic: "أَرْسَاهَا", transliteration: "arsāhā", root: "ر س و", meaning: { en: "He set firmly", ur: "ان کو جما دیا", ar: "ثَبَّتَها" }, pos: "V+PRON", posLabel: "V+PRON", grammarRole: "verb + object", features: { form: "IV" } }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' }
+      ],
     },
   },
 

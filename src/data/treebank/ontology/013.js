@@ -18,6 +18,7 @@ export const ONTOLOGY = {
       color: '#EF4444',
       icon: 'Users',
       name: "Divine Revelation",
+      nameUr: "الٰہی وحی",
       nameArabic: "الوحي الإلهي",
       description: { en: "The truth of Quranic revelation and its signs", ur: "قرآنی وحی کی سچائی اور اس کی نشانیاں" },
       concepts: [
@@ -49,6 +50,7 @@ export const ONTOLOGY = {
       color: '#3B82F6',
       icon: 'Shield',
       name: "Signs in the Universe",
+      nameUr: "کائنات میں نشانیاں",
       nameArabic: "آيات الكون",
       description: { en: "Natural phenomena as evidence of Allah's power and design", ur: "قدرتی مظاہر بطور دلیل Allah کی قدرت اور تخلیق کے" },
       concepts: [
@@ -94,6 +96,7 @@ export const ONTOLOGY = {
       color: '#10B981',
       icon: 'Book',
       name: "Allah's Perfect Knowledge",
+      nameUr: "اللہ کا کامل علم",
       nameArabic: "علم الله الكامل",
       description: { en: "Allah's comprehensive knowledge of seen and unseen", ur: "Allah کا ظاہر و باطن کا مکمل علم" },
       concepts: [
@@ -132,6 +135,7 @@ export const ONTOLOGY = {
       color: '#14B8A6',
       icon: 'Crown',
       name: "Law of Self-Change",
+      nameUr: "خود تبدیلی کا قانون",
       nameArabic: "سنة تغيير النفس",
       description: { en: "The divine law that change begins from within", ur: "الٰہی قانون کہ تبدیلی اندر سے شروع ہوتی ہے" },
       concepts: [
@@ -156,6 +160,7 @@ export const ONTOLOGY = {
       color: '#EC4899',
       icon: 'Globe',
       name: "Thunder Glorifies Allah",
+      nameUr: "گرج کی تسبیح",
       nameArabic: "تسبيح الرعد",
       description: { en: "Natural phenomena as acts of worship", ur: "قدرتی مظاہر بطور عبادت" },
       concepts: [
@@ -201,6 +206,7 @@ export const ONTOLOGY = {
       color: '#06B6D4',
       icon: 'Compass',
       name: "Universal Prostration",
+      nameUr: "کائناتی سجدہ",
       nameArabic: "السجود الكوني",
       description: { en: "All creation prostrates to Allah willingly or unwillingly", ur: "تمام مخلوقات خوشی سے یا مجبوری سے Allah کو سجدہ کرتی ہیں" },
       concepts: [
@@ -225,6 +231,7 @@ export const ONTOLOGY = {
       color: '#F59E0B',
       icon: 'Star',
       name: "Arguments for Tawheed",
+      nameUr: "توحید کے دلائل",
       nameArabic: "أدلة التوحيد",
       description: { en: "Logical arguments establishing Allah as sole Creator and Lord", ur: "منطقی دلائل جو Allah کو واحد خالق اور رب ثابت کرتے ہیں" },
       concepts: [
@@ -270,6 +277,7 @@ export const ONTOLOGY = {
       color: '#EF4444',
       icon: 'Users',
       name: "Truth vs Falsehood",
+      nameUr: "حق بمقابلہ باطل",
       nameArabic: "الحق والباطل",
       description: { en: "The eternal struggle and ultimate victory of truth", ur: "حق و باطل کی ابدی کشمکش اور حق کی حتمی فتح" },
       concepts: [
@@ -315,6 +323,7 @@ export const ONTOLOGY = {
       color: '#EF4444',
       icon: 'Users',
       name: "Reward and Punishment",
+      nameUr: "ثواب اور عذاب",
       nameArabic: "الثواب والعقاب",
       description: { en: "Descriptions of Paradise for believers and Hell for disbelievers", ur: "مومنین کے لیے جنت اور کافرین کے لیے جہنم کا بیان" },
       concepts: [
@@ -360,6 +369,7 @@ export const ONTOLOGY = {
       color: '#8B5CF6',
       icon: 'Heart',
       name: "Qualities of Believers",
+      nameUr: "مومنین کی صفات",
       nameArabic: "صفات المؤمنين",
       description: { en: "Characteristics that distinguish true believers", ur: "وہ خصوصیات جو سچے مومنین کو ممتاز کرتی ہیں" },
       concepts: [
@@ -440,6 +450,7 @@ export const ONTOLOGY = {
       color: '#8B5CF6',
       icon: 'Heart',
       name: "Description of Paradise",
+      nameUr: "جنت کا بیان",
       nameArabic: "وصف الجنة",
       description: { en: "The eternal reward for righteous believers", ur: "نیک مومنین کے لیے ابدی انعام" },
       concepts: [
@@ -492,6 +503,7 @@ export const ONTOLOGY = {
       color: '#EF4444',
       icon: 'Users',
       name: "Qualities of Disbelievers",
+      nameUr: "کافروں کی صفات",
       nameArabic: "صفات الكافرين",
       description: { en: "Characteristics of those who reject faith", ur: "ان لوگوں کی خصوصیات جو ایمان کو رد کرتے ہیں" },
       concepts: [
@@ -530,6 +542,7 @@ export const ONTOLOGY = {
       color: '#F59E0B',
       icon: 'Star',
       name: "Divine Providence",
+      nameUr: "الٰہی رزق",
       nameArabic: "الرزق الإلهي",
       description: { en: "Allah's control over provision and guidance", ur: "رزق اور ہدایت پر Allah کا اختیار" },
       concepts: [
@@ -561,6 +574,7 @@ export const ONTOLOGY = {
       color: '#8B5CF6',
       icon: 'Heart',
       name: "Hearts' Tranquility",
+      nameUr: "دلوں کا اطمینان",
       nameArabic: "طمأنينة القلوب",
       description: { en: "Finding peace through remembrance of Allah", ur: "Allah کے ذکر سے سکون پانا" },
       concepts: [
@@ -599,6 +613,7 @@ export const ONTOLOGY = {
       color: '#F59E0B',
       icon: 'Star',
       name: "The Prophet's Mission",
+      nameUr: "نبی کی رسالت",
       nameArabic: "رسالة النبي",
       description: { en: "The role and treatment of Prophet Muhammad", ur: "نبی محمد ﷺ کا کردار اور ان سے سلوک" },
       concepts: [
@@ -651,6 +666,7 @@ export const ONTOLOGY = {
       color: '#8B5CF6',
       icon: 'Heart',
       name: "The Power of the Quran",
+      nameUr: "قرآن کی طاقت",
       nameArabic: "قوة القرآن",
       description: { en: "Hypothetical demonstrations of Quranic power", ur: "قرآن کی طاقت کے فرضی مظاہرے" },
       concepts: [
@@ -689,6 +705,7 @@ export const ONTOLOGY = {
       color: '#06B6D4',
       icon: 'Compass',
       name: "Fate of Mockers",
+      nameUr: "مذاق اڑانے والوں کا انجام",
       nameArabic: "مصير المستهزئين",
       description: { en: "The end of those who mocked messengers", ur: "ان لوگوں کا انجام جنہوں نے رسولوں کا مذاق اڑایا" },
       concepts: [
@@ -727,6 +744,7 @@ export const ONTOLOGY = {
       color: '#3B82F6',
       icon: 'Shield',
       name: "Final Admonition",
+      nameUr: "اختتامی نصیحت",
       nameArabic: "الموعظة الأخيرة",
       description: { en: "Closing warnings and reassurances", ur: "اختتامی تنبیہات اور تسلیاں" },
       concepts: [
@@ -793,6 +811,7 @@ export const ONTOLOGY = {
       color: '#8B5CF6',
       icon: 'Heart',
       name: "Witness and Message",
+      nameUr: "گواہی اور پیغام",
       nameArabic: "الشهادة والرسالة",
       description: { en: "Allah and scripture as witnesses to the Prophet's mission", ur: "نبی کے مشن کی گواہی Allah اور کتاب سے" },
       concepts: [

@@ -14,6 +14,7 @@ export const ONTOLOGY = {
   categories: {
     namesOfJudgmentDay: {
       name: "Names of Judgment Day",
+      nameUr: "یومِ قیامت کے نام",
       nameArabic: "أسماء يوم القيامة",
       color: '#F59E0B',
       icon: 'AlertTriangle',
@@ -32,6 +33,7 @@ export const ONTOLOGY = {
 
     cosmicChaos: {
       name: "Cosmic Chaos",
+      nameUr: "کائناتی افراتفری",
       nameArabic: "الفوضى الكونية",
       color: '#EF4444',
       icon: 'Globe',
@@ -58,6 +60,7 @@ export const ONTOLOGY = {
 
     divineJudgment: {
       name: "Divine Judgment",
+      nameUr: "الٰہی فیصلہ",
       nameArabic: "الحساب الإلهي",
       color: '#8B5CF6',
       icon: 'Scale',
@@ -83,6 +86,7 @@ export const ONTOLOGY = {
 
     rewards: {
       name: "Eternal Destinations",
+      nameUr: "ابدی ٹھکانے",
       nameArabic: "المآلات الأبدية",
       color: '#10B981',
       icon: 'Compass',

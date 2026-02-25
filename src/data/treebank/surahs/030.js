@@ -34,7 +34,9 @@ const SURAH_30_TREEBANK = {
         grammarExplanations: { en: 'Deputy subject (نائب الفاعل) of passive verb.', ur: 'نائب الفاعل - مجہول فعل کا۔' } },
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'فعل + فاعل' }
+      ],
     },
   },
 
@@ -1584,7 +1586,7 @@ const SURAH_30_TREEBANK = {
     ],
     structure: {
       relationships: [
-
+        { from: 3, to: 8, label: 'عطف' }
       ],
     },
   },

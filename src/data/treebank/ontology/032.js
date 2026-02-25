@@ -17,6 +17,7 @@ export const ONTOLOGY = {
   categories: {
     quranAuthority: {
       name: "Authority of the Quran",
+      nameUr: "قرآن کا اختیار",
       nameArabic: "حجية القرآن",
       color: "#3B82F6",
       icon: "Book",
@@ -32,6 +33,7 @@ export const ONTOLOGY = {
 
     divineCreation: {
       name: "Stages of Divine Creation",
+      nameUr: "الٰہی تخلیق کے مراحل",
       nameArabic: "مراحل الخلق الإلهي",
       color: "#06B6D4",
       icon: "Globe",
@@ -46,6 +48,7 @@ export const ONTOLOGY = {
 
     humanCreation: {
       name: "Creation of Mankind",
+      nameUr: "انسان کی تخلیق",
       nameArabic: "خلق الإنسان",
       color: "#8B5CF6",
       icon: "Users",
@@ -61,6 +64,7 @@ export const ONTOLOGY = {
 
     disbelieversDoubts: {
       name: "Doubts of Disbelievers",
+      nameUr: "کافروں کے شکوک",
       nameArabic: "شكوك الكافرين",
       color: "#EF4444",
       icon: "AlertTriangle",
@@ -73,6 +77,7 @@ export const ONTOLOGY = {
 
     deathAndResurrection: {
       name: "Death and Resurrection",
+      nameUr: "موت اور قیامت",
       nameArabic: "الموت والبعث",
       color: "#8B5CF6",
       icon: "Sun",
@@ -85,6 +90,7 @@ export const ONTOLOGY = {
 
     dayOfJudgment: {
       name: "The Day of Judgment",
+      nameUr: "یومِ فیصلہ",
       nameArabic: "يوم القيامة",
       color: "#EF4444",
       icon: "Scale",
@@ -99,6 +105,7 @@ export const ONTOLOGY = {
 
     believersReward: {
       name: "Reward for Believers",
+      nameUr: "مومنوں کا اجر",
       nameArabic: "جزاء المؤمنين",
       color: "#10B981",
       icon: "Sparkles",
@@ -114,6 +121,7 @@ export const ONTOLOGY = {
 
     believerVsDisbeliever: {
       name: "Believer vs Disbeliever",
+      nameUr: "مومن بمقابلہ کافر",
       nameArabic: "المؤمن والكافر",
       color: "#8B5CF6",
       icon: "Scale",
@@ -129,6 +137,7 @@ export const ONTOLOGY = {
 
     lesserPunishment: {
       name: "Lesser Punishment",
+      nameUr: "ادنیٰ عذاب",
       nameArabic: "العذاب الأدنى",
       color: "#EF4444",
       icon: "AlertTriangle",
@@ -141,6 +150,7 @@ export const ONTOLOGY = {
 
     turningAway: {
       name: "Turning Away from Truth",
+      nameUr: "حق سے اعراض",
       nameArabic: "الإعراض عن الحق",
       color: "#EF4444",
       icon: "Eye",
@@ -153,6 +163,7 @@ export const ONTOLOGY = {
 
     musaAndQuran: {
       name: "Musa and the Quran",
+      nameUr: "موسیٰ اور قرآن",
       nameArabic: "موسى والقرآن",
       color: "#3B82F6",
       icon: "Book",
@@ -168,6 +179,7 @@ export const ONTOLOGY = {
 
     dayOfDecision: {
       name: "The Day of Decision",
+      nameUr: "فیصلے کا دن",
       nameArabic: "يوم الفصل",
       color: "#F59E0B",
       icon: "Scale",
@@ -179,6 +191,7 @@ export const ONTOLOGY = {
 
     lessonsFromHistory: {
       name: "Lessons from Destroyed Nations",
+      nameUr: "تباہ شدہ قوموں سے اسباق",
       nameArabic: "عبر من الأمم الهالكة",
       color: "#EF4444",
       icon: "Book",
@@ -192,6 +205,7 @@ export const ONTOLOGY = {
 
     signsOfMercy: {
       name: "Signs of Divine Mercy",
+      nameUr: "الٰہی رحمت کی نشانیاں",
       nameArabic: "آيات الرحمة الإلهية",
       color: "#8B5CF6",
       icon: "Sparkles",
@@ -205,6 +219,7 @@ export const ONTOLOGY = {
 
     mockingThePromise: {
       name: "Mockers Demanding Judgment",
+      nameUr: "فیصلے کا مطالبہ کرنے والے مذاق اڑانے والے",
       nameArabic: "المستهزئون بالوعد",
       color: "#EF4444",
       icon: "AlertTriangle",
@@ -219,6 +234,7 @@ export const ONTOLOGY = {
 
     finalCommand: {
       name: "Final Command",
+      nameUr: "آخری حکم",
       nameArabic: "الأمر الأخير",
       color: "#3B82F6",
       icon: "Compass",

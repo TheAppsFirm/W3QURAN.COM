@@ -14,6 +14,7 @@ export const ONTOLOGY = {
   categories: {
     theFurqan: {
       name: "Al-Furqan (The Criterion)",
+      nameUr: "الفرقان (حق و باطل میں فرق کرنے والا)",
       nameArabic: "الفرقان",
       color: "#F59E0B",
       icon: "Book",
@@ -27,6 +28,7 @@ export const ONTOLOGY = {
 
     deniersObjections: {
       name: "Objections of Deniers",
+      nameUr: "منکرین کے اعتراضات",
       nameArabic: "اعتراضات المنکرین",
       color: "#EF4444",
       icon: "MessageCircle",
@@ -42,6 +44,7 @@ export const ONTOLOGY = {
 
     divineResponses: {
       name: "Divine Responses",
+      nameUr: "الٰہی جوابات",
       nameArabic: "الردود الإلهية",
       color: "#8B5CF6",
       icon: "Zap",
@@ -55,6 +58,7 @@ export const ONTOLOGY = {
 
     previousNations: {
       name: "Stories of Previous Nations",
+      nameUr: "پچھلی قوموں کے قصے",
       nameArabic: "قصص الأمم السابقة",
       color: "#EF4444",
       icon: "AlertTriangle",
@@ -70,6 +74,7 @@ export const ONTOLOGY = {
 
     signsOfAllah: {
       name: "Signs in Creation",
+      nameUr: "تخلیق میں نشانیاں",
       nameArabic: "الآيات الكونية",
       color: "#06B6D4",
       icon: "Sun",
@@ -91,6 +96,7 @@ export const ONTOLOGY = {
 
     ibadArRahman: {
       name: "Servants of the Most Merciful",
+      nameUr: "رحمٰن کے بندے",
       nameArabic: "عباد الرحمن",
       color: "#8B5CF6",
       icon: "Heart",
@@ -116,6 +122,7 @@ export const ONTOLOGY = {
 
     repentance: {
       name: "Repentance and Forgiveness",
+      nameUr: "توبہ اور مغفرت",
       nameArabic: "التوبة والمغفرة",
       color: "#22C55E",
       icon: "Heart",
@@ -129,6 +136,7 @@ export const ONTOLOGY = {
 
     rewardOfServants: {
       name: "Reward of True Servants",
+      nameUr: "سچے بندوں کا اجر",
       nameArabic: "جزاء العباد الصالحين",
       color: "#22C55E",
       icon: "Sparkles",
@@ -142,6 +150,7 @@ export const ONTOLOGY = {
 
     divineAttributes: {
       name: "Divine Attributes",
+      nameUr: "الٰہی صفات",
       nameArabic: "الصفات الإلهية",
       color: "#F59E0B",
       icon: "Star",
@@ -159,6 +168,7 @@ export const ONTOLOGY = {
 
     judgmentDay: {
       name: "Day of Judgment",
+      nameUr: "یومِ قیامت",
       nameArabic: "يوم القيامة",
       color: "#EF4444",
       icon: "Scale",
@@ -175,6 +185,7 @@ export const ONTOLOGY = {
 
     badCompanionship: {
       name: "Warning Against Bad Company",
+      nameUr: "بری صحبت سے خبردار",
       nameArabic: "التحذير من جليس السوء",
       color: "#EF4444",
       icon: "AlertTriangle",
@@ -187,6 +198,7 @@ export const ONTOLOGY = {
 
     prophetComplaint: {
       name: "Prophet's Complaint",
+      nameUr: "نبی ﷺ کی شکایت",
       nameArabic: "شكوى الرسول",
       color: "#3B82F6",
       icon: "Book",

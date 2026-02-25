@@ -14,6 +14,7 @@ export const ONTOLOGY = {
   categories: {
     commercialFraud: {
       name: "Fraud in Commerce",
+      nameUr: "تجارت میں دھوکہ",
       nameArabic: "الغش في التجارة",
       color: '#EF4444',
       icon: 'AlertTriangle',
@@ -26,6 +27,7 @@ export const ONTOLOGY = {
 
     resurrectionAwareness: {
       name: "Resurrection Awareness",
+      nameUr: "قیامت کا شعور",
       nameArabic: "الوعي بالبعث",
       color: '#3B82F6',
       icon: 'Eye',
@@ -37,6 +39,7 @@ export const ONTOLOGY = {
 
     sijjin: {
       name: "Sijjin - Record of Wicked",
+      nameUr: "سجین - بدکاروں کا نامۂ اعمال",
       nameArabic: "سجين",
       color: '#EF4444',
       icon: 'Book',
@@ -48,6 +51,7 @@ export const ONTOLOGY = {
 
     characterOfWicked: {
       name: "Traits of the Wicked",
+      nameUr: "بدکاروں کی صفات",
       nameArabic: "صفات الفجار",
       color: '#EF4444',
       icon: 'AlertTriangle',
@@ -61,6 +65,7 @@ export const ONTOLOGY = {
 
     illiyyun: {
       name: "Illiyyun - Record of Righteous",
+      nameUr: "علیین - نیکوں کا نامۂ اعمال",
       nameArabic: "عليين",
       color: '#10B981',
       icon: 'Book',
@@ -72,6 +77,7 @@ export const ONTOLOGY = {
 
     paradiseBliss: {
       name: "Paradise Delights",
+      nameUr: "جنت کی نعمتیں",
       nameArabic: "نعيم الجنة",
       color: '#10B981',
       icon: 'Sparkles',
@@ -86,6 +92,7 @@ export const ONTOLOGY = {
 
     mockeryReversed: {
       name: "Tables Turned",
+      nameUr: "پانسا پلٹ گیا",
       nameArabic: "انقلاب السخرية",
       color: '#F59E0B',
       icon: 'Scale',

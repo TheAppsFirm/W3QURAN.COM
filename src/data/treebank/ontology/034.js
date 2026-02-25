@@ -19,6 +19,7 @@ export const ONTOLOGY = {
   categories: {
     openingPraise: {
       name: "Opening Praise",
+      nameUr: "ابتدائی حمد",
       nameArabic: "الافتتاح بالحمد",
       color: "#F59E0B",
       icon: "Star",
@@ -31,6 +32,7 @@ export const ONTOLOGY = {
 
     divineKnowledge: {
       name: "Divine Knowledge",
+      nameUr: "الٰہی علم",
       nameArabic: "العلم الإلهي",
       color: "#F59E0B",
       icon: "Eye",
@@ -45,6 +47,7 @@ export const ONTOLOGY = {
 
     hourDeniers: {
       name: "Deniers of the Hour",
+      nameUr: "قیامت کے منکرین",
       nameArabic: "المكذبون بالساعة",
       color: "#EF4444",
       icon: "AlertTriangle",
@@ -60,6 +63,7 @@ export const ONTOLOGY = {
 
     witnessOfKnowledge: {
       name: "Witness of Those with Knowledge",
+      nameUr: "اہلِ علم کی گواہی",
       nameArabic: "شهادة أهل العلم",
       color: "#3B82F6",
       icon: "Book",
@@ -71,6 +75,7 @@ export const ONTOLOGY = {
 
     mockeryOfResurrection: {
       name: "Mockery of Resurrection",
+      nameUr: "قیامت کا مذاق",
       nameArabic: "السخرية من البعث",
       color: "#EF4444",
       icon: "AlertTriangle",
@@ -84,6 +89,7 @@ export const ONTOLOGY = {
 
     signsInCreation: {
       name: "Signs in Creation",
+      nameUr: "تخلیق میں نشانیاں",
       nameArabic: "آيات في الخلق",
       color: "#06B6D4",
       icon: "Globe",
@@ -97,6 +103,7 @@ export const ONTOLOGY = {
 
     dawudBlessings: {
       name: "Blessings upon Dawud",
+      nameUr: "داؤد پر نعمتیں",
       nameArabic: "نعم داود",
       color: "#8B5CF6",
       icon: "Crown",
@@ -111,6 +118,7 @@ export const ONTOLOGY = {
 
     sulaymanBlessings: {
       name: "Blessings upon Sulayman",
+      nameUr: "سلیمان پر نعمتیں",
       nameArabic: "نعم سليمان",
       color: "#8B5CF6",
       icon: "Crown",
@@ -124,6 +132,7 @@ export const ONTOLOGY = {
 
     jinnWorks: {
       name: "Works of the Jinn",
+      nameUr: "جنات کے کام",
       nameArabic: "أعمال الجن",
       color: "#8B5CF6",
       icon: "Zap",
@@ -138,6 +147,7 @@ export const ONTOLOGY = {
 
     sulaymanDeath: {
       name: "Death of Sulayman",
+      nameUr: "سلیمان کی وفات",
       nameArabic: "موت سليمان",
       color: "#3B82F6",
       icon: "Book",
@@ -151,6 +161,7 @@ export const ONTOLOGY = {
 
     shebaBlessing: {
       name: "Blessing of Sheba",
+      nameUr: "سبا کی نعمت",
       nameArabic: "نعمة سبأ",
       color: "#10B981",
       icon: "Sparkles",
@@ -164,6 +175,7 @@ export const ONTOLOGY = {
 
     shebaIngratitude: {
       name: "Ingratitude of Sheba",
+      nameUr: "سبا کی ناشکری",
       nameArabic: "كفران سبأ",
       color: "#EF4444",
       icon: "AlertTriangle",
@@ -179,6 +191,7 @@ export const ONTOLOGY = {
 
     blessedJourney: {
       name: "Blessed Journey",
+      nameUr: "مبارک سفر",
       nameArabic: "الرحلة المباركة",
       color: "#10B981",
       icon: "Compass",
@@ -191,6 +204,7 @@ export const ONTOLOGY = {
 
     desireForHardship: {
       name: "Desire for Hardship",
+      nameUr: "مشقت کی خواہش",
       nameArabic: "طلب المشقة",
       color: "#EF4444",
       icon: "AlertTriangle",
@@ -205,6 +219,7 @@ export const ONTOLOGY = {
 
     iblisInfluence: {
       name: "Influence of Iblis",
+      nameUr: "ابلیس کا اثر",
       nameArabic: "تأثير إبليس",
       color: "#EF4444",
       icon: "Zap",
@@ -219,6 +234,7 @@ export const ONTOLOGY = {
 
     falseIntercessors: {
       name: "False Intercessors",
+      nameUr: "جھوٹے سفارشی",
       nameArabic: "الشفعاء الباطلون",
       color: "#EF4444",
       icon: "Scale",
@@ -232,6 +248,7 @@ export const ONTOLOGY = {
 
     providerQuestion: {
       name: "Who is the Provider?",
+      nameUr: "رزق دینے والا کون ہے؟",
       nameArabic: "من الرزاق؟",
       color: "#F59E0B",
       icon: "Star",
@@ -245,6 +262,7 @@ export const ONTOLOGY = {
 
     dayOfGathering: {
       name: "Day of Gathering",
+      nameUr: "جمع ہونے کا دن",
       nameArabic: "يوم الجمع",
       color: "#F59E0B",
       icon: "Sun",
@@ -257,6 +275,7 @@ export const ONTOLOGY = {
 
     partnerChallenge: {
       name: "Challenge About Partners",
+      nameUr: "شریکوں کے بارے میں چیلنج",
       nameArabic: "تحدي الشركاء",
       color: "#3B82F6",
       icon: "Shield",
@@ -268,6 +287,7 @@ export const ONTOLOGY = {
 
     prophetUniversalMission: {
       name: "Prophet's Universal Mission",
+      nameUr: "نبی ﷺ کا عالمگیر مشن",
       nameArabic: "رسالة النبي العالمية",
       color: "#F59E0B",
       icon: "Globe",
@@ -280,6 +300,7 @@ export const ONTOLOGY = {
 
     promiseImpatience: {
       name: "Impatience for Promise",
+      nameUr: "وعدے میں جلد بازی",
       nameArabic: "الاستعجال بالوعد",
       color: "#EF4444",
       icon: "AlertTriangle",
@@ -291,6 +312,7 @@ export const ONTOLOGY = {
 
     quranRejection: {
       name: "Rejection of Quran",
+      nameUr: "قرآن کا انکار",
       nameArabic: "رفض القرآن",
       color: "#EF4444",
       icon: "AlertTriangle",
@@ -303,6 +325,7 @@ export const ONTOLOGY = {
 
     mutualBlame: {
       name: "Mutual Blame",
+      nameUr: "باہمی الزام تراشی",
       nameArabic: "التلاوم",
       color: "#EF4444",
       icon: "Users",
@@ -319,213 +342,227 @@ export const ONTOLOGY = {
 
     affluenceAndArrogance: {
       name: "Affluence and Arrogance",
+      nameUr: "مال داری اور تکبر",
       color: "#EF4444",
       icon: "Crown",
       nameArabic: "الثراء والكبر",
       concepts: [
-        { term: "وَمَا أَرْسَلْنَا فِي قَرْيَةٍ مِّن نَّذِيرٍ إِلَّا قَالَ مُتْرَفُوهَا إِنَّا بِمَا أُرْسِلْتُم بِهِ كَافِرُونَ", meaning: { en: "We did not send to a city any warner except its affluent said: We disbelieve in what you were sent with", ur: "We did not send to a city any warner except its affluent said: We disbelieve in what you were sent with" }, explanation: { en: "Wealthy always first to reject", ur: "Wealthy always first to reject" }, verseRef: "34:34" },
-        { term: "وَقَالُوا نَحْنُ أَكْثَرُ أَمْوَالًا وَأَوْلَادًا وَمَا نَحْنُ بِمُعَذَّبِينَ", meaning: { en: "They said: We have more wealth and children, and we will not be punished", ur: "They said: We have more wealth and children, and we will not be punished" }, explanation: { en: "Wealth mistaken for divine favor", ur: "Wealth mistaken for divine favor" }, verseRef: "34:35" }
+        { term: "وَمَا أَرْسَلْنَا فِي قَرْيَةٍ مِّن نَّذِيرٍ إِلَّا قَالَ مُتْرَفُوهَا إِنَّا بِمَا أُرْسِلْتُم بِهِ كَافِرُونَ", meaning: { en: "We did not send to a city any warner except its affluent said: We disbelieve in what you were sent with", ur: "ہم نے جس شہر میں بھی ڈرانے والا بھیجا اس کے خوشحال لوگوں نے کہا: جو تمہارے ساتھ بھیجا گیا ہم اس کے منکر ہیں" }, explanation: { en: "Wealthy always first to reject", ur: "مالدار ہمیشہ سب سے پہلے انکار کرتے ہیں" }, verseRef: "34:34" },
+        { term: "وَقَالُوا نَحْنُ أَكْثَرُ أَمْوَالًا وَأَوْلَادًا وَمَا نَحْنُ بِمُعَذَّبِينَ", meaning: { en: "They said: We have more wealth and children, and we will not be punished", ur: "انہوں نے کہا: ہمارے پاس زیادہ مال اور اولاد ہے اور ہمیں عذاب نہیں ہوگا" }, explanation: { en: "Wealth mistaken for divine favor", ur: "دولت کو الٰہی پسندیدگی سمجھنے کی غلطی" }, verseRef: "34:35" }
       ]
     },
 
     provisionAndConstriction: {
       name: "Provision and Constriction",
+      nameUr: "رزق کی فراخی اور تنگی",
       nameArabic: "الرزق والتقتير",
       color: "#F59E0B",
       icon: "Scale",
       concepts: [
-        { term: "قُلْ إِنَّ رَبِّي يَبْسُطُ الرِّزْقَ لِمَن يَشَاءُ وَيَقْدِرُ", meaning: { en: "Say: Indeed, my Lord extends provision for whom He wills and restricts", ur: "Say: Indeed, my Lord extends provision for whom He wills and restricts" }, explanation: { en: "Allah controls provision freely", ur: "Allah controls provision freely" }, verseRef: "34:36" },
-        { term: "وَلَٰكِنَّ أَكْثَرَ النَّاسِ لَا يَعْلَمُونَ", meaning: { en: "But most people do not know", ur: "But most people do not know" }, explanation: { en: "People misunderstand wealth as blessing", ur: "People misunderstand wealth as blessing" }, verseRef: "34:36" },
-        { term: "وَمَا أَمْوَالُكُمْ وَلَا أَوْلَادُكُم بِالَّتِي تُقَرِّبُكُمْ عِندَنَا زُلْفَىٰ", meaning: { en: "It is not your wealth or children that bring you near to Us", ur: "It is not your wealth or children that bring you near to Us" }, explanation: { en: "Wealth and children don't guarantee closeness to Allah", ur: "Wealth and children don't guarantee closeness to Allah" }, verseRef: "34:37" },
-        { term: "إِلَّا مَنْ آمَنَ وَعَمِلَ صَالِحًا", meaning: { en: "Except one who believes and does righteousness", ur: "Except one who believes and does righteousness" }, explanation: { en: "Faith and deeds bring closeness", ur: "Faith and deeds bring closeness" }, verseRef: "34:37" },
-        { term: "فَأُولَٰئِكَ لَهُمْ جَزَاءُ الضِّعْفِ بِمَا عَمِلُوا", meaning: { en: "Those will have the double reward for what they did", ur: "Those will have the double reward for what they did" }, explanation: { en: "Righteous receive multiplied reward", ur: "Righteous receive multiplied reward" }, verseRef: "34:37" },
-        { term: "وَهُمْ فِي الْغُرُفَاتِ آمِنُونَ", meaning: { en: "And they will be safe in lofty chambers", ur: "And they will be safe in lofty chambers" }, explanation: { en: "Security in elevated Paradise chambers", ur: "Security in elevated Paradise chambers" }, verseRef: "34:37" }
+        { term: "قُلْ إِنَّ رَبِّي يَبْسُطُ الرِّزْقَ لِمَن يَشَاءُ وَيَقْدِرُ", meaning: { en: "Say: Indeed, my Lord extends provision for whom He wills and restricts", ur: "کہو: بے شک میرا رب جس کے لیے چاہے رزق کشادہ کرتا ہے اور تنگ کرتا ہے" }, explanation: { en: "Allah controls provision freely", ur: "اللہ آزادانہ طور پر رزق کو کنٹرول کرتا ہے" }, verseRef: "34:36" },
+        { term: "وَلَٰكِنَّ أَكْثَرَ النَّاسِ لَا يَعْلَمُونَ", meaning: { en: "But most people do not know", ur: "لیکن اکثر لوگ نہیں جانتے" }, explanation: { en: "People misunderstand wealth as blessing", ur: "لوگ دولت کو غلطی سے نعمت سمجھتے ہیں" }, verseRef: "34:36" },
+        { term: "وَمَا أَمْوَالُكُمْ وَلَا أَوْلَادُكُم بِالَّتِي تُقَرِّبُكُمْ عِندَنَا زُلْفَىٰ", meaning: { en: "It is not your wealth or children that bring you near to Us", ur: "نہ تمہارے مال ہیں نہ اولاد جو تمہیں ہمارا مقرب بنائیں" }, explanation: { en: "Wealth and children don't guarantee closeness to Allah", ur: "مال و اولاد اللہ سے قربت کی ضمانت نہیں" }, verseRef: "34:37" },
+        { term: "إِلَّا مَنْ آمَنَ وَعَمِلَ صَالِحًا", meaning: { en: "Except one who believes and does righteousness", ur: "مگر جو ایمان لائے اور نیک عمل کرے" }, explanation: { en: "Faith and deeds bring closeness", ur: "ایمان اور نیک اعمال قربت لاتے ہیں" }, verseRef: "34:37" },
+        { term: "فَأُولَٰئِكَ لَهُمْ جَزَاءُ الضِّعْفِ بِمَا عَمِلُوا", meaning: { en: "Those will have the double reward for what they did", ur: "ان کے لیے ان کے اعمال کا دگنا بدلہ ہے" }, explanation: { en: "Righteous receive multiplied reward", ur: "نیکوکار کئی گنا اجر پاتے ہیں" }, verseRef: "34:37" },
+        { term: "وَهُمْ فِي الْغُرُفَاتِ آمِنُونَ", meaning: { en: "And they will be safe in lofty chambers", ur: "اور وہ بلند بالاخانوں میں امن سے ہوں گے" }, explanation: { en: "Security in elevated Paradise chambers", ur: "جنت کے اونچے محلات میں امان و سکون" }, verseRef: "34:37" }
       ]
     },
 
     striversAgainstSigns: {
       name: "Strivers Against Signs",
+      nameUr: "آیات کے خلاف کوشش کرنے والے",
       nameArabic: "الساعون في الآيات",
       color: "#EF4444",
       icon: "AlertTriangle",
       concepts: [
-        { term: "وَالَّذِينَ يَسْعَوْنَ فِي آيَاتِنَا مُعَاجِزِينَ", meaning: { en: "Those who strive against Our verses to cause failure", ur: "Those who strive against Our verses to cause failure" }, explanation: { en: "Active opposition to divine signs", ur: "Active opposition to divine signs" }, verseRef: "34:38" },
-        { term: "أُولَٰئِكَ فِي الْعَذَابِ مُحْضَرُونَ", meaning: { en: "Those will be brought into the punishment", ur: "Those will be brought into the punishment" }, explanation: { en: "Guaranteed presence in punishment", ur: "Guaranteed presence in punishment" }, verseRef: "34:38" }
+        { term: "وَالَّذِينَ يَسْعَوْنَ فِي آيَاتِنَا مُعَاجِزِينَ", meaning: { en: "Those who strive against Our verses to cause failure", ur: "اور جو ہماری آیتوں کو ناکام بنانے کی کوشش میں لگے رہتے ہیں" }, explanation: { en: "Active opposition to divine signs", ur: "الٰہی نشانیوں کی سرگرم مخالفت" }, verseRef: "34:38" },
+        { term: "أُولَٰئِكَ فِي الْعَذَابِ مُحْضَرُونَ", meaning: { en: "Those will be brought into the punishment", ur: "یہی لوگ عذاب میں حاضر کیے جائیں گے" }, explanation: { en: "Guaranteed presence in punishment", ur: "عذاب میں حاضری یقینی ہے" }, verseRef: "34:38" }
       ]
     },
 
     spendingAndReplacement: {
       name: "Spending and Replacement",
+      nameUr: "خرچ کرنا اور بدلہ پانا",
       nameArabic: "الإنفاق والخلف",
       color: "#10B981",
       icon: "Heart",
       concepts: [
-        { term: "قُلْ إِنَّ رَبِّي يَبْسُطُ الرِّزْقَ لِمَن يَشَاءُ مِنْ عِبَادِهِ وَيَقْدِرُ لَهُ", meaning: { en: "Say: My Lord extends provision for whom He wills of His servants and restricts for him", ur: "Say: My Lord extends provision for whom He wills of His servants and restricts for him" }, explanation: { en: "Provision varies by divine will", ur: "Provision varies by divine will" }, verseRef: "34:39" },
-        { term: "وَمَا أَنفَقْتُم مِّن شَيْءٍ فَهُوَ يُخْلِفُهُ", meaning: { en: "Whatever you spend, He will replace it", ur: "Whatever you spend, He will replace it" }, explanation: { en: "Allah replaces what is spent", ur: "Allah replaces what is spent" }, verseRef: "34:39" },
-        { term: "وَهُوَ خَيْرُ الرَّازِقِينَ", meaning: { en: "And He is the best of providers", ur: "And He is the best of providers" }, explanation: { en: "Allah is the supreme Provider", ur: "Allah is the supreme Provider" }, verseRef: "34:39" }
+        { term: "قُلْ إِنَّ رَبِّي يَبْسُطُ الرِّزْقَ لِمَن يَشَاءُ مِنْ عِبَادِهِ وَيَقْدِرُ لَهُ", meaning: { en: "Say: My Lord extends provision for whom He wills of His servants and restricts for him", ur: "کہو: میرا رب اپنے بندوں میں سے جس کے لیے چاہے رزق کشادہ کرتا ہے اور تنگ کرتا ہے" }, explanation: { en: "Provision varies by divine will", ur: "رزق الٰہی مشیت سے بدلتا رہتا ہے" }, verseRef: "34:39" },
+        { term: "وَمَا أَنفَقْتُم مِّن شَيْءٍ فَهُوَ يُخْلِفُهُ", meaning: { en: "Whatever you spend, He will replace it", ur: "اور جو کچھ تم خرچ کرو گے وہ اس کا بدل دے گا" }, explanation: { en: "Allah replaces what is spent", ur: "اللہ خرچ کیے ہوئے کا بدل دیتا ہے" }, verseRef: "34:39" },
+        { term: "وَهُوَ خَيْرُ الرَّازِقِينَ", meaning: { en: "And He is the best of providers", ur: "اور وہ سب سے بہتر رزق دینے والا ہے" }, explanation: { en: "Allah is the supreme Provider", ur: "اللہ سب سے اعلیٰ رازق ہے" }, verseRef: "34:39" }
       ]
     },
 
     angelsDisowning: {
       name: "Angels Disowning",
+      nameUr: "فرشتوں کا انکار",
       nameArabic: "تبرؤ الملائكة",
       color: "#8B5CF6",
       icon: "Sparkles",
       concepts: [
-        { term: "وَيَوْمَ يَحْشُرُهُمْ جَمِيعًا ثُمَّ يَقُولُ لِلْمَلَائِكَةِ أَهَٰؤُلَاءِ إِيَّاكُمْ كَانُوا يَعْبُدُونَ", meaning: { en: "On the Day He gathers them all, He will say to angels: Did these worship you?", ur: "On the Day He gathers them all, He will say to angels: Did these worship you?" }, explanation: { en: "Allah questions angels about worship", ur: "Allah questions angels about worship" }, verseRef: "34:40" },
-        { term: "قَالُوا سُبْحَانَكَ أَنتَ وَلِيُّنَا مِن دُونِهِم", meaning: { en: "They will say: Exalted are You! You are our Protector, not them", ur: "They will say: Exalted are You! You are our Protector, not them" }, explanation: { en: "Angels declare loyalty only to Allah", ur: "Angels declare loyalty only to Allah" }, verseRef: "34:41" },
-        { term: "بَلْ كَانُوا يَعْبُدُونَ الْجِنَّ", meaning: { en: "Rather, they used to worship the jinn", ur: "Rather, they used to worship the jinn" }, explanation: { en: "True object of worship was jinn", ur: "True object of worship was jinn" }, verseRef: "34:41" },
-        { term: "أَكْثَرُهُم بِهِم مُّؤْمِنُونَ", meaning: { en: "Most of them were believers in them", ur: "Most of them were believers in them" }, explanation: { en: "Most followed jinn, not angels", ur: "Most followed jinn, not angels" }, verseRef: "34:41" }
+        { term: "وَيَوْمَ يَحْشُرُهُمْ جَمِيعًا ثُمَّ يَقُولُ لِلْمَلَائِكَةِ أَهَٰؤُلَاءِ إِيَّاكُمْ كَانُوا يَعْبُدُونَ", meaning: { en: "On the Day He gathers them all, He will say to angels: Did these worship you?", ur: "اور جس دن وہ سب کو جمع کرے گا پھر فرشتوں سے کہے گا: کیا یہ لوگ تمہاری عبادت کرتے تھے؟" }, explanation: { en: "Allah questions angels about worship", ur: "اللہ فرشتوں سے عبادت کے بارے میں سوال کرے گا" }, verseRef: "34:40" },
+        { term: "قَالُوا سُبْحَانَكَ أَنتَ وَلِيُّنَا مِن دُونِهِم", meaning: { en: "They will say: Exalted are You! You are our Protector, not them", ur: "فرشتے کہیں گے: تو پاک ہے! تو ہمارا ولی ہے نہ کہ یہ" }, explanation: { en: "Angels declare loyalty only to Allah", ur: "فرشتے صرف اللہ سے وفاداری کا اعلان کریں گے" }, verseRef: "34:41" },
+        { term: "بَلْ كَانُوا يَعْبُدُونَ الْجِنَّ", meaning: { en: "Rather, they used to worship the jinn", ur: "بلکہ یہ جنات کی عبادت کرتے تھے" }, explanation: { en: "True object of worship was jinn", ur: "عبادت کا اصل ہدف جنات تھے" }, verseRef: "34:41" },
+        { term: "أَكْثَرُهُم بِهِم مُّؤْمِنُونَ", meaning: { en: "Most of them were believers in them", ur: "ان میں سے اکثر ان (جنات) پر ایمان رکھتے تھے" }, explanation: { en: "Most followed jinn, not angels", ur: "اکثر نے جنات کی پیروی کی، فرشتوں کی نہیں" }, verseRef: "34:41" }
       ]
     },
 
     noPowerExceptAllah: {
       name: "No Power Except Allah",
+      nameUr: "اللہ کے سوا کسی کا اختیار نہیں",
       nameArabic: "لا قوة إلا بالله",
       color: "#F59E0B",
       icon: "Star",
       concepts: [
-        { term: "فَالْيَوْمَ لَا يَمْلِكُ بَعْضُكُمْ لِبَعْضٍ نَّفْعًا وَلَا ضَرًّا", meaning: { en: "Today none of you holds benefit or harm for another", ur: "Today none of you holds benefit or harm for another" }, explanation: { en: "No mutual help on Judgment Day", ur: "No mutual help on Judgment Day" }, verseRef: "34:42" },
-        { term: "وَنَقُولُ لِلَّذِينَ ظَلَمُوا ذُوقُوا عَذَابَ النَّارِ الَّتِي كُنتُم بِهَا تُكَذِّبُونَ", meaning: { en: "We will say to those who wronged: Taste the punishment of Fire you used to deny", ur: "We will say to those who wronged: Taste the punishment of Fire you used to deny" }, explanation: { en: "Commanded to taste denied punishment", ur: "Commanded to taste denied punishment" }, verseRef: "34:42" }
+        { term: "فَالْيَوْمَ لَا يَمْلِكُ بَعْضُكُمْ لِبَعْضٍ نَّفْعًا وَلَا ضَرًّا", meaning: { en: "Today none of you holds benefit or harm for another", ur: "آج تم میں سے کوئی ایک دوسرے کو نفع یا نقصان نہیں پہنچا سکتا" }, explanation: { en: "No mutual help on Judgment Day", ur: "یومِ قیامت میں کوئی باہمی مدد نہیں" }, verseRef: "34:42" },
+        { term: "وَنَقُولُ لِلَّذِينَ ظَلَمُوا ذُوقُوا عَذَابَ النَّارِ الَّتِي كُنتُم بِهَا تُكَذِّبُونَ", meaning: { en: "We will say to those who wronged: Taste the punishment of Fire you used to deny", ur: "اور ہم ظالموں سے کہیں گے: اس آگ کا عذاب چکھو جسے تم جھٹلاتے تھے" }, explanation: { en: "Commanded to taste denied punishment", ur: "جھٹلائے ہوئے عذاب کو چکھنے کا حکم" }, verseRef: "34:42" }
       ]
     },
 
     clearSignsRejected: {
       name: "Clear Signs Rejected",
+      nameUr: "واضح نشانیوں کا انکار",
       nameArabic: "رفض الآيات البينات",
       color: "#EF4444",
       icon: "Eye",
       concepts: [
-        { term: "وَإِذَا تُتْلَىٰ عَلَيْهِمْ آيَاتُنَا بَيِّنَاتٍ قَالُوا مَا هَٰذَا إِلَّا رَجُلٌ يُرِيدُ أَن يَصُدَّكُمْ عَمَّا كَانَ يَعْبُدُ آبَاؤُكُمْ", meaning: { en: "When Our clear verses are recited to them, they say: This is only a man who wants to avert you from what your fathers worshipped", ur: "When Our clear verses are recited to them, they say: This is only a man who wants to avert you from what your fathers worshipped" }, explanation: { en: "Accusing Prophet of disrupting tradition", ur: "Accusing Prophet of disrupting tradition" }, verseRef: "34:43" },
-        { term: "وَقَالُوا مَا هَٰذَا إِلَّا إِفْكٌ مُّفْتَرًى", meaning: { en: "They say: This is nothing but invented falsehood", ur: "They say: This is nothing but invented falsehood" }, explanation: { en: "Calling Quran fabricated lies", ur: "Calling Quran fabricated lies" }, verseRef: "34:43" },
-        { term: "وَقَالَ الَّذِينَ كَفَرُوا لِلْحَقِّ لَمَّا جَاءَهُمْ إِنْ هَٰذَا إِلَّا سِحْرٌ مُّبِينٌ", meaning: { en: "Those who disbelieve say of the truth when it came to them: This is only obvious magic", ur: "Those who disbelieve say of the truth when it came to them: This is only obvious magic" }, explanation: { en: "Truth dismissed as magic", ur: "Truth dismissed as magic" }, verseRef: "34:43" }
+        { term: "وَإِذَا تُتْلَىٰ عَلَيْهِمْ آيَاتُنَا بَيِّنَاتٍ قَالُوا مَا هَٰذَا إِلَّا رَجُلٌ يُرِيدُ أَن يَصُدَّكُمْ عَمَّا كَانَ يَعْبُدُ آبَاؤُكُمْ", meaning: { en: "When Our clear verses are recited to them, they say: This is only a man who wants to avert you from what your fathers worshipped", ur: "جب ان پر ہماری واضح آیتیں پڑھی جاتی ہیں تو کہتے ہیں: یہ تو بس ایک آدمی ہے جو تمہیں تمہارے باپ دادا کی عبادت سے روکنا چاہتا ہے" }, explanation: { en: "Accusing Prophet of disrupting tradition", ur: "نبی ﷺ پر روایت توڑنے کا الزام" }, verseRef: "34:43" },
+        { term: "وَقَالُوا مَا هَٰذَا إِلَّا إِفْكٌ مُّفْتَرًى", meaning: { en: "They say: This is nothing but invented falsehood", ur: "اور کہتے ہیں: یہ تو محض بنایا ہوا جھوٹ ہے" }, explanation: { en: "Calling Quran fabricated lies", ur: "قرآن کو من گھڑت جھوٹ کہنا" }, verseRef: "34:43" },
+        { term: "وَقَالَ الَّذِينَ كَفَرُوا لِلْحَقِّ لَمَّا جَاءَهُمْ إِنْ هَٰذَا إِلَّا سِحْرٌ مُّبِينٌ", meaning: { en: "Those who disbelieve say of the truth when it came to them: This is only obvious magic", ur: "کافروں نے حق کے بارے میں جب وہ ان کے پاس آیا کہا: یہ تو صریح جادو ہے" }, explanation: { en: "Truth dismissed as magic", ur: "حق کو جادو کہہ کر ٹالنا" }, verseRef: "34:43" }
       ]
     },
 
     noScriptureBeforeQuran: {
       name: "No Scripture Before Quran",
+      nameUr: "قرآن سے پہلے کوئی کتاب نہیں",
       nameArabic: "لا كتاب قبل القرآن",
       color: "#3B82F6",
       icon: "Book",
       concepts: [
-        { term: "وَمَا آتَيْنَاهُم مِّن كُتُبٍ يَدْرُسُونَهَا", meaning: { en: "We had not given them books to study", ur: "We had not given them books to study" }, explanation: { en: "Arabs had no previous scripture", ur: "Arabs had no previous scripture" }, verseRef: "34:44" },
-        { term: "وَمَا أَرْسَلْنَا إِلَيْهِمْ قَبْلَكَ مِن نَّذِيرٍ", meaning: { en: "Nor sent to them before you any warner", ur: "Nor sent to them before you any warner" }, explanation: { en: "No prophet before Muhammad to Arabs", ur: "No prophet before Muhammad to Arabs" }, verseRef: "34:44" },
-        { term: "وَكَذَّبَ الَّذِينَ مِن قَبْلِهِمْ", meaning: { en: "Those before them denied", ur: "Those before them denied" }, explanation: { en: "Previous nations also denied", ur: "Previous nations also denied" }, verseRef: "34:45" },
-        { term: "وَمَا بَلَغُوا مِعْشَارَ مَا آتَيْنَاهُمْ", meaning: { en: "And they did not attain a tenth of what We gave them", ur: "And they did not attain a tenth of what We gave them" }, explanation: { en: "Previous nations had more yet still denied", ur: "Previous nations had more yet still denied" }, verseRef: "34:45" },
-        { term: "فَكَذَّبُوا رُسُلِي فَكَيْفَ كَانَ نَكِيرِ", meaning: { en: "But they denied My messengers, so how was My reproach?", ur: "But they denied My messengers, so how was My reproach?" }, explanation: { en: "Reminder of punishment for denial", ur: "Reminder of punishment for denial" }, verseRef: "34:45" }
+        { term: "وَمَا آتَيْنَاهُم مِّن كُتُبٍ يَدْرُسُونَهَا", meaning: { en: "We had not given them books to study", ur: "اور ہم نے انہیں کوئی کتابیں نہیں دی تھیں جو وہ پڑھتے" }, explanation: { en: "Arabs had no previous scripture", ur: "عربوں کے پاس کوئی پہلی کتاب نہیں تھی" }, verseRef: "34:44" },
+        { term: "وَمَا أَرْسَلْنَا إِلَيْهِمْ قَبْلَكَ مِن نَّذِيرٍ", meaning: { en: "Nor sent to them before you any warner", ur: "اور نہ ہم نے آپ سے پہلے ان کی طرف کوئی ڈرانے والا بھیجا" }, explanation: { en: "No prophet before Muhammad to Arabs", ur: "عربوں کے پاس محمد ﷺ سے پہلے کوئی نبی نہیں آیا" }, verseRef: "34:44" },
+        { term: "وَكَذَّبَ الَّذِينَ مِن قَبْلِهِمْ", meaning: { en: "Those before them denied", ur: "ان سے پہلے لوگوں نے بھی جھٹلایا" }, explanation: { en: "Previous nations also denied", ur: "پچھلی قوموں نے بھی انکار کیا" }, verseRef: "34:45" },
+        { term: "وَمَا بَلَغُوا مِعْشَارَ مَا آتَيْنَاهُمْ", meaning: { en: "And they did not attain a tenth of what We gave them", ur: "اور یہ اس کے دسویں حصے کو بھی نہیں پہنچے جو ہم نے انہیں دیا تھا" }, explanation: { en: "Previous nations had more yet still denied", ur: "پچھلی قوموں کو زیادہ ملا تھا پھر بھی انکار کیا" }, verseRef: "34:45" },
+        { term: "فَكَذَّبُوا رُسُلِي فَكَيْفَ كَانَ نَكِيرِ", meaning: { en: "But they denied My messengers, so how was My reproach?", ur: "تو انہوں نے میرے رسولوں کو جھٹلایا، پھر میرا عذاب کیسا تھا؟" }, explanation: { en: "Reminder of punishment for denial", ur: "انکار کی سزا کی یاد دہانی" }, verseRef: "34:45" }
       ]
     },
 
     prophetAdvice: {
       name: "Prophet's Advice",
+      nameUr: "نبی ﷺ کی نصیحت",
       nameArabic: "نصيحة النبي",
       color: "#3B82F6",
       icon: "Compass",
       concepts: [
-        { term: "قُلْ إِنَّمَا أَعِظُكُم بِوَاحِدَةٍ", meaning: { en: "Say: I advise you with one thing", ur: "Say: I advise you with one thing" }, explanation: { en: "Single piece of counsel", ur: "Single piece of counsel" }, verseRef: "34:46" },
-        { term: "أَن تَقُومُوا لِلَّهِ مَثْنَىٰ وَفُرَادَىٰ ثُمَّ تَتَفَكَّرُوا", meaning: { en: "That you stand for Allah in pairs or alone, then reflect", ur: "That you stand for Allah in pairs or alone, then reflect" }, explanation: { en: "Sincere reflection alone or in pairs", ur: "Sincere reflection alone or in pairs" }, verseRef: "34:46" },
-        { term: "مَا بِصَاحِبِكُم مِّن جِنَّةٍ", meaning: { en: "There is no madness in your companion", ur: "There is no madness in your companion" }, explanation: { en: "Prophet is not insane", ur: "Prophet is not insane" }, verseRef: "34:46" },
-        { term: "إِنْ هُوَ إِلَّا نَذِيرٌ لَّكُم بَيْنَ يَدَيْ عَذَابٍ شَدِيدٍ", meaning: { en: "He is only a warner to you before a severe punishment", ur: "He is only a warner to you before a severe punishment" }, explanation: { en: "Warning before inevitable punishment", ur: "Warning before inevitable punishment" }, verseRef: "34:46" }
+        { term: "قُلْ إِنَّمَا أَعِظُكُم بِوَاحِدَةٍ", meaning: { en: "Say: I advise you with one thing", ur: "کہو: میں تمہیں ایک بات کی نصیحت کرتا ہوں" }, explanation: { en: "Single piece of counsel", ur: "ایک نصیحت" }, verseRef: "34:46" },
+        { term: "أَن تَقُومُوا لِلَّهِ مَثْنَىٰ وَفُرَادَىٰ ثُمَّ تَتَفَكَّرُوا", meaning: { en: "That you stand for Allah in pairs or alone, then reflect", ur: "کہ اللہ کے لیے دو دو یا اکیلے اکیلے کھڑے ہو کر غور و فکر کرو" }, explanation: { en: "Sincere reflection alone or in pairs", ur: "اکیلے یا جوڑوں میں مخلصانہ غور و فکر" }, verseRef: "34:46" },
+        { term: "مَا بِصَاحِبِكُم مِّن جِنَّةٍ", meaning: { en: "There is no madness in your companion", ur: "تمہارے ساتھی (نبی ﷺ) کو کوئی پاگل پن نہیں" }, explanation: { en: "Prophet is not insane", ur: "نبی ﷺ دیوانے نہیں ہیں" }, verseRef: "34:46" },
+        { term: "إِنْ هُوَ إِلَّا نَذِيرٌ لَّكُم بَيْنَ يَدَيْ عَذَابٍ شَدِيدٍ", meaning: { en: "He is only a warner to you before a severe punishment", ur: "وہ تو بس سخت عذاب سے پہلے تمہیں ڈرانے والے ہیں" }, explanation: { en: "Warning before inevitable punishment", ur: "ناگزیر عذاب سے پہلے تنبیہ" }, verseRef: "34:46" }
       ]
     },
 
     prophetSeekingnNoReward: {
       name: "Prophet Seeks No Reward",
+      nameUr: "نبی ﷺ کوئی اجر نہیں مانگتے",
       nameArabic: "النبي لا يطلب أجراً",
       color: "#F59E0B",
       icon: "Star",
       concepts: [
-        { term: "قُلْ مَا سَأَلْتُكُم مِّنْ أَجْرٍ فَهُوَ لَكُمْ", meaning: { en: "Say: Whatever reward I asked of you - it is yours", ur: "Say: Whatever reward I asked of you - it is yours" }, explanation: { en: "Prophet seeks no worldly reward", ur: "Prophet seeks no worldly reward" }, verseRef: "34:47" },
-        { term: "إِنْ أَجْرِيَ إِلَّا عَلَى اللَّهِ", meaning: { en: "My reward is only from Allah", ur: "My reward is only from Allah" }, explanation: { en: "Reward comes from Allah alone", ur: "Reward comes from Allah alone" }, verseRef: "34:47" },
-        { term: "وَهُوَ عَلَىٰ كُلِّ شَيْءٍ شَهِيدٌ", meaning: { en: "And He is Witness over all things", ur: "And He is Witness over all things" }, explanation: { en: "Allah witnesses Prophet's sincerity", ur: "Allah witnesses Prophet's sincerity" }, verseRef: "34:47" }
+        { term: "قُلْ مَا سَأَلْتُكُم مِّنْ أَجْرٍ فَهُوَ لَكُمْ", meaning: { en: "Say: Whatever reward I asked of you - it is yours", ur: "کہو: جو اجر میں نے تم سے مانگا وہ تمہارا ہی ہے" }, explanation: { en: "Prophet seeks no worldly reward", ur: "نبی ﷺ کوئی دنیاوی اجر نہیں چاہتے" }, verseRef: "34:47" },
+        { term: "إِنْ أَجْرِيَ إِلَّا عَلَى اللَّهِ", meaning: { en: "My reward is only from Allah", ur: "میرا اجر صرف اللہ کے ذمے ہے" }, explanation: { en: "Reward comes from Allah alone", ur: "اجر صرف اللہ کی طرف سے آتا ہے" }, verseRef: "34:47" },
+        { term: "وَهُوَ عَلَىٰ كُلِّ شَيْءٍ شَهِيدٌ", meaning: { en: "And He is Witness over all things", ur: "اور وہ ہر چیز پر گواہ ہے" }, explanation: { en: "Allah witnesses Prophet's sincerity", ur: "اللہ نبی ﷺ کے اخلاص کا گواہ ہے" }, verseRef: "34:47" }
       ]
     },
 
     truthHasCome: {
       name: "Truth Has Come",
+      nameUr: "حق آ گیا",
       nameArabic: "جاء الحق",
       color: "#10B981",
       icon: "Sparkles",
       concepts: [
-        { term: "قُلْ إِنَّ رَبِّي يَقْذِفُ بِالْحَقِّ", meaning: { en: "Say: Indeed, my Lord hurls the truth", ur: "Say: Indeed, my Lord hurls the truth" }, explanation: { en: "Allah casts truth powerfully", ur: "Allah casts truth powerfully" }, verseRef: "34:48" },
-        { term: "عَلَّامُ الْغُيُوبِ", meaning: { en: "Knower of the unseen", ur: "Knower of the unseen" }, explanation: { en: "Allah knows all hidden things", ur: "Allah knows all hidden things" }, verseRef: "34:48" },
-        { term: "قُلْ جَاءَ الْحَقُّ", meaning: { en: "Say: The truth has come", ur: "Say: The truth has come" }, explanation: { en: "Declaration of truth's arrival", ur: "Declaration of truth's arrival" }, verseRef: "34:49" },
-        { term: "وَمَا يُبْدِئُ الْبَاطِلُ وَمَا يُعِيدُ", meaning: { en: "Falsehood cannot originate or restore", ur: "Falsehood cannot originate or restore" }, explanation: { en: "Falsehood has no creative power", ur: "Falsehood has no creative power" }, verseRef: "34:49" }
+        { term: "قُلْ إِنَّ رَبِّي يَقْذِفُ بِالْحَقِّ", meaning: { en: "Say: Indeed, my Lord hurls the truth", ur: "کہو: بے شک میرا رب حق کو قوت سے پھینکتا ہے" }, explanation: { en: "Allah casts truth powerfully", ur: "اللہ حق کو طاقت سے بھیجتا ہے" }, verseRef: "34:48" },
+        { term: "عَلَّامُ الْغُيُوبِ", meaning: { en: "Knower of the unseen", ur: "تمام غیبوں کا جاننے والا" }, explanation: { en: "Allah knows all hidden things", ur: "اللہ تمام پوشیدہ باتوں کو جانتا ہے" }, verseRef: "34:48" },
+        { term: "قُلْ جَاءَ الْحَقُّ", meaning: { en: "Say: The truth has come", ur: "کہو: حق آ گیا" }, explanation: { en: "Declaration of truth's arrival", ur: "حق کی آمد کا اعلان" }, verseRef: "34:49" },
+        { term: "وَمَا يُبْدِئُ الْبَاطِلُ وَمَا يُعِيدُ", meaning: { en: "Falsehood cannot originate or restore", ur: "اور باطل نہ کچھ پیدا کر سکتا ہے نہ لوٹا سکتا ہے" }, explanation: { en: "Falsehood has no creative power", ur: "باطل کے پاس کوئی تخلیقی طاقت نہیں" }, verseRef: "34:49" }
       ]
     },
 
     prophetGuidance: {
       name: "Prophet's Guidance",
+      nameUr: "نبی ﷺ کی ہدایت",
       nameArabic: "هداية النبي",
       color: "#3B82F6",
       icon: "Compass",
       concepts: [
-        { term: "قُلْ إِن ضَلَلْتُ فَإِنَّمَا أَضِلُّ عَلَىٰ نَفْسِي", meaning: { en: "Say: If I err, I err only against myself", ur: "Say: If I err, I err only against myself" }, explanation: { en: "Misguidance harms only oneself", ur: "Misguidance harms only oneself" }, verseRef: "34:50" },
-        { term: "وَإِنِ اهْتَدَيْتُ فَبِمَا يُوحِي إِلَيَّ رَبِّي", meaning: { en: "And if I am guided, it is by what my Lord reveals to me", ur: "And if I am guided, it is by what my Lord reveals to me" }, explanation: { en: "Guidance comes through revelation", ur: "Guidance comes through revelation" }, verseRef: "34:50" },
-        { term: "إِنَّهُ سَمِيعٌ قَرِيبٌ", meaning: { en: "Indeed, He is Hearing and near", ur: "Indeed, He is Hearing and near" }, explanation: { en: "Allah hears all and is close", ur: "Allah hears all and is close" }, verseRef: "34:50" }
+        { term: "قُلْ إِن ضَلَلْتُ فَإِنَّمَا أَضِلُّ عَلَىٰ نَفْسِي", meaning: { en: "Say: If I err, I err only against myself", ur: "کہو: اگر میں بھٹکوں تو میری بھٹکن میری اپنی ذات پر ہے" }, explanation: { en: "Misguidance harms only oneself", ur: "گمراہی صرف اپنے آپ کو نقصان پہنچاتی ہے" }, verseRef: "34:50" },
+        { term: "وَإِنِ اهْتَدَيْتُ فَبِمَا يُوحِي إِلَيَّ رَبِّي", meaning: { en: "And if I am guided, it is by what my Lord reveals to me", ur: "اور اگر ہدایت پاؤں تو اس وحی کی بدولت جو میرا رب مجھ پر نازل کرتا ہے" }, explanation: { en: "Guidance comes through revelation", ur: "ہدایت وحی کے ذریعے آتی ہے" }, verseRef: "34:50" },
+        { term: "إِنَّهُ سَمِيعٌ قَرِيبٌ", meaning: { en: "Indeed, He is Hearing and near", ur: "بے شک وہ سننے والا، قریب ہے" }, explanation: { en: "Allah hears all and is close", ur: "اللہ سب سنتا ہے اور قریب ہے" }, verseRef: "34:50" }
       ]
     },
 
     terrorOnJudgmentDay: {
       name: "Terror on Judgment Day",
+      nameUr: "قیامت کے دن کی دہشت",
       nameArabic: "الفزع يوم القيامة",
       color: "#EF4444",
       icon: "AlertTriangle",
       concepts: [
-        { term: "وَلَوْ تَرَىٰ إِذْ فَزِعُوا فَلَا فَوْتَ", meaning: { en: "If you could see when they are terrified but there is no escape", ur: "If you could see when they are terrified but there is no escape" }, explanation: { en: "No escape from terror on that Day", ur: "No escape from terror on that Day" }, verseRef: "34:51" },
-        { term: "وَأُخِذُوا مِن مَّكَانٍ قَرِيبٍ", meaning: { en: "And they were seized from a nearby place", ur: "And they were seized from a nearby place" }, explanation: { en: "Caught from close proximity", ur: "Caught from close proximity" }, verseRef: "34:51" },
-        { term: "وَقَالُوا آمَنَّا بِهِ", meaning: { en: "And they will say: We believe in it", ur: "And they will say: We believe in it" }, explanation: { en: "Too-late declaration of faith", ur: "Too-late declaration of faith" }, verseRef: "34:52" },
-        { term: "وَأَنَّىٰ لَهُمُ التَّنَاوُشُ مِن مَّكَانٍ بَعِيدٍ", meaning: { en: "But how can they reach faith from a distant place?", ur: "But how can they reach faith from a distant place?" }, explanation: { en: "Faith from afar impossible at that point", ur: "Faith from afar impossible at that point" }, verseRef: "34:52" }
+        { term: "وَلَوْ تَرَىٰ إِذْ فَزِعُوا فَلَا فَوْتَ", meaning: { en: "If you could see when they are terrified but there is no escape", ur: "اور کاش تم دیکھو جب وہ گھبرائیں گے اور کوئی چھٹکارا نہ ہوگا" }, explanation: { en: "No escape from terror on that Day", ur: "اس دن دہشت سے کوئی فرار نہیں" }, verseRef: "34:51" },
+        { term: "وَأُخِذُوا مِن مَّكَانٍ قَرِيبٍ", meaning: { en: "And they were seized from a nearby place", ur: "اور قریب ہی سے پکڑ لیے گئے" }, explanation: { en: "Caught from close proximity", ur: "قریب سے پکڑے گئے" }, verseRef: "34:51" },
+        { term: "وَقَالُوا آمَنَّا بِهِ", meaning: { en: "And they will say: We believe in it", ur: "اور کہیں گے: ہم اس پر ایمان لائے" }, explanation: { en: "Too-late declaration of faith", ur: "بہت دیر سے ایمان کا اعلان" }, verseRef: "34:52" },
+        { term: "وَأَنَّىٰ لَهُمُ التَّنَاوُشُ مِن مَّكَانٍ بَعِيدٍ", meaning: { en: "But how can they reach faith from a distant place?", ur: "اور اتنی دور سے ایمان تک پہنچنا ان کے لیے کہاں ممکن ہے؟" }, explanation: { en: "Faith from afar impossible at that point", ur: "اس مقام پر دور سے ایمان تک پہنچنا ناممکن" }, verseRef: "34:52" }
       ]
     },
 
     previousDisbelief: {
       name: "Previous Disbelief",
+      nameUr: "پہلا کفر",
       nameArabic: "الكفر السابق",
       color: "#EF4444",
       icon: "AlertTriangle",
       concepts: [
-        { term: "وَقَدْ كَفَرُوا بِهِ مِن قَبْلُ", meaning: { en: "They disbelieved in it before", ur: "They disbelieved in it before" }, explanation: { en: "Their prior rejection recorded", ur: "Their prior rejection recorded" }, verseRef: "34:53" },
-        { term: "وَيَقْذِفُونَ بِالْغَيْبِ مِن مَّكَانٍ بَعِيدٍ", meaning: { en: "They hurl accusations about unseen from far away", ur: "They hurl accusations about unseen from far away" }, explanation: { en: "Random accusations without knowledge", ur: "Random accusations without knowledge" }, verseRef: "34:53" },
-        { term: "وَحِيلَ بَيْنَهُمْ وَبَيْنَ مَا يَشْتَهُونَ", meaning: { en: "A barrier will be placed between them and what they desire", ur: "A barrier will be placed between them and what they desire" }, explanation: { en: "Denied their desires permanently", ur: "Denied their desires permanently" }, verseRef: "34:54" },
-        { term: "كَمَا فُعِلَ بِأَشْيَاعِهِم مِّن قَبْلُ", meaning: { en: "As was done with their kind before", ur: "As was done with their kind before" }, explanation: { en: "Same fate as previous deniers", ur: "Same fate as previous deniers" }, verseRef: "34:54" },
-        { term: "إِنَّهُمْ كَانُوا فِي شَكٍّ مُّرِيبٍ", meaning: { en: "Indeed, they were in disquieting doubt", ur: "Indeed, they were in disquieting doubt" }, explanation: { en: "Doubt that created restlessness", ur: "Doubt that created restlessness" }, verseRef: "34:54" }
+        { term: "وَقَدْ كَفَرُوا بِهِ مِن قَبْلُ", meaning: { en: "They disbelieved in it before", ur: "حالانکہ انہوں نے پہلے ہی اس کا انکار کر دیا تھا" }, explanation: { en: "Their prior rejection recorded", ur: "ان کا پہلے سے انکار درج ہے" }, verseRef: "34:53" },
+        { term: "وَيَقْذِفُونَ بِالْغَيْبِ مِن مَّكَانٍ بَعِيدٍ", meaning: { en: "They hurl accusations about unseen from far away", ur: "اور دور سے غیب کے بارے میں اندھے الزامات لگاتے ہیں" }, explanation: { en: "Random accusations without knowledge", ur: "بغیر علم کے بے بنیاد الزامات" }, verseRef: "34:53" },
+        { term: "وَحِيلَ بَيْنَهُمْ وَبَيْنَ مَا يَشْتَهُونَ", meaning: { en: "A barrier will be placed between them and what they desire", ur: "اور ان کے اور ان کی خواہشات کے درمیان رکاوٹ ڈال دی جائے گی" }, explanation: { en: "Denied their desires permanently", ur: "ان کی خواہشات ہمیشہ کے لیے محروم" }, verseRef: "34:54" },
+        { term: "كَمَا فُعِلَ بِأَشْيَاعِهِم مِّن قَبْلُ", meaning: { en: "As was done with their kind before", ur: "جیسا کہ ان سے پہلے ان جیسوں کے ساتھ کیا گیا" }, explanation: { en: "Same fate as previous deniers", ur: "پچھلے انکار کرنے والوں جیسا انجام" }, verseRef: "34:54" },
+        { term: "إِنَّهُمْ كَانُوا فِي شَكٍّ مُّرِيبٍ", meaning: { en: "Indeed, they were in disquieting doubt", ur: "بے شک وہ بے چین کر دینے والے شک میں تھے" }, explanation: { en: "Doubt that created restlessness", ur: "ایسا شک جو بے چینی پیدا کرتا ہے" }, verseRef: "34:54" }
       ]
     }
   },
 
   relationships: [
-    { from: "الحمد لله", to: "العلم الإلهي", type: "foundation", description: { en: "Praise based on Allah's comprehensive knowledge", ur: "Praise based on Allah's comprehensive knowledge" } },
-    { from: "داود", to: "سليمان", type: "succession", description: { en: "Father and son both blessed with kingdoms", ur: "Father and son both blessed with kingdoms" } },
-    { from: "نعم سبأ", to: "كفران سبأ", type: "contrast", description: { en: "Blessings met with ingratitude", ur: "Blessings met with ingratitude" } },
-    { from: "جنتان", to: "سيل العرم", type: "consequence", description: { en: "Gardens destroyed by dam flood as punishment", ur: "Gardens destroyed by dam flood as punishment" } },
-    { from: "الشكر", to: "الكفور", type: "contrast", description: { en: "Grateful few versus ungrateful many", ur: "Grateful few versus ungrateful many" } },
-    { from: "موت سليمان", to: "علم الغيب", type: "proof", description: { en: "Jinn's ignorance proves they don't know unseen", ur: "Jinn's ignorance proves they don't know unseen" } },
-    { from: "باعد بين أسفارنا", to: "أحاديث", type: "consequence", description: { en: "Asking for hardship led to becoming mere tales", ur: "Asking for hardship led to becoming mere tales" } },
-    { from: "إبليس ظنّه", to: "اتبعوه", type: "confirmation", description: { en: "Satan's assumption about human weakness confirmed", ur: "Satan's assumption about human weakness confirmed" } },
-    { from: "الشركاء", to: "لا يملكون ذرة", type: "refutation", description: { en: "Partners own nothing - no power", ur: "Partners own nothing - no power" } },
-    { from: "أموال وأولاد", to: "لا تقربكم زلفى", type: "correction", description: { en: "Wealth and children don't bring closeness to Allah", ur: "Wealth and children don't bring closeness to Allah" } },
-    { from: "الملائكة", to: "تبرؤ", type: "disowning", description: { en: "Angels will disown those who claimed to worship them", ur: "Angels will disown those who claimed to worship them" } },
-    { from: "جاء الحق", to: "الباطل", type: "negation", description: { en: "Truth's arrival means falsehood has no power", ur: "Truth's arrival means falsehood has no power" } }
+    { from: "الحمد لله", to: "العلم الإلهي", type: "foundation", description: { en: "Praise based on Allah's comprehensive knowledge", ur: "اللہ کے جامع علم کی بنیاد پر حمد" } },
+    { from: "داود", to: "سليمان", type: "succession", description: { en: "Father and son both blessed with kingdoms", ur: "باپ اور بیٹے دونوں کو سلطنت سے نوازا گیا" } },
+    { from: "نعم سبأ", to: "كفران سبأ", type: "contrast", description: { en: "Blessings met with ingratitude", ur: "نعمتوں کا جواب ناشکری سے" } },
+    { from: "جنتان", to: "سيل العرم", type: "consequence", description: { en: "Gardens destroyed by dam flood as punishment", ur: "باغات بند کے سیلاب سے تباہ بطور سزا" } },
+    { from: "الشكر", to: "الكفور", type: "contrast", description: { en: "Grateful few versus ungrateful many", ur: "چند شکرگزار بمقابلہ بہت سے ناشکرے" } },
+    { from: "موت سليمان", to: "علم الغيب", type: "proof", description: { en: "Jinn's ignorance proves they don't know unseen", ur: "جنات کی لاعلمی ثابت کرتی ہے کہ وہ غیب نہیں جانتے" } },
+    { from: "باعد بين أسفارنا", to: "أحاديث", type: "consequence", description: { en: "Asking for hardship led to becoming mere tales", ur: "مشکل مانگنے کا نتیجہ محض کہانیاں بن جانا" } },
+    { from: "إبليس ظنّه", to: "اتبعوه", type: "confirmation", description: { en: "Satan's assumption about human weakness confirmed", ur: "انسانی کمزوری کے بارے میں شیطان کا گمان درست ثابت" } },
+    { from: "الشركاء", to: "لا يملكون ذرة", type: "refutation", description: { en: "Partners own nothing - no power", ur: "شریک کسی چیز کے مالک نہیں - کوئی طاقت نہیں" } },
+    { from: "أموال وأولاد", to: "لا تقربكم زلفى", type: "correction", description: { en: "Wealth and children don't bring closeness to Allah", ur: "مال و اولاد اللہ سے قربت نہیں لاتے" } },
+    { from: "الملائكة", to: "تبرؤ", type: "disowning", description: { en: "Angels will disown those who claimed to worship them", ur: "فرشتے ان سے بیزاری کا اعلان کریں گے جنہوں نے ان کی عبادت کا دعویٰ کیا" } },
+    { from: "جاء الحق", to: "الباطل", type: "negation", description: { en: "Truth's arrival means falsehood has no power", ur: "حق کی آمد کا مطلب ہے باطل بے بس ہے" } }
   ],
 
   thematicFlow: {
     stages: [
-      { stage: 1, theme: "Opening Praise and Divine Knowledge", verses: "34:1-6", description: { en: "Praise to Allah, His comprehensive knowledge, Hour affirmed", ur: "Praise to Allah, His comprehensive knowledge, Hour affirmed" } },
-      { stage: 2, theme: "Mockery of Resurrection", verses: "34:7-9", description: { en: "Disbelievers mock resurrection, signs surround them", ur: "Disbelievers mock resurrection, signs surround them" } },
-      { stage: 3, theme: "Dawud's Blessings", verses: "34:10-11", description: { en: "Mountains praise, iron softened, armor crafted", ur: "Mountains praise, iron softened, armor crafted" } },
-      { stage: 4, theme: "Sulayman's Kingdom", verses: "34:12-14", description: { en: "Wind, copper, jinn works, death reveals jinn's ignorance", ur: "Wind, copper, jinn works, death reveals jinn's ignorance" } },
-      { stage: 5, theme: "Sheba's Blessing and Ingratitude", verses: "34:15-17", description: { en: "Two gardens, dam flood punishment for ingratitude", ur: "Two gardens, dam flood punishment for ingratitude" } },
-      { stage: 6, theme: "Safe Travel Rejected", verses: "34:18-19", description: { en: "Blessed towns, asked for hardship, became scattered tales", ur: "Blessed towns, asked for hardship, became scattered tales" } },
-      { stage: 7, theme: "Satan's Success", verses: "34:20-21", description: { en: "Iblis's assumption confirmed, most followed him", ur: "Iblis's assumption confirmed, most followed him" } },
-      { stage: 8, theme: "False Gods Refuted", verses: "34:22-27", description: { en: "Partners own nothing, intercession by permission only", ur: "Partners own nothing, intercession by permission only" } },
-      { stage: 9, theme: "Universal Message", verses: "34:28-30", description: { en: "Prophet sent to all mankind, appointed time fixed", ur: "Prophet sent to all mankind, appointed time fixed" } },
-      { stage: 10, theme: "Mutual Blame", verses: "34:31-33", description: { en: "Leaders and followers blame each other", ur: "Leaders and followers blame each other" } },
-      { stage: 11, theme: "Wealth Misconception", verses: "34:34-39", description: { en: "Affluent reject, provision is from Allah alone", ur: "Affluent reject, provision is from Allah alone" } },
-      { stage: 12, theme: "Angels Disown", verses: "34:40-42", description: { en: "Angels deny being worshipped, jinn were worshipped", ur: "Angels deny being worshipped, jinn were worshipped" } },
-      { stage: 13, theme: "Rejecting Clear Signs", verses: "34:43-45", description: { en: "Quran called magic and lies, despite no prior scripture", ur: "Quran called magic and lies, despite no prior scripture" } },
-      { stage: 14, theme: "Prophet's Sincere Call", verses: "34:46-50", description: { en: "Advice to reflect, Prophet seeks no reward, truth declared", ur: "Advice to reflect, Prophet seeks no reward, truth declared" } },
-      { stage: 15, theme: "Terror and Too-Late Faith", verses: "34:51-54", description: { en: "No escape, late belief rejected, doubt leads to barrier", ur: "No escape, late belief rejected, doubt leads to barrier" } }
+      { stage: 1, theme: "Opening Praise and Divine Knowledge", verses: "34:1-6", description: { en: "Praise to Allah, His comprehensive knowledge, Hour affirmed", ur: "اللہ کی حمد، اس کا جامع علم، قیامت کی تصدیق" } },
+      { stage: 2, theme: "Mockery of Resurrection", verses: "34:7-9", description: { en: "Disbelievers mock resurrection, signs surround them", ur: "کفار دوبارہ اٹھائے جانے کا مذاق اڑاتے ہیں، نشانیاں ان کے چاروں طرف ہیں" } },
+      { stage: 3, theme: "Dawud's Blessings", verses: "34:10-11", description: { en: "Mountains praise, iron softened, armor crafted", ur: "پہاڑوں کی تسبیح، لوہے کا نرم ہونا، زرہ سازی" } },
+      { stage: 4, theme: "Sulayman's Kingdom", verses: "34:12-14", description: { en: "Wind, copper, jinn works, death reveals jinn's ignorance", ur: "ہوا، تانبا، جنات کے کام، موت سے جنات کی لاعلمی ظاہر" } },
+      { stage: 5, theme: "Sheba's Blessing and Ingratitude", verses: "34:15-17", description: { en: "Two gardens, dam flood punishment for ingratitude", ur: "دو باغات، ناشکری پر بند کے سیلاب کی سزا" } },
+      { stage: 6, theme: "Safe Travel Rejected", verses: "34:18-19", description: { en: "Blessed towns, asked for hardship, became scattered tales", ur: "بابرکت بستیاں، مشکل مانگی، منتشر کہانیاں بن گئے" } },
+      { stage: 7, theme: "Satan's Success", verses: "34:20-21", description: { en: "Iblis's assumption confirmed, most followed him", ur: "ابلیس کا گمان درست ثابت، اکثر نے اس کی پیروی کی" } },
+      { stage: 8, theme: "False Gods Refuted", verses: "34:22-27", description: { en: "Partners own nothing, intercession by permission only", ur: "شریک کسی چیز کے مالک نہیں، سفارش صرف اجازت سے" } },
+      { stage: 9, theme: "Universal Message", verses: "34:28-30", description: { en: "Prophet sent to all mankind, appointed time fixed", ur: "نبی ﷺ تمام انسانوں کے لیے بھیجے گئے، مقررہ وقت طے ہے" } },
+      { stage: 10, theme: "Mutual Blame", verses: "34:31-33", description: { en: "Leaders and followers blame each other", ur: "رہنما اور پیروکار ایک دوسرے پر الزام لگاتے ہیں" } },
+      { stage: 11, theme: "Wealth Misconception", verses: "34:34-39", description: { en: "Affluent reject, provision is from Allah alone", ur: "خوشحال لوگ انکار کرتے ہیں، رزق صرف اللہ کی طرف سے ہے" } },
+      { stage: 12, theme: "Angels Disown", verses: "34:40-42", description: { en: "Angels deny being worshipped, jinn were worshipped", ur: "فرشتے عبادت سے انکار کریں گے، جنات کی عبادت ہوتی تھی" } },
+      { stage: 13, theme: "Rejecting Clear Signs", verses: "34:43-45", description: { en: "Quran called magic and lies, despite no prior scripture", ur: "قرآن کو جادو اور جھوٹ کہا، حالانکہ پہلے کوئی کتاب نہیں تھی" } },
+      { stage: 14, theme: "Prophet's Sincere Call", verses: "34:46-50", description: { en: "Advice to reflect, Prophet seeks no reward, truth declared", ur: "غور و فکر کی نصیحت، نبی ﷺ کوئی اجر نہیں چاہتے، حق کا اعلان" } },
+      { stage: 15, theme: "Terror and Too-Late Faith", verses: "34:51-54", description: { en: "No escape, late belief rejected, doubt leads to barrier", ur: "کوئی فرار نہیں، دیر سے ایمان مسترد، شک رکاوٹ بنتا ہے" } }
     ]
   },
 
@@ -545,24 +582,24 @@ export const ONTOLOGY = {
   },
 
   uniqueInsight: {
-    title: { en: "The Surah of Gratitude and its Consequences", ur: "The Surah of Gratitude and its Consequences" },
-    insight: { en: "Surah Saba presents a masterclass on gratitude versus ingratitude through three powerful narratives: Dawud who was commanded 'Work in gratitude' (34:13), Sulayman whose death exposed jinn's lack of unseen knowledge, and the people of Sheba whose 'two gardens' became 'bitter fruit' after they rejected blessings. The surah's central message - 'few of My servants are grateful' (34:13) - explains why wealthy nations fall while patient, grateful individuals succeed. The people of Sheba committed a bizarre form of ingratitude: asking for longer, harder journeys when Allah had blessed them with safe, connected routes. This highlights how humans sometimes reject ease and seek difficulty as a form of arrogance. The mutual blame scene (34:31-33) between leaders and followers serves as a warning: on Judgment Day, no one will accept responsibility for leading or following into disbelief. The surah ends with the powerful image of those trying to reach faith from 'a distant place' (34:52) - too late, after a lifetime of rejection.", ur: "Surah Saba presents a masterclass on gratitude versus ingratitude through three powerful narratives: Dawud who was commanded 'Work in gratitude' (34:13), Sulayman whose death exposed jinn's lack of unseen knowledge, and the people of Sheba whose 'two gardens' became 'bitter fruit' after they rejected blessings. The surah's central message - 'few of My servants are grateful' (34:13) - explains why wealthy nations fall while patient, grateful individuals succeed. The people of Sheba committed a bizarre form of ingratitude: asking for longer, harder journeys when Allah had blessed them with safe, connected routes. This highlights how humans sometimes reject ease and seek difficulty as a form of arrogance. The mutual blame scene (34:31-33) between leaders and followers serves as a warning: on Judgment Day, no one will accept responsibility for leading or following into disbelief. The surah ends with the powerful image of those trying to reach faith from 'a distant place' (34:52) - too late, after a lifetime of rejection." }
+    title: { en: "The Surah of Gratitude and its Consequences", ur: "شکر اور اس کے نتائج کی سورت" },
+    insight: { en: "Surah Saba presents a masterclass on gratitude versus ingratitude through three powerful narratives: Dawud who was commanded 'Work in gratitude' (34:13), Sulayman whose death exposed jinn's lack of unseen knowledge, and the people of Sheba whose 'two gardens' became 'bitter fruit' after they rejected blessings. The surah's central message - 'few of My servants are grateful' (34:13) - explains why wealthy nations fall while patient, grateful individuals succeed. The people of Sheba committed a bizarre form of ingratitude: asking for longer, harder journeys when Allah had blessed them with safe, connected routes. This highlights how humans sometimes reject ease and seek difficulty as a form of arrogance. The mutual blame scene (34:31-33) between leaders and followers serves as a warning: on Judgment Day, no one will accept responsibility for leading or following into disbelief. The surah ends with the powerful image of those trying to reach faith from 'a distant place' (34:52) - too late, after a lifetime of rejection.", ur: "سورہ سبا شکر بمقابلہ ناشکری کا شاہکار سبق تین طاقتور بیانیوں کے ذریعے پیش کرتی ہے: داؤد جنہیں حکم دیا گیا 'شکر کے ساتھ عمل کرو' (34:13)، سلیمان جن کی موت نے جنات کی غیب سے لاعلمی ظاہر کی، اور سبا کے لوگ جن کے 'دو باغ' نعمتوں کے انکار کے بعد 'کڑوے پھل' بن گئے۔ سورت کا مرکزی پیغام - 'میرے بندوں میں سے شکرگزار بہت کم ہیں' (34:13) - بتاتا ہے کہ مالدار قومیں کیوں تباہ ہوتی ہیں جبکہ صبر اور شکر والے کامیاب ہوتے ہیں۔ سبا کے لوگوں نے ناشکری کی عجیب شکل اختیار کی: جب اللہ نے انہیں محفوظ آپس میں جڑے راستے دیے تو انہوں نے لمبے مشکل سفر مانگے۔ باہمی الزام تراشی کا منظر (34:31-33) تنبیہ ہے: قیامت کے دن کوئی کفر کی طرف لے جانے یا پیروی کرنے کی ذمہ داری قبول نہیں کرے گا۔ سورت 'دور جگہ سے' ایمان تک پہنچنے کی کوشش (34:52) کی طاقتور تصویر پر ختم ہوتی ہے - عمر بھر کے انکار کے بعد بہت دیر ہو چکی۔" }
   },
 
   historicalContext: {
-    note: { en: "This Makkan surah addresses the Quraysh's specific objections: that resurrection is impossible (34:7), that Muhammad is either lying or mad (34:8), and that their wealth proves divine favor (34:35). The story of Sheba (Saba) was known to Arabs as the ancient Yemeni civilization whose dam collapse around 6th century CE caused their dispersion - a living memory for the audience. The mention of Dawud's armor-making (34:10-11) may relate to Arabia's awareness of sophisticated metalwork from the north. The challenge to invoke false gods (34:22) directly confronted Quraysh's idols with the logical proof that they 'own not even an atom's weight.' The surah's message of Allah extending and restricting provision (34:36, 39) addressed the Quraysh's commercial mindset, reframing wealth as a test rather than a sign of blessing.", ur: "This Makkan surah addresses the Quraysh's specific objections: that resurrection is impossible (34:7), that Muhammad is either lying or mad (34:8), and that their wealth proves divine favor (34:35). The story of Sheba (Saba) was known to Arabs as the ancient Yemeni civilization whose dam collapse around 6th century CE caused their dispersion - a living memory for the audience. The mention of Dawud's armor-making (34:10-11) may relate to Arabia's awareness of sophisticated metalwork from the north. The challenge to invoke false gods (34:22) directly confronted Quraysh's idols with the logical proof that they 'own not even an atom's weight.' The surah's message of Allah extending and restricting provision (34:36, 39) addressed the Quraysh's commercial mindset, reframing wealth as a test rather than a sign of blessing." }
+    note: { en: "This Makkan surah addresses the Quraysh's specific objections: that resurrection is impossible (34:7), that Muhammad is either lying or mad (34:8), and that their wealth proves divine favor (34:35). The story of Sheba (Saba) was known to Arabs as the ancient Yemeni civilization whose dam collapse around 6th century CE caused their dispersion - a living memory for the audience. The mention of Dawud's armor-making (34:10-11) may relate to Arabia's awareness of sophisticated metalwork from the north. The challenge to invoke false gods (34:22) directly confronted Quraysh's idols with the logical proof that they 'own not even an atom's weight.' The surah's message of Allah extending and restricting provision (34:36, 39) addressed the Quraysh's commercial mindset, reframing wealth as a test rather than a sign of blessing.", ur: "یہ مکی سورت قریش کے مخصوص اعتراضات کا جواب دیتی ہے: کہ دوبارہ اٹھنا ناممکن ہے (34:7)، کہ محمد ﷺ جھوٹے ہیں یا دیوانے (34:8)، اور ان کی دولت الٰہی پسندیدگی ثابت کرتی ہے (34:35)۔ سبا کی کہانی عربوں کو قدیم یمنی تہذیب کے طور پر معلوم تھی جن کے بند کے ٹوٹنے سے چھٹی صدی عیسوی میں ان کی تتر بتر ہوئی - سامعین کے لیے زندہ یاد۔ داؤد کی زرہ سازی (34:10-11) کا ذکر عرب کی شمال سے جدید دھات کاری کی آگاہی سے متعلق ہو سکتا ہے۔ جھوٹے معبودوں کو پکارنے کا چیلنج (34:22) نے قریش کے بتوں کو منطقی دلیل سے ٹکرایا کہ وہ 'ذرہ برابر بھی مالک نہیں'۔ اللہ کے رزق کشادہ اور تنگ کرنے کا پیغام (34:36، 39) نے قریش کی تجارتی ذہنیت کو مخاطب کیا اور دولت کو نعمت کی بجائے آزمائش قرار دیا۔" }
   },
 
   linguisticFeatures: {
     features: [
-      { feature: "الحمد لله", example: { en: "Opening praise", ur: "Opening praise" }, effect: { en: "One of four surahs opening with Alhamdulillah (1, 6, 18, 34, 35)", ur: "One of four surahs opening with Alhamdulillah (1, 6, 18, 34, 35)" } },
-      { feature: "سيل العرم", example: { en: "Flood of the dam", ur: "Flood of the dam" }, effect: { en: "Specific historical reference using 'arim (dam/embankment)", ur: "Specific historical reference using 'arim (dam/embankment)" } },
-      { feature: "أوِّبي", example: { en: "Repeat/return praises", ur: "Repeat/return praises" }, effect: { en: "Rare verb form commanding mountains to echo Dawud's praise", ur: "Rare verb form commanding mountains to echo Dawud's praise" } },
-      { feature: "مُمَزَّق", example: { en: "Torn apart", ur: "Torn apart" }, effect: { en: "Intensive form - completely fragmented", ur: "Intensive form - completely fragmented" } },
-      { feature: "الفتّاح", example: { en: "The Judge/Opener", ur: "The Judge/Opener" }, effect: { en: "Intensive form - the One who opens judgment definitively", ur: "Intensive form - the One who opens judgment definitively" } },
-      { feature: "كافّة", example: { en: "Comprehensively", ur: "Comprehensively" }, effect: { en: "Emphasizes universality of Prophet's mission", ur: "Emphasizes universality of Prophet's mission" } },
-      { feature: "التناوش", example: { en: "Reaching/grasping", ur: "Reaching/grasping" }, effect: { en: "Rare word - trying to grasp faith from impossible distance", ur: "Rare word - trying to grasp faith from impossible distance" } },
-      { feature: "مريب", example: { en: "Disquieting", ur: "Disquieting" }, effect: { en: "Doubt that causes restlessness and anxiety", ur: "Doubt that causes restlessness and anxiety" } }
+      { feature: "الحمد لله", example: { en: "Opening praise", ur: "افتتاحی حمد" }, effect: { en: "One of four surahs opening with Alhamdulillah (1, 6, 18, 34, 35)", ur: "الحمد للہ سے شروع ہونے والی پانچ سورتوں میں سے ایک (1، 6، 18، 34، 35)" } },
+      { feature: "سيل العرم", example: { en: "Flood of the dam", ur: "بند کا سیلاب" }, effect: { en: "Specific historical reference using 'arim (dam/embankment)", ur: "عریم (بند/پشتہ) کا استعمال کرتے ہوئے مخصوص تاریخی حوالہ" } },
+      { feature: "أوِّبي", example: { en: "Repeat/return praises", ur: "تسبیح دہراؤ" }, effect: { en: "Rare verb form commanding mountains to echo Dawud's praise", ur: "نایاب فعل کی صورت - پہاڑوں کو داؤد کی تسبیح کی بازگشت کا حکم" } },
+      { feature: "مُمَزَّق", example: { en: "Torn apart", ur: "ٹکڑے ٹکڑے" }, effect: { en: "Intensive form - completely fragmented", ur: "مبالغہ کا صیغہ - مکمل طور پر بکھرا ہوا" } },
+      { feature: "الفتّاح", example: { en: "The Judge/Opener", ur: "فیصلہ کرنے والا" }, effect: { en: "Intensive form - the One who opens judgment definitively", ur: "مبالغہ کا صیغہ - وہ جو حتمی فیصلہ کرتا ہے" } },
+      { feature: "كافّة", example: { en: "Comprehensively", ur: "مکمل طور پر" }, effect: { en: "Emphasizes universality of Prophet's mission", ur: "نبی ﷺ کی رسالت کی عالمگیریت پر زور" } },
+      { feature: "التناوش", example: { en: "Reaching/grasping", ur: "پکڑنے کی کوشش" }, effect: { en: "Rare word - trying to grasp faith from impossible distance", ur: "نایاب لفظ - ناممکن فاصلے سے ایمان تک پہنچنے کی کوشش" } },
+      { feature: "مريب", example: { en: "Disquieting", ur: "بے چین کرنے والا" }, effect: { en: "Doubt that causes restlessness and anxiety", ur: "ایسا شک جو بے چینی اور اضطراب پیدا کرے" } }
     ]
   },
 
@@ -657,11 +694,11 @@ export const ONTOLOGY = {
 
   scientificReferences: {
     notes: [
-      { verse: "34:10", topic: "Iron softening", note: { en: "Iron requires high temperatures to become pliable - miracle granted to Dawud", ur: "Iron requires high temperatures to become pliable - miracle granted to Dawud" } },
-      { verse: "34:12", topic: "Molten copper", note: { en: "Copper melting point is 1,085°C - flowing spring implies extraordinary metallurgical capability", ur: "Copper melting point is 1,085°C - flowing spring implies extraordinary metallurgical capability" } },
-      { verse: "34:14", topic: "Wood-eating insects", note: { en: "Termites consume wood slowly - Sulayman remained standing until staff weakened enough to collapse", ur: "Termites consume wood slowly - Sulayman remained standing until staff weakened enough to collapse" } },
-      { verse: "34:16", topic: "Dam collapse", note: { en: "Historical Ma'rib Dam collapse documented - massive irrigation system failure", ur: "Historical Ma'rib Dam collapse documented - massive irrigation system failure" } },
-      { verse: "34:18", topic: "Measured journeys", note: { en: "Connected way-stations (visible towns) for safe travel - ancient trade infrastructure", ur: "Connected way-stations (visible towns) for safe travel - ancient trade infrastructure" } }
+      { verse: "34:10", topic: "Iron softening", note: { en: "Iron requires high temperatures to become pliable - miracle granted to Dawud", ur: "لوہے کو نرم کرنے کے لیے بہت زیادہ درجہ حرارت درکار ہے - داؤد کو عطا کردہ معجزہ" } },
+      { verse: "34:12", topic: "Molten copper", note: { en: "Copper melting point is 1,085°C - flowing spring implies extraordinary metallurgical capability", ur: "تانبے کا نقطہ پگھلاؤ 1,085 ڈگری سیلسیس ہے - بہتا چشمہ غیرمعمولی دھات کاری کی صلاحیت ظاہر کرتا ہے" } },
+      { verse: "34:14", topic: "Wood-eating insects", note: { en: "Termites consume wood slowly - Sulayman remained standing until staff weakened enough to collapse", ur: "دیمک لکڑی آہستہ آہستہ کھاتی ہے - سلیمان اس وقت تک کھڑے رہے جب تک لاٹھی اتنی کمزور نہ ہو گئی کہ گر جائیں" } },
+      { verse: "34:16", topic: "Dam collapse", note: { en: "Historical Ma'rib Dam collapse documented - massive irrigation system failure", ur: "تاریخی مآرب بند کی تباہی مستند ہے - بڑے پیمانے پر آبپاشی کے نظام کی ناکامی" } },
+      { verse: "34:18", topic: "Measured journeys", note: { en: "Connected way-stations (visible towns) for safe travel - ancient trade infrastructure", ur: "محفوظ سفر کے لیے جڑے ہوئے پڑاؤ (نظر آنے والی بستیاں) - قدیم تجارتی بنیادی ڈھانچہ" } }
     ]
   }
 };

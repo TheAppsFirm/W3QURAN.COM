@@ -16,6 +16,7 @@ export const ONTOLOGY = {
       color: '#3B82F6',
       icon: 'Shield',
       name: "Nature of the Quran",
+      nameUr: "قرآن کی حقیقت",
       nameArabic: "طبيعة القرآن",
       concepts: [
         { term: "كِتَابٌ أُحْكِمَتْ آيَاتُهُ", meaning: { en: "A Book whose verses are perfected", ur: "ایک کتاب جس کی آیتیں مضبوط اور مُحکم کی گئیں" }, explanation: { en: "Precision of Quran", ur: "قرآن کی درستگی اور استحکام" }, verseRef: "11:1" },
@@ -29,6 +30,7 @@ export const ONTOLOGY = {
       color: '#EC4899',
       icon: 'Globe',
       name: "Benefits of Istighfar",
+      nameUr: "استغفار کے فوائد",
       nameArabic: "فوائد الاستغفار",
       concepts: [
         { term: "اسْتَغْفِرُوا رَبَّكُمْ ثُمَّ تُوبُوا إِلَيْهِ", meaning: { en: "Seek forgiveness then repent to Him", ur: "اپنے رب سے مغفرت مانگو پھر اس کی طرف توبہ کرو" }, explanation: { en: "Two-step process", ur: "دو مرحلے کا عمل" }, verseRef: "11:3" },
@@ -43,6 +45,7 @@ export const ONTOLOGY = {
       color: '#8B5CF6',
       icon: 'Heart',
       name: "Story of Nuh",
+      nameUr: "نوح علیہ السلام کا قصہ",
       nameArabic: "قصة نوح",
       concepts: [
         { term: "أَرْسَلْنَا نُوحًا إِلَىٰ قَوْمِهِ", meaning: { en: "We sent Nuh to his people", ur: "ہم نے نوح کو ان کی قوم کی طرف بھیجا" }, explanation: { en: "Mission begins", ur: "دعوت کا آغاز" }, verseRef: "11:25" },
@@ -59,6 +62,7 @@ export const ONTOLOGY = {
       color: '#EC4899',
       icon: 'Globe',
       name: "Hud and the People of 'Ad",
+      nameUr: "ہود علیہ السلام اور قومِ عاد",
       nameArabic: "هود وقوم عاد",
       concepts: [
         { term: "وَإِلَىٰ عَادٍ أَخَاهُمْ هُودًا", meaning: { en: "And to 'Ad their brother Hud", ur: "اور عاد کی طرف ان کے بھائی ہود کو بھیجا" }, explanation: { en: "Prophet from among them", ur: "انہی میں سے نبی" }, verseRef: "11:50" },
@@ -76,6 +80,7 @@ export const ONTOLOGY = {
       color: '#3B82F6',
       icon: 'Shield',
       name: "Salih and the People of Thamud",
+      nameUr: "صالح علیہ السلام اور قومِ ثمود",
       nameArabic: "صالح وقوم ثمود",
       concepts: [
         { term: "وَإِلَىٰ ثَمُودَ أَخَاهُمْ صَالِحًا", meaning: { en: "And to Thamud their brother Salih", ur: "اور ثمود کی طرف ان کے بھائی صالح کو بھیجا" }, explanation: { en: "Prophet from among them", ur: "انہی میں سے نبی" }, verseRef: "11:61" },
@@ -92,6 +97,7 @@ export const ONTOLOGY = {
       color: '#EC4899',
       icon: 'Globe',
       name: "Story of Ibrahim",
+      nameUr: "ابراہیم علیہ السلام کا قصہ",
       nameArabic: "قصة إبراهيم",
       concepts: [
         { term: "جَاءَتْ رُسُلُنَا إِبْرَاهِيمَ بِالْبُشْرَىٰ", meaning: { en: "Our messengers came to Ibrahim with good tidings", ur: "ہمارے فرشتے ابراہیم کے پاس خوشخبری لے کر آئے" }, explanation: { en: "Angels' visit", ur: "فرشتوں کی آمد" }, verseRef: "11:69" },
@@ -110,6 +116,7 @@ export const ONTOLOGY = {
       color: '#EF4444',
       icon: 'Users',
       name: "Story of Lut",
+      nameUr: "لوط علیہ السلام کا قصہ",
       nameArabic: "قصة لوط",
       concepts: [
         { term: "وَلَمَّا جَاءَتْ رُسُلُنَا لُوطًا سِيءَ بِهِمْ", meaning: { en: "When Our messengers came to Lut, he was distressed", ur: "جب ہمارے فرشتے لوط کے پاس آئے تو وہ پریشان ہو گئے" }, explanation: { en: "Lut's concern", ur: "لوط کی پریشانی" }, verseRef: "11:77" },
@@ -128,6 +135,7 @@ export const ONTOLOGY = {
       color: '#10B981',
       icon: 'Book',
       name: "Shu'ayb and the People of Madyan",
+      nameUr: "شعیب علیہ السلام اور قومِ مدین",
       nameArabic: "شعيب وقوم مدين",
       concepts: [
         { term: "وَإِلَىٰ مَدْيَنَ أَخَاهُمْ شُعَيْبًا", meaning: { en: "And to Madyan their brother Shu'ayb", ur: "اور مدین کی طرف ان کے بھائی شعیب کو بھیجا" }, explanation: { en: "Prophet from among them", ur: "انہی میں سے نبی" }, verseRef: "11:84" },
@@ -145,6 +153,7 @@ export const ONTOLOGY = {
       color: '#14B8A6',
       icon: 'Crown',
       name: "Musa and Fir'aun",
+      nameUr: "موسیٰ علیہ السلام اور فرعون",
       nameArabic: "موسى وفرعون",
       concepts: [
         { term: "أَرْسَلْنَا مُوسَىٰ بِآيَاتِنَا وَسُلْطَانٍ مُّبِينٍ", meaning: { en: "We sent Musa with Our signs and clear authority", ur: "ہم نے موسیٰ کو اپنی نشانیوں اور واضح دلیل کے ساتھ بھیجا" }, explanation: { en: "Musa's mission", ur: "موسیٰ کی بعثت" }, verseRef: "11:96" },
@@ -161,6 +170,7 @@ export const ONTOLOGY = {
       color: '#06B6D4',
       icon: 'Compass',
       name: "Command to Be Steadfast",
+      nameUr: "ثابت قدمی کا حکم",
       nameArabic: "الأمر بالاستقامة",
       concepts: [
         { term: "فَاسْتَقِمْ كَمَا أُمِرْتَ", meaning: { en: "So remain steadfast as you have been commanded", ur: "پس آپ ثابت قدم رہیں جیسا کہ آپ کو حکم دیا گیا ہے" }, explanation: { en: "Central command", ur: "مرکزی حکم" }, verseRef: "11:112" },
@@ -176,6 +186,7 @@ export const ONTOLOGY = {
       color: '#3B82F6',
       icon: 'Shield',
       name: "Prayer and Patience",
+      nameUr: "نماز اور صبر",
       nameArabic: "الصلاة والصبر",
       concepts: [
         { term: "وَأَقِمِ الصَّلَاةَ طَرَفَيِ النَّهَارِ", meaning: { en: "Establish prayer at both ends of the day", ur: "دن کے دونوں کناروں پر نماز قائم کرو" }, explanation: { en: "Prayer times", ur: "نماز کے اوقات" }, verseRef: "11:114" },
@@ -190,6 +201,7 @@ export const ONTOLOGY = {
       color: '#3B82F6',
       icon: 'Shield',
       name: "Lessons from History",
+      nameUr: "تاریخ سے سبق",
       nameArabic: "عبر من التاريخ",
       concepts: [
         { term: "وَكُلًّا نَّقُصُّ عَلَيْكَ مِنْ أَنبَاءِ الرُّسُلِ", meaning: { en: "All We relate to you of the stories of the messengers", ur: "رسولوں کی خبروں میں سے سب ہم آپ کو سنا رہے ہیں" }, explanation: { en: "Purpose of stories", ur: "قصوں کا مقصد" }, verseRef: "11:120" },
@@ -206,6 +218,7 @@ export const ONTOLOGY = {
       color: '#14B8A6',
       icon: 'Crown',
       name: "Allah's Complete Knowledge",
+      nameUr: "اللہ کا مکمل علم",
       nameArabic: "علم الله الكامل",
       concepts: [
         { term: "وَلِلَّهِ غَيْبُ السَّمَاوَاتِ وَالْأَرْضِ", meaning: { en: "To Allah belongs the unseen of heavens and earth", ur: "آسمانوں اور زمین کا غیب اللہ ہی کے لیے ہے" }, explanation: { en: "Allah knows all", ur: "اللہ سب جانتا ہے" }, verseRef: "11:123" },
@@ -219,6 +232,7 @@ export const ONTOLOGY = {
       color: '#EF4444',
       icon: 'Users',
       name: "Patterns of Punishment",
+      nameUr: "عذاب کے نمونے",
       nameArabic: "أنماط العذاب",
       concepts: [
         { term: "الطوفان", meaning: { en: "The Flood", ur: "طوفان" }, explanation: { en: "Nuh's people drowned", ur: "نوح کی قوم غرق ہوئی" }, verseRef: "11:42-44" },
@@ -234,6 +248,7 @@ export const ONTOLOGY = {
       color: '#10B981',
       icon: 'Book',
       name: "Divine Justice",
+      nameUr: "الٰہی انصاف",
       nameArabic: "العدل الإلهي",
       concepts: [
         { term: "وَمَا ظَلَمْنَاهُمْ وَلَٰكِن ظَلَمُوا أَنفُسَهُمْ", meaning: { en: "We did not wrong them, but they wronged themselves", ur: "ہم نے ان پر ظلم نہیں کیا بلکہ انہوں نے خود اپنے اوپر ظلم کیا" }, explanation: { en: "Self-inflicted doom", ur: "خود کی تباہی خود لائی" }, verseRef: "11:101" },
@@ -248,6 +263,7 @@ export const ONTOLOGY = {
       color: '#14B8A6',
       icon: 'Crown',
       name: "Day of Judgment",
+      nameUr: "یومِ قیامت",
       nameArabic: "يوم القيامة",
       concepts: [
         { term: "ذَٰلِكَ يَوْمٌ مَّجْمُوعٌ لَّهُ النَّاسُ", meaning: { en: "That is a Day for which people will be gathered", ur: "وہ ایسا دن ہے جس میں سب لوگ جمع کیے جائیں گے" }, explanation: { en: "Universal gathering", ur: "عالمگیر اجتماع" }, verseRef: "11:103" },
@@ -262,6 +278,7 @@ export const ONTOLOGY = {
       color: '#10B981',
       icon: 'Book',
       name: "Hell and Paradise",
+      nameUr: "جہنم اور جنت",
       nameArabic: "النار والجنة",
       concepts: [
         { term: "فَأَمَّا الَّذِينَ شَقُوا فَفِي النَّارِ", meaning: { en: "As for those who were wretched, in the Fire", ur: "جو لوگ بدبخت ہوئے وہ آگ میں ہوں گے" }, explanation: { en: "Wretched in Hell", ur: "بدبخت جہنم میں" }, verseRef: "11:106" },

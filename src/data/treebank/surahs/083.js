@@ -21,7 +21,9 @@ export const TREEBANK_DATA = {
       { position: 2, arabic: "لِّلْمُطَفِّفِينَ", transliteration: "lil-muṭaffifīna", root: "ط ف ف", meaning: { en: "to the defrauders", ur: "ناپ تول میں کمی کرنے والوں کے لیے", ar: "للمُنقِصينَ" }, pos: "N", posLabel: "N", grammarRole: "prepositional phrase", features: { pattern: "مُفَعِّل" }, advanced: { rootFamily: ["طَفّ", "تطفيف"], linguisticMiracle: "Tatfif = giving less than due in measure/weight" } }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' }
+      ],
     },
   },
 
@@ -170,7 +172,10 @@ export const TREEBANK_DATA = {
       { position: 3, arabic: "لِّلْمُكَذِّبِينَ", transliteration: "lil-mukadhdhibīna", root: "ك ذ ب", meaning: { en: "to the deniers", ur: "جھٹلانے والوں کے لیے", ar: "للجاحِدينَ" }, pos: "N", posLabel: "N", grammarRole: "prepositional phrase" }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' }
+      ],
     },
   },
 
@@ -287,7 +292,11 @@ export const TREEBANK_DATA = {
       { position: 4, arabic: "الْجَحِيمِ", transliteration: "al-jaḥīmi", root: "ج ح م", meaning: { en: "the Hellfire", ur: "دوزخ میں", ar: "النار" }, pos: "N", posLabel: "N", grammarRole: "possessive" }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' }
+      ],
     },
   },
 

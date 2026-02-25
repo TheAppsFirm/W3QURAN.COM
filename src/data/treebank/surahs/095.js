@@ -35,7 +35,10 @@ export const TREEBANK_DATA = {
       tr: "İncir ve zeytine andolsun",
       id: "Demi (buah) tin dan (buah) zaitun",
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'قسم' },
+        { from: 1, to: 2, label: 'مضاف + مضاف إليه' }
+      ],
     },
     },
     words: [
@@ -916,7 +919,11 @@ export const TREEBANK_DATA = {
       tr: "Artık sana dini ne yalanlatıyor",
       id: "Maka apakah yang menyebabkan kamu mendustakan hari pembalasan",
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' }
+      ],
     },
     },
     words: [

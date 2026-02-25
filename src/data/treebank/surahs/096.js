@@ -1300,7 +1300,10 @@ export const TREEBANK_DATA = {
       tr: "Ya da takvayı emrederse",
       id: "Atau dia menyuruh bertakwa",
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' }
+      ],
     },
     },
     words: [

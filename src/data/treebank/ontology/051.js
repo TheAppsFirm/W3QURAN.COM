@@ -16,6 +16,7 @@ export const ONTOLOGY = {
   categories: {
     cosmicOaths: {
       name: "The Cosmic Oaths",
+      nameUr: "کائناتی قسمیں",
       nameAr: "القسم بالمخلوقات",
       color: "#8B5CF6",
       concepts: [
@@ -28,6 +29,7 @@ export const ONTOLOGY = {
 
     promiseOfJudgment: {
       name: "Promise of Judgment",
+      nameUr: "جزا کا وعدہ",
       nameAr: "وعد يوم الدين",
       color: "#EF4444",
       concepts: [
@@ -40,6 +42,7 @@ export const ONTOLOGY = {
 
     signsInCosmos: {
       name: "Signs in the Cosmos",
+      nameUr: "کائنات میں نشانیاں",
       nameAr: "آيات في السماء",
       color: "#3B82F6",
       concepts: [
@@ -51,6 +54,7 @@ export const ONTOLOGY = {
 
     liarsDestroyed: {
       name: "The Liars Destroyed",
+      nameUr: "جھوٹوں کی ہلاکت",
       nameAr: "هلاك الكاذبين",
       color: "#F59E0B",
       concepts: [
@@ -62,6 +66,7 @@ export const ONTOLOGY = {
 
     righteousRewards: {
       name: "Rewards of the Righteous",
+      nameUr: "متقیوں کا اجر",
       nameAr: "جزاء المتقين",
       color: "#10B981",
       concepts: [
@@ -76,6 +81,7 @@ export const ONTOLOGY = {
 
     signsOnEarth: {
       name: "Signs on Earth and Within",
+      nameUr: "زمین اور انسان میں نشانیاں",
       nameAr: "آيات في الأرض والأنفس",
       color: "#6366F1",
       concepts: [
@@ -88,6 +94,7 @@ export const ONTOLOGY = {
 
     ibrahimGuests: {
       name: "Ibrahim's Honored Guests",
+      nameUr: "ابراہیم کے معزز مہمان",
       nameAr: "ضيف إبراهيم المكرمين",
       color: "#EC4899",
       concepts: [
@@ -108,6 +115,7 @@ export const ONTOLOGY = {
 
     missionToLut: {
       name: "Mission to Lut's People",
+      nameUr: "لوط کی قوم کی طرف بھیجنا",
       nameAr: "إرسال إلى قوم لوط",
       color: "#F43F5E",
       concepts: [
@@ -124,6 +132,7 @@ export const ONTOLOGY = {
 
     storyOfMusa: {
       name: "Story of Musa",
+      nameUr: "موسیٰ کا واقعہ",
       nameAr: "قصة موسى",
       color: "#14B8A6",
       concepts: [
@@ -138,6 +147,7 @@ export const ONTOLOGY = {
 
     storyOfAad: {
       name: "Story of 'Aad",
+      nameUr: "عاد کا واقعہ",
       nameAr: "قصة عاد",
       color: "#F59E0B",
       concepts: [
@@ -149,6 +159,7 @@ export const ONTOLOGY = {
 
     storyOfThamud: {
       name: "Story of Thamud",
+      nameUr: "ثمود کا واقعہ",
       nameAr: "قصة ثمود",
       color: "#A855F7",
       concepts: [
@@ -162,6 +173,7 @@ export const ONTOLOGY = {
 
     storyOfNuh: {
       name: "Story of Nuh",
+      nameUr: "نوح کا واقعہ",
       nameAr: "قصة نوح",
       color: "#3B82F6",
       concepts: [
@@ -172,6 +184,7 @@ export const ONTOLOGY = {
 
     creationSigns: {
       name: "Signs in Creation",
+      nameUr: "تخلیق میں نشانیاں",
       nameAr: "آيات في الخلق",
       color: "#22C55E",
       concepts: [
@@ -186,6 +199,7 @@ export const ONTOLOGY = {
 
     purposeOfCreation: {
       name: "Purpose of Creation",
+      nameUr: "تخلیق کا مقصد",
       nameAr: "الحكمة من الخلق",
       color: "#EF4444",
       concepts: [
@@ -202,6 +216,7 @@ export const ONTOLOGY = {
 
     warningToDisbelievers: {
       name: "Warning to Disbelievers",
+      nameUr: "کافروں کو تنبیہ",
       nameAr: "تحذير المكذبين",
       color: "#F43F5E",
       concepts: [

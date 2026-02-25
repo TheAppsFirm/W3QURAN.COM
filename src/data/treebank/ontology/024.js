@@ -24,6 +24,7 @@ export const ONTOLOGY = {
   categories: {
     legalPunishments: {
       name: "Legal Punishments (Hudud)",
+      nameUr: "حدود (شرعی سزائیں)",
       nameArabic: "الحدود",
       color: "#EF4444",
       icon: "Scale",
@@ -37,6 +38,7 @@ export const ONTOLOGY = {
 
     slanderLaws: {
       name: "Laws Against Slander (Qadhf)",
+      nameUr: "قذف کے قوانین (تہمت کے خلاف)",
       nameArabic: "حد القذف",
       color: "#EF4444",
       icon: "Shield",
@@ -51,6 +53,7 @@ export const ONTOLOGY = {
 
     liaan: {
       name: "Li'an (Spousal Accusation)",
+      nameUr: "لعان (میاں بیوی کا باہمی الزام)",
       nameArabic: "اللعان",
       color: "#F59E0B",
       icon: "Scale",
@@ -65,6 +68,7 @@ export const ONTOLOGY = {
 
     ifkIncident: {
       name: "The Slander Incident (Al-Ifk)",
+      nameUr: "واقعۂ افک (بہتان کا واقعہ)",
       nameArabic: "حادثة الإفك",
       color: "#3B82F6",
       icon: "Book",
@@ -81,6 +85,7 @@ export const ONTOLOGY = {
 
     vindication: {
       name: "Vindication of the Innocent",
+      nameUr: "بے گناہوں کی براءت",
       nameArabic: "براءة العفيفات",
       color: "#22C55E",
       icon: "Shield",
@@ -95,6 +100,7 @@ export const ONTOLOGY = {
 
     householdEtiquette: {
       name: "Household Etiquette (Adab)",
+      nameUr: "گھریلو آداب",
       nameArabic: "آداب البيوت",
       color: "#10B981",
       icon: "Users",
@@ -110,6 +116,7 @@ export const ONTOLOGY = {
 
     modestyLaws: {
       name: "Modesty Laws (Hijab)",
+      nameUr: "حجاب کے احکام (پردے کے قوانین)",
       nameArabic: "أحكام الحجاب",
       color: "#EC4899",
       icon: "Eye",
@@ -126,6 +133,7 @@ export const ONTOLOGY = {
 
     exemptRelatives: {
       name: "Exempt Relatives (Mahram)",
+      nameUr: "محرم رشتے دار",
       nameArabic: "المحارم",
       color: "#10B981",
       icon: "Users",
@@ -141,6 +149,7 @@ export const ONTOLOGY = {
 
     marriageEncouragement: {
       name: "Encouragement of Marriage",
+      nameUr: "نکاح کی ترغیب",
       nameArabic: "الحث على الزواج",
       color: "#EC4899",
       icon: "Heart",
@@ -154,6 +163,7 @@ export const ONTOLOGY = {
 
     ayatAnNur: {
       name: "The Light Verse (Ayat an-Nur)",
+      nameUr: "آیتِ نور",
       nameArabic: "آية النور",
       color: "#F59E0B",
       icon: "Sun",
@@ -173,6 +183,7 @@ export const ONTOLOGY = {
 
     housesOfWorship: {
       name: "Houses of Worship",
+      nameUr: "عبادت گاہیں",
       nameArabic: "بيوت العبادة",
       color: "#8B5CF6",
       icon: "Star",
@@ -187,6 +198,7 @@ export const ONTOLOGY = {
 
     disbelieversState: {
       name: "State of Disbelievers",
+      nameUr: "کافروں کی حالت",
       nameArabic: "حال الكافرين",
       color: "#EF4444",
       icon: "Moon",
@@ -204,6 +216,7 @@ export const ONTOLOGY = {
 
     signsInCreation: {
       name: "Signs in Creation",
+      nameUr: "تخلیق میں نشانیاں",
       nameArabic: "آيات في الخلق",
       color: "#06B6D4",
       icon: "Globe",
@@ -218,6 +231,7 @@ export const ONTOLOGY = {
 
     obedienceCommand: {
       name: "Obedience to Allah and Messenger",
+      nameUr: "اللہ اور رسول کی اطاعت",
       nameArabic: "طاعة الله والرسول",
       color: "#3B82F6",
       icon: "Compass",
@@ -231,6 +245,7 @@ export const ONTOLOGY = {
 
     promiseToRighteous: {
       name: "Promise to the Righteous",
+      nameUr: "نیکوکاروں سے وعدہ",
       nameArabic: "وعد المؤمنين",
       color: "#22C55E",
       icon: "Sparkles",
@@ -245,6 +260,7 @@ export const ONTOLOGY = {
 
     privacyRules: {
       name: "Privacy Within Household",
+      nameUr: "گھر کے اندر پردے کے آداب",
       nameArabic: "آداب الاستئذان",
       color: "#10B981",
       icon: "Eye",
@@ -261,6 +277,7 @@ export const ONTOLOGY = {
 
     elderlyWomenExemption: {
       name: "Elderly Women's Exemption",
+      nameUr: "بوڑھی عورتوں کی رخصت",
       nameArabic: "رخصة القواعد",
       color: "#8B5CF6",
       icon: "Heart",
@@ -275,6 +292,7 @@ export const ONTOLOGY = {
 
     socialDining: {
       name: "Social Dining Rules",
+      nameUr: "سماجی کھانے کے آداب",
       nameArabic: "آداب الطعام",
       color: "#10B981",
       icon: "Users",
@@ -292,6 +310,7 @@ export const ONTOLOGY = {
 
     properConduct: {
       name: "Proper Conduct with Prophet",
+      nameUr: "نبی ﷺ کے ساتھ مناسب برتاؤ",
       nameArabic: "آداب مع الرسول",
       color: "#F59E0B",
       icon: "Crown",

@@ -245,6 +245,7 @@ export const UI_LABELS = {
     maybeLater: 'Maybe Later',
     comingSoon: 'Grammar Data Coming Soon',
     comingSoonDesc: 'Treebank analysis for this ayah is being prepared.',
+    languageComingSoon: 'Content in {lang} coming soon — showing English',
     close: 'Close',
     tafseer: 'Tafseer',
     translation: 'Translation',
@@ -319,6 +320,7 @@ export const UI_LABELS = {
     maybeLater: 'بعد میں',
     comingSoon: 'قواعد کا ڈیٹا جلد آ رہا ہے',
     comingSoonDesc: 'اس آیت کا تجزیہ تیار کیا جا رہا ہے۔',
+    languageComingSoon: '{lang} میں مواد جلد آ رہا ہے — انگریزی میں دکھایا جا رہا ہے',
     close: 'بند کریں',
     tafseer: 'تفسیر',
     translation: 'ترجمہ',
@@ -393,6 +395,7 @@ export const UI_LABELS = {
     maybeLater: 'बाद में',
     comingSoon: 'व्याकरण डेटा जल्द आ रहा है',
     comingSoonDesc: 'इस आयत का विश्लेषण तैयार किया जा रहा है।',
+    languageComingSoon: '{lang} में सामग्री जल्द आ रही है — अंग्रेज़ी दिखाया जा रहा है',
     close: 'बंद करें',
     tafseer: 'तफ़सीर',
     translation: 'अनुवाद',
@@ -444,6 +447,7 @@ export const UI_LABELS = {
     maybeLater: 'পরে',
     comingSoon: 'ব্যাকরণ ডেটা শীঘ্রই আসছে',
     comingSoonDesc: 'এই আয়াতের বিশ্লেষণ প্রস্তুত করা হচ্ছে।',
+    languageComingSoon: '{lang} ভাষায় বিষয়বস্তু শীঘ্রই আসছে — ইংরেজিতে দেখানো হচ্ছে',
     close: 'বন্ধ করুন',
     tafseer: 'তাফসীর',
     translation: 'অনুবাদ',
@@ -495,6 +499,7 @@ export const UI_LABELS = {
     maybeLater: 'Daha Sonra',
     comingSoon: 'Dilbilgisi Verisi Yakında',
     comingSoonDesc: 'Bu ayet için analiz hazırlanıyor.',
+    languageComingSoon: '{lang} dilinde içerik yakında — İngilizce gösteriliyor',
     close: 'Kapat',
     tafseer: 'Tefsir',
     translation: 'Çeviri',
@@ -546,6 +551,7 @@ export const UI_LABELS = {
     maybeLater: 'Nanti Saja',
     comingSoon: 'Data Tata Bahasa Segera Hadir',
     comingSoonDesc: 'Analisis untuk ayat ini sedang disiapkan.',
+    languageComingSoon: 'Konten dalam {lang} segera hadir — menampilkan bahasa Inggris',
     close: 'Tutup',
     tafseer: 'Tafsir',
     translation: 'Terjemahan',
@@ -577,6 +583,17 @@ export const UI_LABELS = {
     ontology: 'Konsep Quran',
     viewOntology: 'Lihat Konsep Quran',
   },
+};
+
+// Display names for each language
+export const LANGUAGE_NAMES = {
+  en: 'English',
+  ur: 'اردو',
+  hi: 'हिन्दी',
+  bn: 'বাংলা',
+  tr: 'Türkçe',
+  id: 'Bahasa Indonesia',
+  ar: 'العربية',
 };
 
 // Helper to get language code from translation ID

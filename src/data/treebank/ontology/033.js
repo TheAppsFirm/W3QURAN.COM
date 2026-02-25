@@ -32,6 +32,7 @@ export const ONTOLOGY = {
     // 1. OPENING: GUIDANCE FOR THE PROPHET
     propheticGuidance: {
       name: "Guidance for the Prophet",
+      nameUr: "نبی ﷺ کے لیے ہدایت",
       nameArabic: "توجيهات للنبي",
       color: "#3B82F6",
       icon: "Compass",
@@ -80,6 +81,7 @@ export const ONTOLOGY = {
     // 2. ABOLITION OF ADOPTION AS LINEAGE
     adoptionReform: {
       name: "Reform of Adoption Laws",
+      nameUr: "گود لینے کے قوانین کی اصلاح",
       nameArabic: "إصلاح قوانين التبني",
       color: "#10B981",
       icon: "Scale",
@@ -154,6 +156,7 @@ export const ONTOLOGY = {
       color: "#F59E0B",
       icon: "Star",
       name: "Covenant with the Prophets",
+      nameUr: "انبیاء سے عہد",
       nameArabic: "ميثاق النبيين",
       concepts: [
         {
@@ -186,6 +189,7 @@ export const ONTOLOGY = {
     // 4. BATTLE OF THE TRENCH (KHANDAQ)
     battleOfTrench: {
       name: "Battle of the Trench",
+      nameUr: "غزوۂ خندق",
       nameArabic: "غزوة الخندق",
       color: "#EF4444",
       icon: "Shield",
@@ -258,6 +262,7 @@ export const ONTOLOGY = {
     // 5. HYPOCRITES DURING THE SIEGE
     hypocritesExposed: {
       name: "Hypocrites Exposed",
+      nameUr: "منافقین کا پردہ فاش",
       nameArabic: "انكشاف المنافقين",
       color: "#EF4444",
       icon: "Eye",
@@ -336,6 +341,7 @@ export const ONTOLOGY = {
     // 6. BELIEVERS' STEADFASTNESS
     believersSteadfast: {
       name: "Believers' Steadfastness",
+      nameUr: "مومنوں کی ثابت قدمی",
       nameArabic: "ثبات المؤمنين",
       color: "#10B981",
       icon: "Shield",
@@ -414,6 +420,7 @@ export const ONTOLOGY = {
     // 7. DEFEAT OF THE CONFEDERATES
     confederatesDefeat: {
       name: "Defeat of the Confederates",
+      nameUr: "احزاب کی شکست",
       nameArabic: "هزيمة الأحزاب",
       color: "#F59E0B",
       icon: "Star",
@@ -480,6 +487,7 @@ export const ONTOLOGY = {
     // 8. WIVES OF THE PROPHET - CHOICE
     wivesChoice: {
       name: "The Wives' Choice",
+      nameUr: "ازواجِ مطہرات کا انتخاب",
       nameArabic: "تخيير أزواج النبي",
       color: "#8B5CF6",
       icon: "Scale",
@@ -552,6 +560,7 @@ export const ONTOLOGY = {
     // 9. CONDUCT OF PROPHET'S WIVES
     wivesConduct: {
       name: "Conduct of Prophet's Wives",
+      nameUr: "نبی ﷺ کی بیویوں کا طرزِ عمل",
       nameArabic: "آداب نساء النبي",
       color: "#EC4899",
       icon: "Heart",
@@ -636,6 +645,7 @@ export const ONTOLOGY = {
     // 10. QUALITIES OF MUSLIM MEN AND WOMEN
     muslimQualities: {
       name: "Ten Qualities of Muslim Men and Women",
+      nameUr: "مسلمان مردوں اور عورتوں کی دس صفات",
       nameArabic: "عشر صفات للمسلمين والمسلمات",
       color: "#10B981",
       icon: "Users",
@@ -714,6 +724,7 @@ export const ONTOLOGY = {
     // 11. ZAYD AND ZAYNAB - ADOPTION RULING APPLIED
     zaydZaynab: {
       name: "Zayd and Zaynab - Applying the Adoption Ruling",
+      nameUr: "زید اور زینب - گود لینے کے حکم کا اطلاق",
       nameArabic: "زيد وزينب - تطبيق حكم التبني",
       color: "#3B82F6",
       icon: "Scale",
@@ -816,6 +827,7 @@ export const ONTOLOGY = {
     // 12. REMEMBRANCE OF ALLAH
     dhikrAllah: {
       name: "Remembrance of Allah",
+      nameUr: "اللہ کا ذکر",
       nameArabic: "ذكر الله",
       color: "#F59E0B",
       icon: "Heart",
@@ -870,6 +882,7 @@ export const ONTOLOGY = {
     // 13. PROPHET'S ROLES
     prophetRoles: {
       name: "Roles of the Prophet",
+      nameUr: "نبی ﷺ کے کردار",
       nameArabic: "أدوار النبي",
       color: "#F59E0B",
       icon: "Star",
@@ -936,6 +949,7 @@ export const ONTOLOGY = {
     // 14. MARRIAGE REGULATIONS FOR PROPHET
     prophetMarriages: {
       name: "Marriage Regulations for the Prophet",
+      nameUr: "نبی ﷺ کے لیے نکاح کے احکام",
       nameArabic: "أحكام زواج النبي",
       color: "#8B5CF6",
       icon: "Book",
@@ -1050,6 +1064,7 @@ export const ONTOLOGY = {
     // 15. ETIQUETTE IN PROPHET'S HOUSE
     householdEtiquette: {
       name: "Etiquette in Prophet's Household",
+      nameUr: "نبی ﷺ کے گھر کے آداب",
       nameArabic: "آداب بيت النبي",
       color: "#10B981",
       icon: "Users",
@@ -1140,6 +1155,7 @@ export const ONTOLOGY = {
     // 16. DIVINE KNOWLEDGE
     divineKnowledge: {
       name: "Divine Knowledge",
+      nameUr: "الٰہی علم",
       nameArabic: "علم الله",
       color: "#F59E0B",
       icon: "Eye",
@@ -1162,6 +1178,7 @@ export const ONTOLOGY = {
     // 17. MAHRAM RELATIVES
     mahramRelatives: {
       name: "Mahram Relatives for Prophet's Wives",
+      nameUr: "نبی ﷺ کی بیویوں کے محرم رشتے دار",
       nameArabic: "محارم أزواج النبي",
       color: "#8B5CF6",
       icon: "Users",
@@ -1209,6 +1226,7 @@ export const ONTOLOGY = {
     // 18. SALAWAT - BLESSINGS ON THE PROPHET
     salawat: {
       name: "Blessings Upon the Prophet (Salawat)",
+      nameUr: "نبی ﷺ پر درود و سلام",
       nameArabic: "الصلاة على النبي",
       color: "#F59E0B",
       icon: "Sparkles",
@@ -1239,6 +1257,7 @@ export const ONTOLOGY = {
     // 19. HARMING ALLAH AND HIS MESSENGER
     harmingProphet: {
       name: "Those Who Harm Allah and His Messenger",
+      nameUr: "اللہ اور رسول کو ایذا دینے والے",
       nameArabic: "إيذاء الله ورسوله",
       color: "#EF4444",
       icon: "AlertTriangle",
@@ -1280,6 +1299,7 @@ export const ONTOLOGY = {
     // 20. HIJAB VERSE - JILBAB
     hijabJilbab: {
       name: "The Jilbab Verse",
+      nameUr: "آیتِ جلباب (چادر کا حکم)",
       nameArabic: "آية الجلباب",
       color: "#EC4899",
       icon: "Shield",
@@ -1322,6 +1342,7 @@ export const ONTOLOGY = {
     // 21. WARNING TO HYPOCRITES
     warningHypocrites: {
       name: "Warning to Hypocrites and Rumormongers",
+      nameUr: "منافقوں اور افواہ پھیلانے والوں کو تنبیہ",
       nameArabic: "تهديد المنافقين والمرجفين",
       color: "#EF4444",
       icon: "AlertTriangle",
@@ -1381,6 +1402,7 @@ export const ONTOLOGY = {
     // 22. THE HOUR
     theHour: {
       name: "Knowledge of the Hour",
+      nameUr: "قیامت کا علم",
       nameArabic: "علم الساعة",
       color: "#F59E0B",
       icon: "Eye",
@@ -1410,6 +1432,7 @@ export const ONTOLOGY = {
     // 23. FATE OF DISBELIEVERS
     disbelieversFate: {
       name: "Fate of Disbelievers",
+      nameUr: "کافروں کا انجام",
       nameArabic: "مصير الكافرين",
       color: "#EF4444",
       icon: "AlertTriangle",
@@ -1475,6 +1498,7 @@ export const ONTOLOGY = {
     // 24. DO NOT BE LIKE THOSE WHO HARMED MUSA
     musaExample: {
       name: "Example of Those Who Harmed Musa",
+      nameUr: "موسیٰ کو تکلیف دینے والوں کی مثال",
       nameArabic: "مثل الذين آذوا موسى",
       color: "#3B82F6",
       icon: "Book",
@@ -1504,6 +1528,7 @@ export const ONTOLOGY = {
     // 25. SPEAKING TRUTH
     speakingTruth: {
       name: "Speaking Righteous Words",
+      nameUr: "سیدھی بات کہنا",
       nameArabic: "قول السديد",
       color: "#10B981",
       icon: "MessageCircle",
@@ -1545,6 +1570,7 @@ export const ONTOLOGY = {
     // 26. THE TRUST (AL-AMANAH)
     theTrust: {
       name: "The Trust (Al-Amanah)",
+      nameUr: "امانت",
       nameArabic: "الأمانة",
       color: "#F59E0B",
       icon: "Crown",

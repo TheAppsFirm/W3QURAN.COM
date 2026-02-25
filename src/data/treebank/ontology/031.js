@@ -15,6 +15,7 @@ export const ONTOLOGY = {
   categories: {
     quranAndGuidance: {
       name: "The Quran as Guidance",
+      nameUr: "قرآن بطور ہدایت",
       nameArabic: "القرآن هدى",
       color: "#3B82F6",
       icon: "Book",
@@ -30,6 +31,7 @@ export const ONTOLOGY = {
 
     misguidence: {
       name: "Those Who Mislead",
+      nameUr: "گمراہ کرنے والے",
       nameArabic: "المضلون",
       color: "#EF4444",
       icon: "AlertTriangle",
@@ -45,6 +47,7 @@ export const ONTOLOGY = {
 
     luqmanWisdom: {
       name: "The Wisdom of Luqman",
+      nameUr: "لقمان کی حکمت",
       nameArabic: "حكمة لقمان",
       color: "#F59E0B",
       icon: "Star",
@@ -58,6 +61,7 @@ export const ONTOLOGY = {
 
     luqmanAdvice: {
       name: "Luqman's Advice to His Son",
+      nameUr: "لقمان کی اپنے بیٹے کو نصیحت",
       nameArabic: "وصايا لقمان لابنه",
       color: "#8B5CF6",
       icon: "Heart",
@@ -75,6 +79,7 @@ export const ONTOLOGY = {
 
     characterGuidance: {
       name: "Character and Conduct",
+      nameUr: "کردار اور اخلاق",
       nameArabic: "الأخلاق والسلوك",
       color: "#10B981",
       icon: "Users",
@@ -90,6 +95,7 @@ export const ONTOLOGY = {
 
     parentalRights: {
       name: "Rights of Parents",
+      nameUr: "والدین کے حقوق",
       nameArabic: "حقوق الوالدين",
       color: "#EC4899",
       icon: "Heart",
@@ -104,6 +110,7 @@ export const ONTOLOGY = {
 
     limitsOfObedience: {
       name: "Limits of Parental Obedience",
+      nameUr: "والدین کی اطاعت کی حدود",
       nameArabic: "حدود طاعة الوالدين",
       color: "#3B82F6",
       icon: "Scale",
@@ -118,6 +125,7 @@ export const ONTOLOGY = {
 
     allahsKnowledge: {
       name: "Allah's Infinite Knowledge",
+      nameUr: "اللہ کا لامحدود علم",
       nameArabic: "علم الله المطلق",
       color: "#F59E0B",
       icon: "Eye",
@@ -132,6 +140,7 @@ export const ONTOLOGY = {
 
     signsOfCreation: {
       name: "Signs in Creation",
+      nameUr: "تخلیق میں نشانیاں",
       nameArabic: "آيات في الخلق",
       color: "#06B6D4",
       icon: "Globe",
@@ -147,6 +156,7 @@ export const ONTOLOGY = {
 
     falseWorshipRefuted: {
       name: "Refutation of False Worship",
+      nameUr: "جھوٹی عبادت کی تردید",
       nameArabic: "إبطال عبادة غير الله",
       color: "#EF4444",
       icon: "AlertTriangle",
@@ -162,6 +172,7 @@ export const ONTOLOGY = {
 
     disbelieversState: {
       name: "State of Disbelievers",
+      nameUr: "کافروں کی حالت",
       nameArabic: "حال الكافرين",
       color: "#EF4444",
       icon: "Eye",
@@ -176,6 +187,7 @@ export const ONTOLOGY = {
 
     allahsExclusiveKnowledge: {
       name: "Knowledge Only Allah Possesses",
+      nameUr: "صرف اللہ کے پاس علم",
       nameArabic: "علم الغيب",
       color: "#8B5CF6",
       icon: "Star",

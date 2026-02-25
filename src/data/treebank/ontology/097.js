@@ -14,6 +14,7 @@ export const ONTOLOGY = {
   categories: {
     quranRevelation: {
       name: "The Quran's Descent",
+      nameUr: "نزولِ قرآن",
       nameArabic: "نزول القرآن",
       color: '#3B82F6',
       icon: 'Book',
@@ -38,6 +39,7 @@ export const ONTOLOGY = {
 
     nightVirtue: {
       name: "The Night's Virtue",
+      nameUr: "رات کی فضیلت",
       nameArabic: "فضل الليلة",
       color: '#8B5CF6',
       icon: 'Moon',
@@ -55,6 +57,7 @@ export const ONTOLOGY = {
 
     angelicDescent: {
       name: "Angelic Descent",
+      nameUr: "فرشتوں کا نزول",
       nameArabic: "نزول الملائكة",
       color: '#F59E0B',
       icon: 'Star',
@@ -86,6 +89,7 @@ export const ONTOLOGY = {
 
     nightPeace: {
       name: "Complete Peace",
+      nameUr: "مکمل سلامتی",
       nameArabic: "السلام التام",
       color: '#10B981',
       icon: 'Heart',

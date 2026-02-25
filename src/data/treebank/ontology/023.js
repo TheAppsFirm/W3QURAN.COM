@@ -19,6 +19,7 @@ export const ONTOLOGY = {
   categories: {
     believersQualities: {
       name: "Qualities of Successful Believers",
+      nameUr: "کامیاب مومنوں کی صفات",
       nameArabic: "صفات المؤمنين الفائزين",
       color: "#22C55E",
       icon: "Star",
@@ -36,6 +37,7 @@ export const ONTOLOGY = {
 
     humanCreation: {
       name: "Stages of Human Creation",
+      nameUr: "انسانی تخلیق کے مراحل",
       nameArabic: "مراحل خلق الإنسان",
       color: "#06B6D4",
       icon: "Globe",
@@ -53,6 +55,7 @@ export const ONTOLOGY = {
 
     deathAndResurrection: {
       name: "Death and Resurrection",
+      nameUr: "موت اور قیامت",
       nameArabic: "الموت والبعث",
       color: "#EF4444",
       icon: "AlertTriangle",
@@ -65,6 +68,7 @@ export const ONTOLOGY = {
 
     naturalSigns: {
       name: "Signs in Nature",
+      nameUr: "فطرت میں نشانیاں",
       nameArabic: "الآيات في الطبيعة",
       color: "#06B6D4",
       icon: "Sun",
@@ -79,6 +83,7 @@ export const ONTOLOGY = {
 
     prophetNuh: {
       name: "Story of Prophet Nuh (Noah)",
+      nameUr: "حضرت نوح کا قصہ",
       nameArabic: "قصة نوح عليه السلام",
       color: "#3B82F6",
       icon: "Book",
@@ -95,6 +100,7 @@ export const ONTOLOGY = {
 
     otherProphets: {
       name: "Stories of Other Prophets",
+      nameUr: "دیگر انبیاء کے قصے",
       nameArabic: "قصص الأنبياء الآخرين",
       color: "#3B82F6",
       icon: "Book",
@@ -113,6 +119,7 @@ export const ONTOLOGY = {
 
     unityOfMessage: {
       name: "Unity of Prophetic Message",
+      nameUr: "نبوی پیغام کی وحدت",
       nameArabic: "وحدة رسالة الأنبياء",
       color: "#10B981",
       icon: "Users",
@@ -126,6 +133,7 @@ export const ONTOLOGY = {
 
     wealthAndChildren: {
       name: "Tests of Wealth and Children",
+      nameUr: "مال اور اولاد کی آزمائش",
       nameArabic: "فتنة المال والولد",
       color: "#F59E0B",
       icon: "Zap",
@@ -138,6 +146,7 @@ export const ONTOLOGY = {
 
     trueBelieverQualities: {
       name: "Qualities That Earn Paradise",
+      nameUr: "جنت کے مستحق اوصاف",
       nameArabic: "صفات أهل الجنة",
       color: "#22C55E",
       icon: "Heart",
@@ -152,6 +161,7 @@ export const ONTOLOGY = {
 
     divineJustice: {
       name: "Divine Justice and Accountability",
+      nameUr: "الٰہی انصاف اور احتساب",
       nameArabic: "العدل الإلهي والحساب",
       color: "#F59E0B",
       icon: "Scale",
@@ -164,6 +174,7 @@ export const ONTOLOGY = {
 
     disbelieversState: {
       name: "State of the Heedless",
+      nameUr: "غافلوں کی حالت",
       nameArabic: "حال الغافلين",
       color: "#EF4444",
       icon: "AlertTriangle",
@@ -180,6 +191,7 @@ export const ONTOLOGY = {
 
     prophetRejection: {
       name: "Why They Rejected the Prophet",
+      nameUr: "انہوں نے نبی کو کیوں رد کیا",
       nameArabic: "أسباب رفض النبي",
       color: "#EF4444",
       icon: "MessageCircle",
@@ -195,6 +207,7 @@ export const ONTOLOGY = {
 
     ifTruthFollowedDesires: {
       name: "If Truth Followed Desires",
+      nameUr: "اگر حق خواہشات کے تابع ہوتا",
       nameArabic: "لو اتبع الحق أهواءهم",
       color: "#8B5CF6",
       icon: "Eye",
@@ -208,6 +221,7 @@ export const ONTOLOGY = {
 
     prophetsAskNothing: {
       name: "Prophet Asks No Reward",
+      nameUr: "نبی کوئی اجر نہیں مانگتے",
       nameArabic: "النبي لا يطلب أجراً",
       color: "#10B981",
       icon: "Heart",
@@ -221,6 +235,7 @@ export const ONTOLOGY = {
 
     arrogantDisbelievers: {
       name: "The Arrogant Rejectors",
+      nameUr: "متکبر منکرین",
       nameArabic: "المستكبرون الرافضون",
       color: "#EF4444",
       icon: "AlertTriangle",
@@ -234,6 +249,7 @@ export const ONTOLOGY = {
 
     divineAttributes: {
       name: "Divine Attributes",
+      nameUr: "الٰہی صفات",
       nameArabic: "الصفات الإلهية",
       color: "#F59E0B",
       icon: "Star",
@@ -247,6 +263,7 @@ export const ONTOLOGY = {
 
     dayOfJudgment: {
       name: "Day of Judgment Scenes",
+      nameUr: "قیامت کے مناظر",
       nameArabic: "مشاهد يوم القيامة",
       color: "#EF4444",
       icon: "Scale",
@@ -269,6 +286,7 @@ export const ONTOLOGY = {
 
     hellDescriptions: {
       name: "Descriptions of Hell",
+      nameUr: "جہنم کے احوال",
       nameArabic: "وصف جهنم",
       color: "#EF4444",
       icon: "AlertTriangle",
@@ -286,6 +304,7 @@ export const ONTOLOGY = {
 
     mockersOfBelievers: {
       name: "Those Who Mocked Believers",
+      nameUr: "مومنوں کا مذاق اڑانے والے",
       nameArabic: "الذين سخروا من المؤمنين",
       color: "#EF4444",
       icon: "MessageCircle",
@@ -299,6 +318,7 @@ export const ONTOLOGY = {
 
     timeInWorld: {
       name: "Time in the World",
+      nameUr: "دنیا میں وقت",
       nameArabic: "الزمن في الدنيا",
       color: "#8B5CF6",
       icon: "Moon",
@@ -313,6 +333,7 @@ export const ONTOLOGY = {
 
     purposeOfCreation: {
       name: "Purpose of Creation",
+      nameUr: "تخلیق کا مقصد",
       nameArabic: "الحكمة من الخلق",
       color: "#F59E0B",
       icon: "Star",
@@ -325,6 +346,7 @@ export const ONTOLOGY = {
 
     closingDua: {
       name: "The Closing Supplication",
+      nameUr: "اختتامی دعا",
       nameArabic: "الدعاء الختامي",
       color: "#8B5CF6",
       icon: "Heart",

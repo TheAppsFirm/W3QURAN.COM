@@ -14,6 +14,7 @@ export const ONTOLOGY = {
   categories: {
     starOath: {
       name: "The Star Oath",
+      nameUr: "ستارے کی قسم",
       nameAr: "القسم بالنجم",
       color: '#06B6D4',
       icon: 'Sun',
@@ -27,6 +28,7 @@ export const ONTOLOGY = {
 
     angelicTeacher: {
       name: "The Angelic Teacher",
+      nameUr: "فرشتہ معلم",
       nameAr: "المعلم الملائكي",
       color: '#8B5CF6',
       icon: 'Sparkles',
@@ -42,6 +44,7 @@ export const ONTOLOGY = {
 
     mirajVision: {
       name: "The Mi'raj Vision",
+      nameUr: "معراج کی رؤیت",
       nameAr: "رؤية المعراج",
       color: '#F59E0B',
       icon: 'Star',
@@ -60,6 +63,7 @@ export const ONTOLOGY = {
 
     falseIdolsRefuted: {
       name: "False Idols Refuted",
+      nameUr: "جھوٹے بتوں کی تردید",
       nameAr: "إبطال الأصنام",
       color: '#EF4444',
       icon: 'AlertTriangle',
@@ -76,6 +80,7 @@ export const ONTOLOGY = {
 
     divineAuthority: {
       name: "Divine Authority",
+      nameUr: "الٰہی اختیار",
       nameAr: "السلطان الإلهي",
       color: '#F59E0B',
       icon: 'Crown',
@@ -90,6 +95,7 @@ export const ONTOLOGY = {
 
     intercessionDenied: {
       name: "False Intercession Denied",
+      nameUr: "باطل سفارش کی تردید",
       nameAr: "إبطال الشفاعة الباطلة",
       color: '#EF4444',
       icon: 'Shield',
@@ -103,6 +109,7 @@ export const ONTOLOGY = {
 
     individualAccountability: {
       name: "Individual Accountability",
+      nameUr: "انفرادی جوابدہی",
       nameAr: "المسؤولية الفردية",
       color: '#3B82F6',
       icon: 'Compass',
@@ -119,6 +126,7 @@ export const ONTOLOGY = {
 
     scrollsOfIbrahim: {
       name: "Scrolls of Ibrahim and Musa",
+      nameUr: "ابراہیم اور موسیٰ کے صحیفے",
       nameAr: "صحف إبراهيم وموسى",
       color: '#3B82F6',
       icon: 'Book',
@@ -132,6 +140,7 @@ export const ONTOLOGY = {
 
     divineCreation: {
       name: "Divine Creation and Power",
+      nameUr: "الٰہی تخلیق اور قدرت",
       nameAr: "الخلق والقدرة الإلهية",
       color: '#06B6D4',
       icon: 'Globe',
@@ -148,6 +157,7 @@ export const ONTOLOGY = {
 
     destroyedNations: {
       name: "Destroyed Nations",
+      nameUr: "ہلاک شدہ اقوام",
       nameAr: "الأمم المهلكة",
       color: '#EF4444',
       icon: 'AlertTriangle',
@@ -162,6 +172,7 @@ export const ONTOLOGY = {
 
     warningAndClosing: {
       name: "Final Warning",
+      nameUr: "آخری تنبیہ",
       nameAr: "التحذير الختامي",
       color: '#EF4444',
       icon: 'Shield',

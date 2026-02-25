@@ -33,7 +33,11 @@ export const TREEBANK_DATA = {
       tr: "Her ayıplayıcı, kusur arayıcıya yazıklar olsun",
       id: "Kecelakaanlah bagi setiap pengumpat lagi pencela",
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 2, to: 3, label: 'جار + مجرور' },
+        { from: 2, to: 3, label: 'مضاف + مضاف إليه' },
+        { from: 3, to: 4, label: 'مضاف + مضاف إليه' }
+      ],
     },
     },
     words: [

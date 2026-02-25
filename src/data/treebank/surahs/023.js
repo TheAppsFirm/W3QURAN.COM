@@ -1871,7 +1871,11 @@ const SURAH_23_TREEBANK = {
     ],
     structure: {
         relationships: [
-        ],
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' },
+        { from: 4, to: 5, label: 'تعلق' }
+      ],
     },
   },
   16: { // Ayah 16
@@ -1969,7 +1973,11 @@ const SURAH_23_TREEBANK = {
     ],
     structure: {
         relationships: [
-        ],
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' },
+        { from: 4, to: 5, label: 'تعلق' }
+      ],
     },
   },
   17: { // Ayah 17
@@ -3153,7 +3161,10 @@ const SURAH_23_TREEBANK = {
     ],
     structure: {
         relationships: [
-        ],
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' }
+      ],
     },
   },
   23: { // Ayah 23
@@ -6501,7 +6512,8 @@ const SURAH_23_TREEBANK = {
     ],
     structure: {
         relationships: [
-        ],
+        { from: 3, to: 4, label: 'جار + مجرور' }
+      ],
     },
   },
   37: { // Ayah 37
@@ -8351,7 +8363,8 @@ const SURAH_23_TREEBANK = {
     ],
     structure: {
         relationships: [
-        ],
+        { from: 3, to: 4, label: 'جار + مجرور' }
+      ],
     },
   },
   49: { // Ayah 49
@@ -9557,7 +9570,9 @@ const SURAH_23_TREEBANK = {
     ],
     structure: {
         relationships: [
-        ],
+        { from: 2, to: 3, label: 'جار + مجرور' },
+        { from: 3, to: 4, label: 'جار + مجرور' }
+      ],
     },
   },
   57: { // Ayah 57
@@ -14249,7 +14264,8 @@ const SURAH_23_TREEBANK = {
     ],
     structure: {
         relationships: [
-        ],
+        { from: 2, to: 3, label: 'جار + مجرور' }
+      ],
     },
   },
   86: { // Ayah 86
@@ -14497,7 +14513,8 @@ const SURAH_23_TREEBANK = {
     ],
     structure: {
         relationships: [
-        ],
+        { from: 2, to: 3, label: 'جار + مجرور' }
+      ],
     },
   },
   88: { // Ayah 88
@@ -15488,7 +15505,12 @@ const SURAH_23_TREEBANK = {
     ],
     structure: {
         relationships: [
-        ],
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' },
+        { from: 4, to: 5, label: 'تعلق' },
+        { from: 5, to: 6, label: 'تعلق' }
+      ],
     },
   },
   93: { // Ayah 93

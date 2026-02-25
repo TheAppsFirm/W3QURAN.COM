@@ -22,7 +22,10 @@ export const TREEBANK_DATA = {
       { position: 3, arabic: "كُوِّرَتْ", transliteration: "kuwwirat", root: "ك و ر", meaning: { en: "is wrapped up", ur: "لپیٹ دیا جائے", ar: "لُفَّت" }, pos: "V", posLabel: "V", grammarRole: "verb", features: { form: "II", voice: "passive" }, advanced: { rootFamily: ["كَور", "كُرَة", "تكوير"], linguisticMiracle: "Takwir = folding like a turban wraps. Sun's light extinguished" } }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' }
+      ],
     },
   },
 
@@ -35,7 +38,10 @@ export const TREEBANK_DATA = {
       { position: 3, arabic: "انكَدَرَتْ", transliteration: "inkadarat", root: "ك د ر", meaning: { en: "fall/lose luster", ur: "گر جائیں", ar: "تَساقَطَت" }, pos: "V", posLabel: "V", grammarRole: "verb", features: { form: "VII" }, advanced: { linguisticMiracle: "Stars fall and become dark - dual meaning" } }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' }
+      ],
     },
   },
 
@@ -48,7 +54,10 @@ export const TREEBANK_DATA = {
       { position: 3, arabic: "سُيِّرَتْ", transliteration: "suyyirat", root: "س ي ر", meaning: { en: "are moved", ur: "چلائے جائیں", ar: "حُرِّكَت" }, pos: "V", posLabel: "V", grammarRole: "verb", features: { form: "II", voice: "passive" } }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' }
+      ],
     },
   },
 
@@ -61,7 +70,10 @@ export const TREEBANK_DATA = {
       { position: 3, arabic: "عُطِّلَتْ", transliteration: "ʿuṭṭilat", root: "ع ط ل", meaning: { en: "are neglected", ur: "چھوڑ دی جائیں", ar: "أُهمِلَت" }, pos: "V", posLabel: "V", grammarRole: "verb", features: { form: "II", voice: "passive" } }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' }
+      ],
     },
   },
 
@@ -74,7 +86,10 @@ export const TREEBANK_DATA = {
       { position: 3, arabic: "حُشِرَتْ", transliteration: "ḥushirat", root: "ح ش ر", meaning: { en: "are gathered", ur: "اکٹھے کیے جائیں", ar: "جُمِعَت" }, pos: "V", posLabel: "V", grammarRole: "verb", features: { voice: "passive" } }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' }
+      ],
     },
   },
 
@@ -87,7 +102,10 @@ export const TREEBANK_DATA = {
       { position: 3, arabic: "سُجِّرَتْ", transliteration: "sujjirat", root: "س ج ر", meaning: { en: "are set ablaze", ur: "بھڑکائے جائیں", ar: "أُوقِدَت" }, pos: "V", posLabel: "V", grammarRole: "verb", features: { form: "II", voice: "passive" }, advanced: { linguisticMiracle: "Seas ignited or overflowed - both possible" } }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' }
+      ],
     },
   },
 
@@ -100,7 +118,10 @@ export const TREEBANK_DATA = {
       { position: 3, arabic: "زُوِّجَتْ", transliteration: "zuwwijat", root: "ز و ج", meaning: { en: "are paired", ur: "جوڑی جائیں", ar: "قُرِنَت" }, pos: "V", posLabel: "V", grammarRole: "verb", features: { form: "II", voice: "passive" }, advanced: { linguisticMiracle: "Souls reunited with bodies, or grouped with similar types" } }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' }
+      ],
     },
   },
 
@@ -113,7 +134,10 @@ export const TREEBANK_DATA = {
       { position: 3, arabic: "سُئِلَتْ", transliteration: "su'ilat", root: "س أ ل", meaning: { en: "is asked", ur: "پوچھا جائے", ar: "سُئِلَت" }, pos: "V", posLabel: "V", grammarRole: "verb", features: { voice: "passive" } }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' }
+      ],
     },
   },
 
@@ -126,7 +150,10 @@ export const TREEBANK_DATA = {
       { position: 3, arabic: "قُتِلَتْ", transliteration: "qutilat", root: "ق ت ل", meaning: { en: "was she killed", ur: "وہ ماری گئی", ar: "قُتِلَت" }, pos: "V", posLabel: "V", grammarRole: "verb", features: { voice: "passive" }, advanced: { linguisticMiracle: "Rhetorical - she committed no sin. Murderers questioned" } }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' }
+      ],
     },
   },
 
@@ -139,7 +166,10 @@ export const TREEBANK_DATA = {
       { position: 3, arabic: "نُشِرَتْ", transliteration: "nushirat", root: "ن ش ر", meaning: { en: "are spread open", ur: "کھولے جائیں", ar: "فُتِحَت" }, pos: "V", posLabel: "V", grammarRole: "verb", features: { voice: "passive" } }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' }
+      ],
     },
   },
 
@@ -152,7 +182,10 @@ export const TREEBANK_DATA = {
       { position: 3, arabic: "كُشِطَتْ", transliteration: "kushiṭat", root: "ك ش ط", meaning: { en: "is stripped away", ur: "کھینچ لیا جائے", ar: "أُزيلَت" }, pos: "V", posLabel: "V", grammarRole: "verb", features: { voice: "passive" }, advanced: { linguisticMiracle: "Like skin peeled off - sky removed completely" } }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' }
+      ],
     },
   },
 
@@ -165,7 +198,10 @@ export const TREEBANK_DATA = {
       { position: 3, arabic: "سُعِّرَتْ", transliteration: "suʿʿirat", root: "س ع ر", meaning: { en: "is set ablaze", ur: "بھڑکائی جائے", ar: "أُوقِدَت" }, pos: "V", posLabel: "V", grammarRole: "verb", features: { form: "II", voice: "passive" } }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' }
+      ],
     },
   },
 
@@ -178,7 +214,10 @@ export const TREEBANK_DATA = {
       { position: 3, arabic: "أُزْلِفَتْ", transliteration: "uzlifat", root: "ز ل ف", meaning: { en: "is brought near", ur: "قریب لائی جائے", ar: "قُرِّبَت" }, pos: "V", posLabel: "V", grammarRole: "verb", features: { form: "IV", voice: "passive" }, advanced: { linguisticMiracle: "Paradise approaches its people - divine welcome" } }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' }
+      ],
     },
   },
 
@@ -304,7 +343,10 @@ export const TREEBANK_DATA = {
       { position: 3, arabic: "أَمِينٍ", transliteration: "amīnin", root: "أ م ن", meaning: { en: "trustworthy", ur: "امانتدار", ar: "مَوثوق" }, pos: "ADJ", posLabel: "ADJ", grammarRole: "attribute" }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' }
+      ],
     },
   },
 
@@ -384,7 +426,9 @@ export const TREEBANK_DATA = {
       { position: 2, arabic: "تَذْهَبُونَ", transliteration: "tadh'habūna", root: "ذ ه ب", meaning: { en: "are you going", ur: "تم جا رہے ہو", ar: "تَتَّجِهونَ" }, pos: "V", posLabel: "V", grammarRole: "verb", advanced: { linguisticMiracle: "Rhetorical - where can you go from truth?" } }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' }
+      ],
     },
   },
 

@@ -489,7 +489,9 @@ export const TREEBANK_DATA = {
       tr: "Yazıklar olsun o namaz kılanlara",
       id: "Maka kecelakaanlah bagi orang-orang yang shalat",
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' }
+      ],
     },
     },
     words: [
@@ -732,7 +734,10 @@ export const TREEBANK_DATA = {
       tr: "Onlar gösteriş yapanlardır",
       id: "Yang berbuat riya",
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' }
+      ],
     },
     },
     words: [

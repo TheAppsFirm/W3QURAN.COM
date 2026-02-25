@@ -14,6 +14,7 @@ export const ONTOLOGY = {
   categories: {
     divineAttributes: {
       name: "Divine Attributes",
+      nameUr: "اللہ کی صفات",
       nameAr: "صفات الله",
       color: '#F59E0B',
       icon: 'Star',
@@ -27,6 +28,7 @@ export const ONTOLOGY = {
     },
     cosmicDominion: {
       name: "Cosmic Dominion",
+      nameUr: "کائناتی حاکمیت",
       nameAr: "الملك الكوني",
       color: '#F59E0B',
       icon: 'Crown',
@@ -40,6 +42,7 @@ export const ONTOLOGY = {
     },
     spendingInAllahsWay: {
       name: "Spending in Allah's Way",
+      nameUr: "اللہ کی راہ میں خرچ",
       nameAr: "الإنفاق في سبيل الله",
       color: '#10B981',
       icon: 'Heart',
@@ -52,6 +55,7 @@ export const ONTOLOGY = {
     },
     lightAndDarkness: {
       name: "Light and Darkness",
+      nameUr: "نور اور تاریکی",
       nameAr: "النور والظلمات",
       color: '#3B82F6',
       icon: 'Sun',
@@ -64,6 +68,7 @@ export const ONTOLOGY = {
     },
     hypocrisyExposed: {
       name: "Hypocrites on Judgment Day",
+      nameUr: "قیامت کے دن منافقین",
       nameAr: "المنافقون يوم القيامة",
       color: '#EF4444',
       icon: 'AlertTriangle',
@@ -77,6 +82,7 @@ export const ONTOLOGY = {
     },
     heartSoftening: {
       name: "Softening of Hearts",
+      nameUr: "دلوں کی نرمی",
       nameAr: "خشوع القلوب",
       color: '#8B5CF6',
       icon: 'Heart',
@@ -88,6 +94,7 @@ export const ONTOLOGY = {
     },
     worldlyLifeNature: {
       name: "Nature of Worldly Life",
+      nameUr: "دنیاوی زندگی کی حقیقت",
       nameAr: "طبيعة الحياة الدنيا",
       color: '#06B6D4',
       icon: 'Globe',
@@ -101,6 +108,7 @@ export const ONTOLOGY = {
     },
     divineDecree: {
       name: "Divine Decree (Qadr)",
+      nameUr: "الٰہی تقدیر",
       nameAr: "القدر الإلهي",
       color: '#F59E0B',
       icon: 'Book',
@@ -113,6 +121,7 @@ export const ONTOLOGY = {
     },
     ironAndJustice: {
       name: "Iron and Justice",
+      nameUr: "لوہا اور عدل",
       nameAr: "الحديد والعدل",
       color: '#3B82F6',
       icon: 'Scale',
@@ -126,6 +135,7 @@ export const ONTOLOGY = {
     },
     propheticChain: {
       name: "Prophetic Lineage",
+      nameUr: "سلسلۂ انبیاء",
       nameAr: "سلسلة الأنبياء",
       color: '#8B5CF6',
       icon: 'Users',

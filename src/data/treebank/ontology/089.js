@@ -14,6 +14,7 @@ export const ONTOLOGY = {
   categories: {
     cosmicOaths: {
       name: "The Sacred Oaths",
+      nameUr: "مقدس قسمیں",
       nameArabic: "القسم الكوني",
       color: '#8B5CF6',
       icon: 'Sun',
@@ -27,6 +28,7 @@ export const ONTOLOGY = {
 
     destroyedNations: {
       name: "Lessons from Destroyed Nations",
+      nameUr: "تباہ شدہ قوموں سے عبرت",
       nameArabic: "عبرة الأمم الهالكة",
       color: '#EF4444',
       icon: 'AlertTriangle',
@@ -42,6 +44,7 @@ export const ONTOLOGY = {
 
     humanNatureAndWealth: {
       name: "Human Response to Tests",
+      nameUr: "آزمائش پر انسانی ردعمل",
       nameArabic: "طبيعة الإنسان والابتلاء",
       color: '#EC4899',
       icon: 'Users',
@@ -54,6 +57,7 @@ export const ONTOLOGY = {
 
     socialFailures: {
       name: "Social Sins",
+      nameUr: "سماجی گناہ",
       nameArabic: "الذنوب الاجتماعية",
       color: '#EF4444',
       icon: 'AlertTriangle',
@@ -67,6 +71,7 @@ export const ONTOLOGY = {
 
     dayOfJudgment: {
       name: "The Day of Reckoning",
+      nameUr: "یومِ حساب",
       nameArabic: "يوم الحساب",
       color: '#F59E0B',
       icon: 'Scale',
@@ -81,6 +86,7 @@ export const ONTOLOGY = {
 
     satisfiedSoul: {
       name: "The Tranquil Soul",
+      nameUr: "مطمئن نفس",
       nameArabic: "النفس المطمئنة",
       color: '#10B981',
       icon: 'Heart',

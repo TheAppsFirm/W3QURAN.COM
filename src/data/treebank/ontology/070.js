@@ -14,6 +14,7 @@ export const ONTOLOGY = {
   categories: {
     inevitablePunishment: {
       name: "Inevitable Punishment",
+      nameUr: "ناگزیر عذاب",
       nameArabic: "العذاب الواقع",
       color: '#EF4444',
       icon: 'AlertTriangle',
@@ -26,6 +27,7 @@ export const ONTOLOGY = {
 
     angelicAscent: {
       name: "Angelic Ascent",
+      nameUr: "فرشتوں کا عروج",
       nameArabic: "صعود الملائكة",
       color: '#8B5CF6',
       icon: 'Sun',
@@ -37,6 +39,7 @@ export const ONTOLOGY = {
 
     beautifulPatience: {
       name: "Beautiful Patience",
+      nameUr: "صبرِ جمیل",
       nameArabic: "الصبر الجميل",
       color: '#3B82F6',
       icon: 'Heart',
@@ -48,6 +51,7 @@ export const ONTOLOGY = {
 
     dayOfJudgment: {
       name: "Day of Judgment Scenes",
+      nameUr: "قیامت کے مناظر",
       nameArabic: "مشاهد القيامة",
       color: '#F59E0B',
       icon: 'Globe',
@@ -60,6 +64,7 @@ export const ONTOLOGY = {
 
     desperateRansom: {
       name: "Desperate Ransom Offers",
+      nameUr: "مایوسانہ فدیے کی پیشکش",
       nameArabic: "محاولات الفداء اليائسة",
       color: '#EC4899',
       icon: 'Users',
@@ -74,6 +79,7 @@ export const ONTOLOGY = {
 
     hellDescription: {
       name: "Description of Hell",
+      nameUr: "جہنم کی تصویر کشی",
       nameArabic: "وصف جهنم",
       color: '#EF4444',
       icon: 'Zap',
@@ -87,6 +93,7 @@ export const ONTOLOGY = {
 
     humanNature: {
       name: "Human Nature",
+      nameUr: "انسانی فطرت",
       nameArabic: "طبيعة الإنسان",
       color: '#06B6D4',
       icon: 'Users',
@@ -99,6 +106,7 @@ export const ONTOLOGY = {
 
     exceptionsFromHumanWeakness: {
       name: "Exceptions to Human Weakness",
+      nameUr: "انسانی کمزوری سے مستثنیٰ لوگ",
       nameArabic: "المستثنون من الضعف البشري",
       color: '#10B981',
       icon: 'Sparkles',
@@ -118,6 +126,7 @@ export const ONTOLOGY = {
 
     disbelieversRushing: {
       name: "Disbelievers' Mockery",
+      nameUr: "کافروں کا مذاق",
       nameArabic: "استهزاء الكافرين",
       color: '#EC4899',
       icon: 'AlertTriangle',
@@ -130,6 +139,7 @@ export const ONTOLOGY = {
 
     divineOath: {
       name: "Divine Oath",
+      nameUr: "الہٰی قسم",
       nameArabic: "القسم الإلهي",
       color: '#F59E0B',
       icon: 'Star',
@@ -141,6 +151,7 @@ export const ONTOLOGY = {
 
     finalScene: {
       name: "Final Scene",
+      nameUr: "آخری منظر",
       nameArabic: "المشهد الأخير",
       color: '#8B5CF6',
       icon: 'Eye',

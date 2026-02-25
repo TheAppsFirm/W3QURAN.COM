@@ -4703,7 +4703,7 @@ const SURAH_4_TREEBANK = {
     ],
     structure: {
       relationships: [
-
+        { from: 14, to: 15, label: 'موصوف + صفت' }
       ],
     },
   },
@@ -4922,7 +4922,14 @@ const SURAH_4_TREEBANK = {
     ],
     structure: {
       relationships: [
-
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' },
+        { from: 4, to: 5, label: 'تعلق' },
+        { from: 5, to: 6, label: 'تعلق' },
+        { from: 6, to: 7, label: 'تعلق' },
+        { from: 7, to: 8, label: 'تعلق' },
+        { from: 8, to: 9, label: 'تعلق' }
       ],
     },
   },
@@ -5743,7 +5750,8 @@ const SURAH_4_TREEBANK = {
     ],
     structure: {
       relationships: [
-
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' }
       ],
     },
   },
@@ -5798,7 +5806,7 @@ const SURAH_4_TREEBANK = {
     ],
     structure: {
       relationships: [
-
+        { from: 6, to: 7, label: 'موصوف + صفت' }
       ],
     },
   },
@@ -5822,7 +5830,15 @@ const SURAH_4_TREEBANK = {
     ],
     structure: {
       relationships: [
-
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' },
+        { from: 4, to: 5, label: 'تعلق' },
+        { from: 5, to: 6, label: 'تعلق' },
+        { from: 6, to: 7, label: 'تعلق' },
+        { from: 7, to: 8, label: 'تعلق' },
+        { from: 8, to: 9, label: 'تعلق' },
+        { from: 9, to: 10, label: 'تعلق' }
       ],
     },
   },
@@ -6912,7 +6928,13 @@ const SURAH_4_TREEBANK = {
     ],
     structure: {
       relationships: [
-
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' },
+        { from: 4, to: 5, label: 'تعلق' },
+        { from: 5, to: 6, label: 'تعلق' },
+        { from: 6, to: 7, label: 'تعلق' },
+        { from: 7, to: 8, label: 'تعلق' }
       ],
     },
   },
@@ -7957,7 +7979,22 @@ const SURAH_4_TREEBANK = {
     ],
     structure: {
       relationships: [
-
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' },
+        { from: 4, to: 5, label: 'تعلق' },
+        { from: 5, to: 6, label: 'تعلق' },
+        { from: 6, to: 7, label: 'تعلق' },
+        { from: 7, to: 8, label: 'تعلق' },
+        { from: 8, to: 9, label: 'تعلق' },
+        { from: 9, to: 10, label: 'تعلق' },
+        { from: 10, to: 11, label: 'تعلق' },
+        { from: 11, to: 12, label: 'تعلق' },
+        { from: 12, to: 13, label: 'تعلق' },
+        { from: 13, to: 14, label: 'تعلق' },
+        { from: 14, to: 15, label: 'تعلق' },
+        { from: 15, to: 16, label: 'تعلق' },
+        { from: 16, to: 17, label: 'تعلق' }
       ],
     },
   },

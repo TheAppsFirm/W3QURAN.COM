@@ -14,6 +14,7 @@ export const ONTOLOGY = {
   categories: {
     cosmicOaths: {
       name: "The Cosmic Oaths",
+      nameUr: "کائناتی قسمیں",
       nameArabic: "القسم الكوني",
       color: '#8B5CF6',
       icon: 'Moon',
@@ -45,6 +46,7 @@ export const ONTOLOGY = {
 
     diverseEfforts: {
       name: "The Diverse Human Efforts",
+      nameUr: "انسانی کوششوں کا تنوع",
       nameArabic: "السعي المختلف",
       color: '#06B6D4',
       icon: 'Users',
@@ -62,6 +64,7 @@ export const ONTOLOGY = {
 
     pathOfGenerosity: {
       name: "The Path of Generosity",
+      nameUr: "سخاوت کا راستہ",
       nameArabic: "طريق العطاء",
       color: '#10B981',
       icon: 'Heart',
@@ -100,6 +103,7 @@ export const ONTOLOGY = {
 
     pathOfMiserliness: {
       name: "The Path of Miserliness",
+      nameUr: "بخل کا راستہ",
       nameArabic: "طريق البخل",
       color: '#EF4444',
       icon: 'AlertTriangle',
@@ -138,6 +142,7 @@ export const ONTOLOGY = {
 
     consequencesOfChoice: {
       name: "Consequences of Spiritual Choices",
+      nameUr: "روحانی انتخاب کے نتائج",
       nameArabic: "عواقب الاختيار الروحي",
       color: '#F59E0B',
       icon: 'Scale',
@@ -169,6 +174,7 @@ export const ONTOLOGY = {
 
     fireAndWarning: {
       name: "The Blazing Fire",
+      nameUr: "بھڑکتی آگ",
       nameArabic: "النار المتلظية",
       color: '#EF4444',
       icon: 'Zap',
@@ -200,6 +206,7 @@ export const ONTOLOGY = {
 
     theRighteous: {
       name: "The Most Righteous",
+      nameUr: "سب سے متقی",
       nameArabic: "الأتقى",
       color: '#10B981',
       icon: 'Sparkles',

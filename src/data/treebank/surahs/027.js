@@ -2439,7 +2439,16 @@ const SURAH_27_TREEBANK = {
     ],
     structure: {
       relationships: [
-
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' },
+        { from: 4, to: 5, label: 'تعلق' },
+        { from: 5, to: 6, label: 'تعلق' },
+        { from: 6, to: 7, label: 'تعلق' },
+        { from: 7, to: 8, label: 'تعلق' },
+        { from: 8, to: 9, label: 'تعلق' },
+        { from: 9, to: 10, label: 'تعلق' },
+        { from: 10, to: 11, label: 'تعلق' }
       ],
     },
   },
@@ -3133,7 +3142,7 @@ const SURAH_27_TREEBANK = {
     ],
     structure: {
       relationships: [
-
+        { from: 5, to: 7, label: 'عطف' }
       ],
     },
   },
@@ -3586,7 +3595,14 @@ const SURAH_27_TREEBANK = {
     ],
     structure: {
       relationships: [
-
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' },
+        { from: 4, to: 5, label: 'تعلق' },
+        { from: 5, to: 6, label: 'تعلق' },
+        { from: 6, to: 7, label: 'تعلق' },
+        { from: 7, to: 8, label: 'تعلق' },
+        { from: 8, to: 9, label: 'تعلق' }
       ],
     },
   },
@@ -3611,7 +3627,7 @@ const SURAH_27_TREEBANK = {
     ],
     structure: {
       relationships: [
-
+        { from: 7, to: 8, label: 'جار + مجرور' }
       ],
     },
   },
@@ -3630,7 +3646,10 @@ const SURAH_27_TREEBANK = {
     ],
     structure: {
       relationships: [
-
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' },
+        { from: 4, to: 5, label: 'تعلق' }
       ],
     },
   },
@@ -3748,7 +3767,11 @@ const SURAH_27_TREEBANK = {
     ],
     structure: {
       relationships: [
-
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' },
+        { from: 4, to: 5, label: 'تعلق' },
+        { from: 5, to: 6, label: 'تعلق' }
       ],
     },
   },
@@ -4146,7 +4169,12 @@ const SURAH_27_TREEBANK = {
     ],
     structure: {
       relationships: [
-
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' },
+        { from: 4, to: 5, label: 'تعلق' },
+        { from: 5, to: 6, label: 'تعلق' },
+        { from: 6, to: 7, label: 'تعلق' }
       ],
     },
   },
@@ -4290,7 +4318,9 @@ const SURAH_27_TREEBANK = {
     ],
     structure: {
       relationships: [
-
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' }
       ],
     },
   },

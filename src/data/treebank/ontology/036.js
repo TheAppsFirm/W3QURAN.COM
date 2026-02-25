@@ -22,6 +22,7 @@ export const ONTOLOGY = {
     // OPENING OATH AND PROPHETHOOD (1-12)
     openingOath: {
       name: "Opening Oath and Prophethood",
+      nameUr: "ابتدائی قسم اور نبوت",
       nameArabic: "القسم والرسالة",
       color: "#F59E0B",
       icon: "Star",
@@ -38,6 +39,7 @@ export const ONTOLOGY = {
 
     sealedHearts: {
       name: "The Sealed Hearts",
+      nameUr: "مہر شدہ دل",
       nameArabic: "القلوب المختومة",
       color: "#EF4444",
       icon: "AlertTriangle",
@@ -53,6 +55,7 @@ export const ONTOLOGY = {
 
     whoCanBeWarned: {
       name: "Those Who Benefit from Warning",
+      nameUr: "تنبیہ سے فائدہ اٹھانے والے",
       nameArabic: "من ينتفع بالإنذار",
       color: "#10B981",
       icon: "Heart",
@@ -69,6 +72,7 @@ export const ONTOLOGY = {
     // STORY OF THE MESSENGERS TO THE TOWN (13-32)
     messengersToTown: {
       name: "The Messengers to the Town",
+      nameUr: "بستی کی طرف بھیجے گئے رسول",
       nameArabic: "الرسل إلى القرية",
       color: "#3B82F6",
       icon: "Users",
@@ -83,6 +87,7 @@ export const ONTOLOGY = {
 
     townPeopleRejection: {
       name: "The Town People's Rejection",
+      nameUr: "بستی والوں کا انکار",
       nameArabic: "رفض أهل القرية",
       color: "#EF4444",
       icon: "AlertTriangle",
@@ -100,6 +105,7 @@ export const ONTOLOGY = {
 
     believerFromEdgeOfTown: {
       name: "The Believer from the Edge of Town",
+      nameUr: "شہر کے کنارے سے آنے والا مومن",
       nameArabic: "المؤمن من أقصى المدينة",
       color: "#10B981",
       icon: "Heart",
@@ -117,6 +123,7 @@ export const ONTOLOGY = {
 
     martyrdomAndReward: {
       name: "Martyrdom and Heavenly Reward",
+      nameUr: "شہادت اور آسمانی اجر",
       nameArabic: "الشهادة والجزاء",
       color: "#8B5CF6",
       icon: "Sparkles",
@@ -130,6 +137,7 @@ export const ONTOLOGY = {
 
     destructionOfTown: {
       name: "Destruction of the Town",
+      nameUr: "بستی کی تباہی",
       nameArabic: "هلاك القرية",
       color: "#EF4444",
       icon: "Zap",
@@ -146,6 +154,7 @@ export const ONTOLOGY = {
     // SIGNS OF RESURRECTION (33-44)
     signsInEarth: {
       name: "Signs in the Earth",
+      nameUr: "زمین میں نشانیاں",
       nameArabic: "الآيات في الأرض",
       color: "#06B6D4",
       icon: "Globe",
@@ -163,6 +172,7 @@ export const ONTOLOGY = {
 
     signsInCreation: {
       name: "Signs in Creation - Pairs",
+      nameUr: "تخلیق میں نشانیاں - جوڑے",
       nameArabic: "الآيات في الخلق - الأزواج",
       color: "#06B6D4",
       icon: "Sparkles",
@@ -176,6 +186,7 @@ export const ONTOLOGY = {
 
     signsInNightAndDay: {
       name: "Signs in Night and Day",
+      nameUr: "رات اور دن کی نشانیاں",
       nameArabic: "آية الليل والنهار",
       color: "#06B6D4",
       icon: "Moon",
@@ -189,6 +200,7 @@ export const ONTOLOGY = {
 
     signsInMoon: {
       name: "Signs in the Moon",
+      nameUr: "چاند کی نشانی",
       nameArabic: "آية القمر",
       color: "#06B6D4",
       icon: "Moon",
@@ -203,6 +215,7 @@ export const ONTOLOGY = {
 
     signsInShips: {
       name: "Signs in Ships",
+      nameUr: "کشتیوں کی نشانیاں",
       nameArabic: "آية السفن",
       color: "#3B82F6",
       icon: "Compass",
@@ -219,6 +232,7 @@ export const ONTOLOGY = {
     // WARNING TO DISBELIEVERS (45-54)
     warningIgnored: {
       name: "Warnings Ignored",
+      nameUr: "نظرانداز تنبیہات",
       nameArabic: "الإنذار المرفوض",
       color: "#EF4444",
       icon: "AlertTriangle",
@@ -234,6 +248,7 @@ export const ONTOLOGY = {
 
     mockingResurrection: {
       name: "Mockers of Resurrection",
+      nameUr: "قیامت کا مذاق اڑانے والے",
       nameArabic: "المستهزئون بالبعث",
       color: "#EF4444",
       icon: "AlertTriangle",
@@ -249,6 +264,7 @@ export const ONTOLOGY = {
     // RESURRECTION SCENES (51-65)
     trumpetBlown: {
       name: "The Trumpet and Rising",
+      nameUr: "صور اور اٹھنا",
       nameArabic: "النفخ في الصور",
       color: "#F59E0B",
       icon: "Zap",
@@ -263,6 +279,7 @@ export const ONTOLOGY = {
 
     swiftJudgment: {
       name: "The Swift Judgment",
+      nameUr: "تیز فیصلہ",
       nameArabic: "الحساب السريع",
       color: "#F59E0B",
       icon: "Scale",
@@ -276,6 +293,7 @@ export const ONTOLOGY = {
 
     paradiseDelights: {
       name: "Delights of Paradise",
+      nameUr: "جنت کی نعمتیں",
       nameArabic: "نعيم الجنة",
       color: "#10B981",
       icon: "Sparkles",
@@ -290,6 +308,7 @@ export const ONTOLOGY = {
 
     separationOfSinners: {
       name: "Separation of the Sinners",
+      nameUr: "گناہگاروں کی علیحدگی",
       nameArabic: "تمييز المجرمين",
       color: "#EF4444",
       icon: "Users",
@@ -307,175 +326,184 @@ export const ONTOLOGY = {
 
     hellfireDescription: {
       name: "Description of Hellfire",
+      nameUr: "جہنم کا بیان",
       nameArabic: "وصف جهنم",
       color: "#EF4444",
       icon: "AlertTriangle",
       concepts: [
-        { term: "هَٰذِهِ جَهَنَّمُ الَّتِي كُنتُمْ تُوعَدُونَ", meaning: { en: "This is the Hellfire which you were promised", ur: "This is the Hellfire which you were promised" }, explanation: { en: "Confrontation with Hell", ur: "Confrontation with Hell" }, verseRef: "36:63" },
-        { term: "اصْلَوْهَا الْيَوْمَ بِمَا كُنتُمْ تَكْفُرُونَ", meaning: { en: "Enter it today for what you used to deny", ur: "Enter it today for what you used to deny" }, explanation: { en: "Entry as consequence of denial", ur: "Entry as consequence of denial" }, verseRef: "36:64" },
-        { term: "الْيَوْمَ نَخْتِمُ عَلَىٰ أَفْوَاهِهِمْ", meaning: { en: "Today We seal their mouths", ur: "Today We seal their mouths" }, explanation: { en: "Mouths sealed - cannot speak lies", ur: "Mouths sealed - cannot speak lies" }, verseRef: "36:65" },
-        { term: "وَتُكَلِّمُنَا أَيْدِيهِمْ", meaning: { en: "And their hands will speak to Us", ur: "And their hands will speak to Us" }, explanation: { en: "Hands testify to deeds", ur: "Hands testify to deeds" }, verseRef: "36:65" },
-        { term: "وَتَشْهَدُ أَرْجُلُهُم", meaning: { en: "And their feet will testify", ur: "And their feet will testify" }, explanation: { en: "Feet witness where they walked", ur: "Feet witness where they walked" }, verseRef: "36:65" },
-        { term: "بِمَا كَانُوا يَكْسِبُونَ", meaning: { en: "About what they used to earn", ur: "About what they used to earn" }, explanation: { en: "Body parts witness all deeds", ur: "Body parts witness all deeds" }, verseRef: "36:65" }
+        { term: "هَٰذِهِ جَهَنَّمُ الَّتِي كُنتُمْ تُوعَدُونَ", meaning: { en: "This is the Hellfire which you were promised", ur: "یہ وہ جہنم ہے جس کا تم سے وعدہ کیا جاتا تھا" }, explanation: { en: "Confrontation with Hell", ur: "جہنم سے سامنا" }, verseRef: "36:63" },
+        { term: "اصْلَوْهَا الْيَوْمَ بِمَا كُنتُمْ تَكْفُرُونَ", meaning: { en: "Enter it today for what you used to deny", ur: "آج اس میں داخل ہو جاؤ اس کفر کی وجہ سے جو تم کرتے تھے" }, explanation: { en: "Entry as consequence of denial", ur: "انکار کے نتیجے میں داخلہ" }, verseRef: "36:64" },
+        { term: "الْيَوْمَ نَخْتِمُ عَلَىٰ أَفْوَاهِهِمْ", meaning: { en: "Today We seal their mouths", ur: "آج ہم ان کے منہ پر مہر لگا دیں گے" }, explanation: { en: "Mouths sealed - cannot speak lies", ur: "منہ بند - جھوٹ نہیں بول سکتے" }, verseRef: "36:65" },
+        { term: "وَتُكَلِّمُنَا أَيْدِيهِمْ", meaning: { en: "And their hands will speak to Us", ur: "اور ان کے ہاتھ ہم سے بولیں گے" }, explanation: { en: "Hands testify to deeds", ur: "ہاتھ اعمال کی گواہی دیں گے" }, verseRef: "36:65" },
+        { term: "وَتَشْهَدُ أَرْجُلُهُم", meaning: { en: "And their feet will testify", ur: "اور ان کے پاؤں گواہی دیں گے" }, explanation: { en: "Feet witness where they walked", ur: "پاؤں گواہی دیں گے کہ کہاں چلے" }, verseRef: "36:65" },
+        { term: "بِمَا كَانُوا يَكْسِبُونَ", meaning: { en: "About what they used to earn", ur: "اس کے بارے میں جو وہ کمایا کرتے تھے" }, explanation: { en: "Body parts witness all deeds", ur: "جسم کے اعضاء تمام اعمال کی گواہی دیں گے" }, verseRef: "36:65" }
       ]
     },
 
     // DIVINE POWER PROOFS (66-76)
     divineAbilities: {
       name: "Divine Abilities",
+      nameUr: "الٰہی قدرتیں",
       nameArabic: "القدرة الإلهية",
       color: "#F59E0B",
       icon: "Crown",
       concepts: [
-        { term: "وَلَوْ نَشَاءُ لَطَمَسْنَا عَلَىٰ أَعْيُنِهِمْ", meaning: { en: "If We willed, We could have obliterated their eyes", ur: "If We willed, We could have obliterated their eyes" }, explanation: { en: "Allah could blind them", ur: "Allah could blind them" }, verseRef: "36:66" },
-        { term: "فَاسْتَبَقُوا الصِّرَاطَ فَأَنَّىٰ يُبْصِرُونَ", meaning: { en: "Then they would race to the path, but how could they see?", ur: "Then they would race to the path, but how could they see?" }, explanation: { en: "Without guidance, cannot find the way", ur: "Without guidance, cannot find the way" }, verseRef: "36:66" },
-        { term: "وَلَوْ نَشَاءُ لَمَسَخْنَاهُمْ عَلَىٰ مَكَانَتِهِمْ", meaning: { en: "If We willed, We could have transformed them in their places", ur: "If We willed, We could have transformed them in their places" }, explanation: { en: "Allah could disfigure them", ur: "Allah could disfigure them" }, verseRef: "36:67" },
-        { term: "فَمَا اسْتَطَاعُوا مُضِيًّا وَلَا يَرْجِعُونَ", meaning: { en: "So they would not be able to proceed, nor return", ur: "So they would not be able to proceed, nor return" }, explanation: { en: "Complete paralysis if Allah willed", ur: "Complete paralysis if Allah willed" }, verseRef: "36:67" }
+        { term: "وَلَوْ نَشَاءُ لَطَمَسْنَا عَلَىٰ أَعْيُنِهِمْ", meaning: { en: "If We willed, We could have obliterated their eyes", ur: "اور اگر ہم چاہیں تو ان کی آنکھیں مٹا دیں" }, explanation: { en: "Allah could blind them", ur: "اللہ انہیں اندھا کر سکتا ہے" }, verseRef: "36:66" },
+        { term: "فَاسْتَبَقُوا الصِّرَاطَ فَأَنَّىٰ يُبْصِرُونَ", meaning: { en: "Then they would race to the path, but how could they see?", ur: "پھر وہ راستے کی طرف دوڑیں تو کیسے دیکھیں؟" }, explanation: { en: "Without guidance, cannot find the way", ur: "ہدایت کے بغیر راستہ نہیں مل سکتا" }, verseRef: "36:66" },
+        { term: "وَلَوْ نَشَاءُ لَمَسَخْنَاهُمْ عَلَىٰ مَكَانَتِهِمْ", meaning: { en: "If We willed, We could have transformed them in their places", ur: "اور اگر ہم چاہیں تو انہیں ان کی جگہ پر بگاڑ دیں" }, explanation: { en: "Allah could disfigure them", ur: "اللہ ان کی شکل بدل سکتا ہے" }, verseRef: "36:67" },
+        { term: "فَمَا اسْتَطَاعُوا مُضِيًّا وَلَا يَرْجِعُونَ", meaning: { en: "So they would not be able to proceed, nor return", ur: "تو نہ آگے جا سکیں نہ پیچھے لوٹ سکیں" }, explanation: { en: "Complete paralysis if Allah willed", ur: "اللہ چاہے تو مکمل بے بسی" }, verseRef: "36:67" }
       ]
     },
 
     agingAsSign: {
       name: "Aging as a Sign",
+      nameUr: "بڑھاپا بطور نشانی",
       nameArabic: "آية الشيخوخة",
       color: "#06B6D4",
       icon: "Eye",
       concepts: [
-        { term: "وَمَن نُّعَمِّرْهُ نُنَكِّسْهُ فِي الْخَلْقِ", meaning: { en: "And whoever We grant long life - We reverse him in creation", ur: "And whoever We grant long life - We reverse him in creation" }, explanation: { en: "Old age reverses physical abilities", ur: "Old age reverses physical abilities" }, verseRef: "36:68" },
-        { term: "أَفَلَا يَعْقِلُونَ", meaning: { en: "Will they not use reason?", ur: "Will they not use reason?" }, explanation: { en: "Call to reflect on life cycle", ur: "Call to reflect on life cycle" }, verseRef: "36:68" }
+        { term: "وَمَن نُّعَمِّرْهُ نُنَكِّسْهُ فِي الْخَلْقِ", meaning: { en: "And whoever We grant long life - We reverse him in creation", ur: "اور جسے ہم لمبی عمر دیں اسے خلقت میں الٹا کر دیتے ہیں" }, explanation: { en: "Old age reverses physical abilities", ur: "بڑھاپا جسمانی صلاحیتوں کو الٹ دیتا ہے" }, verseRef: "36:68" },
+        { term: "أَفَلَا يَعْقِلُونَ", meaning: { en: "Will they not use reason?", ur: "کیا وہ عقل نہیں رکھتے؟" }, explanation: { en: "Call to reflect on life cycle", ur: "زندگی کے دور پر غور کرنے کی دعوت" }, verseRef: "36:68" }
       ]
     },
 
     quranNotPoetry: {
       name: "The Quran is Not Poetry",
+      nameUr: "قرآن شاعری نہیں",
       nameArabic: "القرآن ليس شعرا",
       color: "#3B82F6",
       icon: "Book",
       concepts: [
-        { term: "وَمَا عَلَّمْنَاهُ الشِّعْرَ", meaning: { en: "We did not teach him poetry", ur: "We did not teach him poetry" }, explanation: { en: "Prophet was not a poet", ur: "Prophet was not a poet" }, verseRef: "36:69" },
-        { term: "وَمَا يَنبَغِي لَهُ", meaning: { en: "Nor is it befitting for him", ur: "Nor is it befitting for him" }, explanation: { en: "Poetry unfitting for prophecy", ur: "Poetry unfitting for prophecy" }, verseRef: "36:69" },
-        { term: "إِنْ هُوَ إِلَّا ذِكْرٌ وَقُرْآنٌ مُّبِينٌ", meaning: { en: "It is only a reminder and a clear Quran", ur: "It is only a reminder and a clear Quran" }, explanation: { en: "Quran is divine reminder, not human composition", ur: "Quran is divine reminder, not human composition" }, verseRef: "36:69" },
-        { term: "لِّيُنذِرَ مَن كَانَ حَيًّا", meaning: { en: "To warn whoever is alive", ur: "To warn whoever is alive" }, explanation: { en: "Warning for the spiritually alive", ur: "Warning for the spiritually alive" }, verseRef: "36:70" },
-        { term: "وَيَحِقَّ الْقَوْلُ عَلَى الْكَافِرِينَ", meaning: { en: "And justify the word against the disbelievers", ur: "And justify the word against the disbelievers" }, explanation: { en: "Establishing proof against deniers", ur: "Establishing proof against deniers" }, verseRef: "36:70" }
+        { term: "وَمَا عَلَّمْنَاهُ الشِّعْرَ", meaning: { en: "We did not teach him poetry", ur: "اور ہم نے انہیں شعر نہیں سکھایا" }, explanation: { en: "Prophet was not a poet", ur: "نبی ﷺ شاعر نہیں تھے" }, verseRef: "36:69" },
+        { term: "وَمَا يَنبَغِي لَهُ", meaning: { en: "Nor is it befitting for him", ur: "اور نہ یہ ان کے شایانِ شان ہے" }, explanation: { en: "Poetry unfitting for prophecy", ur: "شاعری نبوت کے لائق نہیں" }, verseRef: "36:69" },
+        { term: "إِنْ هُوَ إِلَّا ذِكْرٌ وَقُرْآنٌ مُّبِينٌ", meaning: { en: "It is only a reminder and a clear Quran", ur: "یہ تو بس ایک نصیحت اور واضح قرآن ہے" }, explanation: { en: "Quran is divine reminder, not human composition", ur: "قرآن الٰہی نصیحت ہے، انسانی تصنیف نہیں" }, verseRef: "36:69" },
+        { term: "لِّيُنذِرَ مَن كَانَ حَيًّا", meaning: { en: "To warn whoever is alive", ur: "تاکہ جو زندہ ہو اسے ڈرائے" }, explanation: { en: "Warning for the spiritually alive", ur: "روحانی طور پر زندہ لوگوں کے لیے تنبیہ" }, verseRef: "36:70" },
+        { term: "وَيَحِقَّ الْقَوْلُ عَلَى الْكَافِرِينَ", meaning: { en: "And justify the word against the disbelievers", ur: "اور کافروں پر بات ثابت ہو جائے" }, explanation: { en: "Establishing proof against deniers", ur: "منکرین کے خلاف حجت قائم کرنا" }, verseRef: "36:70" }
       ]
     },
 
     signsInLivestock: {
       name: "Signs in Livestock",
+      nameUr: "مویشیوں میں نشانیاں",
       nameArabic: "آية الأنعام",
       color: "#10B981",
       icon: "Globe",
       concepts: [
-        { term: "أَوَلَمْ يَرَوْا أَنَّا خَلَقْنَا لَهُم مِّمَّا عَمِلَتْ أَيْدِينَا أَنْعَامًا", meaning: { en: "Do they not see that We created for them from what Our hands made - livestock", ur: "Do they not see that We created for them from what Our hands made - livestock" }, explanation: { en: "Cattle as divine creation for humans", ur: "Cattle as divine creation for humans" }, verseRef: "36:71" },
-        { term: "فَهُمْ لَهَا مَالِكُونَ", meaning: { en: "And they are their owners", ur: "And they are their owners" }, explanation: { en: "Human dominion over animals", ur: "Human dominion over animals" }, verseRef: "36:71" },
-        { term: "وَذَلَّلْنَاهَا لَهُمْ", meaning: { en: "And We have tamed them for them", ur: "And We have tamed them for them" }, explanation: { en: "Animals made submissive to humans", ur: "Animals made submissive to humans" }, verseRef: "36:72" },
-        { term: "فَمِنْهَا رَكُوبُهُمْ", meaning: { en: "So some of them they ride", ur: "So some of them they ride" }, explanation: { en: "Transportation blessing", ur: "Transportation blessing" }, verseRef: "36:72" },
-        { term: "وَمِنْهَا يَأْكُلُونَ", meaning: { en: "And some of them they eat", ur: "And some of them they eat" }, explanation: { en: "Food blessing", ur: "Food blessing" }, verseRef: "36:72" },
-        { term: "وَلَهُمْ فِيهَا مَنَافِعُ وَمَشَارِبُ", meaning: { en: "And for them therein are benefits and drinks", ur: "And for them therein are benefits and drinks" }, explanation: { en: "Milk and other uses", ur: "Milk and other uses" }, verseRef: "36:73" },
-        { term: "أَفَلَا يَشْكُرُونَ", meaning: { en: "So will they not be grateful?", ur: "So will they not be grateful?" }, explanation: { en: "Call to gratitude for animal blessings", ur: "Call to gratitude for animal blessings" }, verseRef: "36:73" }
+        { term: "أَوَلَمْ يَرَوْا أَنَّا خَلَقْنَا لَهُم مِّمَّا عَمِلَتْ أَيْدِينَا أَنْعَامًا", meaning: { en: "Do they not see that We created for them from what Our hands made - livestock", ur: "کیا وہ نہیں دیکھتے کہ ہم نے اپنے ہاتھوں سے بنائی ہوئی چیزوں سے ان کے لیے جانور پیدا کیے" }, explanation: { en: "Cattle as divine creation for humans", ur: "مویشی بطور انسانوں کے لیے الٰہی تخلیق" }, verseRef: "36:71" },
+        { term: "فَهُمْ لَهَا مَالِكُونَ", meaning: { en: "And they are their owners", ur: "تو وہ ان کے مالک ہیں" }, explanation: { en: "Human dominion over animals", ur: "جانوروں پر انسانی تسلط" }, verseRef: "36:71" },
+        { term: "وَذَلَّلْنَاهَا لَهُمْ", meaning: { en: "And We have tamed them for them", ur: "اور ہم نے انہیں ان کے لیے مسخر کر دیا" }, explanation: { en: "Animals made submissive to humans", ur: "جانوروں کو انسانوں کے تابع بنایا" }, verseRef: "36:72" },
+        { term: "فَمِنْهَا رَكُوبُهُمْ", meaning: { en: "So some of them they ride", ur: "تو ان میں سے بعض ان کی سواری ہیں" }, explanation: { en: "Transportation blessing", ur: "سواری کی نعمت" }, verseRef: "36:72" },
+        { term: "وَمِنْهَا يَأْكُلُونَ", meaning: { en: "And some of them they eat", ur: "اور بعض کو وہ کھاتے ہیں" }, explanation: { en: "Food blessing", ur: "خوراک کی نعمت" }, verseRef: "36:72" },
+        { term: "وَلَهُمْ فِيهَا مَنَافِعُ وَمَشَارِبُ", meaning: { en: "And for them therein are benefits and drinks", ur: "اور ان کے لیے ان میں فائدے اور مشروبات ہیں" }, explanation: { en: "Milk and other uses", ur: "دودھ اور دیگر استعمال" }, verseRef: "36:73" },
+        { term: "أَفَلَا يَشْكُرُونَ", meaning: { en: "So will they not be grateful?", ur: "تو کیا وہ شکر نہیں کرتے؟" }, explanation: { en: "Call to gratitude for animal blessings", ur: "جانوروں کی نعمتوں پر شکر ادا کرنے کی دعوت" }, verseRef: "36:73" }
       ]
     },
 
     falseGods: {
       name: "Futility of False Gods",
+      nameUr: "جھوٹے معبودوں کی بے کاری",
       nameArabic: "بطلان الآلهة الباطلة",
       color: "#EF4444",
       icon: "Shield",
       concepts: [
-        { term: "وَاتَّخَذُوا مِن دُونِ اللَّهِ آلِهَةً", meaning: { en: "But they have taken besides Allah gods", ur: "But they have taken besides Allah gods" }, explanation: { en: "Polytheism - taking other gods", ur: "Polytheism - taking other gods" }, verseRef: "36:74" },
-        { term: "لَعَلَّهُمْ يُنصَرُونَ", meaning: { en: "That perhaps they would be helped", ur: "That perhaps they would be helped" }, explanation: { en: "False hope in false gods", ur: "False hope in false gods" }, verseRef: "36:74" },
-        { term: "لَا يَسْتَطِيعُونَ نَصْرَهُمْ", meaning: { en: "They are not able to help them", ur: "They are not able to help them" }, explanation: { en: "False gods are powerless", ur: "False gods are powerless" }, verseRef: "36:75" },
-        { term: "وَهُمْ لَهُمْ جُندٌ مُّحْضَرُونَ", meaning: { en: "And they will be soldiers brought forward", ur: "And they will be soldiers brought forward" }, explanation: { en: "Idols become evidence against worshippers", ur: "Idols become evidence against worshippers" }, verseRef: "36:75" },
-        { term: "فَلَا يَحْزُنكَ قَوْلُهُمْ", meaning: { en: "So let not their speech grieve you", ur: "So let not their speech grieve you" }, explanation: { en: "Comfort to the Prophet", ur: "Comfort to the Prophet" }, verseRef: "36:76" },
-        { term: "إِنَّا نَعْلَمُ مَا يُسِرُّونَ وَمَا يُعْلِنُونَ", meaning: { en: "Indeed, We know what they conceal and what they declare", ur: "Indeed, We know what they conceal and what they declare" }, explanation: { en: "Allah knows all secrets", ur: "Allah knows all secrets" }, verseRef: "36:76" }
+        { term: "وَاتَّخَذُوا مِن دُونِ اللَّهِ آلِهَةً", meaning: { en: "But they have taken besides Allah gods", ur: "لیکن انہوں نے اللہ کے سوا معبود بنا لیے" }, explanation: { en: "Polytheism - taking other gods", ur: "شرک - دوسرے معبود بنانا" }, verseRef: "36:74" },
+        { term: "لَعَلَّهُمْ يُنصَرُونَ", meaning: { en: "That perhaps they would be helped", ur: "شاید ان کی مدد کی جائے" }, explanation: { en: "False hope in false gods", ur: "جھوٹے معبودوں سے جھوٹی امید" }, verseRef: "36:74" },
+        { term: "لَا يَسْتَطِيعُونَ نَصْرَهُمْ", meaning: { en: "They are not able to help them", ur: "وہ ان کی مدد نہیں کر سکتے" }, explanation: { en: "False gods are powerless", ur: "جھوٹے معبود بے بس ہیں" }, verseRef: "36:75" },
+        { term: "وَهُمْ لَهُمْ جُندٌ مُّحْضَرُونَ", meaning: { en: "And they will be soldiers brought forward", ur: "اور وہ ان کے لیے لشکر کی طرح حاضر کیے جائیں گے" }, explanation: { en: "Idols become evidence against worshippers", ur: "بت پوجنے والوں کے خلاف گواہ بن جائیں گے" }, verseRef: "36:75" },
+        { term: "فَلَا يَحْزُنكَ قَوْلُهُمْ", meaning: { en: "So let not their speech grieve you", ur: "تو ان کی بات آپ کو غمگین نہ کرے" }, explanation: { en: "Comfort to the Prophet", ur: "نبی ﷺ کو تسلی" }, verseRef: "36:76" },
+        { term: "إِنَّا نَعْلَمُ مَا يُسِرُّونَ وَمَا يُعْلِنُونَ", meaning: { en: "Indeed, We know what they conceal and what they declare", ur: "بیشک ہم جانتے ہیں جو وہ چھپاتے ہیں اور جو ظاہر کرتے ہیں" }, explanation: { en: "Allah knows all secrets", ur: "اللہ تمام رازوں کو جانتا ہے" }, verseRef: "36:76" }
       ]
     },
 
     // CLOSING ARGUMENT - RESURRECTION PROOF (77-83)
     humanCreation: {
       name: "Human Creation Proof",
+      nameUr: "انسانی تخلیق کا ثبوت",
       nameArabic: "دليل خلق الإنسان",
       color: "#06B6D4",
       icon: "Users",
       concepts: [
-        { term: "أَوَلَمْ يَرَ الْإِنسَانُ أَنَّا خَلَقْنَاهُ مِن نُّطْفَةٍ", meaning: { en: "Does man not see that We created him from a sperm-drop", ur: "Does man not see that We created him from a sperm-drop" }, explanation: { en: "Humble origin of humans", ur: "Humble origin of humans" }, verseRef: "36:77" },
-        { term: "فَإِذَا هُوَ خَصِيمٌ مُّبِينٌ", meaning: { en: "Then at once he is a clear adversary", ur: "Then at once he is a clear adversary" }, explanation: { en: "Despite humble origin, he argues", ur: "Despite humble origin, he argues" }, verseRef: "36:77" },
-        { term: "وَضَرَبَ لَنَا مَثَلًا", meaning: { en: "And he presents an example for Us", ur: "And he presents an example for Us" }, explanation: { en: "Man makes arguments against Allah", ur: "Man makes arguments against Allah" }, verseRef: "36:78" },
-        { term: "وَنَسِيَ خَلْقَهُ", meaning: { en: "And forgets his own creation", ur: "And forgets his own creation" }, explanation: { en: "Forgets he was created from nothing", ur: "Forgets he was created from nothing" }, verseRef: "36:78" },
-        { term: "قَالَ مَن يُحْيِي الْعِظَامَ وَهِيَ رَمِيمٌ", meaning: { en: "He says: Who will give life to bones while they are disintegrated?", ur: "He says: Who will give life to bones while they are disintegrated?" }, explanation: { en: "Skeptic's question about resurrection", ur: "Skeptic's question about resurrection" }, verseRef: "36:78" }
+        { term: "أَوَلَمْ يَرَ الْإِنسَانُ أَنَّا خَلَقْنَاهُ مِن نُّطْفَةٍ", meaning: { en: "Does man not see that We created him from a sperm-drop", ur: "کیا انسان نے نہیں دیکھا کہ ہم نے اسے نطفے سے پیدا کیا" }, explanation: { en: "Humble origin of humans", ur: "انسان کی حقیر ابتدا" }, verseRef: "36:77" },
+        { term: "فَإِذَا هُوَ خَصِيمٌ مُّبِينٌ", meaning: { en: "Then at once he is a clear adversary", ur: "پھر وہ کھلا جھگڑالو بن جاتا ہے" }, explanation: { en: "Despite humble origin, he argues", ur: "حقیر ابتدا کے باوجود جھگڑا کرتا ہے" }, verseRef: "36:77" },
+        { term: "وَضَرَبَ لَنَا مَثَلًا", meaning: { en: "And he presents an example for Us", ur: "اور وہ ہمارے لیے مثال بیان کرتا ہے" }, explanation: { en: "Man makes arguments against Allah", ur: "انسان اللہ کے خلاف دلیلیں دیتا ہے" }, verseRef: "36:78" },
+        { term: "وَنَسِيَ خَلْقَهُ", meaning: { en: "And forgets his own creation", ur: "اور اپنی پیدائش بھول جاتا ہے" }, explanation: { en: "Forgets he was created from nothing", ur: "بھول جاتا ہے کہ وہ عدم سے بنایا گیا" }, verseRef: "36:78" },
+        { term: "قَالَ مَن يُحْيِي الْعِظَامَ وَهِيَ رَمِيمٌ", meaning: { en: "He says: Who will give life to bones while they are disintegrated?", ur: "کہتا ہے: ہڈیوں کو کون زندہ کرے گا جبکہ وہ بوسیدہ ہو چکی ہیں؟" }, explanation: { en: "Skeptic's question about resurrection", ur: "قیامت کے بارے میں منکر کا سوال" }, verseRef: "36:78" }
       ]
     },
 
     divineResponse: {
       name: "Divine Response to Skeptics",
+      nameUr: "شک کرنے والوں کو الٰہی جواب",
       nameArabic: "الرد الإلهي على المنكرين",
       color: "#F59E0B",
       icon: "MessageCircle",
       concepts: [
-        { term: "قُلْ يُحْيِيهَا الَّذِي أَنشَأَهَا أَوَّلَ مَرَّةٍ", meaning: { en: "Say: He who produced them the first time will give them life", ur: "Say: He who produced them the first time will give them life" }, explanation: { en: "First creation proves ability for second", ur: "First creation proves ability for second" }, verseRef: "36:79" },
-        { term: "وَهُوَ بِكُلِّ خَلْقٍ عَلِيمٌ", meaning: { en: "And He is of all creation Knowing", ur: "And He is of all creation Knowing" }, explanation: { en: "Allah knows every creation", ur: "Allah knows every creation" }, verseRef: "36:79" },
-        { term: "الَّذِي جَعَلَ لَكُم مِّنَ الشَّجَرِ الْأَخْضَرِ نَارًا", meaning: { en: "He who made for you from the green tree fire", ur: "He who made for you from the green tree fire" }, explanation: { en: "Opposite elements from same source", ur: "Opposite elements from same source" }, verseRef: "36:80" },
-        { term: "فَإِذَا أَنتُم مِّنْهُ تُوقِدُونَ", meaning: { en: "And then from it you ignite", ur: "And then from it you ignite" }, explanation: { en: "Fire from green wood - divine power", ur: "Fire from green wood - divine power" }, verseRef: "36:80" }
+        { term: "قُلْ يُحْيِيهَا الَّذِي أَنشَأَهَا أَوَّلَ مَرَّةٍ", meaning: { en: "Say: He who produced them the first time will give them life", ur: "کہو: انہیں وہی زندہ کرے گا جس نے پہلی بار بنایا" }, explanation: { en: "First creation proves ability for second", ur: "پہلی تخلیق دوسری بار بنانے کی صلاحیت ثابت کرتی ہے" }, verseRef: "36:79" },
+        { term: "وَهُوَ بِكُلِّ خَلْقٍ عَلِيمٌ", meaning: { en: "And He is of all creation Knowing", ur: "اور وہ ہر تخلیق کو جاننے والا ہے" }, explanation: { en: "Allah knows every creation", ur: "اللہ ہر مخلوق کو جانتا ہے" }, verseRef: "36:79" },
+        { term: "الَّذِي جَعَلَ لَكُم مِّنَ الشَّجَرِ الْأَخْضَرِ نَارًا", meaning: { en: "He who made for you from the green tree fire", ur: "جس نے تمہارے لیے ہرے درخت سے آگ بنائی" }, explanation: { en: "Opposite elements from same source", ur: "ایک ہی ماخذ سے متضاد عناصر" }, verseRef: "36:80" },
+        { term: "فَإِذَا أَنتُم مِّنْهُ تُوقِدُونَ", meaning: { en: "And then from it you ignite", ur: "پھر تم اس سے آگ جلاتے ہو" }, explanation: { en: "Fire from green wood - divine power", ur: "ہری لکڑی سے آگ - الٰہی قدرت" }, verseRef: "36:80" }
       ]
     },
 
     ultimateProof: {
       name: "Ultimate Proof of Divine Power",
+      nameUr: "الٰہی قدرت کا حتمی ثبوت",
       nameArabic: "البرهان النهائي للقدرة الإلهية",
       color: "#F59E0B",
       icon: "Star",
       concepts: [
-        { term: "أَوَلَيْسَ الَّذِي خَلَقَ السَّمَاوَاتِ وَالْأَرْضَ", meaning: { en: "Is not He who created the heavens and earth", ur: "Is not He who created the heavens and earth" }, explanation: { en: "Creator of cosmos can recreate humans", ur: "Creator of cosmos can recreate humans" }, verseRef: "36:81" },
-        { term: "بِقَادِرٍ عَلَىٰ أَن يَخْلُقَ مِثْلَهُم", meaning: { en: "Able to create the likes of them?", ur: "Able to create the likes of them?" }, explanation: { en: "Rhetorical - of course He can", ur: "Rhetorical - of course He can" }, verseRef: "36:81" },
-        { term: "بَلَىٰ", meaning: { en: "Yes indeed", ur: "Yes indeed" }, explanation: { en: "Emphatic affirmation", ur: "Emphatic affirmation" }, verseRef: "36:81" },
-        { term: "وَهُوَ الْخَلَّاقُ الْعَلِيمُ", meaning: { en: "And He is the Knowing Creator", ur: "And He is the Knowing Creator" }, explanation: { en: "Perpetual Creator with complete knowledge", ur: "Perpetual Creator with complete knowledge" }, verseRef: "36:81" },
-        { term: "إِنَّمَا أَمْرُهُ إِذَا أَرَادَ شَيْئًا", meaning: { en: "His command is only when He intends a thing", ur: "His command is only when He intends a thing" }, explanation: { en: "Divine will is immediate", ur: "Divine will is immediate" }, verseRef: "36:82" },
-        { term: "أَن يَقُولَ لَهُ كُن فَيَكُونُ", meaning: { en: "That He says to it 'Be' and it is", ur: "That He says to it 'Be' and it is" }, explanation: { en: "Kun Fayakun - creation by command", ur: "Kun Fayakun - creation by command" }, verseRef: "36:82" },
-        { term: "فَسُبْحَانَ الَّذِي بِيَدِهِ مَلَكُوتُ كُلِّ شَيْءٍ", meaning: { en: "Exalted is He in whose hand is the realm of all things", ur: "Exalted is He in whose hand is the realm of all things" }, explanation: { en: "Complete divine sovereignty", ur: "Complete divine sovereignty" }, verseRef: "36:83" },
-        { term: "وَإِلَيْهِ تُرْجَعُونَ", meaning: { en: "And to Him you will be returned", ur: "And to Him you will be returned" }, explanation: { en: "Final return to Allah - closing message", ur: "Final return to Allah - closing message" }, verseRef: "36:83" }
+        { term: "أَوَلَيْسَ الَّذِي خَلَقَ السَّمَاوَاتِ وَالْأَرْضَ", meaning: { en: "Is not He who created the heavens and earth", ur: "کیا وہ جس نے آسمانوں اور زمین کو پیدا کیا" }, explanation: { en: "Creator of cosmos can recreate humans", ur: "کائنات کا خالق انسانوں کو دوبارہ بنا سکتا ہے" }, verseRef: "36:81" },
+        { term: "بِقَادِرٍ عَلَىٰ أَن يَخْلُقَ مِثْلَهُم", meaning: { en: "Able to create the likes of them?", ur: "ان جیسے پیدا کرنے پر قادر نہیں؟" }, explanation: { en: "Rhetorical - of course He can", ur: "استفہامیہ سوال - یقیناً وہ قادر ہے" }, verseRef: "36:81" },
+        { term: "بَلَىٰ", meaning: { en: "Yes indeed", ur: "کیوں نہیں" }, explanation: { en: "Emphatic affirmation", ur: "زور دار تصدیق" }, verseRef: "36:81" },
+        { term: "وَهُوَ الْخَلَّاقُ الْعَلِيمُ", meaning: { en: "And He is the Knowing Creator", ur: "اور وہی بہت پیدا کرنے والا علم والا ہے" }, explanation: { en: "Perpetual Creator with complete knowledge", ur: "مکمل علم والا دائمی خالق" }, verseRef: "36:81" },
+        { term: "إِنَّمَا أَمْرُهُ إِذَا أَرَادَ شَيْئًا", meaning: { en: "His command is only when He intends a thing", ur: "اس کا حکم جب کوئی چیز چاہے تو بس یہ ہے" }, explanation: { en: "Divine will is immediate", ur: "الٰہی ارادہ فوری ہے" }, verseRef: "36:82" },
+        { term: "أَن يَقُولَ لَهُ كُن فَيَكُونُ", meaning: { en: "That He says to it 'Be' and it is", ur: "کہ اسے کہے 'ہو جا' اور وہ ہو جاتی ہے" }, explanation: { en: "Kun Fayakun - creation by command", ur: "کُن فَیَکُون - حکم سے تخلیق" }, verseRef: "36:82" },
+        { term: "فَسُبْحَانَ الَّذِي بِيَدِهِ مَلَكُوتُ كُلِّ شَيْءٍ", meaning: { en: "Exalted is He in whose hand is the realm of all things", ur: "پاک ہے وہ ذات جس کے ہاتھ میں ہر چیز کی بادشاہی ہے" }, explanation: { en: "Complete divine sovereignty", ur: "مکمل الٰہی حاکمیت" }, verseRef: "36:83" },
+        { term: "وَإِلَيْهِ تُرْجَعُونَ", meaning: { en: "And to Him you will be returned", ur: "اور اسی کی طرف تم لوٹائے جاؤ گے" }, explanation: { en: "Final return to Allah - closing message", ur: "اللہ کی طرف آخری واپسی - اختتامی پیغام" }, verseRef: "36:83" }
       ]
     }
   },
 
   relationships: [
     // Prophethood connections
-    { from: "والقرآن الحكيم", to: "إنك لمن المرسلين", type: "oath-proof", description: { en: "Quran testifies to Prophet's messengership", ur: "Quran testifies to Prophet's messengership" } },
-    { from: "لتنذر قوماً", to: "فهم غافلون", type: "purpose", description: { en: "Warning to awaken the heedless", ur: "Warning to awaken the heedless" } },
-    { from: "من اتبع الذكر", to: "بمغفرة وأجر كريم", type: "reward", description: { en: "Following reminder leads to forgiveness", ur: "Following reminder leads to forgiveness" } },
+    { from: "والقرآن الحكيم", to: "إنك لمن المرسلين", type: "oath-proof", description: { en: "Quran testifies to Prophet's messengership", ur: "قرآن نبی ﷺ کی رسالت کی گواہی دیتا ہے" } },
+    { from: "لتنذر قوماً", to: "فهم غافلون", type: "purpose", description: { en: "Warning to awaken the heedless", ur: "غافلوں کو جگانے کے لیے تنبیہ" } },
+    { from: "من اتبع الذكر", to: "بمغفرة وأجر كريم", type: "reward", description: { en: "Following reminder leads to forgiveness", ur: "نصیحت کی پیروی مغفرت کی طرف لے جاتی ہے" } },
 
     // Town story connections
-    { from: "أصحاب القرية", to: "ما أنتم إلا بشر", type: "pattern", description: { en: "Same rejection faced by Prophet", ur: "Same rejection faced by Prophet" } },
-    { from: "جاء من أقصى المدينة رجل", to: "ادخل الجنة", type: "martyrdom", description: { en: "Running for truth leads to Paradise", ur: "Running for truth leads to Paradise" } },
-    { from: "صيحة واحدة", to: "خامدون", type: "swift-justice", description: { en: "Single blast brings swift destruction", ur: "Single blast brings swift destruction" } },
+    { from: "أصحاب القرية", to: "ما أنتم إلا بشر", type: "pattern", description: { en: "Same rejection faced by Prophet", ur: "وہی رد جو نبی ﷺ کو سہنا پڑا" } },
+    { from: "جاء من أقصى المدينة رجل", to: "ادخل الجنة", type: "martyrdom", description: { en: "Running for truth leads to Paradise", ur: "سچائی کے لیے دوڑنا جنت کی طرف لے جاتا ہے" } },
+    { from: "صيحة واحدة", to: "خامدون", type: "swift-justice", description: { en: "Single blast brings swift destruction", ur: "ایک دھماکے نے تیز تباہی لائی" } },
 
     // Signs connections
-    { from: "الأرض الميتة", to: "أحييناها", type: "proof", description: { en: "Dead earth revival proves resurrection", ur: "Dead earth revival proves resurrection" } },
-    { from: "خلق الأزواج كلها", to: "سبحان", type: "glorification", description: { en: "Pairs in creation inspire glorification", ur: "Pairs in creation inspire glorification" } },
-    { from: "الشمس تجري", to: "القمر قدرناه منازل", type: "system", description: { en: "Celestial bodies in precise system", ur: "Celestial bodies in precise system" } },
-    { from: "الفلك المشحون", to: "إلا رحمة منا", type: "dependence", description: { en: "All safety depends on divine mercy", ur: "All safety depends on divine mercy" } },
+    { from: "الأرض الميتة", to: "أحييناها", type: "proof", description: { en: "Dead earth revival proves resurrection", ur: "مُردہ زمین کا زندہ ہونا قیامت ثابت کرتا ہے" } },
+    { from: "خلق الأزواج كلها", to: "سبحان", type: "glorification", description: { en: "Pairs in creation inspire glorification", ur: "تخلیق میں جوڑے تسبیح کی ترغیب دیتے ہیں" } },
+    { from: "الشمس تجري", to: "القمر قدرناه منازل", type: "system", description: { en: "Celestial bodies in precise system", ur: "آسمانی اجرام درست نظام میں" } },
+    { from: "الفلك المشحون", to: "إلا رحمة منا", type: "dependence", description: { en: "All safety depends on divine mercy", ur: "تمام حفاظت الٰہی رحمت پر منحصر ہے" } },
 
     // Resurrection connections
-    { from: "نفخ في الصور", to: "من الأجداث ينسلون", type: "sequence", description: { en: "Trumpet leads to rising from graves", ur: "Trumpet leads to rising from graves" } },
-    { from: "أصحاب الجنة", to: "سلام قولاً", type: "reward", description: { en: "Paradise dwellers receive Allah's greeting", ur: "Paradise dwellers receive Allah's greeting" } },
-    { from: "لا تعبدوا الشيطان", to: "اعبدوني", type: "command", description: { en: "Reject Satan, worship Allah", ur: "Reject Satan, worship Allah" } },
+    { from: "نفخ في الصور", to: "من الأجداث ينسلون", type: "sequence", description: { en: "Trumpet leads to rising from graves", ur: "صور قبروں سے اٹھنے کی طرف لے جاتا ہے" } },
+    { from: "أصحاب الجنة", to: "سلام قولاً", type: "reward", description: { en: "Paradise dwellers receive Allah's greeting", ur: "جنت والوں کو اللہ کا سلام ملتا ہے" } },
+    { from: "لا تعبدوا الشيطان", to: "اعبدوني", type: "command", description: { en: "Reject Satan, worship Allah", ur: "شیطان کو رد کرو، اللہ کی عبادت کرو" } },
 
     // Final proof connections
-    { from: "خلقناه من نطفة", to: "من يحيي العظام", type: "irony", description: { en: "Sperm-drop doubts resurrection", ur: "Sperm-drop doubts resurrection" } },
-    { from: "أنشأها أول مرة", to: "بقادر على أن يخلق مثلهم", type: "logic", description: { en: "First creation proves ability for recreation", ur: "First creation proves ability for recreation" } },
-    { from: "كن", to: "فيكون", type: "divine-power", description: { en: "Creation by single command", ur: "Creation by single command" } }
+    { from: "خلقناه من نطفة", to: "من يحيي العظام", type: "irony", description: { en: "Sperm-drop doubts resurrection", ur: "نطفے سے بنا انسان قیامت پر شک کرتا ہے" } },
+    { from: "أنشأها أول مرة", to: "بقادر على أن يخلق مثلهم", type: "logic", description: { en: "First creation proves ability for recreation", ur: "پہلی تخلیق دوبارہ بنانے کی صلاحیت ثابت کرتی ہے" } },
+    { from: "كن", to: "فيكون", type: "divine-power", description: { en: "Creation by single command", ur: "ایک حکم سے تخلیق" } }
   ],
 
   thematicFlow: {
     stages: [
-      { stage: 1, theme: "Prophethood Affirmed", verses: "36:1-12", description: { en: "Oath by Quran, Prophet's mission, sealed hearts vs. receptive souls", ur: "Oath by Quran, Prophet's mission, sealed hearts vs. receptive souls" } },
-      { stage: 2, theme: "Story of the Messengers", verses: "36:13-19", description: { en: "Three messengers sent to a town, people reject them", ur: "Three messengers sent to a town, people reject them" } },
-      { stage: 3, theme: "The Believing Man", verses: "36:20-27", description: { en: "Man from edge of town, his faith, martyrdom, and Paradise entry", ur: "Man from edge of town, his faith, martyrdom, and Paradise entry" } },
-      { stage: 4, theme: "Town's Destruction", verses: "36:28-32", description: { en: "Single blast destroys town, historical pattern of rejection", ur: "Single blast destroys town, historical pattern of rejection" } },
-      { stage: 5, theme: "Signs in Creation", verses: "36:33-44", description: { en: "Dead earth, pairs, sun/moon, ships as divine signs", ur: "Dead earth, pairs, sun/moon, ships as divine signs" } },
-      { stage: 6, theme: "Warnings Rejected", verses: "36:45-50", description: { en: "Signs ignored, charity refused, resurrection mocked", ur: "Signs ignored, charity refused, resurrection mocked" } },
-      { stage: 7, theme: "Resurrection Scenes", verses: "36:51-58", description: { en: "Trumpet, rising from graves, Paradise delights", ur: "Trumpet, rising from graves, Paradise delights" } },
-      { stage: 8, theme: "Sinners Separated", verses: "36:59-68", description: { en: "Criminals separated, body parts testify, aging sign", ur: "Criminals separated, body parts testify, aging sign" } },
-      { stage: 9, theme: "Quran's Nature", verses: "36:69-76", description: { en: "Not poetry, livestock blessings, false gods futile", ur: "Not poetry, livestock blessings, false gods futile" } },
-      { stage: 10, theme: "Ultimate Proof", verses: "36:77-83", description: { en: "Bones argument, Kun Fayakun, return to Allah", ur: "Bones argument, Kun Fayakun, return to Allah" } }
+      { stage: 1, theme: "Prophethood Affirmed", verses: "36:1-12", description: { en: "Oath by Quran, Prophet's mission, sealed hearts vs. receptive souls", ur: "قرآن کی قسم، نبی ﷺ کا مشن، مہر لگے دل بمقابلہ قبول کرنے والی روحیں" } },
+      { stage: 2, theme: "Story of the Messengers", verses: "36:13-19", description: { en: "Three messengers sent to a town, people reject them", ur: "تین رسول ایک بستی میں بھیجے گئے، لوگوں نے انہیں رد کیا" } },
+      { stage: 3, theme: "The Believing Man", verses: "36:20-27", description: { en: "Man from edge of town, his faith, martyrdom, and Paradise entry", ur: "شہر کے کنارے سے ایک آدمی، اس کا ایمان، شہادت، اور جنت میں داخلہ" } },
+      { stage: 4, theme: "Town's Destruction", verses: "36:28-32", description: { en: "Single blast destroys town, historical pattern of rejection", ur: "ایک دھماکے نے بستی تباہ کی، انکار کا تاریخی سلسلہ" } },
+      { stage: 5, theme: "Signs in Creation", verses: "36:33-44", description: { en: "Dead earth, pairs, sun/moon, ships as divine signs", ur: "مُردہ زمین، جوڑے، سورج/چاند، کشتیاں بطور الٰہی نشانیاں" } },
+      { stage: 6, theme: "Warnings Rejected", verses: "36:45-50", description: { en: "Signs ignored, charity refused, resurrection mocked", ur: "نشانیاں نظر انداز، صدقہ سے انکار، قیامت کا مذاق" } },
+      { stage: 7, theme: "Resurrection Scenes", verses: "36:51-58", description: { en: "Trumpet, rising from graves, Paradise delights", ur: "صور، قبروں سے اٹھنا، جنت کی نعمتیں" } },
+      { stage: 8, theme: "Sinners Separated", verses: "36:59-68", description: { en: "Criminals separated, body parts testify, aging sign", ur: "مجرمین الگ کیے گئے، اعضاء گواہی دیں گے، بڑھاپے کی نشانی" } },
+      { stage: 9, theme: "Quran's Nature", verses: "36:69-76", description: { en: "Not poetry, livestock blessings, false gods futile", ur: "شاعری نہیں، مویشیوں کی نعمتیں، جھوٹے معبود بے سود" } },
+      { stage: 10, theme: "Ultimate Proof", verses: "36:77-83", description: { en: "Bones argument, Kun Fayakun, return to Allah", ur: "ہڈیوں کی دلیل، کُن فَیَکُون، اللہ کی طرف واپسی" } }
     ]
   },
 
@@ -493,13 +521,13 @@ export const ONTOLOGY = {
   },
 
   uniqueInsight: {
-    title: { en: "The Heart of the Quran", ur: "The Heart of the Quran" },
+    title: { en: "The Heart of the Quran", ur: "قرآن کا دل" },
     titleArabic: "قلب القرآن",
-    insight: { en: "The Prophet Muhammad (peace be upon him) called Surah Ya-Sin 'the heart of the Quran' (Tirmidhi). Just as the heart pumps life throughout the body, Ya-Sin pumps the central themes of the Quran - Tawheed, prophethood, and resurrection - into the believer's consciousness. The surah is recommended to be recited for the dying because it addresses the soul directly, affirming resurrection with powerful proofs: the dead earth brought to life (36:33), the story of the martyred believer immediately entering Paradise (36:26), and the ultimate truth that He who created the first time will recreate (36:79). The closing verses contain one of the Quran's most powerful declarations: 'His command when He intends a thing is only that He says to it Be! and it is' (36:82). This 'Kun Fayakun' (Be and it is) encapsulates divine omnipotence - Allah needs no process, no time, no cause; His will alone suffices. Reading Ya-Sin for the dying reminds the departing soul that the God who first created them from nothing has absolute power to resurrect them, and that Paradise awaits those who believed. The surah ends as it began - with the return to Allah, forming a complete circle of divine truth.", ur: "The Prophet Muhammad (peace be upon him) called Surah Ya-Sin 'the heart of the Quran' (Tirmidhi). Just as the heart pumps life throughout the body, Ya-Sin pumps the central themes of the Quran - Tawheed, prophethood, and resurrection - into the believer's consciousness. The surah is recommended to be recited for the dying because it addresses the soul directly, affirming resurrection with powerful proofs: the dead earth brought to life (36:33), the story of the martyred believer immediately entering Paradise (36:26), and the ultimate truth that He who created the first time will recreate (36:79). The closing verses contain one of the Quran's most powerful declarations: 'His command when He intends a thing is only that He says to it Be! and it is' (36:82). This 'Kun Fayakun' (Be and it is) encapsulates divine omnipotence - Allah needs no process, no time, no cause; His will alone suffices. Reading Ya-Sin for the dying reminds the departing soul that the God who first created them from nothing has absolute power to resurrect them, and that Paradise awaits those who believed. The surah ends as it began - with the return to Allah, forming a complete circle of divine truth." }
+    insight: { en: "The Prophet Muhammad (peace be upon him) called Surah Ya-Sin 'the heart of the Quran' (Tirmidhi). Just as the heart pumps life throughout the body, Ya-Sin pumps the central themes of the Quran - Tawheed, prophethood, and resurrection - into the believer's consciousness. The surah is recommended to be recited for the dying because it addresses the soul directly, affirming resurrection with powerful proofs: the dead earth brought to life (36:33), the story of the martyred believer immediately entering Paradise (36:26), and the ultimate truth that He who created the first time will recreate (36:79). The closing verses contain one of the Quran's most powerful declarations: 'His command when He intends a thing is only that He says to it Be! and it is' (36:82). This 'Kun Fayakun' (Be and it is) encapsulates divine omnipotence - Allah needs no process, no time, no cause; His will alone suffices. Reading Ya-Sin for the dying reminds the departing soul that the God who first created them from nothing has absolute power to resurrect them, and that Paradise awaits those who believed. The surah ends as it began - with the return to Allah, forming a complete circle of divine truth.", ur: "نبی محمد ﷺ نے سورۃ یٰس کو 'قرآن کا دل' کہا (ترمذی)۔ جیسے دل پورے جسم میں زندگی پہنچاتا ہے، یٰس قرآن کے مرکزی موضوعات - توحید، نبوت، اور قیامت - کو مومن کے شعور میں پہنچاتی ہے۔ اس سورت کو مرنے والوں کے لیے پڑھنے کی سفارش کی جاتی ہے کیونکہ یہ روح سے براہ راست مخاطب ہوتی ہے، طاقتور دلائل سے قیامت کی تصدیق کرتی ہے: مُردہ زمین کا زندہ ہونا (36:33)، شہید مومن کا فوری جنت میں داخلہ (36:26)، اور حتمی سچائی کہ جس نے پہلی بار بنایا وہی دوبارہ بنائے گا (36:79)۔ آخری آیات میں قرآن کے طاقتور ترین اعلانات میں سے ایک ہے: 'اس کا حکم جب کوئی چیز چاہے تو بس یہ ہے کہ کہے ہو جا اور وہ ہو جاتی ہے' (36:82)۔ یہ 'کُن فَیَکُون' الٰہی قدرتِ مطلقہ کا خلاصہ ہے - اللہ کو نہ عمل کی ضرورت، نہ وقت کی، نہ سبب کی؛ صرف اس کی مشیت کافی ہے۔ مرنے والے کے لیے یٰس پڑھنا رخصت ہوتی روح کو یاد دلاتا ہے کہ جس خدا نے عدم سے بنایا اس کے پاس دوبارہ زندہ کرنے کی مطلق قدرت ہے، اور ایمان لانے والوں کے لیے جنت منتظر ہے۔ سورت جیسے شروع ہوئی ویسے ہی ختم ہوتی ہے - اللہ کی طرف واپسی، الٰہی سچائی کا مکمل دائرہ بناتے ہوئے۔" }
   },
 
   virtueAndMerit: {
-    title: { en: "Virtues of Surah Ya-Sin", ur: "Virtues of Surah Ya-Sin" },
+    title: { en: "Virtues of Surah Ya-Sin", ur: "سورۃ یٰس کے فضائل" },
     titleArabic: "فضائل سورة يس",
     virtues: [
       {
@@ -527,11 +555,11 @@ export const ONTOLOGY = {
         benefit: "Morning recitation for daily needs"
       }
     ],
-    note: { en: "While some hadith about Ya-Sin's virtues have weak chains, scholars agree on its immense spiritual value based on its content alone. Its themes of resurrection, divine power, and the fate of believers and disbelievers make it profoundly impactful for reflection.", ur: "While some hadith about Ya-Sin's virtues have weak chains, scholars agree on its immense spiritual value based on its content alone. Its themes of resurrection, divine power, and the fate of believers and disbelievers make it profoundly impactful for reflection." }
+    note: { en: "While some hadith about Ya-Sin's virtues have weak chains, scholars agree on its immense spiritual value based on its content alone. Its themes of resurrection, divine power, and the fate of believers and disbelievers make it profoundly impactful for reflection.", ur: "اگرچہ یٰس کے فضائل کی بعض احادیث کی سندیں ضعیف ہیں، علماء صرف اس کے مضامین کی بنا پر اس کی عظیم روحانی قدر و قیمت پر متفق ہیں۔ قیامت، الٰہی قدرت، اور مومنین و کافرین کے انجام کے موضوعات اسے غور و فکر کے لیے انتہائی مؤثر بناتے ہیں۔" }
   },
 
   recitationForDying: {
-    title: { en: "Ya-Sin and the Departing Soul", ur: "Ya-Sin and the Departing Soul" },
+    title: { en: "Ya-Sin and the Departing Soul", ur: "یٰس اور رخصت ہوتی روح" },
     titleArabic: "يس وروح المحتضر",
     practice: "It is a Sunnah to recite Surah Ya-Sin for those who are dying",
     wisdom: [
@@ -553,45 +581,45 @@ export const ONTOLOGY = {
   },
 
   historicalContext: {
-    note: { en: "Surah Ya-Sin was revealed in Makkah during the intense persecution of early Muslims. The story of the messengers sent to the town (traditionally identified as Antioch) and the believing man who was martyred served as encouragement for the Prophet and his companions facing similar opposition. The Quraysh mocked resurrection just as the townspeople mocked the messengers, making the detailed resurrection proofs highly relevant. The surah's powerful affirmation of prophethood ('Indeed you are among the messengers' 36:3) directly countered those who denied Muhammad's mission. The closing argument from creation to recreation (36:77-82) employs the same logic later used with Ubayy ibn Khalaf, who brought decayed bones to the Prophet asking 'Who will give life to bones when they are disintegrated?' - Allah revealed the answer: 'He who produced them the first time.'", ur: "Surah Ya-Sin was revealed in Makkah during the intense persecution of early Muslims. The story of the messengers sent to the town (traditionally identified as Antioch) and the believing man who was martyred served as encouragement for the Prophet and his companions facing similar opposition. The Quraysh mocked resurrection just as the townspeople mocked the messengers, making the detailed resurrection proofs highly relevant. The surah's powerful affirmation of prophethood ('Indeed you are among the messengers' 36:3) directly countered those who denied Muhammad's mission. The closing argument from creation to recreation (36:77-82) employs the same logic later used with Ubayy ibn Khalaf, who brought decayed bones to the Prophet asking 'Who will give life to bones when they are disintegrated?' - Allah revealed the answer: 'He who produced them the first time.'" }
+    note: { en: "Surah Ya-Sin was revealed in Makkah during the intense persecution of early Muslims. The story of the messengers sent to the town (traditionally identified as Antioch) and the believing man who was martyred served as encouragement for the Prophet and his companions facing similar opposition. The Quraysh mocked resurrection just as the townspeople mocked the messengers, making the detailed resurrection proofs highly relevant. The surah's powerful affirmation of prophethood ('Indeed you are among the messengers' 36:3) directly countered those who denied Muhammad's mission. The closing argument from creation to recreation (36:77-82) employs the same logic later used with Ubayy ibn Khalaf, who brought decayed bones to the Prophet asking 'Who will give life to bones when they are disintegrated?' - Allah revealed the answer: 'He who produced them the first time.'", ur: "سورۃ یٰس مکہ میں ابتدائی مسلمانوں کے شدید ظلم و ستم کے دور میں نازل ہوئی۔ بستی میں بھیجے گئے رسولوں اور شہید ہونے والے مومن کی کہانی نبی ﷺ اور ان کے صحابہ کے لیے حوصلہ افزائی تھی جو اسی طرح کی مخالفت کا سامنا کر رہے تھے۔ قریش نے قیامت کا مذاق اڑایا جیسے بستی والوں نے رسولوں کا مذاق اڑایا، جس سے قیامت کے تفصیلی دلائل انتہائی مناسب تھے۔ سورت کی نبوت کی طاقتور تصدیق ('بیشک تم رسولوں میں سے ہو' 36:3) نے براہ راست ان لوگوں کا رد کیا جنہوں نے محمد ﷺ کے مشن سے انکار کیا۔ تخلیق سے دوبارہ تخلیق کی آخری دلیل (36:77-82) وہی منطق استعمال کرتی ہے جو بعد میں ابی بن خلف کے ساتھ استعمال ہوئی، جو بوسیدہ ہڈیاں لے کر نبی ﷺ کے پاس آیا اور پوچھا 'ہڈیوں کو کون زندہ کرے گا جب وہ بوسیدہ ہو جائیں؟' - اللہ نے جواب نازل کیا: 'جس نے پہلی بار بنایا وہی۔'" }
   },
 
   linguisticFeatures: {
     features: [
-      { feature: "يس", example: { en: "Huruf Muqatta'at", ur: "Huruf Muqatta'at" }, effect: { en: "Mysterious letters capturing attention - possibly meaning 'O Human'", ur: "Mysterious letters capturing attention - possibly meaning 'O Human'" } },
-      { feature: "مُّقْمَحُونَ", example: { en: "Heads forced upward", ur: "Heads forced upward" }, effect: { en: "Vivid imagery of those shackled by disbelief", ur: "Vivid imagery of those shackled by disbelief" } },
-      { feature: "يَسْعَىٰ", example: { en: "Running/striving", ur: "Running/striving" }, effect: { en: "The believing man's urgency to reach his people", ur: "The believing man's urgency to reach his people" } },
-      { feature: "صَيْحَةً وَاحِدَةً", example: { en: "Single shout", ur: "Single shout" }, effect: { en: "Emphasizes swiftness of divine punishment", ur: "Emphasizes swiftness of divine punishment" } },
-      { feature: "يَنسِلُونَ", example: { en: "Hasten forth", ur: "Hasten forth" }, effect: { en: "Quick emergence from graves - like insects from the ground", ur: "Quick emergence from graves - like insects from the ground" } },
-      { feature: "مَّرْقَدِنَا", example: { en: "Our sleeping place", ur: "Our sleeping place" }, effect: { en: "Death described as sleep - resurrection as awakening", ur: "Death described as sleep - resurrection as awakening" } },
-      { feature: "الْعُرْجُونِ الْقَدِيمِ", example: { en: "Old date stalk", ur: "Old date stalk" }, effect: { en: "Crescent moon curved like dried palm branch - precise imagery", ur: "Crescent moon curved like dried palm branch - precise imagery" } },
-      { feature: "كُن فَيَكُونُ", example: { en: "Be and it is", ur: "Be and it is" }, effect: { en: "Ultimate expression of divine power - no process needed", ur: "Ultimate expression of divine power - no process needed" } }
+      { feature: "يس", example: { en: "Huruf Muqatta'at", ur: "حروفِ مقطعات" }, effect: { en: "Mysterious letters capturing attention - possibly meaning 'O Human'", ur: "پراسرار حروف جو توجہ حاصل کرتے ہیں - ممکنہ معنی 'اے انسان'" } },
+      { feature: "مُّقْمَحُونَ", example: { en: "Heads forced upward", ur: "سر زبردستی اوپر اٹھے ہوئے" }, effect: { en: "Vivid imagery of those shackled by disbelief", ur: "کفر کی زنجیروں میں جکڑے لوگوں کی واضح تصویر" } },
+      { feature: "يَسْعَىٰ", example: { en: "Running/striving", ur: "دوڑنا/کوشش کرنا" }, effect: { en: "The believing man's urgency to reach his people", ur: "مومن آدمی کی اپنی قوم تک پہنچنے کی تڑپ" } },
+      { feature: "صَيْحَةً وَاحِدَةً", example: { en: "Single shout", ur: "ایک چیخ" }, effect: { en: "Emphasizes swiftness of divine punishment", ur: "الٰہی عذاب کی تیزی پر زور" } },
+      { feature: "يَنسِلُونَ", example: { en: "Hasten forth", ur: "تیزی سے نکلنا" }, effect: { en: "Quick emergence from graves - like insects from the ground", ur: "قبروں سے تیز نکلنا - زمین سے کیڑوں کی طرح" } },
+      { feature: "مَّرْقَدِنَا", example: { en: "Our sleeping place", ur: "ہماری آرام گاہ" }, effect: { en: "Death described as sleep - resurrection as awakening", ur: "موت کو نیند سے تشبیہ - قیامت بیداری ہے" } },
+      { feature: "الْعُرْجُونِ الْقَدِيمِ", example: { en: "Old date stalk", ur: "پرانی کھجور کی شاخ" }, effect: { en: "Crescent moon curved like dried palm branch - precise imagery", ur: "ہلال خشک کھجور کی شاخ جیسا خمیدہ - درست تصویر کشی" } },
+      { feature: "كُن فَيَكُونُ", example: { en: "Be and it is", ur: "ہو جا اور وہ ہو جاتی ہے" }, effect: { en: "Ultimate expression of divine power - no process needed", ur: "الٰہی قدرت کا بلند ترین اظہار - کسی عمل کی ضرورت نہیں" } }
     ]
   },
 
   scientificReferences: {
     notes: [
-      { verse: "36:36", topic: "Pairs in creation", note: { en: "Everything in pairs - atoms have positive/negative charges, male/female in living things, matter/antimatter", ur: "Everything in pairs - atoms have positive/negative charges, male/female in living things, matter/antimatter" } },
-      { verse: "36:38", topic: "Sun's course", note: { en: "Sun travels through space toward a destination (Vega region) - 'mustaqarr' as destination point", ur: "Sun travels through space toward a destination (Vega region) - 'mustaqarr' as destination point" } },
-      { verse: "36:39", topic: "Moon phases", note: { en: "28 lunar stations (manazil) - precise lunar calendar system", ur: "28 lunar stations (manazil) - precise lunar calendar system" } },
-      { verse: "36:40", topic: "Celestial orbits", note: { en: "Each celestial body in its orbit (falak) - modern orbital mechanics", ur: "Each celestial body in its orbit (falak) - modern orbital mechanics" } },
-      { verse: "36:77", topic: "Human from sperm", note: { en: "Nutfah (sperm-drop) - human origin from microscopic cell", ur: "Nutfah (sperm-drop) - human origin from microscopic cell" } },
-      { verse: "36:80", topic: "Fire from green tree", note: { en: "Photosynthesis stores energy in wood - released as fire; also Markh and Afar trees used by Arabs to produce fire", ur: "Photosynthesis stores energy in wood - released as fire; also Markh and Afar trees used by Arabs to produce fire" } }
+      { verse: "36:36", topic: "Pairs in creation", note: { en: "Everything in pairs - atoms have positive/negative charges, male/female in living things, matter/antimatter", ur: "ہر چیز جوڑوں میں - ایٹموں میں مثبت/منفی چارجز، جانداروں میں نر/مادہ، مادہ/ضد مادہ" } },
+      { verse: "36:38", topic: "Sun's course", note: { en: "Sun travels through space toward a destination (Vega region) - 'mustaqarr' as destination point", ur: "سورج خلا میں ایک منزل (ویگا کا علاقہ) کی طرف سفر کرتا ہے - 'مستقر' بطور منزلِ مقصود" } },
+      { verse: "36:39", topic: "Moon phases", note: { en: "28 lunar stations (manazil) - precise lunar calendar system", ur: "28 قمری منازل - درست قمری تقویم کا نظام" } },
+      { verse: "36:40", topic: "Celestial orbits", note: { en: "Each celestial body in its orbit (falak) - modern orbital mechanics", ur: "ہر آسمانی جسم اپنے مدار (فلک) میں - جدید مداری میکانکس" } },
+      { verse: "36:77", topic: "Human from sperm", note: { en: "Nutfah (sperm-drop) - human origin from microscopic cell", ur: "نطفہ - خوردبینی خلیے سے انسان کی ابتدا" } },
+      { verse: "36:80", topic: "Fire from green tree", note: { en: "Photosynthesis stores energy in wood - released as fire; also Markh and Afar trees used by Arabs to produce fire", ur: "ضیائی تالیف لکڑی میں توانائی ذخیرہ کرتی ہے - آگ کی صورت خارج ہوتی ہے؛ مرخ اور عفار کے درخت بھی عرب آگ جلانے میں استعمال کرتے تھے" } }
     ]
   },
 
   connectionToDeathAndResurrection: {
-    title: { en: "Why Ya-Sin for the Dying", ur: "Why Ya-Sin for the Dying" },
+    title: { en: "Why Ya-Sin for the Dying", ur: "مرنے والوں کے لیے یٰس کیوں" },
     titleArabic: "لماذا يس للمحتضر",
     connections: [
-      { theme: "Soul's journey affirmed", verse: "36:12", explanation: { en: "Allah gives life and records all deeds - soul's record complete", ur: "Allah gives life and records all deeds - soul's record complete" } },
-      { theme: "Immediate Paradise entry", verse: "36:26", explanation: { en: "Believer told 'Enter Paradise' - hope for immediate reward", ur: "Believer told 'Enter Paradise' - hope for immediate reward" } },
-      { theme: "Single blast awareness", verse: "36:29, 49, 53", explanation: { en: "Death comes suddenly - be prepared", ur: "Death comes suddenly - be prepared" } },
-      { theme: "Rising described", verse: "36:51-52", explanation: { en: "Detailed resurrection scene - knowing what comes next", ur: "Detailed resurrection scene - knowing what comes next" } },
-      { theme: "Allah's greeting", verse: "36:58", explanation: { en: "Believers receive 'Salam' from Allah - ultimate honor", ur: "Believers receive 'Salam' from Allah - ultimate honor" } },
-      { theme: "Body parts witness", verse: "36:65", explanation: { en: "Encourages final repentance - hands and feet will testify", ur: "Encourages final repentance - hands and feet will testify" } },
-      { theme: "Recreation assured", verse: "36:79", explanation: { en: "He who created first time will recreate - certainty of resurrection", ur: "He who created first time will recreate - certainty of resurrection" } },
-      { theme: "Kun Fayakun", verse: "36:82", explanation: { en: "Allah's power is absolute - resurrection is easy for Him", ur: "Allah's power is absolute - resurrection is easy for Him" } }
+      { theme: "Soul's journey affirmed", verse: "36:12", explanation: { en: "Allah gives life and records all deeds - soul's record complete", ur: "اللہ زندگی دیتا ہے اور تمام اعمال لکھتا ہے - روح کا ریکارڈ مکمل ہے" } },
+      { theme: "Immediate Paradise entry", verse: "36:26", explanation: { en: "Believer told 'Enter Paradise' - hope for immediate reward", ur: "مومن کو کہا گیا 'جنت میں داخل ہو جاؤ' - فوری اجر کی امید" } },
+      { theme: "Single blast awareness", verse: "36:29, 49, 53", explanation: { en: "Death comes suddenly - be prepared", ur: "موت اچانک آتی ہے - تیار رہو" } },
+      { theme: "Rising described", verse: "36:51-52", explanation: { en: "Detailed resurrection scene - knowing what comes next", ur: "قیامت کا تفصیلی منظر - یہ جاننا کہ آگے کیا ہوگا" } },
+      { theme: "Allah's greeting", verse: "36:58", explanation: { en: "Believers receive 'Salam' from Allah - ultimate honor", ur: "مومنین کو اللہ کی طرف سے 'سلام' ملتا ہے - سب سے بڑا اعزاز" } },
+      { theme: "Body parts witness", verse: "36:65", explanation: { en: "Encourages final repentance - hands and feet will testify", ur: "آخری توبہ کی ترغیب - ہاتھ اور پاؤں گواہی دیں گے" } },
+      { theme: "Recreation assured", verse: "36:79", explanation: { en: "He who created first time will recreate - certainty of resurrection", ur: "جس نے پہلی بار بنایا وہی دوبارہ بنائے گا - قیامت کا یقین" } },
+      { theme: "Kun Fayakun", verse: "36:82", explanation: { en: "Allah's power is absolute - resurrection is easy for Him", ur: "اللہ کی قدرت مطلق ہے - قیامت اس کے لیے آسان ہے" } }
     ]
   }
 };

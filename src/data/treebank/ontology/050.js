@@ -15,6 +15,7 @@ export const ONTOLOGY = {
   categories: {
     mysteriousLetter: {
       name: "The Mysterious Letter",
+      nameUr: "حروفِ مقطعات",
       nameArabic: "الحرف المقطع",
       color: '#F59E0B',
       icon: 'Sparkles',
@@ -26,6 +27,7 @@ export const ONTOLOGY = {
 
     disbelieversWonder: {
       name: "Disbelievers' Astonishment",
+      nameUr: "کافروں کی حیرت",
       nameArabic: "تعجب الكافرين",
       color: '#EF4444',
       icon: 'AlertTriangle',
@@ -39,6 +41,7 @@ export const ONTOLOGY = {
 
     divineKnowledge: {
       name: "Allah's Complete Knowledge",
+      nameUr: "اللہ کا مکمل علم",
       nameArabic: "علم الله الشامل",
       color: '#F59E0B',
       icon: 'Crown',
@@ -50,6 +53,7 @@ export const ONTOLOGY = {
 
     creationSigns: {
       name: "Signs in Creation",
+      nameUr: "تخلیق میں نشانیاں",
       nameArabic: "آيات في الخلق",
       color: '#06B6D4',
       icon: 'Globe',
@@ -67,6 +71,7 @@ export const ONTOLOGY = {
 
     rainBlessing: {
       name: "Blessed Rain",
+      nameUr: "بارش کی برکت",
       nameArabic: "بركة المطر",
       color: '#06B6D4',
       icon: 'Sun',
@@ -83,6 +88,7 @@ export const ONTOLOGY = {
 
     destroyedNations: {
       name: "Destroyed Nations",
+      nameUr: "ہلاک شدہ اقوام",
       nameArabic: "الأمم المهلكة",
       color: '#EF4444',
       icon: 'AlertTriangle',
@@ -99,6 +105,7 @@ export const ONTOLOGY = {
 
     firstCreation: {
       name: "Proof from First Creation",
+      nameUr: "پہلی تخلیق سے دلیل",
       nameArabic: "برهان الخلق الأول",
       color: '#F59E0B',
       icon: 'Star',
@@ -110,6 +117,7 @@ export const ONTOLOGY = {
 
     humanCreationKnowledge: {
       name: "Allah's Intimate Knowledge of Humans",
+      nameUr: "انسان کے بارے میں اللہ کا گہرا علم",
       nameArabic: "علم الله بالإنسان",
       color: '#F59E0B',
       icon: 'Crown',
@@ -122,6 +130,7 @@ export const ONTOLOGY = {
 
     recordingAngels: {
       name: "The Recording Angels",
+      nameUr: "لکھنے والے فرشتے",
       nameArabic: "الملائكة الكاتبون",
       color: '#8B5CF6',
       icon: 'Sparkles',
@@ -135,6 +144,7 @@ export const ONTOLOGY = {
 
     deathAndResurrection: {
       name: "Death and Resurrection",
+      nameUr: "موت اور قیامت",
       nameArabic: "الموت والبعث",
       color: '#EF4444',
       icon: 'Shield',
@@ -148,6 +158,7 @@ export const ONTOLOGY = {
 
     dayOfJudgment: {
       name: "Scene of Judgment Day",
+      nameUr: "قیامت کا منظر",
       nameArabic: "مشهد يوم القيامة",
       color: '#EF4444',
       icon: 'Shield',
@@ -162,6 +173,7 @@ export const ONTOLOGY = {
 
     hellDescription: {
       name: "Description of Hell",
+      nameUr: "جہنم کا بیان",
       nameArabic: "وصف جهنم",
       color: '#EF4444',
       icon: 'AlertTriangle',
@@ -182,6 +194,7 @@ export const ONTOLOGY = {
 
     paradiseDescription: {
       name: "Description of Paradise",
+      nameUr: "جنت کا بیان",
       nameArabic: "وصف الجنة",
       color: '#8B5CF6',
       icon: 'Sparkles',
@@ -200,6 +213,7 @@ export const ONTOLOGY = {
 
     lessonsFromHistory: {
       name: "Lessons from History",
+      nameUr: "تاریخ سے عبرت",
       nameArabic: "العبر من التاريخ",
       color: '#3B82F6',
       icon: 'Book',
@@ -216,6 +230,7 @@ export const ONTOLOGY = {
 
     sixDayCreation: {
       name: "Six-Day Creation",
+      nameUr: "چھ دنوں میں تخلیق",
       nameArabic: "خلق الستة أيام",
       color: '#06B6D4',
       icon: 'Globe',
@@ -228,6 +243,7 @@ export const ONTOLOGY = {
 
     propheticGuidance: {
       name: "Guidance to the Prophet",
+      nameUr: "نبی کو ہدایات",
       nameArabic: "توجيهات للنبي",
       color: '#3B82F6',
       icon: 'Compass',
@@ -242,6 +258,7 @@ export const ONTOLOGY = {
 
     dayOfCalling: {
       name: "The Day of Calling",
+      nameUr: "پکار کا دن",
       nameArabic: "يوم النداء",
       color: '#EF4444',
       icon: 'Shield',
@@ -254,6 +271,7 @@ export const ONTOLOGY = {
 
     divineControl: {
       name: "Divine Control Over Life and Death",
+      nameUr: "زندگی اور موت پر الٰہی اختیار",
       nameArabic: "سيطرة الله على الحياة والموت",
       color: '#F59E0B',
       icon: 'Crown',
@@ -267,6 +285,7 @@ export const ONTOLOGY = {
 
     finalConsole: {
       name: "Final Consolation",
+      nameUr: "آخری تسلی",
       nameArabic: "التسلية الأخيرة",
       color: '#10B981',
       icon: 'Heart',

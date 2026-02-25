@@ -16,6 +16,7 @@ export const ONTOLOGY = {
   categories: {
     quranInArabic: {
       name: "Quran Revealed in Arabic",
+      nameUr: "عربی میں نازل شدہ قرآن",
       nameArabic: "القرآن عربي",
       color: '#3B82F6',
       icon: 'Book',
@@ -33,6 +34,7 @@ export const ONTOLOGY = {
 
     previousProphetsRejected: {
       name: "Previous Prophets Also Mocked",
+      nameUr: "پچھلے انبیاء کا بھی مذاق اڑایا گیا",
       nameArabic: "استهزاء الأنبياء السابقين",
       color: '#EF4444',
       icon: 'AlertTriangle',
@@ -46,6 +48,7 @@ export const ONTOLOGY = {
 
     signsOfCreation: {
       name: "Signs in Creation",
+      nameUr: "تخلیق میں نشانیاں",
       nameArabic: "آيات الخلق",
       color: '#06B6D4',
       icon: 'Globe',
@@ -63,6 +66,7 @@ export const ONTOLOGY = {
 
     transportationBlessings: {
       name: "Blessings of Transportation",
+      nameUr: "سفر کی نعمتیں",
       nameArabic: "نعمة المركب",
       color: '#06B6D4',
       icon: 'Sun',
@@ -79,6 +83,7 @@ export const ONTOLOGY = {
 
     angelsAsFemales: {
       name: "Refutation of Angels as Daughters",
+      nameUr: "فرشتوں کو بیٹیاں کہنے کی تردید",
       nameArabic: "رد دعوى الملائكة إناث",
       color: '#EF4444',
       icon: 'AlertTriangle',
@@ -99,6 +104,7 @@ export const ONTOLOGY = {
 
     blindFollowingOfAncestors: {
       name: "Blind Following of Ancestors",
+      nameUr: "باپ دادا کی اندھی تقلید",
       nameArabic: "التقليد الأعمى للآباء",
       color: '#EF4444',
       icon: 'AlertTriangle',
@@ -121,6 +127,7 @@ export const ONTOLOGY = {
 
     ibrahimMonotheism: {
       name: "Ibrahim's Pure Monotheism",
+      nameUr: "ابراہیم علیہ السلام کی خالص توحید",
       nameArabic: "توحيد إبراهيم",
       color: '#F59E0B',
       icon: 'Star',
@@ -138,6 +145,7 @@ export const ONTOLOGY = {
 
     rejectionOfMuhammad: {
       name: "Quraysh's Rejection of Muhammad",
+      nameUr: "قریش کا محمد ﷺ کا انکار",
       nameArabic: "رفض قريش لمحمد",
       color: '#EF4444',
       icon: 'Shield',
@@ -155,6 +163,7 @@ export const ONTOLOGY = {
 
     goldOrnamentsDevalued: {
       name: "Gold Ornaments - Worldly Deception",
+      nameUr: "سونے کی زینت - دنیاوی دھوکا",
       nameArabic: "الزخرف - متاع الدنيا",
       color: '#F59E0B',
       icon: 'Sparkles',
@@ -171,6 +180,7 @@ export const ONTOLOGY = {
 
     satanAsCompanion: {
       name: "Satan as Companion of the Heedless",
+      nameUr: "غافلوں کا ساتھی شیطان",
       nameArabic: "الشيطان قرين الغافل",
       color: '#EF4444',
       icon: 'AlertTriangle',
@@ -189,6 +199,7 @@ export const ONTOLOGY = {
 
     prophetCannotGuideAll: {
       name: "Prophet Cannot Guide the Unwilling",
+      nameUr: "نبی ناخواہ لوگوں کو ہدایت نہیں دے سکتے",
       nameArabic: "النبي لا يهدي من لا يريد",
       color: '#3B82F6',
       icon: 'Compass',
@@ -208,6 +219,7 @@ export const ONTOLOGY = {
 
     allMessengersPreachedTawhid: {
       name: "All Messengers Preached Monotheism",
+      nameUr: "تمام رسولوں نے توحید کی تبلیغ کی",
       nameArabic: "كل الرسل دعوا للتوحيد",
       color: '#F59E0B',
       icon: 'Star',
@@ -219,6 +231,7 @@ export const ONTOLOGY = {
 
     musaAndPharaoh: {
       name: "Musa and Pharaoh",
+      nameUr: "موسیٰ اور فرعون",
       nameArabic: "موسى وفرعون",
       color: '#3B82F6',
       icon: 'Book',
@@ -237,6 +250,7 @@ export const ONTOLOGY = {
 
     pharaohsArrogance: {
       name: "Pharaoh's Arrogance",
+      nameUr: "فرعون کا تکبر",
       nameArabic: "تكبر فرعون",
       color: '#EF4444',
       icon: 'AlertTriangle',
@@ -259,6 +273,7 @@ export const ONTOLOGY = {
 
     isaServantNotSon: {
       name: "Isa: Servant, Not Son",
+      nameUr: "عیسیٰ: بندے، بیٹے نہیں",
       nameArabic: "عيسى عبد لا ولد",
       color: '#F59E0B',
       icon: 'Crown',
@@ -281,6 +296,7 @@ export const ONTOLOGY = {
 
     isasTeaching: {
       name: "Isa's Clear Teaching",
+      nameUr: "عیسیٰ کی واضح تعلیم",
       nameArabic: "تعليم عيسى الواضح",
       color: '#3B82F6',
       icon: 'Book',
@@ -298,6 +314,7 @@ export const ONTOLOGY = {
 
     dayOfJudgment: {
       name: "Day of Judgment",
+      nameUr: "یومِ قیامت",
       nameArabic: "يوم القيامة",
       color: '#EF4444',
       icon: 'Shield',
@@ -311,6 +328,7 @@ export const ONTOLOGY = {
 
     paradiseForRighteous: {
       name: "Paradise for the Righteous",
+      nameUr: "نیکوکاروں کے لیے جنت",
       nameArabic: "الجنة للمتقين",
       color: '#8B5CF6',
       icon: 'Sparkles',
@@ -328,6 +346,7 @@ export const ONTOLOGY = {
 
     criminalsInHell: {
       name: "Criminals in Hell",
+      nameUr: "مجرم جہنم میں",
       nameArabic: "المجرمون في النار",
       color: '#EF4444',
       icon: 'AlertTriangle',
@@ -345,6 +364,7 @@ export const ONTOLOGY = {
 
     secretPlotsExposed: {
       name: "Secret Plots Exposed",
+      nameUr: "خفیہ سازشوں کا بے نقاب ہونا",
       nameArabic: "كشف المكائد السرية",
       color: '#EF4444',
       icon: 'Shield',
@@ -357,6 +377,7 @@ export const ONTOLOGY = {
 
     noChildForAllah: {
       name: "Allah Has No Child",
+      nameUr: "اللہ کی کوئی اولاد نہیں",
       nameArabic: "الله ليس له ولد",
       color: '#F59E0B',
       icon: 'Star',
@@ -372,6 +393,7 @@ export const ONTOLOGY = {
 
     allahsSovereignty: {
       name: "Allah's Universal Sovereignty",
+      nameUr: "اللہ کی عالمگیر حاکمیت",
       nameArabic: "ملكية الله الشاملة",
       color: '#F59E0B',
       icon: 'Crown',
@@ -391,6 +413,7 @@ export const ONTOLOGY = {
 
     prophetsFrustration: {
       name: "Prophet's Concern for His People",
+      nameUr: "نبی ﷺ کی اپنی امت کے لیے فکر",
       nameArabic: "همّ النبي لقومه",
       color: '#10B981',
       icon: 'Heart',

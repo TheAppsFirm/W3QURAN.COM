@@ -14,6 +14,7 @@ export const ONTOLOGY = {
   categories: {
     prophecyOfRomans: {
       name: "Prophecy of Roman Victory",
+      nameUr: "رومیوں کی فتح کی پیشگوئی",
       nameArabic: "نبوءة انتصار الروم",
       color: "#F59E0B",
       icon: "Star",
@@ -29,6 +30,7 @@ export const ONTOLOGY = {
 
     divinePromise: {
       name: "Divine Promise",
+      nameUr: "الٰہی وعدہ",
       nameArabic: "وعد الله",
       color: "#8B5CF6",
       icon: "Sparkles",
@@ -41,6 +43,7 @@ export const ONTOLOGY = {
 
     heedlessness: {
       name: "Heedlessness of Creation",
+      nameUr: "تخلیق سے غفلت",
       nameArabic: "الغفلة عن الخلق",
       color: "#EF4444",
       icon: "AlertTriangle",
@@ -53,6 +56,7 @@ export const ONTOLOGY = {
 
     creationPurpose: {
       name: "Purpose of Creation",
+      nameUr: "تخلیق کا مقصد",
       nameArabic: "الحكمة من الخلق",
       color: "#06B6D4",
       icon: "Globe",
@@ -65,6 +69,7 @@ export const ONTOLOGY = {
 
     historicalLessons: {
       name: "Lessons from History",
+      nameUr: "تاریخ سے اسباق",
       nameArabic: "العبر من التاريخ",
       color: "#3B82F6",
       icon: "Book",
@@ -78,6 +83,7 @@ export const ONTOLOGY = {
 
     dayOfJudgment: {
       name: "Day of Judgment",
+      nameUr: "یومِ قیامت",
       nameArabic: "يوم القيامة",
       color: "#EF4444",
       icon: "Scale",
@@ -93,6 +99,7 @@ export const ONTOLOGY = {
 
     glorificationTimes: {
       name: "Times of Glorification",
+      nameUr: "تسبیح کے اوقات",
       nameArabic: "أوقات التسبيح",
       color: "#F59E0B",
       icon: "Star",
@@ -106,6 +113,7 @@ export const ONTOLOGY = {
 
     signsInCreation: {
       name: "Signs in Creation",
+      nameUr: "تخلیق میں نشانیاں",
       nameArabic: "آيات في الخلق",
       color: "#06B6D4",
       icon: "Globe",
@@ -119,6 +127,7 @@ export const ONTOLOGY = {
 
     humanCreation: {
       name: "Human Creation",
+      nameUr: "انسانی تخلیق",
       nameArabic: "خلق الإنسان",
       color: "#06B6D4",
       icon: "Users",
@@ -130,6 +139,7 @@ export const ONTOLOGY = {
 
     signOfMarriage: {
       name: "Sign of Marriage",
+      nameUr: "نکاح کی نشانی",
       nameArabic: "آية الزواج",
       color: "#EC4899",
       icon: "Heart",
@@ -143,6 +153,7 @@ export const ONTOLOGY = {
 
     signsOfDiversity: {
       name: "Signs of Diversity",
+      nameUr: "تنوع کی نشانیاں",
       nameArabic: "آيات التنوع",
       color: "#8B5CF6",
       icon: "Users",
@@ -155,6 +166,7 @@ export const ONTOLOGY = {
 
     signsOfSleep: {
       name: "Signs of Sleep",
+      nameUr: "نیند کی نشانی",
       nameArabic: "آية النوم",
       color: "#22C55E",
       icon: "Moon",
@@ -166,6 +178,7 @@ export const ONTOLOGY = {
 
     signsOfLightning: {
       name: "Signs of Lightning and Rain",
+      nameUr: "بجلی اور بارش کی نشانیاں",
       nameArabic: "آيات البرق والمطر",
       color: "#06B6D4",
       icon: "Zap",
@@ -178,6 +191,7 @@ export const ONTOLOGY = {
 
     cosmicStability: {
       name: "Cosmic Stability",
+      nameUr: "کائناتی استحکام",
       nameArabic: "استقرار الكون",
       color: "#3B82F6",
       icon: "Globe",
@@ -190,6 +204,7 @@ export const ONTOLOGY = {
 
     divineOwnership: {
       name: "Divine Ownership",
+      nameUr: "الٰہی ملکیت",
       nameArabic: "الملكية الإلهية",
       color: "#F59E0B",
       icon: "Crown",
@@ -204,6 +219,7 @@ export const ONTOLOGY = {
 
     monotheism: {
       name: "Pure Monotheism",
+      nameUr: "خالص توحید",
       nameArabic: "التوحيد الخالص",
       color: "#F59E0B",
       icon: "Star",
@@ -219,6 +235,7 @@ export const ONTOLOGY = {
 
     turningToAllah: {
       name: "Turning to Allah",
+      nameUr: "اللہ کی طرف رجوع",
       nameArabic: "الإنابة إلى الله",
       color: "#8B5CF6",
       icon: "Heart",
@@ -232,6 +249,7 @@ export const ONTOLOGY = {
 
     divisionInReligion: {
       name: "Division in Religion",
+      nameUr: "دین میں تفرقہ",
       nameArabic: "التفرق في الدين",
       color: "#EF4444",
       icon: "AlertTriangle",
@@ -244,6 +262,7 @@ export const ONTOLOGY = {
 
     humanNature: {
       name: "Human Nature",
+      nameUr: "انسانی فطرت",
       nameArabic: "طبيعة الإنسان",
       color: "#EC4899",
       icon: "Users",
@@ -258,6 +277,7 @@ export const ONTOLOGY = {
 
     rightsAndGiving: {
       name: "Rights and Giving",
+      nameUr: "حقوق اور عطا",
       nameArabic: "الحقوق والإنفاق",
       color: "#10B981",
       icon: "Heart",
@@ -271,6 +291,7 @@ export const ONTOLOGY = {
 
     ribaVsZakat: {
       name: "Riba vs Zakat",
+      nameUr: "سود بمقابلہ زکوٰة",
       nameArabic: "الربا مقابل الزكاة",
       color: "#10B981",
       icon: "Scale",
@@ -286,6 +307,7 @@ export const ONTOLOGY = {
 
     divineProvision: {
       name: "Divine Provision",
+      nameUr: "الٰہی رزق",
       nameArabic: "الرزق الإلهي",
       color: "#22C55E",
       icon: "Sparkles",
@@ -298,6 +320,7 @@ export const ONTOLOGY = {
 
     corruptionOnEarth: {
       name: "Corruption on Earth",
+      nameUr: "زمین پر فساد",
       nameArabic: "الفساد في الأرض",
       color: "#EF4444",
       icon: "AlertTriangle",
@@ -311,6 +334,7 @@ export const ONTOLOGY = {
 
     windSigns: {
       name: "Signs in Wind and Rain",
+      nameUr: "ہوا اور بارش کی نشانیاں",
       nameArabic: "آيات الرياح والمطر",
       color: "#06B6D4",
       icon: "Sun",
@@ -326,6 +350,7 @@ export const ONTOLOGY = {
 
     resurrectionProof: {
       name: "Proof of Resurrection",
+      nameUr: "قیامت کا ثبوت",
       nameArabic: "دليل البعث",
       color: "#8B5CF6",
       icon: "Sun",
@@ -339,6 +364,7 @@ export const ONTOLOGY = {
 
     hardnessOfHeart: {
       name: "Hardness of Heart",
+      nameUr: "دلوں کی سختی",
       nameArabic: "قسوة القلوب",
       color: "#EF4444",
       icon: "AlertTriangle",
@@ -353,6 +379,7 @@ export const ONTOLOGY = {
 
     stagesOfLife: {
       name: "Stages of Human Life",
+      nameUr: "انسانی زندگی کے مراحل",
       nameArabic: "مراحل حياة الإنسان",
       color: "#06B6D4",
       icon: "Users",
@@ -366,6 +393,7 @@ export const ONTOLOGY = {
 
     oathsOfDisbelievers: {
       name: "Oaths of Disbelievers",
+      nameUr: "کافروں کی قسمیں",
       nameArabic: "أيمان الكافرين",
       color: "#EF4444",
       icon: "Eye",
@@ -380,6 +408,7 @@ export const ONTOLOGY = {
 
     finalExhortation: {
       name: "Final Exhortation",
+      nameUr: "آخری نصیحت",
       nameArabic: "الموعظة الأخيرة",
       color: "#3B82F6",
       icon: "Compass",

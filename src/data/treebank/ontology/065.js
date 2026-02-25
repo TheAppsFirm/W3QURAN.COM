@@ -14,6 +14,7 @@ export const ONTOLOGY = {
   categories: {
     divorceRules: {
       name: "Divorce Regulations",
+      nameUr: "طلاق کے احکام",
       nameArabic: "أحكام الطلاق",
       color: '#EF4444',
       icon: 'Scale',
@@ -27,6 +28,7 @@ export const ONTOLOGY = {
 
     divineWisdom: {
       name: "Divine Wisdom in Waiting",
+      nameUr: "عدت میں الٰہی حکمت",
       nameArabic: "حكمة العدة",
       color: '#8B5CF6',
       icon: 'Eye',
@@ -39,6 +41,7 @@ export const ONTOLOGY = {
 
     endOfIddah: {
       name: "End of Waiting Period",
+      nameUr: "عدت کا اختتام",
       nameArabic: "انتهاء العدة",
       color: '#3B82F6',
       icon: 'Compass',
@@ -52,6 +55,7 @@ export const ONTOLOGY = {
 
     taqwaRewards: {
       name: "Rewards of Taqwa",
+      nameUr: "تقویٰ کے ثمرات",
       nameArabic: "ثمرات التقوى",
       color: '#10B981',
       icon: 'Sparkles',
@@ -66,6 +70,7 @@ export const ONTOLOGY = {
 
     tawakkul: {
       name: "Trust in Allah",
+      nameUr: "اللہ پر توکل",
       nameArabic: "التوكل على الله",
       color: '#F59E0B',
       icon: 'Heart',
@@ -78,6 +83,7 @@ export const ONTOLOGY = {
 
     waitingPeriods: {
       name: "Specific Waiting Periods",
+      nameUr: "مخصوص عدت کی مدتیں",
       nameArabic: "مدد العدة المختلفة",
       color: '#06B6D4',
       icon: 'Book',
@@ -91,6 +97,7 @@ export const ONTOLOGY = {
 
     divorcedWomenRights: {
       name: "Rights of Divorced Women",
+      nameUr: "مطلقہ خواتین کے حقوق",
       nameArabic: "حقوق المطلقات",
       color: '#EC4899',
       icon: 'Shield',
@@ -104,6 +111,7 @@ export const ONTOLOGY = {
 
     pregnancyBreastfeeding: {
       name: "Pregnancy and Breastfeeding",
+      nameUr: "حمل اور رضاعت",
       nameArabic: "الحمل والرضاعة",
       color: '#22C55E',
       icon: 'Heart',
@@ -117,6 +125,7 @@ export const ONTOLOGY = {
 
     financialResponsibility: {
       name: "Financial Responsibility",
+      nameUr: "مالی ذمہ داری",
       nameArabic: "المسؤولية المالية",
       color: '#F59E0B',
       icon: 'Scale',
@@ -130,6 +139,7 @@ export const ONTOLOGY = {
 
     destructionOfNations: {
       name: "Destruction of Disobedient Nations",
+      nameUr: "نافرمان قوموں کی تباہی",
       nameArabic: "هلاك الأمم العاصية",
       color: '#EF4444',
       icon: 'AlertTriangle',
@@ -143,6 +153,7 @@ export const ONTOLOGY = {
 
     divineReminder: {
       name: "Divine Reminder",
+      nameUr: "الٰہی یاد دہانی",
       nameArabic: "التذكير الإلهي",
       color: '#3B82F6',
       icon: 'MessageCircle',
@@ -156,6 +167,7 @@ export const ONTOLOGY = {
 
     cosmicCreation: {
       name: "Cosmic Creation",
+      nameUr: "کائناتی تخلیق",
       nameArabic: "الخلق الكوني",
       color: '#06B6D4',
       icon: 'Globe',

@@ -39,6 +39,7 @@ export const ONTOLOGY = {
   categories: {
     divineAttribute: {
       name: "The Most Merciful (Ar-Rahman)",
+      nameUr: "رحمٰن کی صفت",
       nameAr: "صفة الرحمن",
       color: '#F59E0B',
       icon: 'Crown',
@@ -50,6 +51,7 @@ export const ONTOLOGY = {
 
     teachingQuran: {
       name: "Teaching of the Quran",
+      nameUr: "قرآن کی تعلیم",
       nameAr: "تعليم القرآن",
       color: '#3B82F6',
       icon: 'Book',
@@ -62,6 +64,7 @@ export const ONTOLOGY = {
 
     cosmicOrder: {
       name: "Cosmic Order and Balance",
+      nameUr: "کائناتی نظام اور میزان",
       nameAr: "النظام الكوني والميزان",
       color: '#06B6D4',
       icon: 'Globe',
@@ -76,6 +79,7 @@ export const ONTOLOGY = {
 
     justiceAndBalance: {
       name: "Justice and Balance",
+      nameUr: "عدل اور میزان",
       nameAr: "العدل والميزان",
       color: '#3B82F6',
       icon: 'Compass',
@@ -89,6 +93,7 @@ export const ONTOLOGY = {
 
     earthlyBlessings: {
       name: "Blessings of the Earth",
+      nameUr: "زمین کی نعمتیں",
       nameAr: "نعم الأرض",
       color: '#06B6D4',
       icon: 'Sun',
@@ -103,6 +108,7 @@ export const ONTOLOGY = {
 
     creationOfBeings: {
       name: "Creation of Jinn and Humans",
+      nameUr: "جن اور انسان کی تخلیق",
       nameAr: "خلق الجن والإنس",
       color: '#F59E0B',
       icon: 'Star',
@@ -116,6 +122,7 @@ export const ONTOLOGY = {
 
     divineAuthority: {
       name: "Divine Authority Over All",
+      nameUr: "اللہ کی ربوبیت",
       nameAr: "ربوبية الله",
       color: '#F59E0B',
       icon: 'Crown',
@@ -127,6 +134,7 @@ export const ONTOLOGY = {
 
     twoSeas: {
       name: "The Two Seas",
+      nameUr: "دو سمندر",
       nameAr: "البحران",
       color: '#06B6D4',
       icon: 'Globe',
@@ -142,6 +150,7 @@ export const ONTOLOGY = {
 
     mortality: {
       name: "Mortality and Divine Permanence",
+      nameUr: "فنا اور بقا",
       nameAr: "الفناء والبقاء",
       color: '#EF4444',
       icon: 'Shield',
@@ -154,6 +163,7 @@ export const ONTOLOGY = {
 
     dependenceOnAllah: {
       name: "Creation's Dependence",
+      nameUr: "مخلوقات کا انحصار",
       nameAr: "افتقار المخلوقات",
       color: '#8B5CF6',
       icon: 'Heart',
@@ -165,6 +175,7 @@ export const ONTOLOGY = {
 
     dayOfJudgment: {
       name: "Day of Judgment",
+      nameUr: "قیامت کا دن",
       nameAr: "يوم القيامة",
       color: '#EF4444',
       icon: 'Shield',
@@ -182,6 +193,7 @@ export const ONTOLOGY = {
 
     sinnersOnJudgment: {
       name: "Criminals on Judgment Day",
+      nameUr: "قیامت کے دن مجرم",
       nameAr: "المجرمون يوم القيامة",
       color: '#EF4444',
       icon: 'AlertTriangle',
@@ -195,6 +207,7 @@ export const ONTOLOGY = {
 
     twoGardensFirst: {
       name: "Two Gardens (First Pair)",
+      nameUr: "دو باغ (پہلا جوڑا)",
       nameAr: "الجنتان الأولى",
       color: '#8B5CF6',
       icon: 'Sparkles',
@@ -211,6 +224,7 @@ export const ONTOLOGY = {
 
     companionsOfParadise: {
       name: "Companions in Paradise",
+      nameUr: "جنت کی حوریں",
       nameAr: "حور الجنة",
       color: '#8B5CF6',
       icon: 'Heart',
@@ -224,6 +238,7 @@ export const ONTOLOGY = {
 
     twoGardensSecond: {
       name: "Two Gardens (Second Pair)",
+      nameUr: "دو باغ (دوسرا جوڑا)",
       nameAr: "الجنتان الأخرى",
       color: '#8B5CF6',
       icon: 'Sparkles',
@@ -240,6 +255,7 @@ export const ONTOLOGY = {
 
     rewardOfGoodness: {
       name: "Reward Principle",
+      nameUr: "احسان کا بدلہ",
       nameAr: "جزاء الإحسان",
       color: '#10B981',
       icon: 'Heart',
@@ -250,6 +266,7 @@ export const ONTOLOGY = {
 
     closingGlory: {
       name: "Closing Glory",
+      nameUr: "عظمت بھرا اختتام",
       nameAr: "الختام المجيد",
       color: '#F59E0B',
       icon: 'Crown',

@@ -20,7 +20,9 @@ export const TREEBANK_DATA = {
       { position: 2, arabic: "عُرْفًا", transliteration: "ʿurfan", root: "ع ر ف", meaning: { en: "in succession", ur: "پے در پے", ar: "مُتَتابِعَة" }, pos: "N", posLabel: "N", grammarRole: "adverbial" }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'قسم' }
+      ],
     },
   },
 
@@ -32,7 +34,9 @@ export const TREEBANK_DATA = {
       { position: 2, arabic: "عَصْفًا", transliteration: "ʿaṣfan", root: "ع ص ف", meaning: { en: "violently", ur: "زور سے", ar: "بِشِدَّة" }, pos: "N", posLabel: "N", grammarRole: "cognate accusative" }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'قسم' }
+      ],
     },
   },
 
@@ -44,7 +48,9 @@ export const TREEBANK_DATA = {
       { position: 2, arabic: "نَشْرًا", transliteration: "nashran", root: "ن ش ر", meaning: { en: "spreading", ur: "پھیلاتی ہوئی", ar: "نَشراً" }, pos: "N", posLabel: "N", grammarRole: "cognate accusative" }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'قسم' }
+      ],
     },
   },
 
@@ -56,7 +62,9 @@ export const TREEBANK_DATA = {
       { position: 2, arabic: "فَرْقًا", transliteration: "farqan", root: "ف ر ق", meaning: { en: "separating", ur: "جدائی", ar: "فَرقاً" }, pos: "N", posLabel: "N", grammarRole: "cognate accusative" }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'قسم' }
+      ],
     },
   },
 
@@ -68,7 +76,9 @@ export const TREEBANK_DATA = {
       { position: 2, arabic: "ذِكْرًا", transliteration: "dhikran", root: "ذ ك ر", meaning: { en: "a reminder", ur: "یاد دہانی", ar: "ذِكراً" }, pos: "N", posLabel: "N", grammarRole: "object" }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'قسم' }
+      ],
     },
   },
 
@@ -81,7 +91,10 @@ export const TREEBANK_DATA = {
       { position: 3, arabic: "نُذْرًا", transliteration: "nudhran", root: "ن ذ ر", meaning: { en: "warning", ur: "ڈرانے کے لیے", ar: "نُذراً" }, pos: "N", posLabel: "N", grammarRole: "purpose" }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' }
+      ],
     },
   },
 
@@ -169,7 +182,10 @@ export const TREEBANK_DATA = {
       { position: 3, arabic: "أُجِّلَتْ", transliteration: "ʾujjilat", root: "أ ج ل", meaning: { en: "were they postponed", ur: "مہلت دی گئی", ar: "أُجِّلَت" }, pos: "V", posLabel: "V", grammarRole: "predicate", voice: "passive", form: "II" }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' }
+      ],
     },
   },
 
@@ -215,7 +231,10 @@ export const TREEBANK_DATA = {
       { position: 3, arabic: "لِّلْمُكَذِّبِينَ", transliteration: "lil-mukadhdhibīna", root: "ك ذ ب", meaning: { en: "to the deniers", ur: "جھٹلانے والوں کو", ar: "لِلمُكَذِّبِينَ" }, pos: "N", posLabel: "N", grammarRole: "indirect object", form: "II" }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' }
+      ],
     },
   },
 
@@ -274,7 +293,10 @@ export const TREEBANK_DATA = {
       { position: 3, arabic: "لِّلْمُكَذِّبِينَ", transliteration: "lil-mukadhdhibīna", meaning: { en: "to the deniers", ur: "جھٹلانے والوں کو", ar: "لِلمُكَذِّبِينَ" }, pos: "N", posLabel: "N", grammarRole: "indirect object" }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' }
+      ],
     },
   },
 
@@ -355,7 +377,10 @@ export const TREEBANK_DATA = {
       { position: 3, arabic: "لِّلْمُكَذِّبِينَ", transliteration: "lil-mukadhdhibīna", meaning: { en: "to the deniers", ur: "جھٹلانے والوں کو", ar: "لِلمُكَذِّبِينَ" }, pos: "N", posLabel: "N", grammarRole: "indirect object" }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' }
+      ],
     },
   },
 
@@ -384,7 +409,9 @@ export const TREEBANK_DATA = {
       { position: 2, arabic: "وَأَمْوَاتًا", transliteration: "wa-ʾamwātan", root: "م و ت", meaning: { en: "and the dead", ur: "اور مردوں کو", ar: "وأَمواتاً" }, pos: "N", posLabel: "N", grammarRole: "object" }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' }
+      ],
     },
   },
 
@@ -420,7 +447,10 @@ export const TREEBANK_DATA = {
       { position: 3, arabic: "لِّلْمُكَذِّبِينَ", transliteration: "lil-mukadhdhibīna", meaning: { en: "to the deniers", ur: "جھٹلانے والوں کو", ar: "لِلمُكَذِّبِينَ" }, pos: "N", posLabel: "N", grammarRole: "indirect object" }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' }
+      ],
     },
   },
 
@@ -523,7 +553,10 @@ export const TREEBANK_DATA = {
       { position: 3, arabic: "لِّلْمُكَذِّبِينَ", transliteration: "lil-mukadhdhibīna", meaning: { en: "to the deniers", ur: "جھٹلانے والوں کو", ar: "لِلمُكَذِّبِينَ" }, pos: "N", posLabel: "N", grammarRole: "indirect object" }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' }
+      ],
     },
   },
 
@@ -569,7 +602,10 @@ export const TREEBANK_DATA = {
       { position: 3, arabic: "لِّلْمُكَذِّبِينَ", transliteration: "lil-mukadhdhibīna", meaning: { en: "to the deniers", ur: "جھٹلانے والوں کو", ar: "لِلمُكَذِّبِينَ" }, pos: "N", posLabel: "N", grammarRole: "indirect object" }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' }
+      ],
     },
   },
 
@@ -619,7 +655,10 @@ export const TREEBANK_DATA = {
       { position: 3, arabic: "لِّلْمُكَذِّبِينَ", transliteration: "lil-mukadhdhibīna", meaning: { en: "to the deniers", ur: "جھٹلانے والوں کو", ar: "لِلمُكَذِّبِينَ" }, pos: "N", posLabel: "N", grammarRole: "indirect object" }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' }
+      ],
     },
   },
 
@@ -650,7 +689,10 @@ export const TREEBANK_DATA = {
       { position: 3, arabic: "يَشْتَهُونَ", transliteration: "yashtahūna", root: "ش ه و", meaning: { en: "they desire", ur: "وہ چاہیں", ar: "يَشتَهُونَ" }, pos: "V", posLabel: "V", grammarRole: "predicate", form: "VIII" }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' }
+      ],
     },
   },
 
@@ -666,7 +708,9 @@ export const TREEBANK_DATA = {
       { position: 6, arabic: "تَعْمَلُونَ", transliteration: "taʿmalūna", root: "ع م ل", meaning: { en: "do", ur: "کرتے تھے", ar: "تَعمَلُونَ" }, pos: "V", posLabel: "V", grammarRole: "predicate" }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 2, to: 3, label: 'ظرف' }
+      ],
     },
   },
 
@@ -695,7 +739,10 @@ export const TREEBANK_DATA = {
       { position: 3, arabic: "لِّلْمُكَذِّبِينَ", transliteration: "lil-mukadhdhibīna", meaning: { en: "to the deniers", ur: "جھٹلانے والوں کو", ar: "لِلمُكَذِّبِينَ" }, pos: "N", posLabel: "N", grammarRole: "indirect object" }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' }
+      ],
     },
   },
 
@@ -710,7 +757,9 @@ export const TREEBANK_DATA = {
       { position: 5, arabic: "مُّجْرِمُونَ", transliteration: "mujrimūna", root: "ج ر م", meaning: { en: "criminals", ur: "مجرم ہو", ar: "مُجرِمُونَ" }, pos: "N", posLabel: "N", grammarRole: "predicate", form: "IV" }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 2, to: 3, label: 'ظرف' }
+      ],
     },
   },
 
@@ -723,7 +772,10 @@ export const TREEBANK_DATA = {
       { position: 3, arabic: "لِّلْمُكَذِّبِينَ", transliteration: "lil-mukadhdhibīna", meaning: { en: "to the deniers", ur: "جھٹلانے والوں کو", ar: "لِلمُكَذِّبِينَ" }, pos: "N", posLabel: "N", grammarRole: "indirect object" }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' }
+      ],
     },
   },
 
@@ -755,7 +807,10 @@ export const TREEBANK_DATA = {
       { position: 3, arabic: "لِّلْمُكَذِّبِينَ", transliteration: "lil-mukadhdhibīna", meaning: { en: "to the deniers", ur: "جھٹلانے والوں کو", ar: "لِلمُكَذِّبِينَ" }, pos: "N", posLabel: "N", grammarRole: "indirect object" }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' }
+      ],
     },
   },
 
@@ -769,7 +824,9 @@ export const TREEBANK_DATA = {
       { position: 4, arabic: "يُؤْمِنُونَ", transliteration: "yuʾminūna", root: "أ م ن", meaning: { en: "will they believe", ur: "وہ ایمان لائیں گے", ar: "يُؤمِنُونَ" }, pos: "V", posLabel: "V", grammarRole: "predicate", form: "IV", finalQuestion: true }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 3, to: 4, label: 'ظرف' }
+      ],
     },
   }
 };

@@ -33,6 +33,7 @@ export const ONTOLOGY = {
   categories: {
     contractsAndCovenants: {
       name: "Contracts and Covenants",
+      nameUr: "عہد اور میثاق",
       nameArabic: "العقود والمواثيق",
       nameUrdu: "عہد اور میثاق",
       color: "#3B82F6",
@@ -79,6 +80,7 @@ export const ONTOLOGY = {
 
     halalAndHaram: {
       name: "Halal and Haram Laws",
+      nameUr: "حلال و حرام کے احکام",
       nameArabic: "أحكام الحلال والحرام",
       nameUrdu: "حلال و حرام کے احکام",
       color: "#10B981",
@@ -179,6 +181,7 @@ export const ONTOLOGY = {
 
     huntingAndIhram: {
       name: "Hunting and Ihram Laws",
+      nameUr: "شکار اور احرام کے احکام",
       nameArabic: "أحكام الصيد والإحرام",
       nameUrdu: "شکار اور احرام کے احکام",
       color: "#F59E0B",
@@ -219,6 +222,7 @@ export const ONTOLOGY = {
 
     wuduAndTayammum: {
       name: "Purification Laws",
+      nameUr: "طہارت کے احکام",
       nameArabic: "أحكام الطهارة",
       nameUrdu: "طہارت کے احکام",
       color: "#06B6D4",
@@ -271,6 +275,7 @@ export const ONTOLOGY = {
 
     peopleOfTheBook: {
       name: "Relations with People of the Book",
+      nameUr: "اہلِ کتاب سے تعلقات",
       nameArabic: "العلاقة مع أهل الكتاب",
       nameUrdu: "اہل کتاب سے تعلقات",
       color: "#8B5CF6",
@@ -329,6 +334,7 @@ export const ONTOLOGY = {
 
     jesusAndDisciplesStory: {
       name: "Jesus and the Disciples",
+      nameUr: "عیسیٰ اور حواری",
       nameArabic: "عيسى والحواريون",
       nameUrdu: "عیسیٰ اور حواری",
       color: "#EC4899",
@@ -399,6 +405,7 @@ export const ONTOLOGY = {
 
     jesusAndMary: {
       name: "Jesus and Mary - Clarifications",
+      nameUr: "عیسیٰ اور مریم - وضاحت",
       nameArabic: "عيسى ومريم - التوضيحات",
       nameUrdu: "عیسیٰ اور مریم - وضاحت",
       color: "#F472B6",
@@ -469,6 +476,7 @@ export const ONTOLOGY = {
 
     miraclesOfJesus: {
       name: "Miracles Granted to Jesus",
+      nameUr: "عیسیٰ کے معجزات",
       nameArabic: "معجزات عيسى",
       nameUrdu: "عیسیٰ کے معجزات",
       color: "#A855F7",
@@ -533,6 +541,7 @@ export const ONTOLOGY = {
 
     cainAndAbel: {
       name: "Story of Cain and Abel",
+      nameUr: "قابیل و ہابیل کا قصہ",
       nameArabic: "قصة قابيل وهابيل",
       nameUrdu: "قابیل و ہابیل کا قصہ",
       color: "#EF4444",
@@ -603,6 +612,7 @@ export const ONTOLOGY = {
 
     sanctityOfLife: {
       name: "Sanctity of Human Life",
+      nameUr: "انسانی جان کی حرمت",
       nameArabic: "حرمة الدم البشري",
       nameUrdu: "انسانی جان کی حرمت",
       color: "#DC2626",
@@ -637,6 +647,7 @@ export const ONTOLOGY = {
 
     hirabahAndHadd: {
       name: "Punishment for Corruption",
+      nameUr: "فساد کی سزا",
       nameArabic: "حد الحرابة والإفساد",
       nameUrdu: "فساد کی سزا",
       color: "#7C3AED",
@@ -695,6 +706,7 @@ export const ONTOLOGY = {
 
     justiceAndWitness: {
       name: "Justice and Bearing Witness",
+      nameUr: "عدل اور گواہی",
       nameArabic: "العدل والشهادة",
       nameUrdu: "عدل اور گواہی",
       color: "#0891B2",
@@ -747,6 +759,7 @@ export const ONTOLOGY = {
 
     divineSovereignty: {
       name: "Divine Sovereignty and Judgment",
+      nameUr: "اللہ کی حاکمیت اور فیصلہ",
       nameArabic: "سيادة الله والحكم",
       nameUrdu: "اللہ کی حاکمیت اور فیصلہ",
       color: "#6366F1",
@@ -799,6 +812,7 @@ export const ONTOLOGY = {
 
     loyaltyAndAlliance: {
       name: "Loyalty and Alliance (Wala)",
+      nameUr: "دوستی اور ولایت",
       nameArabic: "الولاء والبراء",
       nameUrdu: "دوستی اور ولایت",
       color: "#F97316",
@@ -845,6 +859,7 @@ export const ONTOLOGY = {
 
     mosesAndBaniIsrael: {
       name: "Moses and Bani Israel",
+      nameUr: "موسیٰ اور بنی اسرائیل",
       nameArabic: "موسى وبنو إسرائيل",
       nameUrdu: "موسیٰ اور بنی اسرائیل",
       color: "#0D9488",
@@ -915,6 +930,7 @@ export const ONTOLOGY = {
 
     prophethoodAndGuidance: {
       name: "Prophethood and Divine Guidance",
+      nameUr: "نبوت اور ہدایت",
       nameArabic: "النبوة والهداية",
       nameUrdu: "نبوت اور ہدایت",
       color: "#84CC16",

@@ -14,6 +14,7 @@ export const ONTOLOGY = {
   categories: {
     ziharLaw: {
       name: "Zihar (False Divorce) Legislation",
+      nameUr: "ظہار کے احکام",
       nameAr: "أحكام الظهار",
       color: '#3B82F6',
       icon: 'Book',
@@ -26,6 +27,7 @@ export const ONTOLOGY = {
     },
     ziharExpiation: {
       name: "Expiation for Zihar",
+      nameUr: "ظہار کا کفارہ",
       nameAr: "كفارة الظهار",
       color: '#8B5CF6',
       icon: 'Scale',
@@ -38,6 +40,7 @@ export const ONTOLOGY = {
     },
     divineOmniscience: {
       name: "Allah's Complete Knowledge",
+      nameUr: "اللہ کا مکمل علم",
       nameAr: "علم الله الشامل",
       color: '#F59E0B',
       icon: 'Eye',
@@ -50,6 +53,7 @@ export const ONTOLOGY = {
     },
     secretConversations: {
       name: "Regulations on Private Conversations",
+      nameUr: "سرگوشی کے آداب",
       nameAr: "آداب النجوى",
       color: '#06B6D4',
       icon: 'MessageCircle',
@@ -62,6 +66,7 @@ export const ONTOLOGY = {
     },
     assemblyEtiquette: {
       name: "Assembly Etiquette",
+      nameUr: "مجلسوں کے آداب",
       nameAr: "آداب المجالس",
       color: '#10B981',
       icon: 'Users',
@@ -74,6 +79,7 @@ export const ONTOLOGY = {
     },
     charityBeforeConsultation: {
       name: "Charity Before Private Consultation",
+      nameUr: "نجی مشاورت سے پہلے صدقہ",
       nameAr: "الصدقة قبل النجوى",
       color: '#10B981',
       icon: 'Heart',
@@ -85,6 +91,7 @@ export const ONTOLOGY = {
     },
     hypocritesExposed: {
       name: "Hypocrites' False Allegiances",
+      nameUr: "منافقین کی جھوٹی وفاداریاں",
       nameAr: "فضح المنافقين",
       color: '#EF4444',
       icon: 'AlertTriangle',
@@ -97,6 +104,7 @@ export const ONTOLOGY = {
     },
     twoParties: {
       name: "Two Opposing Parties",
+      nameUr: "دو متقابل گروہ",
       nameAr: "الحزبان المتقابلان",
       color: '#8B5CF6',
       icon: 'Users',
@@ -109,6 +117,7 @@ export const ONTOLOGY = {
     },
     loyaltyToAllah: {
       name: "Loyalty to Allah Over Family",
+      nameUr: "خاندان سے بالاتر اللہ سے وفاداری",
       nameAr: "الولاء لله فوق القرابة",
       color: '#F59E0B',
       icon: 'Shield',

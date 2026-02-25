@@ -21,7 +21,9 @@ export const TREEBANK_DATA = {
       { position: 2, arabic: "وَتَوَلَّىٰ", transliteration: "wa-tawallā", root: "و ل ي", meaning: { en: "and turned away", ur: "اور منہ پھیر لیا", ar: "وَأَعرَضَ" }, pos: "V", posLabel: "V", grammarRole: "verb", features: { form: "V" } }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' }
+      ],
     },
   },
 
@@ -50,7 +52,11 @@ export const TREEBANK_DATA = {
       { position: 4, arabic: "يَزَّكَّىٰ", transliteration: "yazzakkā", root: "ز ك و", meaning: { en: "might be purified", ur: "پاک ہو جائے", ar: "يَتَطَهَّرَ" }, pos: "V", posLabel: "V", grammarRole: "verb", features: { form: "V" }, advanced: { linguisticMiracle: "The blind man might achieve more purification than the chiefs" } }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' }
+      ],
     },
   },
 
@@ -142,7 +148,9 @@ export const TREEBANK_DATA = {
       { position: 2, arabic: "يَخْشَىٰ", transliteration: "yakhshā", root: "خ ش ي", meaning: { en: "fears (Allah)", ur: "ڈرتا ہے", ar: "يَخافُ" }, pos: "V", posLabel: "V", grammarRole: "verb", advanced: { linguisticMiracle: "Khashyah - reverential fear mixed with awe" } }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' }
+      ],
     },
   },
 
@@ -170,7 +178,10 @@ export const TREEBANK_DATA = {
       { position: 3, arabic: "تَذْكِرَةٌ", transliteration: "tadhkiratun", root: "ذ ك ر", meaning: { en: "is a reminder", ur: "نصیحت ہے", ar: "مَوعِظَة" }, pos: "N", posLabel: "N", grammarRole: "predicate", features: { pattern: "تَفْعِلَة" } }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' }
+      ],
     },
   },
 
@@ -213,7 +224,9 @@ export const TREEBANK_DATA = {
       { position: 2, arabic: "مُّطَهَّرَةٍ", transliteration: "muṭahharatin", root: "ط ه ر", meaning: { en: "purified", ur: "پاکیزہ", ar: "نَقِيَّة" }, pos: "ADJ", posLabel: "ADJ", grammarRole: "attribute" }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' }
+      ],
     },
   },
 
@@ -239,7 +252,9 @@ export const TREEBANK_DATA = {
       { position: 2, arabic: "بَرَرَةٍ", transliteration: "bararatin", root: "ب ر ر", meaning: { en: "dutiful", ur: "فرمانبردار", ar: "صالِحينَ" }, pos: "ADJ", posLabel: "ADJ", grammarRole: "attribute", advanced: { linguisticMiracle: "Angels both noble and obedient to Allah" } }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' }
+      ],
     },
   },
 
@@ -300,7 +315,10 @@ export const TREEBANK_DATA = {
       { position: 3, arabic: "يَسَّرَهُ", transliteration: "yassarahu", root: "ي س ر", meaning: { en: "made easy for him", ur: "آسان کیا", ar: "سَهَّلَهُ" }, pos: "V+PRON", posLabel: "V+PRON", grammarRole: "verb + object", features: { form: "II" }, advanced: { linguisticMiracle: "Birth canal opened, or path of guidance shown" } }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' }
+      ],
     },
   },
 
@@ -313,7 +331,10 @@ export const TREEBANK_DATA = {
       { position: 3, arabic: "فَأَقْبَرَهُ", transliteration: "fa-aqbarahu", root: "ق ب ر", meaning: { en: "then buried him", ur: "پھر اسے دفنایا", ar: "فَدَفَنَهُ" }, pos: "V+PRON", posLabel: "V+PRON", grammarRole: "verb + object", features: { form: "IV" }, advanced: { linguisticMiracle: "Form IV causative - Allah causes burial (through others)" } }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' }
+      ],
     },
   },
 
@@ -425,7 +446,9 @@ export const TREEBANK_DATA = {
       { position: 2, arabic: "وَقَضْبًا", transliteration: "wa-qaḍban", root: "ق ض ب", meaning: { en: "and herbage", ur: "اور ترکاری", ar: "وَخَضراوات" }, pos: "N", posLabel: "N", grammarRole: "object" }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' }
+      ],
     },
   },
 
@@ -437,7 +460,9 @@ export const TREEBANK_DATA = {
       { position: 2, arabic: "وَنَخْلًا", transliteration: "wa-nakhlan", root: "ن خ ل", meaning: { en: "and date palms", ur: "اور کھجور", ar: "وَنَخيلاً" }, pos: "N", posLabel: "N", grammarRole: "object" }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' }
+      ],
     },
   },
 
@@ -463,7 +488,9 @@ export const TREEBANK_DATA = {
       { position: 2, arabic: "وَأَبًّا", transliteration: "wa-abban", root: "أ ب ب", meaning: { en: "and pasture", ur: "اور چارہ", ar: "وَمَرعى" }, pos: "N", posLabel: "N", grammarRole: "object", advanced: { linguisticMiracle: "Abb = fodder/grass for animals - provision for livestock too" } }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' }
+      ],
     },
   },
 
@@ -525,7 +552,9 @@ export const TREEBANK_DATA = {
       { position: 2, arabic: "وَأَبِيهِ", transliteration: "wa-abīhi", root: "أ ب و", meaning: { en: "and his father", ur: "اور اپنے باپ سے", ar: "وَوالِدِهِ" }, pos: "N+PRON", posLabel: "N+PRON", grammarRole: "prepositional phrase" }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' }
+      ],
     },
   },
 
@@ -537,7 +566,9 @@ export const TREEBANK_DATA = {
       { position: 2, arabic: "وَبَنِيهِ", transliteration: "wa-banīhi", root: "ب ن ي", meaning: { en: "and his children", ur: "اور اپنے بچوں سے", ar: "وَأَولادِهِ" }, pos: "N+PRON", posLabel: "N+PRON", grammarRole: "prepositional phrase", advanced: { linguisticMiracle: "Flees from closest relatives - each person's terror" } }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' }
+      ],
     },
   },
 
@@ -585,7 +616,9 @@ export const TREEBANK_DATA = {
       { position: 2, arabic: "مُّسْتَبْشِرَةٌ", transliteration: "mustabshiratun", root: "ب ش ر", meaning: { en: "rejoicing", ur: "خوش", ar: "مَسرورَة" }, pos: "ADJ", posLabel: "ADJ", grammarRole: "predicate", features: { form: "X" }, advanced: { linguisticMiracle: "Seeking good news - they receive it" } }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' }
+      ],
     },
   },
 

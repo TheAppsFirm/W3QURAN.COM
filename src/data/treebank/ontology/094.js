@@ -14,6 +14,7 @@ export const ONTOLOGY = {
   categories: {
     divineBlessings: {
       name: "Divine Blessings Upon the Prophet",
+      nameUr: "نبی پر الٰہی انعامات",
       nameArabic: "نعم الله على النبي",
       color: '#F59E0B',
       icon: 'Star',
@@ -45,6 +46,7 @@ export const ONTOLOGY = {
 
     easeWithHardship: {
       name: "The Promise of Ease",
+      nameUr: "آسانی کا وعدہ",
       nameArabic: "اليسر مع العسر",
       color: '#10B981',
       icon: 'Sparkles',
@@ -76,6 +78,7 @@ export const ONTOLOGY = {
 
     perpetualStriving: {
       name: "Continuous Effort",
+      nameUr: "مسلسل محنت",
       nameArabic: "الجهد المستمر",
       color: '#3B82F6',
       icon: 'Zap',

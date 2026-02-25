@@ -23,6 +23,7 @@ export const ONTOLOGY = {
       color: '#EF4444',
       icon: 'Users',
       name: "Revelation as Guidance",
+      nameUr: "وحی بطور ہدایت",
       nameArabic: "الهداية بالوحي",
       concepts: [
         { term: "كِتَابٌ أَنزَلْنَاهُ إِلَيْكَ", meaning: { en: "A Book We revealed to you", ur: "ایک کتاب جو ہم نے تمہاری طرف نازل کی" }, explanation: { en: "Quran's purpose is to guide humanity", ur: "قرآن کا مقصد انسانیت کی رہنمائی ہے" }, verseRef: "14:1" },
@@ -36,6 +37,7 @@ export const ONTOLOGY = {
       color: '#8B5CF6',
       icon: 'Heart',
       name: "Divine Authority",
+      nameUr: "الٰہی اختیار",
       nameArabic: "السلطان الإلهي",
       concepts: [
         { term: "اللَّهِ الَّذِي لَهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ", meaning: { en: "Allah, to whom belongs all in heavens and earth", ur: "Allah جس کا ہے جو کچھ آسمانوں اور زمین میں ہے" }, explanation: { en: "Absolute divine ownership", ur: "مطلق الٰہی ملکیت" }, verseRef: "14:2" },
@@ -48,6 +50,7 @@ export const ONTOLOGY = {
       color: '#F59E0B',
       icon: 'Star',
       name: "Prophetic Mission",
+      nameUr: "انبیاء کی رسالت",
       nameArabic: "رسالة الأنبياء",
       concepts: [
         { term: "أَرْسَلْنَا مُوسَىٰ بِآيَاتِنَا", meaning: { en: "We sent Musa with Our signs", ur: "ہم نے موسیٰ کو اپنی نشانیوں کے ساتھ بھیجا" }, explanation: { en: "Musa's mission to Pharaoh's people", ur: "موسیٰ کی فرعون کی قوم کی طرف بعثت" }, verseRef: "14:5" },
@@ -61,6 +64,7 @@ export const ONTOLOGY = {
       color: '#EF4444',
       icon: 'Users',
       name: "Tactics of Disbelievers",
+      nameUr: "کافروں کے حربے",
       nameArabic: "مكر الكافرين",
       concepts: [
         { term: "الَّذِينَ يَسْتَحِبُّونَ الْحَيَاةَ الدُّنْيَا عَلَى الْآخِرَةِ", meaning: { en: "Those who prefer worldly life over Hereafter", ur: "جو دنیا کی زندگی کو آخرت پر ترجیح دیتے ہیں" }, explanation: { en: "Root cause: prioritizing this world", ur: "بنیادی وجہ: اس دنیا کو ترجیح دینا" }, verseRef: "14:3" },
@@ -74,6 +78,7 @@ export const ONTOLOGY = {
       color: '#06B6D4',
       icon: 'Compass',
       name: "Prophetic Response",
+      nameUr: "انبیاء کا جواب",
       nameArabic: "رد الأنبياء",
       concepts: [
         { term: "أَفِي اللَّهِ شَكٌّ فَاطِرِ السَّمَاوَاتِ وَالْأَرْضِ", meaning: { en: "Is there doubt about Allah, Creator of heavens and earth?", ur: "کیا آسمانوں اور زمین کے پیدا کرنے والے Allah میں شک ہے؟" }, explanation: { en: "Rhetorical question affirming Allah's existence", ur: "بلاغی سوال جو Allah کے وجود کی تصدیق کرتا ہے" }, verseRef: "14:10" },
@@ -87,6 +92,7 @@ export const ONTOLOGY = {
       color: '#F59E0B',
       icon: 'Star',
       name: "Patience and Trust in Allah",
+      nameUr: "صبر اور اللہ پر توکل",
       nameArabic: "الصبر والتوكل",
       concepts: [
         { term: "وَلَنَصْبِرَنَّ عَلَىٰ مَا آذَيْتُمُونَا", meaning: { en: "We will surely be patient over your harm", ur: "تمہاری تکلیف پر ہم ضرور صبر کریں گے" }, explanation: { en: "Prophetic commitment to patience", ur: "صبر پر انبیاء کا عزم" }, verseRef: "14:12" },
@@ -100,6 +106,7 @@ export const ONTOLOGY = {
       color: '#8B5CF6',
       icon: 'Heart',
       name: "Destroyed Nations",
+      nameUr: "تباہ شدہ قومیں",
       nameArabic: "الأمم الهالكة",
       concepts: [
         { term: "أَلَمْ يَأْتِكُمْ نَبَأُ الَّذِينَ مِن قَبْلِكُمْ قَوْمِ نُوحٍ وَعَادٍ وَثَمُودَ", meaning: { en: "Has not the news reached you of those before you - people of Nuh, Aad, Thamud", ur: "کیا تمہیں ان لوگوں کی خبر نہیں پہنچی جو تم سے پہلے تھے - قوم نوح، عاد اور ثمود" }, explanation: { en: "Historical precedents of destruction", ur: "تباہی کی تاریخی مثالیں" }, verseRef: "14:9" },
@@ -112,6 +119,7 @@ export const ONTOLOGY = {
       color: '#8B5CF6',
       icon: 'Heart',
       name: "Parable of the Good Word",
+      nameUr: "پاکیزہ کلمے کی مثال",
       nameArabic: "مثل الكلمة الطيبة",
       concepts: [
         { term: "كَلِمَةً طَيِّبَةً كَشَجَرَةٍ طَيِّبَةٍ", meaning: { en: "A good word like a good tree", ur: "پاکیزہ کلمہ پاکیزہ درخت کی مانند ہے" }, explanation: { en: "La ilaha illallah compared to tree", ur: "لا الہ الا اللہ کا درخت سے موازنہ" }, verseRef: "14:24" },
@@ -126,6 +134,7 @@ export const ONTOLOGY = {
       color: '#EF4444',
       icon: 'Users',
       name: "Parable of the Evil Word",
+      nameUr: "خبیث کلمے کی مثال",
       nameArabic: "مثل الكلمة الخبيثة",
       concepts: [
         { term: "كَلِمَةٍ خَبِيثَةٍ كَشَجَرَةٍ خَبِيثَةٍ", meaning: { en: "An evil word like an evil tree", ur: "خبیث کلمہ خبیث درخت کی مانند ہے" }, explanation: { en: "Kufr/shirk compared to rotten tree", ur: "کفر/شرک کا بوسیدہ درخت سے موازنہ" }, verseRef: "14:26" },
@@ -138,6 +147,7 @@ export const ONTOLOGY = {
       color: '#3B82F6',
       icon: 'Shield',
       name: "The Firm Word",
+      nameUr: "پختہ بات",
       nameArabic: "القول الثابت",
       concepts: [
         { term: "يُثَبِّتُ اللَّهُ الَّذِينَ آمَنُوا بِالْقَوْلِ الثَّابِتِ", meaning: { en: "Allah keeps firm those who believe with the firm word", ur: "Allah ایمان والوں کو پختہ قول سے ثابت قدم رکھتا ہے" }, explanation: { en: "Faith provides stability", ur: "ایمان ثابت قدمی دیتا ہے" }, verseRef: "14:27" },
@@ -150,6 +160,7 @@ export const ONTOLOGY = {
       color: '#8B5CF6',
       icon: 'Heart',
       name: "Allah's Blessings",
+      nameUr: "اللہ کی نعمتیں",
       nameArabic: "نعم الله",
       concepts: [
         { term: "وَسَخَّرَ لَكُمُ الْفُلْكَ لِتَجْرِيَ فِي الْبَحْرِ بِأَمْرِهِ", meaning: { en: "Subjected to you ships to sail through the sea by His command", ur: "تمہارے لیے کشتیاں مسخر کیں تاکہ اس کے حکم سے سمندر میں چلیں" }, explanation: { en: "Sea travel as divine gift", ur: "سمندری سفر بطور الٰہی عطیہ" }, verseRef: "14:32" },
@@ -165,6 +176,7 @@ export const ONTOLOGY = {
       color: '#8B5CF6',
       icon: 'Heart',
       name: "Human Ingratitude",
+      nameUr: "انسانی ناشکری",
       nameArabic: "كفران النعم",
       concepts: [
         { term: "إِنَّ الْإِنسَانَ لَظَلُومٌ كَفَّارٌ", meaning: { en: "Indeed mankind is most unjust, ungrateful", ur: "بے شک انسان بڑا ظالم، بڑا ناشکرا ہے" }, explanation: { en: "Human tendency toward ingratitude", ur: "ناشکری کی طرف انسانی رجحان" }, verseRef: "14:34" },
@@ -177,6 +189,7 @@ export const ONTOLOGY = {
       color: '#EF4444',
       icon: 'Users',
       name: "Ibrahim's Prayer for Makkah",
+      nameUr: "ابراہیم کی مکہ کے لیے دعا",
       nameArabic: "دعاء إبراهيم لمكة",
       concepts: [
         { term: "رَبِّ اجْعَلْ هَٰذَا الْبَلَدَ آمِنًا", meaning: { en: "My Lord, make this city secure", ur: "اے میرے رب! اس شہر کو امن والا بنا دے" }, explanation: { en: "Prayer for Makkah's safety", ur: "مکہ کی سلامتی کی دعا" }, verseRef: "14:35" },
@@ -190,6 +203,7 @@ export const ONTOLOGY = {
       color: '#F59E0B',
       icon: 'Star',
       name: "Ibrahim's Family in Makkah",
+      nameUr: "ابراہیم کا خاندان مکہ میں",
       nameArabic: "ذرية إبراهيم في مكة",
       concepts: [
         { term: "رَّبَّنَا إِنِّي أَسْكَنتُ مِن ذُرِّيَّتِي بِوَادٍ غَيْرِ ذِي زَرْعٍ", meaning: { en: "Our Lord, I have settled some of my descendants in an uncultivated valley", ur: "اے ہمارے رب! میں نے اپنی اولاد کو بے آب و گیاہ وادی میں بسایا" }, explanation: { en: "Settling Ismail and Hajar in barren Makkah", ur: "اسماعیل اور ہاجرہ کو بنجر مکہ میں بسانا" }, verseRef: "14:37" },
@@ -204,6 +218,7 @@ export const ONTOLOGY = {
       color: '#14B8A6',
       icon: 'Crown',
       name: "Ibrahim's Gratitude",
+      nameUr: "ابراہیم کا شکر",
       nameArabic: "شكر إبراهيم",
       concepts: [
         { term: "الْحَمْدُ لِلَّهِ الَّذِي وَهَبَ لِي عَلَى الْكِبَرِ إِسْمَاعِيلَ وَإِسْحَاقَ", meaning: { en: "Praise to Allah who granted me in old age Ismail and Ishaq", ur: "تمام تعریفیں Allah کے لیے جس نے مجھے بڑھاپے میں اسماعیل اور اسحاق عطا فرمائے" }, explanation: { en: "Gratitude for children in old age", ur: "بڑھاپے میں اولاد کا شکر" }, verseRef: "14:39" },
@@ -215,6 +230,7 @@ export const ONTOLOGY = {
       color: '#10B981',
       icon: 'Book',
       name: "Ibrahim's Prayer for Family",
+      nameUr: "ابراہیم کی خاندان کے لیے دعا",
       nameArabic: "دعاء إبراهيم لأهله",
       concepts: [
         { term: "رَبِّ اجْعَلْنِي مُقِيمَ الصَّلَاةِ وَمِن ذُرِّيَّتِي", meaning: { en: "My Lord, make me establisher of prayer and from my descendants", ur: "اے میرے رب! مجھے نماز قائم کرنے والا بنا اور میری اولاد سے بھی" }, explanation: { en: "Prayer for generations of worshippers", ur: "نسلوں کے عبادت گزار ہونے کی دعا" }, verseRef: "14:40" },
@@ -228,6 +244,7 @@ export const ONTOLOGY = {
       color: '#14B8A6',
       icon: 'Crown',
       name: "Day of Judgment",
+      nameUr: "یومِ قیامت",
       nameArabic: "يوم القيامة",
       concepts: [
         { term: "وَلَا تَحْسَبَنَّ اللَّهَ غَافِلًا عَمَّا يَعْمَلُ الظَّالِمُونَ", meaning: { en: "Never think Allah is unaware of what wrongdoers do", ur: "ظالم جو کچھ کرتے ہیں Allah کو اس سے غافل نہ سمجھو" }, explanation: { en: "Divine observation of all deeds", ur: "تمام اعمال پر الٰہی نگرانی" }, verseRef: "14:42" },
@@ -242,6 +259,7 @@ export const ONTOLOGY = {
       color: '#EF4444',
       icon: 'Users',
       name: "Regret of Disbelievers",
+      nameUr: "کافروں کا پچھتاوا",
       nameArabic: "ندم الكافرين",
       concepts: [
         { term: "رَبَّنَا أَخِّرْنَا إِلَىٰ أَجَلٍ قَرِيبٍ", meaning: { en: "Our Lord, delay us for a brief term", ur: "اے ہمارے رب! ہمیں تھوڑی مہلت دے" }, explanation: { en: "Too-late request for time", ur: "وقت کی دیر سے درخواست" }, verseRef: "14:44" },
@@ -254,6 +272,7 @@ export const ONTOLOGY = {
       color: '#8B5CF6',
       icon: 'Heart',
       name: "Satan Disowns Followers",
+      nameUr: "شیطان کا پیروکاروں سے اظہارِ برأت",
       nameArabic: "تبرؤ الشيطان",
       concepts: [
         { term: "وَقَالَ الشَّيْطَانُ لَمَّا قُضِيَ الْأَمْرُ", meaning: { en: "And Satan will say when the matter is concluded", ur: "اور شیطان کہے گا جب فیصلہ ہو جائے گا" }, explanation: { en: "Satan's speech on Judgment Day", ur: "قیامت کے دن شیطان کی تقریر" }, verseRef: "14:22" },
@@ -268,6 +287,7 @@ export const ONTOLOGY = {
       color: '#8B5CF6',
       icon: 'Heart',
       name: "Description of Paradise",
+      nameUr: "جنت کا بیان",
       nameArabic: "وصف الجنة",
       concepts: [
         { term: "وَأُدْخِلَ الَّذِينَ آمَنُوا... جَنَّاتٍ", meaning: { en: "And those who believed will be admitted to gardens", ur: "اور جو ایمان لائے انہیں باغات میں داخل کیا جائے گا" }, explanation: { en: "Entry of believers to Paradise", ur: "مومنین کا جنت میں داخلہ" }, verseRef: "14:23" },
@@ -281,6 +301,7 @@ export const ONTOLOGY = {
       color: '#F59E0B',
       icon: 'Star',
       name: "Cosmic Transformation",
+      nameUr: "کائناتی تبدیلی",
       nameArabic: "تبدل الكون",
       concepts: [
         { term: "يَوْمَ تُبَدَّلُ الْأَرْضُ غَيْرَ الْأَرْضِ وَالسَّمَاوَاتُ", meaning: { en: "The Day earth will be replaced by another earth and the heavens", ur: "جس دن زمین بدل دی جائے گی دوسری زمین سے اور آسمان بھی" }, explanation: { en: "Complete cosmic recreation", ur: "مکمل کائناتی تخلیق نو" }, verseRef: "14:48" },
@@ -295,6 +316,7 @@ export const ONTOLOGY = {
       color: '#10B981',
       icon: 'Book',
       name: "Warning to People",
+      nameUr: "لوگوں کو تنبیہ",
       nameArabic: "البلاغ والإنذار",
       concepts: [
         { term: "هَٰذَا بَلَاغٌ لِّلنَّاسِ", meaning: { en: "This is notification for the people", ur: "یہ لوگوں کے لیے پیغام ہے" }, explanation: { en: "Quran as clear message", ur: "قرآن بطور واضح پیغام" }, verseRef: "14:52" },

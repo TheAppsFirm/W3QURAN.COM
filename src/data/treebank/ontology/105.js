@@ -14,6 +14,7 @@ export const ONTOLOGY = {
   categories: {
     divineIntervention: {
       name: "Divine Intervention",
+      nameUr: "الٰہی مداخلت",
       nameArabic: "التدخل الإلهي",
       color: '#F59E0B',
       icon: 'Star',
@@ -38,6 +39,7 @@ export const ONTOLOGY = {
 
     enemiesOfKaaba: {
       name: "Enemies of the Ka'bah",
+      nameUr: "کعبہ کے دشمن",
       nameArabic: "أعداء الكعبة",
       color: '#EF4444',
       icon: 'AlertTriangle',
@@ -62,6 +64,7 @@ export const ONTOLOGY = {
 
     divineArmy: {
       name: "Divine Army",
+      nameUr: "الٰہی لشکر",
       nameArabic: "جند الله",
       color: '#8B5CF6',
       icon: 'Shield',
@@ -86,6 +89,7 @@ export const ONTOLOGY = {
 
     completeDestruction: {
       name: "Complete Destruction",
+      nameUr: "مکمل تباہی",
       nameArabic: "الدمار الشامل",
       color: '#DC2626',
       icon: 'Zap',

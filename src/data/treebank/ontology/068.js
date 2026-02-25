@@ -14,6 +14,7 @@ export const ONTOLOGY = {
   categories: {
     divineOath: {
       name: "Divine Oath by the Pen",
+      nameUr: "قلم کی الٰہی قسم",
       nameArabic: "القسم بالقلم",
       color: '#3B82F6',
       icon: 'Book',
@@ -26,6 +27,7 @@ export const ONTOLOGY = {
 
     prophetDefense: {
       name: "Defense of Prophet's Character",
+      nameUr: "نبی ﷺ کے کردار کا دفاع",
       nameArabic: "الدفاع عن خلق النبي",
       color: '#F59E0B',
       icon: 'Crown',
@@ -38,6 +40,7 @@ export const ONTOLOGY = {
 
     futureVindication: {
       name: "Future Vindication",
+      nameUr: "مستقبل میں سچائی کا ثبوت",
       nameArabic: "التبرئة المستقبلية",
       color: '#8B5CF6',
       icon: 'Eye',
@@ -50,6 +53,7 @@ export const ONTOLOGY = {
 
     evilCharacteristics: {
       name: "Evil Characteristics to Avoid",
+      nameUr: "بری صفات جن سے بچنا ہے",
       nameArabic: "الصفات السيئة للتجنب",
       color: '#EF4444',
       icon: 'AlertTriangle',
@@ -64,6 +68,7 @@ export const ONTOLOGY = {
 
     wealthArrogance: {
       name: "Wealth and Arrogance",
+      nameUr: "مال اور غرور",
       nameArabic: "المال والغرور",
       color: '#EC4899',
       icon: 'AlertTriangle',
@@ -76,6 +81,7 @@ export const ONTOLOGY = {
 
     gardenOwners: {
       name: "Story of the Garden Owners",
+      nameUr: "باغ والوں کا قصہ",
       nameArabic: "قصة أصحاب الجنة",
       color: '#22C55E',
       icon: 'Book',
@@ -90,6 +96,7 @@ export const ONTOLOGY = {
 
     gardenOwnersRemorse: {
       name: "The Garden Owners' Remorse",
+      nameUr: "باغ والوں کی ندامت",
       nameArabic: "ندم أصحاب الجنة",
       color: '#8B5CF6',
       icon: 'Heart',
@@ -105,6 +112,7 @@ export const ONTOLOGY = {
 
     muslimsVsCriminals: {
       name: "Muslims vs Criminals",
+      nameUr: "مسلمان بمقابلہ مجرمین",
       nameArabic: "المسلمون مقابل المجرمين",
       color: '#10B981',
       icon: 'Scale',
@@ -117,6 +125,7 @@ export const ONTOLOGY = {
 
     rhetoricalQuestions: {
       name: "Rhetorical Questions",
+      nameUr: "بلاغتی سوالات",
       nameArabic: "الأسئلة البلاغية",
       color: '#06B6D4',
       icon: 'MessageCircle',
@@ -129,6 +138,7 @@ export const ONTOLOGY = {
 
     dayOfJudgment: {
       name: "Day of Judgment",
+      nameUr: "یومِ قیامت",
       nameArabic: "يوم القيامة",
       color: '#EF4444',
       icon: 'Scale',
@@ -142,6 +152,7 @@ export const ONTOLOGY = {
 
     divineStrategy: {
       name: "Divine Strategy",
+      nameUr: "الٰہی تدبیر",
       nameArabic: "الاستدراج الإلهي",
       color: '#F59E0B',
       icon: 'Eye',
@@ -155,6 +166,7 @@ export const ONTOLOGY = {
 
     prophetYunus: {
       name: "Reference to Prophet Yunus",
+      nameUr: "حضرت یونس علیہ السلام کا ذکر",
       nameArabic: "ذكر سيدنا يونس",
       color: '#3B82F6',
       icon: 'Book',
@@ -168,6 +180,7 @@ export const ONTOLOGY = {
 
     evilEye: {
       name: "The Evil Eye",
+      nameUr: "بدنظری (نظرِ بد)",
       nameArabic: "العين الحاسدة",
       color: '#EC4899',
       icon: 'Shield',

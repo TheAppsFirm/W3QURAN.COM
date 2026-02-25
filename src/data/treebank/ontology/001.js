@@ -14,6 +14,7 @@ export const ONTOLOGY = {
   categories: {
     divinePraise: {
       name: "Divine Praise and Gratitude",
+      nameUr: "الٰہی حمد و شکر",
       nameAr: "الحمد والثناء",
       color: '#F59E0B',
       icon: 'Star',
@@ -25,6 +26,7 @@ export const ONTOLOGY = {
     },
     divineAttributes: {
       name: "Divine Attributes",
+      nameUr: "اللہ کی صفات",
       nameAr: "صفات الله",
       color: '#8B5CF6',
       icon: 'Crown',
@@ -37,6 +39,7 @@ export const ONTOLOGY = {
     },
     worshipAndSeeking: {
       name: "Worship and Seeking Help",
+      nameUr: "عبادت اور مدد مانگنا",
       nameAr: "العبادة والاستعانة",
       color: '#10B981',
       icon: 'Heart',
@@ -49,6 +52,7 @@ export const ONTOLOGY = {
     },
     guidanceAndPath: {
       name: "Guidance and the Straight Path",
+      nameUr: "ہدایت اور صراطِ مستقیم",
       nameAr: "الهداية والصراط المستقيم",
       color: '#3B82F6',
       icon: 'Compass',
@@ -60,6 +64,7 @@ export const ONTOLOGY = {
     },
     threeGroupsOfPeople: {
       name: "Three Groups of People",
+      nameUr: "لوگوں کے تین گروہ",
       nameAr: "الفئات الثلاث من الناس",
       color: '#06B6D4',
       icon: 'Users',
@@ -72,6 +77,7 @@ export const ONTOLOGY = {
     },
     prayerStructure: {
       name: "Structure of Perfect Prayer",
+      nameUr: "کامل دعا کی ساخت",
       nameAr: "بنية الدعاء الكامل",
       color: '#EC4899',
       icon: 'Book',

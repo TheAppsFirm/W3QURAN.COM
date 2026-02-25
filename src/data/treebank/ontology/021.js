@@ -19,6 +19,7 @@ export const ONTOLOGY = {
   categories: {
     approachingJudgment: {
       name: "Approaching Judgment",
+      nameUr: "قیامت کا قریب آنا",
       nameArabic: "اقتراب الحساب",
       color: "#EF4444",
       icon: "AlertTriangle",
@@ -32,6 +33,7 @@ export const ONTOLOGY = {
 
     disbelieversClaims: {
       name: "Claims of Disbelievers",
+      nameUr: "کافروں کے دعوے",
       nameArabic: "ادعاءات الكافرين",
       color: "#EF4444",
       icon: "MessageCircle",
@@ -46,6 +48,7 @@ export const ONTOLOGY = {
 
     prophetsWereHuman: {
       name: "Prophets Were Human",
+      nameUr: "انبیاء بشر تھے",
       nameArabic: "الأنبياء بشر",
       color: "#10B981",
       icon: "Users",
@@ -58,6 +61,7 @@ export const ONTOLOGY = {
 
     tawheedDeclaration: {
       name: "Declaration of Tawheed",
+      nameUr: "توحید کا اعلان",
       nameArabic: "إعلان التوحيد",
       color: "#F59E0B",
       icon: "Star",
@@ -71,6 +75,7 @@ export const ONTOLOGY = {
 
     ibrahimStory: {
       name: "Ibrahim's Story - Breaking Idols",
+      nameUr: "ابراہیم کا قصہ - بت شکنی",
       nameArabic: "قصة إبراهيم - تحطيم الأصنام",
       color: "#3B82F6",
       icon: "Book",
@@ -89,6 +94,7 @@ export const ONTOLOGY = {
 
     ibrahimInFire: {
       name: "Ibrahim Thrown in Fire",
+      nameUr: "ابراہیم کو آگ میں ڈالنا",
       nameArabic: "إلقاء إبراهيم في النار",
       color: "#8B5CF6",
       icon: "Shield",
@@ -103,6 +109,7 @@ export const ONTOLOGY = {
 
     prophetLut: {
       name: "Prophet Lut",
+      nameUr: "حضرت لوط",
       nameArabic: "النبي لوط",
       color: "#3B82F6",
       icon: "Book",
@@ -115,6 +122,7 @@ export const ONTOLOGY = {
 
     prophetNuh: {
       name: "Prophet Nuh",
+      nameUr: "حضرت نوح",
       nameArabic: "النبي نوح",
       color: "#3B82F6",
       icon: "Book",
@@ -128,6 +136,7 @@ export const ONTOLOGY = {
 
     prophetsDavidSolomon: {
       name: "Prophets Dawud and Sulayman",
+      nameUr: "حضرت داؤد اور سلیمان",
       nameArabic: "النبيان داود وسليمان",
       color: "#F59E0B",
       icon: "Crown",
@@ -144,6 +153,7 @@ export const ONTOLOGY = {
 
     prophetAyyub: {
       name: "Prophet Ayyub (Job)",
+      nameUr: "حضرت ایوب",
       nameArabic: "النبي أيوب",
       color: "#10B981",
       icon: "Heart",
@@ -158,6 +168,7 @@ export const ONTOLOGY = {
 
     prophetsIsmailIdrisZulKifl: {
       name: "Prophets Ismail, Idris, Dhul-Kifl",
+      nameUr: "حضرت اسماعیل، ادریس، ذوالکفل",
       nameArabic: "الأنبياء إسماعيل وإدريس وذو الكفل",
       color: "#3B82F6",
       icon: "Users",
@@ -170,6 +181,7 @@ export const ONTOLOGY = {
 
     prophetYunus: {
       name: "Prophet Yunus (Dhun-Nun)",
+      nameUr: "حضرت یونس (ذوالنون)",
       nameArabic: "النبي يونس (ذو النون)",
       color: "#06B6D4",
       icon: "Heart",
@@ -184,6 +196,7 @@ export const ONTOLOGY = {
 
     prophetZakariyyaYahya: {
       name: "Prophets Zakariyya and Yahya",
+      nameUr: "حضرت زکریا اور یحییٰ",
       nameArabic: "النبيان زكريا ويحيى",
       color: "#8B5CF6",
       icon: "Heart",
@@ -200,6 +213,7 @@ export const ONTOLOGY = {
 
     prophetMaryamIsa: {
       name: "Maryam and Prophet Isa",
+      nameUr: "مریم اور حضرت عیسیٰ",
       nameArabic: "مريم والنبي عيسى",
       color: "#EC4899",
       icon: "Sparkles",
@@ -212,6 +226,7 @@ export const ONTOLOGY = {
 
     oneUmmah: {
       name: "One Ummah - Unity of Message",
+      nameUr: "ایک امت - پیغام کی وحدت",
       nameArabic: "أمة واحدة",
       color: "#10B981",
       icon: "Users",
@@ -225,6 +240,7 @@ export const ONTOLOGY = {
 
     dayOfJudgment: {
       name: "Day of Judgment",
+      nameUr: "یومِ قیامت",
       nameArabic: "يوم القيامة",
       color: "#EF4444",
       icon: "Scale",
@@ -240,6 +256,7 @@ export const ONTOLOGY = {
 
     yajoojMajooj: {
       name: "Yajuj and Majuj (Gog and Magog)",
+      nameUr: "یاجوج اور ماجوج",
       nameArabic: "يأجوج ومأجوج",
       color: "#EF4444",
       icon: "AlertTriangle",
@@ -252,6 +269,7 @@ export const ONTOLOGY = {
 
     idolsAndWorshippers: {
       name: "Idols and Their Worshippers",
+      nameUr: "بت اور ان کے پجاری",
       nameArabic: "الأصنام وعابدوها",
       color: "#EF4444",
       icon: "AlertTriangle",
@@ -265,6 +283,7 @@ export const ONTOLOGY = {
 
     believersReward: {
       name: "Reward for Believers",
+      nameUr: "مومنوں کا اجر",
       nameArabic: "جزاء المؤمنين",
       color: "#22C55E",
       icon: "Sparkles",
@@ -280,6 +299,7 @@ export const ONTOLOGY = {
 
     inheritanceOfEarth: {
       name: "Inheritance of the Earth",
+      nameUr: "زمین کی وراثت",
       nameArabic: "وراثة الأرض",
       color: "#06B6D4",
       icon: "Globe",
@@ -292,6 +312,7 @@ export const ONTOLOGY = {
 
     prophetMuhammadMercy: {
       name: "Prophet Muhammad - Mercy to Worlds",
+      nameUr: "نبی محمد ﷺ - جہانوں کے لیے رحمت",
       nameArabic: "النبي محمد رحمة للعالمين",
       color: "#8B5CF6",
       icon: "Heart",
@@ -304,6 +325,7 @@ export const ONTOLOGY = {
 
     finalSupplication: {
       name: "Final Supplication",
+      nameUr: "آخری دعا",
       nameArabic: "الدعاء الختامي",
       color: "#8B5CF6",
       icon: "Heart",

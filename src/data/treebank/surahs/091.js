@@ -35,7 +35,10 @@ export const TREEBANK_DATA = {
       tr: "Güneşe ve aydınlığına yemin olsun",
       id: "Demi matahari dan sinarnya",
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'مضاف + مضاف إليه' },
+        { from: 1, to: 2, label: 'قسم' }
+      ],
     },
     },
     words: [
@@ -671,7 +674,10 @@ export const TREEBANK_DATA = {
       tr: "Sonra ona kötülüğü ve takvayı ilham etti",
       id: "Lalu Dia mengilhamkan kepadanya kedurhakaan dan ketakwaannya",
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' }
+      ],
     },
     },
     words: [

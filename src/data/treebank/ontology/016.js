@@ -16,6 +16,7 @@ export const ONTOLOGY = {
       color: '#EF4444',
       icon: 'Users',
       name: "Divine Decree & Command",
+      nameUr: "اللہ کا حکم اور فیصلہ",
       nameArabic: "أمر الله",
       concepts: [
         { term: "أَتَىٰ أَمْرُ اللَّهِ", meaning: { en: "The command of Allah is coming", ur: "اللہ کا حکم آ رہا ہے" }, explanation: { en: "Opening declaration - Day of Judgment is certain", ur: "افتتاحی اعلان - قیامت کا دن یقینی ہے" }, verseRef: "16:1" },
@@ -28,6 +29,7 @@ export const ONTOLOGY = {
       color: '#8B5CF6',
       icon: 'Heart',
       name: "Revelation & Prophets",
+      nameUr: "وحی اور رسول",
       nameArabic: "الوحي والرسل",
       concepts: [
         { term: "يُنَزِّلُ الْمَلَائِكَةَ بِالرُّوحِ", meaning: { en: "He sends down angels with the spirit/revelation", ur: "وہ فرشتوں کو روح/وحی کے ساتھ نازل کرتا ہے" }, explanation: { en: "Divine method of guidance through angels", ur: "فرشتوں کے ذریعے ہدایت کا الٰہی طریقہ" }, verseRef: "16:2" },
@@ -42,6 +44,7 @@ export const ONTOLOGY = {
       color: '#8B5CF6',
       icon: 'Heart',
       name: "Signs in Creation",
+      nameUr: "تخلیق میں نشانیاں",
       nameArabic: "آيات الخلق",
       concepts: [
         { term: "خَلَقَ السَّمَاوَاتِ وَالْأَرْضَ بِالْحَقِّ", meaning: { en: "Created heavens and earth in truth", ur: "آسمانوں اور زمین کو حق کے ساتھ پیدا کیا" }, explanation: { en: "Creation has purpose and truth", ur: "تخلیق کا مقصد اور حقیقت ہے" }, verseRef: "16:3" },
@@ -56,6 +59,7 @@ export const ONTOLOGY = {
       color: '#F59E0B',
       icon: 'Star',
       name: "The Blessing of Water",
+      nameUr: "پانی کی نعمت",
       nameArabic: "نعمة الماء",
       concepts: [
         { term: "هُوَ الَّذِي أَنزَلَ مِنَ السَّمَاءِ مَاءً", meaning: { en: "He who sent down water from sky", ur: "وہی ہے جس نے آسمان سے پانی اتارا" }, explanation: { en: "Rain as divine provision", ur: "بارش بطور الٰہی رزق" }, verseRef: "16:10" },
@@ -70,6 +74,7 @@ export const ONTOLOGY = {
       color: '#3B82F6',
       icon: 'Shield',
       name: "Cosmic Signs",
+      nameUr: "کائناتی نشانیاں",
       nameArabic: "الآيات الكونية",
       concepts: [
         { term: "وَسَخَّرَ لَكُمُ اللَّيْلَ وَالنَّهَارَ", meaning: { en: "He subjected for you night and day", ur: "اس نے رات اور دن کو تمہارے لیے مسخر کیا" }, explanation: { en: "Celestial system in service", ur: "آسمانی نظام خدمت میں" }, verseRef: "16:12" },
@@ -84,6 +89,7 @@ export const ONTOLOGY = {
       color: '#EF4444',
       icon: 'Users',
       name: "Blessings of the Sea",
+      nameUr: "سمندر کی نعمتیں",
       nameArabic: "نعم البحر",
       concepts: [
         { term: "وَهُوَ الَّذِي سَخَّرَ الْبَحْرَ", meaning: { en: "He who subjected the sea", ur: "اور وہی ہے جس نے سمندر کو مسخر کیا" }, explanation: { en: "Sea in service of humans", ur: "سمندر انسانوں کی خدمت میں" }, verseRef: "16:14" },
@@ -98,6 +104,7 @@ export const ONTOLOGY = {
       color: '#EC4899',
       icon: 'Globe',
       name: "The Bee - Central Theme",
+      nameUr: "شہد کی مکھی - مرکزی موضوع",
       nameArabic: "النحل",
       concepts: [
         { term: "وَأَوْحَىٰ رَبُّكَ إِلَى النَّحْلِ", meaning: { en: "Your Lord inspired the bee", ur: "اور تمہارے رب نے شہد کی مکھی کو الہام کیا" }, explanation: { en: "Divine instinct given to bees", ur: "مکھیوں کو دی گئی الٰہی فطرت" }, verseRef: "16:68" },
@@ -115,6 +122,7 @@ export const ONTOLOGY = {
       color: '#EC4899',
       icon: 'Globe',
       name: "Human Faculties & Life",
+      nameUr: "انسانی صلاحیتیں اور زندگی",
       nameArabic: "نعم الإنسان",
       concepts: [
         { term: "وَاللَّهُ أَخْرَجَكُم مِّن بُطُونِ أُمَّهَاتِكُمْ", meaning: { en: "Allah brought you from mothers' wombs", ur: "اللہ نے تمہیں تمہاری ماؤں کے پیٹوں سے نکالا" }, explanation: { en: "Birth knowing nothing", ur: "کچھ نہ جانتے ہوئے پیدائش" }, verseRef: "16:78" },
@@ -128,6 +136,7 @@ export const ONTOLOGY = {
       color: '#06B6D4',
       icon: 'Compass',
       name: "Homes & Shelter",
+      nameUr: "گھر اور رہائش",
       nameArabic: "البيوت والسكن",
       concepts: [
         { term: "وَاللَّهُ جَعَلَ لَكُم مِّن بُيُوتِكُمْ سَكَنًا", meaning: { en: "Allah made your homes a place of rest", ur: "اللہ نے تمہارے گھروں کو سکون کی جگہ بنایا" }, explanation: { en: "Peace in homes", ur: "گھروں میں سکون" }, verseRef: "16:80" },
@@ -143,6 +152,7 @@ export const ONTOLOGY = {
       color: '#3B82F6',
       icon: 'Shield',
       name: "Shades & Protection",
+      nameUr: "سائے اور تحفظ",
       nameArabic: "الظلال والحماية",
       concepts: [
         { term: "وَاللَّهُ جَعَلَ لَكُم مِّمَّا خَلَقَ ظِلَالًا", meaning: { en: "Allah made shade from what He created", ur: "اللہ نے اپنی بنائی ہوئی چیزوں سے تمہارے لیے سائے بنائے" }, explanation: { en: "Natural shade - trees, mountains", ur: "قدرتی سایہ - درخت، پہاڑ" }, verseRef: "16:81" },
@@ -156,6 +166,7 @@ export const ONTOLOGY = {
       color: '#8B5CF6',
       icon: 'Heart',
       name: "Refutation of Polytheism",
+      nameUr: "شرک کی تردید",
       nameArabic: "إبطال الشرك",
       concepts: [
         { term: "أَفَمَن يَخْلُقُ كَمَن لَّا يَخْلُقُ", meaning: { en: "Is He who creates like one who does not?", ur: "کیا جو پیدا کرے وہ ایسا ہے جیسا جو نہ بنائے؟" }, explanation: { en: "Creator vs created - cannot be equal", ur: "خالق بمقابلہ مخلوق - برابر نہیں ہو سکتے" }, verseRef: "16:17" },
@@ -170,6 +181,7 @@ export const ONTOLOGY = {
       color: '#F59E0B',
       icon: 'Star',
       name: "Traits of Disbelievers",
+      nameUr: "کافروں کی خصلتیں",
       nameArabic: "صفات الكافرين",
       concepts: [
         { term: "إِلَٰهُكُمْ إِلَٰهٌ وَاحِدٌ", meaning: { en: "Your God is one God", ur: "تمہارا معبود ایک معبود ہے" }, explanation: { en: "Core declaration of monotheism", ur: "توحید کا بنیادی اعلان" }, verseRef: "16:22" },
@@ -184,6 +196,7 @@ export const ONTOLOGY = {
       color: '#3B82F6',
       icon: 'Shield',
       name: "Justice & Excellence",
+      nameUr: "عدل اور احسان",
       nameArabic: "العدل والإحسان",
       concepts: [
         { term: "إِنَّ اللَّهَ يَأْمُرُ بِالْعَدْلِ", meaning: { en: "Allah commands justice", ur: "بے شک اللہ عدل کا حکم دیتا ہے" }, explanation: { en: "Divine command for fairness", ur: "انصاف کا الٰہی حکم" }, verseRef: "16:90" },
@@ -200,6 +213,7 @@ export const ONTOLOGY = {
       color: '#10B981',
       icon: 'Book',
       name: "Covenants & Oaths",
+      nameUr: "عہد اور قسمیں",
       nameArabic: "العهود والأيمان",
       concepts: [
         { term: "وَأَوْفُوا بِعَهْدِ اللَّهِ إِذَا عَاهَدتُّمْ", meaning: { en: "Fulfill covenant of Allah when you make covenant", ur: "اللہ کا عہد پورا کرو جب عہد کرو" }, explanation: { en: "Keeping promises made to Allah", ur: "اللہ سے کیے ہوئے وعدے نبھانا" }, verseRef: "16:91" },
@@ -213,6 +227,7 @@ export const ONTOLOGY = {
       color: '#EF4444',
       icon: 'Users',
       name: "Quran as Guidance",
+      nameUr: "قرآن بطور ہدایت",
       nameArabic: "القرآن هدى",
       concepts: [
         { term: "وَنَزَّلْنَا عَلَيْكَ الْكِتَابَ تِبْيَانًا لِّكُلِّ شَيْءٍ", meaning: { en: "We sent down the Book explaining all things", ur: "ہم نے آپ پر کتاب نازل کی ہر چیز کی وضاحت کرنے والی" }, explanation: { en: "Comprehensive guidance", ur: "جامع رہنمائی" }, verseRef: "16:89" },
@@ -227,6 +242,7 @@ export const ONTOLOGY = {
       color: '#3B82F6',
       icon: 'Shield',
       name: "Ibrahim as Model",
+      nameUr: "ابراہیم بطور نمونہ",
       nameArabic: "إبراهيم أسوة",
       concepts: [
         { term: "إِنَّ إِبْرَاهِيمَ كَانَ أُمَّةً", meaning: { en: "Indeed Ibrahim was a nation", ur: "بے شک ابراہیم اکیلے ایک امت تھے" }, explanation: { en: "One man = entire community in virtue", ur: "ایک آدمی = نیکی میں پوری جماعت" }, verseRef: "16:120" },
@@ -242,6 +258,7 @@ export const ONTOLOGY = {
       color: '#F59E0B',
       icon: 'Star',
       name: "Patience & Perseverance",
+      nameUr: "صبر اور استقامت",
       nameArabic: "الصبر",
       concepts: [
         { term: "وَاصْبِرْ وَمَا صَبْرُكَ إِلَّا بِاللَّهِ", meaning: { en: "Be patient, and your patience is only through Allah", ur: "صبر کریں اور آپ کا صبر صرف اللہ کی توفیق سے ہے" }, explanation: { en: "Patience enabled by Allah", ur: "صبر اللہ کی توفیق سے ممکن ہے" }, verseRef: "16:127" },
@@ -256,6 +273,7 @@ export const ONTOLOGY = {
       color: '#8B5CF6',
       icon: 'Heart',
       name: "Wisdom in Calling to Allah",
+      nameUr: "اللہ کی طرف دعوت میں حکمت",
       nameArabic: "الحكمة في الدعوة",
       concepts: [
         { term: "ادْعُ إِلَىٰ سَبِيلِ رَبِّكَ بِالْحِكْمَةِ", meaning: { en: "Invite to way of your Lord with wisdom", ur: "اپنے رب کے راستے کی طرف حکمت سے دعوت دیں" }, explanation: { en: "Use wisdom in dawah", ur: "دعوت میں حکمت استعمال کریں" }, verseRef: "16:125" },
@@ -271,6 +289,7 @@ export const ONTOLOGY = {
       color: '#F59E0B',
       icon: 'Star',
       name: "Provisions & Gratitude",
+      nameUr: "رزق اور شکر",
       nameArabic: "الرزق والشكر",
       concepts: [
         { term: "وَاللَّهُ فَضَّلَ بَعْضَكُمْ عَلَىٰ بَعْضٍ فِي الرِّزْقِ", meaning: { en: "Allah favored some over others in provision", ur: "اللہ نے رزق میں بعض کو بعض پر فضیلت دی" }, explanation: { en: "Inequality in provision is test", ur: "رزق میں فرق آزمائش ہے" }, verseRef: "16:71" },
@@ -284,6 +303,7 @@ export const ONTOLOGY = {
       color: '#EC4899',
       icon: 'Globe',
       name: "Parables Against Idols",
+      nameUr: "بتوں کے خلاف تمثیلات",
       nameArabic: "أمثال ضد الأصنام",
       concepts: [
         { term: "ضَرَبَ اللَّهُ مَثَلًا عَبْدًا مَّمْلُوكًا", meaning: { en: "Allah presents parable of an owned slave", ur: "اللہ نے ایک غلام کی مثال دی" }, explanation: { en: "Slave vs free man - idol vs Allah", ur: "غلام بمقابلہ آزاد آدمی - بت بمقابلہ اللہ" }, verseRef: "16:75" },
@@ -298,6 +318,7 @@ export const ONTOLOGY = {
       color: '#06B6D4',
       icon: 'Compass',
       name: "Certainty of Resurrection",
+      nameUr: "قیامت کا یقین",
       nameArabic: "يقين البعث",
       concepts: [
         { term: "وَأَقْسَمُوا بِاللَّهِ جَهْدَ أَيْمَانِهِمْ", meaning: { en: "They swear by Allah their strongest oaths", ur: "وہ اللہ کی پختہ قسمیں کھاتے ہیں" }, explanation: { en: "Disbelievers deny resurrection", ur: "کافر قیامت سے انکار کرتے ہیں" }, verseRef: "16:38" },
@@ -312,6 +333,7 @@ export const ONTOLOGY = {
       color: '#F59E0B',
       icon: 'Star',
       name: "Makkah as Sanctuary",
+      nameUr: "مکہ بطور حرمِ امن",
       nameArabic: "مكة حرم آمن",
       concepts: [
         { term: "وَضَرَبَ اللَّهُ مَثَلًا قَرْيَةً كَانَتْ آمِنَةً", meaning: { en: "Allah presents parable of a city that was secure", ur: "اللہ نے ایک بستی کی مثال دی جو امن والی تھی" }, explanation: { en: "Secure city - Makkah parable", ur: "محفوظ شہر - مکہ کی تمثیل" }, verseRef: "16:112" },

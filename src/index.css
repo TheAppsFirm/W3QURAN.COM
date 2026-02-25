@@ -117,9 +117,18 @@ body {
   text-align: right;
 }
 
+/* Jameel Noori Nastaleeq — loaded locally */
+@font-face {
+  font-family: 'Jameel Noori Nastaleeq';
+  src: url('/fonts/JameelNooriNastaleeq.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* Urdu Font — Nastaleeq style */
 .font-urdu {
-  font-family: 'Noto Nastaliq Urdu', 'Jameel Noori Nastaleeq', 'Nastaliq', 'Urdu Typesetting', serif;
+  font-family: 'Jameel Noori Nastaleeq', 'Noto Nastaliq Urdu', 'Nastaliq', 'Urdu Typesetting', serif;
   direction: rtl;
   text-align: right;
   line-height: 2.2;

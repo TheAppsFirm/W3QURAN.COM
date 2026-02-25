@@ -16,6 +16,7 @@ export const ONTOLOGY = {
   categories: {
     divineNames: {
       name: "Divine Names of Forgiveness",
+      nameUr: "بخشش کے الٰہی نام",
       nameArabic: "أسماء الله للمغفرة",
       color: "#F59E0B",
       icon: "Crown",
@@ -33,6 +34,7 @@ export const ONTOLOGY = {
 
     musaPharaohHaman: {
       name: "Moses, Pharaoh and Haman",
+      nameUr: "موسیٰ، فرعون اور ہامان",
       nameArabic: "موسى وفرعون وهامان",
       color: "#3B82F6",
       icon: "Shield",
@@ -51,6 +53,7 @@ export const ONTOLOGY = {
 
     believerFromPharaohsFamily: {
       name: "The Believing Man from Pharaoh's Family",
+      nameUr: "فرعون کے خاندان کا مومن آدمی",
       nameArabic: "مؤمن آل فرعون",
       color: "#10B981",
       icon: "Heart",
@@ -74,6 +77,7 @@ export const ONTOLOGY = {
 
     cosmicSigns: {
       name: "Cosmic Signs",
+      nameUr: "کائناتی نشانیاں",
       nameArabic: "الآيات الكونية",
       color: "#06B6D4",
       icon: "Globe",
@@ -94,6 +98,7 @@ export const ONTOLOGY = {
 
     prayerOfAngels: {
       name: "Prayer of the Angels",
+      nameUr: "فرشتوں کی دعا",
       nameArabic: "دعاء الملائكة",
       color: "#8B5CF6",
       icon: "Star",
@@ -113,6 +118,7 @@ export const ONTOLOGY = {
 
     argumentsWithDisbelievers: {
       name: "Arguments with Disbelievers",
+      nameUr: "کافروں سے مناظرہ",
       nameArabic: "محاجة الكافرين",
       color: "#EF4444",
       icon: "MessageCircle",
@@ -127,6 +133,7 @@ export const ONTOLOGY = {
 
     judgmentDay: {
       name: "Day of Judgment",
+      nameUr: "یومِ قیامت",
       nameArabic: "يوم القيامة",
       color: "#EF4444",
       icon: "Scale",
@@ -145,6 +152,7 @@ export const ONTOLOGY = {
 
     supplicationAndResponse: {
       name: "Supplication and Response",
+      nameUr: "دعا اور قبولیت",
       nameArabic: "الدعاء والاستجابة",
       color: "#8B5CF6",
       icon: "MessageCircle",
@@ -157,6 +165,7 @@ export const ONTOLOGY = {
 
     propheticConsolation: {
       name: "Consolation to the Prophet",
+      nameUr: "نبی ﷺ کی تسلی",
       nameArabic: "تسلية النبي",
       color: "#3B82F6",
       icon: "Heart",
@@ -171,6 +180,7 @@ export const ONTOLOGY = {
 
     fateOfArrogant: {
       name: "Fate of the Arrogant",
+      nameUr: "متکبروں کا انجام",
       nameArabic: "عاقبة المستكبرين",
       color: "#EF4444",
       icon: "AlertTriangle",

@@ -14,6 +14,7 @@ export const ONTOLOGY = {
   categories: {
     propheticAddress: {
       name: "Address to the Prophet",
+      nameUr: "نبی ﷺ سے خطاب",
       nameArabic: "خطاب النبي",
       color: '#F59E0B',
       icon: 'Crown',
@@ -26,6 +27,7 @@ export const ONTOLOGY = {
 
     nightPrayerGuidelines: {
       name: "Night Prayer Guidelines",
+      nameUr: "قیام اللیل کے احکام",
       nameArabic: "أحكام قيام الليل",
       color: '#8B5CF6',
       icon: 'Moon',
@@ -38,6 +40,7 @@ export const ONTOLOGY = {
 
     weightyRevelation: {
       name: "The Weighty Word",
+      nameUr: "بھاری کلام",
       nameArabic: "القول الثقيل",
       color: '#3B82F6',
       icon: 'Book',
@@ -51,6 +54,7 @@ export const ONTOLOGY = {
 
     dayOccupations: {
       name: "Daytime Activities",
+      nameUr: "دن کی مصروفیات",
       nameArabic: "أشغال النهار",
       color: '#06B6D4',
       icon: 'Sun',
@@ -63,6 +67,7 @@ export const ONTOLOGY = {
 
     divineAttributes: {
       name: "Divine Attributes",
+      nameUr: "الہٰی صفات",
       nameArabic: "الصفات الإلهية",
       color: '#F59E0B',
       icon: 'Star',
@@ -76,6 +81,7 @@ export const ONTOLOGY = {
 
     patienceWithDeniers: {
       name: "Patience with Deniers",
+      nameUr: "جھٹلانے والوں پر صبر",
       nameArabic: "الصبر على المكذبين",
       color: '#10B981',
       icon: 'Heart',
@@ -89,6 +95,7 @@ export const ONTOLOGY = {
 
     hellDescription: {
       name: "Description of Hell",
+      nameUr: "جہنم کا بیان",
       nameArabic: "وصف جهنم",
       color: '#EF4444',
       icon: 'AlertTriangle',
@@ -102,6 +109,7 @@ export const ONTOLOGY = {
 
     dayOfJudgment: {
       name: "Day of Judgment",
+      nameUr: "یومِ قیامت",
       nameArabic: "يوم القيامة",
       color: '#EF4444',
       icon: 'Scale',
@@ -115,6 +123,7 @@ export const ONTOLOGY = {
 
     pharaohParallel: {
       name: "Pharaoh's Lesson",
+      nameUr: "فرعون کی عبرت",
       nameArabic: "عبرة فرعون",
       color: '#EC4899',
       icon: 'Book',
@@ -128,6 +137,7 @@ export const ONTOLOGY = {
 
     abrogationOfNightPrayer: {
       name: "Lightening of Night Prayer",
+      nameUr: "قیام اللیل میں تخفیف",
       nameArabic: "تخفيف قيام الليل",
       color: '#8B5CF6',
       icon: 'Sparkles',
@@ -142,6 +152,7 @@ export const ONTOLOGY = {
 
     excusesForLightening: {
       name: "Reasons for Concession",
+      nameUr: "رعایت کی وجوہات",
       nameArabic: "أسباب التخفيف",
       color: '#06B6D4',
       icon: 'Users',
@@ -155,6 +166,7 @@ export const ONTOLOGY = {
 
     finalInjunctions: {
       name: "Final Commands",
+      nameUr: "اختتامی احکام",
       nameArabic: "الأوامر الختامية",
       color: '#10B981',
       icon: 'Compass',

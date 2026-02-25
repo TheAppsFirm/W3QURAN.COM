@@ -14,6 +14,7 @@ export const ONTOLOGY = {
   categories: {
     cosmicSigns: {
       name: "Cosmic Signs of Judgment",
+      nameUr: "قیامت کی کائناتی نشانیاں",
       nameArabic: "علامات القيامة الكونية",
       color: '#06B6D4',
       icon: 'Globe',
@@ -29,6 +30,7 @@ export const ONTOLOGY = {
 
     humanEvents: {
       name: "Human Events on That Day",
+      nameUr: "اس دن کے انسانی واقعات",
       nameArabic: "أحداث البشر يومئذ",
       color: '#10B981',
       icon: 'Users',
@@ -41,6 +43,7 @@ export const ONTOLOGY = {
 
     finalRealities: {
       name: "Final Realities",
+      nameUr: "حتمی حقائق",
       nameArabic: "الحقائق الأخيرة",
       color: '#EF4444',
       icon: 'AlertTriangle',
@@ -54,6 +57,7 @@ export const ONTOLOGY = {
 
     cosmicOaths: {
       name: "Oaths on Celestial Bodies",
+      nameUr: "آسمانی اجرام کی قسمیں",
       nameArabic: "القسم بالكواكب",
       color: '#8B5CF6',
       icon: 'Sun',
@@ -66,6 +70,7 @@ export const ONTOLOGY = {
 
     jibreelDescription: {
       name: "Jibreel's Noble Attributes",
+      nameUr: "جبرائیل کی بلند صفات",
       nameArabic: "صفات جبريل",
       color: '#F59E0B',
       icon: 'Crown',
@@ -79,6 +84,7 @@ export const ONTOLOGY = {
 
     prophetDefense: {
       name: "Defense of the Prophet",
+      nameUr: "نبی کا دفاع",
       nameArabic: "الدفاع عن النبي",
       color: '#EC4899',
       icon: 'Shield',
@@ -91,6 +97,7 @@ export const ONTOLOGY = {
 
     quranAuthority: {
       name: "Quran's Divine Authority",
+      nameUr: "قرآن کا الٰہی اختیار",
       nameArabic: "سلطان القرآن",
       color: '#3B82F6',
       icon: 'Book',

@@ -14,6 +14,7 @@ export const ONTOLOGY = {
   categories: {
     trialsAndTests: {
       name: "Trials and Tests of Faith",
+      nameUr: "ایمان کی آزمائشیں اور امتحان",
       nameArabic: "الفتن والابتلاءات",
       color: "#EF4444",
       icon: "Shield",
@@ -28,6 +29,7 @@ export const ONTOLOGY = {
 
     spiderParable: {
       name: "The Spider's Web Parable",
+      nameUr: "مکڑی کے جالے کی مثال",
       nameArabic: "مثل العنكبوت",
       color: "#8B5CF6",
       icon: "MessageCircle",
@@ -42,6 +44,7 @@ export const ONTOLOGY = {
 
     storyOfNuh: {
       name: "Story of Prophet Nuh",
+      nameUr: "حضرت نوح کا قصہ",
       nameArabic: "قصة نوح",
       color: "#3B82F6",
       icon: "Book",
@@ -56,6 +59,7 @@ export const ONTOLOGY = {
 
     storyOfIbrahim: {
       name: "Story of Prophet Ibrahim",
+      nameUr: "حضرت ابراہیم کا قصہ",
       nameArabic: "قصة إبراهيم",
       color: "#3B82F6",
       icon: "Book",
@@ -71,6 +75,7 @@ export const ONTOLOGY = {
 
     storyOfLut: {
       name: "Story of Prophet Lut",
+      nameUr: "حضرت لوط کا قصہ",
       nameArabic: "قصة لوط",
       color: "#EF4444",
       icon: "AlertTriangle",
@@ -84,6 +89,7 @@ export const ONTOLOGY = {
 
     storyOfShuayb: {
       name: "Story of Prophet Shuayb",
+      nameUr: "حضرت شعیب کا قصہ",
       nameArabic: "قصة شعيب",
       color: "#10B981",
       icon: "Scale",
@@ -97,6 +103,7 @@ export const ONTOLOGY = {
 
     destructionOfNations: {
       name: "Destruction of Past Nations",
+      nameUr: "گزشتہ قوموں کی تباہی",
       nameArabic: "هلاك الأمم السابقة",
       color: "#EF4444",
       icon: "AlertTriangle",
@@ -114,6 +121,7 @@ export const ONTOLOGY = {
 
     parentalRelations: {
       name: "Duty to Parents",
+      nameUr: "والدین کے حقوق",
       nameArabic: "حق الوالدين",
       color: "#10B981",
       icon: "Heart",
@@ -128,6 +136,7 @@ export const ONTOLOGY = {
 
     hypocrisyExposed: {
       name: "Hypocrisy Exposed",
+      nameUr: "منافقت کا پردہ فاش",
       nameArabic: "كشف النفاق",
       color: "#EF4444",
       icon: "Eye",
@@ -142,6 +151,7 @@ export const ONTOLOGY = {
 
     quranAndRevelation: {
       name: "Quran and Revelation",
+      nameUr: "قرآن اور وحی",
       nameArabic: "القرآن والوحي",
       color: "#3B82F6",
       icon: "Book",
@@ -156,6 +166,7 @@ export const ONTOLOGY = {
 
     divineKnowledge: {
       name: "Allah's Knowledge",
+      nameUr: "اللہ کا علم",
       nameArabic: "علم الله",
       color: "#F59E0B",
       icon: "Eye",
@@ -169,6 +180,7 @@ export const ONTOLOGY = {
 
     signsInCreation: {
       name: "Signs in Creation",
+      nameUr: "تخلیق میں نشانیاں",
       nameArabic: "آيات في الخلق",
       color: "#06B6D4",
       icon: "Globe",
@@ -183,6 +195,7 @@ export const ONTOLOGY = {
 
     prayerAndRemembrance: {
       name: "Prayer and Remembrance",
+      nameUr: "نماز اور ذکر",
       nameArabic: "الصلاة والذكر",
       color: "#8B5CF6",
       icon: "Heart",
@@ -197,6 +210,7 @@ export const ONTOLOGY = {
 
     debateWithPeopleOfBook: {
       name: "Dialogue with People of the Book",
+      nameUr: "اہلِ کتاب سے مکالمہ",
       nameArabic: "الحوار مع أهل الكتاب",
       color: "#10B981",
       icon: "MessageCircle",
@@ -211,6 +225,7 @@ export const ONTOLOGY = {
 
     strivingForAllah: {
       name: "Striving for Allah",
+      nameUr: "اللہ کی راہ میں جہاد",
       nameArabic: "الجهاد في سبيل الله",
       color: "#F59E0B",
       icon: "Zap",
@@ -223,6 +238,7 @@ export const ONTOLOGY = {
 
     worldlyLife: {
       name: "Nature of Worldly Life",
+      nameUr: "دنیاوی زندگی کی حقیقت",
       nameArabic: "حقيقة الحياة الدنيا",
       color: "#EC4899",
       icon: "Globe",
@@ -235,6 +251,7 @@ export const ONTOLOGY = {
 
     divineProvision: {
       name: "Divine Provision",
+      nameUr: "الٰہی رزق",
       nameArabic: "الرزق الإلهي",
       color: "#22C55E",
       icon: "Sparkles",
@@ -247,6 +264,7 @@ export const ONTOLOGY = {
 
     migrationForFaith: {
       name: "Migration for Faith",
+      nameUr: "ایمان کے لیے ہجرت",
       nameArabic: "الهجرة في سبيل الدين",
       color: "#06B6D4",
       icon: "Compass",

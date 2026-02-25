@@ -18,6 +18,7 @@ export const ONTOLOGY = {
   categories: {
     guidanceAndRevelation: {
       name: "Guidance and Revelation",
+      nameUr: "ہدایت اور وحی",
       nameAr: "الهداية والوحي",
       color: '#3B82F6',
       icon: 'Book',
@@ -35,6 +36,7 @@ export const ONTOLOGY = {
     },
     categoriesOfPeople: {
       name: "Categories of People",
+      nameUr: "لوگوں کی اقسام",
       nameAr: "أصناف الناس",
       color: '#06B6D4',
       icon: 'Users',
@@ -52,6 +54,7 @@ export const ONTOLOGY = {
     },
     adamAndCreation: {
       name: "Adam and Creation Story",
+      nameUr: "آدم اور تخلیق کا قصہ",
       nameAr: "قصة آدم والخلق",
       color: '#10B981',
       icon: 'Globe',
@@ -69,6 +72,7 @@ export const ONTOLOGY = {
     },
     baniIsraelNarratives: {
       name: "Bani Israel Narratives",
+      nameUr: "بنی اسرائیل کے واقعات",
       nameAr: "قصص بني إسرائيل",
       color: '#F59E0B',
       icon: 'Book',
@@ -94,6 +98,7 @@ export const ONTOLOGY = {
     },
     theCowStory: {
       name: "The Cow Story (Namesake)",
+      nameUr: "گائے کا قصہ (سورت کا نام)",
       nameAr: "قصة البقرة",
       color: '#8B5CF6',
       icon: 'Eye',
@@ -110,6 +115,7 @@ export const ONTOLOGY = {
     },
     scripturalDistortion: {
       name: "Scriptural Distortion",
+      nameUr: "کتابوں میں تحریف",
       nameAr: "تحريف الكتب",
       color: '#EF4444',
       icon: 'AlertTriangle',
@@ -125,6 +131,7 @@ export const ONTOLOGY = {
     },
     ibrahimLegacy: {
       name: "Ibrahim's Legacy",
+      nameUr: "ابراہیم کی میراث",
       nameAr: "إرث إبراهيم",
       color: '#F59E0B',
       icon: 'Star',
@@ -143,6 +150,7 @@ export const ONTOLOGY = {
     },
     qiblaChange: {
       name: "Qibla (Direction of Prayer)",
+      nameUr: "قبلہ (نماز کی سمت)",
       nameAr: "تحويل القبلة",
       color: '#3B82F6',
       icon: 'Compass',
@@ -158,6 +166,7 @@ export const ONTOLOGY = {
     },
     perseveranceAndPatience: {
       name: "Patience and Perseverance",
+      nameUr: "صبر اور ثابت قدمی",
       nameAr: "الصبر والثبات",
       color: '#10B981',
       icon: 'Shield',
@@ -174,6 +183,7 @@ export const ONTOLOGY = {
     },
     signsInCreation: {
       name: "Signs in Creation",
+      nameUr: "کائنات میں نشانیاں",
       nameAr: "آيات في الخلق",
       color: '#06B6D4',
       icon: 'Sun',
@@ -188,6 +198,7 @@ export const ONTOLOGY = {
     },
     ayatAlKursi: {
       name: "Ayat al-Kursi (Throne Verse)",
+      nameUr: "آیت الکرسی",
       nameAr: "آية الكرسي",
       color: '#8B5CF6',
       icon: 'Crown',
@@ -205,6 +216,7 @@ export const ONTOLOGY = {
     },
     noCompulsionInReligion: {
       name: "Faith Without Compulsion",
+      nameUr: "دین میں کوئی جبر نہیں",
       nameAr: "لا إكراه في الدين",
       color: '#EC4899',
       icon: 'Heart',
@@ -219,6 +231,7 @@ export const ONTOLOGY = {
     },
     legislation: {
       name: "Islamic Legislation",
+      nameUr: "اسلامی قانون سازی",
       nameAr: "التشريعات الإسلامية",
       color: '#22C55E',
       icon: 'Scale',
@@ -237,6 +250,7 @@ export const ONTOLOGY = {
     },
     qisasAndLaw: {
       name: "Qisas and Legal Rulings",
+      nameUr: "قصاص اور قانونی احکام",
       nameAr: "القصاص والأحكام",
       color: '#EF4444',
       icon: 'Scale',
@@ -252,6 +266,7 @@ export const ONTOLOGY = {
     },
     fightingInAllahsCause: {
       name: "Fighting in Allah's Cause",
+      nameUr: "اللہ کی راہ میں جہاد",
       nameAr: "القتال في سبيل الله",
       color: '#EF4444',
       icon: 'Shield',
@@ -267,6 +282,7 @@ export const ONTOLOGY = {
     },
     charityAndWealth: {
       name: "Charity and Wealth",
+      nameUr: "صدقہ اور مال",
       nameAr: "الصدقة والمال",
       color: '#10B981',
       icon: 'Heart',
@@ -285,6 +301,7 @@ export const ONTOLOGY = {
     },
     usury: {
       name: "Usury (Riba)",
+      nameUr: "سود (ربا)",
       nameAr: "الربا",
       color: '#EF4444',
       icon: 'AlertTriangle',
@@ -301,6 +318,7 @@ export const ONTOLOGY = {
     },
     contracts: {
       name: "Business Contracts",
+      nameUr: "تجارتی معاہدے",
       nameAr: "العقود والمعاملات",
       color: '#3B82F6',
       icon: 'Book',
@@ -319,6 +337,7 @@ export const ONTOLOGY = {
     },
     marriageAndDivorce: {
       name: "Marriage and Divorce",
+      nameUr: "نکاح اور طلاق",
       nameAr: "النكاح والطلاق",
       color: '#EC4899',
       icon: 'Users',
@@ -339,6 +358,7 @@ export const ONTOLOGY = {
     },
     widowsAndOrphans: {
       name: "Widows and Orphans",
+      nameUr: "بیوائیں اور یتیم",
       nameAr: "الأرامل والأيتام",
       color: '#8B5CF6',
       icon: 'Heart',
@@ -355,6 +375,7 @@ export const ONTOLOGY = {
     },
     talutAndJalut: {
       name: "Talut and Jalut (Saul and Goliath)",
+      nameUr: "طالوت اور جالوت کا قصہ",
       nameAr: "قصة طالوت وجالوت",
       color: '#F59E0B',
       icon: 'Shield',
@@ -373,6 +394,7 @@ export const ONTOLOGY = {
     },
     messenger: {
       name: "The Messenger's Description",
+      nameUr: "رسول کی صفات",
       nameAr: "صفات الرسول",
       color: '#22C55E',
       icon: 'Star',
@@ -387,6 +409,7 @@ export const ONTOLOGY = {
     },
     closingVerses: {
       name: "Closing Verses (Last Two Ayahs)",
+      nameUr: "آخری دو آیات",
       nameAr: "خواتيم السورة",
       color: '#8B5CF6',
       icon: 'Sparkles',

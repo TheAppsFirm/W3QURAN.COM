@@ -155,7 +155,11 @@ export const TREEBANK_DATA = {
       tr: "Ve sen bu şehirde serbestsin",
       id: "Dan engkau (Muhammad) bebas di negeri ini",
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' }
+      ],
     },
     },
     words: [
@@ -967,7 +971,9 @@ export const TREEBANK_DATA = {
       tr: "Bir dil ve iki dudak",
       id: "Dan lidah serta dua bibir",
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' }
+      ],
     },
     },
     words: [
@@ -1040,7 +1046,9 @@ export const TREEBANK_DATA = {
       tr: "Ve ona iki yolu göstermedik mi",
       id: "Dan Kami telah menunjukkan kepadanya dua jalan",
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' }
+      ],
     },
     },
     words: [
@@ -1216,7 +1224,11 @@ export const TREEBANK_DATA = {
       tr: "Sarp yokuşun ne olduğunu sana ne bildirdi",
       id: "Dan tahukah kamu apakah jalan yang mendaki itu",
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' }
+      ],
     },
     },
     words: [

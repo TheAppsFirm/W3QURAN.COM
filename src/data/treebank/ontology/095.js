@@ -14,6 +14,7 @@ export const ONTOLOGY = {
   categories: {
     sacredOaths: {
       name: "Divine Oaths by Sacred Places",
+      nameUr: "مقدس مقامات کی الٰہی قسمیں",
       nameArabic: "القسم بالأماكن المقدسة",
       color: '#8B5CF6',
       icon: 'Star',
@@ -45,6 +46,7 @@ export const ONTOLOGY = {
 
     humanCreation: {
       name: "Human Excellence in Creation",
+      nameUr: "تخلیق میں انسانی کمال",
       nameArabic: "كمال خلق الإنسان",
       color: '#F59E0B',
       icon: 'Crown',
@@ -69,6 +71,7 @@ export const ONTOLOGY = {
 
     humanFall: {
       name: "The Fall to Lowest Depths",
+      nameUr: "پست ترین درجے تک گراوٹ",
       nameArabic: "الانحدار إلى أسفل سافلين",
       color: '#EF4444',
       icon: 'AlertTriangle',

@@ -14,6 +14,7 @@ export const ONTOLOGY = {
   categories: {
     greatNews: {
       name: "The Great News",
+      nameUr: "بڑی خبر",
       nameArabic: "النبأ العظيم",
       color: '#F59E0B',
       icon: 'Star',
@@ -27,6 +28,7 @@ export const ONTOLOGY = {
 
     creationSigns: {
       name: "Signs of Divine Creation",
+      nameUr: "الہٰی تخلیق کی نشانیاں",
       nameArabic: "آيات الخلق الإلهي",
       color: '#06B6D4',
       icon: 'Globe',
@@ -44,6 +46,7 @@ export const ONTOLOGY = {
 
     rainProvision: {
       name: "Rain and Provision",
+      nameUr: "بارش اور رزق",
       nameArabic: "المطر والرزق",
       color: '#22C55E',
       icon: 'Sun',
@@ -57,6 +60,7 @@ export const ONTOLOGY = {
 
     dayOfSeparation: {
       name: "Day of Separation",
+      nameUr: "فیصلے کا دن",
       nameArabic: "يوم الفصل",
       color: '#8B5CF6',
       icon: 'Scale',
@@ -71,6 +75,7 @@ export const ONTOLOGY = {
 
     hellDescription: {
       name: "Description of Hell",
+      nameUr: "جہنم کا بیان",
       nameArabic: "وصف جهنم",
       color: '#EF4444',
       icon: 'Zap',
@@ -86,6 +91,7 @@ export const ONTOLOGY = {
 
     reasonsForPunishment: {
       name: "Reasons for Punishment",
+      nameUr: "عذاب کی وجوہات",
       nameArabic: "أسباب العذاب",
       color: '#EF4444',
       icon: 'AlertTriangle',
@@ -99,6 +105,7 @@ export const ONTOLOGY = {
 
     paradiseDescription: {
       name: "Description of Paradise",
+      nameUr: "جنت کا بیان",
       nameArabic: "وصف الجنة",
       color: '#10B981',
       icon: 'Sparkles',
@@ -114,6 +121,7 @@ export const ONTOLOGY = {
 
     divineAuthority: {
       name: "Divine Authority on That Day",
+      nameUr: "اس دن الہٰی اقتدار",
       nameArabic: "السلطة الإلهية يوم القيامة",
       color: '#F59E0B',
       icon: 'Crown',
@@ -128,6 +136,7 @@ export const ONTOLOGY = {
 
     finalWarning: {
       name: "Final Warning",
+      nameUr: "آخری تنبیہ",
       nameArabic: "التحذير الأخير",
       color: '#EC4899',
       icon: 'AlertTriangle',

@@ -14,6 +14,7 @@ export const ONTOLOGY = {
   categories: {
     clearEvidence: {
       name: "The Clear Evidence",
+      nameUr: "واضح دلیل",
       nameArabic: "البينة",
       color: '#3B82F6',
       icon: 'Eye',
@@ -52,6 +53,7 @@ export const ONTOLOGY = {
 
     divisionAfterTruth: {
       name: "Division After Truth",
+      nameUr: "حق کے بعد تفرقہ",
       nameArabic: "التفرق بعد الحق",
       color: '#EF4444',
       icon: 'AlertTriangle',
@@ -83,6 +85,7 @@ export const ONTOLOGY = {
 
     essenceOfReligion: {
       name: "The Essence of True Religion",
+      nameUr: "سچے دین کا جوہر",
       nameArabic: "جوهر الدين الصحيح",
       color: '#10B981',
       icon: 'Heart',
@@ -128,6 +131,7 @@ export const ONTOLOGY = {
 
     ultimateDestinations: {
       name: "Ultimate Destinations",
+      nameUr: "حتمی انجام",
       nameArabic: "المصير النهائي",
       color: '#F59E0B',
       icon: 'Scale',

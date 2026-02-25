@@ -15,6 +15,7 @@ export {
   getFeatureKey,
   parseWordLetters,
   detectHaraka,
+  LANGUAGE_NAMES,
 } from './shared/constants';
 
 // Cache for loaded surah data

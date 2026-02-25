@@ -14,6 +14,7 @@ export const ONTOLOGY = {
   categories: {
     namesOfJudgmentDay: {
       name: "Names of Judgment Day",
+      nameUr: "قیامت کے نام",
       nameArabic: "أسماء يوم القيامة",
       color: '#EF4444',
       icon: 'Scale',
@@ -26,6 +27,7 @@ export const ONTOLOGY = {
 
     destroyedNations: {
       name: "Destroyed Nations",
+      nameUr: "تباہ شدہ قومیں",
       nameArabic: "الأمم المهلكة",
       color: '#EF4444',
       icon: 'AlertTriangle',
@@ -43,6 +45,7 @@ export const ONTOLOGY = {
 
     noahsFlood: {
       name: "Noah's Flood",
+      nameUr: "طوفانِ نوح",
       nameArabic: "طوفان نوح",
       color: '#06B6D4',
       icon: 'Book',
@@ -56,6 +59,7 @@ export const ONTOLOGY = {
 
     cosmicEvents: {
       name: "Cosmic Events",
+      nameUr: "کائناتی واقعات",
       nameArabic: "الأحداث الكونية",
       color: '#8B5CF6',
       icon: 'Globe',
@@ -71,6 +75,7 @@ export const ONTOLOGY = {
 
     accountAndExhibition: {
       name: "Account and Exhibition",
+      nameUr: "پیشی اور حساب",
       nameArabic: "العرض والحساب",
       color: '#F59E0B',
       icon: 'Eye',
@@ -82,6 +87,7 @@ export const ONTOLOGY = {
 
     rightHandRecipients: {
       name: "Recipients of Right Hand",
+      nameUr: "دائیں ہاتھ والے",
       nameArabic: "أصحاب اليمين",
       color: '#10B981',
       icon: 'Sparkles',
@@ -97,6 +103,7 @@ export const ONTOLOGY = {
 
     leftHandRecipients: {
       name: "Recipients of Left Hand",
+      nameUr: "بائیں ہاتھ والے",
       nameArabic: "أصحاب الشمال",
       color: '#EF4444',
       icon: 'AlertTriangle',
@@ -112,6 +119,7 @@ export const ONTOLOGY = {
 
     hellPunishment: {
       name: "Hell's Punishment",
+      nameUr: "جہنم کا عذاب",
       nameArabic: "عذاب جهنم",
       color: '#EF4444',
       icon: 'Zap',
@@ -127,6 +135,7 @@ export const ONTOLOGY = {
 
     quransDivineOrigin: {
       name: "Quran's Divine Origin",
+      nameUr: "قرآن کا الٰہی ماخذ",
       nameArabic: "مصدر القرآن الإلهي",
       color: '#3B82F6',
       icon: 'Book',
@@ -140,6 +149,7 @@ export const ONTOLOGY = {
 
     propheticAuthority: {
       name: "Prophetic Authority",
+      nameUr: "نبوی اختیار",
       nameArabic: "سلطة النبوة",
       color: '#F59E0B',
       icon: 'Crown',
@@ -153,6 +163,7 @@ export const ONTOLOGY = {
 
     quranAsCertainty: {
       name: "Quran as Certainty",
+      nameUr: "قرآن بطور یقین",
       nameArabic: "القرآن يقين",
       color: '#8B5CF6',
       icon: 'Star',

@@ -14,6 +14,7 @@ export const ONTOLOGY = {
   categories: {
     loyaltyBoundaries: {
       name: "Loyalty Boundaries",
+      nameUr: "وفاداری کی حدود",
       nameAr: "حدود الولاء",
       color: '#F59E0B',
       icon: 'Shield',
@@ -25,6 +26,7 @@ export const ONTOLOGY = {
     },
     abrahamicModel: {
       name: "Abraham's Example",
+      nameUr: "ابراہیم علیہ السلام کا نمونہ",
       nameAr: "أسوة إبراهيم",
       color: '#8B5CF6',
       icon: 'Star',
@@ -36,6 +38,7 @@ export const ONTOLOGY = {
     },
     nuancedRelations: {
       name: "Nuanced Relations",
+      nameUr: "متوازن تعلقات",
       nameAr: "العلاقات المتمايزة",
       color: '#10B981',
       icon: 'Users',
@@ -48,6 +51,7 @@ export const ONTOLOGY = {
     },
     emigrantWomen: {
       name: "Examining Emigrant Women",
+      nameUr: "مہاجر خواتین کا امتحان",
       nameAr: "امتحان المهاجرات",
       color: '#3B82F6',
       icon: 'Search',
@@ -60,6 +64,7 @@ export const ONTOLOGY = {
     },
     womensPledge: {
       name: "Women's Pledge of Allegiance",
+      nameUr: "خواتین کی بیعت",
       nameAr: "بيعة النساء",
       color: '#06B6D4',
       icon: 'Heart',

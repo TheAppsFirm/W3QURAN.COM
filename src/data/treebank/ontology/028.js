@@ -17,6 +17,7 @@ export const ONTOLOGY = {
   categories: {
     musaEarlyLife: {
       name: "Musa's Early Life",
+      nameUr: "موسیٰ کی ابتدائی زندگی",
       nameArabic: "طفولة موسى",
       color: "#3B82F6",
       icon: "Book",
@@ -34,6 +35,7 @@ export const ONTOLOGY = {
 
     musaPreservation: {
       name: "Divine Protection of Baby Musa",
+      nameUr: "بچے موسیٰ کی الٰہی حفاظت",
       nameArabic: "حفظ موسى الرضيع",
       color: "#8B5CF6",
       icon: "Shield",
@@ -52,6 +54,7 @@ export const ONTOLOGY = {
 
     musaStrength: {
       name: "Musa Reaches Maturity",
+      nameUr: "موسیٰ کی بلوغت",
       nameArabic: "بلوغ موسى رشده",
       color: "#10B981",
       icon: "Zap",
@@ -69,6 +72,7 @@ export const ONTOLOGY = {
 
     musaFlightMadyan: {
       name: "Flight to Madyan",
+      nameUr: "مدین کی طرف فرار",
       nameArabic: "فرار موسى إلى مدين",
       color: "#06B6D4",
       icon: "Compass",
@@ -86,6 +90,7 @@ export const ONTOLOGY = {
 
     musaService: {
       name: "Musa's Service and Marriage",
+      nameUr: "موسیٰ کی خدمت اور شادی",
       nameArabic: "خدمة موسى وزواجه",
       color: "#10B981",
       icon: "Heart",
@@ -103,6 +108,7 @@ export const ONTOLOGY = {
 
     musaProphethood: {
       name: "Call to Prophethood",
+      nameUr: "نبوت کی دعوت",
       nameArabic: "نداء النبوة",
       color: "#F59E0B",
       icon: "Star",
@@ -120,6 +126,7 @@ export const ONTOLOGY = {
 
     musaHarun: {
       name: "Musa and Harun's Mission",
+      nameUr: "موسیٰ اور ہارون کا مشن",
       nameArabic: "رسالة موسى وهارون",
       color: "#3B82F6",
       icon: "Users",
@@ -135,6 +142,7 @@ export const ONTOLOGY = {
 
     pharaohArrogance: {
       name: "Pharaoh's Arrogance and Defiance",
+      nameUr: "فرعون کا تکبر اور سرکشی",
       nameArabic: "تكبر فرعون وعناده",
       color: "#EF4444",
       icon: "Crown",
@@ -152,6 +160,7 @@ export const ONTOLOGY = {
 
     pharaohDestruction: {
       name: "Destruction of Pharaoh",
+      nameUr: "فرعون کی تباہی",
       nameArabic: "هلاك فرعون",
       color: "#EF4444",
       icon: "AlertTriangle",
@@ -168,6 +177,7 @@ export const ONTOLOGY = {
 
     bookOfMusa: {
       name: "Book Given to Musa",
+      nameUr: "موسیٰ کو کتاب دینا",
       nameArabic: "كتاب موسى",
       color: "#3B82F6",
       icon: "Book",
@@ -182,6 +192,7 @@ export const ONTOLOGY = {
 
     prophetConfirmation: {
       name: "Confirmation of Prophet Muhammad",
+      nameUr: "نبی محمد ﷺ کی تصدیق",
       nameArabic: "تأكيد نبوة محمد",
       color: "#F59E0B",
       icon: "Star",
@@ -198,6 +209,7 @@ export const ONTOLOGY = {
 
     disbelieversExcuses: {
       name: "Excuses of Disbelievers",
+      nameUr: "کافروں کے بہانے",
       nameArabic: "معاذير الكافرين",
       color: "#EF4444",
       icon: "AlertTriangle",
@@ -215,6 +227,7 @@ export const ONTOLOGY = {
 
     peopleOfBook: {
       name: "People of Earlier Scripture",
+      nameUr: "پچھلی کتاب والے لوگ",
       nameArabic: "أهل الكتاب",
       color: "#10B981",
       icon: "Book",
@@ -232,6 +245,7 @@ export const ONTOLOGY = {
 
     guidanceFromAllah: {
       name: "Guidance is from Allah Alone",
+      nameUr: "ہدایت صرف اللہ کی طرف سے ہے",
       nameArabic: "الهداية من الله",
       color: "#3B82F6",
       icon: "Compass",
@@ -247,6 +261,7 @@ export const ONTOLOGY = {
 
     destroyedCities: {
       name: "Destroyed Civilizations",
+      nameUr: "تباہ شدہ تہذیبیں",
       nameArabic: "القرى المهلكة",
       color: "#EF4444",
       icon: "AlertTriangle",
@@ -263,6 +278,7 @@ export const ONTOLOGY = {
 
     worldlyVsEternal: {
       name: "Worldly vs. Eternal Life",
+      nameUr: "دنیاوی بمقابلہ ابدی زندگی",
       nameArabic: "الدنيا والآخرة",
       color: "#8B5CF6",
       icon: "Scale",
@@ -280,6 +296,7 @@ export const ONTOLOGY = {
 
     dayOfJudgment: {
       name: "Day of Judgment Scenes",
+      nameUr: "قیامت کے مناظر",
       nameArabic: "مشاهد يوم القيامة",
       color: "#EF4444",
       icon: "Scale",
@@ -297,6 +314,7 @@ export const ONTOLOGY = {
 
     qarunStory: {
       name: "Story of Qarun (Korah)",
+      nameUr: "قارون کا قصہ",
       nameArabic: "قصة قارون",
       color: "#F59E0B",
       icon: "Crown",
@@ -313,6 +331,7 @@ export const ONTOLOGY = {
 
     qarunArrogance: {
       name: "Qarun's Arrogance and Downfall",
+      nameUr: "قارون کا غرور اور زوال",
       nameArabic: "تكبر قارون وسقوطه",
       color: "#EF4444",
       icon: "AlertTriangle",
@@ -330,6 +349,7 @@ export const ONTOLOGY = {
 
     qarunDisplay: {
       name: "Qarun's Display and Destruction",
+      nameUr: "قارون کی نمائش اور تباہی",
       nameArabic: "عرض قارون وهلاكه",
       color: "#EC4899",
       icon: "Eye",
@@ -347,6 +367,7 @@ export const ONTOLOGY = {
 
     qarunDestruction: {
       name: "Qarun Swallowed by Earth",
+      nameUr: "زمین نے قارون کو نگل لیا",
       nameArabic: "ابتلاع الأرض لقارون",
       color: "#EF4444",
       icon: "Globe",
@@ -365,6 +386,7 @@ export const ONTOLOGY = {
 
     hereafterReward: {
       name: "The Hereafter's True Success",
+      nameUr: "آخرت کی حقیقی کامیابی",
       nameArabic: "الفوز الحقيقي في الآخرة",
       color: "#10B981",
       icon: "Sparkles",
@@ -381,6 +403,7 @@ export const ONTOLOGY = {
 
     promiseToMuhammad: {
       name: "Allah's Promise to the Prophet",
+      nameUr: "نبی ﷺ سے اللہ کا وعدہ",
       nameArabic: "وعد الله للنبي",
       color: "#8B5CF6",
       icon: "Heart",
@@ -398,6 +421,7 @@ export const ONTOLOGY = {
 
     finalMessage: {
       name: "Final Message and Tawheed",
+      nameUr: "آخری پیغام اور توحید",
       nameArabic: "الرسالة الختامية والتوحيد",
       color: "#F59E0B",
       icon: "Star",

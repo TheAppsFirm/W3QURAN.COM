@@ -19,6 +19,7 @@ export const ONTOLOGY = {
       color: '#EC4899',
       icon: 'Globe',
       name: "Purpose of the Quran",
+      nameUr: "قرآن کا مقصد",
       nameAr: "مقصد القرآن",
       concepts: [
         { term: "Not for Distress", arabic: "ما أنزلنا عليك القرآن لتشقى", meaning: { en: "Quran was not sent to cause hardship", ur: "قرآن تکلیف دینے کے لیے نازل نہیں کیا گیا" }, ayahs: [2] },
@@ -34,6 +35,7 @@ export const ONTOLOGY = {
       color: '#10B981',
       icon: 'Book',
       name: "Musa at the Burning Bush",
+      nameUr: "موسیٰ جلتی جھاڑی کے پاس",
       nameAr: "موسى عند الشجرة المباركة",
       concepts: [
         { term: "Seeing Fire", arabic: "آنست نارا", meaning: { en: "Musa perceived a fire", ur: "موسیٰ نے ایک آگ دیکھی" }, ayahs: [10] },
@@ -52,6 +54,7 @@ export const ONTOLOGY = {
       color: '#14B8A6',
       icon: 'Crown',
       name: "Miracles Given to Musa",
+      nameUr: "موسیٰ کو عطا کردہ معجزات",
       nameAr: "معجزات موسى",
       concepts: [
         { term: "Staff Question", arabic: "وما تلك بيمينك يا موسى", meaning: { en: "What is in your right hand, O Musa?", ur: "اے موسیٰ، تمہارے دائیں ہاتھ میں کیا ہے؟" }, ayahs: [17] },
@@ -66,6 +69,7 @@ export const ONTOLOGY = {
       color: '#EF4444',
       icon: 'Users',
       name: "Mission to Pharaoh",
+      nameUr: "فرعون کی طرف بھیجنا",
       nameAr: "الإرسال إلى فرعون",
       concepts: [
         { term: "Go to Pharaoh", arabic: "اذهب إلى فرعون", meaning: { en: "Go to Pharaoh - he has transgressed", ur: "فرعون کے پاس جاؤ - اس نے سرکشی کی ہے" }, ayahs: [24] },
@@ -83,6 +87,7 @@ export const ONTOLOGY = {
       color: '#8B5CF6',
       icon: 'Heart',
       name: "Musa's Early Life - Divine Protection",
+      nameUr: "موسیٰ کی ابتدائی زندگی - الٰہی حفاظت",
       nameAr: "حياة موسى المبكرة",
       concepts: [
         { term: "Revelation to Mother", arabic: "وأوحينا إلى أم موسى", meaning: { en: "We inspired to Musa's mother", ur: "ہم نے موسیٰ کی ماں کو وحی کی" }, ayahs: [38] },
@@ -102,6 +107,7 @@ export const ONTOLOGY = {
       color: '#F59E0B',
       icon: 'Star',
       name: "Confrontation with Pharaoh",
+      nameUr: "فرعون سے مقابلہ",
       nameAr: "مواجهة فرعون",
       concepts: [
         { term: "Who is Your Lord", arabic: "فمن ربكما يا موسى", meaning: { en: "Pharaoh asked: Who is your Lord?", ur: "فرعون نے پوچھا: تمہارا رب کون ہے؟" }, ayahs: [49] },
@@ -119,6 +125,7 @@ export const ONTOLOGY = {
       color: '#14B8A6',
       icon: 'Crown',
       name: "Contest with the Magicians",
+      nameUr: "جادوگروں سے مقابلہ",
       nameAr: "مباراة السحرة",
       concepts: [
         { term: "Day of Festival", arabic: "يوم الزينة", meaning: { en: "The day of the festival", ur: "تہوار کا دن" }, ayahs: [59] },
@@ -139,6 +146,7 @@ export const ONTOLOGY = {
       color: '#F59E0B',
       icon: 'Star',
       name: "Pharaoh's Threats and Magicians' Faith",
+      nameUr: "فرعون کی دھمکیاں اور جادوگروں کا ایمان",
       nameAr: "تهديدات فرعون وإيمان السحرة",
       concepts: [
         { term: "Unauthorized Belief", arabic: "آمنتم له قبل أن آذن لكم", meaning: { en: "You believed before I permitted you", ur: "تم میری اجازت سے پہلے ایمان لے آئے" }, ayahs: [71] },
@@ -156,6 +164,7 @@ export const ONTOLOGY = {
       color: '#10B981',
       icon: 'Book',
       name: "Consequences: Hell and Paradise",
+      nameUr: "نتائج: جہنم اور جنت",
       nameAr: "العاقبة: النار والجنة",
       concepts: [
         { term: "Criminal to Hell", arabic: "من يأت ربه مجرما", meaning: { en: "Who comes as criminal - for him is Hell", ur: "جو مجرم بن کر آئے - اس کے لیے جہنم ہے" }, ayahs: [74] },
@@ -171,6 +180,7 @@ export const ONTOLOGY = {
       color: '#06B6D4',
       icon: 'Compass',
       name: "The Exodus and Parting of the Sea",
+      nameUr: "ہجرت اور سمندر کا شق ہونا",
       nameAr: "الخروج وانشقاق البحر",
       concepts: [
         { term: "Travel by Night", arabic: "أن أسر بعبادي", meaning: { en: "Travel by night with My servants", ur: "میرے بندوں کو رات کو لے کر چلو" }, ayahs: [77] },
@@ -186,6 +196,7 @@ export const ONTOLOGY = {
       color: '#EC4899',
       icon: 'Globe',
       name: "Blessings Upon Bani Israel",
+      nameUr: "بنی اسرائیل پر نعمتیں",
       nameAr: "نعم الله على بني إسرائيل",
       concepts: [
         { term: "Delivered from Enemy", arabic: "أنجيناكم من عدوكم", meaning: { en: "We saved you from your enemy", ur: "ہم نے تمہیں تمہارے دشمن سے بچایا" }, ayahs: [80] },
@@ -201,6 +212,7 @@ export const ONTOLOGY = {
       color: '#10B981',
       icon: 'Book',
       name: "The Samiri and the Golden Calf",
+      nameUr: "سامری اور سونے کا بچھڑا",
       nameAr: "السامري والعجل",
       concepts: [
         { term: "Musa Hastened", arabic: "وما أعجلك عن قومك", meaning: { en: "What made you hasten from your people?", ur: "تجھے اپنی قوم سے جلدی کس بات نے کرائی؟" }, ayahs: [83] },
@@ -219,6 +231,7 @@ export const ONTOLOGY = {
       color: '#10B981',
       icon: 'Book',
       name: "Musa's Return and Confrontation",
+      nameUr: "موسیٰ کی واپسی اور محاسبہ",
       nameAr: "عودة موسى الغاضبة",
       concepts: [
         { term: "Seizes Harun's Head", arabic: "أخذ برأس أخيه يجره إليه", meaning: { en: "Musa seized his brother's head", ur: "موسیٰ نے اپنے بھائی کا سر پکڑ کر کھینچا" }, ayahs: [94] },
@@ -238,6 +251,7 @@ export const ONTOLOGY = {
       color: '#3B82F6',
       icon: 'Shield',
       name: "Revelation of the Torah",
+      nameUr: "تورات کا نزول",
       nameAr: "إنزال التوراة",
       concepts: [
         { term: "Appointed Thirty Nights", arabic: "وواعدنا موسى ثلاثين ليلة", meaning: { en: "We made appointment with Musa for thirty nights", ur: "ہم نے موسیٰ سے تیس راتوں کا وعدہ کیا" }, ayahs: [83] },
@@ -250,6 +264,7 @@ export const ONTOLOGY = {
       color: '#10B981',
       icon: 'Book',
       name: "The Story of Adam",
+      nameUr: "آدم کا قصہ",
       nameAr: "قصة آدم",
       concepts: [
         { term: "Covenant with Adam", arabic: "ولقد عهدنا إلى آدم", meaning: { en: "We made covenant with Adam", ur: "ہم نے آدم سے عہد لیا" }, ayahs: [115] },
@@ -277,6 +292,7 @@ export const ONTOLOGY = {
       color: '#3B82F6',
       icon: 'Shield',
       name: "Consequences of Following/Ignoring Guidance",
+      nameUr: "ہدایت کی پیروی یا اعراض کے نتائج",
       nameAr: "عواقب اتباع الهدى أو الإعراض عنه",
       concepts: [
         { term: "Following Guidance", arabic: "فمن اتبع هداي", meaning: { en: "Whoever follows My guidance", ur: "جس نے میری ہدایت کی پیروی کی" }, ayahs: [123] },
@@ -294,6 +310,7 @@ export const ONTOLOGY = {
       color: '#14B8A6',
       icon: 'Crown',
       name: "Day of Judgment Scenes",
+      nameUr: "قیامت کے مناظر",
       nameAr: "مشاهد يوم القيامة",
       concepts: [
         { term: "Trumpet Blown", arabic: "يوم ينفخ في الصور", meaning: { en: "Day when trumpet is blown", ur: "جس دن صور پھونکا جائے گا" }, ayahs: [102] },
@@ -316,6 +333,7 @@ export const ONTOLOGY = {
       color: '#EF4444',
       icon: 'Users',
       name: "The Quran as Guidance",
+      nameUr: "قرآن بطور ہدایت",
       nameAr: "القرآن هداية",
       concepts: [
         { term: "Arabic Quran", arabic: "قرآنا عربيا", meaning: { en: "An Arabic Quran", ur: "عربی قرآن" }, ayahs: [113] },
@@ -332,6 +350,7 @@ export const ONTOLOGY = {
       color: '#10B981',
       icon: 'Book',
       name: "Final Admonitions",
+      nameUr: "آخری نصیحتیں",
       nameAr: "النصائح الختامية",
       concepts: [
         { term: "Do Not Extend Eyes", arabic: "ولا تمدن عينيك", meaning: { en: "Do not extend your eyes toward what We gave", ur: "اپنی نظریں نہ لگاؤ ان چیزوں کی طرف جو ہم نے دیں" }, ayahs: [131] },

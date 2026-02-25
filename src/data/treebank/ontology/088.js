@@ -14,6 +14,7 @@ export const ONTOLOGY = {
   categories: {
     overwhelmingEvent: {
       name: "The Overwhelming Event",
+      nameUr: "چھا جانے والا واقعہ (غاشیہ)",
       nameArabic: "الغاشية",
       color: '#EF4444',
       icon: 'AlertTriangle',
@@ -24,6 +25,7 @@ export const ONTOLOGY = {
 
     facesOfDoom: {
       name: "Faces of the Doomed",
+      nameUr: "عذاب والوں کے چہرے",
       nameArabic: "وجوه العذاب",
       color: '#EF4444',
       icon: 'AlertTriangle',
@@ -38,6 +40,7 @@ export const ONTOLOGY = {
 
     facesOfBliss: {
       name: "Faces of the Blessed",
+      nameUr: "نعمت والوں کے چہرے",
       nameArabic: "وجوه النعيم",
       color: '#10B981',
       icon: 'Sparkles',
@@ -56,6 +59,7 @@ export const ONTOLOGY = {
 
     signsInCreation: {
       name: "Signs in Creation",
+      nameUr: "تخلیق میں نشانیاں",
       nameArabic: "آيات في الخلق",
       color: '#06B6D4',
       icon: 'Globe',
@@ -69,6 +73,7 @@ export const ONTOLOGY = {
 
     prophetsRole: {
       name: "The Prophet's Role",
+      nameUr: "نبی کا کردار",
       nameArabic: "دور النبي",
       color: '#8B5CF6',
       icon: 'MessageCircle',
@@ -81,6 +86,7 @@ export const ONTOLOGY = {
 
     divineJustice: {
       name: "Divine Justice",
+      nameUr: "الٰہی انصاف",
       nameArabic: "العدل الإلهي",
       color: '#F59E0B',
       icon: 'Scale',

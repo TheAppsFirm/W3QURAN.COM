@@ -22,6 +22,7 @@ export const ONTOLOGY = {
   categories: {
     manifestVictory: {
       name: "The Manifest Victory",
+      nameUr: "فتحِ مبین",
       nameAr: "الفتح المبين",
       color: '#F59E0B',
       icon: 'Crown',
@@ -36,6 +37,7 @@ export const ONTOLOGY = {
     },
     sakinah: {
       name: "Divine Tranquility (Sakinah)",
+      nameUr: "الٰہی سکینت",
       nameAr: "السكينة",
       color: '#8B5CF6',
       icon: 'Sparkles',
@@ -50,6 +52,7 @@ export const ONTOLOGY = {
     },
     bayatRidwan: {
       name: "Bay'at ar-Ridwan (Pledge of Pleasure)",
+      nameUr: "بیعتِ رضوان",
       nameAr: "بيعة الرضوان",
       color: '#10B981',
       icon: 'Heart',
@@ -66,6 +69,7 @@ export const ONTOLOGY = {
     },
     believersRewards: {
       name: "Rewards for True Believers",
+      nameUr: "سچے مومنین کا اجر",
       nameAr: "جزاء المؤمنين",
       color: '#8B5CF6',
       icon: 'Sparkles',
@@ -80,6 +84,7 @@ export const ONTOLOGY = {
     },
     munafiqunAndDoubters: {
       name: "Hypocrites and Doubters",
+      nameUr: "منافقین اور شک کرنے والے",
       nameAr: "المنافقون والمرجفون",
       color: '#EF4444',
       icon: 'AlertTriangle',
@@ -95,6 +100,7 @@ export const ONTOLOGY = {
     },
     bedouinsLeft: {
       name: "Bedouins Who Stayed Behind",
+      nameUr: "پیچھے رہ جانے والے بدو",
       nameAr: "المخلفون من الأعراب",
       color: '#EF4444',
       icon: 'AlertTriangle',
@@ -111,6 +117,7 @@ export const ONTOLOGY = {
     },
     treatyHudaybiyyah: {
       name: "Treaty of Hudaybiyyah",
+      nameUr: "صلح حدیبیہ",
       nameAr: "صلح الحديبية",
       color: '#3B82F6',
       icon: 'Book',
@@ -127,6 +134,7 @@ export const ONTOLOGY = {
     },
     protectionBelievers: {
       name: "Protection of Hidden Believers",
+      nameUr: "خفیہ مومنین کی حفاظت",
       nameAr: "حماية المؤمنين المختفين",
       color: '#10B981',
       icon: 'Users',
@@ -141,6 +149,7 @@ export const ONTOLOGY = {
     },
     jahiliyyahVsIslam: {
       name: "Jahiliyyah Pride vs Islamic Tranquility",
+      nameUr: "جاہلی حمیت بمقابلہ اسلامی سکینت",
       nameAr: "حمية الجاهلية مقابل السكينة",
       color: '#EF4444',
       icon: 'Shield',
@@ -155,6 +164,7 @@ export const ONTOLOGY = {
     },
     visionFulfilled: {
       name: "The Prophet's Vision Fulfilled",
+      nameUr: "نبی ﷺ کے خواب کی تعبیر",
       nameAr: "تحقق رؤيا النبي",
       color: '#F59E0B',
       icon: 'Star',
@@ -171,6 +181,7 @@ export const ONTOLOGY = {
     },
     islamTriumph: {
       name: "Islam Over All Religions",
+      nameUr: "اسلام تمام ادیان پر غالب",
       nameAr: "ظهور الإسلام",
       color: '#F59E0B',
       icon: 'Crown',
@@ -185,6 +196,7 @@ export const ONTOLOGY = {
     },
     companionsDescription: {
       name: "Description of the Companions",
+      nameUr: "صحابہ کی صفات",
       nameAr: "صفة الصحابة",
       color: '#10B981',
       icon: 'Users',
@@ -206,6 +218,7 @@ export const ONTOLOGY = {
     },
     breakingPledge: {
       name: "Consequences of Breaking Pledge",
+      nameUr: "عہد توڑنے کے نتائج",
       nameAr: "نقض العهد",
       color: '#EF4444',
       icon: 'AlertTriangle',
@@ -219,6 +232,7 @@ export const ONTOLOGY = {
     },
     divineDominion: {
       name: "Allah's Complete Dominion",
+      nameUr: "اللہ کی مکمل حاکمیت",
       nameAr: "ملك الله المطلق",
       color: '#F59E0B',
       icon: 'Crown',
@@ -232,6 +246,7 @@ export const ONTOLOGY = {
     },
     obedienceRequired: {
       name: "Obedience to Allah and Messenger",
+      nameUr: "اللہ اور رسول کی اطاعت",
       nameAr: "طاعة الله والرسول",
       color: '#3B82F6',
       icon: 'Compass',

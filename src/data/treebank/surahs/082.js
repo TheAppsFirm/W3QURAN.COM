@@ -22,7 +22,10 @@ export const TREEBANK_DATA = {
       { position: 3, arabic: "انفَطَرَتْ", transliteration: "infaṭarat", root: "ف ط ر", meaning: { en: "is cleft asunder", ur: "پھٹ جائے", ar: "انشَقَّت" }, pos: "V", posLabel: "V", grammarRole: "verb", features: { form: "VII", aspect: "perfect" }, advanced: { rootFamily: ["فَطر", "فِطرة", "انفطار"], linguisticMiracle: "Form VII - internal splitting of sky" } }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' }
+      ],
     },
   },
 
@@ -35,7 +38,10 @@ export const TREEBANK_DATA = {
       { position: 3, arabic: "انتَثَرَتْ", transliteration: "intatharat", root: "ن ث ر", meaning: { en: "are scattered", ur: "بکھر جائیں", ar: "تَفَرَّقَت" }, pos: "V", posLabel: "V", grammarRole: "verb", features: { form: "VIII" }, advanced: { linguisticMiracle: "Stars fall like pearls from broken necklace" } }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' }
+      ],
     },
   },
 
@@ -48,7 +54,10 @@ export const TREEBANK_DATA = {
       { position: 3, arabic: "فُجِّرَتْ", transliteration: "fujjirat", root: "ف ج ر", meaning: { en: "are burst forth", ur: "پھوٹ جائیں", ar: "انفَجَرَت" }, pos: "V", posLabel: "V", grammarRole: "verb", features: { form: "II", voice: "passive" }, advanced: { linguisticMiracle: "Seas merge, barriers removed - all water becomes one" } }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' }
+      ],
     },
   },
 
@@ -61,7 +70,10 @@ export const TREEBANK_DATA = {
       { position: 3, arabic: "بُعْثِرَتْ", transliteration: "buʿthirat", root: "ب ع ث ر", meaning: { en: "are overturned", ur: "کھول دی جائیں", ar: "أُثيرَت" }, pos: "V", posLabel: "V", grammarRole: "verb", features: { voice: "passive" }, advanced: { linguisticMiracle: "Graves opened, contents scattered - resurrection begins" } }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' }
+      ],
     },
   },
 
@@ -146,7 +158,11 @@ export const TREEBANK_DATA = {
       { position: 4, arabic: "بِالدِّينِ", transliteration: "bil-dīni", root: "د ي ن", meaning: { en: "the Recompense", ur: "جزا کو", ar: "بالحِساب" }, pos: "PREP+N", posLabel: "PREP+N", grammarRole: "prepositional phrase", advanced: { linguisticMiracle: "Din here = Judgment/Recompense, not religion" } }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' }
+      ],
     },
   },
 
@@ -173,7 +189,9 @@ export const TREEBANK_DATA = {
       { position: 2, arabic: "كَاتِبِينَ", transliteration: "kātibīna", root: "ك ت ب", meaning: { en: "recording", ur: "لکھنے والے", ar: "مُسَجِّلينَ" }, pos: "ADJ", posLabel: "ADJ", grammarRole: "attribute", features: { pattern: "فَاعِل" }, advanced: { linguisticMiracle: "كِرام كاتِبين - noble scribes, not mere clerks" } }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' }
+      ],
     },
   },
 

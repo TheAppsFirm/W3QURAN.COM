@@ -14,6 +14,7 @@ export const ONTOLOGY = {
   categories: {
     cosmicOaths: {
       name: "The Seven Cosmic Oaths",
+      nameUr: "سات کائناتی قسمیں",
       nameArabic: "القسم الكوني السباعي",
       color: '#F59E0B',
       icon: 'Sun',
@@ -73,6 +74,7 @@ export const ONTOLOGY = {
 
     soulAndItsNature: {
       name: "The Nature of the Soul",
+      nameUr: "نفس کی فطرت",
       nameArabic: "طبيعة النفس",
       color: '#8B5CF6',
       icon: 'Heart',
@@ -111,6 +113,7 @@ export const ONTOLOGY = {
 
     successAndFailure: {
       name: "Success and Failure of the Soul",
+      nameUr: "نفس کی فلاح اور ناکامی",
       nameArabic: "فلاح النفس وخسرانها",
       color: '#10B981',
       icon: 'Scale',
@@ -149,6 +152,7 @@ export const ONTOLOGY = {
 
     storyOfThamud: {
       name: "The Story of Thamud",
+      nameUr: "قوم ثمود کا واقعہ",
       nameArabic: "قصة ثمود",
       color: '#EF4444',
       icon: 'AlertTriangle',
@@ -208,6 +212,7 @@ export const ONTOLOGY = {
 
     divineAuthority: {
       name: "Divine Authority",
+      nameUr: "الٰہی اقتدار",
       nameArabic: "السلطة الإلهية",
       color: '#F59E0B',
       icon: 'Crown',

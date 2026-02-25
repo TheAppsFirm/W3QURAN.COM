@@ -25,6 +25,7 @@ export const ONTOLOGY = {
       color: '#06B6D4',
       icon: 'Compass',
       name: "Praise of the Quran",
+      nameUr: "قرآن کی تعریف",
       nameArabic: "الثناء على القرآن",
       concepts: [
         { term: "الْحَمْدُ لِلَّهِ الَّذِي أَنزَلَ", meaning: { en: "Praise to Allah who revealed", ur: "تمام تعریفیں اللہ کے لیے جس نے نازل کیا" }, explanation: { en: "Opening with gratitude for revelation", ur: "وحی کی نعمت پر شکر کے ساتھ آغاز" }, verseRef: "18:1" },
@@ -40,6 +41,7 @@ export const ONTOLOGY = {
       color: '#3B82F6',
       icon: 'Shield',
       name: "Companions of the Cave (Ashab al-Kahf)",
+      nameUr: "اصحابِ کہف",
       nameArabic: "أصحاب الكهف - فتنة الدين",
       themeType: "Trial of Faith",
       concepts: [
@@ -57,6 +59,7 @@ export const ONTOLOGY = {
       color: '#8B5CF6',
       icon: 'Heart',
       name: "The Miraculous Sleep",
+      nameUr: "معجزاتی نیند",
       nameArabic: "النوم المعجز",
       concepts: [
         { term: "ضَرَبْنَا عَلَىٰ آذَانِهِمْ", meaning: { en: "We cast upon their ears", ur: "ہم نے ان کے کانوں پر (نیند کا) پردہ ڈال دیا" }, explanation: { en: "Supernatural deep sleep", ur: "غیر معمولی گہری نیند" }, verseRef: "18:11" },
@@ -73,6 +76,7 @@ export const ONTOLOGY = {
       color: '#06B6D4',
       icon: 'Compass',
       name: "Lessons from the Cave",
+      nameUr: "غار کے اسباق",
       nameArabic: "دروس الكهف",
       concepts: [
         { term: "وَلَا تَقُولَنَّ لِشَيْءٍ إِنِّي فَاعِلٌ ذَٰلِكَ غَدًا", meaning: { en: "Never say 'I will do this tomorrow'", ur: "کسی چیز کے بارے میں ہرگز نہ کہو کہ میں یہ کل کروں گا" }, explanation: { en: "Do not speak of future without Allah", ur: "مستقبل کی بات اللہ کے ذکر کے بغیر نہ کرو" }, verseRef: "18:23" },
@@ -88,6 +92,7 @@ export const ONTOLOGY = {
       color: '#06B6D4',
       icon: 'Compass',
       name: "Parable of Two Gardens",
+      nameUr: "دو باغوں کی مثال",
       nameArabic: "مثل الجنتين - فتنة المال",
       themeType: "Trial of Wealth",
       concepts: [
@@ -104,6 +109,7 @@ export const ONTOLOGY = {
       color: '#06B6D4',
       icon: 'Compass',
       name: "The Believer's Response",
+      nameUr: "مومن کا جواب",
       nameArabic: "رد المؤمن",
       concepts: [
         { term: "أَكَفَرْتَ بِالَّذِي خَلَقَكَ مِن تُرَابٍ", meaning: { en: "Have you disbelieved in He who created you from dust?", ur: "کیا تو نے اس کا انکار کیا جس نے تجھے مٹی سے بنایا؟" }, explanation: { en: "Reminder of humble origin", ur: "عاجز اصل کی یاد دہانی" }, verseRef: "18:37" },
@@ -118,6 +124,7 @@ export const ONTOLOGY = {
       color: '#10B981',
       icon: 'Book',
       name: "Destruction of the Gardens",
+      nameUr: "باغوں کی تباہی",
       nameArabic: "هلاك الجنتين",
       concepts: [
         { term: "وَأُحِيطَ بِثَمَرِهِ", meaning: { en: "His fruits were encompassed [by ruin]", ur: "اس کے پھل تباہی میں گھیر لیے گئے" }, explanation: { en: "Complete destruction", ur: "مکمل تباہی" }, verseRef: "18:42" },
@@ -131,6 +138,7 @@ export const ONTOLOGY = {
       color: '#14B8A6',
       icon: 'Crown',
       name: "Parable of Worldly Life",
+      nameUr: "دنیاوی زندگی کی مثال",
       nameArabic: "مثل الحياة الدنيا",
       concepts: [
         { term: "إِنَّمَا مَثَلُ الْحَيَاةِ الدُّنْيَا", meaning: { en: "The example of worldly life", ur: "دنیاوی زندگی کی مثال" }, explanation: { en: "Temporary nature illustrated", ur: "عارضی فطرت کی عکاسی" }, verseRef: "18:45" },
@@ -147,6 +155,7 @@ export const ONTOLOGY = {
       color: '#14B8A6',
       icon: 'Crown',
       name: "Musa's Journey to Knowledge",
+      nameUr: "موسیٰ کا علم کی تلاش کا سفر",
       nameArabic: "رحلة موسى للعلم - فتنة العلم",
       themeType: "Trial of Knowledge",
       concepts: [
@@ -162,6 +171,7 @@ export const ONTOLOGY = {
       color: '#EF4444',
       icon: 'Users',
       name: "Meeting Khidr",
+      nameUr: "خضر سے ملاقات",
       nameArabic: "لقاء الخضر",
       concepts: [
         { term: "عَبْدًا مِّنْ عِبَادِنَا", meaning: { en: "A servant from among Our servants", ur: "ہمارے بندوں میں سے ایک بندہ" }, explanation: { en: "Khidr - Allah's special servant", ur: "خضر - اللہ کا خاص بندہ" }, verseRef: "18:65" },
@@ -177,6 +187,7 @@ export const ONTOLOGY = {
       color: '#8B5CF6',
       icon: 'Heart',
       name: "The Three Incidents",
+      nameUr: "تین واقعات",
       nameArabic: "الحوادث الثلاث",
       concepts: [
         { term: "خَرَقَهَا", meaning: { en: "He made a hole in it", ur: "اس نے کشتی میں سوراخ کر دیا" }, explanation: { en: "First incident - damaging the ship", ur: "پہلا واقعہ - کشتی کو نقصان پہنچانا" }, verseRef: "18:71" },
@@ -193,6 +204,7 @@ export const ONTOLOGY = {
       color: '#3B82F6',
       icon: 'Shield',
       name: "Khidr's Explanations",
+      nameUr: "خضر کی وضاحتیں",
       nameArabic: "تفسير الخضر",
       concepts: [
         { term: "أَمَّا السَّفِينَةُ فَكَانَتْ لِمَسَاكِينَ", meaning: { en: "As for the ship, it belonged to poor people", ur: "رہی کشتی تو وہ مسکینوں کی تھی" }, explanation: { en: "Ship damage to save from tyrannical king", ur: "ظالم بادشاہ سے بچانے کے لیے کشتی کو نقصان" }, verseRef: "18:79" },
@@ -210,6 +222,7 @@ export const ONTOLOGY = {
       color: '#EC4899',
       icon: 'Globe',
       name: "Dhul-Qarnayn's Authority",
+      nameUr: "ذوالقرنین کا اقتدار",
       nameArabic: "ذو القرنين - فتنة السلطة",
       themeType: "Trial of Power",
       concepts: [
@@ -223,6 +236,7 @@ export const ONTOLOGY = {
       color: '#EC4899',
       icon: 'Globe',
       name: "The Three Journeys",
+      nameUr: "تین سفر",
       nameArabic: "الرحلات الثلاث",
       concepts: [
         { term: "مَغْرِبَ الشَّمْسِ", meaning: { en: "Setting of the sun", ur: "سورج کے غروب کی جگہ" }, explanation: { en: "First journey - to the west", ur: "پہلا سفر - مغرب کی طرف" }, verseRef: "18:86" },
@@ -237,6 +251,7 @@ export const ONTOLOGY = {
       color: '#14B8A6',
       icon: 'Crown',
       name: "Yajuj and Majuj (Gog and Magog)",
+      nameUr: "یاجوج و ماجوج",
       nameArabic: "يأجوج ومأجوج",
       concepts: [
         { term: "يَأْجُوجَ وَمَأْجُوجَ مُفْسِدُونَ فِي الْأَرْضِ", meaning: { en: "Gog and Magog are corrupters in the land", ur: "یاجوج اور ماجوج زمین میں فساد مچانے والے ہیں" }, explanation: { en: "Destructive nations", ur: "تباہ کن قومیں" }, verseRef: "18:94" },
@@ -252,6 +267,7 @@ export const ONTOLOGY = {
       color: '#10B981',
       icon: 'Book',
       name: "The Barrier's Success",
+      nameUr: "دیوار کی کامیابی",
       nameArabic: "نجاح السد",
       concepts: [
         { term: "فَمَا اسْطَاعُوا أَن يَظْهَرُوهُ", meaning: { en: "They could not scale it", ur: "وہ اس پر چڑھ نہ سکے" }, explanation: { en: "Barrier too high to climb", ur: "رکاوٹ چڑھنے کے لیے بہت اونچی" }, verseRef: "18:97" },
@@ -267,6 +283,7 @@ export const ONTOLOGY = {
       color: '#14B8A6',
       icon: 'Crown',
       name: "Day of Judgment",
+      nameUr: "یومِ قیامت",
       nameArabic: "يوم القيامة",
       concepts: [
         { term: "وَتَرَكْنَا بَعْضَهُمْ يَوْمَئِذٍ يَمُوجُ فِي بَعْضٍ", meaning: { en: "We will leave them surging over each other", ur: "اس دن ہم انہیں ایک دوسرے میں ٹکراتا چھوڑ دیں گے" }, explanation: { en: "Chaos when barrier breaks", ur: "رکاوٹ ٹوٹنے پر افراتفری" }, verseRef: "18:99" },
@@ -283,6 +300,7 @@ export const ONTOLOGY = {
       color: '#3B82F6',
       icon: 'Shield',
       name: "Final Message",
+      nameUr: "اختتامی پیغام",
       nameArabic: "الخاتمة",
       concepts: [
         { term: "فَلَا نُقِيمُ لَهُمْ يَوْمَ الْقِيَامَةِ وَزْنًا", meaning: { en: "We will not assign them any weight on Day of Resurrection", ur: "قیامت کے دن ہم ان کا کوئی وزن قائم نہیں کریں گے" }, explanation: { en: "Worthless deeds of disbelievers", ur: "کافروں کے بے وزن اعمال" }, verseRef: "18:105" },

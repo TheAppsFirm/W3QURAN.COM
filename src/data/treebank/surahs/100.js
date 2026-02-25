@@ -33,7 +33,9 @@ export const TREEBANK_DATA = {
       tr: "Soluyarak koşanlara yemin olsun",
       id: "Demi kuda perang yang berlari kencang dengan terengah-engah",
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'قسم' }
+      ],
     },
     },
     words: [
@@ -122,7 +124,9 @@ export const TREEBANK_DATA = {
       tr: "Ateş saçanlara",
       id: "Dan yang mencetuskan api dengan pukulan kukunya",
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'قسم' }
+      ],
     },
     },
     words: [

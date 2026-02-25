@@ -2120,7 +2120,7 @@ const SURAH_28_TREEBANK = {
     ],
     structure: {
       relationships: [
-
+        { from: 2, to: 3, label: 'عطف' }
       ],
     },
   },
@@ -2458,7 +2458,7 @@ const SURAH_28_TREEBANK = {
     ],
     structure: {
       relationships: [
-
+        { from: 2, to: 3, label: 'عطف' }
       ],
     },
   },

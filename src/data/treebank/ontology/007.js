@@ -16,6 +16,7 @@ export const ONTOLOGY = {
       color: '#14B8A6',
       icon: 'Crown',
       name: "Introduction to the Quran",
+      nameUr: "قرآن کا تعارف",
       nameArabic: "مقدمة القرآن",
       concepts: [
         { term: "كِتَابٌ أُنزِلَ إِلَيْكَ", meaning: { en: "A Book revealed to you", ur: "ایک کتاب جو آپ پر نازل کی گئی" }, explanation: { en: "Quran's divine origin", ur: "قرآن کی الٰہی اصل" }, verseRef: "7:2" },
@@ -29,6 +30,7 @@ export const ONTOLOGY = {
       color: '#3B82F6',
       icon: 'Shield',
       name: "Creation of Adam",
+      nameUr: "آدم کی تخلیق",
       nameArabic: "خلق آدم",
       concepts: [
         { term: "خَلَقْنَاكُمْ ثُمَّ صَوَّرْنَاكُمْ", meaning: { en: "We created you, then fashioned you", ur: "ہم نے تمہیں پیدا کیا، پھر تمہاری صورت بنائی" }, explanation: { en: "Two stages: creation then shaping", ur: "دو مراحل: تخلیق پھر صورت گری" }, verseRef: "7:11" },
@@ -42,6 +44,7 @@ export const ONTOLOGY = {
       color: '#06B6D4',
       icon: 'Compass',
       name: "Iblis's Refusal and Fall",
+      nameUr: "ابلیس کا انکار اور زوال",
       nameArabic: "رفض إبليس وسقوطه",
       concepts: [
         { term: "أَنَا خَيْرٌ مِّنْهُ", meaning: { en: "I am better than him", ur: "میں اس سے بہتر ہوں" }, explanation: { en: "Root of pride: self-superiority", ur: "تکبر کی جڑ: اپنے آپ کو برتر سمجھنا" }, verseRef: "7:12" },
@@ -57,6 +60,7 @@ export const ONTOLOGY = {
       color: '#F59E0B',
       icon: 'Star',
       name: "Adam in Paradise",
+      nameUr: "آدم جنت میں",
       nameArabic: "آدم في الجنة",
       concepts: [
         { term: "اسْكُنْ أَنتَ وَزَوْجُكَ الْجَنَّةَ", meaning: { en: "Dwell, you and your wife, in Paradise", ur: "تم اور تمہاری بیوی جنت میں رہو" }, explanation: { en: "Initial dwelling", ur: "ابتدائی سکونت" }, verseRef: "7:19" },
@@ -70,6 +74,7 @@ export const ONTOLOGY = {
       color: '#10B981',
       icon: 'Book',
       name: "Shaytan's Deception",
+      nameUr: "شیطان کا دھوکہ",
       nameArabic: "خداع الشيطان",
       concepts: [
         { term: "فَوَسْوَسَ لَهُمَا الشَّيْطَانُ", meaning: { en: "Then Shaytan whispered to them", ur: "پھر شیطان نے ان دونوں کو وسوسہ ڈالا" }, explanation: { en: "Method: whispering", ur: "طریقہ: وسوسہ اندازی" }, verseRef: "7:20" },
@@ -85,6 +90,7 @@ export const ONTOLOGY = {
       color: '#EF4444',
       icon: 'Users',
       name: "Adam's Repentance",
+      nameUr: "آدم کی توبہ",
       nameArabic: "توبة آدم",
       concepts: [
         { term: "بَدَتْ لَهُمَا سَوْآتُهُمَا", meaning: { en: "Their private parts became visible", ur: "ان کے ستر ان پر ظاہر ہو گئے" }, explanation: { en: "Consequence of sin", ur: "گناہ کا نتیجہ" }, verseRef: "7:22" },
@@ -100,6 +106,7 @@ export const ONTOLOGY = {
       color: '#3B82F6',
       icon: 'Shield',
       name: "Clothing of Taqwa",
+      nameUr: "تقویٰ کا لباس",
       nameArabic: "لباس التقوى",
       concepts: [
         { term: "أَنزَلْنَا عَلَيْكُمْ لِبَاسًا يُوَارِي سَوْآتِكُمْ", meaning: { en: "We sent down clothing to cover your private parts", ur: "ہم نے تم پر لباس اتارا جو تمہارے ستر چھپاتا ہے" }, explanation: { en: "Physical covering", ur: "جسمانی پردہ" }, verseRef: "7:26" },
@@ -112,6 +119,7 @@ export const ONTOLOGY = {
       color: '#10B981',
       icon: 'Book',
       name: "Al-A'raf - The Heights",
+      nameUr: "اعراف - بلندیاں",
       nameArabic: "الأعراف",
       concepts: [
         { term: "وَبَيْنَهُمَا حِجَابٌ", meaning: { en: "Between them is a barrier", ur: "ان دونوں کے درمیان ایک پردہ ہے" }, explanation: { en: "Partition between Paradise and Hell", ur: "جنت اور جہنم کے درمیان آڑ" }, verseRef: "7:46" },
@@ -126,6 +134,7 @@ export const ONTOLOGY = {
       color: '#F59E0B',
       icon: 'Star',
       name: "Dialogue Between Paradise and Hell Dwellers",
+      nameUr: "جنت اور جہنم والوں کا مکالمہ",
       nameArabic: "حوار أهل الجنة والنار",
       concepts: [
         { term: "وَنَادَىٰ أَصْحَابُ الْجَنَّةِ أَصْحَابَ النَّارِ", meaning: { en: "Paradise dwellers call to Hell dwellers", ur: "جنت والے جہنم والوں کو پکاریں گے" }, explanation: { en: "Cross-realm dialogue", ur: "دونوں جہانوں کے درمیان مکالمہ" }, verseRef: "7:44" },
@@ -141,6 +150,7 @@ export const ONTOLOGY = {
       color: '#3B82F6',
       icon: 'Shield',
       name: "Prophet Nuh (Noah)",
+      nameUr: "نبی نوح علیہ السلام",
       nameArabic: "قصة نوح",
       concepts: [
         { term: "لَقَدْ أَرْسَلْنَا نُوحًا إِلَىٰ قَوْمِهِ", meaning: { en: "We sent Nuh to his people", ur: "ہم نے نوح کو ان کی قوم کی طرف بھیجا" }, explanation: { en: "First named prophet in series", ur: "سلسلے میں پہلے نامزد نبی" }, verseRef: "7:59" },
@@ -156,6 +166,7 @@ export const ONTOLOGY = {
       color: '#10B981',
       icon: 'Book',
       name: "Prophet Hud",
+      nameUr: "نبی ہود علیہ السلام",
       nameArabic: "قصة هود",
       concepts: [
         { term: "وَإِلَىٰ عَادٍ أَخَاهُمْ هُودًا", meaning: { en: "And to 'Ad, their brother Hud", ur: "اور عاد کی طرف ان کے بھائی ہود کو" }, explanation: { en: "Prophet to 'Ad", ur: "قومِ عاد کے لیے نبی" }, verseRef: "7:65" },
@@ -172,6 +183,7 @@ export const ONTOLOGY = {
       color: '#3B82F6',
       icon: 'Shield',
       name: "Prophet Salih",
+      nameUr: "نبی صالح علیہ السلام",
       nameArabic: "قصة صالح",
       concepts: [
         { term: "وَإِلَىٰ ثَمُودَ أَخَاهُمْ صَالِحًا", meaning: { en: "And to Thamud, their brother Salih", ur: "اور ثمود کی طرف ان کے بھائی صالح کو" }, explanation: { en: "Prophet to Thamud", ur: "قومِ ثمود کے لیے نبی" }, verseRef: "7:73" },
@@ -188,6 +200,7 @@ export const ONTOLOGY = {
       color: '#06B6D4',
       icon: 'Compass',
       name: "Prophet Lut (Lot)",
+      nameUr: "نبی لوط علیہ السلام",
       nameArabic: "قصة لوط",
       concepts: [
         { term: "وَلُوطًا إِذْ قَالَ لِقَوْمِهِ", meaning: { en: "And Lut when he said to his people", ur: "اور لوط نے جب اپنی قوم سے کہا" }, explanation: { en: "Lut's mission", ur: "لوط کی دعوت" }, verseRef: "7:80" },
@@ -204,6 +217,7 @@ export const ONTOLOGY = {
       color: '#EC4899',
       icon: 'Globe',
       name: "Prophet Shu'ayb",
+      nameUr: "نبی شعیب علیہ السلام",
       nameArabic: "قصة شعيب",
       concepts: [
         { term: "وَإِلَىٰ مَدْيَنَ أَخَاهُمْ شُعَيْبًا", meaning: { en: "And to Madyan, their brother Shu'ayb", ur: "اور مدین کی طرف ان کے بھائی شعیب کو" }, explanation: { en: "Prophet to Madyan", ur: "اہلِ مدین کے لیے نبی" }, verseRef: "7:85" },
@@ -220,6 +234,7 @@ export const ONTOLOGY = {
       color: '#14B8A6',
       icon: 'Crown',
       name: "Prophet Musa (Moses) - Most Extensive",
+      nameUr: "نبی موسیٰ علیہ السلام - سب سے تفصیلی",
       nameArabic: "قصة موسى",
       concepts: [
         { term: "ثُمَّ بَعَثْنَا مِن بَعْدِهِم مُّوسَىٰ بِآيَاتِنَا إِلَىٰ فِرْعَوْنَ وَمَلَئِهِ", meaning: { en: "Then We sent Musa with Our signs to Pharaoh", ur: "پھر ہم نے ان کے بعد موسیٰ کو اپنی نشانیوں کے ساتھ فرعون اور اس کے سرداروں کی طرف بھیجا" }, explanation: { en: "Musa's mission", ur: "موسیٰ کی بعثت" }, verseRef: "7:103" },
@@ -233,6 +248,7 @@ export const ONTOLOGY = {
       color: '#06B6D4',
       icon: 'Compass',
       name: "Musa vs. Pharaoh's Magicians",
+      nameUr: "موسیٰ بمقابلہ فرعون کے جادوگر",
       nameArabic: "موسى والسحرة",
       concepts: [
         { term: "ائْتُونِي بِكُلِّ سَاحِرٍ عَلِيمٍ", meaning: { en: "Bring me every skilled magician", ur: "ہر ماہر جادوگر کو میرے پاس لاؤ" }, explanation: { en: "Pharaoh's challenge", ur: "فرعون کا چیلنج" }, verseRef: "7:112" },
@@ -250,6 +266,7 @@ export const ONTOLOGY = {
       color: '#10B981',
       icon: 'Book',
       name: "Pharaoh's Threat",
+      nameUr: "فرعون کی دھمکی",
       nameArabic: "تهديد فرعون",
       concepts: [
         { term: "آمَنتُم بِهِ قَبْلَ أَنْ آذَنَ لَكُمْ", meaning: { en: "You believed before I permitted you", ur: "تم نے میری اجازت سے پہلے ایمان لے آئے" }, explanation: { en: "Pharaoh's anger", ur: "فرعون کا غصہ" }, verseRef: "7:123" },
@@ -264,6 +281,7 @@ export const ONTOLOGY = {
       color: '#F59E0B',
       icon: 'Star',
       name: "Plagues on Egypt",
+      nameUr: "مصر پر عذاب",
       nameArabic: "الآيات التسع",
       concepts: [
         { term: "الطُّوفَانَ", meaning: { en: "The flood", ur: "طوفان" }, explanation: { en: "First plague", ur: "پہلی آفت" }, verseRef: "7:133" },
@@ -280,6 +298,7 @@ export const ONTOLOGY = {
       color: '#EF4444',
       icon: 'Users',
       name: "Exodus and Crossing the Sea",
+      nameUr: "ہجرت اور سمندر عبور کرنا",
       nameArabic: "الخروج وعبور البحر",
       concepts: [
         { term: "وَجَاوَزْنَا بِبَنِي إِسْرَائِيلَ الْبَحْرَ", meaning: { en: "We took Children of Israel across the sea", ur: "اور ہم بنی اسرائیل کو سمندر پار لے گئے" }, explanation: { en: "Sea crossing miracle", ur: "سمندر پار کرنے کا معجزہ" }, verseRef: "7:138" },
@@ -293,6 +312,7 @@ export const ONTOLOGY = {
       color: '#10B981',
       icon: 'Book',
       name: "Musa at Mount Tur",
+      nameUr: "موسیٰ کوہِ طور پر",
       nameArabic: "موسى عند الطور",
       concepts: [
         { term: "وَوَاعَدْنَا مُوسَىٰ ثَلَاثِينَ لَيْلَةً وَأَتْمَمْنَاهَا بِعَشْرٍ", meaning: { en: "We appointed for Musa thirty nights, then ten more", ur: "ہم نے موسیٰ سے تیس راتوں کا وعدہ کیا پھر دس مزید سے پورا کیا" }, explanation: { en: "Forty nights total", ur: "کل چالیس راتیں" }, verseRef: "7:142" },
@@ -309,6 +329,7 @@ export const ONTOLOGY = {
       color: '#8B5CF6',
       icon: 'Heart',
       name: "The Tablets",
+      nameUr: "تختیاں (الواح)",
       nameArabic: "الألواح",
       concepts: [
         { term: "وَكَتَبْنَا لَهُ فِي الْأَلْوَاحِ", meaning: { en: "We wrote for him on tablets", ur: "اور ہم نے اس کے لیے تختیوں میں لکھ دیا" }, explanation: { en: "Divine writing", ur: "الٰہی تحریر" }, verseRef: "7:145" },
@@ -323,6 +344,7 @@ export const ONTOLOGY = {
       color: '#EC4899',
       icon: 'Globe',
       name: "The Golden Calf",
+      nameUr: "سونے کا بچھڑا",
       nameArabic: "العجل",
       concepts: [
         { term: "وَاتَّخَذَ قَوْمُ مُوسَىٰ مِن بَعْدِهِ مِنْ حُلِيِّهِمْ عِجْلًا جَسَدًا", meaning: { en: "Musa's people made from their ornaments a calf body", ur: "موسیٰ کی قوم نے اس کے بعد اپنے زیوروں سے ایک بچھڑے کا جسم بنا لیا" }, explanation: { en: "Calf creation", ur: "بچھڑے کی تخلیق" }, verseRef: "7:148" },
@@ -338,6 +360,7 @@ export const ONTOLOGY = {
       color: '#10B981',
       icon: 'Book',
       name: "Musa's Return and Anger",
+      nameUr: "موسیٰ کی واپسی اور غصہ",
       nameArabic: "عودة موسى وغضبه",
       concepts: [
         { term: "وَلَمَّا رَجَعَ مُوسَىٰ إِلَىٰ قَوْمِهِ غَضْبَانَ أَسِفًا", meaning: { en: "When Musa returned angry and grieved", ur: "جب موسیٰ غصے اور غم سے بھرے ہوئے اپنی قوم کی طرف لوٹے" }, explanation: { en: "Musa's reaction", ur: "موسیٰ کا ردعمل" }, verseRef: "7:150" },
@@ -353,6 +376,7 @@ export const ONTOLOGY = {
       color: '#8B5CF6',
       icon: 'Heart',
       name: "Allah's Beautiful Names",
+      nameUr: "اللہ کے حسین نام",
       nameArabic: "أسماء الله الحسنى",
       concepts: [
         { term: "وَلِلَّهِ الْأَسْمَاءُ الْحُسْنَىٰ", meaning: { en: "To Allah belong the Beautiful Names", ur: "اللہ کے لیے سب سے اچھے نام ہیں" }, explanation: { en: "Divine Names concept", ur: "اسمائے الٰہی کا تصور" }, verseRef: "7:180" },
@@ -365,6 +389,7 @@ export const ONTOLOGY = {
       color: '#EC4899',
       icon: 'Globe',
       name: "Reflection on Creation",
+      nameUr: "تخلیق پر غور و فکر",
       nameArabic: "التفكر في الخلق",
       concepts: [
         { term: "إِنَّ رَبَّكُمُ اللَّهُ الَّذِي خَلَقَ السَّمَاوَاتِ وَالْأَرْضَ فِي سِتَّةِ أَيَّامٍ", meaning: { en: "Your Lord is Allah who created heavens and earth in six days", ur: "بے شک تمہارا رب اللہ ہے جس نے آسمانوں اور زمین کو چھ دنوں میں بنایا" }, explanation: { en: "Creation in six periods", ur: "چھ ادوار میں تخلیق" }, verseRef: "7:54" },
@@ -379,6 +404,7 @@ export const ONTOLOGY = {
       color: '#F59E0B',
       icon: 'Star',
       name: "How to Supplicate",
+      nameUr: "دعا کا طریقہ",
       nameArabic: "آداب الدعاء",
       concepts: [
         { term: "ادْعُوا رَبَّكُمْ تَضَرُّعًا وَخُفْيَةً", meaning: { en: "Call your Lord humbly and privately", ur: "اپنے رب کو عاجزی سے اور خاموشی سے پکارو" }, explanation: { en: "Humble, quiet supplication", ur: "عاجزانہ اور خاموش دعا" }, verseRef: "7:55" },
@@ -393,6 +419,7 @@ export const ONTOLOGY = {
       color: '#10B981',
       icon: 'Book',
       name: "The Primordial Covenant",
+      nameUr: "عہدِ الست",
       nameArabic: "الميثاق الأول",
       concepts: [
         { term: "وَإِذْ أَخَذَ رَبُّكَ مِن بَنِي آدَمَ مِن ظُهُورِهِمْ ذُرِّيَّتَهُمْ", meaning: { en: "When your Lord took from Adam's children, from their loins, their descendants", ur: "جب تمہارے رب نے اولادِ آدم کی پشتوں سے ان کی ذریت نکالی" }, explanation: { en: "Extraction of souls", ur: "روحوں کا نکالنا" }, verseRef: "7:172" },
@@ -406,6 +433,7 @@ export const ONTOLOGY = {
       color: '#14B8A6',
       icon: 'Crown',
       name: "Prophet Muhammad Prophecy",
+      nameUr: "نبی محمد ﷺ کی بشارت",
       nameArabic: "البشارة بمحمد",
       concepts: [
         { term: "الَّذِينَ يَتَّبِعُونَ الرَّسُولَ النَّبِيَّ الْأُمِّيَّ", meaning: { en: "Those who follow the Messenger, the unlettered Prophet", ur: "وہ لوگ جو اس رسول، نبی اُمّی کی پیروی کرتے ہیں" }, explanation: { en: "Description of Muhammad", ur: "محمد ﷺ کا تعارف" }, verseRef: "7:157" },
@@ -420,6 +448,7 @@ export const ONTOLOGY = {
       color: '#3B82F6',
       icon: 'Shield',
       name: "Final Guidance",
+      nameUr: "آخری ہدایت",
       nameArabic: "الهداية الختامية",
       concepts: [
         { term: "وَإِذَا قُرِئَ الْقُرْآنُ فَاسْتَمِعُوا لَهُ وَأَنصِتُوا", meaning: { en: "When Quran is recited, listen and be silent", ur: "جب قرآن پڑھا جائے تو غور سے سنو اور خاموش رہو" }, explanation: { en: "Etiquette of Quran recitation", ur: "قرآن کی تلاوت کے آداب" }, verseRef: "7:204" },
@@ -435,6 +464,7 @@ export const ONTOLOGY = {
       color: '#EF4444',
       icon: 'Users',
       name: "Verse of Prostration",
+      nameUr: "آیتِ سجدہ",
       nameArabic: "آية السجدة",
       concepts: [
         { term: "إِنَّ الَّذِينَ عِندَ رَبِّكَ لَا يَسْتَكْبِرُونَ عَنْ عِبَادَتِهِ", meaning: { en: "Those near your Lord are not too proud to worship", ur: "جو تمہارے رب کے قریب ہیں وہ اس کی عبادت سے تکبر نہیں کرتے" }, explanation: { en: "Angels' humility", ur: "فرشتوں کی عاجزی" }, verseRef: "7:206" },

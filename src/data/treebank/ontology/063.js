@@ -14,6 +14,7 @@ export const ONTOLOGY = {
   categories: {
     hypocrisyTraits: {
       name: "Traits of Hypocrites",
+      nameUr: "منافقوں کی خصلتیں",
       nameAr: "صفات المنافقين",
       color: '#EF4444',
       icon: 'AlertTriangle',
@@ -32,6 +33,7 @@ export const ONTOLOGY = {
     },
     divineJudgment: {
       name: "Divine Response to Hypocrisy",
+      nameUr: "نفاق پر اللہ کا فیصلہ",
       nameAr: "حكم الله في النفاق",
       color: '#F59E0B',
       icon: 'Scale',
@@ -44,6 +46,7 @@ export const ONTOLOGY = {
     },
     trueHonor: {
       name: "True Source of Honor",
+      nameUr: "حقیقی عزت کا سرچشمہ",
       nameAr: "مصدر العزة الحقيقية",
       color: '#8B5CF6',
       icon: 'Crown',
@@ -56,6 +59,7 @@ export const ONTOLOGY = {
     },
     guidanceForBelievers: {
       name: "Guidance for Believers",
+      nameUr: "مومنوں کے لیے رہنمائی",
       nameAr: "توجيهات للمؤمنين",
       color: '#3B82F6',
       icon: 'Compass',

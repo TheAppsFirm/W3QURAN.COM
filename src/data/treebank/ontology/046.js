@@ -14,6 +14,7 @@ export const ONTOLOGY = {
   categories: {
     quranConfirmation: {
       name: "Quran's Divine Origin",
+      nameUr: "قرآن کی الٰہی اصل",
       nameArabic: "التأكيد على القرآن",
       color: '#3B82F6',
       icon: 'Book',
@@ -31,6 +32,7 @@ export const ONTOLOGY = {
 
     idolCritique: {
       name: "Critique of Idol Worship",
+      nameUr: "بت پرستی پر تنقید",
       nameArabic: "نقد عبادة الأصنام",
       color: '#EF4444',
       icon: 'AlertTriangle',
@@ -49,6 +51,7 @@ export const ONTOLOGY = {
 
     quranRejection: {
       name: "Rejection of Quran",
+      nameUr: "قرآن کا انکار",
       nameArabic: "رفض القرآن",
       color: '#EF4444',
       icon: 'Shield',
@@ -63,6 +66,7 @@ export const ONTOLOGY = {
 
     prophetDefense: {
       name: "Prophet's Defense",
+      nameUr: "نبی ﷺ کا دفاع",
       nameArabic: "دفاع النبي",
       color: '#3B82F6',
       icon: 'Compass',
@@ -76,6 +80,7 @@ export const ONTOLOGY = {
 
     witnessFromIsrael: {
       name: "Witness from Children of Israel",
+      nameUr: "بنی اسرائیل سے گواہ",
       nameArabic: "شاهد من بني إسرائيل",
       color: '#3B82F6',
       icon: 'Book',
@@ -89,6 +94,7 @@ export const ONTOLOGY = {
 
     disbelieversExcuses: {
       name: "Disbelievers' Excuses",
+      nameUr: "کافروں کے بہانے",
       nameArabic: "حجج الكافرين",
       color: '#EF4444',
       icon: 'AlertTriangle',
@@ -101,6 +107,7 @@ export const ONTOLOGY = {
 
     mosesBook: {
       name: "Book of Moses",
+      nameUr: "موسیٰ کی کتاب",
       nameArabic: "كتاب موسى",
       color: '#3B82F6',
       icon: 'Book',
@@ -112,6 +119,7 @@ export const ONTOLOGY = {
 
     steadfastBelievers: {
       name: "Steadfast Believers",
+      nameUr: "ثابت قدم مومنین",
       nameArabic: "المؤمنون الصابرون",
       color: '#10B981',
       icon: 'Heart',
@@ -125,6 +133,7 @@ export const ONTOLOGY = {
 
     kindnessToParents: {
       name: "Kindness to Parents",
+      nameUr: "والدین سے حسنِ سلوک",
       nameArabic: "الإحسان إلى الوالدين",
       color: '#10B981',
       icon: 'Heart',
@@ -143,6 +152,7 @@ export const ONTOLOGY = {
 
     acceptedBelievers: {
       name: "Believers Whose Deeds Are Accepted",
+      nameUr: "وہ مومنین جن کے اعمال قبول ہیں",
       nameArabic: "المقبولون من المؤمنين",
       color: '#8B5CF6',
       icon: 'Sparkles',
@@ -156,6 +166,7 @@ export const ONTOLOGY = {
 
     disobedientChild: {
       name: "Disobedient Child",
+      nameUr: "نافرمان اولاد",
       nameArabic: "الولد العاق",
       color: '#EF4444',
       icon: 'AlertTriangle',
@@ -173,6 +184,7 @@ export const ONTOLOGY = {
 
     ranksByDeeds: {
       name: "Ranks According to Deeds",
+      nameUr: "اعمال کے مطابق درجات",
       nameArabic: "الدرجات بالأعمال",
       color: '#F59E0B',
       icon: 'Star',
@@ -184,6 +196,7 @@ export const ONTOLOGY = {
 
     disbelieversExposed: {
       name: "Disbelievers Exposed on Judgment Day",
+      nameUr: "قیامت کے دن کافروں کا بے نقاب ہونا",
       nameArabic: "فضح الكافرين يوم القيامة",
       color: '#EF4444',
       icon: 'Shield',
@@ -199,6 +212,7 @@ export const ONTOLOGY = {
 
     adDestruction: {
       name: "Destruction of 'Ad at Al-Ahqaf",
+      nameUr: "احقاف میں عاد کی تباہی",
       nameArabic: "هلاك عاد في الأحقاف",
       color: '#EF4444',
       icon: 'AlertTriangle',
@@ -213,6 +227,7 @@ export const ONTOLOGY = {
 
     adResponse: {
       name: "'Ad's Response to Hud",
+      nameUr: "ہود کو عاد کا جواب",
       nameArabic: "رد عاد على هود",
       color: '#EF4444',
       icon: 'Shield',
@@ -227,6 +242,7 @@ export const ONTOLOGY = {
 
     theDestructiveWind: {
       name: "The Destructive Wind",
+      nameUr: "تباہ کن ہوا",
       nameArabic: "الريح المدمرة",
       color: '#06B6D4',
       icon: 'Globe',
@@ -243,6 +259,7 @@ export const ONTOLOGY = {
 
     adPower: {
       name: "'Ad's Power Was Useless",
+      nameUr: "عاد کی طاقت بے کار تھی",
       nameArabic: "عجز قوة عاد",
       color: '#EF4444',
       icon: 'AlertTriangle',
@@ -257,6 +274,7 @@ export const ONTOLOGY = {
 
     surroundingDestruction: {
       name: "Surrounding Nations Destroyed",
+      nameUr: "اردگرد کی اقوام تباہ ہوئیں",
       nameArabic: "إهلاك الأمم المجاورة",
       color: '#EF4444',
       icon: 'Shield',
@@ -271,6 +289,7 @@ export const ONTOLOGY = {
 
     jinnListeningToQuran: {
       name: "Jinn Listening to the Quran",
+      nameUr: "جنات کا قرآن سننا",
       nameArabic: "استماع الجن للقرآن",
       color: '#F59E0B',
       icon: 'Sparkles',
@@ -283,6 +302,7 @@ export const ONTOLOGY = {
 
     jinnAnnouncement: {
       name: "Jinn's Announcement to Their People",
+      nameUr: "جنات کا اپنی قوم کو اعلان",
       nameArabic: "إعلان الجن لقومهم",
       color: '#3B82F6',
       icon: 'Compass',
@@ -299,6 +319,7 @@ export const ONTOLOGY = {
 
     jinnWarning: {
       name: "Jinn's Warning",
+      nameUr: "جنات کی تنبیہ",
       nameArabic: "تحذير الجن",
       color: '#EF4444',
       icon: 'AlertTriangle',
@@ -311,6 +332,7 @@ export const ONTOLOGY = {
 
     resurrectionProof: {
       name: "Proof of Resurrection",
+      nameUr: "قیامت کی دلیل",
       nameArabic: "إثبات البعث",
       color: '#F59E0B',
       icon: 'Star',
@@ -323,6 +345,7 @@ export const ONTOLOGY = {
 
     judgmentDay: {
       name: "Judgment Day",
+      nameUr: "یومِ حساب",
       nameArabic: "يوم القيامة",
       color: '#EF4444',
       icon: 'Shield',
@@ -336,6 +359,7 @@ export const ONTOLOGY = {
 
     prophetPatience: {
       name: "Command for Prophet's Patience",
+      nameUr: "نبی ﷺ کو صبر کا حکم",
       nameArabic: "الأمر بالصبر",
       color: '#10B981',
       icon: 'Heart',

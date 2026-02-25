@@ -14,6 +14,7 @@ export const ONTOLOGY = {
   categories: {
     cosmicCollapse: {
       name: "Cosmic Collapse",
+      nameUr: "کائناتی انہدام",
       nameArabic: "انهيار الكون",
       color: '#06B6D4',
       icon: 'Globe',
@@ -27,6 +28,7 @@ export const ONTOLOGY = {
 
     soulKnowledge: {
       name: "Soul's Knowledge",
+      nameUr: "روح کا علم",
       nameArabic: "علم النفس",
       color: '#8B5CF6',
       icon: 'Eye',
@@ -37,6 +39,7 @@ export const ONTOLOGY = {
 
     humanIngratitude: {
       name: "Human Ingratitude",
+      nameUr: "انسانی ناشکری",
       nameArabic: "جحود الإنسان",
       color: '#EF4444',
       icon: 'AlertTriangle',
@@ -49,6 +52,7 @@ export const ONTOLOGY = {
 
     denialOfRecompense: {
       name: "Denial of Recompense",
+      nameUr: "جزا و سزا کا انکار",
       nameArabic: "تكذيب الدين",
       color: '#EF4444',
       icon: 'AlertTriangle',
@@ -59,6 +63,7 @@ export const ONTOLOGY = {
 
     nobleScribes: {
       name: "The Recording Angels",
+      nameUr: "کرام الکاتبین (لکھنے والے فرشتے)",
       nameArabic: "الكرام الكاتبين",
       color: '#F59E0B',
       icon: 'Star',
@@ -71,6 +76,7 @@ export const ONTOLOGY = {
 
     twoDestinies: {
       name: "Two Final Destinations",
+      nameUr: "دو حتمی ٹھکانے",
       nameArabic: "المصيران",
       color: '#3B82F6',
       icon: 'Compass',
@@ -83,6 +89,7 @@ export const ONTOLOGY = {
 
     dayOfRecompense: {
       name: "Day of Recompense",
+      nameUr: "یومِ جزا",
       nameArabic: "يوم الدين",
       color: '#F59E0B',
       icon: 'Scale',

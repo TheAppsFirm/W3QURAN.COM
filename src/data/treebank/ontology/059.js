@@ -14,6 +14,7 @@ export const ONTOLOGY = {
   categories: {
     divineAction: {
       name: "Divine Action Against Enemies",
+      nameUr: "دشمنوں کے خلاف الٰہی اقدام",
       nameAr: "الفعل الإلهي ضد الأعداء",
       color: '#F59E0B',
       icon: 'Shield',
@@ -26,6 +27,7 @@ export const ONTOLOGY = {
     },
     faiDistribution: {
       name: "Distribution of Fai' (War Gains)",
+      nameUr: "فَے (مالِ غنیمت) کی تقسیم",
       nameAr: "توزيع الفيء",
       color: '#3B82F6',
       icon: 'Scale',
@@ -38,6 +40,7 @@ export const ONTOLOGY = {
     },
     muhajirin: {
       name: "The Emigrants (Muhajirin)",
+      nameUr: "مہاجرین",
       nameAr: "المهاجرون",
       color: '#10B981',
       icon: 'Users',
@@ -50,6 +53,7 @@ export const ONTOLOGY = {
     },
     ansar: {
       name: "The Helpers (Ansar)",
+      nameUr: "انصار",
       nameAr: "الأنصار",
       color: '#10B981',
       icon: 'Heart',
@@ -62,6 +66,7 @@ export const ONTOLOGY = {
     },
     laterGenerations: {
       name: "Later Generations",
+      nameUr: "بعد کی نسلیں",
       nameAr: "الأجيال اللاحقة",
       color: '#8B5CF6',
       icon: 'Users',
@@ -73,6 +78,7 @@ export const ONTOLOGY = {
     },
     hypocritesAlliance: {
       name: "Hypocrites' False Alliance",
+      nameUr: "منافقین کا جھوٹا اتحاد",
       nameAr: "تحالف المنافقين",
       color: '#EF4444',
       icon: 'AlertTriangle',
@@ -85,6 +91,7 @@ export const ONTOLOGY = {
     },
     satansDeception: {
       name: "Satan's Deception",
+      nameUr: "شیطان کا دھوکا",
       nameAr: "خداع الشيطان",
       color: '#EF4444',
       icon: 'Flame',
@@ -97,6 +104,7 @@ export const ONTOLOGY = {
     },
     divineNames: {
       name: "The Beautiful Names of Allah",
+      nameUr: "اللہ کے حسین نام",
       nameAr: "أسماء الله الحسنى",
       color: '#F59E0B',
       icon: 'Star',

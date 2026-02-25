@@ -15,6 +15,7 @@ export const ONTOLOGY = {
   categories: {
     divineOaths: {
       name: "The Opening Oaths",
+      nameUr: "ابتدائی قسمیں",
       nameArabic: "القسم الإلهي",
       color: "#8B5CF6",
       concepts: [
@@ -29,6 +30,7 @@ export const ONTOLOGY = {
 
     certaintyOfPunishment: {
       name: "Certainty of Punishment",
+      nameUr: "عذاب کا یقین",
       nameArabic: "حتمية العذاب",
       color: "#EF4444",
       concepts: [
@@ -41,6 +43,7 @@ export const ONTOLOGY = {
 
     punishmentOfDeniers: {
       name: "Punishment of Deniers",
+      nameUr: "جھٹلانے والوں کا عذاب",
       nameArabic: "عذاب المكذبين",
       color: "#F43F5E",
       concepts: [
@@ -55,6 +58,7 @@ export const ONTOLOGY = {
 
     paradiseBliss: {
       name: "Paradise and Its Bliss",
+      nameUr: "جنت اور اس کی نعمتیں",
       nameArabic: "نعيم الجنة",
       color: "#10B981",
       concepts: [
@@ -69,6 +73,7 @@ export const ONTOLOGY = {
 
     familyReunion: {
       name: "Family Reunion in Paradise",
+      nameUr: "جنت میں خاندان کا ملاپ",
       nameArabic: "لحاق الذرية",
       color: "#3B82F6",
       concepts: [
@@ -81,6 +86,7 @@ export const ONTOLOGY = {
 
     paradiseContinued: {
       name: "More Delights of Paradise",
+      nameUr: "جنت کی مزید نعمتیں",
       nameArabic: "المزيد من النعيم",
       color: "#22C55E",
       concepts: [
@@ -95,6 +101,7 @@ export const ONTOLOGY = {
 
     dialogueInParadise: {
       name: "Dialogue of Paradise Dwellers",
+      nameUr: "اہلِ جنت کا مکالمہ",
       nameArabic: "حوار أهل الجنة",
       color: "#6366F1",
       concepts: [
@@ -109,6 +116,7 @@ export const ONTOLOGY = {
 
     prophetVindication: {
       name: "Vindication of the Prophet",
+      nameUr: "نبی کی صداقت",
       nameArabic: "تبرئة النبي",
       color: "#F59E0B",
       concepts: [
@@ -121,6 +129,7 @@ export const ONTOLOGY = {
 
     refutingAccusations: {
       name: "Refuting Accusations",
+      nameUr: "الزامات کی تردید",
       nameArabic: "دحض الاتهامات",
       color: "#EC4899",
       concepts: [
@@ -134,6 +143,7 @@ export const ONTOLOGY = {
 
     rhetoricalQuestions: {
       name: "Rhetorical Questions",
+      nameUr: "استفہامی سوالات",
       nameArabic: "الأسئلة الإنكارية",
       color: "#8B5CF6",
       concepts: [
@@ -148,6 +158,7 @@ export const ONTOLOGY = {
 
     moreQuestions: {
       name: "Further Challenges",
+      nameUr: "مزید چیلنج",
       nameArabic: "المزيد من التحديات",
       color: "#14B8A6",
       concepts: [
@@ -161,6 +172,7 @@ export const ONTOLOGY = {
 
     plottersExposed: {
       name: "Plotters Exposed",
+      nameUr: "سازشیوں کا پردہ فاش",
       nameArabic: "فضح المتآمرين",
       color: "#EF4444",
       concepts: [
@@ -173,6 +185,7 @@ export const ONTOLOGY = {
 
     stubborness: {
       name: "Stubbornness of Deniers",
+      nameUr: "منکروں کی ہٹ دھرمی",
       nameArabic: "عناد المكذبين",
       color: "#F97316",
       concepts: [
@@ -186,6 +199,7 @@ export const ONTOLOGY = {
 
     punishmentBeforeJudgment: {
       name: "Punishment Before Judgment",
+      nameUr: "قیامت سے پہلے عذاب",
       nameArabic: "العذاب قبل القيامة",
       color: "#DC2626",
       concepts: [
@@ -196,6 +210,7 @@ export const ONTOLOGY = {
 
     finalCommand: {
       name: "Final Command to the Prophet",
+      nameUr: "نبی کو آخری حکم",
       nameArabic: "الأمر الأخير للنبي",
       color: "#10B981",
       concepts: [

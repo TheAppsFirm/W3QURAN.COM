@@ -14,6 +14,7 @@ export const ONTOLOGY = {
   categories: {
     propheticMission: {
       name: "Nuh's Mission",
+      nameUr: "نوح علیہ السلام کی رسالت",
       nameArabic: "رسالة نوح",
       color: '#3B82F6',
       icon: 'Book',
@@ -27,6 +28,7 @@ export const ONTOLOGY = {
 
     coreMessage: {
       name: "Core Message",
+      nameUr: "بنیادی پیغام",
       nameArabic: "الرسالة الأساسية",
       color: '#F59E0B',
       icon: 'MessageCircle',
@@ -39,6 +41,7 @@ export const ONTOLOGY = {
 
     forgivenessBenefits: {
       name: "Benefits of Forgiveness",
+      nameUr: "استغفار کے فوائد",
       nameArabic: "فوائد الاستغفار",
       color: '#10B981',
       icon: 'Sparkles',
@@ -54,6 +57,7 @@ export const ONTOLOGY = {
 
     dawahMethods: {
       name: "Methods of Dawah",
+      nameUr: "دعوت کے طریقے",
       nameArabic: "أساليب الدعوة",
       color: '#8B5CF6',
       icon: 'Users',
@@ -67,6 +71,7 @@ export const ONTOLOGY = {
 
     peoplesRejection: {
       name: "People's Rejection",
+      nameUr: "قوم کا انکار",
       nameArabic: "رفض القوم",
       color: '#EF4444',
       icon: 'AlertTriangle',
@@ -81,6 +86,7 @@ export const ONTOLOGY = {
 
     cosmicSigns: {
       name: "Cosmic Signs",
+      nameUr: "کائناتی نشانیاں",
       nameArabic: "الآيات الكونية",
       color: '#06B6D4',
       icon: 'Globe',
@@ -96,6 +102,7 @@ export const ONTOLOGY = {
 
     idols: {
       name: "The Five Idols",
+      nameUr: "پانچ بت",
       nameArabic: "الأصنام الخمسة",
       color: '#EC4899',
       icon: 'AlertTriangle',
@@ -110,6 +117,7 @@ export const ONTOLOGY = {
 
     nuhsDua: {
       name: "Nuh's Final Supplication",
+      nameUr: "نوح علیہ السلام کی آخری دعا",
       nameArabic: "دعاء نوح الأخير",
       color: '#8B5CF6',
       icon: 'Heart',
@@ -124,6 +132,7 @@ export const ONTOLOGY = {
 
     punishment: {
       name: "Punishment",
+      nameUr: "سزا",
       nameArabic: "العقوبة",
       color: '#EF4444',
       icon: 'Zap',

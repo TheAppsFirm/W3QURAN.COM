@@ -2461,7 +2461,13 @@ const SURAH_3_TREEBANK = {
       en: 'The patient, the true, the obedient, those who spend [in the way of Allah], and those who seek forgiveness before dawn.',
       ur: 'یہ وہ لوگ ہیں جو (مشکلات میں) صبر کرتے اور سچ بولتے اور عبادت میں لگے رہتے اور (راہ خدا میں) خرچ کرتے اور اوقات سحر میں گناہوں کی معافی مانگا کرتے ہیں',
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' },
+        { from: 4, to: 5, label: 'تعلق' },
+        { from: 5, to: 6, label: 'تعلق' }
+      ],
     },
     },
     words: [
@@ -9916,7 +9922,15 @@ const SURAH_3_TREEBANK = {
       en: 'Indeed, Allah is my Lord and your Lord, so worship Him. That is the straight path.\"',
       ur: 'کچھ شک نہیں کہ خدا ہی میرا اور تمہارا پروردگار ہے تو اسی کی عبادت کرو یہی سیدھا رستہ ہے',
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' },
+        { from: 4, to: 5, label: 'تعلق' },
+        { from: 5, to: 6, label: 'تعلق' },
+        { from: 6, to: 7, label: 'تعلق' },
+        { from: 7, to: 8, label: 'تعلق' }
+      ],
     },
     },
     words: [
@@ -16238,7 +16252,9 @@ const SURAH_3_TREEBANK = {
       en: 'And whoever turned away after that - they were the defiantly disobedient.',
       ur: 'تو جو اس کے بعد پھر جائیں وہ بد کردار ہیں',
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 2, to: 3, label: 'ظرف' }
+      ],
     },
     },
     words: [
@@ -17212,7 +17228,9 @@ const SURAH_3_TREEBANK = {
       en: 'Those - their recompense will be that upon them is the curse of Allah and the angels and the people, all together,',
       ur: 'ان لوگوں کی سزا یہ ہے کہ ان پر خدا کی اور فرشتوں کی اور انسانوں کی سب کی لعنت ہو',
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 4, to: 5, label: 'جار + مجرور' }
+      ],
     },
     },
     words: [
@@ -21022,7 +21040,9 @@ const SURAH_3_TREEBANK = {
       en: 'But as for those whose faces will turn white, [they will be] within the mercy of Allah. They will abide therein eternally.',
       ur: 'اور جن لوگوں کے منہ سفید ہوں گے وہ خدا کی رحمت (کے باغوں) میں ہوں گے اور ان میں ہمیشہ رہیں گے',
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 9, to: 10, label: 'جار + مجرور' }
+      ],
     },
     },
     words: [
@@ -21145,7 +21165,9 @@ const SURAH_3_TREEBANK = {
       en: 'These are the verses of Allah. We recite them to you, [O Muhammad], in truth; and Allah wants no injustice to the worlds.',
       ur: 'یہ خدا کی آیتیں ہیں جو ہم تم کو صحت کے ساتھ پڑھ کر سناتے ہیں اور خدا اہلِ عالم پر ظلم نہیں کرنا چاہتا',
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 5, to: 6, label: 'جار + مجرور' }
+      ],
     },
     },
     words: [
@@ -25170,7 +25192,12 @@ const SURAH_3_TREEBANK = {
       en: 'Not for you, [O Muhammad, but for Allah], is the decision whether He should [cut them down] or forgive them or punish them, for indeed, they are wrongdoers.',
       ur: '(اے پیغمبر) اس کام میں تمہارا کچھ اختیار نہیں (اب دو صورتیں ہیں) یا خدا انکے حال پر مہربانی کرے یا انہیں عذاب دے کہ یہ ظالم لوگ ہیں',
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 2, to: 3, label: 'جار + مجرور' },
+        { from: 5, to: 7, label: 'عطف' },
+        { from: 8, to: 9, label: 'جار + مجرور' },
+        { from: 8, to: 10, label: 'عطف' }
+      ],
     },
     },
     words: [
@@ -26707,7 +26734,13 @@ const SURAH_3_TREEBANK = {
       en: 'This [Qur\'an] is a clear statement to [all] the people and a guidance and instruction for those conscious of Allah.',
       ur: 'یہ (قرآن) لوگوں کے لیے بیان صریح اور اہلِ تقویٰ کے لیے ہدایت اور نصیحت ہے',
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' },
+        { from: 4, to: 5, label: 'تعلق' },
+        { from: 5, to: 6, label: 'تعلق' }
+      ],
     },
     },
     words: [
@@ -28929,7 +28962,13 @@ const SURAH_3_TREEBANK = {
       en: 'But Allah is your protector, and He is the best of helpers.',
       ur: '(یہ تمہارے مددگار نہیں ہیں) بلکہ خدا تمہارا مددگار ہے اور وہ سب سے بہتر مددگار ہے',
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' },
+        { from: 4, to: 5, label: 'تعلق' },
+        { from: 5, to: 6, label: 'تعلق' }
+      ],
     },
     },
     words: [
@@ -32730,7 +32769,15 @@ const SURAH_3_TREEBANK = {
       en: 'They are [varying] degrees in the sight of Allah, and Allah is Seeing of whatever they do.',
       ur: 'ان لوگوں کے خدا کے ہاں (مختلف اور متفاوت) درجے ہیں اور خدا ان کے سب اعمال کو دیکھ رہا ہے',
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' },
+        { from: 4, to: 5, label: 'تعلق' },
+        { from: 5, to: 6, label: 'تعلق' },
+        { from: 6, to: 7, label: 'تعلق' },
+        { from: 7, to: 8, label: 'تعلق' }
+      ],
     },
     },
     words: [

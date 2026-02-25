@@ -14,6 +14,7 @@ export const ONTOLOGY = {
   categories: {
     divineSovereignty: {
       name: "Divine Sovereignty",
+      nameUr: "الٰہی بادشاہت",
       nameArabic: "الملك الإلهي",
       color: '#F59E0B',
       icon: 'Crown',
@@ -24,6 +25,7 @@ export const ONTOLOGY = {
     },
     purposeOfLife: {
       name: "Purpose of Life",
+      nameUr: "زندگی کا مقصد",
       nameArabic: "الحكمة من الخلق",
       color: '#3B82F6',
       icon: 'Compass',
@@ -35,6 +37,7 @@ export const ONTOLOGY = {
     },
     perfectCreation: {
       name: "Perfection of Creation",
+      nameUr: "تخلیق کا کمال",
       nameArabic: "كمال الخلق",
       color: '#06B6D4',
       icon: 'Globe',
@@ -47,6 +50,7 @@ export const ONTOLOGY = {
     },
     cosmicSigns: {
       name: "Cosmic Signs",
+      nameUr: "کائناتی نشانیاں",
       nameArabic: "الآيات الكونية",
       color: '#8B5CF6',
       icon: 'Sun',
@@ -58,6 +62,7 @@ export const ONTOLOGY = {
     },
     hellDescription: {
       name: "Description of Hell",
+      nameUr: "جہنم کا بیان",
       nameArabic: "وصف جهنم",
       color: '#EF4444',
       icon: 'AlertTriangle',
@@ -70,6 +75,7 @@ export const ONTOLOGY = {
     },
     admissionOfGuilt: {
       name: "Admission of Guilt",
+      nameUr: "گناہ کا اعتراف",
       nameArabic: "الاعتراف بالذنب",
       color: '#EF4444',
       icon: 'Scale',
@@ -82,6 +88,7 @@ export const ONTOLOGY = {
     },
     rewardForRighteous: {
       name: "Reward for Righteous",
+      nameUr: "متقیوں کا اجر",
       nameArabic: "جزاء المتقين",
       color: '#10B981',
       icon: 'Sparkles',
@@ -92,6 +99,7 @@ export const ONTOLOGY = {
     },
     divineKnowledge: {
       name: "Divine Knowledge",
+      nameUr: "الٰہی علم",
       nameArabic: "العلم الإلهي",
       color: '#F59E0B',
       icon: 'Eye',
@@ -104,6 +112,7 @@ export const ONTOLOGY = {
     },
     earthlyBlessings: {
       name: "Earthly Blessings",
+      nameUr: "زمین کی نعمتیں",
       nameArabic: "نعم الأرض",
       color: '#22C55E',
       icon: 'Globe',
@@ -116,6 +125,7 @@ export const ONTOLOGY = {
     },
     divineWarnings: {
       name: "Divine Warnings",
+      nameUr: "الٰہی تنبیہات",
       nameArabic: "التحذيرات الإلهية",
       color: '#EF4444',
       icon: 'Zap',
@@ -128,6 +138,7 @@ export const ONTOLOGY = {
     },
     humanDependence: {
       name: "Human Dependence on Allah",
+      nameUr: "اللہ پر انسان کا انحصار",
       nameArabic: "اعتماد البشر على الله",
       color: '#8B5CF6',
       icon: 'Heart',
@@ -139,6 +150,7 @@ export const ONTOLOGY = {
     },
     twoPaths: {
       name: "Two Paths",
+      nameUr: "دو راستے",
       nameArabic: "الطريقان",
       color: '#3B82F6',
       icon: 'Compass',
@@ -149,6 +161,7 @@ export const ONTOLOGY = {
     },
     humanFaculties: {
       name: "Human Faculties",
+      nameUr: "انسانی صلاحیتیں",
       nameArabic: "قدرات الإنسان",
       color: '#06B6D4',
       icon: 'Users',
@@ -160,6 +173,7 @@ export const ONTOLOGY = {
     },
     finalDestination: {
       name: "Final Destination",
+      nameUr: "آخری ٹھکانا",
       nameArabic: "المصير النهائي",
       color: '#EC4899',
       icon: 'Scale',
@@ -172,6 +186,7 @@ export const ONTOLOGY = {
     },
     waterBlessing: {
       name: "The Water Blessing",
+      nameUr: "پانی کی نعمت",
       nameArabic: "نعمة الماء",
       color: '#06B6D4',
       icon: 'Sparkles',

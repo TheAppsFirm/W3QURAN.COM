@@ -51,7 +51,9 @@ export const TREEBANK_DATA = {
       }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'قسم' }
+      ],
     },
   },
 
@@ -95,7 +97,9 @@ export const TREEBANK_DATA = {
       }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'قسم' }
+      ],
     },
   },
 
@@ -139,7 +143,9 @@ export const TREEBANK_DATA = {
       }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'قسم' }
+      ],
     },
   },
 
@@ -1285,7 +1291,11 @@ export const TREEBANK_DATA = {
       }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' }
+      ],
     },
   },
 
@@ -1684,7 +1694,9 @@ export const TREEBANK_DATA = {
       }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 5, to: 7, label: 'ظرف' }
+      ],
     },
   },
 
@@ -2122,7 +2134,10 @@ export const TREEBANK_DATA = {
       }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' }
+      ],
     },
   },
 
@@ -2248,7 +2263,11 @@ export const TREEBANK_DATA = {
       }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' }
+      ],
     },
   },
 
@@ -2725,7 +2744,9 @@ export const TREEBANK_DATA = {
       }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 2, to: 3, label: 'جار + مجرور' }
+      ],
     },
   },
 
@@ -2928,7 +2949,11 @@ export const TREEBANK_DATA = {
       }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' }
+      ],
     },
   },
 
@@ -3068,7 +3093,10 @@ export const TREEBANK_DATA = {
       }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 2, to: 3, label: 'ظرف' },
+        { from: 5, to: 6, label: 'جار + مجرور' }
+      ],
     },
   },
 
@@ -3457,7 +3485,11 @@ export const TREEBANK_DATA = {
       }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' }
+      ],
     },
   },
 
@@ -3570,7 +3602,10 @@ export const TREEBANK_DATA = {
       }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' }
+      ],
     },
   },
 
@@ -3799,7 +3834,10 @@ export const TREEBANK_DATA = {
       }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' }
+      ],
     },
   },
 
@@ -3900,7 +3938,9 @@ export const TREEBANK_DATA = {
       }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 6, to: 7, label: 'جار + مجرور' }
+      ],
     },
   },
 
@@ -4195,7 +4235,14 @@ export const TREEBANK_DATA = {
       }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' },
+        { from: 4, to: 5, label: 'تعلق' },
+        { from: 5, to: 6, label: 'تعلق' },
+        { from: 6, to: 7, label: 'تعلق' }
+      ],
     },
   },
 
@@ -4425,7 +4472,11 @@ export const TREEBANK_DATA = {
       }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' }
+      ],
     },
   },
 
@@ -4577,7 +4628,12 @@ export const TREEBANK_DATA = {
       }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' },
+        { from: 4, to: 5, label: 'تعلق' }
+      ],
     },
   },
 
@@ -4716,7 +4772,10 @@ export const TREEBANK_DATA = {
       }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' }
+      ],
     },
   },
 
@@ -4804,7 +4863,13 @@ export const TREEBANK_DATA = {
       }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' },
+        { from: 4, to: 5, label: 'تعلق' },
+        { from: 5, to: 6, label: 'تعلق' }
+      ],
     },
   },
 
@@ -4943,7 +5008,11 @@ export const TREEBANK_DATA = {
       }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' }
+      ],
     },
   },
 
@@ -5031,7 +5100,9 @@ export const TREEBANK_DATA = {
       }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 3, to: 5, label: 'عطف' }
+      ],
     },
   },
 
@@ -5183,7 +5254,13 @@ export const TREEBANK_DATA = {
       }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' },
+        { from: 4, to: 5, label: 'تعلق' },
+        { from: 5, to: 6, label: 'تعلق' }
+      ],
     },
   },
 
@@ -5245,7 +5322,11 @@ export const TREEBANK_DATA = {
       }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' }
+      ],
     },
   },
 
@@ -5333,7 +5414,10 @@ export const TREEBANK_DATA = {
       }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 3, to: 4, label: 'جار + مجرور' },
+        { from: 5, to: 6, label: 'جار + مجرور' }
+      ],
     },
   },
 
@@ -5434,7 +5518,10 @@ export const TREEBANK_DATA = {
       }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 3, to: 4, label: 'جار + مجرور' },
+        { from: 4, to: 5, label: 'جار + مجرور' }
+      ],
     },
   },
 
@@ -5509,7 +5596,12 @@ export const TREEBANK_DATA = {
       }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' },
+        { from: 4, to: 5, label: 'تعلق' }
+      ],
     },
   },
 
@@ -5571,7 +5663,11 @@ export const TREEBANK_DATA = {
       }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' }
+      ],
     },
   },
 
@@ -5633,7 +5729,11 @@ export const TREEBANK_DATA = {
       }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' }
+      ],
     },
   },
 
@@ -5850,7 +5950,12 @@ export const TREEBANK_DATA = {
       }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' },
+        { from: 4, to: 5, label: 'تعلق' }
+      ],
     },
   },
 
@@ -5912,7 +6017,11 @@ export const TREEBANK_DATA = {
       }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' }
+      ],
     },
   },
 
@@ -6335,7 +6444,11 @@ export const TREEBANK_DATA = {
       }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' }
+      ],
     },
   },
 
@@ -6757,7 +6870,12 @@ export const TREEBANK_DATA = {
       }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' },
+        { from: 4, to: 5, label: 'تعلق' }
+      ],
     },
   },
 
@@ -6935,7 +7053,10 @@ export const TREEBANK_DATA = {
       }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' }
+      ],
     },
   },
 
@@ -6984,7 +7105,9 @@ export const TREEBANK_DATA = {
       }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 2, to: 3, label: 'جار + مجرور' }
+      ],
     },
   },
 
@@ -7072,7 +7195,13 @@ export const TREEBANK_DATA = {
       }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' },
+        { from: 4, to: 5, label: 'تعلق' },
+        { from: 5, to: 6, label: 'تعلق' }
+      ],
     },
   },
 
@@ -7198,7 +7327,9 @@ export const TREEBANK_DATA = {
       }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 2, to: 3, label: 'جار + مجرور' }
+      ],
     },
   },
 
@@ -7247,7 +7378,9 @@ export const TREEBANK_DATA = {
       }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 2, to: 3, label: 'جار + مجرور' }
+      ],
     },
   },
 
@@ -8588,7 +8721,10 @@ export const TREEBANK_DATA = {
       }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' }
+      ],
     },
   },
 
@@ -9438,7 +9574,11 @@ export const TREEBANK_DATA = {
       }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' }
+      ],
     },
   },
 
@@ -9642,7 +9782,12 @@ export const TREEBANK_DATA = {
       }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' },
+        { from: 4, to: 5, label: 'تعلق' }
+      ],
     },
   },
 
@@ -9795,7 +9940,12 @@ export const TREEBANK_DATA = {
       }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' },
+        { from: 4, to: 5, label: 'تعلق' }
+      ],
     },
   },
 
@@ -9908,7 +10058,11 @@ export const TREEBANK_DATA = {
       }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' }
+      ],
     },
   },
 
@@ -10021,7 +10175,10 @@ export const TREEBANK_DATA = {
       }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' }
+      ],
     },
   },
 
@@ -10083,7 +10240,11 @@ export const TREEBANK_DATA = {
       }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' }
+      ],
     },
   },
 
@@ -10453,7 +10614,11 @@ export const TREEBANK_DATA = {
       }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' }
+      ],
     },
   },
 
@@ -10502,7 +10667,9 @@ export const TREEBANK_DATA = {
       }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'جار + مجرور' }
+      ],
     },
   },
 
@@ -10705,7 +10872,11 @@ export const TREEBANK_DATA = {
       }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' }
+      ],
     },
   },
 
@@ -11075,7 +11246,9 @@ export const TREEBANK_DATA = {
       }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 2, to: 3, label: 'جار + مجرور' }
+      ],
     },
   },
 
@@ -11472,7 +11645,12 @@ export const TREEBANK_DATA = {
       }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' },
+        { from: 4, to: 5, label: 'تعلق' }
+      ],
     },
   },
 
@@ -11663,7 +11841,9 @@ export const TREEBANK_DATA = {
       }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 2, to: 3, label: 'جار + مجرور' }
+      ],
     },
   },
 
@@ -11699,7 +11879,9 @@ export const TREEBANK_DATA = {
       }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' }
+      ],
     },
   },
 
@@ -12046,7 +12228,11 @@ export const TREEBANK_DATA = {
       }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' }
+      ],
     },
   },
 
@@ -12108,7 +12294,11 @@ export const TREEBANK_DATA = {
       }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' }
+      ],
     },
   },
 
@@ -12221,7 +12411,9 @@ export const TREEBANK_DATA = {
       }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 3, to: 4, label: 'جار + مجرور' }
+      ],
     },
   },
 
@@ -12296,7 +12488,12 @@ export const TREEBANK_DATA = {
       }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' },
+        { from: 4, to: 5, label: 'تعلق' }
+      ],
     },
   },
 
@@ -12435,7 +12632,10 @@ export const TREEBANK_DATA = {
       }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' }
+      ],
     },
   },
 
@@ -12484,7 +12684,10 @@ export const TREEBANK_DATA = {
       }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' }
+      ],
     },
   },
 
@@ -12533,7 +12736,10 @@ export const TREEBANK_DATA = {
       }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' }
+      ],
     },
   },
 
@@ -12879,7 +13085,10 @@ export const TREEBANK_DATA = {
       }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' }
+      ],
     },
   },
 
@@ -12941,7 +13150,11 @@ export const TREEBANK_DATA = {
       }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' }
+      ],
     },
   },
 
@@ -13003,7 +13216,9 @@ export const TREEBANK_DATA = {
       }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 2, to: 3, label: 'جار + مجرور' }
+      ],
     },
   },
 
@@ -13090,7 +13305,9 @@ export const TREEBANK_DATA = {
       }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' }
+      ],
     },
   },
 
@@ -13242,7 +13459,9 @@ export const TREEBANK_DATA = {
       }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 2, to: 3, label: 'جار + مجرور' }
+      ],
     },
   },
 
@@ -13381,7 +13600,13 @@ export const TREEBANK_DATA = {
       }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' },
+        { from: 4, to: 5, label: 'تعلق' },
+        { from: 5, to: 6, label: 'تعلق' }
+      ],
     },
   },
 

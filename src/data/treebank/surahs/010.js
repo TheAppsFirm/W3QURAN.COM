@@ -305,7 +305,21 @@ const SURAH_10_TREEBANK = {
       en: 'Their call therein will be, "Exalted are You, O Allah," and their greeting therein will be, "Peace." And the last of their call will be, "Praise to Allah, Lord of the worlds!"',
       ur: 'اس میں ان کی دعا ہوگی "پاک ہے تو اے اللہ" اور اس میں ان کا سلام "سلام" ہوگا۔ اور ان کی آخری دعا ہوگی "تمام تعریف اللہ کے لیے ہے جو تمام جہانوں کا رب ہے۔"',
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' },
+        { from: 4, to: 5, label: 'تعلق' },
+        { from: 5, to: 6, label: 'تعلق' },
+        { from: 6, to: 7, label: 'تعلق' },
+        { from: 7, to: 8, label: 'تعلق' },
+        { from: 8, to: 9, label: 'تعلق' },
+        { from: 9, to: 10, label: 'تعلق' },
+        { from: 10, to: 11, label: 'تعلق' },
+        { from: 11, to: 12, label: 'تعلق' },
+        { from: 12, to: 13, label: 'تعلق' },
+        { from: 13, to: 14, label: 'تعلق' }
+      ],
     },
     },
     words: [
@@ -1442,7 +1456,7 @@ const SURAH_10_TREEBANK = {
     ],
     structure: {
       relationships: [
-
+        { from: 10, to: 11, label: 'موصوف + صفت' }
       ],
     },
   },
@@ -1904,7 +1918,10 @@ const SURAH_10_TREEBANK = {
     ],
     structure: {
       relationships: [
-
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' },
+        { from: 4, to: 5, label: 'تعلق' }
       ],
     },
   },
@@ -2141,7 +2158,9 @@ const SURAH_10_TREEBANK = {
     ],
     structure: {
       relationships: [
-
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' }
       ],
     },
   },

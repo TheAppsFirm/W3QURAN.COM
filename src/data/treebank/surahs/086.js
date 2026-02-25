@@ -21,7 +21,9 @@ export const TREEBANK_DATA = {
       { position: 2, arabic: "وَالطَّارِقِ", transliteration: "wal-ṭāriq", root: "ط ر ق", meaning: { en: "and the night-comer", ur: "اور رات کو آنے والے کی", ar: "والنَّجمِ الثاقِب" }, pos: "CONJ+N", posLabel: "CONJ+N", grammarRole: "oath", features: { pattern: "فَاعِل" }, advanced: { rootFamily: ["طَرق", "طَريق", "مِطرَقة"], linguisticMiracle: "طارق = one who knocks/comes at night - stars 'appear' at night" } }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'قسم' }
+      ],
     },
   },
 

@@ -124,7 +124,11 @@ export const TREEBANK_DATA = {
       tr: "Kış ve yaz yolculuklarındaki güvenlikleri için",
       id: "Kebiasaan mereka bepergian pada musim dingin dan musim panas",
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' }
+      ],
     },
     },
     words: [
@@ -262,7 +266,11 @@ export const TREEBANK_DATA = {
       tr: "Bu Evin Rabbine kulluk etsinler",
       id: "Maka hendaklah mereka menyembah Tuhan pemilik rumah ini",
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' }
+      ],
     },
     },
     words: [

@@ -26,6 +26,7 @@ import {
   loadSurahTreebank,
   loadSurahOntology,
   hasOntologyData,
+  LANGUAGE_NAMES,
 } from '../../data/treebank/index';
 import {
   TAFSEER_SOURCES,
@@ -1065,10 +1066,12 @@ const CategorySection = memo(function CategorySection({ category, categoryKey, c
   const IconComponent = Icons[category.icon] || Icons.Star;
   // Use category color or assign based on index
   const color = category.color || CATEGORY_COLORS[categoryIndex % CATEGORY_COLORS.length];
-  // Get category label - handle both old ({label: {en, ur}}) and new ({name, nameAr}) structures
+  // Get category label - handle both old ({label: {en, ur}}) and new ({name, nameAr, nameUr}) structures
   const categoryLabel = category.label
     ? getOntologyText(category.label, lang)
-    : ((lang === 'ar' || lang === 'ur') ? (category.nameAr || category.name) : category.name) || categoryKey;
+    : (lang === 'ur' ? (category.nameUr || category.nameArabic || category.nameAr || category.name)
+      : (lang === 'ar' ? (category.nameArabic || category.nameAr || category.name)
+      : category.name)) || categoryKey;
 
   return (
     <div className="mb-4">
@@ -1419,17 +1422,20 @@ export const OntologyView = memo(function OntologyView({ surahId, lang = 'en', i
         </div>
 
         {/* Content */}
-        <div className="flex-1 overflow-y-auto p-4 custom-scrollbar" dir={lang === 'ur' ? 'rtl' : 'ltr'}>
-          {/* Language fallback notice */}
-          {lang === 'ur' && ontology.categories && (() => {
+        <div className={`flex-1 overflow-y-auto p-4 custom-scrollbar ${lang === 'ur' ? 'font-urdu' : ''}`} dir={lang === 'ur' || lang === 'ar' ? 'rtl' : 'ltr'}>
+          {/* Language fallback notice — show if user's language data is missing */}
+          {lang !== 'en' && ontology.categories && (() => {
             const firstCat = Object.values(ontology.categories)[0];
             const firstMeaning = firstCat?.concepts?.[0]?.meaning;
-            const hasUrdu = firstMeaning && typeof firstMeaning === 'object' && firstMeaning.ur;
-            if (!hasUrdu) return (
-              <div className="mb-3 px-3 py-2 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs text-amber-300/80 text-right" dir="rtl">
-                اس سورت کے تصورات ابھی اردو میں دستیاب نہیں — انگریزی میں دکھایا جا رہا ہے
-              </div>
-            );
+            const hasLangData = firstMeaning && typeof firstMeaning === 'object' && firstMeaning[lang];
+            if (!hasLangData) {
+              const msg = labels.languageComingSoon?.replace('{lang}', LANGUAGE_NAMES[lang] || lang) || `Content in ${LANGUAGE_NAMES[lang] || lang} coming soon — showing English`;
+              return (
+                <div className={`mb-3 px-3 py-2 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs text-amber-300/80 ${lang === 'ur' || lang === 'ar' ? 'text-right' : 'text-left'}`} dir={lang === 'ur' || lang === 'ar' ? 'rtl' : 'ltr'}>
+                  {msg}
+                </div>
+              );
+            }
             return null;
           })()}
           {/* Categories Tab */}
@@ -1919,7 +1925,21 @@ export function TreebankOverlay({
         </div>
 
         {/* Content - All in one view */}
-        <div className="flex-1 overflow-y-auto p-4 custom-scrollbar">
+        <div className={`flex-1 overflow-y-auto p-4 custom-scrollbar ${lang === 'ur' ? 'font-urdu' : ''}`}>
+          {/* Language fallback notice for grammar data */}
+          {lang !== 'en' && lang !== 'ur' && treebankData?.words && (() => {
+            const firstWord = treebankData.words[0];
+            const hasLangMeaning = firstWord?.meaning && typeof firstWord.meaning === 'object' && firstWord.meaning[lang];
+            if (!hasLangMeaning) {
+              const msg = labels.languageComingSoon?.replace('{lang}', LANGUAGE_NAMES[lang] || lang) || `Content in ${LANGUAGE_NAMES[lang] || lang} coming soon — showing English`;
+              return (
+                <div className={`mb-3 px-3 py-2 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs text-amber-300/80 ${lang === 'ar' ? 'text-right' : 'text-left'}`} dir={lang === 'ar' ? 'rtl' : 'ltr'}>
+                  {msg}
+                </div>
+              );
+            }
+            return null;
+          })()}
           {/* Full Arabic Text */}
           <div className="text-center mb-6 p-4 bg-white/5 rounded-2xl">
             <p className="text-2xl font-arabic text-white leading-loose" dir="rtl">

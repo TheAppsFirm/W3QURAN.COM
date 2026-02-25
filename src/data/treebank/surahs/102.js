@@ -232,7 +232,10 @@ export const TREEBANK_DATA = {
       tr: "Hayır! Yakında bileceksiniz",
       id: "Janganlah begitu! Kelak kamu akan mengetahui",
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' }
+      ],
     },
     },
     words: [
@@ -329,7 +332,11 @@ export const TREEBANK_DATA = {
       tr: "Yine hayır! Yakında bileceksiniz",
       id: "Dan janganlah begitu! Kelak kamu akan mengetahui",
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' }
+      ],
     },
     },
     words: [

@@ -14,6 +14,7 @@ export const ONTOLOGY = {
   categories: {
     quranIntroduction: {
       name: "Quran Introduction",
+      nameUr: "قرآن کا تعارف",
       nameArabic: "مقدمة القرآن",
       color: "#3B82F6",
       icon: "Book",
@@ -26,6 +27,7 @@ export const ONTOLOGY = {
 
     believersQualities: {
       name: "Qualities of Believers",
+      nameUr: "مومنوں کی صفات",
       nameArabic: "صفات المؤمنين",
       color: "#10B981",
       icon: "Heart",
@@ -38,6 +40,7 @@ export const ONTOLOGY = {
 
     disbelieversState: {
       name: "State of Disbelievers",
+      nameUr: "کافروں کی حالت",
       nameArabic: "حال الكافرين",
       color: "#EF4444",
       icon: "AlertTriangle",
@@ -50,6 +53,7 @@ export const ONTOLOGY = {
 
     musaStory: {
       name: "Story of Musa",
+      nameUr: "قصۂ موسیٰ",
       nameArabic: "قصة موسى",
       color: "#3B82F6",
       icon: "Book",
@@ -67,6 +71,7 @@ export const ONTOLOGY = {
 
     sulaymanKingdom: {
       name: "Kingdom of Sulayman",
+      nameUr: "سلیمان کی سلطنت",
       nameArabic: "ملك سليمان",
       color: "#F59E0B",
       icon: "Crown",
@@ -81,6 +86,7 @@ export const ONTOLOGY = {
 
     sulaymanArmy: {
       name: "Sulayman's Army",
+      nameUr: "سلیمان کا لشکر",
       nameArabic: "جنود سليمان",
       color: "#F59E0B",
       icon: "Shield",
@@ -93,6 +99,7 @@ export const ONTOLOGY = {
 
     valleyOfAnts: {
       name: "Valley of the Ants",
+      nameUr: "چیونٹیوں کی وادی",
       nameArabic: "وادي النمل",
       color: "#06B6D4",
       icon: "Globe",
@@ -107,6 +114,7 @@ export const ONTOLOGY = {
 
     sulaymanPrayer: {
       name: "Sulayman's Prayer",
+      nameUr: "سلیمان کی دعا",
       nameArabic: "دعاء سليمان",
       color: "#8B5CF6",
       icon: "Heart",
@@ -120,6 +128,7 @@ export const ONTOLOGY = {
 
     hudhudStory: {
       name: "Story of the Hoopoe",
+      nameUr: "ہدہد کا قصہ",
       nameArabic: "قصة الهدهد",
       color: "#22C55E",
       icon: "MessageCircle",
@@ -135,6 +144,7 @@ export const ONTOLOGY = {
 
     queenOfSheba: {
       name: "Queen of Sheba",
+      nameUr: "ملکۂ سبا",
       nameArabic: "ملكة سبأ",
       color: "#EC4899",
       icon: "Crown",
@@ -149,6 +159,7 @@ export const ONTOLOGY = {
 
     sulaymanLetter: {
       name: "Sulayman's Letter",
+      nameUr: "سلیمان کا خط",
       nameArabic: "كتاب سليمان",
       color: "#3B82F6",
       icon: "Book",
@@ -162,6 +173,7 @@ export const ONTOLOGY = {
 
     shebaConsultation: {
       name: "Sheba's Consultation",
+      nameUr: "ملکۂ سبا کی مشاورت",
       nameArabic: "مشاورة ملكة سبأ",
       color: "#8B5CF6",
       icon: "Users",
@@ -177,6 +189,7 @@ export const ONTOLOGY = {
 
     sulaymanRejectsGift: {
       name: "Sulayman Rejects Gift",
+      nameUr: "سلیمان کا تحفہ رد کرنا",
       nameArabic: "رفض سليمان للهدية",
       color: "#F59E0B",
       icon: "Scale",
@@ -190,6 +203,7 @@ export const ONTOLOGY = {
 
     throneTransport: {
       name: "Transport of the Throne",
+      nameUr: "تخت کی منتقلی",
       nameArabic: "نقل العرش",
       color: "#8B5CF6",
       icon: "Sparkles",
@@ -206,6 +220,7 @@ export const ONTOLOGY = {
 
     queenArrival: {
       name: "Queen's Arrival",
+      nameUr: "ملکہ کی آمد",
       nameArabic: "وصول الملكة",
       color: "#EC4899",
       icon: "Eye",
@@ -222,6 +237,7 @@ export const ONTOLOGY = {
 
     queenSubmission: {
       name: "Queen's Submission",
+      nameUr: "ملکہ کا اسلام",
       nameArabic: "إسلام الملكة",
       color: "#10B981",
       icon: "Heart",
@@ -233,6 +249,7 @@ export const ONTOLOGY = {
 
     salihStory: {
       name: "Story of Salih",
+      nameUr: "قصۂ صالح",
       nameArabic: "قصة صالح",
       color: "#3B82F6",
       icon: "Book",
@@ -248,6 +265,7 @@ export const ONTOLOGY = {
 
     thamudDestruction: {
       name: "Destruction of Thamud",
+      nameUr: "ثمود کی تباہی",
       nameArabic: "هلاك ثمود",
       color: "#EF4444",
       icon: "AlertTriangle",
@@ -264,6 +282,7 @@ export const ONTOLOGY = {
 
     lutStory: {
       name: "Story of Lut",
+      nameUr: "قصۂ لوط",
       nameArabic: "قصة لوط",
       color: "#EF4444",
       icon: "AlertTriangle",
@@ -283,6 +302,7 @@ export const ONTOLOGY = {
 
     praiseAndGratitude: {
       name: "Praise and Gratitude",
+      nameUr: "حمد و شکر",
       nameArabic: "الحمد والشكر",
       color: "#F59E0B",
       icon: "Star",
@@ -295,6 +315,7 @@ export const ONTOLOGY = {
 
     signsInCreation: {
       name: "Signs in Creation",
+      nameUr: "تخلیق میں نشانیاں",
       nameArabic: "آيات في الخلق",
       color: "#06B6D4",
       icon: "Globe",
@@ -312,6 +333,7 @@ export const ONTOLOGY = {
 
     divineResponseToSupplication: {
       name: "Divine Response",
+      nameUr: "الٰہی جواب",
       nameArabic: "الاستجابة الإلهية",
       color: "#8B5CF6",
       icon: "Sparkles",
@@ -325,6 +347,7 @@ export const ONTOLOGY = {
 
     guidanceInDarkness: {
       name: "Guidance in Darkness",
+      nameUr: "اندھیروں میں ہدایت",
       nameArabic: "الهداية في الظلمات",
       color: "#3B82F6",
       icon: "Compass",
@@ -336,6 +359,7 @@ export const ONTOLOGY = {
 
     creationAndResurrection: {
       name: "Creation and Resurrection",
+      nameUr: "تخلیق اور قیامت",
       nameArabic: "الخلق والبعث",
       color: "#06B6D4",
       icon: "Sun",
@@ -348,6 +372,7 @@ export const ONTOLOGY = {
 
     unseenKnowledge: {
       name: "Knowledge of the Unseen",
+      nameUr: "علمِ غیب",
       nameArabic: "علم الغيب",
       color: "#F59E0B",
       icon: "Eye",
@@ -362,6 +387,7 @@ export const ONTOLOGY = {
 
     disbelieversDoubts: {
       name: "Disbelievers' Doubts",
+      nameUr: "کافروں کے شبہات",
       nameArabic: "شكوك الكافرين",
       color: "#EF4444",
       icon: "AlertTriangle",
@@ -375,6 +401,7 @@ export const ONTOLOGY = {
 
     travelAndReflect: {
       name: "Travel and Reflect",
+      nameUr: "سفر کرو اور غور کرو",
       nameArabic: "السير والتأمل",
       color: "#06B6D4",
       icon: "Compass",
@@ -388,6 +415,7 @@ export const ONTOLOGY = {
 
     dayOfJudgment: {
       name: "Day of Judgment",
+      nameUr: "یومِ قیامت",
       nameArabic: "يوم القيامة",
       color: "#EF4444",
       icon: "Scale",
@@ -404,6 +432,7 @@ export const ONTOLOGY = {
 
     goodAndEvil: {
       name: "Recompense of Good and Evil",
+      nameUr: "نیکی اور بدی کا بدلہ",
       nameArabic: "جزاء الخير والشر",
       color: "#8B5CF6",
       icon: "Scale",
@@ -417,6 +446,7 @@ export const ONTOLOGY = {
 
     prophetMission: {
       name: "Prophet's Mission",
+      nameUr: "نبی ﷺ کا مشن",
       nameArabic: "مهمة النبي",
       color: "#10B981",
       icon: "Book",
@@ -433,6 +463,7 @@ export const ONTOLOGY = {
 
     closingPraise: {
       name: "Closing Praise",
+      nameUr: "اختتامی حمد",
       nameArabic: "الختام بالحمد",
       color: "#F59E0B",
       icon: "Star",

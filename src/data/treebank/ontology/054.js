@@ -14,6 +14,7 @@ export const ONTOLOGY = {
   categories: {
     moonSplitting: {
       name: "The Moon Splitting",
+      nameUr: "چاند کا شق ہونا",
       nameArabic: "انشقاق القمر",
       color: "#8B5CF6",
       concepts: [
@@ -26,6 +27,7 @@ export const ONTOLOGY = {
 
     refrain1: {
       name: "Warning Refrain",
+      nameUr: "بار بار تنبیہ",
       nameArabic: "التحذير المتكرر",
       color: "#EF4444",
       concepts: [
@@ -41,6 +43,7 @@ export const ONTOLOGY = {
 
     refrain2: {
       name: "Quran Made Easy",
+      nameUr: "قرآن کی آسانی",
       nameArabic: "تيسير القرآن",
       color: "#10B981",
       concepts: [
@@ -56,6 +59,7 @@ export const ONTOLOGY = {
 
     peopleOfNuh: {
       name: "People of Nuh (Noah)",
+      nameUr: "قومِ نوح",
       nameArabic: "قوم نوح",
       color: "#3B82F6",
       concepts: [
@@ -71,6 +75,7 @@ export const ONTOLOGY = {
 
     peopleOfAad: {
       name: "People of 'Aad",
+      nameUr: "قومِ عاد",
       nameArabic: "قوم عاد",
       color: "#F59E0B",
       concepts: [
@@ -83,6 +88,7 @@ export const ONTOLOGY = {
 
     peopleOfThamud: {
       name: "People of Thamud",
+      nameUr: "قومِ ثمود",
       nameArabic: "قوم ثمود",
       color: "#EC4899",
       concepts: [
@@ -97,6 +103,7 @@ export const ONTOLOGY = {
 
     peopleOfLut: {
       name: "People of Lut (Lot)",
+      nameUr: "قومِ لوط",
       nameArabic: "قوم لوط",
       color: "#6366F1",
       concepts: [
@@ -110,6 +117,7 @@ export const ONTOLOGY = {
 
     peopleOfPharaoh: {
       name: "People of Pharaoh",
+      nameUr: "آلِ فرعون",
       nameArabic: "آل فرعون",
       color: "#14B8A6",
       concepts: [
@@ -121,6 +129,7 @@ export const ONTOLOGY = {
 
     warningToQuraysh: {
       name: "Warning to Quraysh",
+      nameUr: "قریش کو تنبیہ",
       nameArabic: "تحذير قريش",
       color: "#F43F5E",
       concepts: [
@@ -133,6 +142,7 @@ export const ONTOLOGY = {
 
     dayOfJudgment: {
       name: "Day of Judgment",
+      nameUr: "قیامت کا دن",
       nameArabic: "يوم القيامة",
       color: "#8B5CF6",
       concepts: [
@@ -145,6 +155,7 @@ export const ONTOLOGY = {
 
     divineDecree: {
       name: "Divine Decree",
+      nameUr: "الٰہی تقدیر",
       nameArabic: "القضاء الإلهي",
       color: "#22C55E",
       concepts: [
@@ -155,6 +166,7 @@ export const ONTOLOGY = {
 
     rewardForRighteous: {
       name: "Reward for the Righteous",
+      nameUr: "متقیوں کا اجر",
       nameArabic: "جزاء المتقين",
       color: "#10B981",
       concepts: [

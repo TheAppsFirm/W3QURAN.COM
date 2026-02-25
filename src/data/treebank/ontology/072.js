@@ -14,6 +14,7 @@ export const ONTOLOGY = {
   categories: {
     jinnHearingQuran: {
       name: "Jinn Hearing the Quran",
+      nameUr: "جنوں کا قرآن سننا",
       nameArabic: "استماع الجن للقرآن",
       color: '#8B5CF6',
       icon: 'Book',
@@ -27,6 +28,7 @@ export const ONTOLOGY = {
 
     tawheedOfJinn: {
       name: "Jinn's Monotheism",
+      nameUr: "جنوں کی توحید",
       nameArabic: "توحيد الجن",
       color: '#F59E0B',
       icon: 'Star',
@@ -39,6 +41,7 @@ export const ONTOLOGY = {
 
     jinnFoolishOnes: {
       name: "The Foolish Among Jinn",
+      nameUr: "جنوں میں بے وقوف",
       nameArabic: "سفهاء الجن",
       color: '#EF4444',
       icon: 'AlertTriangle',
@@ -51,6 +54,7 @@ export const ONTOLOGY = {
 
     humanJinnInteraction: {
       name: "Human-Jinn Relations",
+      nameUr: "انسان اور جن کے تعلقات",
       nameArabic: "علاقة الإنس والجن",
       color: '#EC4899',
       icon: 'Users',
@@ -63,6 +67,7 @@ export const ONTOLOGY = {
 
     heavensGuarded: {
       name: "Heavens Now Guarded",
+      nameUr: "آسمان کی حفاظت",
       nameArabic: "حراسة السماء",
       color: '#06B6D4',
       icon: 'Shield',
@@ -76,6 +81,7 @@ export const ONTOLOGY = {
 
     jinnDiversity: {
       name: "Diversity Among Jinn",
+      nameUr: "جنوں میں تنوع",
       nameArabic: "تنوع الجن",
       color: '#3B82F6',
       icon: 'Compass',
@@ -90,6 +96,7 @@ export const ONTOLOGY = {
 
     jinnSubmission: {
       name: "Jinn's Submission",
+      nameUr: "جنوں کی فرمانبرداری",
       nameArabic: "استسلام الجن",
       color: '#10B981',
       icon: 'Heart',
@@ -102,6 +109,7 @@ export const ONTOLOGY = {
 
     mosquesForAllah: {
       name: "Mosques for Allah Alone",
+      nameUr: "مسجدیں صرف اللہ کے لیے",
       nameArabic: "المساجد لله",
       color: '#F59E0B',
       icon: 'Globe',
@@ -113,6 +121,7 @@ export const ONTOLOGY = {
 
     prophetsCrowded: {
       name: "Crowds Around Prophet",
+      nameUr: "نبی ﷺ کے گرد بھیڑ",
       nameArabic: "ازدحام حول النبي",
       color: '#8B5CF6',
       icon: 'Users',
@@ -124,6 +133,7 @@ export const ONTOLOGY = {
 
     prophetsLimitations: {
       name: "Prophet's Limitations",
+      nameUr: "نبی ﷺ کی حدود",
       nameArabic: "حدود النبي",
       color: '#3B82F6',
       icon: 'MessageCircle',
@@ -137,6 +147,7 @@ export const ONTOLOGY = {
 
     unseenKnowledge: {
       name: "Knowledge of Unseen",
+      nameUr: "علمِ غیب",
       nameArabic: "علم الغيب",
       color: '#F59E0B',
       icon: 'Eye',
@@ -150,6 +161,7 @@ export const ONTOLOGY = {
 
     divineKnowledge: {
       name: "Allah's Complete Knowledge",
+      nameUr: "اللہ کا مکمل علم",
       nameArabic: "إحاطة علم الله",
       color: '#F59E0B',
       icon: 'Star',

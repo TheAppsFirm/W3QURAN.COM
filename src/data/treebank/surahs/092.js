@@ -589,7 +589,9 @@ export const TREEBANK_DATA = {
       tr: "Ve en güzeli (cenneti) tasdik ederse",
       id: "Dan membenarkan (pahala) yang terbaik",
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' }
+      ],
     },
     },
     words: [
@@ -667,7 +669,9 @@ export const TREEBANK_DATA = {
       tr: "Biz de onu en kolaya hazırlarız",
       id: "Maka akan Kami mudahkan baginya jalan menuju kemudahan",
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' }
+      ],
     },
     },
     words: [
@@ -867,7 +871,9 @@ export const TREEBANK_DATA = {
       tr: "Ve en güzeli (cenneti) yalanlarsa",
       id: "Dan mendustakan (pahala) yang terbaik",
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' }
+      ],
     },
     },
     words: [
@@ -935,7 +941,9 @@ export const TREEBANK_DATA = {
       tr: "Biz de onu en zora hazırlarız",
       id: "Maka akan Kami mudahkan baginya jalan menuju kesukaran",
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' }
+      ],
     },
     },
     words: [
@@ -1386,7 +1394,10 @@ export const TREEBANK_DATA = {
       tr: "Ben de sizi alevli ateşe karşı uyardım",
       id: "Maka Aku memperingatkan kalian dengan api yang menyala-nyala",
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' }
+      ],
     },
     },
     words: [

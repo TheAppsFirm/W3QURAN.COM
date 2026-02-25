@@ -14,6 +14,7 @@ export const ONTOLOGY = {
   categories: {
     sacredOaths: {
       name: "The Sacred Oaths",
+      nameUr: "مقدس قسمیں",
       nameArabic: "القسم المقدس",
       color: '#8B5CF6',
       icon: 'Star',
@@ -45,6 +46,7 @@ export const ONTOLOGY = {
 
     humanNature: {
       name: "Human Nature and Struggle",
+      nameUr: "انسانی فطرت اور جدوجہد",
       nameArabic: "طبيعة الإنسان وكفاحه",
       color: '#06B6D4',
       icon: 'Users',
@@ -69,6 +71,7 @@ export const ONTOLOGY = {
 
     humanArrogance: {
       name: "Human Arrogance",
+      nameUr: "انسانی تکبر",
       nameArabic: "غرور الإنسان",
       color: '#EF4444',
       icon: 'AlertTriangle',
@@ -100,6 +103,7 @@ export const ONTOLOGY = {
 
     divineBlessings: {
       name: "Divine Blessings and Guidance",
+      nameUr: "الٰہی نعمتیں اور ہدایت",
       nameArabic: "النعم الإلهية والهداية",
       color: '#F59E0B',
       icon: 'Sparkles',
@@ -131,6 +135,7 @@ export const ONTOLOGY = {
 
     steepPath: {
       name: "The Steep Path ('Aqabah)",
+      nameUr: "کٹھن گھاٹی (عقبہ)",
       nameArabic: "العقبة",
       color: '#3B82F6',
       icon: 'Compass',
@@ -176,6 +181,7 @@ export const ONTOLOGY = {
 
     spiritualCommunity: {
       name: "The Spiritual Community",
+      nameUr: "روحانی جماعت",
       nameArabic: "المجتمع الروحي",
       color: '#10B981',
       icon: 'Heart',
@@ -207,6 +213,7 @@ export const ONTOLOGY = {
 
     twoDestinies: {
       name: "The Two Destinies",
+      nameUr: "دو انجام",
       nameArabic: "المصيران",
       color: '#EC4899',
       icon: 'Scale',

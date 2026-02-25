@@ -14,6 +14,7 @@ export const ONTOLOGY = {
   categories: {
     propheticHousehold: {
       name: "Prophet's Household Matter",
+      nameUr: "نبی ﷺ کے گھرانے کا معاملہ",
       nameArabic: "شأن بيت النبي",
       color: '#EC4899',
       icon: 'Users',
@@ -26,6 +27,7 @@ export const ONTOLOGY = {
 
     secretRevealed: {
       name: "Secret Revealed",
+      nameUr: "راز کا انکشاف",
       nameArabic: "كشف السر",
       color: '#F59E0B',
       icon: 'Eye',
@@ -40,6 +42,7 @@ export const ONTOLOGY = {
 
     callToRepentance: {
       name: "Call to Repentance",
+      nameUr: "توبہ کی دعوت",
       nameArabic: "الدعوة إلى التوبة",
       color: '#8B5CF6',
       icon: 'Heart',
@@ -53,6 +56,7 @@ export const ONTOLOGY = {
 
     idealWifeQualities: {
       name: "Qualities of Ideal Wives",
+      nameUr: "مثالی بیویوں کی صفات",
       nameArabic: "صفات الزوجات المثاليات",
       color: '#10B981',
       icon: 'Sparkles',
@@ -69,6 +73,7 @@ export const ONTOLOGY = {
 
     familyProtection: {
       name: "Family Protection from Fire",
+      nameUr: "خاندان کو آگ سے بچانا",
       nameArabic: "حماية الأسرة من النار",
       color: '#EF4444',
       icon: 'Shield',
@@ -82,6 +87,7 @@ export const ONTOLOGY = {
 
     noExcuses: {
       name: "No Excuses Accepted",
+      nameUr: "کوئی عذر قبول نہیں",
       nameArabic: "لا أعذار مقبولة",
       color: '#EF4444',
       icon: 'AlertTriangle',
@@ -93,6 +99,7 @@ export const ONTOLOGY = {
 
     sincereRepentance: {
       name: "Sincere Repentance",
+      nameUr: "سچی توبہ",
       nameArabic: "التوبة النصوح",
       color: '#8B5CF6',
       icon: 'Sparkles',
@@ -107,6 +114,7 @@ export const ONTOLOGY = {
 
     striving: {
       name: "Striving Against Disbelief",
+      nameUr: "کفر کے خلاف جہاد",
       nameArabic: "الجهاد ضد الكفر",
       color: '#3B82F6',
       icon: 'Shield',
@@ -119,6 +127,7 @@ export const ONTOLOGY = {
 
     wickedWomenExamples: {
       name: "Examples of Wicked Women",
+      nameUr: "بدکار خواتین کی مثالیں",
       nameArabic: "أمثلة النساء الكافرات",
       color: '#EF4444',
       icon: 'AlertTriangle',
@@ -133,6 +142,7 @@ export const ONTOLOGY = {
 
     righteousWomenExamples: {
       name: "Examples of Righteous Women",
+      nameUr: "نیک خواتین کی مثالیں",
       nameArabic: "أمثلة النساء الصالحات",
       color: '#10B981',
       icon: 'Crown',

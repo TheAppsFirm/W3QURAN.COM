@@ -14,6 +14,7 @@ export const ONTOLOGY = {
   categories: {
     glorification: {
       name: "Glorifying the Most High",
+      nameUr: "اعلیٰ کی تسبیح",
       nameArabic: "تسبيح الأعلى",
       color: '#F59E0B',
       icon: 'Crown',
@@ -25,6 +26,7 @@ export const ONTOLOGY = {
 
     divineAttributes: {
       name: "Divine Acts",
+      nameUr: "الٰہی افعال",
       nameArabic: "أفعال الله",
       color: '#F59E0B',
       icon: 'Star',
@@ -38,6 +40,7 @@ export const ONTOLOGY = {
 
     divinePromise: {
       name: "Promise to the Prophet",
+      nameUr: "نبی سے وعدہ",
       nameArabic: "الوعد للنبي",
       color: '#8B5CF6',
       icon: 'Sparkles',
@@ -49,6 +52,7 @@ export const ONTOLOGY = {
 
     theReminder: {
       name: "The Reminder",
+      nameUr: "نصیحت",
       nameArabic: "التذكرة",
       color: '#3B82F6',
       icon: 'MessageCircle',
@@ -61,6 +65,7 @@ export const ONTOLOGY = {
 
     twoDestinies: {
       name: "Two Destinies",
+      nameUr: "دو انجام",
       nameArabic: "المصيران",
       color: '#EF4444',
       icon: 'Compass',
@@ -73,6 +78,7 @@ export const ONTOLOGY = {
 
     purificationPath: {
       name: "Path of Success",
+      nameUr: "کامیابی کا راستہ",
       nameArabic: "طريق الفلاح",
       color: '#10B981',
       icon: 'Heart',
@@ -84,6 +90,7 @@ export const ONTOLOGY = {
 
     worldlyVsEternal: {
       name: "Worldly vs Eternal",
+      nameUr: "دنیا بمقابلہ آخرت",
       nameArabic: "الدنيا والآخرة",
       color: '#EC4899',
       icon: 'Scale',
@@ -95,6 +102,7 @@ export const ONTOLOGY = {
 
     ancientScriptures: {
       name: "Earlier Scriptures",
+      nameUr: "پہلے کے صحیفے",
       nameArabic: "الصحف الأولى",
       color: '#3B82F6',
       icon: 'Book',

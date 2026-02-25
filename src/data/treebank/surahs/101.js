@@ -88,7 +88,9 @@ export const TREEBANK_DATA = {
       tr: "Karia nedir?",
       id: "Apakah hari Kiamat itu?",
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' }
+      ],
     },
     },
     words: [
@@ -145,7 +147,11 @@ export const TREEBANK_DATA = {
       tr: "Karianın ne olduğunu sana ne bildirdi?",
       id: "Tahukah kamu apakah hari Kiamat itu?",
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' }
+      ],
     },
     },
     words: [
@@ -917,7 +923,9 @@ export const TREEBANK_DATA = {
       tr: "Onun anası Haviye'dir",
       id: "Maka tempat kembalinya adalah jurang neraka",
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'مبتدأ + خبر' }
+      ],
     },
     },
     words: [
@@ -1004,7 +1012,11 @@ export const TREEBANK_DATA = {
       tr: "Haviyenin ne olduğunu sana ne bildirdi?",
       id: "Tahukah kamu apakah jurang neraka itu?",
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' }
+      ],
     },
     },
     words: [

@@ -50,7 +50,9 @@ export const TREEBANK_DATA = {
       { position: 2, arabic: "وَمَشْهُودٍ", transliteration: "wa-mashhūdin", root: "ش ه د", meaning: { en: "and witnessed", ur: "اور مشہود کی", ar: "وَمُشاهَد" }, pos: "N", posLabel: "N", grammarRole: "oath", features: { pattern: "مَفْعُول" }, advanced: { linguisticMiracle: "Active + Passive from same root - Friday/Day of Arafah/Judgment" } }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'قسم' }
+      ],
     },
   },
 
@@ -270,7 +272,11 @@ export const TREEBANK_DATA = {
       { position: 4, arabic: "وَيُعِيدُ", transliteration: "wa-yuʿīdu", root: "ع و د", meaning: { en: "and repeats", ur: "اور دوبارہ پیدا کرتا ہے", ar: "وَيُعيدُ" }, pos: "V", posLabel: "V", grammarRole: "verb", features: { form: "IV" }, advanced: { linguisticMiracle: "Creates initially AND resurrects - complete power over existence" } }
     ],
     structure: {
-      relationships: [],
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' }
+      ],
     },
   },
 

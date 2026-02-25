@@ -14,6 +14,7 @@ export const ONTOLOGY = {
   categories: {
     angelicOaths: {
       name: "Oaths by Angels",
+      nameUr: "فرشتوں کی قسمیں",
       nameArabic: "القسم بالملائكة",
       color: '#8B5CF6',
       icon: 'Sparkles',
@@ -28,6 +29,7 @@ export const ONTOLOGY = {
 
     twoBlasts: {
       name: "The Two Trumpet Blasts",
+      nameUr: "صور کی دو پھونکیں",
       nameArabic: "النفختان",
       color: '#EF4444',
       icon: 'Zap',
@@ -41,6 +43,7 @@ export const ONTOLOGY = {
 
     deniersMockery: {
       name: "Deniers' Mockery",
+      nameUr: "منکرین کا مذاق",
       nameArabic: "سخرية المنكرين",
       color: '#EC4899',
       icon: 'MessageCircle',
@@ -53,6 +56,7 @@ export const ONTOLOGY = {
 
     resurrectionEase: {
       name: "Resurrection's Ease",
+      nameUr: "قیامت کی آسانی",
       nameArabic: "سهولة البعث",
       color: '#F59E0B',
       icon: 'Star',
@@ -64,6 +68,7 @@ export const ONTOLOGY = {
 
     musaPharaoh: {
       name: "Musa and Pharaoh",
+      nameUr: "موسیٰ اور فرعون",
       nameArabic: "موسى وفرعون",
       color: '#3B82F6',
       icon: 'Book',
@@ -79,6 +84,7 @@ export const ONTOLOGY = {
 
     creationSigns: {
       name: "Signs in Creation",
+      nameUr: "تخلیق میں نشانیاں",
       nameArabic: "آيات في الخلق",
       color: '#06B6D4',
       icon: 'Globe',
@@ -93,6 +99,7 @@ export const ONTOLOGY = {
 
     overwhelmingDay: {
       name: "The Overwhelming Day",
+      nameUr: "سب سے بڑی آفت",
       nameArabic: "الطامة الكبرى",
       color: '#EF4444',
       icon: 'AlertTriangle',
@@ -105,6 +112,7 @@ export const ONTOLOGY = {
 
     twoDestinies: {
       name: "Two Destinies",
+      nameUr: "دو انجام",
       nameArabic: "المصيران",
       color: '#10B981',
       icon: 'Scale',
@@ -118,6 +126,7 @@ export const ONTOLOGY = {
 
     hourKnowledge: {
       name: "Knowledge of the Hour",
+      nameUr: "قیامت کا علم",
       nameArabic: "علم الساعة",
       color: '#F59E0B',
       icon: 'Eye',

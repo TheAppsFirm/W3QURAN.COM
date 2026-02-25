@@ -32,6 +32,7 @@ export const ONTOLOGY = {
   categories: {
     humanUnity: {
       name: "Human Unity and Origin",
+      nameUr: "انسانی وحدت اور اصل",
       nameArabic: "وحدة البشرية والأصل",
       nameUrdu: "انسانی وحدت اور اصل",
       color: "#3B82F6",
@@ -72,6 +73,7 @@ export const ONTOLOGY = {
 
     orphanRights: {
       name: "Orphan Rights and Protection",
+      nameUr: "یتیموں کے حقوق اور تحفظ",
       nameArabic: "حقوق اليتامى وحمايتهم",
       nameUrdu: "یتیموں کے حقوق اور تحفظ",
       color: "#EC4899",
@@ -148,6 +150,7 @@ export const ONTOLOGY = {
 
     marriageRegulations: {
       name: "Marriage Regulations",
+      nameUr: "نکاح کے احکام",
       nameArabic: "أحكام الزواج",
       nameUrdu: "نکاح کے احکام",
       color: "#F59E0B",
@@ -200,6 +203,7 @@ export const ONTOLOGY = {
 
     prohibitedMarriages: {
       name: "Prohibited Marriage Relations",
+      nameUr: "حرام رشتے",
       nameArabic: "المحرمات من النساء",
       nameUrdu: "حرام رشتے",
       color: "#EF4444",
@@ -294,6 +298,7 @@ export const ONTOLOGY = {
 
     inheritanceLaws: {
       name: "Inheritance Laws",
+      nameUr: "وراثت کے احکام",
       nameArabic: "أحكام الميراث",
       nameUrdu: "وراثت کے احکام",
       color: "#10B981",
@@ -412,6 +417,7 @@ export const ONTOLOGY = {
 
     womenRights: {
       name: "Women's Rights and Treatment",
+      nameUr: "عورتوں کے حقوق اور سلوک",
       nameArabic: "حقوق المرأة ومعاملتها",
       nameUrdu: "عورتوں کے حقوق اور سلوک",
       color: "#8B5CF6",
@@ -482,6 +488,7 @@ export const ONTOLOGY = {
 
     maritalDisputes: {
       name: "Marital Disputes and Resolution",
+      nameUr: "ازدواجی تنازعات اور حل",
       nameArabic: "النزاعات الزوجية والحل",
       nameUrdu: "ازدواجی تنازعات اور حل",
       color: "#06B6D4",
@@ -570,6 +577,7 @@ export const ONTOLOGY = {
 
     hypocrites: {
       name: "Hypocrites and Their Traits",
+      nameUr: "منافقین اور ان کی صفات",
       nameArabic: "المنافقون وصفاتهم",
       nameUrdu: "منافقین اور ان کی صفات",
       color: "#6B7280",
@@ -646,6 +654,7 @@ export const ONTOLOGY = {
 
     obedienceHierarchy: {
       name: "Obedience and Authority",
+      nameUr: "اطاعت اور اختیار",
       nameArabic: "الطاعة والسلطة",
       nameUrdu: "اطاعت اور اختیار",
       color: "#7C3AED",
@@ -698,6 +707,7 @@ export const ONTOLOGY = {
 
     fightingRules: {
       name: "Fighting in Allah's Cause",
+      nameUr: "اللہ کی راہ میں جہاد",
       nameArabic: "القتال في سبيل الله",
       nameUrdu: "اللہ کی راہ میں جہاد",
       color: "#DC2626",
@@ -768,6 +778,7 @@ export const ONTOLOGY = {
 
     migration: {
       name: "Migration (Hijrah)",
+      nameUr: "ہجرت",
       nameArabic: "الهجرة",
       nameUrdu: "ہجرت",
       color: "#0891B2",
@@ -832,6 +843,7 @@ export const ONTOLOGY = {
 
     prayerInDanger: {
       name: "Prayer in Times of Danger",
+      nameUr: "خوف کی نماز",
       nameArabic: "صلاة الخوف",
       nameUrdu: "خوف کی نماز",
       color: "#F59E0B",
@@ -884,6 +896,7 @@ export const ONTOLOGY = {
 
     justice: {
       name: "Justice and Fair Dealing",
+      nameUr: "عدل اور انصاف",
       nameArabic: "العدل والإنصاف",
       nameUrdu: "عدل اور انصاف",
       color: "#10B981",
@@ -942,6 +955,7 @@ export const ONTOLOGY = {
 
     peopleOfBook: {
       name: "People of the Book",
+      nameUr: "اہلِ کتاب",
       nameArabic: "أهل الكتاب",
       nameUrdu: "اہل کتاب",
       color: "#6366F1",
@@ -1006,6 +1020,7 @@ export const ONTOLOGY = {
 
     shirk: {
       name: "Shirk and Forgiveness",
+      nameUr: "شرک اور مغفرت",
       nameArabic: "الشرك والمغفرة",
       nameUrdu: "شرک اور مغفرت",
       color: "#EF4444",
@@ -1052,6 +1067,7 @@ export const ONTOLOGY = {
 
     tawbah: {
       name: "Repentance and Forgiveness",
+      nameUr: "توبہ اور بخشش",
       nameArabic: "التوبة والمغفرة",
       nameUrdu: "توبہ اور بخشش",
       color: "#22C55E",
@@ -1098,6 +1114,7 @@ export const ONTOLOGY = {
 
     prophethood: {
       name: "Prophethood and Messengers",
+      nameUr: "نبوت اور رسالت",
       nameArabic: "النبوة والرسل",
       nameUrdu: "نبوت اور رسالت",
       color: "#A855F7",
@@ -1168,6 +1185,7 @@ export const ONTOLOGY = {
 
     kalalahFinal: {
       name: "Final Inheritance Ruling (Kalalah)",
+      nameUr: "کلالہ کا آخری حکم",
       nameArabic: "حكم الكلالة الختامي",
       nameUrdu: "کلالہ کا آخری حکم",
       color: "#0D9488",
