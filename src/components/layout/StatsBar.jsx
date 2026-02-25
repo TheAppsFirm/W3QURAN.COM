@@ -154,6 +154,7 @@ const StatsBar = memo(function StatsBar({
   onTimeMachine,
   onGlobalPulse,
   onWeatherSync,
+  onShowBookmarks,
 }) {
   const gamification = useGamification();
   const { isPremium } = useAuth();
@@ -267,6 +268,9 @@ const StatsBar = memo(function StatsBar({
 
             {/* Time Machine */}
             {showControls && onTimeMachine && (<li className="flex-shrink-0"><BubbleButton icon={Icons.Clock} label="Timeline" color="#F59E0B" color2="#D97706" onClick={onTimeMachine} /></li>)}
+
+            {/* Bookmarks */}
+            {showControls && onShowBookmarks && (<li className="flex-shrink-0"><BubbleButton icon={Icons.Bookmark} label="Bookmarks" color="#EC4899" color2="#F472B6" onClick={onShowBookmarks} /></li>)}
 
             {/* Ummah */}
             {showControls && onGlobalPulse && (<li className="flex-shrink-0"><BubbleButton icon={Icons.GlobalPulse} label="Ummah" color="#10B981" color2="#059669" onClick={onGlobalPulse} /></li>)}

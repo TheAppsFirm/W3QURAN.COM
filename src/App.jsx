@@ -11,7 +11,7 @@
 
 import React, { Suspense, lazy, useState, useEffect, useMemo, useCallback, useRef } from 'react';
 // Core components (needed immediately for first paint)
-import { ErrorBoundary, LoadingSpinner, BubbleModal } from './components/common';
+import { ErrorBoundary, LoadingSpinner, BubbleModal, Icons } from './components/common';
 import { Header, FloatingMenu, StatsBar } from './components/layout';
 import { SurahBubble, LayoutSelector, ClockLayout, GridLayout, JuzzGroupLayout, AlphabetLayout, RevelationLayout, BookLayout, ListLayout, CompactLayout, HoneycombLayout, WaveLayout, LengthLayout, KidsLayout, ArtLayout } from './components/bubbles';
 import { SURAHS, MAX_AYAHS } from './data';
@@ -261,6 +261,7 @@ function QuranBubbleApp() {
   const [showAnalytics, setShowAnalytics] = useState(false);
   const [darkMode, setDarkMode] = useLocalStorage('darkMode', false);
   const [bookmarks, setBookmarks] = useLocalStorage('bookmarks', {});
+  const [savedBookmarks] = useLocalStorage('quran_bookmarks', []);
   const [readingProgress, setReadingProgress] = useLocalStorage('readingProgress', {});
   const [overlayReaderSurah, setOverlayReaderSurah] = useState(null);
   const [initialVerse, setInitialVerse] = useState(1); // For navigating to specific verse
@@ -289,6 +290,7 @@ function QuranBubbleApp() {
   const [showTimeMachine, setShowTimeMachine] = useState(false);
   const [showCompanionAI, setShowCompanionAI] = useState(false);
   const [showFAQ, setShowFAQ] = useState(false);
+  const [showBookmarksPanel, setShowBookmarksPanel] = useState(false);
 
   // Next prayer time for sidebar badge
   const [nextPrayerInfo, setNextPrayerInfo] = useState(null);
@@ -368,6 +370,7 @@ function QuranBubbleApp() {
     setShowWeatherSync(false);
     setShowSoundHealing(false);
     setShowBabyNames(false);
+    setShowBookmarksPanel(false);
     setOverlayReaderSurah(null);
     setInitialVerse(1);
     setInitialPanel(null);
@@ -989,6 +992,7 @@ function QuranBubbleApp() {
           onTimeMachine={() => { stopAllGlobalAudio(); setShowTimeMachine(true); }}
           onGlobalPulse={() => setShowGlobalPulse(true)}
           onWeatherSync={() => setShowWeatherSync(true)}
+          onShowBookmarks={() => setShowBookmarksPanel(true)}
         />
       )}
 
@@ -1338,26 +1342,28 @@ function QuranBubbleApp() {
         </Suspense>
       </main>
 
-      {/* Floating Menu */}
-      <FloatingMenu
-        view={view}
-        setView={setView}
-        darkMode={darkMode}
-        onDonate={handleOpenDonate}
-        onMindMap={() => setShowMindMap(true)}
-        onMood={() => setShowMoodTracker(true)}
-        onVideoSync={() => setShowVideoSync(true)}
-        onBabyNames={() => setShowBabyNames(true)}
-        onTalkToQuran={() => setShowTalkToQuran(true)}
-        onProgress={() => setShowProgressDashboard(true)}
-        onOpenKidsMode={() => setShowKidsMode(true)}
-        onAIGuide={() => setShowCompanionAI(true)}
-        onSoundHealing={() => { stopAllGlobalAudio(); setShowSoundHealing(true); }}
-        onSearch={() => setShowSearchPanel(true)}
-        onHifz={() => setShowHifzMode(true)}
-        onOffline={() => setShowOfflineManager(true)}
-        onFAQ={() => setShowFAQ(true)}
-      />
+      {/* Floating Menu - hidden when Talk to Quran is open */}
+      {!showTalkToQuran && (
+        <FloatingMenu
+          view={view}
+          setView={setView}
+          darkMode={darkMode}
+          onDonate={handleOpenDonate}
+          onMindMap={() => setShowMindMap(true)}
+          onMood={() => setShowMoodTracker(true)}
+          onVideoSync={() => setShowVideoSync(true)}
+          onBabyNames={() => setShowBabyNames(true)}
+          onTalkToQuran={() => setShowTalkToQuran(true)}
+          onProgress={() => setShowProgressDashboard(true)}
+          onOpenKidsMode={() => setShowKidsMode(true)}
+          onAIGuide={() => setShowCompanionAI(true)}
+          onSoundHealing={() => { stopAllGlobalAudio(); setShowSoundHealing(true); }}
+          onSearch={() => setShowSearchPanel(true)}
+          onHifz={() => setShowHifzMode(true)}
+          onOffline={() => setShowOfflineManager(true)}
+          onFAQ={() => setShowFAQ(true)}
+        />
+      )}
 
       {/* Bubble Modal */}
       {selected && (
@@ -1617,6 +1623,71 @@ function QuranBubbleApp() {
             }}
           />
         </Suspense>
+      )}
+
+      {/* Bookmarks Panel */}
+      {showBookmarksPanel && (
+        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4" onClick={() => setShowBookmarksPanel(false)}>
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+          <div className="relative w-full max-w-lg max-h-[80vh] bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl shadow-2xl border border-white/10 overflow-hidden flex flex-col" onClick={e => e.stopPropagation()}>
+            {/* Header */}
+            <div className="flex items-center justify-between p-4 border-b border-white/10">
+              <div className="flex items-center gap-2">
+                <Icons.Bookmark className="w-5 h-5 text-pink-400" />
+                <h2 className="text-lg font-bold text-white">Bookmarks</h2>
+                <span className="text-xs text-white/40 bg-white/10 px-2 py-0.5 rounded-full">{savedBookmarks.length}</span>
+              </div>
+              <button onClick={() => setShowBookmarksPanel(false)} className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white/60 hover:text-white transition-colors">
+                <Icons.X className="w-4 h-4" />
+              </button>
+            </div>
+            {/* Bookmark List */}
+            <div className="flex-1 overflow-y-auto p-3 space-y-2">
+              {savedBookmarks.length === 0 ? (
+                <div className="text-center py-12 text-white/40">
+                  <Icons.Bookmark className="w-12 h-12 mx-auto mb-3 opacity-30" />
+                  <p className="text-sm">No bookmarks yet</p>
+                  <p className="text-xs mt-1">Open a surah and tap the bookmark button to save ayahs</p>
+                </div>
+              ) : (
+                savedBookmarks.map((bm) => (
+                  <button
+                    key={bm.id}
+                    onClick={() => {
+                      const surah = SURAHS.find(s => s.id === bm.surahId);
+                      if (surah) {
+                        setShowBookmarksPanel(false);
+                        setOverlayReaderSurah(surah);
+                        setInitialVerse(bm.ayahNumber || 1);
+                      }
+                    }}
+                    className="w-full text-left p-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 hover:border-pink-500/30 transition-all group"
+                  >
+                    <div className="flex items-start gap-3">
+                      <div className="flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-br from-pink-500/30 to-purple-500/30 flex items-center justify-center text-pink-300 text-sm font-bold">
+                        {bm.surahId}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2">
+                          <span className="text-white font-semibold text-sm">{bm.surahName}</span>
+                          <span className="text-white/40 text-xs">Ayah {bm.ayahNumber}</span>
+                        </div>
+                        {bm.versePreview && (
+                          <p className="text-white/50 text-xs mt-1 truncate font-arabic" dir="rtl">{bm.versePreview}</p>
+                        )}
+                        {bm.note && (
+                          <p className="text-pink-300/60 text-xs mt-1 truncate">{bm.note}</p>
+                        )}
+                        <span className="text-white/20 text-[10px] mt-1 block">{new Date(bm.timestamp).toLocaleDateString()}</span>
+                      </div>
+                      <Icons.ChevronRight className="w-4 h-4 text-white/20 group-hover:text-pink-400 transition-colors flex-shrink-0 mt-1" />
+                    </div>
+                  </button>
+                ))
+              )}
+            </div>
+          </div>
+        </div>
       )}
 
       {/* AI Companion Guide */}

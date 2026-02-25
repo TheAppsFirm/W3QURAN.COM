@@ -849,7 +849,7 @@ const TafseerPanel = memo(function TafseerPanel({ surahId, ayahNumber, verseArab
 
   return (
     <div className="h-full flex flex-col">
-      <div className="flex-shrink-0 flex items-center justify-between pb-3 border-b border-white/20">
+      <div className="flex-shrink-0 flex items-center justify-between pb-3">
         <div className="flex items-center gap-2">
           <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center">
             <Icons.BookOpen className="w-5 h-5 text-white" />
@@ -945,7 +945,7 @@ const MemorizePanel = memo(function MemorizePanel({ onSettingsChange, currentSet
 
   return (
     <div className="h-full flex flex-col">
-      <div className="flex-shrink-0 flex items-center justify-between pb-3 border-b border-white/20">
+      <div className="flex-shrink-0 flex items-center justify-between pb-3">
         <div className="flex items-center gap-2">
           <div className="w-10 h-10 rounded-full bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center">
             <Icons.Brain className="w-5 h-5 text-white" />
@@ -1029,7 +1029,7 @@ const BookmarksPanel = memo(function BookmarksPanel({ surahId, surahName, ayahNu
 
   return (
     <div className="h-full flex flex-col">
-      <div className="flex-shrink-0 flex items-center justify-between pb-3 border-b border-white/20">
+      <div className="flex-shrink-0 flex items-center justify-between pb-3">
         <div className="flex items-center gap-2">
           <div className="w-10 h-10 rounded-full bg-gradient-to-br from-pink-500 to-rose-600 flex items-center justify-center">
             <Icons.Bookmark className="w-5 h-5 text-white" />
@@ -1115,7 +1115,7 @@ const YouTubePanel = memo(function YouTubePanel({ surahId, surahName, onClose })
   return (
     <>
       <div className="h-full flex flex-col">
-        <div className="flex-shrink-0 flex items-center justify-between pb-3 border-b border-white/20">
+        <div className="flex-shrink-0 flex items-center justify-between pb-3">
           <div className="flex items-center gap-2">
             <div className="w-10 h-10 rounded-full bg-gradient-to-br from-red-500 to-rose-600 flex items-center justify-center">
               <Icons.Video className="w-5 h-5 text-white" />
@@ -1384,7 +1384,7 @@ const SharePanel = memo(function SharePanel({ surahId, surahName, ayahNumber, ve
 
   return (
     <div className="h-full flex flex-col">
-      <div className="flex-shrink-0 flex items-center justify-between pb-3 border-b border-white/20">
+      <div className="flex-shrink-0 flex items-center justify-between pb-3">
         <div className="flex items-center gap-2">
           <div className="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center">
             <Icons.Share className="w-5 h-5 text-white" />
@@ -1498,7 +1498,9 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
   const gamificationRef = useRef(gamification);
   useEffect(() => { gamificationRef.current = gamification; }, [gamification]);
   const surahRef = useRef(surah);
+  const onChangeSurahRef = useRef(onChangeSurah);
   useEffect(() => { surahRef.current = surah; }, [surah]);
+  useEffect(() => { onChangeSurahRef.current = onChangeSurah; }, [onChangeSurah]);
 
   // Premium feature: HD TTS is free for Surah Al-Fatiha (trial), requires premium for others
   const canUseHDTTS = isPremium || surah?.id === 1;
@@ -1518,6 +1520,7 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
   const [tajweedMode, setTajweedMode] = useLocalStorage('reader_tajweed', false);
   const [wordByWordMode, setWordByWordMode] = useLocalStorage('reader_wbw', false);
   const [repeatMode, setRepeatMode] = useLocalStorage('reader_repeat', 'none');
+  const [playAllSurahs, setPlayAllSurahs] = useLocalStorage('reader_play_all', false);
   const [autoScroll, setAutoScroll] = useLocalStorage('reader_autoscroll', true);
 
   const [shareStatus, setShareStatus] = useState(null);
@@ -1551,7 +1554,9 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
   const [currentAyah, setCurrentAyah] = useState(1);
   const [audioLoading, setAudioLoading] = useState(false);
   const [audioError, setAudioError] = useState(null);
-  const [speakingAyah, setSpeakingAyah] = useState(null); // Track which ayah translation is being spoken
+  const [speakingAyah, setSpeakingAyah] = useState(null); // Track which ayah translation is being spoken (TTS)
+  const [narratorPlayingAyah, setNarratorPlayingAyah] = useState(null); // Track which ayah narrator is playing (human voice)
+  const narratorAyahAudioRef = useRef(null); // Ref for per-ayah narrator audio
 
   // Translation Audio Playback State
   const [isPlayingTranslation, setIsPlayingTranslation] = useState(false);
@@ -2118,7 +2123,7 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
   const speakTranslation = useCallback(async (ayahNum, translationText) => {
     if (!translationText) return;
 
-    // If already speaking, stop
+    // If already speaking this ayah, stop it
     if (speakingAyah === ayahNum) {
       if (ttsAudioRef.current) {
         ttsAudioRef.current.pause();
@@ -2128,11 +2133,17 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
       return;
     }
 
-    // Stop any ongoing audio
-    if (ttsAudioRef.current) {
-      ttsAudioRef.current.pause();
-      ttsAudioRef.current = null;
-    }
+    // Stop ALL other audio systems to prevent double audio
+    if (audioRef.current) { audioRef.current.pause(); }
+    if (translationAudioRef.current) { translationAudioRef.current.pause(); translationAudioRef.current = null; }
+    if (narratorAyahAudioRef.current) { narratorAyahAudioRef.current.pause(); narratorAyahAudioRef.current = null; }
+    if (ttsAudioRef.current) { ttsAudioRef.current.pause(); ttsAudioRef.current = null; }
+    setIsPlaying(false);
+    setIsPlayingTranslation(false);
+    isPlayingTranslationRef.current = false;
+    setIsPlayingCombined(false);
+    isPlayingCombinedRef.current = false;
+    setNarratorPlayingAyah(null);
 
     setSpeakingAyah(ayahNum);
 
@@ -2167,6 +2178,70 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
     }
   }, [speakingAyah, ttsLanguage, playGoogleCloudTTS]);
 
+  // Play human narrator translation audio for a single ayah (free for all users)
+  const playAyahNarrator = useCallback((ayahNum) => {
+    // If already playing this ayah's narrator, stop it
+    if (narratorPlayingAyah === ayahNum) {
+      if (narratorAyahAudioRef.current) {
+        narratorAyahAudioRef.current.pause();
+        narratorAyahAudioRef.current = null;
+      }
+      setNarratorPlayingAyah(null);
+      return;
+    }
+
+    // Stop ALL other audio systems to prevent double audio
+    if (audioRef.current) { audioRef.current.pause(); }
+    if (translationAudioRef.current) { translationAudioRef.current.pause(); translationAudioRef.current = null; }
+    if (ttsAudioRef.current) { ttsAudioRef.current.pause(); ttsAudioRef.current = null; }
+    if (narratorAyahAudioRef.current) { narratorAyahAudioRef.current.pause(); narratorAyahAudioRef.current = null; }
+    setIsPlaying(false);
+    setIsPlayingTranslation(false);
+    isPlayingTranslationRef.current = false;
+    setIsPlayingCombined(false);
+    isPlayingCombinedRef.current = false;
+    setSpeakingAyah(null);
+
+    // Find best human narrator (not TTS)
+    const narrator = effectiveNarrator !== 'tts' ? effectiveNarrator : defaultNarratorForTranslation;
+    if (!narrator || !narratorUrlConfig[narrator]) return;
+
+    // Inner function to play a specific ayah
+    const playNarratorForAyah = (targetAyah) => {
+      const url = getTranslationAudioUrl(surah?.id, targetAyah, narrator);
+      if (!url) { setNarratorPlayingAyah(null); return; }
+
+      setNarratorPlayingAyah(targetAyah);
+      setCurrentAyah(targetAyah);
+      setTranslationAyah(targetAyah);
+      const audio = new Audio(url);
+      narratorAyahAudioRef.current = audio;
+
+      audio.onended = () => {
+        const repeat = repeatModeRef.current;
+        const total = totalVersesRef.current;
+        if (repeat === 'verse') {
+          // Repeat same ayah
+          audio.currentTime = 0;
+          audio.play().catch(() => { setNarratorPlayingAyah(null); narratorAyahAudioRef.current = null; });
+        } else if (targetAyah < total) {
+          // Advance to next ayah (surah repeat will loop back at the end)
+          playNarratorForAyah(targetAyah + 1);
+        } else if (repeat === 'surah') {
+          // Loop back to first ayah
+          playNarratorForAyah(1);
+        } else {
+          setNarratorPlayingAyah(null);
+          narratorAyahAudioRef.current = null;
+        }
+      };
+      audio.onerror = () => { setNarratorPlayingAyah(null); narratorAyahAudioRef.current = null; };
+      audio.play().catch(() => { setNarratorPlayingAyah(null); narratorAyahAudioRef.current = null; });
+    };
+
+    playNarratorForAyah(ayahNum);
+  }, [narratorPlayingAyah, effectiveNarrator, defaultNarratorForTranslation, surah?.id]);
+
   // Play translation audio using Google Cloud TTS API (continuous playback)
   const playTranslationWithTTS = useCallback(async (ayahNum, translationText, totalAyahs, playbackId) => {
     // Truncate long text to avoid API limits (Google TTS has ~5000 char limit)
@@ -2196,6 +2271,17 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
         console.error('[GoogleTTS] Failed to get audio URL, advancing...');
         if (!isLast && isPlayingTranslationRef.current) {
           setTimeout(() => setTranslationAyah(prev => prev + 1), 300);
+        } else if (isLast && repeatModeRef.current === 'surah') {
+          setTranslationAyah(1); setCurrentAyah(1);
+        } else if (isLast && playAllSurahsRef.current) {
+          const currentSurahId = surahRef.current?.id;
+          if (currentSurahId && currentSurahId < 114) {
+            const nextS = SURAHS.find(s => s.id === currentSurahId + 1);
+            if (nextS && onChangeSurahRef.current) {
+              setCurrentAyah(1); setTranslationAyah(1);
+              playAllAdvancingRef.current = true; onChangeSurahRef.current(nextS);
+            }
+          } else { setIsPlayingTranslation(false); isPlayingTranslationRef.current = false; }
         } else {
           setIsPlayingTranslation(false);
           isPlayingTranslationRef.current = false;
@@ -2215,6 +2301,17 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
         if (translationAudioRef.current?._playbackId !== playbackId) return;
         if (!isLast && isPlayingTranslationRef.current) {
           setTranslationAyah(prev => prev + 1);
+        } else if (isLast && repeatModeRef.current === 'surah') {
+          setTranslationAyah(1); setCurrentAyah(1);
+        } else if (isLast && playAllSurahsRef.current) {
+          const currentSurahId = surahRef.current?.id;
+          if (currentSurahId && currentSurahId < 114) {
+            const nextS = SURAHS.find(s => s.id === currentSurahId + 1);
+            if (nextS && onChangeSurahRef.current) {
+              setCurrentAyah(1); setTranslationAyah(1);
+              playAllAdvancingRef.current = true; onChangeSurahRef.current(nextS);
+            }
+          } else { setIsPlayingTranslation(false); isPlayingTranslationRef.current = false; }
         } else {
           setIsPlayingTranslation(false);
           isPlayingTranslationRef.current = false;
@@ -2241,6 +2338,15 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
       console.error('[GoogleTTS] Error playing TTS:', error);
       if (!isLast && isPlayingTranslationRef.current) {
         setTimeout(() => setTranslationAyah(prev => prev + 1), 300);
+      } else if (isLast && playAllSurahsRef.current) {
+        const currentSurahId = surahRef.current?.id;
+        if (currentSurahId && currentSurahId < 114) {
+          const nextS = SURAHS.find(s => s.id === currentSurahId + 1);
+          if (nextS && onChangeSurahRef.current) {
+            setCurrentAyah(1); setTranslationAyah(1);
+            playAllAdvancingRef.current = true; onChangeSurahRef.current(nextS);
+          }
+        } else { setIsPlayingTranslation(false); isPlayingTranslationRef.current = false; }
       } else {
         setIsPlayingTranslation(false);
         isPlayingTranslationRef.current = false;
@@ -2257,6 +2363,15 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
       const isLast = ayahNum >= totalAyahs;
       if (!isLast && isPlayingTranslationRef.current) {
         setTranslationAyah(prev => prev + 1);
+      } else if (isLast && playAllSurahsRef.current) {
+        const currentSurahId = surahRef.current?.id;
+        if (currentSurahId && currentSurahId < 114) {
+          const nextS = SURAHS.find(s => s.id === currentSurahId + 1);
+          if (nextS && onChangeSurahRef.current) {
+            setCurrentAyah(1); setTranslationAyah(1);
+            playAllAdvancingRef.current = true; onChangeSurahRef.current(nextS);
+          }
+        } else { setIsPlayingTranslation(false); isPlayingTranslationRef.current = false; }
       } else {
         setIsPlayingTranslation(false);
         isPlayingTranslationRef.current = false;
@@ -2294,6 +2409,15 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
           if (translationAudioRef.current?._playbackId !== playbackId) return;
           if (!isLast && isPlayingTranslationRef.current) {
             setTranslationAyah(prev => prev + 1);
+          } else if (isLast && playAllSurahsRef.current) {
+            const currentSurahId = surahRef.current?.id;
+            if (currentSurahId && currentSurahId < 114) {
+              const nextS = SURAHS.find(s => s.id === currentSurahId + 1);
+              if (nextS && onChangeSurahRef.current) {
+                setCurrentAyah(1); setTranslationAyah(1);
+                playAllAdvancingRef.current = true; onChangeSurahRef.current(nextS);
+              }
+            } else { setIsPlayingTranslation(false); isPlayingTranslationRef.current = false; }
           } else {
             setIsPlayingTranslation(false);
             isPlayingTranslationRef.current = false;
@@ -2340,6 +2464,11 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
       setIsPlayingTranslation(false);
       isPlayingTranslationRef.current = false;
     } else {
+      // Stop per-ayah audio systems
+      if (ttsAudioRef.current) { ttsAudioRef.current.pause(); ttsAudioRef.current = null; }
+      if (narratorAyahAudioRef.current) { narratorAyahAudioRef.current.pause(); narratorAyahAudioRef.current = null; }
+      setSpeakingAyah(null);
+      setNarratorPlayingAyah(null);
       // Start from current ayah
       setTranslationAyah(currentAyah);
       setIsPlayingTranslation(true);
@@ -2384,6 +2513,11 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
         setIsPlayingTranslation(false);
         isPlayingTranslationRef.current = false;
       }
+      // Stop per-ayah audio systems
+      if (ttsAudioRef.current) { ttsAudioRef.current.pause(); ttsAudioRef.current = null; }
+      if (narratorAyahAudioRef.current) { narratorAyahAudioRef.current.pause(); narratorAyahAudioRef.current = null; }
+      setSpeakingAyah(null);
+      setNarratorPlayingAyah(null);
 
       // Now start combined mode - Arabic first
       setIsPlayingCombined(true);
@@ -2393,8 +2527,24 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
     }
   }, [isPlayingCombined, isPlayingTranslation, currentAyah]);
 
-  // Stop translation when switching surahs
+  // Stop translation when switching surahs (unless Play All is advancing)
   useEffect(() => {
+    if (playAllAdvancingRef.current) {
+      // Play All advance — preserve playback states, just reset ayah tracking & stop old audio
+      playAllAdvancingRef.current = false;
+      setTranslationAyah(1);
+      setTranslationAudioSource(null);
+      if (translationAudioRef.current) {
+        translationAudioRef.current.pause();
+        translationAudioRef.current = null;
+      }
+      // Per-ayah audio from previous surah
+      if (narratorAyahAudioRef.current) { narratorAyahAudioRef.current.pause(); narratorAyahAudioRef.current = null; }
+      if (ttsAudioRef.current) { ttsAudioRef.current.pause(); ttsAudioRef.current = null; }
+      setSpeakingAyah(null);
+      setNarratorPlayingAyah(null);
+      return;
+    }
     setIsPlayingTranslation(false);
     isPlayingTranslationRef.current = false;
     setIsPlayingCombined(false);
@@ -2406,6 +2556,11 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
       translationAudioRef.current.pause();
       translationAudioRef.current = null;
     }
+    // Also stop per-ayah audio
+    if (narratorAyahAudioRef.current) { narratorAyahAudioRef.current.pause(); narratorAyahAudioRef.current = null; }
+    if (ttsAudioRef.current) { ttsAudioRef.current.pause(); ttsAudioRef.current = null; }
+    setSpeakingAyah(null);
+    setNarratorPlayingAyah(null);
   }, [surah?.id]);
 
   // Reset translation audio source when translation changes
@@ -2427,10 +2582,13 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
   const isPlayingRef = useRef(isPlaying);
   const currentAyahRef = useRef(currentAyah);
   const repeatModeRef = useRef(repeatMode);
+  const playAllSurahsRef = useRef(playAllSurahs);
+  const playAllAdvancingRef = useRef(false); // Flag to prevent surah change effect from killing playback during Play All
 
   useEffect(() => { isPlayingRef.current = isPlaying; }, [isPlaying]);
   useEffect(() => { currentAyahRef.current = currentAyah; }, [currentAyah]);
   useEffect(() => { repeatModeRef.current = repeatMode; }, [repeatMode]);
+  useEffect(() => { playAllSurahsRef.current = playAllSurahs; }, [playAllSurahs]);
 
   const { verses, loading, error } = useQuranAPI(surah?.id, { translationId: selectedTranslation, includeTajweed: tajweedMode, includeWordByWord: false });
   const { wordsMap, loading: wordsLoading, isFallback: isWordsFallback, userLanguage: wordsUserLang } = useMultilingualWords(wordByWordMode ? surah?.id : null, selectedTranslation);
@@ -2650,13 +2808,26 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
   const prevSurah = useMemo(() => surah?.id > 1 ? SURAHS.find(s => s.id === surah.id - 1) : null, [surah?.id]);
   const nextSurah = useMemo(() => surah?.id < 114 ? SURAHS.find(s => s.id === surah.id + 1) : null, [surah?.id]);
 
-  // Memoize fontSizeMap to prevent object recreation
+  // Memoize fontSizeMap with more granular levels
+  const FONT_SIZE_KEYS = useMemo(() => ['xs', 'small', 'medium', 'large', 'xlarge', 'xxlarge'], []);
   const fontSizeMap = useMemo(() => ({
+    xs: { arabic: '1.1rem', translation: '0.7rem' },
     small: { arabic: '1.4rem', translation: '0.8rem' },
     medium: { arabic: '1.8rem', translation: '0.95rem' },
     large: { arabic: '2.2rem', translation: '1.1rem' },
-    xlarge: { arabic: '2.6rem', translation: '1.2rem' },
+    xlarge: { arabic: '2.6rem', translation: '1.3rem' },
+    xxlarge: { arabic: '3.0rem', translation: '1.5rem' },
   }), []);
+
+  // Font size increase/decrease helpers
+  const increaseFontSize = useCallback(() => {
+    const idx = FONT_SIZE_KEYS.indexOf(fontSize);
+    if (idx < FONT_SIZE_KEYS.length - 1) setFontSize(FONT_SIZE_KEYS[idx + 1]);
+  }, [fontSize, FONT_SIZE_KEYS, setFontSize]);
+  const decreaseFontSize = useCallback(() => {
+    const idx = FONT_SIZE_KEYS.indexOf(fontSize);
+    if (idx > 0) setFontSize(FONT_SIZE_KEYS[idx - 1]);
+  }, [fontSize, FONT_SIZE_KEYS, setFontSize]);
 
   // Memoize particle positions to prevent random regeneration on every render
   const particles = useMemo(() =>
@@ -2730,12 +2901,43 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
       const g = gamificationRef.current;
       if (g?.isActive) g.recordAction('listen_verse', { surahId: surah?.id, ayahNum });
 
-      if (ayahNum < total) {
+      const repeat = repeatModeRef.current;
+      if (repeat === 'verse') {
+        // Repeat same ayah (Arabic + Translation again)
+        console.log('[Combined] Verse repeat — replaying ayah:', ayahNum);
+        setCombinedPhase('arabic');
+        setCurrentAyah(ayahNum); // Trigger Arabic replay
+        // Force re-trigger by toggling off/on
+        setIsPlaying(false);
+        setTimeout(() => setIsPlaying(true), 50);
+      } else if (ayahNum < total) {
         console.log('[Combined] Advancing to next verse:', ayahNum + 1);
         setCombinedPhase('arabic');
-        // Use direct value instead of functional update for clarity
         setCurrentAyah(ayahNum + 1);
         console.log('[Combined] setCurrentAyah called with:', ayahNum + 1);
+      } else if (repeat === 'surah') {
+        console.log('[Combined] Surah repeat — looping to ayah 1');
+        setCombinedPhase('arabic');
+        setCurrentAyah(1);
+        setTranslationAyah(1);
+      } else if (playAllSurahsRef.current) {
+        console.log('[Combined] Last verse reached, Play All active - advancing to next surah');
+        if (g?.isActive) g.recordAction('listen_surah', { surahId: surah?.id });
+        const currentSurahId = surahRef.current?.id;
+        if (currentSurahId && currentSurahId < 114) {
+          const nextS = SURAHS.find(s => s.id === currentSurahId + 1);
+          if (nextS && onChangeSurahRef.current) {
+            setCombinedPhase('arabic');
+            setCurrentAyah(1); setTranslationAyah(1);
+            playAllAdvancingRef.current = true; onChangeSurahRef.current(nextS);
+            // isPlayingCombined stays true so playback continues
+          }
+        } else {
+          setIsPlayingCombined(false);
+          isPlayingCombinedRef.current = false;
+          setIsPlaying(false);
+          setCombinedPhase('arabic');
+        }
       } else {
         console.log('[Combined] Last verse reached, stopping');
         // Track surah listened
@@ -2775,7 +2977,7 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
           console.log('[Combined-TTS] Blocked by premium gate - stopping combined playback');
           setIsPlayingCombined(false);
           isPlayingCombinedRef.current = false;
-          setCombinedPhase(null);
+          setCombinedPhase('arabic');
           return;
         }
 
@@ -3020,6 +3222,21 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
       if (repeat === 'verse') { audio.currentTime = 0; audio.play().catch(() => {}); }
       else if (current < total) { setCurrentAyah(prev => prev + 1); }
       else if (repeat === 'surah') { setCurrentAyah(1); }
+      else if (playAllSurahsRef.current) {
+        // Play All mode: auto-advance to next surah
+        if (g?.isActive) g.recordAction('listen_surah', { surahId: surahRef.current?.id });
+        const currentSurahId = surahRef.current?.id;
+        if (currentSurahId && currentSurahId < 114) {
+          const nextS = SURAHS.find(s => s.id === currentSurahId + 1);
+          if (nextS && onChangeSurahRef.current) {
+            setCurrentAyah(1); setTranslationAyah(1);
+            playAllAdvancingRef.current = true; onChangeSurahRef.current(nextS);
+            // isPlaying stays true so playback continues on the new surah
+          }
+        } else {
+          setIsPlaying(false); // Last surah (114), stop
+        }
+      }
       else {
         // Last verse finished — track surah listened
         if (g?.isActive) g.recordAction('listen_surah', { surahId: surahRef.current?.id });
@@ -3101,6 +3318,34 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
     } else { audio.pause(); }
   }, [isPlaying, currentAyah, selectedReciter, isPlayingTranslation]);
 
+  // Central audio stop — stops all audio systems and resets play states
+  const stopAllAudio = useCallback(() => {
+    if (audioRef.current) { audioRef.current.pause(); }
+    if (translationAudioRef.current) { translationAudioRef.current.pause(); translationAudioRef.current = null; }
+    if (ttsAudioRef.current) { ttsAudioRef.current.pause(); ttsAudioRef.current = null; }
+    if (narratorAyahAudioRef.current) { narratorAyahAudioRef.current.pause(); narratorAyahAudioRef.current = null; }
+    if (window.speechSynthesis) window.speechSynthesis.cancel();
+    setIsPlaying(false);
+    setIsPlayingTranslation(false);
+    isPlayingTranslationRef.current = false;
+    setIsPlayingCombined(false);
+    isPlayingCombinedRef.current = false;
+    setCombinedPhase('arabic');
+    setSpeakingAyah(null);
+    setNarratorPlayingAyah(null);
+  }, []);
+
+  // Mode-aware play/pause toggle
+  const togglePlayPause = useCallback(() => {
+    if (audioMode === 'arabic') {
+      setIsPlaying(prev => !prev);
+    } else if (audioMode === 'translation') {
+      toggleTranslationPlayback();
+    } else if (audioMode === 'combined') {
+      toggleCombinedPlayback();
+    }
+  }, [audioMode, toggleTranslationPlayback, toggleCombinedPlayback]);
+
   // Ref to always have latest handleClose (defined below)
   const handleCloseRef = useRef(null);
 
@@ -3114,14 +3359,14 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
         else if (showTafseer) setShowTafseer(false);
         else if (handleCloseRef.current) handleCloseRef.current();
       }
-      if (e.key === ' ' && !e.target.matches('input, textarea, select')) { e.preventDefault(); setIsPlaying(prev => !prev); }
-      if (e.key === 'ArrowRight') currentAyah < totalVerses && setCurrentAyah(prev => prev + 1);
-      if (e.key === 'ArrowLeft') currentAyah > 1 && setCurrentAyah(prev => prev - 1);
+      if (e.key === ' ' && !e.target.matches('input, textarea, select')) { e.preventDefault(); togglePlayPause(); }
+      if (e.key === 'ArrowRight' && currentAyah < totalVerses) { setCurrentAyah(prev => prev + 1); setTranslationAyah(prev => Math.min(totalVerses, prev + 1)); }
+      if (e.key === 'ArrowLeft' && currentAyah > 1) { setCurrentAyah(prev => prev - 1); setTranslationAyah(prev => Math.max(1, prev - 1)); }
     };
     document.addEventListener('keydown', handleKeyDown);
     document.body.style.overflow = 'hidden';
     return () => { clearTimeout(timer); document.removeEventListener('keydown', handleKeyDown); document.body.style.overflow = ''; };
-  }, [currentAyah, totalVerses, selectedWordData, leftFeature, showTafseer]);
+  }, [currentAyah, totalVerses, selectedWordData, leftFeature, showTafseer, togglePlayPause]);
 
   // Handle initial panel from URL
   useEffect(() => {
@@ -3166,9 +3411,8 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
 
     const duration = Math.round((Date.now() - startTime.current) / 60000);
     logReadingSession(surah.id, verses.length > 0 ? 1 : 0, duration);
-    if (audioRef.current) { audioRef.current.pause(); audioRef.current.src = ''; }
-    window.speechSynthesis?.cancel();
-    setIsPlaying(false);
+    stopAllAudio();
+    if (audioRef.current) { audioRef.current.src = ''; }
 
     // Show mood entry only every 30 surahs (if read for more than 1 minute)
     if (duration >= 1) {
@@ -3190,7 +3434,7 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
     } else {
       onClose();
     }
-  }, [surah, verses.length, onClose]);
+  }, [surah, verses.length, onClose, stopAllAudio]);
 
   // Keep ref updated with latest handleClose
   useEffect(() => {
@@ -3199,32 +3443,20 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
 
   const toggleAyahPlayback = useCallback((ayahNum) => {
     if (currentAyah === ayahNum && isPlaying) {
-      setIsPlaying(false);
+      stopAllAudio();
     } else {
-      // IMPORTANT: Stop translation audio before starting Arabic
-      if (isPlayingTranslation) {
-        setIsPlayingTranslation(false);
-        isPlayingTranslationRef.current = false;
-        if (translationAudioRef.current) {
-          translationAudioRef.current.pause();
-          translationAudioRef.current.src = '';
-          translationAudioRef.current = null;
-        }
-      }
-      // Start Arabic playback
-      if (currentAyah === ayahNum) {
-        setIsPlaying(true);
-      } else {
-        setCurrentAyah(ayahNum);
-        setIsPlaying(true);
-      }
+      stopAllAudio();
+      setCurrentAyah(ayahNum);
+      setTranslationAyah(ayahNum);
+      setAudioMode('arabic');
+      setIsPlaying(true);
     }
     // Track progress when user plays a verse
     if (surah?.id) {
       markAyahRead(surah.id, ayahNum);
       if (gamification.isActive) gamification.recordAction('verse_read', { surahId: surah.id, ayahNum });
     }
-  }, [currentAyah, isPlaying, isPlayingTranslation, surah?.id]);
+  }, [currentAyah, isPlaying, surah?.id, stopAllAudio]);
 
   // Safe function to start Arabic playback (stops translation first)
   const startArabicPlayback = useCallback(() => {
@@ -3254,11 +3486,12 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
 
   const goToSurah = useCallback((newSurah) => {
     if (!newSurah || !onChangeSurah) return;
-    if (audioRef.current) { audioRef.current.pause(); audioRef.current.src = ''; }
-    setIsPlaying(false); setCurrentAyah(1); setSelectedWordData(null);
+    stopAllAudio();
+    if (audioRef.current) { audioRef.current.src = ''; }
+    setCurrentAyah(1); setTranslationAyah(1); setSelectedWordData(null);
     setShowTafseer(false); setLeftFeature(null);
     onChangeSurah(newSurah);
-  }, [onChangeSurah]);
+  }, [onChangeSurah, stopAllAudio]);
 
   // State to track which verse to share in the Share dialog
   const [shareVerseData, setShareVerseData] = useState(null);
@@ -3326,7 +3559,6 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
   const toggleWordByWord = useCallback(() => setWordByWordMode(prev => !prev), [setWordByWordMode]);
   const toggleTajweed = useCallback(() => setTajweedMode(prev => !prev), [setTajweedMode]);
   const toggleTranslation = useCallback(() => setShowTranslation(prev => !prev), [setShowTranslation]);
-  const togglePlayPause = useCallback(() => setIsPlaying(prev => !prev), []);
   const cycleRepeatMode = useCallback(() => setRepeatMode(prev => prev === 'none' ? 'verse' : prev === 'verse' ? 'surah' : 'none'), [setRepeatMode]);
 
   // Copy verse text to clipboard
@@ -3359,8 +3591,8 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
   const stopPropagation = useCallback((e) => e.stopPropagation(), []);
 
   // Memoize navigation handlers
-  const goToPrevAyah = useCallback(() => setCurrentAyah(prev => prev > 1 ? prev - 1 : prev), []);
-  const goToNextAyah = useCallback(() => setCurrentAyah(prev => prev < totalVerses ? prev + 1 : prev), [totalVerses]);
+  const goToPrevAyah = useCallback(() => { setCurrentAyah(prev => prev > 1 ? prev - 1 : prev); setTranslationAyah(prev => prev > 1 ? prev - 1 : prev); }, []);
+  const goToNextAyah = useCallback(() => { setCurrentAyah(prev => prev < totalVerses ? prev + 1 : prev); setTranslationAyah(prev => prev < totalVerses ? prev + 1 : prev); }, [totalVerses]);
   const clearSelectedWord = useCallback(() => {
     setSelectedWordData(null);
     setWordAudioError(null);
@@ -3664,7 +3896,7 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
 
       {/* Left Info Bubble - Expands in place to show Surah Details */}
       <div
-        className={`fixed left-4 sm:left-6 bottom-36 sm:bottom-40 z-[55] transition-all duration-500 ${isAnimating ? 'opacity-0 scale-50' : 'opacity-100 scale-100'}`}
+        className={`fixed left-4 sm:left-6 bottom-24 sm:bottom-28 z-[55] transition-all duration-500 ${isAnimating ? 'opacity-0 scale-50' : 'opacity-100 scale-100'}`}
         onClick={stopPropagation}
         style={{ animation: showSurahDetails ? 'none' : 'floatBubble 4s ease-in-out infinite' }}
       >
@@ -4151,26 +4383,29 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
                 )}
 
                 {showSettings && (
-                  <div className="mt-1 sm:mt-2 p-2 sm:p-3 bg-black/20 backdrop-blur-sm rounded-xl mx-2 sm:mx-4 max-h-[120px] overflow-y-auto" style={{ animation: 'slideDown 0.2s ease-out' }}>
-                    <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2">
-                      <div className="flex items-center gap-1.5 text-white">
-                        <span className="text-[9px] sm:text-[10px] text-white/70">Size:</span>
-                        <button onClick={() => { const sizes = ['small', 'medium', 'large', 'xlarge']; const idx = sizes.indexOf(fontSize); if (idx > 0) setFontSize(sizes[idx - 1]); }}
-                          className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/40 flex items-center justify-center hover:bg-white/50 active:scale-95 border border-white/30 text-white font-bold text-lg leading-none">−</button>
-                        <span className="text-sm sm:text-base w-5 sm:w-6 text-center font-bold">{fontSize.charAt(0).toUpperCase()}</span>
-                        <button onClick={() => { const sizes = ['small', 'medium', 'large', 'xlarge']; const idx = sizes.indexOf(fontSize); if (idx < sizes.length - 1) setFontSize(sizes[idx + 1]); }}
-                          className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/40 flex items-center justify-center hover:bg-white/50 active:scale-95 border border-white/30 text-white font-bold text-lg leading-none">+</button>
-                      </div>
-                      <div className="w-px h-4 sm:h-5 bg-white/30 hidden sm:block" />
-                      <select value={selectedTranslation} onChange={(e) => setSelectedTranslation(e.target.value)} className="px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full text-[10px] sm:text-xs bg-white/20 text-white cursor-pointer max-w-[90px] sm:max-w-[120px]">
+                  <div className="mt-1 sm:mt-2 p-1.5 sm:p-2 bg-black/20 backdrop-blur-sm rounded-xl mx-2 sm:mx-4 flex-shrink-0" style={{ animation: 'slideDown 0.2s ease-out' }}>
+                    {/* Row 1: Font size + Translation + Reciter */}
+                    <div className="flex items-center justify-center gap-1 sm:gap-1.5 mb-1">
+                      <button onClick={decreaseFontSize} disabled={FONT_SIZE_KEYS.indexOf(fontSize) <= 0}
+                        className="w-6 h-6 rounded-full bg-white/30 flex items-center justify-center hover:bg-white/40 active:scale-95 text-white font-bold text-sm leading-none disabled:opacity-30">−</button>
+                      <span className="text-[9px] w-10 text-center text-white/80">{fontSize}</span>
+                      <button onClick={increaseFontSize} disabled={FONT_SIZE_KEYS.indexOf(fontSize) >= FONT_SIZE_KEYS.length - 1}
+                        className="w-6 h-6 rounded-full bg-white/30 flex items-center justify-center hover:bg-white/40 active:scale-95 text-white font-bold text-sm leading-none disabled:opacity-30">+</button>
+                      <select value={selectedTranslation} onChange={(e) => setSelectedTranslation(e.target.value)} className="px-1.5 py-0.5 rounded-full text-[10px] bg-white/20 text-white cursor-pointer max-w-[100px] truncate">
                         {Object.entries(TRANSLATIONS).map(([id, info]) => (<option key={id} value={id} className="text-gray-800">{info.name}</option>))}
                       </select>
-                      <select value={selectedReciter} onChange={(e) => setSelectedReciter(e.target.value)} className="px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full text-[10px] sm:text-xs bg-white/20 text-white cursor-pointer max-w-[90px] sm:max-w-[120px]">
+                      <select value={selectedReciter} onChange={(e) => setSelectedReciter(e.target.value)} className="px-1.5 py-0.5 rounded-full text-[10px] bg-white/20 text-white cursor-pointer max-w-[100px] truncate">
                         {Object.entries(RECITERS).map(([id, info]) => (<option key={id} value={id} className="text-gray-800">{info.name}</option>))}
                       </select>
-                      <button onClick={toggleTranslation} className={`px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full text-[10px] sm:text-xs ${showTranslation ? 'bg-white/30' : 'bg-white/15'}`}>Trans</button>
-                      <button onClick={cycleRepeatMode} className={`px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full text-[10px] sm:text-xs ${repeatMode !== 'none' ? 'bg-purple-500/60' : 'bg-white/15'}`}>
+                    </div>
+                    {/* Row 2: Trans + Repeat + Play All */}
+                    <div className="flex items-center justify-center gap-1.5">
+                      <button onClick={toggleTranslation} className={`px-2 py-0.5 rounded-full text-[10px] ${showTranslation ? 'bg-white/30' : 'bg-white/15'}`}>Trans</button>
+                      <button onClick={cycleRepeatMode} className={`px-2 py-0.5 rounded-full text-[10px] ${repeatMode !== 'none' ? 'bg-purple-500/60' : 'bg-white/15'}`}>
                         {repeatMode === 'none' ? '↻' : repeatMode === 'verse' ? '1x' : '∞'}
+                      </button>
+                      <button onClick={() => setPlayAllSurahs(prev => !prev)} className={`px-2 py-0.5 rounded-full text-[10px] flex items-center gap-1 ${playAllSurahs ? 'bg-emerald-500/60 text-white' : 'bg-white/15 text-white/70'}`}>
+                        <Icons.Play className="w-2.5 h-2.5" /> {playAllSurahs ? 'All ✓' : 'All'}
                       </button>
                     </div>
                   </div>
@@ -4178,7 +4413,7 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
               </div>
 
               <div ref={versesContainerRef} className="flex-1 overflow-y-auto overflow-x-hidden px-3"
-                style={{ maskImage: 'linear-gradient(to bottom, transparent 0%, black 4%, black 96%, transparent 100%)', WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 4%, black 96%, transparent 100%)' }}>
+                style={{ maskImage: 'linear-gradient(to bottom, transparent 0%, black 1.5%, black 98.5%, transparent 100%)', WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 1.5%, black 98.5%, transparent 100%)' }}>
                 {loading ? (
                   <div className="flex flex-col items-center justify-center h-32 gap-2">
                     <Icons.Loader className="w-10 h-10 animate-spin text-white/60" />
@@ -4441,13 +4676,29 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
                             <button onClick={() => toggleAyahPlayback(ayahNum)} className={`p-1.5 rounded-full transition-all hover:scale-110 ${isCurrentAyah && isPlaying ? 'bg-white/40' : 'bg-white/15'}`} title="Play Arabic recitation">
                               {audioLoading && isCurrentAyah ? <Icons.Loader className="w-3 h-3 animate-spin" /> : isCurrentAyah && isPlaying ? <Icons.Pause className="w-3 h-3" /> : <Icons.Play className="w-3 h-3" />}
                             </button>
+                            {/* Per-ayah human narrator button (free) */}
+                            {showTranslation && verse.translation && hasMatchingAudio && (
+                              <button
+                                onClick={() => playAyahNarrator(ayahNum)}
+                                className={`p-1.5 rounded-full transition-all hover:scale-110 ${narratorPlayingAyah === ayahNum ? 'bg-emerald-500/80 animate-pulse' : 'bg-white/15'}`}
+                                title="Listen translation (narrator)"
+                              >
+                                {narratorPlayingAyah === ayahNum ? <Icons.Volume className="w-3 h-3 text-emerald-200" /> : <Icons.Mic className="w-3 h-3 text-emerald-300" />}
+                              </button>
+                            )}
+                            {/* Per-ayah TTS button (premium) */}
                             {showTranslation && verse.translation && (
                               <button
                                 onClick={() => speakTranslation(ayahNum, verse.translation)}
-                                className={`p-1.5 rounded-full transition-all hover:scale-110 ${speakingAyah === ayahNum ? 'bg-cyan-500/80 animate-pulse' : 'bg-white/15'}`}
-                                title="Read translation aloud"
+                                className={`p-1.5 rounded-full transition-all hover:scale-110 relative ${speakingAyah === ayahNum ? 'bg-cyan-500/80 animate-pulse' : 'bg-white/15'}`}
+                                title={canUseHDTTS ? 'Read translation aloud (TTS)' : 'Premium: Read translation aloud (TTS)'}
                               >
                                 {speakingAyah === ayahNum ? <Icons.Volume className="w-3 h-3" /> : <Icons.Headphones className="w-3 h-3" />}
+                                {!canUseHDTTS && surah?.id !== 1 && (
+                                  <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-amber-500 rounded-full flex items-center justify-center">
+                                    <Icons.Lock className="w-1.5 h-1.5 text-white" />
+                                  </span>
+                                )}
                               </button>
                             )}
                             <button onClick={() => handleShareVerse(verse, ayahNum)} className={`p-1.5 rounded-full transition-all hover:scale-110 ${shareStatus === ayahNum ? 'bg-emerald-500/80' : 'bg-white/15'}`} title="Share verse">
@@ -4518,13 +4769,12 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
                 <div className="flex items-center justify-center gap-1.5 mb-2">
                   {/* Ayah Jump Dropdown */}
                   <select
-                    value={audioMode === 'translation' ? translationAyah : currentAyah}
+                    value={currentAyah}
                     onChange={(e) => {
                       const val = Number(e.target.value);
-                      if (audioMode === 'translation') {
-                        setTranslationAyah(val);
-                      }
+                      stopAllAudio();
                       setCurrentAyah(val);
+                      setTranslationAyah(val);
                       setTimeout(() => {
                         const el = versesContainerRef.current?.querySelector(`[data-ayah="${val}"]`);
                         if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -4541,9 +4791,8 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
 
                   <button
                     onClick={() => {
+                      stopAllAudio();
                       setAudioMode('arabic');
-                      if (isPlayingTranslation) toggleTranslationPlayback();
-                      if (isPlayingCombined) toggleCombinedPlayback();
                     }}
                     className={`px-2.5 py-1 rounded-full text-xs font-medium transition-all ${audioMode === 'arabic' ? 'bg-white/30 text-white' : 'bg-white/10 text-white/60'}`}
                   >
@@ -4551,13 +4800,9 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
                   </button>
                   <button
                     onClick={() => {
+                      stopAllAudio();
                       setAudioMode('translation');
-                      // Stop Arabic audio
-                      if (isPlaying) {
-                        setIsPlaying(false);
-                        if (audioRef.current) audioRef.current.pause();
-                      }
-                      if (isPlayingCombined) toggleCombinedPlayback();
+                      setTranslationAyah(currentAyah);
                     }}
                     className={`px-2.5 py-1 rounded-full text-xs font-medium transition-all ${audioMode === 'translation' ? 'bg-cyan-500/50 text-white' : 'bg-white/10 text-white/60'}`}
                     title={apiAudioSource ? `Audio: ${apiAudioSource.reciter?.name}` : 'TTS Audio (No narrator available)'}
@@ -4579,7 +4824,7 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
                     >
                       {availableNarrators.map((narrator) => (
                         <option key={narrator.id} value={narrator.id} className="bg-gray-800 text-white">
-                          {narrator.translationShort || narrator.name} ({narrator.styleLabel || (narrator.style === 'word-by-word' ? 'لفظی' : 'جملہ')})
+                          {narrator.translationShort || narrator.name} ({narrator.styleLabel || (narrator.style === 'word-by-word' ? 'لفظی' : 'جملہ')}) {narrator.id === 'tts' && !canUseHDTTS ? '🔒' : ''}
                         </option>
                       ))}
                     </select>
@@ -4592,14 +4837,8 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
                   )}
                   <button
                     onClick={() => {
+                      stopAllAudio();
                       setAudioMode('combined');
-                      // Stop translation-only mode
-                      if (isPlayingTranslation) toggleTranslationPlayback();
-                      // Stop Arabic-only mode
-                      if (isPlaying && !isPlayingCombined) {
-                        setIsPlaying(false);
-                        if (audioRef.current) audioRef.current.pause();
-                      }
                     }}
                     className={`px-2.5 py-1 rounded-full text-xs font-medium transition-all ${audioMode === 'combined' ? 'bg-gradient-to-r from-amber-500/50 to-cyan-500/50 text-white' : 'bg-white/10 text-white/60'}`}
                     title="Play Arabic then Translation for each verse"
@@ -4612,13 +4851,11 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
                 <div className="flex items-center justify-center gap-3">
                   <button
                     onClick={() => {
-                      if (audioMode === 'translation') {
-                        setTranslationAyah(prev => Math.max(1, prev - 1));
-                      } else {
-                        goToPrevAyah();
-                      }
+                      const newAyah = Math.max(1, currentAyah - 1);
+                      setCurrentAyah(newAyah);
+                      setTranslationAyah(newAyah);
                     }}
-                    disabled={audioMode === 'translation' ? translationAyah <= 1 : currentAyah <= 1}
+                    disabled={currentAyah <= 1}
                     className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center hover:bg-white/30 transition-all disabled:opacity-30"
                   >
                     <Icons.SkipBack className="w-4 h-4" />
@@ -4646,13 +4883,11 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
 
                   <button
                     onClick={() => {
-                      if (audioMode === 'translation') {
-                        setTranslationAyah(prev => Math.min(totalVerses, prev + 1));
-                      } else {
-                        goToNextAyah();
-                      }
+                      const newAyah = Math.min(totalVerses, currentAyah + 1);
+                      setCurrentAyah(newAyah);
+                      setTranslationAyah(newAyah);
                     }}
-                    disabled={audioMode === 'translation' ? translationAyah >= totalVerses : currentAyah >= totalVerses}
+                    disabled={currentAyah >= totalVerses}
                     className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center hover:bg-white/30 transition-all disabled:opacity-30"
                   >
                     <Icons.SkipForward className="w-4 h-4" />
@@ -4690,6 +4925,7 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
                     </span>
                   )}
                 </div>
+
               </div>
             </div>
           </div>
