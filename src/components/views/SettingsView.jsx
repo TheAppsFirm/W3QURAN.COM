@@ -151,7 +151,9 @@ function SettingsView({ darkMode, setDarkMode, onNavigate }) {
   };
 
   return (
-    <div className={`h-full overflow-auto p-6 ${darkMode ? 'text-white' : ''}`}>
+    <div className={`h-full overflow-auto p-6 ${darkMode ? 'text-white' : ''}`}
+      style={{ paddingBottom: 'max(6rem, calc(env(safe-area-inset-bottom, 0px) + 6rem))' }}
+    >
       <div className="max-w-lg mx-auto">
         {/* Back Button */}
         <button

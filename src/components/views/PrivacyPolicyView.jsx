@@ -8,7 +8,9 @@ import { Icons } from '../common/Icons';
 
 const PrivacyPolicyView = memo(function PrivacyPolicyView({ darkMode, onBack }) {
   return (
-    <div className={`h-full overflow-auto ${darkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
+    <div className={`h-full overflow-auto ${darkMode ? 'bg-gray-900' : 'bg-gray-50'}`}
+      style={{ paddingBottom: 'max(6rem, calc(env(safe-area-inset-bottom, 0px) + 6rem))' }}
+    >
       {/* Header */}
       <div
         className="sticky top-0 z-10 backdrop-blur-xl border-b"

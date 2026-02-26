@@ -949,9 +949,10 @@ function QuranBubbleApp() {
 
   return (
     <div
-      className={`h-screen flex flex-col overflow-hidden transition-colors duration-500 ${
+      className={`flex flex-col overflow-hidden transition-colors duration-500 ${
         darkMode ? 'animated-bg-dark' : 'animated-bg'
       }`}
+      style={{ height: '100dvh' }}
     >
       {/* Blocked User Screen */}
       {blocked && (
@@ -1007,11 +1008,15 @@ function QuranBubbleApp() {
       )}
 
       {/* Main Content */}
-      <main className="flex-1 relative overflow-hidden">
+      <main className="flex-1 relative overflow-hidden"
+        style={view !== 'surahs' ? { paddingTop: 'env(safe-area-inset-top, 0px)' } : undefined}
+      >
         {/* Surahs View */}
         {view === 'surahs' && (
           <>
-            <div className="absolute inset-0 overflow-auto bubble-container pt-4 pr-10 sm:pr-12 pb-28 sm:pb-32">
+            <div className="absolute inset-0 overflow-auto bubble-container pt-4 pr-10 sm:pr-12"
+              style={{ paddingBottom: 'max(7rem, calc(env(safe-area-inset-bottom, 0px) + 7rem))' }}
+            >
               {/* Spiral Layout (Default) */}
               {surahLayout === 'spiral' && (
                 <div

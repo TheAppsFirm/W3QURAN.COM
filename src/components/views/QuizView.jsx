@@ -82,7 +82,9 @@ function QuizView({ darkMode, onEarnPoints }) {
   }
 
   return (
-    <div className={`h-full flex flex-col overflow-auto ${darkMode ? 'text-white' : ''}`}>
+    <div className={`h-full flex flex-col overflow-auto ${darkMode ? 'text-white' : ''}`}
+      style={{ paddingBottom: 'max(6rem, calc(env(safe-area-inset-bottom, 0px) + 6rem))' }}
+    >
       {/* Header with back button */}
       <div className={`sticky top-0 z-10 backdrop-blur-xl ${darkMode ? 'bg-gray-900/90' : 'bg-white/90'} border-b ${darkMode ? 'border-gray-800' : 'border-gray-200'}`}>
         <div className="flex items-center gap-3 p-4">

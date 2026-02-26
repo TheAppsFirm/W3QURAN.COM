@@ -138,7 +138,9 @@ function NamesOfAllahView({ darkMode }) {
       )}
 
       {/* Names Grid */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-w-4xl mx-auto pb-24">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-w-4xl mx-auto"
+        style={{ paddingBottom: 'max(6rem, calc(env(safe-area-inset-bottom, 0px) + 6rem))' }}
+      >
         {filteredNames.map((name, i) => {
           const p = PALETTES[name.id % 10];
           return (
