@@ -1080,9 +1080,10 @@ export default function TalkToQuran({ isVisible, onClose, onNavigate }) {
         <div className="flex items-center justify-between mb-2">
           <button
             onClick={onClose}
-            className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-lg border border-white/20 flex items-center justify-center hover:bg-white/20 transition-all"
+            className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white hover:bg-white/30 transition-all shadow-lg"
           >
-            <Icons.X className="w-5 h-5 text-white" />
+            <Icons.ArrowLeft className="w-5 h-5" />
+            <span className="font-medium text-sm">Back</span>
           </button>
 
           <div className="text-center">
