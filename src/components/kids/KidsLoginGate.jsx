@@ -5,10 +5,12 @@
 
 import React from 'react';
 import { useAuth } from '../../contexts/AuthContext';
+import { useTranslation } from '../../contexts/LocaleContext';
 import { Icons } from '../common/Icons';
 
 const KidsLoginGate = ({ onClose }) => {
   const { login } = useAuth();
+  const { t, isRTL, language } = useTranslation();
 
   return (
     <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-gradient-to-br from-purple-900/95 via-indigo-900/95 to-blue-900/95 backdrop-blur-sm">
@@ -37,7 +39,7 @@ const KidsLoginGate = ({ onClose }) => {
           className="absolute top-4 left-4 z-50 flex items-center gap-2 px-4 py-2 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white hover:bg-white/30 transition-all"
         >
           <Icons.ArrowLeft className="w-5 h-5" />
-          <span className="font-medium text-sm">Back</span>
+          <span className="font-medium text-sm">{t('kids.back')}</span>
         </button>
       )}
 
@@ -51,29 +53,28 @@ const KidsLoginGate = ({ onClose }) => {
         {/* Content */}
         <div className="text-center pt-8">
           <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">
-            Welcome to Quran Kids!
+            {t('kids.welcome')}
           </h2>
           <p className="text-lg font-arabic text-yellow-300 mb-4">
             مرحباً بك في قرآن للأطفال
           </p>
           <p className="text-white/80 mb-6">
-            Sign in to start your magical learning journey with fun train rides,
-            garden walks, and desert adventures!
+            {t('kids.signInMessage')}
           </p>
 
           {/* Features preview */}
           <div className="grid grid-cols-3 gap-3 mb-6">
             <div className="bg-white/10 rounded-xl p-3 text-center">
               <div className="text-2xl mb-1">🚂</div>
-              <p className="text-white/70 text-xs">Train Journey</p>
+              <p className="text-white/70 text-xs">{t('kids.trainJourney')}</p>
             </div>
             <div className="bg-white/10 rounded-xl p-3 text-center">
               <div className="text-2xl mb-1">🌸</div>
-              <p className="text-white/70 text-xs">Garden Path</p>
+              <p className="text-white/70 text-xs">{t('kids.gardenPath')}</p>
             </div>
             <div className="bg-white/10 rounded-xl p-3 text-center">
               <div className="text-2xl mb-1">🐪</div>
-              <p className="text-white/70 text-xs">Desert Caravan</p>
+              <p className="text-white/70 text-xs">{t('kids.desertCaravan')}</p>
             </div>
           </div>
 
@@ -100,11 +101,11 @@ const KidsLoginGate = ({ onClose }) => {
                 d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
               />
             </svg>
-            <span>Sign in with Google</span>
+            <span>{t('kids.signInWithGoogle')}</span>
           </button>
 
           <p className="text-white/50 text-xs mt-4">
-            Safe and secure login for parents and kids
+            {t('kids.safeLogin')}
           </p>
         </div>
 

@@ -5,6 +5,7 @@
 
 import React from 'react';
 import { Icons } from '../../common/Icons';
+import { useTranslation } from '../../../contexts/LocaleContext';
 
 const LANGUAGES = [
   {
@@ -31,6 +32,8 @@ const LANGUAGES = [
 ];
 
 const LanguageSelect = ({ onSelectLanguage, onBack }) => {
+  const { t } = useTranslation();
+
   return (
     <div
       className="fixed inset-0 z-[9999] flex flex-col items-center justify-center p-4"
@@ -68,10 +71,10 @@ const LanguageSelect = ({ onSelectLanguage, onBack }) => {
       <div className="relative z-10 text-center mb-8">
         <div className="text-6xl mb-4">🕋</div>
         <h1 className="text-3xl sm:text-4xl font-bold text-white mb-2">
-          Hajj & Umrah Journey
+          {t('hajjUmrah.title')}
         </h1>
         <p className="text-white/80 text-lg">
-          Learn the sacred pilgrimage step by step
+          {t('hajjUmrah.subtitle')}
         </p>
       </div>
 
@@ -114,7 +117,7 @@ const LanguageSelect = ({ onSelectLanguage, onBack }) => {
 
       {/* Footer */}
       <div className="absolute bottom-6 text-center text-white/60 text-sm">
-        <p>🤲 May Allah accept your worship</p>
+        <p>🤲 {t('hajjUmrah.footerDua')}</p>
       </div>
 
       {/* Font imports */}

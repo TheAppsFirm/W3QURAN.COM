@@ -15,6 +15,7 @@
 import { memo, useState, useRef, useCallback } from 'react';
 import { Icons } from '../../common/Icons';
 import { shareVerse } from '../../../utils/shareUtils';
+import { useTranslation } from '../../../contexts/LocaleContext';
 
 // Share card style presets
 const SHARE_STYLES = [
@@ -66,6 +67,7 @@ const SharePanel = memo(function SharePanel({
   onClose,
   onOpenArtGenerator,
 }) {
+  const { t } = useTranslation();
   const [shareStatus, setShareStatus] = useState(null);
   const [downloadStatus, setDownloadStatus] = useState(null);
   const [selectedStyle, setSelectedStyle] = useState('classic');
@@ -312,7 +314,7 @@ const SharePanel = memo(function SharePanel({
           </div>
           <div>
             <h3 className="text-white font-bold">
-              {isMultiple ? `Share ${versesToShare.length} Verses` : 'Share Verse'}
+              {isMultiple ? `${t('share.shareVerse')} (${versesToShare.length})` : t('share.shareVerse')}
             </h3>
             <p className="text-white/60 text-xs">
               {surahName} : {ayahRangeStr}
@@ -383,7 +385,7 @@ const SharePanel = memo(function SharePanel({
         {/* Style Selector */}
         <div>
           <label className="text-white/80 text-xs font-medium mb-2 block">
-            Card Style
+            {t('verseArt.style')}
           </label>
           <div className="grid grid-cols-6 gap-2">
             {SHARE_STYLES.map((style) => (
@@ -409,7 +411,7 @@ const SharePanel = memo(function SharePanel({
             onClick={onOpenArtGenerator}
             className="w-full py-3 bg-gradient-to-r from-amber-500/60 to-orange-500/60 hover:from-amber-500/80 hover:to-orange-500/80 rounded-xl text-white font-medium transition-all flex items-center justify-center gap-2"
           >
-            <Icons.Palette className="w-5 h-5" /> Create Beautiful Art
+            <Icons.Palette className="w-5 h-5" /> {t('share.shareArt')}
           </button>
 
           {/* Download Image Button */}
@@ -420,15 +422,15 @@ const SharePanel = memo(function SharePanel({
           >
             {downloadStatus === 'generating' ? (
               <>
-                <Icons.Loader className="w-5 h-5 animate-spin" /> Generating...
+                <Icons.Loader className="w-5 h-5 animate-spin" /> {t('common.loading')}
               </>
             ) : downloadStatus === 'done' ? (
               <>
-                <Icons.Check className="w-5 h-5" /> Downloaded!
+                <Icons.Check className="w-5 h-5" /> {t('common.done')}
               </>
             ) : (
               <>
-                <Icons.Download className="w-5 h-5" /> Quick Download
+                <Icons.Download className="w-5 h-5" /> {t('common.download')}
               </>
             )}
           </button>
@@ -443,11 +445,11 @@ const SharePanel = memo(function SharePanel({
               <Icons.Loader className="w-5 h-5 animate-spin" />
             ) : shareStatus === 'copied' ? (
               <>
-                <Icons.Check className="w-5 h-5" /> Copied!
+                <Icons.Check className="w-5 h-5" /> {t('common.copied')}
               </>
             ) : (
               <>
-                <Icons.Share className="w-5 h-5" /> Share
+                <Icons.Share className="w-5 h-5" /> {t('common.share')}
               </>
             )}
           </button>
@@ -457,7 +459,7 @@ const SharePanel = memo(function SharePanel({
             onClick={copyText}
             className="w-full py-2.5 bg-white/10 hover:bg-white/20 rounded-xl text-white/80 font-medium transition-all flex items-center justify-center gap-2"
           >
-            <Icons.Copy className="w-4 h-4" /> Copy Text
+            <Icons.Copy className="w-4 h-4" /> {t('share.copyText')}
           </button>
 
           {/* Social Buttons */}
@@ -466,13 +468,13 @@ const SharePanel = memo(function SharePanel({
               onClick={shareToTwitter}
               className="flex-1 py-2.5 bg-[#1DA1F2]/30 hover:bg-[#1DA1F2]/50 rounded-xl text-white font-medium transition-all text-sm"
             >
-              Twitter
+              {t('share.twitter')}
             </button>
             <button
               onClick={shareToWhatsApp}
               className="flex-1 py-2.5 bg-[#25D366]/30 hover:bg-[#25D366]/50 rounded-xl text-white font-medium transition-all text-sm"
             >
-              WhatsApp
+              {t('share.whatsapp')}
             </button>
           </div>
         </div>

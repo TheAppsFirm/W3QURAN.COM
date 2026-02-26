@@ -7,8 +7,10 @@ import { useState, useCallback } from 'react';
 import { Icons } from '../common/Icons';
 import { NAMES_OF_ALLAH, PALETTES } from '../../data';
 import { shareName } from '../../utils/shareUtils';
+import { useTranslation } from '../../contexts/LocaleContext';
 
 function NamesOfAllahView({ darkMode }) {
+  const { t, isRTL } = useTranslation();
   const [selectedName, setSelectedName] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [shareStatus, setShareStatus] = useState(null);
@@ -87,10 +89,10 @@ function NamesOfAllahView({ darkMode }) {
           </button>
           <div>
             <h2 className={`text-xl font-bold ${darkMode ? 'text-white' : 'text-gray-800'}`}>
-              99 Names of Allah
+              {t('namesOfAllah.title')}
             </h2>
             <p className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-              Asma ul Husna - The Beautiful Names
+              {t('namesOfAllah.subtitle')}
             </p>
           </div>
         </div>
@@ -108,7 +110,7 @@ function NamesOfAllahView({ darkMode }) {
           <Icons.Search className={`w-5 h-5 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`} />
           <input
             type="text"
-            placeholder="Search names..."
+            placeholder={t('namesOfAllah.searchNames')}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className={`flex-1 bg-transparent outline-none ${
@@ -258,10 +260,10 @@ function NamesOfAllahView({ darkMode }) {
                     <Icons.Share className="w-4 h-4" />
                   )}
                   {shareStatus === 'copied'
-                    ? 'Copied!'
+                    ? t('common.copied')
                     : shareStatus === 'shared'
-                      ? 'Shared!'
-                      : 'Share'}
+                      ? t('common.copied')
+                      : t('common.share')}
                 </button>
               </div>
             </div>

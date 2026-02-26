@@ -8,6 +8,7 @@ import { Icons } from '../common/Icons';
 import { FusionLogo, FusionLogoWithText } from '../common/Logo';
 import { FAQ_TOPICS } from '../../data';
 import { useAuth } from '../../contexts/AuthContext';
+import { useLocale } from '../../contexts/LocaleContext';
 import { LoginButton, UserMenu } from '../auth';
 
 const Header = memo(function Header({ filters, setFilters, showAnalytics, setShowAnalytics, onSettingsClick }) {
@@ -16,9 +17,11 @@ const Header = memo(function Header({ filters, setFilters, showAnalytics, setSho
   const [showTopics, setShowTopics] = useState(false);
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [dropdownPos, setDropdownPos] = useState({ top: 0, left: 0 });
+  const [showLangMenu, setShowLangMenu] = useState(false);
   const debounceTimer = useRef(null);
   const buttonRefs = useRef({});
   const { user, loading: authLoading } = useAuth();
+  const { language, setLanguage, supportedLanguages, t, isRTL } = useLocale();
 
   // Debounced search
   useEffect(() => {
@@ -31,12 +34,12 @@ const Header = memo(function Header({ filters, setFilters, showAnalytics, setSho
 
   // Close dropdown when clicking outside
   useEffect(() => {
-    const handleClick = () => setOpen(null);
-    if (open) {
+    const handleClick = () => { setOpen(null); setShowLangMenu(false); };
+    if (open || showLangMenu) {
       document.addEventListener('click', handleClick);
       return () => document.removeEventListener('click', handleClick);
     }
-  }, [open]);
+  }, [open, showLangMenu]);
 
   // Update dropdown position when opened
   useEffect(() => {
@@ -47,9 +50,23 @@ const Header = memo(function Header({ filters, setFilters, showAnalytics, setSho
   }, [open]);
 
   const filterConfigs = [
-    { id: 'rev', label: 'Revelation', icon: Icons.Book, opts: ['All', 'Makki', 'Madani'] },
-    { id: 'ayahRange', label: 'Verses', icon: Icons.BarChart, opts: ['All', '1-20', '21-50', '51-100', '100+'] },
-    { id: 'chronOrder', label: 'Order', icon: Icons.Clock, opts: ['Default', 'Chronological', 'Reverse Chron'] },
+    { id: 'rev', label: t('header.revelation'), icon: Icons.Book, opts: [
+      { value: 'All', label: t('header.all') },
+      { value: 'Makki', label: t('reader.makki') },
+      { value: 'Madani', label: t('reader.madani') },
+    ]},
+    { id: 'ayahRange', label: t('header.verses'), icon: Icons.BarChart, opts: [
+      { value: 'All', label: t('header.all') },
+      { value: '1-20', label: '1-20' },
+      { value: '21-50', label: '21-50' },
+      { value: '51-100', label: '51-100' },
+      { value: '100+', label: '100+' },
+    ]},
+    { id: 'chronOrder', label: t('header.order'), icon: Icons.Clock, opts: [
+      { value: 'Default', label: t('header.default') },
+      { value: 'Chronological', label: t('header.chronological') },
+      { value: 'Reverse Chron', label: t('header.reverseChron') },
+    ]},
   ];
 
   const hasActiveFilters = filters.type || filters.ayahRange || filters.chronOrder || filters.topic;
@@ -123,7 +140,7 @@ const Header = memo(function Header({ filters, setFilters, showAnalytics, setSho
               <Icons.Search className={`w-4 h-4 transition-all duration-300 ${isSearchFocused ? 'text-white scale-110' : 'text-white/70'}`} />
               <input
                 type="text"
-                placeholder="Search surahs..."
+                placeholder={t('header.searchPlaceholder')}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onFocus={() => setIsSearchFocused(true)}
@@ -182,7 +199,7 @@ const Header = memo(function Header({ filters, setFilters, showAnalytics, setSho
             style={{ backdropFilter: 'blur(10px)' }}
           >
             <Icons.Tag className="w-4 h-4" />
-            <span className="text-xs sm:text-sm hidden xs:inline">Topics</span>
+            <span className="text-xs sm:text-sm hidden xs:inline">{t('header.topics')}</span>
             {filters.topic && (
               <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
             )}
@@ -199,7 +216,7 @@ const Header = memo(function Header({ filters, setFilters, showAnalytics, setSho
             style={{ backdropFilter: 'blur(10px)' }}
           >
             <Icons.BarChart className="w-4 h-4" />
-            <span className="text-xs sm:text-sm hidden sm:inline">Analytics</span>
+            <span className="text-xs sm:text-sm hidden sm:inline">{t('header.analytics')}</span>
           </button>
 
           {/* Clear Filters - Only show when filters active */}
@@ -210,12 +227,48 @@ const Header = memo(function Header({ filters, setFilters, showAnalytics, setSho
               style={{ animation: 'fadeIn 0.3s ease-out' }}
             >
               <Icons.X className="w-3.5 h-3.5" />
-              <span className="text-xs">Clear</span>
+              <span className="text-xs">{t('header.clear')}</span>
             </button>
           )}
 
+          {/* Language Selector */}
+          <div className="relative">
+            <button
+              onClick={(e) => { e.stopPropagation(); setShowLangMenu(!showLangMenu); }}
+              className="flex items-center justify-center w-10 h-10 rounded-2xl text-white font-medium transition-all duration-300 border bg-white/10 hover:bg-white/20 border-white/20 hover:border-white/40"
+              style={{ backdropFilter: 'blur(10px)' }}
+              aria-label={t('settings.language')}
+            >
+              <span className="text-lg">
+                {language === 'en' ? '🇺🇸' : language === 'ur' ? '🇵🇰' : '🇸🇦'}
+              </span>
+            </button>
+            {showLangMenu && (
+              <div
+                className="absolute right-0 mt-2 bg-white backdrop-blur-xl rounded-2xl shadow-2xl py-2 min-w-[160px] border border-purple-100 overflow-hidden"
+                style={{ zIndex: 999999, animation: 'dropdownSlide 0.2s ease-out' }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                {supportedLanguages.map((lang) => (
+                  <button
+                    key={lang.code}
+                    onClick={() => { setLanguage(lang.code); setShowLangMenu(false); }}
+                    className={`w-full px-4 py-3 text-left transition-all flex items-center gap-3 ${
+                      language === lang.code
+                        ? 'bg-gradient-to-r from-purple-500 to-fuchsia-500 text-white'
+                        : 'text-gray-700 hover:bg-purple-50'
+                    }`}
+                  >
+                    <span className="text-lg">{lang.flag}</span>
+                    <span className="font-medium">{lang.nativeLabel}</span>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
           {/* Auth - Login/User Menu */}
-          <div className="ml-2">
+          <div className={isRTL ? 'mr-2' : 'ml-2'}>
             {authLoading ? (
               <div className="w-8 h-8 rounded-full bg-white/20 animate-pulse" />
             ) : user ? (
@@ -274,17 +327,17 @@ const Header = memo(function Header({ filters, setFilters, showAnalytics, setSho
             onClick={(e) => e.stopPropagation()}
           >
             {f.opts.map((o, i) => {
-              const isActive = (f.id === 'rev' && filters.type === o) ||
-                (f.id === 'ayahRange' && filters.ayahRange === o) ||
-                (f.id === 'chronOrder' && filters.chronOrder === o);
+              const isActive = (f.id === 'rev' && filters.type === o.value) ||
+                (f.id === 'ayahRange' && filters.ayahRange === o.value) ||
+                (f.id === 'chronOrder' && filters.chronOrder === o.value);
 
               return (
                 <button
-                  key={o}
+                  key={o.value}
                   onClick={() => {
-                    if (f.id === 'rev') setFilters({ ...filters, type: o === 'All' ? null : o });
-                    if (f.id === 'ayahRange') setFilters({ ...filters, ayahRange: o === 'All' ? null : o });
-                    if (f.id === 'chronOrder') setFilters({ ...filters, chronOrder: o === 'Default' ? null : o });
+                    if (f.id === 'rev') setFilters({ ...filters, type: o.value === 'All' ? null : o.value });
+                    if (f.id === 'ayahRange') setFilters({ ...filters, ayahRange: o.value === 'All' ? null : o.value });
+                    if (f.id === 'chronOrder') setFilters({ ...filters, chronOrder: o.value === 'Default' ? null : o.value });
                     setOpen(null);
                   }}
                   className={`w-full px-4 py-3 text-left transition-all flex items-center gap-3 ${
@@ -299,7 +352,7 @@ const Header = memo(function Header({ filters, setFilters, showAnalytics, setSho
                   }`}>
                     {isActive && <Icons.Check className="w-3 h-3 text-purple-600" />}
                   </div>
-                  <span className="font-medium">{o}</span>
+                  <span className="font-medium">{o.label}</span>
                 </button>
               );
             })}

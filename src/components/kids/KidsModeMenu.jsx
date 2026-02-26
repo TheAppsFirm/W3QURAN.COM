@@ -13,6 +13,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Icons } from '../common/Icons';
 import { useAuth } from '../../contexts/AuthContext';
+import { useTranslation } from '../../contexts/LocaleContext';
 import KidsPremiumGate from './KidsPremiumGate';
 
 // Arabic Alphabet learning journeys - all show the same alphabet with different themes
@@ -178,10 +179,47 @@ const FloatingParticle = ({ emoji, delay, duration, startX, startY }) => (
   </div>
 );
 
+// Map theme IDs to translation keys for name and description
+const THEME_NAME_KEYS = {
+  'train': 'kids.trainJourney',
+  'garden': 'kids.flowerGarden',
+  'seert': 'kids.camelJourney',
+};
+const THEME_DESC_KEYS = {
+  'train': 'kids.trainJourneyDesc',
+  'garden': 'kids.flowerGardenSurahDesc',
+  'seert': 'kids.camelJourneyDesc',
+};
+
+// Map alphabet journey IDs to translation keys
+const ALPHABET_NAME_KEYS = {
+  'alphabet-train': 'kids.alphabetTrain',
+  'alphabet-garden': 'kids.flowerGarden',
+  'alphabet-seert': 'kids.camelCaravan',
+};
+const ALPHABET_DESC_KEYS = {
+  'alphabet-train': 'kids.alphabetTrainDesc',
+  'alphabet-garden': 'kids.flowerGardenDesc',
+  'alphabet-seert': 'kids.camelCaravanDesc',
+};
+
+// Map special journey IDs to translation keys
+const SPECIAL_NAME_KEYS = {
+  'kids-dua': 'kids.kidsDuas',
+  'prophet-life': 'kids.prophetLife',
+  'hajj-umrah': 'kids.hajjUmrah',
+};
+const SPECIAL_DESC_KEYS = {
+  'kids-dua': 'kids.kidsDuasDesc',
+  'prophet-life': 'kids.prophetLifeDesc',
+  'hajj-umrah': 'kids.hajjUmrahDesc',
+};
+
 // Theme Card component with 3D tilt effect
 const ThemeCard = ({ theme, onSelect, index, isLocked = false, onLockedClick }) => {
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const [isHovered, setIsHovered] = useState(false);
+  const { t } = useTranslation();
 
   const handleMouseMove = useCallback((e) => {
     const card = e.currentTarget;
@@ -238,7 +276,7 @@ const ThemeCard = ({ theme, onSelect, index, isLocked = false, onLockedClick }) 
             <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-r from-amber-400 to-orange-500 flex items-center justify-center shadow-lg">
               <Icons.Lock className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
             </div>
-            <span className="text-white text-[10px] sm:text-xs font-bold mt-1 drop-shadow">PREMIUM</span>
+            <span className="text-white text-[10px] sm:text-xs font-bold mt-1 drop-shadow">{t('common.premium')}</span>
           </div>
         </div>
       )}
@@ -301,7 +339,7 @@ const ThemeCard = ({ theme, onSelect, index, isLocked = false, onLockedClick }) 
         {/* Theme name - compact */}
         <div className="text-center leading-none">
           <h3 className="text-[10px] sm:text-xs font-bold text-white drop-shadow-lg">
-            {theme.name}
+            {THEME_NAME_KEYS[theme.id] ? t(THEME_NAME_KEYS[theme.id]) : theme.name}
           </h3>
           <p className="text-[9px] sm:text-[10px] text-white/70 font-arabic">{theme.nameAr}</p>
         </div>
@@ -320,7 +358,7 @@ const ThemeCard = ({ theme, onSelect, index, isLocked = false, onLockedClick }) 
             active:scale-95
           `}
         >
-          <span>PLAY</span>
+          <span>{t('kids.play')}</span>
           <Icons.Play className="w-3 h-3 sm:w-4 sm:h-4 fill-current" />
         </button>
 
@@ -342,6 +380,7 @@ const ThemeCard = ({ theme, onSelect, index, isLocked = false, onLockedClick }) 
 const AlphabetCard = ({ section, onSelect, index, isLocked = false, onLockedClick }) => {
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const [isHovered, setIsHovered] = useState(false);
+  const { t } = useTranslation();
 
   const handleMouseMove = useCallback((e) => {
     const card = e.currentTarget;
@@ -401,7 +440,7 @@ const AlphabetCard = ({ section, onSelect, index, isLocked = false, onLockedClic
             <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-r from-amber-400 to-orange-500 flex items-center justify-center shadow-lg">
               <Icons.Lock className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
             </div>
-            <span className="text-white text-[10px] sm:text-xs font-bold mt-1 drop-shadow">PREMIUM</span>
+            <span className="text-white text-[10px] sm:text-xs font-bold mt-1 drop-shadow">{t('common.premium')}</span>
           </div>
         </div>
       )}
@@ -451,7 +490,7 @@ const AlphabetCard = ({ section, onSelect, index, isLocked = false, onLockedClic
         {/* Section name - compact single line */}
         <div className="text-center leading-none">
           <h3 className="text-[10px] sm:text-xs font-bold text-white drop-shadow-lg">
-            {section.name}
+            {ALPHABET_NAME_KEYS[section.id] ? t(ALPHABET_NAME_KEYS[section.id]) : section.name}
           </h3>
           <p className="text-[9px] sm:text-[10px] text-white/70 font-arabic">{section.nameAr} • {section.letterDisplay}</p>
         </div>
@@ -470,7 +509,7 @@ const AlphabetCard = ({ section, onSelect, index, isLocked = false, onLockedClic
             active:scale-95
           `}
         >
-          <span>LEARN</span>
+          <span>{t('kids.learn')}</span>
           <span className="text-xs sm:text-lg">{section.emoji}</span>
         </button>
 
@@ -779,6 +818,7 @@ const useBackgroundMusic = (isMuted) => {
 const SpecialJourneyCard = ({ journey, onSelect, index, isLocked = false, onLockedClick }) => {
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const [isHovered, setIsHovered] = useState(false);
+  const { t } = useTranslation();
 
   const handleMouseMove = useCallback((e) => {
     const card = e.currentTarget;
@@ -846,7 +886,7 @@ const SpecialJourneyCard = ({ journey, onSelect, index, isLocked = false, onLock
         {isLocked && (
           <div className="absolute inset-0 z-20 rounded-xl sm:rounded-2xl bg-black/50 backdrop-blur-[2px] flex flex-col items-center justify-center">
             <Icons.Lock className="w-6 h-6 text-white mb-1" />
-            <span className="text-white text-xs font-bold px-2 py-0.5 bg-amber-500 rounded-full">PREMIUM</span>
+            <span className="text-white text-xs font-bold px-2 py-0.5 bg-amber-500 rounded-full">{t('common.premium')}</span>
           </div>
         )}
         {/* Sparkle decorations */}
@@ -879,13 +919,13 @@ const SpecialJourneyCard = ({ journey, onSelect, index, isLocked = false, onLock
         {/* Text content */}
         <div className="flex-1 text-left">
           <h3 className="text-sm sm:text-xl font-bold text-white drop-shadow-lg tracking-wide">
-            {journey.name}
+            {SPECIAL_NAME_KEYS[journey.id] ? t(SPECIAL_NAME_KEYS[journey.id]) : journey.name}
           </h3>
           <p className="text-[10px] sm:text-xs text-white/80 font-arabic">
             {journey.nameAr}
           </p>
           <p className="text-[9px] sm:text-xs text-white/70 mt-0.5 hidden sm:block">
-            {journey.description}
+            {SPECIAL_DESC_KEYS[journey.id] ? t(SPECIAL_DESC_KEYS[journey.id]) : journey.description}
           </p>
         </div>
 
@@ -904,7 +944,7 @@ const SpecialJourneyCard = ({ journey, onSelect, index, isLocked = false, onLock
             flex-shrink-0
           `}
         >
-          <span>START</span>
+          <span>{t('kids.start')}</span>
           <Icons.Play className="w-3 h-3 sm:w-4 sm:h-4 fill-current" />
         </button>
 
@@ -930,6 +970,7 @@ const KidsModeMenu = ({ onSelectTheme, onSelectAlphabet, onSelectSpecialJourney,
 
   // Get auth state
   const { isPremium, isAdmin } = useAuth();
+  const { t } = useTranslation();
 
   // Play background music
   useBackgroundMusic(isMuted);
@@ -999,7 +1040,7 @@ const KidsModeMenu = ({ onSelectTheme, onSelectAlphabet, onSelectSpecialJourney,
             <span className="text-lg sm:text-2xl animate-pulse hidden sm:inline">☪️</span>
             <h1 className="text-xl sm:text-3xl md:text-4xl font-bold text-white tracking-wider drop-shadow-lg">
               <span className="bg-gradient-to-r from-yellow-200 via-yellow-400 to-yellow-200 text-transparent bg-clip-text">
-                QURAN KIDS
+                {t('kids.quranKids')}
               </span>
             </h1>
             <span className="text-lg sm:text-2xl animate-pulse hidden sm:inline" style={{ animationDelay: '0.5s' }}>☪️</span>
@@ -1035,7 +1076,7 @@ const KidsModeMenu = ({ onSelectTheme, onSelectAlphabet, onSelectSpecialJourney,
           <div className="sm:hidden w-full px-2">
             <h2 className="text-center text-white/90 text-sm font-bold mb-2 flex items-center justify-center gap-1">
               <span>✨</span>
-              <span>Choose Your Adventure</span>
+              <span>{t('kids.chooseAdventure')}</span>
               <span className="font-arabic text-yellow-300 text-xs">اختر مغامرتك</span>
             </h2>
             <div className="grid grid-cols-2 gap-2">
@@ -1111,7 +1152,7 @@ const KidsModeMenu = ({ onSelectTheme, onSelectAlphabet, onSelectSpecialJourney,
             {/* Arabic Alphabet Learning Section */}
             <h2 className="text-center text-white/90 text-lg font-bold mb-2 flex items-center justify-center gap-2">
               <span className="text-lg">📚</span>
-              <span>Learn Arabic Alphabet</span>
+              <span>{t('kids.learnArabicAlphabet')}</span>
               <span className="font-arabic text-yellow-300 text-sm">حروف الهجاء</span>
             </h2>
             <div className="grid grid-cols-3 gap-3 md:gap-4 lg:gap-5">
@@ -1131,7 +1172,7 @@ const KidsModeMenu = ({ onSelectTheme, onSelectAlphabet, onSelectSpecialJourney,
           {/* Divider - Desktop only */}
           <div className="hidden sm:flex w-full max-w-4xl px-8 items-center gap-3 py-1">
             <div className="flex-1 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
-            <span className="text-white/60 text-xs font-medium">or</span>
+            <span className="text-white/60 text-xs font-medium">{t('kids.or')}</span>
             <div className="flex-1 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
           </div>
 
@@ -1139,7 +1180,7 @@ const KidsModeMenu = ({ onSelectTheme, onSelectAlphabet, onSelectSpecialJourney,
           <div className="hidden sm:block w-full max-w-6xl px-4">
             <h2 className="text-center text-white/90 text-lg font-bold mb-2 flex items-center justify-center gap-2">
               <span className="text-lg">🕌</span>
-              <span>Quran Journey Adventures</span>
+              <span>{t('kids.quranJourneyAdventures')}</span>
               <span className="font-arabic text-yellow-300 text-sm">رحلات القرآن</span>
             </h2>
             <div className="grid grid-cols-3 gap-3 md:gap-4 lg:gap-5">
@@ -1160,7 +1201,7 @@ const KidsModeMenu = ({ onSelectTheme, onSelectAlphabet, onSelectSpecialJourney,
           <div className="hidden sm:block w-full max-w-3xl px-6 mt-3 mb-4">
             <h2 className="text-center text-white/90 text-lg font-bold mb-2 flex items-center justify-center gap-2">
               <span className="text-xl">☪️</span>
-              <span>Special Journeys</span>
+              <span>{t('kids.specialJourneys')}</span>
               <span className="font-arabic text-yellow-300 text-sm">رحلات خاصة</span>
             </h2>
             <div className="flex flex-col gap-3">
@@ -1182,7 +1223,7 @@ const KidsModeMenu = ({ onSelectTheme, onSelectAlphabet, onSelectSpecialJourney,
         <footer className="text-center py-2 mt-2 mb-2">
           <p className="text-white/80 text-xs sm:text-lg flex items-center justify-center gap-1 sm:gap-2 flex-wrap">
             <span className="text-sm sm:text-xl">✨</span>
-            <span className="font-medium tracking-wide">Learn Quran on a Magical Journey</span>
+            <span className="font-medium tracking-wide">{t('kids.learnQuranMagical')}</span>
             <span className="text-sm sm:text-xl">✨</span>
           </p>
         </footer>

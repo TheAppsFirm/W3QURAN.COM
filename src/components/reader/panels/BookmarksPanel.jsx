@@ -14,6 +14,7 @@
 import { memo, useState, useCallback } from 'react';
 import { Icons } from '../../common/Icons';
 import { useLocalStorage } from '../../../hooks';
+import { useTranslation } from '../../../contexts/LocaleContext';
 
 /**
  * Creates a new bookmark object
@@ -38,6 +39,7 @@ const BookmarksPanel = memo(function BookmarksPanel({
   onClose,
   onNavigateToBookmark,
 }) {
+  const { t } = useTranslation();
   const [bookmarks, setBookmarks] = useLocalStorage('quran_bookmarks', []);
   const [notes, setNotes] = useState('');
   const [showNoteInput, setShowNoteInput] = useState(false);
@@ -84,8 +86,8 @@ const BookmarksPanel = memo(function BookmarksPanel({
             <Icons.Bookmark className="w-5 h-5 text-white" />
           </div>
           <div>
-            <h3 className="text-white font-bold">Bookmarks</h3>
-            <p className="text-white/60 text-xs">{bookmarks.length} saved</p>
+            <h3 className="text-white font-bold">{t('reader.bookmark')}</h3>
+            <p className="text-white/60 text-xs">{bookmarks.length} {t('common.save').toLowerCase()}</p>
           </div>
         </div>
         <button
@@ -138,10 +140,11 @@ const BookmarksPanel = memo(function BookmarksPanel({
  * Indicator when current ayah is already bookmarked
  */
 const BookmarkedIndicator = memo(function BookmarkedIndicator({ ayahNumber }) {
+  const { t } = useTranslation();
   return (
     <div className="flex items-center gap-2 p-3 bg-pink-500/20 rounded-xl">
       <Icons.Check className="w-5 h-5 text-pink-400" />
-      <span className="text-white/80 text-sm">Ayah {ayahNumber} is bookmarked</span>
+      <span className="text-white/80 text-sm">{t('reader.ayah')} {ayahNumber} {t('reader.bookmarked').toLowerCase()}</span>
     </div>
   );
 });
@@ -150,6 +153,7 @@ const BookmarkedIndicator = memo(function BookmarkedIndicator({ ayahNumber }) {
  * Note input form for adding a bookmark
  */
 const NoteInput = memo(function NoteInput({ notes, onNotesChange, onSave, onCancel }) {
+  const { t } = useTranslation();
   return (
     <div className="space-y-2">
       <textarea
@@ -164,13 +168,13 @@ const NoteInput = memo(function NoteInput({ notes, onNotesChange, onSave, onCanc
           onClick={onSave}
           className="flex-1 py-2 bg-pink-500/50 hover:bg-pink-500/70 rounded-xl text-white text-sm font-medium transition-all"
         >
-          Save
+          {t('common.save')}
         </button>
         <button
           onClick={onCancel}
           className="px-4 py-2 bg-white/10 hover:bg-white/20 rounded-xl text-white/70 text-sm transition-all"
         >
-          Cancel
+          {t('common.cancel')}
         </button>
       </div>
     </div>
@@ -181,12 +185,13 @@ const NoteInput = memo(function NoteInput({ notes, onNotesChange, onSave, onCanc
  * Button to add a new bookmark
  */
 const AddBookmarkButton = memo(function AddBookmarkButton({ ayahNumber, onClick }) {
+  const { t } = useTranslation();
   return (
     <button
       onClick={onClick}
       className="w-full py-3 bg-gradient-to-r from-pink-500/40 to-rose-500/40 hover:from-pink-500/60 hover:to-rose-500/60 rounded-xl text-white font-medium transition-all flex items-center justify-center gap-2"
     >
-      <Icons.Plus className="w-4 h-4" /> Bookmark Ayah {ayahNumber}
+      <Icons.Plus className="w-4 h-4" /> {t('reader.bookmark')} {t('reader.ayah')} {ayahNumber}
     </button>
   );
 });
@@ -195,10 +200,11 @@ const AddBookmarkButton = memo(function AddBookmarkButton({ ayahNumber, onClick 
  * Empty state when no bookmarks exist
  */
 const EmptyBookmarks = memo(function EmptyBookmarks() {
+  const { t } = useTranslation();
   return (
     <div className="text-center py-8">
       <Icons.Bookmark className="w-12 h-12 mx-auto text-white/20 mb-3" />
-      <p className="text-white/50 text-sm">No bookmarks yet</p>
+      <p className="text-white/50 text-sm">{t('errors.notFound')}</p>
     </div>
   );
 });

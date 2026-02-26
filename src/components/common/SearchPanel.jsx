@@ -17,6 +17,7 @@ import {
 } from '../../data/searchIndex';
 import { SURAHS } from '../../data';
 import { sanitizeHighlight } from '../../utils/sanitize';
+import { useTranslation } from '../../contexts/LocaleContext';
 
 /**
  * Search Result Item
@@ -99,6 +100,7 @@ const RecentSearchItem = memo(function RecentSearchItem({ query, onSelect, onRem
  * Main Search Panel Component - Bubble Style
  */
 const SearchPanel = memo(function SearchPanel({ onClose, onSelectResult }) {
+  const { t } = useTranslation();
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -137,7 +139,7 @@ const SearchPanel = memo(function SearchPanel({ onClose, onSelectResult }) {
         setRecentSearches(getRecentSearches());
       }
     } catch (err) {
-      setError('Search failed. Please try again.');
+      setError(t('errors.generic'));
       setResults([]);
     } finally {
       setLoading(false);
@@ -176,8 +178,8 @@ const SearchPanel = memo(function SearchPanel({ onClose, onSelectResult }) {
   return (
     <BubbleOverlay
       onClose={onClose}
-      title="Search Quran"
-      subtitle={results.length > 0 ? `${results.length} results` : 'Find verses'}
+      title={`${t('common.search')} ${t('nav.quran')}`}
+      subtitle={results.length > 0 ? `${results.length} results` : t('reader.verses')}
       icon={Icons.Search}
       gradient={['#f59e0b', '#d97706', '#b45309']}
       size="medium"
@@ -191,7 +193,7 @@ const SearchPanel = memo(function SearchPanel({ onClose, onSelectResult }) {
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder={searchMode === 'arabic' ? 'Search in Arabic...' : searchMode === 'urdu' ? 'اردو میں تلاش کریں...' : 'Search in English...'}
+              placeholder={searchMode === 'arabic' ? 'ابحث بالعربية...' : searchMode === 'urdu' ? 'اردو میں تلاش کریں...' : `${t('common.search')}...`}
               className="w-full py-2.5 px-4 rounded-xl text-sm"
               style={{
                 background: 'rgba(0,0,0,0.3)',
@@ -247,7 +249,7 @@ const SearchPanel = memo(function SearchPanel({ onClose, onSelectResult }) {
       {error && (
         <div className="p-4 rounded-xl mb-3 text-center" style={{ background: 'rgba(239,68,68,0.15)' }}>
           <div className="text-2xl mb-2">⚠️</div>
-          <p className="text-sm text-red-300 font-medium mb-1">Search Unavailable</p>
+          <p className="text-sm text-red-300 font-medium mb-1">{t('common.search')} Unavailable</p>
           <p className="text-xs text-red-300/70 mb-3">
             {error.includes('API') || error.includes('failed')
               ? 'Unable to connect to search service. Please check your internet connection.'
@@ -258,7 +260,7 @@ const SearchPanel = memo(function SearchPanel({ onClose, onSelectResult }) {
             className="px-4 py-2 rounded-lg text-xs font-medium text-white transition-all hover:bg-red-500/30"
             style={{ background: 'rgba(239,68,68,0.3)' }}
           >
-            Try Again
+            {t('common.retry')}
           </button>
         </div>
       )}
@@ -280,7 +282,7 @@ const SearchPanel = memo(function SearchPanel({ onClose, onSelectResult }) {
       ) : !loading && query.length >= 2 ? (
         <div className="text-center py-6">
           <div className="text-3xl mb-2">🔍</div>
-          <div className="text-xs text-white/50">No results found</div>
+          <div className="text-xs text-white/50">{t('errors.notFound')}</div>
           <div className="text-[10px] text-white/40 mt-1">Try different keywords</div>
         </div>
       ) : (
@@ -291,7 +293,7 @@ const SearchPanel = memo(function SearchPanel({ onClose, onSelectResult }) {
               <div className="flex justify-between items-center mb-2">
                 <h3 className="text-xs font-medium">Recent</h3>
                 <button onClick={handleClearRecent} className="text-[10px] text-white/40 hover:text-white/60">
-                  Clear
+                  {t('header.clear')}
                 </button>
               </div>
               {recentSearches.slice(0, 5).map((recentQuery, index) => (

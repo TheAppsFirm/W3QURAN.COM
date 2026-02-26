@@ -12,14 +12,16 @@
 
 import { memo, useState, useEffect } from 'react';
 import { Icons } from '../../common/Icons';
+import { useTranslation } from '../../../contexts/LocaleContext';
 
 // Word visibility levels for progressive memorization
+// Labels and descriptions use translation keys resolved at render time
 const HIDE_LEVELS = [
-  { level: 0, label: 'Show All', desc: 'All words visible', bars: 5 },
-  { level: 1, label: 'Hide 25%', desc: 'Every 4th word hidden', bars: 4 },
-  { level: 2, label: 'Hide 50%', desc: 'Every 2nd word hidden', bars: 3 },
-  { level: 3, label: 'Hide 75%', desc: 'Most words hidden', bars: 2 },
-  { level: 4, label: 'Hide All', desc: 'All words hidden', bars: 1 },
+  { level: 0, labelKey: 'reader.showAll', descKey: 'reader.allWordsVisible', bars: 5 },
+  { level: 1, labelKey: 'reader.hide25', descKey: 'reader.every4thWordHidden', bars: 4 },
+  { level: 2, labelKey: 'reader.hide50', descKey: 'reader.every2ndWordHidden', bars: 3 },
+  { level: 3, labelKey: 'reader.hide75', descKey: 'reader.mostWordsHidden', bars: 2 },
+  { level: 4, labelKey: 'reader.hideAll', descKey: 'reader.allWordsHidden', bars: 1 },
 ];
 
 // Repeat count options
@@ -30,6 +32,7 @@ const MemorizePanel = memo(function MemorizePanel({
   currentSettings,
   onClose,
 }) {
+  const { t } = useTranslation();
   const [hideLevel, setHideLevel] = useState(currentSettings?.hideLevel || 0);
   const [repeatCount, setRepeatCount] = useState(currentSettings?.repeatCount || 3);
 
@@ -47,8 +50,8 @@ const MemorizePanel = memo(function MemorizePanel({
             <Icons.Brain className="w-5 h-5 text-white" />
           </div>
           <div>
-            <h3 className="text-white font-bold">Memorize</h3>
-            <p className="text-white/60 text-xs">Hifz Mode</p>
+            <h3 className="text-white font-bold">{t('reader.memorize')}</h3>
+            <p className="text-white/60 text-xs">{t('reader.hifzMode')}</p>
           </div>
         </div>
         <button
@@ -63,10 +66,10 @@ const MemorizePanel = memo(function MemorizePanel({
         {/* Word Visibility Selector */}
         <div>
           <label className="text-white/80 text-xs font-medium mb-2 block">
-            Word Visibility
+            {t('reader.wordVisibility')}
           </label>
           <div className="space-y-2">
-            {HIDE_LEVELS.map(({ level, label, desc, bars }) => (
+            {HIDE_LEVELS.map(({ level, labelKey, descKey, bars }) => (
               <button
                 key={level}
                 onClick={() => setHideLevel(level)}
@@ -77,7 +80,7 @@ const MemorizePanel = memo(function MemorizePanel({
                 }`}
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-white text-sm font-medium">{label}</span>
+                  <span className="text-white text-sm font-medium">{t(labelKey)}</span>
                   <div className="flex gap-0.5">
                     {[...Array(5)].map((_, i) => (
                       <div
@@ -89,7 +92,7 @@ const MemorizePanel = memo(function MemorizePanel({
                     ))}
                   </div>
                 </div>
-                <p className="text-white/50 text-xs mt-0.5">{desc}</p>
+                <p className="text-white/50 text-xs mt-0.5">{t(descKey)}</p>
               </button>
             ))}
           </div>
@@ -98,7 +101,7 @@ const MemorizePanel = memo(function MemorizePanel({
         {/* Repeat Count Selector */}
         <div>
           <label className="text-white/80 text-xs font-medium mb-2 block">
-            Repeat Each Ayah
+            {t('reader.repeatEachAyah')}
           </label>
           <div className="flex gap-2">
             {REPEAT_OPTIONS.map((count) => (
@@ -123,11 +126,10 @@ const MemorizePanel = memo(function MemorizePanel({
             <span className="text-2xl">💡</span>
             <div>
               <p className="text-white font-medium text-sm mb-1">
-                Memorization Tip
+                {t('reader.memorizationTip')}
               </p>
               <p className="text-white/70 text-xs leading-relaxed">
-                Start with "Show All" and recite along with audio. Gradually
-                increase the hide level as you become more confident.
+                {t('reader.memorizationTipText')}
               </p>
             </div>
           </div>

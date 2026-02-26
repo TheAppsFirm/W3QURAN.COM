@@ -13,7 +13,7 @@ import React, { Suspense, lazy, useState, useEffect, useMemo, useCallback, useRe
 // Core components (needed immediately for first paint)
 import { ErrorBoundary, LoadingSpinner, BubbleModal } from './components/common';
 import { Header, FloatingMenu, StatsBar } from './components/layout';
-import { SurahBubble, LayoutSelector, ClockLayout, GridLayout, JuzzGroupLayout, AlphabetLayout, RevelationLayout, BookLayout, ListLayout, CompactLayout, HoneycombLayout, WaveLayout, LengthLayout, KidsLayout, ArtLayout } from './components/bubbles';
+import { SurahBubble } from './components/bubbles';
 import { SURAHS, MAX_AYAHS } from './data';
 import { useLocalStorage, isMobileDevice, BREAKPOINTS } from './hooks';
 import { updateSEO, getSEOForView } from './hooks/useSEO';
@@ -35,6 +35,9 @@ const lazyWithRetry = (importFn) => lazy(() =>
 
 // Clear reload flag on successful page load
 if (sessionStorage.getItem('chunk_reload')) sessionStorage.removeItem('chunk_reload');
+
+// Lazy-loaded bubble layouts (only loaded when user switches from default spiral)
+const LayoutRenderer = lazyWithRetry(() => import('./components/bubbles/LayoutRenderer'));
 
 // Lazy-loaded views (only loaded when user navigates to them)
 const SettingsView = lazyWithRetry(() => import('./components/views/SettingsView'));
@@ -1121,148 +1124,18 @@ function QuranBubbleApp() {
                 </div>
               )}
 
-              {/* Clock Layout */}
-              {surahLayout === 'clock' && (
-                <ClockLayout
-                  surahs={filtered}
-                  onSurahClick={handleSelectSurah}
-                  zoom={zoom}
-                  contentZoom={contentZoom}
-                  darkMode={darkMode}
-                />
-              )}
-
-              {/* Grid Layout */}
-              {surahLayout === 'grid' && (
-                <GridLayout
-                  surahs={filtered}
-                  onSurahClick={handleSelectSurah}
-                  zoom={zoom}
-                  contentZoom={contentZoom}
-                  darkMode={darkMode}
-                />
-              )}
-
-              {/* Juzz Group Layout */}
-              {surahLayout === 'juzz' && (
-                <JuzzGroupLayout
-                  surahs={filtered}
-                  onSurahClick={handleSelectSurah}
-                  zoom={zoom}
-                  contentZoom={contentZoom}
-                  darkMode={darkMode}
-                />
-              )}
-
-              {/* Alphabet Layout */}
-              {surahLayout === 'alphabet' && (
-                <AlphabetLayout
-                  surahs={filtered}
-                  onSurahClick={handleSelectSurah}
-                  zoom={zoom}
-                  contentZoom={contentZoom}
-                  darkMode={darkMode}
-                />
-              )}
-
-              {/* Revelation Order Layout */}
-              {surahLayout === 'revelation' && (
-                <RevelationLayout
-                  surahs={filtered}
-                  onSurahClick={handleSelectSurah}
-                  zoom={zoom}
-                  contentZoom={contentZoom}
-                  darkMode={darkMode}
-                />
-              )}
-
-              {/* Book Layout */}
-              {surahLayout === 'book' && (
-                <BookLayout
-                  surahs={filtered}
-                  onSurahClick={handleSelectSurah}
-                  zoom={zoom}
-                  contentZoom={contentZoom}
-                  darkMode={darkMode}
-                />
-              )}
-
-              {/* List Layout - Simple list view */}
-              {surahLayout === 'list' && (
-                <ListLayout
-                  surahs={filtered}
-                  onSurahClick={handleSelectSurah}
-                  zoom={zoom}
-                  contentZoom={contentZoom}
-                  darkMode={darkMode}
-                />
-              )}
-
-              {/* Compact Layout - Smaller grid */}
-              {surahLayout === 'compact' && (
-                <CompactLayout
-                  surahs={filtered}
-                  onSurahClick={handleSelectSurah}
-                  zoom={zoom}
-                  contentZoom={contentZoom}
-                  darkMode={darkMode}
-                />
-              )}
-
-              {/* Honeycomb Layout */}
-              {surahLayout === 'honeycomb' && (
-                <HoneycombLayout
-                  surahs={filtered}
-                  onSurahClick={handleSelectSurah}
-                  zoom={zoom}
-                  contentZoom={contentZoom}
-                  darkMode={darkMode}
-                />
-              )}
-
-              {/* Wave Layout */}
-              {surahLayout === 'wave' && (
-                <WaveLayout
-                  surahs={filtered}
-                  onSurahClick={handleSelectSurah}
-                  zoom={zoom}
-                  contentZoom={contentZoom}
-                  darkMode={darkMode}
-                />
-              )}
-
-              {/* Length Layout - Sorted by ayah count */}
-              {surahLayout === 'length' && (
-                <LengthLayout
-                  surahs={filtered}
-                  onSurahClick={handleSelectSurah}
-                  zoom={zoom}
-                  contentZoom={contentZoom}
-                  darkMode={darkMode}
-                />
-              )}
-
-              {/* Kids Layouts - Fun and colorful for children */}
-              {(surahLayout === 'kids-rainbow' || surahLayout === 'kids-blocks' || surahLayout === 'kids-bubbles') && (
-                <KidsLayout
-                  surahs={filtered}
-                  onSurahClick={handleSelectSurah}
-                  zoom={zoom}
-                  contentZoom={contentZoom}
-                  darkMode={darkMode}
-                  variant={surahLayout.replace('kids-', '')}
-                />
-              )}
-
-              {/* Kids Art Layout - Art studio style */}
-              {surahLayout === 'kids-art' && (
-                <ArtLayout
-                  surahs={filtered}
-                  onSurahClick={handleSelectSurah}
-                  zoom={zoom}
-                  contentZoom={contentZoom}
-                  darkMode={darkMode}
-                />
+              {/* All other layouts (lazy-loaded) */}
+              {surahLayout !== 'spiral' && (
+                <Suspense fallback={<div className="flex items-center justify-center py-20"><LoadingSpinner /></div>}>
+                  <LayoutRenderer
+                    layoutId={surahLayout}
+                    surahs={filtered}
+                    onSurahClick={handleSelectSurah}
+                    zoom={zoom}
+                    contentZoom={contentZoom}
+                    darkMode={darkMode}
+                  />
+                </Suspense>
               )}
             </div>
 

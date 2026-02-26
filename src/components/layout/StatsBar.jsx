@@ -8,6 +8,7 @@ import { createPortal } from 'react-dom';
 import { Icons } from '../common/Icons';
 import { useGamification } from '../../hooks/useGamification';
 import { useAuth } from '../../contexts/AuthContext';
+import { useTranslation } from '../../contexts/LocaleContext';
 
 // Lazy load NotificationBell
 const NotificationBell = lazy(() => import('../common/AnnouncementBanner').then(m => ({ default: m.NotificationBell })));
@@ -157,6 +158,20 @@ const StatsBar = memo(function StatsBar({
 }) {
   const gamification = useGamification();
   const { isPremium } = useAuth();
+  const { t } = useTranslation();
+  // Map layout IDs to locale keys: strip 'kids-' prefix, and handle special cases
+  const LAYOUT_KEY_MAP = {
+    'kids-rainbow': 'rainbow',
+    'kids-art': 'artStudio',
+    'kids-blocks': 'blocks',
+    'kids-bubbles': 'bubbles',
+    'length': 'byLength',
+    'alphabet': 'arabic',
+  };
+  const getLayoutLabel = (id) => {
+    const key = LAYOUT_KEY_MAP[id] || id;
+    return t(`statsBar.${key}`, LAYOUTS.find(l => l.id === id)?.label);
+  };
   const [showLayoutMenu, setShowLayoutMenu] = useState(false);
   const [showZoomMenu, setShowZoomMenu] = useState(false);
   const layoutBtnRef = useRef(null);
@@ -219,7 +234,7 @@ const StatsBar = memo(function StatsBar({
           {/* All buttons in a single unified list - ensures consistent spacing */}
           <ul className="flex items-center gap-0.5 sm:gap-3 md:gap-4 lg:gap-5 overflow-x-auto overflow-y-hidden scrollbar-hide px-2 list-none m-0 p-0" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', touchAction: 'pan-x' }}>
             {/* Donate */}
-            <li className="flex-shrink-0"><BubbleButton icon={Icons.Heart} label="Donate" color="#10B981" color2="#14B8A6" onClick={onDonate} /></li>
+            <li className="flex-shrink-0"><BubbleButton icon={Icons.Heart} label={t('statsBar.donate', 'Donate')} color="#10B981" color2="#14B8A6" onClick={onDonate} /></li>
 
             {/* Alerts */}
             <li className="flex-shrink-0"><Suspense fallback={null}><NotificationBell userTier={isPremium ? 'premium' : 'free'} /></Suspense></li>
@@ -241,7 +256,7 @@ const StatsBar = memo(function StatsBar({
                     <div className="absolute pointer-events-none" style={{ width: '18%', height: '12%', top: '15%', left: '22%', background: 'radial-gradient(ellipse, rgba(255,255,255,0.9) 0%, transparent 70%)', borderRadius: '50%' }} />
                     <div className="absolute inset-0 flex items-center justify-center"><span className="text-base sm:text-lg text-white drop-shadow-lg">{currentLayout.icon}</span></div>
                   </div>
-                  <span className="text-[9px] font-semibold text-gray-500 hidden sm:block">Layout</span>
+                  <span className="text-[9px] font-semibold text-gray-500 hidden sm:block">{t('statsBar.layout', 'Layout')}</span>
                 </button>
               </li>
             )}
@@ -263,36 +278,36 @@ const StatsBar = memo(function StatsBar({
                     <div className="absolute pointer-events-none" style={{ width: '18%', height: '12%', top: '15%', left: '22%', background: 'radial-gradient(ellipse, rgba(255,255,255,0.9) 0%, transparent 70%)', borderRadius: '50%' }} />
                     <div className="absolute inset-0 flex items-center justify-center"><Icons.ZoomIn className="w-5 h-5 sm:w-7 sm:h-7 text-white drop-shadow-lg" /></div>
                   </div>
-                  <span className="text-[9px] font-semibold text-gray-500 hidden sm:block">Zoom</span>
+                  <span className="text-[9px] font-semibold text-gray-500 hidden sm:block">{t('statsBar.zoom', 'Zoom')}</span>
                 </button>
               </li>
             )}
 
             {/* Map */}
-            {showControls && onWorldMap && (<li className="flex-shrink-0"><BubbleButton icon={Icons.Globe3D} label="Map" color="#0EA5E9" color2="#0284C7" onClick={onWorldMap} /></li>)}
+            {showControls && onWorldMap && (<li className="flex-shrink-0"><BubbleButton icon={Icons.Globe3D} label={t('statsBar.map', 'Map')} color="#0EA5E9" color2="#0284C7" onClick={onWorldMap} /></li>)}
 
             {/* Ummah */}
-            {showControls && onGlobalPulse && (<li className="flex-shrink-0"><BubbleButton icon={Icons.GlobalPulse} label="Ummah" color="#10B981" color2="#059669" onClick={onGlobalPulse} /></li>)}
+            {showControls && onGlobalPulse && (<li className="flex-shrink-0"><BubbleButton icon={Icons.GlobalPulse} label={t('statsBar.ummah', 'Ummah')} color="#10B981" color2="#059669" onClick={onGlobalPulse} /></li>)}
 
             {/* Weather */}
-            {showControls && onWeatherSync && (<li className="flex-shrink-0"><BubbleButton icon={Icons.CloudSun} label="Weather" color="#3B82F6" color2="#2563EB" onClick={onWeatherSync} /></li>)}
+            {showControls && onWeatherSync && (<li className="flex-shrink-0"><BubbleButton icon={Icons.CloudSun} label={t('statsBar.weather', 'Weather')} color="#3B82F6" color2="#2563EB" onClick={onWeatherSync} /></li>)}
 
             {/* Hajj & Umrah */}
-            {onHajjUmrah && (<li className="flex-shrink-0"><BubbleButton icon={() => <span className="text-xl sm:text-2xl">🕋</span>} label="Hajj" color="#F59E0B" color2="#D97706" onClick={onHajjUmrah} /></li>)}
+            {onHajjUmrah && (<li className="flex-shrink-0"><BubbleButton icon={() => <span className="text-xl sm:text-2xl">🕋</span>} label={t('statsBar.hajj', 'Hajj')} color="#F59E0B" color2="#D97706" onClick={onHajjUmrah} /></li>)}
 
             {/* Gamification Stats */}
             {gamification.isActive ? (
               <>
-                <li className="flex-shrink-0"><BubbleButton icon={() => <span className="text-white text-sm sm:text-lg font-black drop-shadow-lg">{gamification.level}</span>} label="Level" color={gamification.levelInfo.current.color} color2={`${gamification.levelInfo.current.color}cc`} onClick={onShowAchievements} /></li>
+                <li className="flex-shrink-0"><BubbleButton icon={() => <span className="text-white text-sm sm:text-lg font-black drop-shadow-lg">{gamification.level}</span>} label={t('statsBar.level', 'Level')} color={gamification.levelInfo.current.color} color2={`${gamification.levelInfo.current.color}cc`} onClick={onShowAchievements} /></li>
                 <li className="flex-shrink-0"><BubbleButton icon={Icons.Star} label={`${gamification.xp} XP`} color="#F59E0B" color2="#D97706" onClick={onShowAchievements} /></li>
-                <li className="flex-shrink-0"><BubbleButton icon={Icons.Fire} label={`${gamification.streak.current} Days`} color={gamification.streak.current > 0 ? '#F97316' : '#94A3B8'} color2={gamification.streak.current > 0 ? '#EA580C' : '#64748B'} onClick={onShowAchievements} /></li>
-                <li className="flex-shrink-0"><BubbleButton icon={Icons.Trophy} label={`${gamification.achievements.length} Won`} color="#A855F7" color2="#9333EA" onClick={onShowAchievements} /></li>
+                <li className="flex-shrink-0"><BubbleButton icon={Icons.Fire} label={`${gamification.streak.current} ${t('statsBar.days', 'Days')}`} color={gamification.streak.current > 0 ? '#F97316' : '#94A3B8'} color2={gamification.streak.current > 0 ? '#EA580C' : '#64748B'} onClick={onShowAchievements} /></li>
+                <li className="flex-shrink-0"><BubbleButton icon={Icons.Trophy} label={`${gamification.achievements.length} ${t('statsBar.won', 'Won')}`} color="#A855F7" color2="#9333EA" onClick={onShowAchievements} /></li>
               </>
             ) : (
               <>
                 <li className="flex-shrink-0 opacity-50"><BubbleButton icon={Icons.Star} label="XP" color="#F59E0B" color2="#D97706" onClick={() => {}} /></li>
-                <li className="flex-shrink-0 opacity-50"><BubbleButton icon={Icons.Fire} label="Streak" color="#94A3B8" color2="#64748B" onClick={() => {}} /></li>
-                <li className="flex-shrink-0 opacity-50"><BubbleButton icon={Icons.Trophy} label="Awards" color="#A855F7" color2="#9333EA" onClick={() => {}} /></li>
+                <li className="flex-shrink-0 opacity-50"><BubbleButton icon={Icons.Fire} label={t('statsBar.streak', 'Streak')} color="#94A3B8" color2="#64748B" onClick={() => {}} /></li>
+                <li className="flex-shrink-0 opacity-50"><BubbleButton icon={Icons.Trophy} label={t('statsBar.awards', 'Awards')} color="#A855F7" color2="#9333EA" onClick={() => {}} /></li>
               </>
             )}
           </ul>
@@ -359,7 +374,7 @@ const StatsBar = memo(function StatsBar({
           >
             {/* Category: Standard */}
             <div className="text-white/60 text-[10px] font-bold uppercase tracking-wider px-3 py-2 flex items-center gap-2">
-              <span>📋</span> Standard
+              <span>📋</span> {t('statsBar.standard', 'Standard')}
             </div>
             {LAYOUTS.filter(l => l.category === 'standard').map((layout) => (
               <button
@@ -372,14 +387,14 @@ const StatsBar = memo(function StatsBar({
                 }}
               >
                 <span className="text-lg w-7 text-center">{layout.icon}</span>
-                <span className="font-medium text-sm flex-1 text-left">{layout.label}</span>
+                <span className="font-medium text-sm flex-1 text-left">{getLayoutLabel(layout.id)}</span>
                 {surahLayout === layout.id && <Icons.Check className="w-4 h-4 text-green-300" />}
               </button>
             ))}
 
             {/* Category: Kids - moved up for easy access */}
             <div className="text-white/60 text-[10px] font-bold uppercase tracking-wider px-3 py-2 mt-2 flex items-center gap-2 border-t border-white/10 pt-3">
-              <span>👶</span> Kids Mode
+              <span>👶</span> {t('statsBar.kidsMode', 'Kids Mode')}
             </div>
             {LAYOUTS.filter(l => l.category === 'kids').map((layout) => (
               <button
@@ -392,14 +407,14 @@ const StatsBar = memo(function StatsBar({
                 }}
               >
                 <span className="text-lg w-7 text-center">{layout.icon}</span>
-                <span className="font-medium text-sm flex-1 text-left">{layout.label}</span>
+                <span className="font-medium text-sm flex-1 text-left">{getLayoutLabel(layout.id)}</span>
                 {surahLayout === layout.id && <Icons.Check className="w-4 h-4 text-green-300" />}
               </button>
             ))}
 
             {/* Category: Creative */}
             <div className="text-white/60 text-[10px] font-bold uppercase tracking-wider px-3 py-2 mt-2 flex items-center gap-2 border-t border-white/10 pt-3">
-              <span>✨</span> Creative
+              <span>✨</span> {t('statsBar.creative', 'Creative')}
             </div>
             {LAYOUTS.filter(l => l.category === 'creative').map((layout) => (
               <button
@@ -412,14 +427,14 @@ const StatsBar = memo(function StatsBar({
                 }}
               >
                 <span className="text-lg w-7 text-center">{layout.icon}</span>
-                <span className="font-medium text-sm flex-1 text-left">{layout.label}</span>
+                <span className="font-medium text-sm flex-1 text-left">{getLayoutLabel(layout.id)}</span>
                 {surahLayout === layout.id && <Icons.Check className="w-4 h-4 text-green-300" />}
               </button>
             ))}
 
             {/* Category: Organize */}
             <div className="text-white/60 text-[10px] font-bold uppercase tracking-wider px-3 py-2 mt-2 flex items-center gap-2 border-t border-white/10 pt-3">
-              <span>📁</span> Organize
+              <span>📁</span> {t('statsBar.organize', 'Organize')}
             </div>
             {LAYOUTS.filter(l => l.category === 'organize').map((layout) => (
               <button
@@ -432,7 +447,7 @@ const StatsBar = memo(function StatsBar({
                 }}
               >
                 <span className="text-lg w-7 text-center">{layout.icon}</span>
-                <span className="font-medium text-sm flex-1 text-left">{layout.label}</span>
+                <span className="font-medium text-sm flex-1 text-left">{getLayoutLabel(layout.id)}</span>
                 {surahLayout === layout.id && <Icons.Check className="w-4 h-4 text-green-300" />}
               </button>
             ))}
@@ -465,7 +480,7 @@ const StatsBar = memo(function StatsBar({
             {/* Bubble Zoom */}
             <div className="mb-4">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-xs font-semibold text-white/80 uppercase">Bubble Size</span>
+                <span className="text-xs font-semibold text-white/80 uppercase">{t('statsBar.bubbleSize', 'Bubble Size')}</span>
                 <span className="text-xs font-bold text-white">{Math.round(zoom * 100)}%</span>
               </div>
               <div className="flex items-center gap-2">
@@ -489,7 +504,7 @@ const StatsBar = memo(function StatsBar({
             {/* Content Zoom */}
             <div>
               <div className="flex items-center justify-between mb-2">
-                <span className="text-xs font-semibold text-white/80 uppercase">Text Size</span>
+                <span className="text-xs font-semibold text-white/80 uppercase">{t('statsBar.textSize', 'Text Size')}</span>
                 <span className="text-xs font-bold text-white">{Math.round(contentZoom * 100)}%</span>
               </div>
               <div className="flex items-center gap-2">

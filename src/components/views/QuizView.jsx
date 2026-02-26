@@ -7,8 +7,10 @@ import { useState } from 'react';
 import { Icons } from '../common/Icons';
 import { QUIZ_QUESTIONS } from '../../data';
 import { useGamification } from '../../hooks/useGamification';
+import { useTranslation } from '../../contexts/LocaleContext';
 
 function QuizView({ darkMode, onEarnPoints }) {
+  const { t, isRTL } = useTranslation();
   const gamification = useGamification();
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
@@ -59,7 +61,7 @@ function QuizView({ darkMode, onEarnPoints }) {
       <div className={`h-full flex flex-col items-center justify-center p-6 ${darkMode ? 'text-white' : ''}`}>
         <div className={`rounded-3xl p-8 text-center max-w-md w-full ${darkMode ? 'bg-gray-800' : 'bg-white'} shadow-2xl`}>
           <Icons.Award className="w-20 h-20 mx-auto mb-4 text-amber-500" />
-          <h2 className={`text-3xl font-bold mb-2 ${darkMode ? 'text-white' : 'text-gray-800'}`}>Quiz Complete!</h2>
+          <h2 className={`text-3xl font-bold mb-2 ${darkMode ? 'text-white' : 'text-gray-800'}`}>{t('quiz.title')}!</h2>
           <p
             className={`text-6xl font-bold my-6 ${
               percentage >= 70 ? 'text-emerald-500' : percentage >= 50 ? 'text-amber-500' : 'text-red-500'
@@ -74,7 +76,7 @@ function QuizView({ darkMode, onEarnPoints }) {
             onClick={restartQuiz}
             className="mt-6 px-8 py-3 bg-gradient-to-r from-emerald-500 to-teal-500 text-white rounded-2xl font-bold"
           >
-            Try Again
+            {t('quiz.tryAgain')}
           </button>
         </div>
       </div>
@@ -95,7 +97,7 @@ function QuizView({ darkMode, onEarnPoints }) {
             <Icons.ChevronLeft className={`w-6 h-6 ${darkMode ? 'text-white' : 'text-gray-600'}`} />
           </button>
           <h2 className={`text-xl font-bold ${darkMode ? 'text-white' : 'text-gray-800'}`}>
-            Quran Quiz
+            {t('quiz.title')}
           </h2>
         </div>
       </div>
@@ -130,9 +132,9 @@ function QuizView({ darkMode, onEarnPoints }) {
       <div className="max-w-lg mx-auto w-full mb-6">
         <div className="flex justify-between text-sm mb-2">
           <span className={darkMode ? 'text-gray-400' : 'text-gray-500'}>
-            Question {currentQuestion + 1} of {filteredQuestions.length}
+            {t('quiz.question')} {currentQuestion + 1} {t('quiz.of')} {filteredQuestions.length}
           </span>
-          <span className="text-emerald-500 font-bold">Score: {score}</span>
+          <span className="text-emerald-500 font-bold">{t('quiz.score')}: {score}</span>
         </div>
         <div className={`h-2 rounded-full ${darkMode ? 'bg-gray-700' : 'bg-gray-200'}`}>
           <div
@@ -191,7 +193,7 @@ function QuizView({ darkMode, onEarnPoints }) {
               onClick={nextQuestion}
               className="w-full mt-6 py-4 bg-gradient-to-r from-violet-500 to-purple-500 text-white rounded-2xl font-bold"
             >
-              {currentQuestion < filteredQuestions.length - 1 ? 'Next Question' : 'See Results'}
+              {currentQuestion < filteredQuestions.length - 1 ? t('quiz.nextQuestion') : t('quiz.viewResults')}
             </button>
           )}
         </div>

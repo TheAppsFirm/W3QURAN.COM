@@ -6,6 +6,7 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { Icons } from '../common/Icons';
 import { useLocalStorage } from '../../hooks';
+import { useTranslation } from '../../contexts/LocaleContext';
 
 // Calculation method options
 const CALCULATION_METHODS = [
@@ -29,6 +30,7 @@ const formatTime = (time24, use12Hour) => {
 };
 
 function PrayerTimesView({ darkMode }) {
+  const { t, isRTL } = useTranslation();
   // Location state
   const [location, setLocation] = useLocalStorage('prayer_location', null);
   const [locationName, setLocationName] = useLocalStorage('prayer_location_name', 'Unknown');
@@ -306,16 +308,26 @@ function PrayerTimesView({ darkMode }) {
   // Prayer data with icons
   const prayers = useMemo(() => {
     if (!prayerData?.timings) return [];
-    const t = prayerData.timings;
+    const timings = prayerData.timings;
     return [
-      { name: 'Fajr', arabic: 'الفجر', time: formatTime(t.Fajr, use12HourFormat), icon: '🌅', color: '#818CF8' },
-      { name: 'Sunrise', arabic: 'الشروق', time: formatTime(t.Sunrise, use12HourFormat), icon: '☀️', color: '#FBBF24' },
-      { name: 'Dhuhr', arabic: 'الظهر', time: formatTime(t.Dhuhr, use12HourFormat), icon: '🌞', color: '#F59E0B' },
-      { name: 'Asr', arabic: 'العصر', time: formatTime(t.Asr, use12HourFormat), icon: '🌤️', color: '#FB923C' },
-      { name: 'Maghrib', arabic: 'المغرب', time: formatTime(t.Maghrib, use12HourFormat), icon: '🌅', color: '#F472B6' },
-      { name: 'Isha', arabic: 'العشاء', time: formatTime(t.Isha, use12HourFormat), icon: '🌙', color: '#8B5CF6' },
+      { name: 'Fajr', displayName: t('prayer.fajr'), arabic: 'الفجر', time: formatTime(timings.Fajr, use12HourFormat), icon: '🌅', color: '#818CF8' },
+      { name: 'Sunrise', displayName: t('prayer.sunrise'), arabic: 'الشروق', time: formatTime(timings.Sunrise, use12HourFormat), icon: '☀️', color: '#FBBF24' },
+      { name: 'Dhuhr', displayName: t('prayer.dhuhr'), arabic: 'الظهر', time: formatTime(timings.Dhuhr, use12HourFormat), icon: '🌞', color: '#F59E0B' },
+      { name: 'Asr', displayName: t('prayer.asr'), arabic: 'العصر', time: formatTime(timings.Asr, use12HourFormat), icon: '🌤️', color: '#FB923C' },
+      { name: 'Maghrib', displayName: t('prayer.maghrib'), arabic: 'المغرب', time: formatTime(timings.Maghrib, use12HourFormat), icon: '🌅', color: '#F472B6' },
+      { name: 'Isha', displayName: t('prayer.isha'), arabic: 'العشاء', time: formatTime(timings.Isha, use12HourFormat), icon: '🌙', color: '#8B5CF6' },
     ];
-  }, [prayerData, use12HourFormat]);
+  }, [prayerData, use12HourFormat, t]);
+
+  // Map API prayer names to translated names
+  const prayerNameMap = {
+    'Fajr': t('prayer.fajr'),
+    'Sunrise': t('prayer.sunrise'),
+    'Dhuhr': t('prayer.dhuhr'),
+    'Asr': t('prayer.asr'),
+    'Maghrib': t('prayer.maghrib'),
+    'Isha': t('prayer.isha'),
+  };
 
   const isRamadan = prayerData?.ramadan?.isRamadan;
   const hijriDate = prayerData?.date?.hijri;
@@ -349,7 +361,7 @@ function PrayerTimesView({ darkMode }) {
           </button>
 
           <h2 className={`text-2xl font-bold text-center ${darkMode ? 'text-white' : 'text-gray-800'}`}>
-            🕌 Prayer Times
+            🕌 {t('prayer.title')}
           </h2>
         </div>
 
@@ -371,11 +383,11 @@ function PrayerTimesView({ darkMode }) {
             <p className="font-bold text-lg">🌙 Ramadan Mubarak! 🌙</p>
             <div className="flex justify-center gap-6 mt-2 text-sm">
               <div>
-                <span className="opacity-80">Suhoor ends:</span>{' '}
+                <span className="opacity-80">{t('prayerExtended.suhoor')}:</span>{' '}
                 <span className="font-bold">{suhoorTime}</span>
               </div>
               <div>
-                <span className="opacity-80">Iftar:</span>{' '}
+                <span className="opacity-80">{t('prayerExtended.iftar')}:</span>{' '}
                 <span className="font-bold">{iftarTime}</span>
               </div>
             </div>
@@ -416,7 +428,7 @@ function PrayerTimesView({ darkMode }) {
               ) : (
                 <Icons.MapPin className="w-5 h-5" />
               )}
-              {isLoadingLocation ? 'Getting location...' : 'Enable Location for Prayer Times'}
+              {isLoadingLocation ? t('common.loading') : t('prayer.detectLocation')}
             </button>
           )}
           {locationError && (
@@ -459,7 +471,7 @@ function PrayerTimesView({ darkMode }) {
             {/* Calculation Method */}
             <div>
               <h3 className={`font-bold mb-2 ${darkMode ? 'text-white' : 'text-gray-800'}`}>
-                Calculation Method
+                {t('prayerExtended.calculationMethod')}
               </h3>
               <select
                 value={calculationMethod}
@@ -479,9 +491,9 @@ function PrayerTimesView({ darkMode }) {
         {/* Next Prayer Countdown */}
         {nextPrayer && (
           <div className={`p-4 rounded-2xl ${darkMode ? 'bg-gray-800' : 'bg-white'} shadow-lg text-center`}>
-            <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>Next Prayer</p>
+            <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>{t('prayer.nextPrayer')}</p>
             <p className={`text-2xl font-bold ${darkMode ? 'text-white' : 'text-gray-800'}`}>
-              {nextPrayer.name} at {nextPrayerTime}
+              {prayerNameMap[nextPrayer.name] || nextPrayer.name} at {nextPrayerTime}
             </p>
             <p className="text-emerald-500 font-semibold text-lg">
               ⏱️ {nextPrayer.countdown}
@@ -521,8 +533,8 @@ function PrayerTimesView({ darkMode }) {
                     </div>
                     <div>
                       <div className={`font-bold ${isNext ? 'text-white' : darkMode ? 'text-white' : 'text-gray-800'}`}>
-                        {prayer.name}
-                        {isNext && <span className="ml-2 text-xs bg-white/20 px-2 py-0.5 rounded-full">Next</span>}
+                        {prayer.displayName}
+                        {isNext && <span className="ml-2 text-xs bg-white/20 px-2 py-0.5 rounded-full">{t('prayer.nextPrayer')}</span>}
                       </div>
                       <div className={`text-sm ${isNext ? 'text-white/80' : darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
                         {prayer.arabic}
@@ -551,7 +563,7 @@ function PrayerTimesView({ darkMode }) {
         {/* Qibla Direction — Compass with Avatar + Kaaba */}
         <div className={`rounded-3xl p-6 ${darkMode ? 'bg-gray-800' : 'bg-white'} shadow-xl`}>
           <h3 className={`text-xl font-bold text-center mb-5 ${darkMode ? 'text-white' : 'text-gray-800'}`}>
-            🧭 Qibla Direction
+            🧭 {t('prayerExtended.qiblaDirection')}
           </h3>
 
           {qiblaData ? (

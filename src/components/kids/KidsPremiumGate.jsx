@@ -6,105 +6,106 @@
 
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
+import { useTranslation } from '../../contexts/LocaleContext';
 import { Icons } from '../common/Icons';
 
-// Premium features list
-const PREMIUM_FEATURES = [
-  { emoji: '🌸', text: 'Garden Theme Journey' },
-  { emoji: '🐪', text: 'Desert Camel Caravan' },
-  { emoji: '📖', text: 'All Surah Stations (6+)' },
-  { emoji: '🏍️', text: "Prophet's Life Journey" },
-  { emoji: '🕋', text: '3D Hajj Pilgrimage Journey' },
-  { emoji: '🎵', text: 'All Audio Features' },
-  { emoji: '⭐', text: 'Ad-free Experience' },
+// Premium features list - keys map to premium.* translations
+const PREMIUM_FEATURE_KEYS = [
+  { emoji: '🌸', key: 'premium.gardenTheme' },
+  { emoji: '🐪', key: 'premium.desertCamelCaravan' },
+  { emoji: '📖', key: 'premium.allSurahStations' },
+  { emoji: '🏍️', key: 'premium.prophetLifeJourney' },
+  { emoji: '🕋', key: 'premium.hajjPilgrimage' },
+  { emoji: '🎵', key: 'premium.allAudioFeatures' },
+  { emoji: '⭐', key: 'premium.adFreeExperience' },
 ];
 
 // Subscription tiers linking to main app premium
 const SUBSCRIPTION_OPTIONS = [
   {
     id: 'premium_monthly',
-    name: 'Monthly',
+    nameKey: 'premium.monthly',
     price: '$4.99',
-    period: '/month',
+    periodKey: 'premium.perMonth',
     popular: false,
   },
   {
     id: 'premium_yearly',
-    name: 'Yearly',
+    nameKey: 'premium.yearly',
     price: '$29.99',
-    period: '/year',
+    periodKey: 'premium.perYear',
     popular: true,
-    savings: 'Save 50%',
+    savingsKey: 'premium.save50',
   },
   {
     id: 'lifetime',
-    name: 'Lifetime',
+    nameKey: 'premium.lifetime',
     price: '$49.99',
-    period: 'one-time',
+    periodKey: 'premium.oneTime',
     popular: false,
   },
 ];
 
 // Payment Result Popup Component
-const PaymentResultPopup = ({ success, canceled, onClose, onRetry }) => {
+const PaymentResultPopup = ({ success, canceled, onClose, onRetry, t }) => {
   return (
     <div className="fixed inset-0 z-[10001] flex items-center justify-center bg-black/80 backdrop-blur-sm">
       <div className="bg-white rounded-3xl p-8 max-w-sm mx-4 text-center shadow-2xl">
         {success ? (
           <>
             <div className="text-7xl mb-4 animate-bounce">🎉</div>
-            <h2 className="text-2xl font-bold text-green-600 mb-2">Payment Successful!</h2>
+            <h2 className="text-2xl font-bold text-green-600 mb-2">{t('premium.paymentSuccessful')}</h2>
             <p className="text-gray-600 mb-6">
-              Welcome to Quran Kids Premium! All features are now unlocked.
+              {t('premium.welcomePremium')}
             </p>
             <button
               onClick={onClose}
               className="w-full py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white font-bold rounded-xl hover:shadow-lg transition-all"
             >
-              Start Learning! 🚀
+              {t('premium.startLearning')} 🚀
             </button>
           </>
         ) : canceled ? (
           <>
             <div className="text-7xl mb-4">🤔</div>
-            <h2 className="text-2xl font-bold text-amber-600 mb-2">Payment Canceled</h2>
+            <h2 className="text-2xl font-bold text-amber-600 mb-2">{t('premium.paymentCanceled')}</h2>
             <p className="text-gray-600 mb-6">
-              No worries! You can upgrade anytime to unlock all features.
+              {t('premium.cancelMessage')}
             </p>
             <div className="space-y-2">
               <button
                 onClick={onRetry}
                 className="w-full py-3 bg-gradient-to-r from-amber-400 to-orange-500 text-white font-bold rounded-xl hover:shadow-lg transition-all"
               >
-                Try Again
+                {t('premium.tryAgain')}
               </button>
               <button
                 onClick={onClose}
                 className="w-full py-2 text-gray-500 hover:text-gray-700 transition-colors"
               >
-                Continue with Free
+                {t('premium.continueFreeFeatures')}
               </button>
             </div>
           </>
         ) : (
           <>
             <div className="text-7xl mb-4">😔</div>
-            <h2 className="text-2xl font-bold text-red-600 mb-2">Payment Failed</h2>
+            <h2 className="text-2xl font-bold text-red-600 mb-2">{t('premium.paymentFailed')}</h2>
             <p className="text-gray-600 mb-6">
-              Something went wrong with your payment. Please try again.
+              {t('premium.failedMessage')}
             </p>
             <div className="space-y-2">
               <button
                 onClick={onRetry}
                 className="w-full py-3 bg-gradient-to-r from-amber-400 to-orange-500 text-white font-bold rounded-xl hover:shadow-lg transition-all"
               >
-                Try Again
+                {t('premium.tryAgain')}
               </button>
               <button
                 onClick={onClose}
                 className="w-full py-2 text-gray-500 hover:text-gray-700 transition-colors"
               >
-                Cancel
+                {t('premium.cancel')}
               </button>
             </div>
           </>
@@ -114,8 +115,9 @@ const PaymentResultPopup = ({ success, canceled, onClose, onRetry }) => {
   );
 };
 
-const KidsPremiumGate = ({ onClose, feature = 'premium', lockedTheme = null, returnPath = '/', source = 'kids', language = 'en' }) => {
+const KidsPremiumGate = ({ onClose, feature = 'premium', lockedTheme = null, returnPath = '/', source = 'kids', language: languageProp = 'en' }) => {
   const { isAuthenticated, login, refreshUser } = useAuth();
+  const { t, isRTL: globalIsRTL, language: globalLanguage } = useTranslation();
   const [isLoading, setIsLoading] = useState(false);
   const [loadingPlan, setLoadingPlan] = useState(null);
   const [paymentResult, setPaymentResult] = useState(null); // 'success' | 'failed' | null
@@ -184,61 +186,42 @@ const KidsPremiumGate = ({ onClose, feature = 'premium', lockedTheme = null, ret
   const getFeatureMessage = () => {
     if (lockedTheme === 'garden') {
       return {
-        title: 'Garden Journey is Premium',
+        title: t('premium.gardenJourneyPremium'),
         emoji: '🌸',
-        description: 'Unlock the beautiful flower garden adventure!',
+        description: t('premium.unlockGardenDesc'),
       };
     }
     if (lockedTheme === 'seert' || lockedTheme === 'desert') {
       return {
-        title: 'Desert Caravan is Premium',
+        title: t('premium.desertCaravanPremium'),
         emoji: '🐪',
-        description: 'Unlock the peaceful camel desert journey!',
+        description: t('premium.unlockDesertDesc'),
       };
     }
     if (lockedTheme === 'hajj-umrah') {
       return {
-        title: {
-          en: 'Hajj Journey is Premium',
-          ur: 'حج کا سفر پریمیم ہے',
-          ar: 'رحلة الحج مدفوعة',
-        }[language] || 'Hajj Journey is Premium',
+        title: t('premium.hajjJourneyPremium'),
         emoji: '🕋',
-        description: {
-          en: 'Unlock the interactive 3D Hajj pilgrimage experience!',
-          ur: 'تھری ڈی حج کا انٹرایکٹو تجربہ حاصل کریں!',
-          ar: 'افتح تجربة الحج التفاعلية ثلاثية الأبعاد!',
-        }[language] || 'Unlock the interactive 3D Hajj pilgrimage experience!',
+        description: t('premium.unlockHajjDesc'),
       };
     }
     if (feature === 'station_limit') {
       return {
-        title: 'More Stations Available!',
+        title: t('kids.moreStationsAvailable'),
         emoji: '🚉',
-        description: 'Upgrade to explore all stations beyond station 5!',
+        description: t('kids.moreStationsDesc'),
       };
     }
     return {
-      title: 'Premium Feature',
+      title: t('kids.premiumFeature'),
       emoji: '⭐',
-      description: 'Unlock all Quran Kids features!',
+      description: t('kids.premiumFeatureDesc'),
     };
   };
 
   const featureInfo = getFeatureMessage();
 
-  // Localized UI strings (used when language is passed, e.g. from Hajj flow)
-  const t = {
-    premium: { en: 'PREMIUM', ur: 'پریمیم', ar: 'مدفوع' }[language] || 'PREMIUM',
-    whatYouGet: { en: 'What you get with Premium:', ur: 'پریمیم میں آپ کو کیا ملتا ہے:', ar: 'ما تحصل عليه مع المدفوع:' }[language] || 'What you get with Premium:',
-    signIn: { en: 'Sign in to upgrade to Premium', ur: 'پریمیم میں اپ گریڈ کے لیے سائن ان کریں', ar: 'سجّل الدخول للترقية إلى المدفوع' }[language] || 'Sign in to upgrade to Premium',
-    signInGoogle: { en: 'Sign in with Google', ur: 'گوگل سے سائن ان کریں', ar: 'تسجيل الدخول بحساب جوجل' }[language] || 'Sign in with Google',
-    continueFree: { en: 'Continue with free features', ur: 'مفت خصوصیات جاری رکھیں', ar: 'متابعة بالميزات المجانية' }[language] || 'Continue with free features',
-    freeReminder: { en: 'Umrah 3D journey is free for everyone', ur: 'عمرہ تھری ڈی سفر سب کے لیے مفت ہے', ar: 'رحلة العمرة ثلاثية الأبعاد مجانية للجميع' }[language] || 'Umrah 3D journey is free for everyone',
-    processing: { en: 'Processing...', ur: 'جاری ہے...', ar: 'جارٍ المعالجة...' }[language] || 'Processing...',
-    mostPopular: { en: 'Most Popular', ur: 'سب سے مقبول', ar: 'الأكثر شيوعاً' }[language] || 'Most Popular',
-  };
-  const isRTL = language === 'ar' || language === 'ur';
+  const isRTL = globalIsRTL;
 
   // Show payment result popup if needed
   if (paymentResult) {
@@ -248,6 +231,7 @@ const KidsPremiumGate = ({ onClose, feature = 'premium', lockedTheme = null, ret
         canceled={paymentResult === 'canceled'}
         onClose={handleResultClose}
         onRetry={() => setPaymentResult(null)}
+        t={t}
       />
     );
   }
@@ -279,7 +263,7 @@ const KidsPremiumGate = ({ onClose, feature = 'premium', lockedTheme = null, ret
         {/* Premium badge */}
         <div className="flex justify-center mb-2 pt-6">
           <div className="px-4 py-1 bg-gradient-to-r from-amber-400 to-orange-500 rounded-full">
-            <span className="text-white font-bold text-sm">{t.premium}</span>
+            <span className="text-white font-bold text-sm">{t('premium.title')}</span>
           </div>
         </div>
 
@@ -302,12 +286,12 @@ const KidsPremiumGate = ({ onClose, feature = 'premium', lockedTheme = null, ret
           <h3
             className="text-white/90 font-semibold mb-3 text-sm"
             style={{ fontFamily: isRTL ? "'Noto Nastaliq Urdu', serif" : 'inherit' }}
-          >{t.whatYouGet}</h3>
+          >{t('premium.whatYouGet')}</h3>
           <div className="grid grid-cols-2 gap-2">
-            {PREMIUM_FEATURES.map((feat, i) => (
+            {PREMIUM_FEATURE_KEYS.map((feat, i) => (
               <div key={i} className="flex items-center gap-2 text-white/80 text-sm">
                 <span>{feat.emoji}</span>
-                <span>{feat.text}</span>
+                <span>{t(feat.key)}</span>
               </div>
             ))}
           </div>
@@ -333,23 +317,23 @@ const KidsPremiumGate = ({ onClose, feature = 'premium', lockedTheme = null, ret
                 {loadingPlan === option.id ? (
                   <div className="flex items-center justify-center gap-2">
                     <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                    <span>{t.processing}</span>
+                    <span>{t('premium.processing')}</span>
                   </div>
                 ) : (
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <span className="font-bold">{option.name}</span>
+                      <span className="font-bold">{t(option.nameKey)}</span>
                       {option.popular && (
                         <span className="px-2 py-0.5 bg-white/20 rounded-full text-xs">
-                          {t.mostPopular}
+                          {t('premium.mostPopular')}
                         </span>
                       )}
                     </div>
                     <div className="text-right">
                       <span className="font-bold text-lg">{option.price}</span>
-                      <span className="text-sm opacity-80">{option.period}</span>
-                      {option.savings && (
-                        <div className="text-xs text-yellow-300">{option.savings}</div>
+                      <span className="text-sm opacity-80">{t(option.periodKey)}</span>
+                      {option.savingsKey && (
+                        <div className="text-xs text-yellow-300">{t(option.savingsKey)}</div>
                       )}
                     </div>
                   </div>
@@ -363,7 +347,7 @@ const KidsPremiumGate = ({ onClose, feature = 'premium', lockedTheme = null, ret
               className="text-white/70 text-center text-sm mb-3"
               style={{ fontFamily: isRTL ? "'Noto Nastaliq Urdu', serif" : 'inherit' }}
             >
-              {t.signIn}
+              {t('premium.signInToUpgrade')}
             </p>
             <button
               onClick={login}
@@ -387,7 +371,7 @@ const KidsPremiumGate = ({ onClose, feature = 'premium', lockedTheme = null, ret
                   d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
                 />
               </svg>
-              <span>{t.signInGoogle}</span>
+              <span>{t('premium.signInWithGoogle')}</span>
             </button>
           </div>
         )}
@@ -400,13 +384,13 @@ const KidsPremiumGate = ({ onClose, feature = 'premium', lockedTheme = null, ret
             className="text-white/60 text-sm hover:text-white/80 transition-colors disabled:opacity-50"
             style={{ fontFamily: isRTL ? "'Noto Nastaliq Urdu', serif" : 'inherit' }}
           >
-            {t.continueFree}
+            {t('premium.continueFree')}
           </button>
           <p
             className="text-white/40 text-xs mt-1"
             style={{ fontFamily: isRTL ? "'Noto Nastaliq Urdu', serif" : 'inherit' }}
           >
-            {lockedTheme === 'hajj-umrah' ? t.freeReminder : 'Train theme + Food & Drink duas free'}
+            {lockedTheme === 'hajj-umrah' ? t('premium.umrahFreeReminder') : t('premium.trainFreeReminder')}
           </p>
         </div>
 

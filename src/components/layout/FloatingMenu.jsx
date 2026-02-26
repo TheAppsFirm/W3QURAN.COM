@@ -6,6 +6,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Icons } from '../common/Icons';
 import { useIsMobile } from '../../hooks';
+import { useTranslation } from '../../contexts/LocaleContext';
 
 // Bubble Menu Item Component
 const BubbleMenuItem = ({ item, active, onClick, delay = 0, darkMode }) => {
@@ -127,6 +128,7 @@ const BubbleMenuItem = ({ item, active, onClick, delay = 0, darkMode }) => {
 function FloatingMenu({ view, setView, darkMode, onDonate, onMindMap, onMood, onVideoSync, onBabyNames, onTalkToQuran, onProgress, onOpenKidsMode, onAIGuide, onSoundHealing, onSearch, onHifz, onOffline, onFAQ }) {
   const [showMore, setShowMore] = useState(false);
   const menuRef = useRef(null);
+  const { t } = useTranslation();
 
   // Close menu when clicking outside
   useEffect(() => {
@@ -142,34 +144,34 @@ function FloatingMenu({ view, setView, darkMode, onDonate, onMindMap, onMood, on
   }, [showMore]);
 
   const mainItems = [
-    { id: 'surahs', label: 'Quran', icon: Icons.Book, gradient: ['#10b981', '#059669'] },
-    { id: 'kids', label: 'Kids', icon: Icons.Gamepad, isKids: true, gradient: ['#a855f7', '#7c3aed'] },
-    { id: 'talk', label: 'Talk', icon: Icons.Mic, isTalk: true, gradient: ['#6366f1', '#4f46e5'] },
-    { id: 'more', label: 'More', icon: Icons.Grid, isMore: true, gradient: ['#f59e0b', '#d97706'] },
+    { id: 'surahs', label: t('floatingMenu.quran'), icon: Icons.Book, gradient: ['#10b981', '#059669'] },
+    { id: 'kids', label: t('floatingMenu.kids'), icon: Icons.Gamepad, isKids: true, gradient: ['#a855f7', '#7c3aed'] },
+    { id: 'talk', label: t('floatingMenu.talk'), icon: Icons.Mic, isTalk: true, gradient: ['#6366f1', '#4f46e5'] },
+    { id: 'more', label: t('floatingMenu.more'), icon: Icons.Grid, isMore: true, gradient: ['#f59e0b', '#d97706'] },
   ];
 
   // All features available to everyone
   const moreItems = [
     // Innovative features - Top row
-    { id: 'mindmap', label: 'Explorer', icon: Icons.Search, gradient: ['#A855F7', '#7C3AED'], isSpecial: true },
-    { id: 'babynames', label: 'Names', icon: Icons.Baby, gradient: ['#F59E0B', '#EA580C'], isSpecial: true },
-    { id: 'mood', label: 'Mood', icon: Icons.Activity, gradient: ['#06B6D4', '#0891B2'], isSpecial: true },
-    { id: 'soundhealing', label: 'Healing', icon: Icons.Music, gradient: ['#EC4899', '#DB2777'], isSpecial: true },
+    { id: 'mindmap', label: t('floatingMenu.explorer'), icon: Icons.Search, gradient: ['#A855F7', '#7C3AED'], isSpecial: true },
+    { id: 'babynames', label: t('floatingMenu.names'), icon: Icons.Baby, gradient: ['#F59E0B', '#EA580C'], isSpecial: true },
+    { id: 'mood', label: t('floatingMenu.mood'), icon: Icons.Activity, gradient: ['#06B6D4', '#0891B2'], isSpecial: true },
+    { id: 'soundhealing', label: t('floatingMenu.healing'), icon: Icons.Music, gradient: ['#EC4899', '#DB2777'], isSpecial: true },
     // Row 1: Tools (moved from sidebar)
-    { id: 'search', label: 'Search', icon: Icons.Search, gradient: ['#f59e0b', '#d97706'] },
-    { id: 'progress', label: 'Progress', icon: Icons.BarChart, gradient: ['#10b981', '#059669'] },
-    { id: 'hifz', label: 'Memorize', icon: Icons.Brain, gradient: ['#8b5cf6', '#6366f1'] },
-    { id: 'offline', label: 'Offline', icon: Icons.Download, gradient: ['#3b82f6', '#2563eb'] },
+    { id: 'search', label: t('floatingMenu.search'), icon: Icons.Search, gradient: ['#f59e0b', '#d97706'] },
+    { id: 'progress', label: t('floatingMenu.progress'), icon: Icons.BarChart, gradient: ['#10b981', '#059669'] },
+    { id: 'hifz', label: t('floatingMenu.memorize'), icon: Icons.Brain, gradient: ['#8b5cf6', '#6366f1'] },
+    { id: 'offline', label: t('floatingMenu.offline'), icon: Icons.Download, gradient: ['#3b82f6', '#2563eb'] },
     // Row 2: Spiritual content
-    { id: 'faq', label: 'FAQ', icon: Icons.HelpCircle, gradient: ['#06B6D4', '#0891B2'] },
-    { id: 'names', label: '99 Names', icon: Icons.Sparkles, gradient: ['#8b5cf6', '#a855f7'] },
-    { id: 'quiz', label: 'Quiz', icon: Icons.HelpCircle, gradient: ['#ec4899', '#f43f5e'] },
-    { id: 'listen', label: 'Listen', icon: Icons.Headphones, gradient: ['#22c55e', '#10b981'] },
+    { id: 'faq', label: t('floatingMenu.faq'), icon: Icons.HelpCircle, gradient: ['#06B6D4', '#0891B2'] },
+    { id: 'names', label: t('floatingMenu.namesOfAllah'), icon: Icons.Sparkles, gradient: ['#8b5cf6', '#a855f7'] },
+    { id: 'quiz', label: t('floatingMenu.quiz'), icon: Icons.HelpCircle, gradient: ['#ec4899', '#f43f5e'] },
+    { id: 'listen', label: t('floatingMenu.listen'), icon: Icons.Headphones, gradient: ['#22c55e', '#10b981'] },
     // Row 3: Engagement & settings
-    { id: 'settings', label: 'Settings', icon: Icons.Settings, gradient: ['#6366f1', '#8b5cf6'] },
-    { id: 'donate', label: 'Donate', icon: Icons.Heart, gradient: ['#ef4444', '#f97316'], isDonate: true },
-    { id: 'privacy', label: 'Privacy', icon: Icons.Shield, gradient: ['#64748b', '#475569'] },
-    { id: 'terms', label: 'Terms', icon: Icons.FileText, gradient: ['#6b7280', '#4b5563'] },
+    { id: 'settings', label: t('floatingMenu.settings'), icon: Icons.Settings, gradient: ['#6366f1', '#8b5cf6'] },
+    { id: 'donate', label: t('floatingMenu.donate'), icon: Icons.Heart, gradient: ['#ef4444', '#f97316'], isDonate: true },
+    { id: 'privacy', label: t('floatingMenu.privacy'), icon: Icons.Shield, gradient: ['#64748b', '#475569'] },
+    { id: 'terms', label: t('floatingMenu.terms'), icon: Icons.FileText, gradient: ['#6b7280', '#4b5563'] },
   ];
 
   const handleItemClick = (item) => {
@@ -206,7 +208,7 @@ function FloatingMenu({ view, setView, darkMode, onDonate, onMindMap, onMood, on
   };
 
   // Get special features label based on mode
-  const specialFeaturesLabel = 'Innovative Features';
+  const specialFeaturesLabel = t('floatingMenu.innovativeFeatures');
 
   return (
     <nav ref={menuRef} aria-label="Main navigation">

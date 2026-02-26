@@ -5,40 +5,30 @@
 
 import React from 'react';
 import { Icons } from '../../common/Icons';
+import { useTranslation } from '../../../contexts/LocaleContext';
 
 const JourneySelector = ({ language, onSelectJourney, onBack, onChangeLanguage, hajjLocked = false }) => {
   const isRTL = language === 'ar' || language === 'ur';
+  const { t } = useTranslation();
 
   const text = {
-    title: {
-      en: 'Choose Your Journey',
-      ur: 'اپنا سفر منتخب کریں',
-      ar: 'اختر رحلتك',
-    },
-    subtitle: {
-      en: 'Experience the sacred pilgrimage in 3D',
-      ur: 'تھری ڈی میں مقدس حج کا تجربہ کریں',
-      ar: 'عش تجربة الحج المقدس ثلاثي الأبعاد',
-    },
+    title: t('hajjUmrah.chooseJourney'),
+    subtitle: t('hajjUmrah.experienceIn3D'),
     umrah: {
-      title: { en: 'Umrah', ur: 'عمرہ', ar: 'العمرة' },
-      subtitle: { en: 'The Lesser Pilgrimage', ur: 'چھوٹا حج', ar: 'الحج الأصغر' },
-      steps: { en: '5 Steps', ur: '5 مراحل', ar: '5 خطوات' },
-      badge: { en: 'FREE', ur: 'مفت', ar: 'مجاني' },
-      features: { en: 'Bird\'s Eye • Auto Play • Duas', ur: 'فضائی منظر • آٹو پلے • دعائیں', ar: 'منظر علوي • تشغيل تلقائي • أدعية' },
+      title: t('hajjUmrah.umrah'),
+      subtitle: t('hajjUmrah.lesserPilgrimage'),
+      steps: t('hajjUmrah.steps5'),
+      badge: t('hajjUmrah.free'),
+      features: `${t('hajjUmrah.birdsEye')} • ${t('hajjUmrah.autoPlay')} • ${t('hajjUmrah.duas')}`,
     },
     hajj: {
-      title: { en: 'Hajj', ur: 'حج', ar: 'الحج' },
-      subtitle: { en: 'The Greater Pilgrimage', ur: 'بڑا حج', ar: 'الحج الأكبر' },
-      steps: { en: '12 Steps', ur: '12 مراحل', ar: '12 خطوة' },
-      badge: { en: 'PREMIUM', ur: 'پریمیم', ar: 'مدفوع' },
-      features: { en: 'Bird\'s Eye • Auto Play • Duas', ur: 'فضائی منظر • آٹو پلے • دعائیں', ar: 'منظر علوي • تشغيل تلقائي • أدعية' },
+      title: t('hajjUmrah.hajj'),
+      subtitle: t('hajjUmrah.greaterPilgrimage'),
+      steps: t('hajjUmrah.steps12'),
+      badge: t('hajjUmrah.premiumBadge'),
+      features: `${t('hajjUmrah.birdsEye')} • ${t('hajjUmrah.autoPlay')} • ${t('hajjUmrah.duas')}`,
     },
-    features: {
-      en: '🦅 Bird\'s Eye View • 🎵 Audio Duas • ▶️ Auto Play Experience',
-      ur: '🦅 فضائی منظر • 🎵 آڈیو دعائیں • ▶️ آٹو پلے تجربہ',
-      ar: '🦅 منظر من السماء • 🎵 أدعية صوتية • ▶️ تجربة تشغيل تلقائي',
-    },
+    features: t('hajjUmrah.features'),
   };
 
   return (
@@ -93,13 +83,13 @@ const JourneySelector = ({ language, onSelectJourney, onBack, onChangeLanguage, 
           className="text-2xl sm:text-3xl font-bold text-white mb-2"
           style={{ fontFamily: isRTL ? "'Noto Nastaliq Urdu', 'Scheherazade New', serif" : 'inherit' }}
         >
-          {text.title[language]}
+          {text.title}
         </h1>
         <p
           className="text-white/70 text-sm sm:text-base"
           style={{ fontFamily: isRTL ? "'Noto Nastaliq Urdu', serif" : 'inherit' }}
         >
-          {text.subtitle[language]}
+          {text.subtitle}
         </p>
       </div>
 
@@ -114,7 +104,7 @@ const JourneySelector = ({ language, onSelectJourney, onBack, onChangeLanguage, 
 
           <div className="absolute top-4 right-4 flex gap-2">
             <span className="px-3 py-1 bg-emerald-300/90 backdrop-blur-sm rounded-full text-xs font-bold text-emerald-900">
-              {text.umrah.badge[language]}
+              {text.umrah.badge}
             </span>
             <span className="px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-white font-bold text-xs">🦅 3D</span>
           </div>
@@ -125,17 +115,17 @@ const JourneySelector = ({ language, onSelectJourney, onBack, onChangeLanguage, 
               className="text-2xl font-bold mb-1"
               style={{ fontFamily: isRTL ? "'Noto Nastaliq Urdu', serif" : 'inherit' }}
             >
-              {text.umrah.title[language]}
+              {text.umrah.title}
             </h2>
             <p className="text-white/80 text-sm mb-3" style={{ fontFamily: isRTL ? "'Noto Nastaliq Urdu', serif" : 'inherit' }}>
-              {text.umrah.subtitle[language]}
+              {text.umrah.subtitle}
             </p>
 
             <div className="flex justify-center gap-4 text-sm mb-3">
-              <span>📍 {text.umrah.steps[language]}</span>
+              <span>📍 {text.umrah.steps}</span>
             </div>
 
-            <p className="text-white/70 text-xs">{text.umrah.features[language]}</p>
+            <p className="text-white/70 text-xs">{text.umrah.features}</p>
           </div>
 
           <div className="absolute bottom-4 right-4 w-10 h-10 rounded-full bg-white/20 flex items-center justify-center group-hover:bg-white/30">
@@ -172,11 +162,11 @@ const JourneySelector = ({ language, onSelectJourney, onBack, onChangeLanguage, 
                 className="px-3 py-1 rounded-full text-xs font-bold backdrop-blur-sm"
                 style={{ background: 'rgba(0,0,0,0.5)', color: '#FFD700', border: '1px solid rgba(255,215,0,0.4)' }}
               >
-                🔒 {text.hajj.badge[language]}
+                🔒 {text.hajj.badge}
               </span>
             ) : (
               <span className="px-3 py-1 bg-emerald-300/90 backdrop-blur-sm rounded-full text-xs font-bold text-emerald-900">
-                {text.umrah.badge[language]}
+                {text.umrah.badge}
               </span>
             )}
             <span
@@ -200,7 +190,7 @@ const JourneySelector = ({ language, onSelectJourney, onBack, onChangeLanguage, 
                 textShadow: '0 1px 0 rgba(255,255,255,0.3)',
               }}
             >
-              {text.hajj.title[language]}
+              {text.hajj.title}
             </h2>
             <p
               className="text-sm mb-3"
@@ -209,14 +199,14 @@ const JourneySelector = ({ language, onSelectJourney, onBack, onChangeLanguage, 
                 color: '#3d1f00',
               }}
             >
-              {text.hajj.subtitle[language]}
+              {text.hajj.subtitle}
             </p>
 
             <div className="flex justify-center gap-4 text-sm mb-3" style={{ color: '#2d1400' }}>
-              <span>📍 {text.hajj.steps[language]}</span>
+              <span>📍 {text.hajj.steps}</span>
             </div>
 
-            <p className="text-xs" style={{ color: '#5a3000' }}>{text.hajj.features[language]}</p>
+            <p className="text-xs" style={{ color: '#5a3000' }}>{text.hajj.features}</p>
           </div>
 
           <div
@@ -234,7 +224,7 @@ const JourneySelector = ({ language, onSelectJourney, onBack, onChangeLanguage, 
       {/* Features */}
       <div className="relative z-10 mt-8 text-center">
         <p className="text-white/50 text-xs sm:text-sm" style={{ fontFamily: isRTL ? "'Noto Nastaliq Urdu', serif" : 'inherit' }}>
-          {text.features[language]}
+          {text.features}
         </p>
       </div>
 

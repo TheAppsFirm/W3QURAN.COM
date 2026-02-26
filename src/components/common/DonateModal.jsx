@@ -5,6 +5,7 @@
 
 import { memo, useState } from 'react';
 import { Icons } from './Icons';
+import { useTranslation } from '../../contexts/LocaleContext';
 
 // Donation configuration
 const DONATION_CONFIG = {
@@ -37,6 +38,7 @@ const DONATION_CONFIG = {
 };
 
 const DonateModal = memo(function DonateModal({ isOpen, onClose }) {
+  const { t } = useTranslation();
   const [copied, setCopied] = useState(false);
   const [mobilePayTab, setMobilePayTab] = useState('jazzcash');
   const [showEnlargedQR, setShowEnlargedQR] = useState(false);
@@ -161,9 +163,9 @@ const DonateModal = memo(function DonateModal({ isOpen, onClose }) {
         <div className="text-center mb-3 relative z-10">
           <div className="flex items-center justify-center gap-2 mb-1">
             <span className="text-2xl">💝</span>
-            <h2 className="text-lg font-bold text-white">Support w3Quran</h2>
+            <h2 className="text-lg font-bold text-white">{t('donate.title')}</h2>
           </div>
-          <p className="text-white/70 text-xs">Help us maintain and improve this app</p>
+          <p className="text-white/70 text-xs">{t('donate.subtitle')}</p>
         </div>
 
         {/* Payment Options */}
@@ -283,7 +285,7 @@ const DonateModal = memo(function DonateModal({ isOpen, onClose }) {
         {/* Footer */}
         <div className="mt-3 text-center relative z-10">
           <p className="text-white/40 text-[10px]">
-            JazakAllah Khair for your support! 🤲
+            {t('donate.thankYou')} 🤲
           </p>
         </div>
       </div>

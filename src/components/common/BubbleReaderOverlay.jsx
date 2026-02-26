@@ -34,6 +34,7 @@ import { useLocalStorage, useIsMobile } from '../../hooks';
 import { logReadingSession, trackSurahCompletion, trackFeatureUsage } from '../../utils/trackingUtils';
 import { shareVerse } from '../../utils/shareUtils';
 import { useAuth } from '../../contexts/AuthContext';
+import { useTranslation } from '../../contexts/LocaleContext';
 import logger from '../../utils/logger';
 import { trackSurahRead, trackFeatureUse, trackAudioPlay, trackTafseerView } from '../../utils/analyticsTracker';
 import { getCachedSurah, getDownloadedAudio } from '../../data/offlineStorage';
@@ -314,6 +315,7 @@ const FloatingFeatureBubble = memo(function FloatingFeatureBubble({
 const TafseerFloatingBubble = memo(function TafseerFloatingBubble({
   isVisible, onClose, surahId, ayahNumber, verseArabic, translationId, totalAyahs = 7, onAyahChange
 }) {
+  const { t } = useTranslation();
   const [tafseer, setTafseer] = useState(null);
   const [loading, setLoading] = useState(false);
   const [selectedTafseer, setSelectedTafseer] = useState(null);
@@ -398,7 +400,7 @@ const TafseerFloatingBubble = memo(function TafseerFloatingBubble({
     <FloatingFeatureBubble
       isVisible={isVisible}
       onClose={onClose}
-      title="Tafseer"
+      title={t('reader.tafseer')}
       icon={Icons.BookOpen}
       gradient={['#8B5CF6', '#6366F1', '#4F46E5']}
       position={{ top: '50%', right: '10px', transform: 'translateY(-50%)' }}
@@ -408,24 +410,24 @@ const TafseerFloatingBubble = memo(function TafseerFloatingBubble({
       <div className="mb-3 pb-3 border-b border-white/20">
         {/* Tafseer Source Selector with Icons */}
         <div className="flex flex-wrap gap-1.5 mb-2">
-          {availableTafseers.map(t => {
-            const TafseerIcon = Icons[t.icon] || Icons.BookOpen;
+          {availableTafseers.map(ts => {
+            const TafseerIcon = Icons[ts.icon] || Icons.BookOpen;
             return (
               <button
-                key={t.id}
-                onClick={() => setSelectedTafseer(t.id)}
+                key={ts.id}
+                onClick={() => setSelectedTafseer(ts.id)}
                 className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-[10px] font-medium transition-all ${
-                  selectedTafseer === t.id
+                  selectedTafseer === ts.id
                     ? 'text-white shadow-lg'
                     : 'bg-white/10 text-white/70 hover:bg-white/20'
                 }`}
                 style={{
-                  background: selectedTafseer === t.id ? `linear-gradient(135deg, ${t.color || '#8B5CF6'}, ${t.color || '#8B5CF6'}99)` : undefined,
-                  boxShadow: selectedTafseer === t.id ? `0 4px 15px ${t.color || '#8B5CF6'}40` : undefined,
+                  background: selectedTafseer === ts.id ? `linear-gradient(135deg, ${ts.color || '#8B5CF6'}, ${ts.color || '#8B5CF6'}99)` : undefined,
+                  boxShadow: selectedTafseer === ts.id ? `0 4px 15px ${ts.color || '#8B5CF6'}40` : undefined,
                 }}
               >
                 <TafseerIcon className="w-3 h-3" />
-                {t.name}
+                {ts.name}
               </button>
             );
           })}
@@ -509,7 +511,7 @@ const TafseerFloatingBubble = memo(function TafseerFloatingBubble({
         {loading ? (
           <div className="flex flex-col items-center justify-center py-8">
             <Icons.Loader className="w-8 h-8 animate-spin text-white/60 mb-2" />
-            <p className="text-white/50 text-sm">Loading tafseer...</p>
+            <p className="text-white/50 text-sm">{t('reader.loadingTafseer')}</p>
           </div>
         ) : tafseer?.error ? (
           <div className="flex flex-col items-center justify-center py-8">
@@ -519,7 +521,7 @@ const TafseerFloatingBubble = memo(function TafseerFloatingBubble({
               onClick={loadTafseer}
               className="px-4 py-2 bg-white/20 hover:bg-white/30 rounded-full text-white text-xs transition-all"
             >
-              Try Again
+              {t('common.retry')}
             </button>
           </div>
         ) : tafseer ? (
@@ -541,8 +543,8 @@ const TafseerFloatingBubble = memo(function TafseerFloatingBubble({
 
       {tafseer && !tafseer.error && (
         <div className="pt-2 mt-2 border-t border-white/10 flex items-center justify-between">
-          <p className="text-white/40 text-[10px]">Source: {tafseer.source}</p>
-          <p className="text-white/30 text-[10px]">Surah {surahId}, Ayah {selectedAyah}</p>
+          <p className="text-white/40 text-[10px]">{t('reader.source')}: {tafseer.source}</p>
+          <p className="text-white/30 text-[10px]">{t('reader.surah')} {surahId}, {t('reader.ayah')} {selectedAyah}</p>
         </div>
       )}
     </FloatingFeatureBubble>
@@ -576,6 +578,7 @@ const YOUTUBE_SCHOLARS = [
 const VideosFloatingBubble = memo(function VideosFloatingBubble({
   isVisible, onClose, surahId, surahName
 }) {
+  const { t, tInterpolate } = useTranslation();
   const [selectedType, setSelectedType] = useState('all');
   const [selectedScholar, setSelectedScholar] = useState(null);
 
@@ -598,7 +601,7 @@ const VideosFloatingBubble = memo(function VideosFloatingBubble({
     <FloatingFeatureBubble
       isVisible={isVisible}
       onClose={onClose}
-      title="Quran Videos"
+      title={t('reader.quranVideos')}
       icon={Icons.Video}
       gradient={['#EF4444', '#DC2626', '#B91C1C']}
       position={{ top: '50%', left: '10px', transform: 'translateY(-50%)' }}
@@ -607,9 +610,9 @@ const VideosFloatingBubble = memo(function VideosFloatingBubble({
       {/* Type Filter */}
       <div className="flex gap-1 mb-3 p-1 bg-white/10 rounded-xl">
         {[
-          { id: 'all', label: 'All' },
-          { id: 'reciter', label: 'Reciters' },
-          { id: 'scholar', label: 'Scholars' },
+          { id: 'all', label: t('common.all') },
+          { id: 'reciter', label: t('reader.reciters') },
+          { id: 'scholar', label: t('reader.scholars') },
         ].map(type => (
           <button
             key={type.id}
@@ -630,21 +633,21 @@ const VideosFloatingBubble = memo(function VideosFloatingBubble({
           className="flex-1 py-2 px-3 bg-white/10 hover:bg-white/20 rounded-xl text-xs text-white font-medium transition-all flex items-center justify-center gap-2"
         >
           <Icons.Headphones className="w-3.5 h-3.5" />
-          Recitations
+          {t('reader.recitation')}
         </button>
         <button
           onClick={() => openGeneralSearch('tafseer explanation')}
           className="flex-1 py-2 px-3 bg-white/10 hover:bg-white/20 rounded-xl text-xs text-white font-medium transition-all flex items-center justify-center gap-2"
         >
           <Icons.BookOpen className="w-3.5 h-3.5" />
-          Tafseer
+          {t('reader.tafseer')}
         </button>
       </div>
 
       {/* Scholar/Reciter List */}
       <div className="space-y-2 max-h-[240px] overflow-y-auto">
         <p className="text-white/50 text-[10px] uppercase tracking-wide mb-2">
-          {selectedType === 'reciter' ? 'World-Renowned Reciters' : selectedType === 'scholar' ? 'Islamic Scholars' : 'Scholars & Reciters'}
+          {selectedType === 'reciter' ? t('reader.worldRenownedReciters') : selectedType === 'scholar' ? t('reader.islamicScholars') : t('reader.scholarsAndReciters')}
         </p>
         {filteredScholars.map(scholar => (
           <button
@@ -669,7 +672,7 @@ const VideosFloatingBubble = memo(function VideosFloatingBubble({
                   <span className={`text-[10px] px-2 py-0.5 rounded-full ${
                     scholar.type === 'reciter' ? 'bg-emerald-500/30 text-emerald-300' : 'bg-purple-500/30 text-purple-300'
                   }`}>
-                    {scholar.type === 'reciter' ? 'Reciter' : 'Scholar'}
+                    {scholar.type === 'reciter' ? t('reader.reciter_label') : t('reader.scholar_label')}
                   </span>
                   <span className="text-white/40 text-[10px]">{scholar.country}</span>
                 </div>
@@ -683,7 +686,7 @@ const VideosFloatingBubble = memo(function VideosFloatingBubble({
       {/* Footer */}
       <div className="pt-3 mt-3 border-t border-white/10">
         <p className="text-white/40 text-[10px] text-center">
-          Click on any scholar to search their {surahName} videos on YouTube
+          {tInterpolate('reader.clickScholarSearch', { surah: surahName })}
         </p>
       </div>
     </FloatingFeatureBubble>
@@ -770,12 +773,13 @@ const ShareFloatingBubble = memo(function ShareFloatingBubble({
 
 // Small Feature Toggle Buttons (shown inside main bubble)
 const FeatureToggleButtons = memo(function FeatureToggleButtons({ activeFeature, onToggle }) {
+  const { t } = useTranslation();
   const buttons = [
-    { id: 'tafseer', icon: Icons.BookOpen, label: 'Tafseer', color: '#8B5CF6' },
-    { id: 'youtube', icon: Icons.Video, label: 'Videos', color: '#EF4444' },
-    { id: 'memorize', icon: Icons.Brain, label: 'Memorize', color: '#F59E0B' },
-    { id: 'bookmark', icon: Icons.Bookmark, label: 'Bookmark', color: '#EC4899' },
-    { id: 'share', icon: Icons.Share, label: 'Share', color: '#10B981' },
+    { id: 'tafseer', icon: Icons.BookOpen, label: t('reader.tafseer'), color: '#8B5CF6' },
+    { id: 'youtube', icon: Icons.Video, label: t('reader.videos'), color: '#EF4444' },
+    { id: 'memorize', icon: Icons.Brain, label: t('reader.memorize'), color: '#F59E0B' },
+    { id: 'bookmark', icon: Icons.Bookmark, label: t('reader.bookmark'), color: '#EC4899' },
+    { id: 'share', icon: Icons.Share, label: t('common.share'), color: '#10B981' },
   ];
 
   return (
@@ -810,6 +814,7 @@ const FeatureToggleButtons = memo(function FeatureToggleButtons({ activeFeature,
 
 // Tafseer Panel with Multi-language Support
 const TafseerPanel = memo(function TafseerPanel({ surahId, ayahNumber, verseArabic, translationId, onClose }) {
+  const { t } = useTranslation();
   const [tafseer, setTafseer] = useState(null);
   const [loading, setLoading] = useState(false);
   const [selectedTafseer, setSelectedTafseer] = useState(null);
@@ -855,8 +860,8 @@ const TafseerPanel = memo(function TafseerPanel({ surahId, ayahNumber, verseArab
             <Icons.BookOpen className="w-5 h-5 text-white" />
           </div>
           <div>
-            <h3 className="text-white font-bold">Tafseer</h3>
-            <p className="text-white/60 text-xs">Ayah {ayahNumber}</p>
+            <h3 className="text-white font-bold">{t('reader.tafseer')}</h3>
+            <p className="text-white/60 text-xs">{t('reader.ayah')} {ayahNumber}</p>
           </div>
         </div>
         <button onClick={onClose} className="p-2 rounded-full hover:bg-white/10 transition-all">
@@ -866,10 +871,10 @@ const TafseerPanel = memo(function TafseerPanel({ surahId, ayahNumber, verseArab
 
       <div className="flex-shrink-0 py-3 border-b border-white/10">
         <div className="flex flex-wrap gap-1">
-          {availableTafseers.map(t => (
-            <button key={t.id} onClick={() => setSelectedTafseer(t.id)}
-              className={`px-3 py-1.5 rounded-full text-xs transition-all ${selectedTafseer === t.id ? 'bg-purple-500/60 text-white font-medium' : 'bg-white/10 text-white/70 hover:bg-white/20'}`}>
-              {t.name}
+          {availableTafseers.map(ts => (
+            <button key={ts.id} onClick={() => setSelectedTafseer(ts.id)}
+              className={`px-3 py-1.5 rounded-full text-xs transition-all ${selectedTafseer === ts.id ? 'bg-purple-500/60 text-white font-medium' : 'bg-white/10 text-white/70 hover:bg-white/20'}`}>
+              {ts.name}
             </button>
           ))}
         </div>
@@ -885,7 +890,7 @@ const TafseerPanel = memo(function TafseerPanel({ surahId, ayahNumber, verseArab
         {loading ? (
           <div className="flex flex-col items-center justify-center py-8">
             <Icons.Loader className="w-8 h-8 animate-spin text-purple-400 mb-2" />
-            <p className="text-white/50 text-xs">Loading tafseer...</p>
+            <p className="text-white/50 text-xs">{t('reader.loadingTafseer')}</p>
           </div>
         ) : tafseer?.error ? (
           <div className="flex flex-col items-center justify-center py-8">
@@ -895,7 +900,7 @@ const TafseerPanel = memo(function TafseerPanel({ surahId, ayahNumber, verseArab
               onClick={handleRetry}
               className="px-4 py-2 bg-purple-500/40 hover:bg-purple-500/60 rounded-full text-white text-xs font-medium transition-all"
             >
-              Try Again
+              {t('common.retry')}
             </button>
           </div>
         ) : tafseer ? (
@@ -919,7 +924,7 @@ const TafseerPanel = memo(function TafseerPanel({ surahId, ayahNumber, verseArab
 
       {tafseer && !tafseer.error && (
         <div className="flex-shrink-0 pt-2 border-t border-white/10">
-          <p className="text-white/40 text-[10px]">Source: {tafseer.source}</p>
+          <p className="text-white/40 text-[10px]">{t('reader.source')}: {tafseer.source}</p>
         </div>
       )}
     </div>
@@ -928,6 +933,7 @@ const TafseerPanel = memo(function TafseerPanel({ surahId, ayahNumber, verseArab
 
 // Memorization Panel
 const MemorizePanel = memo(function MemorizePanel({ onSettingsChange, currentSettings, onClose }) {
+  const { t } = useTranslation();
   const [hideLevel, setHideLevel] = useState(currentSettings?.hideLevel || 0);
   const [repeatCount, setRepeatCount] = useState(3);
 
@@ -936,11 +942,11 @@ const MemorizePanel = memo(function MemorizePanel({ onSettingsChange, currentSet
   }, [hideLevel, repeatCount, onSettingsChange]);
 
   const HIDE_LEVELS = [
-    { level: 0, label: 'Show All', desc: 'All words visible', bars: 5 },
-    { level: 1, label: 'Hide 25%', desc: 'Every 4th word hidden', bars: 4 },
-    { level: 2, label: 'Hide 50%', desc: 'Every 2nd word hidden', bars: 3 },
-    { level: 3, label: 'Hide 75%', desc: 'Most words hidden', bars: 2 },
-    { level: 4, label: 'Hide All', desc: 'All words hidden', bars: 1 },
+    { level: 0, label: t('reader.showAll'), desc: t('reader.allWordsVisible'), bars: 5 },
+    { level: 1, label: t('reader.hide25'), desc: t('reader.every4thWordHidden'), bars: 4 },
+    { level: 2, label: t('reader.hide50'), desc: t('reader.every2ndWordHidden'), bars: 3 },
+    { level: 3, label: t('reader.hide75'), desc: t('reader.mostWordsHidden'), bars: 2 },
+    { level: 4, label: t('reader.hideAll'), desc: t('reader.allWordsHidden'), bars: 1 },
   ];
 
   return (
@@ -951,8 +957,8 @@ const MemorizePanel = memo(function MemorizePanel({ onSettingsChange, currentSet
             <Icons.Brain className="w-5 h-5 text-white" />
           </div>
           <div>
-            <h3 className="text-white font-bold">Memorize</h3>
-            <p className="text-white/60 text-xs">Hifz Mode</p>
+            <h3 className="text-white font-bold">{t('reader.memorize')}</h3>
+            <p className="text-white/60 text-xs">{t('reader.hifzMode')}</p>
           </div>
         </div>
         <button onClick={onClose} className="p-2 rounded-full hover:bg-white/10 transition-all">
@@ -962,7 +968,7 @@ const MemorizePanel = memo(function MemorizePanel({ onSettingsChange, currentSet
 
       <div className="flex-1 overflow-y-auto py-3 space-y-4">
         <div>
-          <label className="text-white/80 text-xs font-medium mb-2 block">Word Visibility</label>
+          <label className="text-white/80 text-xs font-medium mb-2 block">{t('reader.wordVisibility')}</label>
           <div className="space-y-2">
             {HIDE_LEVELS.map(({ level, label, desc, bars }) => (
               <button key={level} onClick={() => setHideLevel(level)}
@@ -982,7 +988,7 @@ const MemorizePanel = memo(function MemorizePanel({ onSettingsChange, currentSet
         </div>
 
         <div>
-          <label className="text-white/80 text-xs font-medium mb-2 block">Repeat Each Ayah</label>
+          <label className="text-white/80 text-xs font-medium mb-2 block">{t('reader.repeatEachAyah')}</label>
           <div className="flex gap-2">
             {[1, 3, 5, 7, 10].map(count => (
               <button key={count} onClick={() => setRepeatCount(count)}
@@ -997,9 +1003,9 @@ const MemorizePanel = memo(function MemorizePanel({ onSettingsChange, currentSet
           <div className="flex items-start gap-3">
             <span className="text-2xl">💡</span>
             <div>
-              <p className="text-white font-medium text-sm mb-1">Memorization Tip</p>
+              <p className="text-white font-medium text-sm mb-1">{t('reader.memorizationTip')}</p>
               <p className="text-white/70 text-xs leading-relaxed">
-                Start with "Show All" and recite along with audio. Gradually increase the hide level as you become more confident.
+                {t('reader.memorizationTipText')}
               </p>
             </div>
           </div>
@@ -1011,6 +1017,7 @@ const MemorizePanel = memo(function MemorizePanel({ onSettingsChange, currentSet
 
 // Bookmarks Panel
 const BookmarksPanel = memo(function BookmarksPanel({ surahId, surahName, ayahNumber, verseArabic, onClose, onBookmarkSuccess }) {
+  const { t, tInterpolate } = useTranslation();
   const [bookmarks, setBookmarks] = useLocalStorage('quran_bookmarks', []);
   const [notes, setNotes] = useState('');
   const [showNoteInput, setShowNoteInput] = useState(false);
@@ -1035,8 +1042,8 @@ const BookmarksPanel = memo(function BookmarksPanel({ surahId, surahName, ayahNu
             <Icons.Bookmark className="w-5 h-5 text-white" />
           </div>
           <div>
-            <h3 className="text-white font-bold">Bookmarks</h3>
-            <p className="text-white/60 text-xs">{bookmarks.length} saved</p>
+            <h3 className="text-white font-bold">{t('reader.bookmarks')}</h3>
+            <p className="text-white/60 text-xs">{bookmarks.length} {t('reader.saved')}</p>
           </div>
         </div>
         <button onClick={onClose} className="p-2 rounded-full hover:bg-white/10 transition-all">
@@ -1048,21 +1055,21 @@ const BookmarksPanel = memo(function BookmarksPanel({ surahId, surahName, ayahNu
         {isCurrentBookmarked ? (
           <div className="flex items-center gap-2 p-3 bg-pink-500/20 rounded-xl">
             <Icons.Check className="w-5 h-5 text-pink-400" />
-            <span className="text-white/80 text-sm">Ayah {ayahNumber} is bookmarked</span>
+            <span className="text-white/80 text-sm">{tInterpolate('reader.ayahBookmarked', { num: ayahNumber })}</span>
           </div>
         ) : showNoteInput ? (
           <div className="space-y-2">
-            <textarea value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Add a note (optional)..."
+            <textarea value={notes} onChange={(e) => setNotes(e.target.value)} placeholder={t('reader.addNote')}
               className="w-full p-3 bg-white/10 rounded-xl text-white text-sm placeholder-white/40 resize-none" rows={2} />
             <div className="flex gap-2">
-              <button onClick={addBookmark} className="flex-1 py-2 bg-pink-500/50 hover:bg-pink-500/70 rounded-xl text-white text-sm font-medium transition-all">Save</button>
-              <button onClick={() => setShowNoteInput(false)} className="px-4 py-2 bg-white/10 hover:bg-white/20 rounded-xl text-white/70 text-sm transition-all">Cancel</button>
+              <button onClick={addBookmark} className="flex-1 py-2 bg-pink-500/50 hover:bg-pink-500/70 rounded-xl text-white text-sm font-medium transition-all">{t('common.save')}</button>
+              <button onClick={() => setShowNoteInput(false)} className="px-4 py-2 bg-white/10 hover:bg-white/20 rounded-xl text-white/70 text-sm transition-all">{t('common.cancel')}</button>
             </div>
           </div>
         ) : (
           <button onClick={() => setShowNoteInput(true)}
             className="w-full py-3 bg-gradient-to-r from-pink-500/40 to-rose-500/40 hover:from-pink-500/60 hover:to-rose-500/60 rounded-xl text-white font-medium transition-all flex items-center justify-center gap-2">
-            <Icons.Plus className="w-4 h-4" /> Bookmark Ayah {ayahNumber}
+            <Icons.Plus className="w-4 h-4" /> {t('reader.bookmarkAyah')} {ayahNumber}
           </button>
         )}
       </div>
@@ -1071,7 +1078,7 @@ const BookmarksPanel = memo(function BookmarksPanel({ surahId, surahName, ayahNu
         {bookmarks.length === 0 ? (
           <div className="text-center py-8">
             <Icons.Bookmark className="w-12 h-12 mx-auto text-white/20 mb-3" />
-            <p className="text-white/50 text-sm">No bookmarks yet</p>
+            <p className="text-white/50 text-sm">{t('reader.noBookmarks')}</p>
           </div>
         ) : (
           bookmarks.map(bookmark => (
@@ -1096,6 +1103,7 @@ const BookmarksPanel = memo(function BookmarksPanel({ surahId, surahName, ayahNu
 
 // YouTube Videos Panel
 const YouTubePanel = memo(function YouTubePanel({ surahId, surahName, onClose }) {
+  const { t } = useTranslation();
   const [category, setCategory] = useState('tafseer');
   const [selectedVideo, setSelectedVideo] = useState(null);
 
@@ -1107,9 +1115,9 @@ const YouTubePanel = memo(function YouTubePanel({ surahId, surahName, onClose })
   }, [surahId]);
 
   const CATEGORIES = [
-    { id: 'tafseer', label: 'Tafseer', icon: 'BookOpen' },
-    { id: 'recitation', label: 'Recitation', icon: 'Headphones' },
-    { id: 'lecture', label: 'Lectures', icon: 'Video' },
+    { id: 'tafseer', label: t('reader.tafseer'), icon: 'BookOpen' },
+    { id: 'recitation', label: t('reader.recitation'), icon: 'Headphones' },
+    { id: 'lecture', label: t('reader.lectures'), icon: 'Video' },
   ];
 
   return (
@@ -1121,7 +1129,7 @@ const YouTubePanel = memo(function YouTubePanel({ surahId, surahName, onClose })
               <Icons.Video className="w-5 h-5 text-white" />
             </div>
             <div>
-              <h3 className="text-white font-bold">Video Lectures</h3>
+              <h3 className="text-white font-bold">{t('reader.videoLectures')}</h3>
               <p className="text-white/60 text-xs">{surahName}</p>
             </div>
           </div>
@@ -1193,6 +1201,7 @@ const YouTubePanel = memo(function YouTubePanel({ surahId, surahName, onClose })
 
 // Share Panel
 const SharePanel = memo(function SharePanel({ surahId, surahName, ayahNumber, verseArabic, verseTranslation, multipleVerses, onClose, onOpenArtGenerator, onShareSuccess }) {
+  const { t, tInterpolate } = useTranslation();
   const [shareStatus, setShareStatus] = useState(null);
   const [downloadStatus, setDownloadStatus] = useState(null);
   const [selectedStyle, setSelectedStyle] = useState('classic');
@@ -1390,7 +1399,7 @@ const SharePanel = memo(function SharePanel({ surahId, surahName, ayahNumber, ve
             <Icons.Share className="w-5 h-5 text-white" />
           </div>
           <div>
-            <h3 className="text-white font-bold">{isMultiple ? `Share ${versesToShare.length} Verses` : 'Share Verse'}</h3>
+            <h3 className="text-white font-bold">{isMultiple ? tInterpolate('reader.shareVerses', { count: versesToShare.length }) : t('reader.shareVerse')}</h3>
             <p className="text-white/60 text-xs">{surahName} : {ayahRangeStr}</p>
           </div>
         </div>
@@ -1429,7 +1438,7 @@ const SharePanel = memo(function SharePanel({ surahId, surahName, ayahNumber, ve
 
         {/* Style Selector */}
         <div>
-          <label className="text-white/80 text-xs font-medium mb-2 block">Card Style</label>
+          <label className="text-white/80 text-xs font-medium mb-2 block">{t('reader.cardStyle')}</label>
           <div className="grid grid-cols-6 gap-2">
             {STYLES.map(style => (
               <button key={style.id} onClick={() => setSelectedStyle(style.id)}
@@ -1446,30 +1455,30 @@ const SharePanel = memo(function SharePanel({ surahId, surahName, ayahNumber, ve
           {/* Art Generator Button - NEW */}
           <button onClick={onOpenArtGenerator}
             className="w-full py-3 bg-gradient-to-r from-amber-500/60 to-orange-500/60 hover:from-amber-500/80 hover:to-orange-500/80 rounded-xl text-white font-medium transition-all flex items-center justify-center gap-2">
-            <Icons.Palette className="w-5 h-5" /> Create Beautiful Art
+            <Icons.Palette className="w-5 h-5" /> {t('share.shareArt')}
           </button>
 
           {/* Download Image Button */}
           <button onClick={downloadImage} disabled={downloadStatus === 'generating'}
             className="w-full py-3 bg-gradient-to-r from-purple-500/60 to-pink-500/60 hover:from-purple-500/80 hover:to-pink-500/80 rounded-xl text-white font-medium transition-all flex items-center justify-center gap-2 disabled:opacity-50">
             {downloadStatus === 'generating' ? (
-              <><Icons.Loader className="w-5 h-5 animate-spin" /> Generating...</>
+              <><Icons.Loader className="w-5 h-5 animate-spin" /> {t('reader.generating')}</>
             ) : downloadStatus === 'done' ? (
-              <><Icons.Check className="w-5 h-5" /> Downloaded!</>
+              <><Icons.Check className="w-5 h-5" /> {t('reader.downloaded')}</>
             ) : (
-              <><Icons.Download className="w-5 h-5" /> Quick Download</>
+              <><Icons.Download className="w-5 h-5" /> {t('reader.quickDownload')}</>
             )}
           </button>
 
           {/* Share Button */}
           <button onClick={handleShare} disabled={shareStatus === 'generating'}
             className="w-full py-3 bg-gradient-to-r from-emerald-500/60 to-teal-500/60 hover:from-emerald-500/80 hover:to-teal-500/80 rounded-xl text-white font-medium transition-all flex items-center justify-center gap-2 disabled:opacity-50">
-            {shareStatus === 'generating' ? <Icons.Loader className="w-5 h-5 animate-spin" /> : shareStatus === 'copied' ? <><Icons.Check className="w-5 h-5" /> Copied!</> : <><Icons.Share className="w-5 h-5" /> Share</>}
+            {shareStatus === 'generating' ? <Icons.Loader className="w-5 h-5 animate-spin" /> : shareStatus === 'copied' ? <><Icons.Check className="w-5 h-5" /> {t('common.copied')}</> : <><Icons.Share className="w-5 h-5" /> {t('common.share')}</>}
           </button>
 
           {/* Copy Text */}
           <button onClick={copyText} className="w-full py-2.5 bg-white/10 hover:bg-white/20 rounded-xl text-white/80 font-medium transition-all flex items-center justify-center gap-2">
-            <Icons.Copy className="w-4 h-4" /> Copy Text
+            <Icons.Copy className="w-4 h-4" /> {t('share.copyText')}
           </button>
 
           {/* Social Buttons */}
@@ -1490,6 +1499,9 @@ const SharePanel = memo(function SharePanel({ surahId, surahName, ayahNumber, ve
 // ============================================
 
 const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, darkMode, onChangeSurah, initialVerse = 1, initialPanel = null, onPanelChange, readerStyle = 'default', layoutStyle = 'spiral' }) {
+  // i18n
+  const { t, tInterpolate, isRTL } = useTranslation();
+
   // Auth state for premium features
   const { isPremium, isAuthenticated, login } = useAuth();
 
@@ -1543,6 +1555,8 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
   const [leftFeature, setLeftFeature] = useState(null); // 'youtube', 'memorize', 'bookmark', 'share'
   const [memorizeSettings, setMemorizeSettings] = useState({ hideLevel: 0 });
   const [showSurahDetails, setShowSurahDetails] = useState(false);
+  const [showSurahPicker, setShowSurahPicker] = useState(false);
+  const [surahSearchQuery, setSurahSearchQuery] = useState('');
   const [selectionMode, setSelectionMode] = useState(false);
   const [selectedVerses, setSelectedVerses] = useState([]);
 
@@ -3604,11 +3618,11 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
         <div className="flex items-center gap-1.5 sm:gap-2 px-3 py-2 rounded-full bg-black/30 backdrop-blur-xl border border-white/20 max-w-[95vw] overflow-x-auto scrollbar-hide">
           {[
             // Core reading features only
-            { id: 'tafseer', icon: Icons.BookOpen, color: '#8B5CF6', label: 'Tafseer' },
-            { id: 'youtube', icon: Icons.Video, color: '#EF4444', label: 'Videos' },
-            { id: 'memorize', icon: Icons.Brain, color: '#F59E0B', label: 'Memorize' },
-            { id: 'bookmark', icon: Icons.Bookmark, color: '#EC4899', label: 'Bookmark' },
-            { id: 'share', icon: Icons.Share, color: '#10B981', label: 'Share' },
+            { id: 'tafseer', icon: Icons.BookOpen, color: '#8B5CF6', label: t('reader.tafseer') },
+            { id: 'youtube', icon: Icons.Video, color: '#EF4444', label: t('reader.videos') },
+            { id: 'memorize', icon: Icons.Brain, color: '#F59E0B', label: t('reader.memorize') },
+            { id: 'bookmark', icon: Icons.Bookmark, color: '#EC4899', label: t('reader.bookmark') },
+            { id: 'share', icon: Icons.Share, color: '#10B981', label: t('common.share') },
           ].map((btn) => {
             const Icon = btn.icon;
             // Determine active state based on feature type
@@ -3663,7 +3677,7 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
             <div onClick={toggleSurahDetails} className="relative z-10 flex flex-col items-center justify-center h-full">
               <div className="text-sm sm:text-base font-bold mb-0.5" style={{ fontFamily: "'Scheherazade New', serif" }} dir="rtl">{surah.arabic}</div>
               <div className="text-[8px] sm:text-[9px] font-medium opacity-90">{surah.type}</div>
-              <div className="text-[7px] sm:text-[8px] opacity-70">{surah.ayahs} Ayahs</div>
+              <div className="text-[7px] sm:text-[8px] opacity-70">{surah.ayahs} {t('reader.ayahs')}</div>
               {/* Expand indicator */}
               <div className="absolute bottom-1 left-1/2 -translate-x-1/2">
                 <Icons.ChevronDown className="w-3 h-3 text-white/60 animate-bounce" />
@@ -3688,14 +3702,14 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
                 <p className="text-white/70 text-[10px]">{surah.meaning}</p>
                 <div className="flex items-center justify-center gap-2 mt-1 text-[9px]">
                   <span className="px-1.5 py-0.5 rounded-full bg-white/20">{surah.type}</span>
-                  <span className="px-1.5 py-0.5 rounded-full bg-white/20">{surah.ayahs} Ayahs</span>
+                  <span className="px-1.5 py-0.5 rounded-full bg-white/20">{surah.ayahs} {t('reader.ayahs')}</span>
                 </div>
               </div>
 
               {/* Topics/Themes */}
               {surahTopics.themes && surahTopics.themes.length > 0 && (
                 <div className="p-2 border-b border-white/10">
-                  <h4 className="text-[9px] font-semibold text-white/60 mb-1.5 uppercase tracking-wide">Themes</h4>
+                  <h4 className="text-[9px] font-semibold text-white/60 mb-1.5 uppercase tracking-wide">{t('reader.themes')}</h4>
                   <div className="flex flex-wrap gap-1">
                     {surahTopics.themes.slice(0, 4).map((theme, i) => (
                       <span key={i} className="px-1.5 py-0.5 rounded-full text-[9px] font-medium bg-white/15">
@@ -3709,7 +3723,7 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
               {/* Key Verses - Compact scrollable list */}
               {surahTopics.keyVerses && surahTopics.keyVerses.length > 0 && (
                 <div className="p-2 max-h-32 overflow-y-auto custom-scrollbar">
-                  <h4 className="text-[9px] font-semibold text-white/60 mb-1.5 uppercase tracking-wide">Key Verses</h4>
+                  <h4 className="text-[9px] font-semibold text-white/60 mb-1.5 uppercase tracking-wide">{t('reader.keyVerses')}</h4>
                   <div className="space-y-1">
                     {surahTopics.keyVerses.slice(0, 5).map((kv, i) => (
                       <button
@@ -4016,16 +4030,20 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
               left: overlayConfig.shape === 'circle' ? '25%' : (overlayConfig.isCalm ? '20px' : '5%'),
               right: overlayConfig.shape === 'circle' ? '25%' : (overlayConfig.isCalm ? '20px' : '5%')
             }}>
-            {/* Surah number badge - adapts to theme */}
-            <div className={`w-10 h-10 flex items-center justify-center text-sm font-bold ${overlayConfig.shape === 'circle' ? 'rounded-full' : 'rounded-xl'}`}
+            {/* Surah number badge - clickable to open surah picker */}
+            <button
+              onClick={(e) => { e.stopPropagation(); setShowSurahPicker(true); setSurahSearchQuery(''); }}
+              className={`w-10 h-10 flex items-center justify-center text-sm font-bold cursor-pointer hover:scale-110 transition-all duration-200 ${overlayConfig.shape === 'circle' ? 'rounded-full' : 'rounded-xl'}`}
               style={{
                 background: !overlayConfig.isDark ? 'rgba(139, 90, 43, 0.25)' : (overlayConfig.isCalm ? 'rgba(20, 184, 166, 0.25)' : 'rgba(255,255,255,0.25)'),
                 backdropFilter: 'blur(10px)',
                 color: !overlayConfig.isDark ? '#5D4037' : 'white',
                 border: overlayConfig.isCalm ? '1px solid rgba(20, 184, 166, 0.3)' : 'none'
-              }}>
+              }}
+              title={`${surah.name} - Tap to switch surah`}
+            >
               {surah.id}
-            </div>
+            </button>
 
             {/* Close button - adapts to theme */}
             <button onClick={handleCloseClick}
@@ -4490,7 +4508,7 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
                     }}
                     className={`px-2.5 py-1 rounded-full text-xs font-medium transition-all ${audioMode === 'arabic' ? 'bg-white/30 text-white' : 'bg-white/10 text-white/60'}`}
                   >
-                    Arabic
+                    {t('reader.arabic')}
                   </button>
                   <button
                     onClick={() => {
@@ -4505,7 +4523,7 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
                     className={`px-2.5 py-1 rounded-full text-xs font-medium transition-all ${audioMode === 'translation' ? 'bg-cyan-500/50 text-white' : 'bg-white/10 text-white/60'}`}
                     title={apiAudioSource ? `Audio: ${apiAudioSource.reciter?.name}` : 'TTS Audio (No narrator available)'}
                   >
-                    {ttsLanguage === 'ur' ? 'اردو' : 'Translation'}
+                    {ttsLanguage === 'ur' ? 'اردو' : t('reader.translation')}
                     {apiAudioSource ? (
                       <span className="ml-1 text-emerald-300">●</span>
                     ) : (
@@ -4547,7 +4565,7 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
                     className={`px-2.5 py-1 rounded-full text-xs font-medium transition-all ${audioMode === 'combined' ? 'bg-gradient-to-r from-amber-500/50 to-cyan-500/50 text-white' : 'bg-white/10 text-white/60'}`}
                     title="Play Arabic then Translation for each verse"
                   >
-                    Both
+                    {t('reader.both')}
                   </button>
                 </div>
 
@@ -4606,7 +4624,7 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
                     <span>{currentAyah} / {totalVerses}</span>
                   ) : audioMode === 'translation' ? (
                     <div className="flex flex-col items-center gap-0.5">
-                      <span className="text-cyan-300">{translationAyah} / {totalVerses} {isPlayingTranslation && '(Playing)'}</span>
+                      <span className="text-cyan-300">{translationAyah} / {totalVerses} {isPlayingTranslation && `(${t('reader.playing')})`}</span>
                       {isPlayingTranslation && translationAudioSource && (
                         <span className={`text-[10px] ${translationAudioSource === 'api' ? 'text-emerald-300' : 'text-amber-300'}`}>
                           {translationAudioSource === 'api' ? (
@@ -4752,6 +4770,126 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
         </div>
       )}
 
+      {/* Surah Picker Popup */}
+      {showSurahPicker && (
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
+          onClick={() => setShowSurahPicker(false)}
+          style={{ background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(8px)', animation: 'fadeIn 0.2s ease-out' }}>
+          <div className="relative w-full max-w-md max-h-[80vh] flex flex-col rounded-3xl overflow-hidden shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              background: 'linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #1e1b4b 100%)',
+              border: '1px solid rgba(139, 92, 246, 0.3)',
+              boxShadow: '0 0 60px rgba(139, 92, 246, 0.2), 0 25px 50px rgba(0,0,0,0.5)',
+              animation: 'surahPickerIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)'
+            }}>
+            {/* Header */}
+            <div className="flex-shrink-0 p-5 pb-3 text-center">
+              <div className="flex items-center justify-between mb-3">
+                <div className="w-8" />
+                <h3 className="text-lg font-bold text-white">{t('reader.selectSurah', 'Select Surah')}</h3>
+                <button onClick={() => setShowSurahPicker(false)}
+                  className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-all">
+                  <Icons.X className="w-4 h-4 text-white/70" />
+                </button>
+              </div>
+              {/* Search bar */}
+              <div className="relative">
+                <Icons.Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+                <input
+                  type="text"
+                  value={surahSearchQuery}
+                  onChange={(e) => setSurahSearchQuery(e.target.value)}
+                  placeholder={t('reader.searchSurah', 'Search surah name or number...')}
+                  className="w-full pl-10 pr-4 py-2.5 rounded-2xl text-sm text-white placeholder-white/40 outline-none transition-all"
+                  style={{
+                    background: 'rgba(255,255,255,0.08)',
+                    border: '1px solid rgba(255,255,255,0.15)',
+                  }}
+                  autoFocus
+                />
+              </div>
+            </div>
+            {/* Surah list */}
+            <div className="flex-1 overflow-y-auto px-3 pb-4 custom-scrollbar" style={{ minHeight: 0 }}>
+              {SURAHS.filter(s => {
+                if (!surahSearchQuery.trim()) return true;
+                const q = surahSearchQuery.toLowerCase().trim();
+                return s.name.toLowerCase().includes(q)
+                  || s.arabic.includes(q)
+                  || String(s.id).includes(q)
+                  || (s.meaning && s.meaning.toLowerCase().includes(q));
+              }).map((s, idx) => {
+                const isActive = s.id === surah.id;
+                const palette = PALETTES[s.id % PALETTES.length];
+                const color = palette?.colors?.[0] || '#8B5CF6';
+                return (
+                  <button
+                    key={s.id}
+                    onClick={() => {
+                      if (s.id !== surah.id) {
+                        goToSurah(s);
+                      }
+                      setShowSurahPicker(false);
+                    }}
+                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-2xl mb-1 transition-all duration-200 group ${
+                      isActive
+                        ? 'bg-gradient-to-r from-purple-500/30 to-violet-500/30 border border-purple-400/40'
+                        : 'hover:bg-white/8 border border-transparent'
+                    }`}
+                    style={{ animation: `surahItemIn 0.15s ease-out ${idx * 0.015}s both` }}
+                  >
+                    {/* Number badge */}
+                    <div className="w-10 h-10 flex-shrink-0 rounded-xl flex items-center justify-center text-xs font-bold transition-all"
+                      style={{
+                        background: isActive ? `${color}40` : 'rgba(255,255,255,0.06)',
+                        color: isActive ? color : 'rgba(255,255,255,0.5)',
+                        border: isActive ? `1px solid ${color}60` : '1px solid transparent'
+                      }}>
+                      {s.id}
+                    </div>
+                    {/* Surah info */}
+                    <div className="flex-1 min-w-0 text-left">
+                      <div className="flex items-center justify-between gap-2">
+                        <span className={`text-sm font-semibold truncate ${isActive ? 'text-white' : 'text-white/80 group-hover:text-white'}`}>
+                          {s.name}
+                        </span>
+                        <span className="text-base flex-shrink-0" style={{ fontFamily: "'Scheherazade New', serif", color: isActive ? 'white' : 'rgba(255,255,255,0.6)' }} dir="rtl">
+                          {s.arabic}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2 mt-0.5">
+                        <span className="text-[11px] text-white/40">{s.meaning}</span>
+                        <span className="text-[10px] text-white/25">|</span>
+                        <span className="text-[11px] text-white/40">{s.ayahs} {t('reader.verses', 'verses')}</span>
+                        <span className="text-[10px] text-white/25">|</span>
+                        <span className={`text-[10px] px-1.5 py-0.5 rounded-full ${s.type === 'Makki' ? 'bg-amber-500/15 text-amber-400/70' : 'bg-emerald-500/15 text-emerald-400/70'}`}>
+                          {s.type}
+                        </span>
+                      </div>
+                    </div>
+                    {/* Active indicator */}
+                    {isActive && (
+                      <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: color, boxShadow: `0 0 8px ${color}` }} />
+                    )}
+                  </button>
+                );
+              })}
+              {/* No results */}
+              {SURAHS.filter(s => {
+                if (!surahSearchQuery.trim()) return true;
+                const q = surahSearchQuery.toLowerCase().trim();
+                return s.name.toLowerCase().includes(q) || s.arabic.includes(q) || String(s.id).includes(q) || (s.meaning && s.meaning.toLowerCase().includes(q));
+              }).length === 0 && (
+                <div className="text-center py-8 text-white/40 text-sm">
+                  {t('reader.noSurahFound', 'No surah found')}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
       <style>{`
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         @keyframes breathe { 0%, 100% { transform: scale(1); opacity: 0.6; } 50% { transform: scale(1.05); opacity: 0.9; } }
@@ -4761,6 +4899,9 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
         @keyframes floatBubble { 0%, 100% { transform: translateY(0); } 25% { transform: translateY(-4px); } 75% { transform: translateY(4px); } }
         @keyframes pulseRing { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(2); opacity: 0; } }
         @keyframes bubblePopIn { 0% { opacity: 0; transform: scale(0.5); } 100% { opacity: 1; transform: scale(1); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes surahPickerIn { from { opacity: 0; transform: scale(0.9) translateY(20px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+        @keyframes surahItemIn { from { opacity: 0; transform: translateX(-8px); } to { opacity: 1; transform: translateX(0); } }
         .custom-scrollbar::-webkit-scrollbar { width: 6px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: rgba(255,255,255,0.1); border-radius: 3px; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.3); border-radius: 3px; }

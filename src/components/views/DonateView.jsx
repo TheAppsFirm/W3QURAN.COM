@@ -6,8 +6,10 @@
 import { useState, useCallback } from 'react';
 import { Icons } from '../common/Icons';
 import { PALETTES } from '../../data';
+import { useTranslation } from '../../contexts/LocaleContext';
 
 function DonateView({ darkMode }) {
+  const { t, isRTL } = useTranslation();
   const [selectedAmount, setSelectedAmount] = useState(null);
   const [customAmount, setCustomAmount] = useState('');
   const [showThankYou, setShowThankYou] = useState(false);
@@ -62,7 +64,7 @@ function DonateView({ darkMode }) {
             <Icons.ChevronLeft className={`w-6 h-6 ${darkMode ? 'text-white' : 'text-gray-600'}`} />
           </button>
           <h2 className={`text-xl font-bold ${darkMode ? 'text-white' : 'text-gray-800'}`}>
-            Support the Project
+            {t('donate.title')}
           </h2>
         </div>
       </div>
@@ -74,7 +76,7 @@ function DonateView({ darkMode }) {
             <Icons.Heart className="w-8 h-8 text-white" />
           </div>
           <p className={`${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-            Help us maintain and improve w3Quran
+            {t('donate.subtitle')}
           </p>
         </div>
 
@@ -82,7 +84,7 @@ function DonateView({ darkMode }) {
         {showThankYou && (
           <div className="mb-6 p-4 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 text-white text-center shadow-lg animate-pulse">
             <Icons.Check className="w-8 h-8 mx-auto mb-2" />
-            <p className="font-bold text-lg">JazakAllah Khair!</p>
+            <p className="font-bold text-lg">{t('donate.thankYou')}</p>
             <p className="text-sm opacity-90">May Allah reward you abundantly</p>
           </div>
         )}
@@ -116,14 +118,14 @@ function DonateView({ darkMode }) {
                 disabled={!customAmount || parseFloat(customAmount) <= 0}
                 className="px-6 py-3 bg-gradient-to-r from-emerald-500 to-teal-500 text-white rounded-xl font-semibold hover:shadow-lg transition-all disabled:opacity-50"
               >
-                Donate
+                {t('donate.donateNow')}
               </button>
             </div>
             <button
               onClick={() => setSelectedAmount(null)}
               className={`mt-2 text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}
             >
-              Cancel
+              {t('common.cancel')}
             </button>
           </div>
         )}

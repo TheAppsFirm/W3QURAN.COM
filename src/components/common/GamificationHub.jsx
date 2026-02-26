@@ -6,6 +6,7 @@
 import { useState, useEffect, memo, useMemo } from 'react';
 import { Icons } from './Icons';
 import { useAuth } from '../../contexts/AuthContext';
+import { useTranslation } from '../../contexts/LocaleContext';
 import {
   LEVELS,
   ACHIEVEMENTS,
@@ -122,26 +123,27 @@ const XPProgressBar = memo(function XPProgressBar({ levelInfo, xp }) {
 
 // Streak Display Component
 const StreakDisplay = memo(function StreakDisplay({ current, best }) {
+  const { t } = useTranslation();
   return (
     <div className="flex items-center gap-4">
       {/* Current Streak */}
       <div className="flex-1 p-4 rounded-xl bg-gradient-to-br from-orange-500/20 to-red-500/20 border border-orange-500/30">
         <div className="flex items-center gap-2 mb-2">
           <Icons.Fire className="w-5 h-5 text-orange-400" />
-          <span className="text-white/60 text-sm">Current Streak</span>
+          <span className="text-white/60 text-sm">{t('gamification.streak')}</span>
         </div>
         <p className="text-3xl font-bold text-white">{current}</p>
-        <p className="text-white/40 text-xs">days</p>
+        <p className="text-white/40 text-xs">{t('stats.days')}</p>
       </div>
 
       {/* Best Streak */}
       <div className="flex-1 p-4 rounded-xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-purple-500/30">
         <div className="flex items-center gap-2 mb-2">
           <Icons.Trophy className="w-5 h-5 text-purple-400" />
-          <span className="text-white/60 text-sm">Best Streak</span>
+          <span className="text-white/60 text-sm">{t('gamification.achievements')}</span>
         </div>
         <p className="text-3xl font-bold text-white">{best}</p>
-        <p className="text-white/40 text-xs">days</p>
+        <p className="text-white/40 text-xs">{t('stats.days')}</p>
       </div>
     </div>
   );
@@ -329,11 +331,12 @@ const LeaderboardRow = memo(function LeaderboardRow({ entry, isCurrentUser }) {
 
 // Leaderboard Tab Component
 const LeaderboardTab = memo(function LeaderboardTab({ data, loading, error, sort, onSortChange }) {
+  const { t } = useTranslation();
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center py-12">
         <div className="w-8 h-8 border-2 border-white/20 border-t-amber-400 rounded-full animate-spin" />
-        <p className="text-white/40 text-sm mt-3">Loading leaderboard...</p>
+        <p className="text-white/40 text-sm mt-3">{t('common.loading')}</p>
       </div>
     );
   }
@@ -347,7 +350,7 @@ const LeaderboardTab = memo(function LeaderboardTab({ data, loading, error, sort
           onClick={() => onSortChange(sort)}
           className="mt-3 px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-white text-sm transition-all"
         >
-          Retry
+          {t('common.retry')}
         </button>
       </div>
     );
@@ -418,6 +421,7 @@ const GamificationHub = memo(function GamificationHub({
   onClose,
 }) {
   const { user } = useAuth();
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState('overview');
   const [data, setData] = useState(null);
   const [levelInfo, setLevelInfo] = useState(null);
@@ -525,9 +529,9 @@ const GamificationHub = memo(function GamificationHub({
         <div className="flex-shrink-0 flex border-b border-white/10">
           {[
             { id: 'overview', label: 'Overview', icon: 'Compass' },
-            { id: 'challenges', label: 'Challenges', icon: 'Target' },
-            { id: 'achievements', label: 'Badges', icon: 'Award' },
-            { id: 'leaderboard', label: 'Leaderboard', icon: 'Trophy' },
+            { id: 'challenges', label: t('gamification.dailyGoal'), icon: 'Target' },
+            { id: 'achievements', label: t('gamification.badges'), icon: 'Award' },
+            { id: 'leaderboard', label: t('gamification.leaderboard'), icon: 'Trophy' },
           ].map((tab) => {
             const Icon = getIcon(tab.icon);
             return (
@@ -562,14 +566,14 @@ const GamificationHub = memo(function GamificationHub({
 
               {/* Stats */}
               <div>
-                <h3 className="text-white/60 text-sm uppercase mb-3">Your Stats</h3>
+                <h3 className="text-white/60 text-sm uppercase mb-3">{t('stats.title')}</h3>
                 <StatsGrid stats={data.stats} />
               </div>
 
               {/* Recent Achievements */}
               {data.achievements.length > 0 && (
                 <div>
-                  <h3 className="text-white/60 text-sm uppercase mb-3">Recent Achievements</h3>
+                  <h3 className="text-white/60 text-sm uppercase mb-3">{t('gamification.achievements')}</h3>
                   <div className="grid grid-cols-4 gap-2">
                     {data.achievements.slice(-4).map((achId) => {
                       const ach = ACHIEVEMENTS[achId];
@@ -591,7 +595,7 @@ const GamificationHub = memo(function GamificationHub({
           {activeTab === 'challenges' && (
             <div className="space-y-4">
               <div className="flex items-center justify-between mb-2">
-                <h3 className="text-white font-medium">Today's Challenges</h3>
+                <h3 className="text-white font-medium">{t('gamification.dailyGoal')}</h3>
                 <span className="text-white/40 text-sm">
                   {challenges.filter(c => c.completed).length}/{challenges.length} completed
                 </span>

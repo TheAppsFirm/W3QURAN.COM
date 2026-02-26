@@ -15,8 +15,10 @@ import {
   getRecentActivity,
 } from '../../utils/trackingUtils';
 import { loadProgress } from '../../data/progressTracker';
+import { useTranslation } from '../../contexts/LocaleContext';
 
 function StatisticsView({ darkMode, readingProgress, streak: propStreak, points }) {
+  const { t, isRTL } = useTranslation();
   // Real statistics
   const [weeklyData, setWeeklyData] = useState([0, 0, 0, 0, 0, 0, 0]);
 
@@ -75,7 +77,7 @@ function StatisticsView({ darkMode, readingProgress, streak: propStreak, points 
             <Icons.ChevronLeft className={`w-6 h-6 ${darkMode ? 'text-white' : 'text-gray-600'}`} />
           </button>
           <h2 className={`text-xl font-bold ${darkMode ? 'text-white' : 'text-gray-800'}`}>
-            Your Statistics
+            {t('stats.title')}
           </h2>
         </div>
       </div>
@@ -111,9 +113,9 @@ function StatisticsView({ darkMode, readingProgress, streak: propStreak, points 
       {/* Stats Cards */}
       <div className="grid grid-cols-2 gap-4 max-w-lg mx-auto w-full mb-6">
         {[
-          { label: 'Surahs Started', value: uniqueSurahs, icon: Icons.Book, color: 'from-emerald-500 to-teal-500' },
-          { label: 'Total Ayahs', value: totalAyahs, icon: Icons.Layers, color: 'from-violet-500 to-purple-500' },
-          { label: 'Day Streak', value: displayStreak, icon: Icons.Fire, color: 'from-orange-500 to-amber-500' },
+          { label: t('stats.surahsCompleted'), value: uniqueSurahs, icon: Icons.Book, color: 'from-emerald-500 to-teal-500' },
+          { label: t('stats.totalVerses'), value: totalAyahs, icon: Icons.Layers, color: 'from-violet-500 to-purple-500' },
+          { label: t('stats.readingStreak'), value: displayStreak, icon: Icons.Fire, color: 'from-orange-500 to-amber-500' },
           { label: 'Total Points', value: points || 0, icon: Icons.Star, color: 'from-pink-500 to-rose-500' },
         ].map((stat, i) => {
           const StatIcon = stat.icon;
@@ -130,7 +132,7 @@ function StatisticsView({ darkMode, readingProgress, streak: propStreak, points 
       {/* Completion Progress */}
       <div className={`max-w-lg mx-auto w-full rounded-2xl p-4 ${darkMode ? 'bg-gray-800' : 'bg-white'} shadow-xl mb-6`}>
         <div className="flex items-center justify-between mb-2">
-          <h3 className={`font-bold ${darkMode ? 'text-white' : 'text-gray-800'}`}>Quran Completion</h3>
+          <h3 className={`font-bold ${darkMode ? 'text-white' : 'text-gray-800'}`}>{t('stats.readingProgress')}</h3>
           <span className="text-emerald-500 font-bold">{completionPercent}%</span>
         </div>
         <div className={`h-3 rounded-full ${darkMode ? 'bg-gray-700' : 'bg-gray-200'}`}>
@@ -146,7 +148,7 @@ function StatisticsView({ darkMode, readingProgress, streak: propStreak, points 
 
       {/* Weekly Activity Chart */}
       <div className={`max-w-lg mx-auto w-full rounded-2xl p-6 ${darkMode ? 'bg-gray-800' : 'bg-white'} shadow-xl mb-6`}>
-        <h3 className={`font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-800'}`}>Weekly Activity</h3>
+        <h3 className={`font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-800'}`}>{t('stats.thisWeek')}</h3>
         <div className="flex items-end justify-between h-32 gap-2">
           {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((day, i) => {
             const isToday = i === new Date().getDay();

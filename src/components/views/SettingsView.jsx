@@ -8,6 +8,7 @@ import { Icons } from '../common/Icons';
 import { useLocalStorage } from '../../hooks';
 import { isSoundEnabled, setSoundEnabled } from '../../utils/soundUtils';
 import { useAuth } from '../../contexts/AuthContext';
+import { useTranslation } from '../../contexts/LocaleContext';
 
 // Product types - backend resolves correct price for test/live mode
 const PRODUCTS = {
@@ -38,6 +39,7 @@ const CREDIT_PACKS = [
 ];
 
 function SettingsView({ darkMode, setDarkMode, onNavigate }) {
+  const { t, isRTL } = useTranslation();
   const { user, subscription, isPremium, isAdmin, loading: authLoading } = useAuth();
   const [upgradeLoading, setUpgradeLoading] = useState(null);
   const [upgradeError, setUpgradeError] = useState(null);
@@ -117,11 +119,11 @@ function SettingsView({ darkMode, setDarkMode, onNavigate }) {
   const [reciter, setReciter] = useLocalStorage('reader_reciter', 'ar.alafasy');
 
   const settingsToggle = [
-    { key: 'notify', label: 'Notifications', icon: Icons.Bell, value: notifications, setter: setNotifications, desc: 'Daily verse and prayer reminders' },
-    { key: 'auto', label: 'Auto-play Audio', icon: Icons.Volume, value: autoPlayAudio, setter: setAutoPlayAudio, desc: 'Automatically play next ayah' },
-    { key: 'trans', label: 'Show Translation', icon: Icons.Globe, value: showTranslation, setter: setShowTranslation, desc: 'Display English translation' },
-    { key: 'tajweed', label: 'Tajweed Highlighting', icon: Icons.Sparkles, value: tajweedHighlight, setter: setTajweedHighlight, desc: 'Color-code tajweed rules' },
-    { key: 'wordByWord', label: 'Word-by-Word Mode', icon: Icons.Layers, value: wordByWord, setter: setWordByWord, desc: 'Show word meanings on tap' },
+    { key: 'notify', label: t('settings.notifications'), icon: Icons.Bell, value: notifications, setter: setNotifications, desc: 'Daily verse and prayer reminders' },
+    { key: 'auto', label: t('settingsExtended.autoPlayAudio'), icon: Icons.Volume, value: autoPlayAudio, setter: setAutoPlayAudio, desc: 'Automatically play next ayah' },
+    { key: 'trans', label: t('settingsExtended.showTranslation'), icon: Icons.Globe, value: showTranslation, setter: setShowTranslation, desc: 'Display English translation' },
+    { key: 'tajweed', label: t('settingsExtended.tajweedHighlighting'), icon: Icons.Sparkles, value: tajweedHighlight, setter: setTajweedHighlight, desc: 'Color-code tajweed rules' },
+    { key: 'wordByWord', label: t('settingsExtended.wordByWordMode'), icon: Icons.Layers, value: wordByWord, setter: setWordByWord, desc: 'Show word meanings on tap' },
   ];
 
   const fontSizes = [
@@ -164,7 +166,7 @@ function SettingsView({ darkMode, setDarkMode, onNavigate }) {
         </button>
 
         <h2 className={`text-3xl font-bold mb-2 text-center ${darkMode ? 'text-white' : 'text-gray-800'}`}>
-          Settings
+          {t('settings.title')}
         </h2>
         <p className={`text-center mb-8 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
           Customize your experience
@@ -224,7 +226,7 @@ function SettingsView({ darkMode, setDarkMode, onNavigate }) {
               <div className="flex items-center gap-3">
                 <Icons.Shield className="w-6 h-6" />
                 <div className="text-left">
-                  <p className="font-bold">Admin Dashboard</p>
+                  <p className="font-bold">{t('settings.adminDashboard')}</p>
                   <p className="text-white/70 text-sm">User management & sales</p>
                 </div>
               </div>
@@ -237,7 +239,7 @@ function SettingsView({ darkMode, setDarkMode, onNavigate }) {
         {user && (
           <div className="mb-6">
             <h3 className={`text-sm font-semibold uppercase tracking-wider mb-3 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-              Subscription
+              {t('settings.subscription')}
             </h3>
 
             <div className={`rounded-2xl p-4 shadow-lg border ${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}>
@@ -255,7 +257,7 @@ function SettingsView({ darkMode, setDarkMode, onNavigate }) {
                   </div>
                   <div>
                     <span className={`font-bold block ${darkMode ? 'text-white' : 'text-gray-800'}`}>
-                      {isPremium ? 'Premium Plan' : 'Free Plan'}
+                      {isPremium ? t('settingsExtended.premiumPlan') : t('auth.freePlan')}
                     </span>
                     <span className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
                       {isPremium ? 'All features unlocked' : 'Basic features'}
@@ -349,7 +351,7 @@ function SettingsView({ darkMode, setDarkMode, onNavigate }) {
                       darkMode ? 'bg-gray-700 text-white hover:bg-gray-600' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                     } ${upgradeLoading === 'portal' ? 'opacity-50' : ''}`}
                   >
-                    {upgradeLoading === 'portal' ? 'Loading...' : 'Manage Subscription'}
+                    {upgradeLoading === 'portal' ? t('common.loading') : t('settings.manageSubscription')}
                   </button>
                 </div>
               )}
@@ -627,7 +629,7 @@ function SettingsView({ darkMode, setDarkMode, onNavigate }) {
         {/* Appearance Section */}
         <div className="mb-6">
           <h3 className={`text-sm font-semibold uppercase tracking-wider mb-3 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-            Appearance
+            {t('settings.appearance')}
           </h3>
 
           {/* Dark Mode Toggle */}
@@ -644,7 +646,7 @@ function SettingsView({ darkMode, setDarkMode, onNavigate }) {
                   <Icons.Sun className="w-5 h-5 text-amber-500" />
                 )}
                 <div>
-                  <span className={`font-bold block ${darkMode ? 'text-white' : 'text-gray-800'}`}>Dark Mode</span>
+                  <span className={`font-bold block ${darkMode ? 'text-white' : 'text-gray-800'}`}>{t('settings.darkMode')}</span>
                   <span className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>Easier on the eyes</span>
                 </div>
               </div>
@@ -674,7 +676,7 @@ function SettingsView({ darkMode, setDarkMode, onNavigate }) {
             <div className="flex items-center gap-3 mb-3">
               <Icons.Type className="w-5 h-5 text-blue-500" />
               <div>
-                <span className={`font-bold block ${darkMode ? 'text-white' : 'text-gray-800'}`}>Arabic Font Size</span>
+                <span className={`font-bold block ${darkMode ? 'text-white' : 'text-gray-800'}`}>{t('settingsExtended.arabicFontSize')}</span>
                 <span className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>Adjust reading comfort</span>
               </div>
             </div>
@@ -701,7 +703,7 @@ function SettingsView({ darkMode, setDarkMode, onNavigate }) {
         {/* Audio Section */}
         <div className="mb-6">
           <h3 className={`text-sm font-semibold uppercase tracking-wider mb-3 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-            Audio
+            {t('settings.audio')}
           </h3>
 
           {/* Reciter Selection */}
@@ -889,7 +891,7 @@ function SettingsView({ darkMode, setDarkMode, onNavigate }) {
           }`}
         >
           <p className={`font-bold ${darkMode ? 'text-white' : 'text-gray-800'}`}>w3Quran</p>
-          <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>Version 1.0.0</p>
+          <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>{t('settings.version')} 1.0.0</p>
           <p className={`text-xs mt-2 ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>
             Made with ❤️ for the Ummah
           </p>

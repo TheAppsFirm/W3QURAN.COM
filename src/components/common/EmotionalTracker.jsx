@@ -11,6 +11,7 @@
 import { useState, useEffect, useCallback, memo, useMemo } from 'react';
 import { Icons } from './Icons';
 import { SURAHS } from '../../data';
+import { useTranslation } from '../../contexts/LocaleContext';
 
 // Mood definitions with colors and Arabic translations
 const MOODS = [
@@ -56,6 +57,15 @@ const saveData = (data) => {
 
 // Quick Mood Selector Component
 export const MoodSelector = memo(function MoodSelector({ onSelect, selectedMood }) {
+  const { t } = useTranslation();
+  const moodLabels = {
+    peaceful: t('mood.peaceful'),
+    motivated: t('mood.motivated'),
+    reflective: t('mood.reflective'),
+    moved: t('mood.moved'),
+    grateful: t('mood.grateful'),
+    hopeful: t('mood.hopeful'),
+  };
   return (
     <div className="grid grid-cols-3 gap-3">
       {MOODS.map((mood) => {
@@ -81,7 +91,7 @@ export const MoodSelector = memo(function MoodSelector({ onSelect, selectedMood 
             >
               <Icon className="w-6 h-6 text-white" />
             </div>
-            <span className="text-white font-medium text-sm">{mood.label}</span>
+            <span className="text-white font-medium text-sm">{moodLabels[mood.id] || mood.label}</span>
             <span className="text-white/60 text-xs" dir="rtl">{mood.labelAr}</span>
           </button>
         );
@@ -99,6 +109,7 @@ export const MoodEntryForm = memo(function MoodEntryForm({
   readingDuration, // in minutes
   versesRead,
 }) {
+  const { t } = useTranslation();
   const [selectedMood, setSelectedMood] = useState(null);
   const [notes, setNotes] = useState('');
   const [saved, setSaved] = useState(false);
@@ -159,7 +170,7 @@ export const MoodEntryForm = memo(function MoodEntryForm({
             <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-br from-emerald-500 to-green-500 flex items-center justify-center">
               <Icons.Check className="w-10 h-10 text-white" />
             </div>
-            <h3 className="text-xl font-bold text-white mb-2">Saved!</h3>
+            <h3 className="text-xl font-bold text-white mb-2">{t('success.saved')}</h3>
             <p className="text-white/60">Your emotional journey is being tracked</p>
           </div>
         ) : (
@@ -169,7 +180,7 @@ export const MoodEntryForm = memo(function MoodEntryForm({
               <div>
                 <h2 className="text-xl font-bold text-white flex items-center gap-2">
                   <Icons.Activity className="w-5 h-5 text-purple-400" />
-                  How do you feel?
+                  {t('mood.howFeeling')}
                 </h2>
                 <p className="text-white/60 text-sm mt-1">
                   After reading {surahName}
@@ -229,7 +240,7 @@ export const MoodEntryForm = memo(function MoodEntryForm({
               }`}
             >
               <Icons.Check className="w-5 h-5" />
-              Save Reflection
+              {t('common.save')}
             </button>
           </>
         )}
@@ -240,6 +251,7 @@ export const MoodEntryForm = memo(function MoodEntryForm({
 
 // Main Emotional Journey Dashboard
 const EmotionalTracker = memo(function EmotionalTracker({ isVisible, onClose, onNavigateToSurah }) {
+  const { t } = useTranslation();
   const [data, setData] = useState({ entries: [], insights: {} });
   const [activeTab, setActiveTab] = useState('overview'); // overview, history, suggestions
   const [currentMoodState, setCurrentMoodState] = useState(null);
@@ -339,7 +351,7 @@ const EmotionalTracker = memo(function EmotionalTracker({ isVisible, onClose, on
                 <Icons.Activity className="w-6 h-6 text-white" />
               </div>
               <div>
-                <h2 className="text-xl font-bold text-white">Emotional Journey</h2>
+                <h2 className="text-xl font-bold text-white">{t('mood.title')}</h2>
                 <p className="text-white/60 text-sm">Track your spiritual wellness</p>
               </div>
             </div>
@@ -355,7 +367,7 @@ const EmotionalTracker = memo(function EmotionalTracker({ isVisible, onClose, on
           <div className="flex gap-2 mt-4">
             {[
               { id: 'overview', label: 'Overview', icon: Icons.PieChart },
-              { id: 'history', label: 'History', icon: Icons.Clock },
+              { id: 'history', label: t('mood.moodHistory'), icon: Icons.Clock },
               { id: 'suggestions', label: 'For You', icon: Icons.Sparkles },
             ].map((tab) => {
               const Icon = tab.icon;
@@ -389,17 +401,17 @@ const EmotionalTracker = memo(function EmotionalTracker({ isVisible, onClose, on
                     <div className="p-4 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-teal-500/20 border border-cyan-500/20">
                       <div className="flex items-center gap-2 mb-2">
                         <Icons.Fire className="w-5 h-5 text-orange-400" />
-                        <span className="text-white/60 text-sm">Streak</span>
+                        <span className="text-white/60 text-sm">{t('mood.streak')}</span>
                       </div>
-                      <p className="text-3xl font-bold text-white">{insights.streak} days</p>
+                      <p className="text-3xl font-bold text-white">{insights.streak} {t('stats.days')}</p>
                     </div>
 
                     <div className="p-4 rounded-2xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-purple-500/20">
                       <div className="flex items-center gap-2 mb-2">
                         <Icons.BookOpen className="w-5 h-5 text-purple-400" />
-                        <span className="text-white/60 text-sm">This Week</span>
+                        <span className="text-white/60 text-sm">{t('stats.thisWeek')}</span>
                       </div>
-                      <p className="text-3xl font-bold text-white">{insights.weeklyEntries} sessions</p>
+                      <p className="text-3xl font-bold text-white">{insights.weeklyEntries} {t('mood.sessions')}</p>
                     </div>
 
                     <div className="p-4 rounded-2xl bg-gradient-to-br from-amber-500/20 to-orange-500/20 border border-amber-500/20">
@@ -511,7 +523,7 @@ const EmotionalTracker = memo(function EmotionalTracker({ isVisible, onClose, on
               ) : (
                 <div className="text-center py-12">
                   <Icons.Clock className="w-12 h-12 text-white/20 mx-auto mb-4" />
-                  <p className="text-white/60">No entries yet</p>
+                  <p className="text-white/60">{t('errors.notFound')}</p>
                 </div>
               )}
             </div>
@@ -521,13 +533,13 @@ const EmotionalTracker = memo(function EmotionalTracker({ isVisible, onClose, on
           {activeTab === 'suggestions' && (
             <div className="space-y-6">
               <div>
-                <h3 className="text-white font-medium mb-4">How are you feeling right now?</h3>
+                <h3 className="text-white font-medium mb-4">{t('mood.howFeeling')}</h3>
                 <div className="grid grid-cols-2 gap-3">
                   {[
-                    { id: 'anxious', label: 'Anxious', icon: 'Cloud', color: '#EF4444' },
-                    { id: 'sad', label: 'Sad', icon: 'Frown', color: '#6366F1' },
+                    { id: 'anxious', label: t('mood.anxious'), icon: 'Cloud', color: '#EF4444' },
+                    { id: 'sad', label: t('mood.sad'), icon: 'Frown', color: '#6366F1' },
                     { id: 'stressed', label: 'Stressed', icon: 'Zap', color: '#F59E0B' },
-                    { id: 'grateful', label: 'Grateful', icon: 'Heart', color: '#10B981' },
+                    { id: 'grateful', label: t('mood.grateful'), icon: 'Heart', color: '#10B981' },
                     { id: 'seeking_guidance', label: 'Seeking Guidance', icon: 'Compass', color: '#8B5CF6' },
                     { id: 'need_strength', label: 'Need Strength', icon: 'Award', color: '#EC4899' },
                   ].map((state) => {
@@ -558,7 +570,7 @@ const EmotionalTracker = memo(function EmotionalTracker({ isVisible, onClose, on
 
               {suggestions.length > 0 && (
                 <div>
-                  <h3 className="text-white font-medium mb-4">Recommended for You</h3>
+                  <h3 className="text-white font-medium mb-4">{t('mood.suggestedSurahs')}</h3>
                   <div className="space-y-3">
                     {suggestions.map((surah) => (
                       <button

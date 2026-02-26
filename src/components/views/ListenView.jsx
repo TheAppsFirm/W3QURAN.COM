@@ -8,6 +8,7 @@ import { Icons } from '../common/Icons';
 import { PALETTES } from '../../data';
 import { useLocalStorage } from '../../hooks';
 import { RECITERS as RECITER_DATA, getAudioUrl } from '../../hooks/useAudioPlayer';
+import { useTranslation } from '../../contexts/LocaleContext';
 
 // Extended reciters data with styles
 const RECITERS = [
@@ -28,6 +29,7 @@ const TRANSLATIONS = [
 ];
 
 function ListenView({ level, darkMode }) {
+  const { t, isRTL } = useTranslation();
   const [activeTab, setActiveTab] = useState('reciters');
   const [selectedReciter, setSelectedReciter] = useLocalStorage('reader_reciter', 'ar.alafasy');
   const [selectedTranslation, setSelectedTranslation] = useLocalStorage('settings_translation', 'sahih');
@@ -106,7 +108,7 @@ function ListenView({ level, darkMode }) {
             <Icons.ChevronLeft className={`w-6 h-6 ${darkMode ? 'text-white' : 'text-gray-600'}`} />
           </button>
           <h2 className={`text-xl font-bold ${darkMode ? 'text-white' : 'text-gray-800'}`}>
-            Listen to Quran
+            {t('listen.title')}
           </h2>
         </div>
       </div>
@@ -126,7 +128,7 @@ function ListenView({ level, darkMode }) {
           }`}
         >
           <Icons.Mic className="w-4 h-4 inline mr-2" />
-          Reciters
+          {t('listen.selectReciter')}
         </button>
         <button
           onClick={() => setActiveTab('translations')}
@@ -139,7 +141,7 @@ function ListenView({ level, darkMode }) {
           }`}
         >
           <Icons.Globe className="w-4 h-4 inline mr-2" />
-          Translations
+          {t('listenExtended.translation')}
         </button>
       </div>
 
@@ -148,10 +150,10 @@ function ListenView({ level, darkMode }) {
           {/* Reciter Filters */}
           <div className="flex justify-center gap-2 mb-6 flex-wrap">
             {[
-              { id: 'all', label: 'All' },
-              { id: 'popular', label: 'Popular' },
-              { id: 'murattal', label: 'Murattal' },
-              { id: 'mujawwad', label: 'Mujawwad' },
+              { id: 'all', label: t('common.all') },
+              { id: 'popular', label: t('listenExtended.popularReciters') },
+              { id: 'murattal', label: t('listenExtended.murattal') },
+              { id: 'mujawwad', label: t('listenExtended.mujawwad') },
             ].map((f) => (
               <button
                 key={f.id}
@@ -229,10 +231,10 @@ function ListenView({ level, darkMode }) {
                       {isSelected ? (
                         <>
                           <Icons.Check className="w-4 h-4 inline mr-1" />
-                          Selected
+                          {t('common.done')}
                         </>
                       ) : (
-                        'Select'
+                        t('common.select')
                       )}
                     </button>
                   </div>
