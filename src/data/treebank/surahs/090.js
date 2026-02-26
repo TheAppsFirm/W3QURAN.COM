@@ -136,7 +136,12 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "لَا (emphatic) + أُقْسِمُ (verb) + بِهَٰذَا الْبَلَدِ (sworn object)"
+    dependencyStructure: "لَا (emphatic) + أُقْسِمُ (verb) + بِهَٰذَا الْبَلَدِ (sworn object)",
+    structure: {
+      relationships: [
+      { from: 1, to: 2, label: 'نفی + فعل' }
+      ],
+    },
   },
 
   2: {
@@ -148,7 +153,14 @@ export const TREEBANK_DATA = {
       hi: "और आप इस शहर में हलाल हैं",
       bn: "এবং আপনি এই শহরে হালাল",
       tr: "Ve sen bu şehirde serbestsin",
-      id: "Dan engkau (Muhammad) bebas di negeri ini"
+      id: "Dan engkau (Muhammad) bebas di negeri ini",
+    structure: {
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' }
+      ],
+    },
     },
     words: [
       {
@@ -317,7 +329,12 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "وَوَالِدٍ (oath object) + وَمَا وَلَدَ (relative clause)"
+    dependencyStructure: "وَوَالِدٍ (oath object) + وَمَا وَلَدَ (relative clause)",
+    structure: {
+      relationships: [
+      { from: 2, to: 3, label: 'موصول + صلة' }
+      ],
+    },
   },
 
   4: {
@@ -450,7 +467,12 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "لَقَدْ (emphasis) + خَلَقْنَا (verb) + الْإِنسَانَ (object) + فِي كَبَدٍ (state) - THE MAIN THESIS"
+    dependencyStructure: "لَقَدْ (emphasis) + خَلَقْنَا (verb) + الْإِنسَانَ (object) + فِي كَبَدٍ (state) - THE MAIN THESIS",
+    structure: {
+      relationships: [
+      { from: 4, to: 5, label: 'جار + مجرور' }
+      ],
+    },
   },
 
   5: {
@@ -596,7 +618,13 @@ export const TREEBANK_DATA = {
         grammarRole: "noun_nominative"
       }
     ],
-    dependencyStructure: "أَيَحْسَبُ (rhetorical question) + أَن لَّن يَقْدِرَ عَلَيْهِ أَحَدٌ (content)"
+    dependencyStructure: "أَيَحْسَبُ (rhetorical question) + أَن لَّن يَقْدِرَ عَلَيْهِ أَحَدٌ (content)",
+    structure: {
+      relationships: [
+      { from: 3, to: 4, label: 'نفی + فعل' },
+      { from: 5, to: 6, label: 'جار + مجرور' }
+      ],
+    },
   },
 
   6: {
@@ -608,7 +636,10 @@ export const TREEBANK_DATA = {
       hi: "वह कहता है मैंने बहुत सा माल ख़र्च कर दिया",
       bn: "সে বলে আমি প্রচুর সম্পদ ব্যয় করেছি",
       tr: "O, 'Yığınla mal harcadım' diyor",
-      id: "Dia berkata, 'Aku telah menghabiskan harta yang banyak'"
+      id: "Dia berkata, 'Aku telah menghabiskan harta yang banyak'",
+    structure: {
+      relationships: [{ from: 2, to: 3, label: 'فعل + فاعل' }],
+    },
     },
     words: [
       {
@@ -814,7 +845,12 @@ export const TREEBANK_DATA = {
         grammarRole: "noun_nominative"
       }
     ],
-    dependencyStructure: "أَيَحْسَبُ (rhetorical question) + أَن لَّمْ يَرَهُ أَحَدٌ (content)"
+    dependencyStructure: "أَيَحْسَبُ (rhetorical question) + أَن لَّمْ يَرَهُ أَحَدٌ (content)",
+    structure: {
+      relationships: [
+      { from: 3, to: 4, label: 'نفی + فعل' }
+      ],
+    },
   },
 
   8: {
@@ -915,7 +951,13 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "أَلَمْ (rhetorical) + نَجْعَل (verb) + لَّهُ (beneficiary) + عَيْنَيْنِ (object)"
+    dependencyStructure: "أَلَمْ (rhetorical) + نَجْعَل (verb) + لَّهُ (beneficiary) + عَيْنَيْنِ (object)",
+    structure: {
+      relationships: [
+      { from: 1, to: 2, label: 'نفی + فعل' },
+      { from: 3, to: 4, label: 'جار + مجرور' }
+      ],
+    },
   },
 
   9: {
@@ -927,7 +969,12 @@ export const TREEBANK_DATA = {
       hi: "और ज़बान और दो होंठ",
       bn: "এবং একটি জিহ্বা ও দুটি ঠোঁট",
       tr: "Bir dil ve iki dudak",
-      id: "Dan lidah serta dua bibir"
+      id: "Dan lidah serta dua bibir",
+    structure: {
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' }
+      ],
+    },
     },
     words: [
       {
@@ -997,7 +1044,12 @@ export const TREEBANK_DATA = {
       hi: "और हमने उसे दोनों रास्ते दिखाए",
       bn: "এবং আমরা তাকে দুটি পথ দেখিয়েছি",
       tr: "Ve ona iki yolu göstermedik mi",
-      id: "Dan Kami telah menunjukkan kepadanya dua jalan"
+      id: "Dan Kami telah menunjukkan kepadanya dua jalan",
+    structure: {
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' }
+      ],
+    },
     },
     words: [
       {
@@ -1153,7 +1205,12 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "فَلَا (negative result) + اقْتَحَمَ (verb) + الْعَقَبَةَ (object) - INTRODUCING THE STEEP PATH"
+    dependencyStructure: "فَلَا (negative result) + اقْتَحَمَ (verb) + الْعَقَبَةَ (object) - INTRODUCING THE STEEP PATH",
+    structure: {
+      relationships: [
+      { from: 1, to: 2, label: 'نفی + فعل' }
+      ],
+    },
   },
 
   12: {
@@ -1165,7 +1222,14 @@ export const TREEBANK_DATA = {
       hi: "और आपको क्या मालूम कि वह घाटी क्या है",
       bn: "এবং আপনাকে কে জানাবে এই দুর্গম পথ কী",
       tr: "Sarp yokuşun ne olduğunu sana ne bildirdi",
-      id: "Dan tahukah kamu apakah jalan yang mendaki itu"
+      id: "Dan tahukah kamu apakah jalan yang mendaki itu",
+    structure: {
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' }
+      ],
+    },
     },
     words: [
       {
@@ -1263,7 +1327,10 @@ export const TREEBANK_DATA = {
       hi: "गर्दन छुड़ाना (ग़ुलाम आज़ाद करना)",
       bn: "দাস মুক্ত করা",
       tr: "Bir köle azat etmektir",
-      id: "Yaitu memerdekakan hamba sahaya"
+      id: "Yaitu memerdekakan hamba sahaya",
+    structure: {
+      relationships: [{ from: 1, to: 2, label: 'فعل + فاعل' }],
+    },
     },
     words: [
       {
@@ -1466,7 +1533,12 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "أَوْ (alternative) + إِطْعَامٌ (action) + فِي يَوْمٍ ذِي مَسْغَبَةٍ (circumstance)"
+    dependencyStructure: "أَوْ (alternative) + إِطْعَامٌ (action) + فِي يَوْمٍ ذِي مَسْغَبَةٍ (circumstance)",
+    structure: {
+      relationships: [
+      { from: 3, to: 4, label: 'جار + مجرور' }
+      ],
+    },
   },
 
   15: {
@@ -1478,7 +1550,10 @@ export const TREEBANK_DATA = {
       hi: "रिश्तेदार यतीम को",
       bn: "নিকটাত্মীয় এতিমকে",
       tr: "Yakın akrabadan bir yetimi",
-      id: "Yaitu anak yatim yang ada hubungan kerabat"
+      id: "Yaitu anak yatim yang ada hubungan kerabat",
+    structure: {
+      relationships: [{ from: 2, to: 3, label: 'فعل + فاعل' }],
+    },
     },
     words: [
       {
@@ -1565,7 +1640,10 @@ export const TREEBANK_DATA = {
       hi: "या मिट्टी में लोटने वाले मिस्कीन को",
       bn: "অথবা ধুলায় মিশে থাকা মিসকীনকে",
       tr: "Veya toprağa serilmiş bir yoksulu",
-      id: "Atau orang miskin yang sangat sengsara"
+      id: "Atau orang miskin yang sangat sengsara",
+    structure: {
+      relationships: [{ from: 3, to: 4, label: 'فعل + فاعل' }],
+    },
     },
     words: [
       {
@@ -1869,7 +1947,13 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "ثُمَّ (sequence) + كَانَ مِنَ الَّذِينَ آمَنُوا (first condition) + وَتَوَاصَوْا بِالصَّبْرِ (second) + وَتَوَاصَوْا بِالْمَرْحَمَةِ (third)"
+    dependencyStructure: "ثُمَّ (sequence) + كَانَ مِنَ الَّذِينَ آمَنُوا (first condition) + وَتَوَاصَوْا بِالصَّبْرِ (second) + وَتَوَاصَوْا بِالْمَرْحَمَةِ (third)",
+    structure: {
+      relationships: [
+      { from: 3, to: 4, label: 'جار + مجرور' },
+      { from: 4, to: 5, label: 'موصول + صلة' }
+      ],
+    },
   },
 
   18: {
@@ -1881,7 +1965,10 @@ export const TREEBANK_DATA = {
       hi: "यह लोग दाईं तरफ़ वाले हैं",
       bn: "এরাই ডান দিকের লোক",
       tr: "İşte onlar sağ taraftakilerdir",
-      id: "Mereka adalah golongan kanan"
+      id: "Mereka adalah golongan kanan",
+    structure: {
+      relationships: [{ from: 3, to: 4, label: 'فعل + فاعل' }],
+    },
     },
     words: [
       {
@@ -2083,7 +2170,12 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "وَالَّذِينَ كَفَرُوا بِآيَاتِنَا (subject clause) + هُمْ أَصْحَابُ الْمَشْأَمَةِ (predicate)"
+    dependencyStructure: "وَالَّذِينَ كَفَرُوا بِآيَاتِنَا (subject clause) + هُمْ أَصْحَابُ الْمَشْأَمَةِ (predicate)",
+    structure: {
+      relationships: [
+      { from: 1, to: 2, label: 'موصول + صلة' }
+      ],
+    },
   },
 
   20: {
@@ -2164,7 +2256,13 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "عَلَيْهِمْ (predicate) + نَارٌ مُّؤْصَدَةٌ (subject) - FINAL WARNING"
+    dependencyStructure: "عَلَيْهِمْ (predicate) + نَارٌ مُّؤْصَدَةٌ (subject) - FINAL WARNING",
+    structure: {
+      relationships: [
+      { from: 1, to: 2, label: 'جار + مجرور' },
+      { from: 2, to: 3, label: 'موصوف + صفت' }
+      ],
+    },
   }
 };
 

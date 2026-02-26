@@ -26,6 +26,7 @@ import {
   loadSurahTreebank,
   loadSurahOntology,
   hasOntologyData,
+  LANGUAGE_NAMES,
 } from '../../data/treebank/index';
 import {
   TAFSEER_SOURCES,
@@ -470,7 +471,7 @@ const WordDetailPanel = memo(function WordDetailPanel({ word, onClose, lang = 'e
 
   // Handle both pos array format and posTag string format
   const posArray = Array.isArray(word.pos) ? word.pos : (word.posTag ? [word.posTag] : ['N']);
-  const primaryTag = POS_TAGS[posArray[0]];
+  const primaryTag = POS_TAGS[posArray[0]] || { label: posArray[0], color: '#666', bgColor: '#66666620' };
   const caseInfo = word.case ? CASES[word.case] : null;
   const roleInfo = word.grammarRole ? GRAMMAR_ROLES[word.grammarRole] : null;
   const labels = UI_LABELS[lang] || UI_LABELS.en;
@@ -622,6 +623,8 @@ const DependencyTree = memo(function DependencyTree({ words, structure, lang = '
   const labels = UI_LABELS[lang] || UI_LABELS.en;
 
   if (!structure?.diagram || structure.diagram.length === 0) return null;
+  // Skip if diagram contains only strings (not connection objects)
+  if (typeof structure.diagram[0] === 'string') return null;
 
   // Calculate positions for words (RTL)
   // Dynamic width based on word count - minimum spacing for readability
@@ -807,7 +810,10 @@ const DependencyTree = memo(function DependencyTree({ words, structure, lang = '
                   className="fill-white/60"
                   style={{ fontSize: `${transSize}px` }}
                 >
-                  {word.translation?.length > 15 ? word.translation.substring(0, 12) + '...' : word.translation}
+                  {(() => {
+                    const t = typeof word.translation === 'object' ? (word.translation[lang] || word.translation.en || '') : (word.translation || '');
+                    return t.length > 15 ? t.substring(0, 12) + '...' : t;
+                  })()}
                 </text>
               </g>
             );
@@ -827,7 +833,7 @@ const DependencyTree = memo(function DependencyTree({ words, structure, lang = '
       {/* Structure explanation */}
       {structure.explanation && (
         <p className="text-white/70 text-sm mt-3 leading-relaxed">
-          {structure.explanation}
+          {typeof structure.explanation === 'object' ? (structure.explanation[lang] || structure.explanation.en || structure.explanation.ur || '') : structure.explanation}
         </p>
       )}
     </div>
@@ -843,7 +849,7 @@ const POSLegend = memo(function POSLegend({ lang = 'en' }) {
   return (
     <div className="flex flex-wrap gap-2 p-3 bg-white/5 rounded-xl">
       {commonTags.map(tag => {
-        const info = POS_TAGS[tag];
+        const info = POS_TAGS[tag] || { label: tag, color: '#666', bgColor: '#66666620' };
         return (
           <div key={tag} className="flex items-center gap-1">
             <span
@@ -1060,10 +1066,13 @@ const CategorySection = memo(function CategorySection({ category, categoryKey, c
   const IconComponent = Icons[category.icon] || Icons.Star;
   // Use category color or assign based on index
   const color = category.color || CATEGORY_COLORS[categoryIndex % CATEGORY_COLORS.length];
-  // Get category label - handle both old ({label: {en, ur}}) and new ({name, nameAr}) structures
-  const categoryLabel = category.label
+  // Get category label - handle both old ({label: {en, ur}}) and new ({name, nameAr, nameUr}) structures
+  const rawLabel = category.label
     ? getOntologyText(category.label, lang)
-    : (lang === 'ar' ? category.nameAr : category.name) || categoryKey;
+    : (lang === 'ur' ? (category.nameUr || category.nameArabic || category.nameAr || getOntologyText(category.name, lang))
+      : (lang === 'ar' ? (category.nameArabic || category.nameAr || getOntologyText(category.name, lang))
+      : getOntologyText(category.name, lang))) || categoryKey;
+  const categoryLabel = typeof rawLabel === 'object' ? getOntologyText(rawLabel, lang) : rawLabel;
 
   return (
     <div className="mb-4">
@@ -1084,7 +1093,7 @@ const CategorySection = memo(function CategorySection({ category, categoryKey, c
             {categoryLabel}
           </h4>
           <p className="text-xs text-white/50">
-            {category.concepts?.length || 0} concepts
+            {category.concepts?.length || 0} {lang === 'ur' ? 'تصورات' : lang === 'ar' ? 'مفاهيم' : 'concepts'}
           </p>
         </div>
         <Icons.ChevronDown
@@ -1174,16 +1183,18 @@ const RelationshipCard = memo(function RelationshipCard({ relationship, lang }) 
  * Updated to handle both old and new ontology data structures
  */
 const ThematicFlow = memo(function ThematicFlow({ flow, lang }) {
+  if (!flow?.stages) return null;
   return (
     <div className="space-y-3">
       {flow.stages.map((stage, index) => {
         // Handle both old ({ayahs: [1,2]}) and new ({ayahs: [1,2,3,4,5,6]}) or old ayah format
         const ayahsArray = stage.ayahs || [];
+        const ayahLabel = lang === 'ur' ? 'آیت' : lang === 'ar' ? 'آية' : 'Ayah';
         const ayahDisplay = ayahsArray.length > 1
-          ? `Ayah ${ayahsArray[0]}-${ayahsArray[ayahsArray.length - 1]}`
-          : `Ayah ${ayahsArray[0] || '?'}`;
+          ? `${ayahLabel} ${ayahsArray[0]}-${ayahsArray[ayahsArray.length - 1]}`
+          : `${ayahLabel} ${ayahsArray[0] || '?'}`;
         // Handle both old ({theme: {en, ur}}) and new ({name: "string"}) structures
-        const stageTitle = stage.name || getOntologyText(stage.theme, lang);
+        const stageTitle = getOntologyText(stage.theme, lang) || getOntologyText(stage.name, lang);
         const stageDesc = typeof stage.description === 'string'
           ? stage.description
           : getOntologyText(stage.description, lang);
@@ -1244,9 +1255,9 @@ const CrossReferenceCard = memo(function CrossReferenceCard({ reference, lang, l
       <div className="bg-white/5 rounded-xl p-3 border border-white/10">
         <div className="flex items-center gap-2 mb-2 flex-wrap">
           <span className="text-xs bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded">
-            Surah {reference.surah}
+            {lang === 'ur' ? 'سورت' : lang === 'ar' ? 'سورة' : 'Surah'} {reference.surah}
           </span>
-          <span className="text-sm text-white font-medium">{reference.name}</span>
+          <span className="text-sm text-white font-medium">{getOntologyText(reference.name, lang)}</span>
           <span
             className="text-xs px-2 py-0.5 rounded-full"
             style={{ backgroundColor: `${color}30`, color }}
@@ -1255,7 +1266,7 @@ const CrossReferenceCard = memo(function CrossReferenceCard({ reference, lang, l
           </span>
         </div>
         <p className={`text-sm text-white/70 ${lang === 'ur' || lang === 'ar' ? 'text-right' : ''}`} dir={lang === 'ur' || lang === 'ar' ? 'rtl' : 'ltr'}>
-          {reference.relationship}
+          {getOntologyText(reference.relationship, lang)}
         </p>
       </div>
     );
@@ -1268,11 +1279,11 @@ const CrossReferenceCard = memo(function CrossReferenceCard({ reference, lang, l
         <span className="text-xs bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded">
           {reference.reference?.surah}:{reference.reference?.ayah}
         </span>
-        <span className="text-sm text-white/50">{reference.concept}</span>
+        <span className="text-sm text-white/50">{getOntologyText(reference.concept, lang)}</span>
       </div>
       {reference.text && (
         <p className="text-lg font-arabic text-white/90 mb-2" dir="rtl">
-          {reference.text}
+          {getOntologyText(reference.text, lang)}
         </p>
       )}
       <p className={`text-sm text-white/60 ${lang === 'ur' || lang === 'ar' ? 'text-right' : ''}`} dir={lang === 'ur' || lang === 'ar' ? 'rtl' : 'ltr'}>
@@ -1413,7 +1424,22 @@ export const OntologyView = memo(function OntologyView({ surahId, lang = 'en', i
         </div>
 
         {/* Content */}
-        <div className="flex-1 overflow-y-auto p-4 custom-scrollbar" dir={lang === 'ur' ? 'rtl' : 'ltr'}>
+        <div className={`flex-1 overflow-y-auto p-4 custom-scrollbar ${lang === 'ur' ? 'font-urdu' : ''}`} dir={lang === 'ur' || lang === 'ar' ? 'rtl' : 'ltr'}>
+          {/* Language fallback notice — show if user's language data is missing */}
+          {lang !== 'en' && ontology.categories && (() => {
+            const firstCat = Object.values(ontology.categories)[0];
+            const firstMeaning = firstCat?.concepts?.[0]?.meaning;
+            const hasLangData = firstMeaning && typeof firstMeaning === 'object' && firstMeaning[lang];
+            if (!hasLangData) {
+              const msg = labels.languageComingSoon?.replace('{lang}', LANGUAGE_NAMES[lang] || lang) || `Content in ${LANGUAGE_NAMES[lang] || lang} coming soon — showing English`;
+              return (
+                <div className={`mb-3 px-3 py-2 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs text-amber-300/80 ${lang === 'ur' || lang === 'ar' ? 'text-right' : 'text-left'}`} dir={lang === 'ur' || lang === 'ar' ? 'rtl' : 'ltr'}>
+                  {msg}
+                </div>
+              );
+            }
+            return null;
+          })()}
           {/* Categories Tab */}
           {activeTab === 'categories' && ontology.categories && (
             <div>
@@ -1477,7 +1503,7 @@ export const OntologyView = memo(function OntologyView({ surahId, lang = 'en', i
                 <div className="bg-gradient-to-r from-amber-500/10 to-orange-500/10 rounded-2xl p-4 border border-amber-500/20">
                   <div className="flex items-center gap-2 mb-3">
                     <Icons.Star className="w-5 h-5 text-amber-400" />
-                    <h4 className="text-amber-300 font-medium">{ontology.uniqueInsight.title}</h4>
+                    <h4 className="text-amber-300 font-medium">{getOntologyText(ontology.uniqueInsight.title, lang)}</h4>
                   </div>
                   {ontology.uniqueInsight.arabicTerm && (
                     <p className="text-xl font-arabic text-white/90 mb-3 text-center p-2 bg-black/20 rounded-lg" dir="rtl">
@@ -1485,18 +1511,18 @@ export const OntologyView = memo(function OntologyView({ surahId, lang = 'en', i
                     </p>
                   )}
                   <p className={`text-white/80 text-sm leading-relaxed ${lang === 'ur' || lang === 'ar' ? 'text-right' : ''}`} dir={lang === 'ur' || lang === 'ar' ? 'rtl' : 'ltr'}>
-                    {ontology.uniqueInsight.insight}
+                    {getOntologyText(ontology.uniqueInsight.insight, lang)}
                   </p>
                   {ontology.uniqueInsight.rootMeaning && (
                     <div className="mt-3 pt-3 border-t border-amber-500/20">
-                      <span className="text-amber-400/70 text-xs">Root: </span>
-                      <span className="text-white/70 text-sm">{ontology.uniqueInsight.rootMeaning}</span>
+                      <span className="text-amber-400/70 text-xs">{lang === 'ur' ? 'اصل: ' : 'Root: '}</span>
+                      <span className="text-white/70 text-sm">{getOntologyText(ontology.uniqueInsight.rootMeaning, lang)}</span>
                     </div>
                   )}
                   {ontology.uniqueInsight.keyAyah && (
                     <div className="mt-2">
                       <span className="text-xs bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded">
-                        Key Ayah: {ontology.uniqueInsight.keyAyah}
+                        {lang === 'ur' ? 'کلیدی آیت: ' : 'Key Ayah: '}{ontology.uniqueInsight.keyAyah}
                       </span>
                     </div>
                   )}
@@ -1517,7 +1543,7 @@ export const OntologyView = memo(function OntologyView({ surahId, lang = 'en', i
                       <span className="text-blue-400 text-xs font-medium">
                         {lang === 'ur' ? 'دور نزول: ' : 'Period: '}
                       </span>
-                      <span className="text-white/80 text-sm">{ontology.historicalContext.revelationPeriod}</span>
+                      <span className="text-white/80 text-sm">{getOntologyText(ontology.historicalContext.revelationPeriod, lang)}</span>
                     </div>
                   )}
                   {ontology.historicalContext.occasion && (
@@ -1526,13 +1552,13 @@ export const OntologyView = memo(function OntologyView({ surahId, lang = 'en', i
                         {lang === 'ur' ? 'شان نزول:' : 'Occasion of Revelation:'}
                       </span>
                       <p className={`text-white/80 text-sm leading-relaxed ${lang === 'ur' || lang === 'ar' ? 'text-right' : ''}`} dir={lang === 'ur' || lang === 'ar' ? 'rtl' : 'ltr'}>
-                        {ontology.historicalContext.occasion}
+                        {getOntologyText(ontology.historicalContext.occasion, lang)}
                       </p>
                     </div>
                   )}
                   {ontology.historicalContext.note && (
                     <p className={`text-white/60 text-xs italic leading-relaxed ${lang === 'ur' || lang === 'ar' ? 'text-right' : ''}`} dir={lang === 'ur' || lang === 'ar' ? 'rtl' : 'ltr'}>
-                      📝 {ontology.historicalContext.note}
+                      📝 {getOntologyText(ontology.historicalContext.note, lang)}
                     </p>
                   )}
                 </div>
@@ -1551,18 +1577,18 @@ export const OntologyView = memo(function OntologyView({ surahId, lang = 'en', i
                     {ontology.linguisticFeatures.features.map((feature, idx) => (
                       <div key={idx} className="p-3 bg-white/5 rounded-xl border border-purple-500/10">
                         <div className="flex items-start justify-between gap-2 mb-1">
-                          <span className="text-purple-300 font-medium text-sm">{feature.name}</span>
+                          <span className="text-purple-300 font-medium text-sm">{getOntologyText(feature.name, lang)}</span>
                           {feature.ayah && (
                             <span className="text-xs bg-purple-500/20 text-purple-300 px-2 py-0.5 rounded">
-                              Ayah {feature.ayah}
+                              {lang === 'ur' ? 'آیت' : lang === 'ar' ? 'آية' : 'Ayah'} {feature.ayah}
                             </span>
                           )}
                         </div>
                         {feature.description && (
-                          <p className="text-white/60 text-xs font-arabic mb-1" dir="rtl">{feature.description}</p>
+                          <p className="text-white/60 text-xs font-arabic mb-1" dir="rtl">{getOntologyText(feature.description, lang)}</p>
                         )}
                         {feature.example && (
-                          <p className="text-white/70 text-sm">{feature.example}</p>
+                          <p className={`text-white/70 text-sm ${lang === 'ur' || lang === 'ar' ? 'text-right' : ''}`} dir={lang === 'ur' || lang === 'ar' ? 'rtl' : 'ltr'}>{getOntologyText(feature.example, lang)}</p>
                         )}
                       </div>
                     ))}
@@ -1586,7 +1612,7 @@ export const OntologyView = memo(function OntologyView({ surahId, lang = 'en', i
                         <p className="text-white/70 text-sm">{note.observation}</p>
                         {note.ayah && (
                           <span className="text-xs bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded mt-2 inline-block">
-                            Ayah {note.ayah}
+                            {lang === 'ur' ? 'آیت' : lang === 'ar' ? 'آية' : 'Ayah'} {note.ayah}
                           </span>
                         )}
                       </div>
@@ -1901,7 +1927,21 @@ export function TreebankOverlay({
         </div>
 
         {/* Content - All in one view */}
-        <div className="flex-1 overflow-y-auto p-4 custom-scrollbar">
+        <div className={`flex-1 overflow-y-auto p-4 custom-scrollbar ${lang === 'ur' ? 'font-urdu' : ''}`}>
+          {/* Language fallback notice for grammar data */}
+          {lang !== 'en' && lang !== 'ur' && treebankData?.words && (() => {
+            const firstWord = treebankData.words[0];
+            const hasLangMeaning = firstWord?.meaning && typeof firstWord.meaning === 'object' && firstWord.meaning[lang];
+            if (!hasLangMeaning) {
+              const msg = labels.languageComingSoon?.replace('{lang}', LANGUAGE_NAMES[lang] || lang) || `Content in ${LANGUAGE_NAMES[lang] || lang} coming soon — showing English`;
+              return (
+                <div className={`mb-3 px-3 py-2 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs text-amber-300/80 ${lang === 'ar' ? 'text-right' : 'text-left'}`} dir={lang === 'ar' ? 'rtl' : 'ltr'}>
+                  {msg}
+                </div>
+              );
+            }
+            return null;
+          })()}
           {/* Full Arabic Text */}
           <div className="text-center mb-6 p-4 bg-white/5 rounded-2xl">
             <p className="text-2xl font-arabic text-white leading-loose" dir="rtl">

@@ -3,7 +3,7 @@
  * Single Responsibility: Display the 99 Names of Allah with share/listen functionality
  */
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { Icons } from '../common/Icons';
 import { NAMES_OF_ALLAH, PALETTES } from '../../data';
 import { shareName } from '../../utils/shareUtils';
@@ -42,6 +42,13 @@ function NamesOfAllahView({ darkMode }) {
 
     setTimeout(() => setShareStatus(null), 2000);
   }, [selectedName]);
+
+  // Cancel speech on unmount
+  useEffect(() => {
+    return () => {
+      if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+    };
+  }, []);
 
   // Handle listen - use browser's text-to-speech for Arabic
   const handleListen = useCallback(() => {
@@ -133,7 +140,9 @@ function NamesOfAllahView({ darkMode }) {
       )}
 
       {/* Names Grid */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-w-4xl mx-auto pb-24">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-w-4xl mx-auto"
+        style={{ paddingBottom: 'max(6rem, calc(env(safe-area-inset-bottom, 0px) + 6rem))' }}
+      >
         {filteredNames.map((name, i) => {
           const p = PALETTES[name.id % 10];
           return (

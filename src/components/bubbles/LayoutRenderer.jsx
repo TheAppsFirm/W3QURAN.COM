@@ -1,24 +1,12 @@
 /**
- * LayoutRenderer.jsx
- * Renders the selected bubble layout. This component is lazy-loaded
- * to keep all 14 layout components out of the main bundle.
+ * LayoutRenderer — Lazy-loaded wrapper for all surah layout components.
+ * Keeps the 80KB BubbleLayouts out of the initial bundle.
  */
-
-import React from 'react';
+import { memo } from 'react';
 import {
-  ClockLayout,
-  GridLayout,
-  JuzzGroupLayout,
-  AlphabetLayout,
-  RevelationLayout,
-  BookLayout,
-  ListLayout,
-  CompactLayout,
-  HoneycombLayout,
-  WaveLayout,
-  LengthLayout,
-  KidsLayout,
-  ArtLayout,
+  ClockLayout, GridLayout, JuzzGroupLayout, AlphabetLayout,
+  RevelationLayout, BookLayout, ListLayout, CompactLayout,
+  HoneycombLayout, WaveLayout, LengthLayout, KidsLayout, ArtLayout,
 } from './BubbleLayouts';
 
 const LAYOUT_MAP = {
@@ -33,36 +21,20 @@ const LAYOUT_MAP = {
   honeycomb: HoneycombLayout,
   wave: WaveLayout,
   length: LengthLayout,
-  'kids-art': ArtLayout,
 };
 
-const LayoutRenderer = ({ layoutId, surahs, onSurahClick, zoom, contentZoom, darkMode }) => {
-  // Kids layouts with variants
-  if (layoutId === 'kids-rainbow' || layoutId === 'kids-blocks' || layoutId === 'kids-bubbles') {
-    return (
-      <KidsLayout
-        surahs={surahs}
-        onSurahClick={onSurahClick}
-        zoom={zoom}
-        contentZoom={contentZoom}
-        darkMode={darkMode}
-        variant={layoutId.replace('kids-', '')}
-      />
-    );
+function LayoutRenderer({ layout, surahs, onSurahClick, zoom, contentZoom, darkMode }) {
+  // Kids layouts
+  if (layout === 'kids-rainbow' || layout === 'kids-blocks' || layout === 'kids-bubbles') {
+    return <KidsLayout surahs={surahs} onSurahClick={onSurahClick} zoom={zoom} contentZoom={contentZoom} darkMode={darkMode} variant={layout.replace('kids-', '')} />;
+  }
+  if (layout === 'kids-art') {
+    return <ArtLayout surahs={surahs} onSurahClick={onSurahClick} zoom={zoom} contentZoom={contentZoom} darkMode={darkMode} />;
   }
 
-  const LayoutComponent = LAYOUT_MAP[layoutId];
-  if (!LayoutComponent) return null;
+  const Layout = LAYOUT_MAP[layout];
+  if (!Layout) return null;
+  return <Layout surahs={surahs} onSurahClick={onSurahClick} zoom={zoom} contentZoom={contentZoom} darkMode={darkMode} />;
+}
 
-  return (
-    <LayoutComponent
-      surahs={surahs}
-      onSurahClick={onSurahClick}
-      zoom={zoom}
-      contentZoom={contentZoom}
-      darkMode={darkMode}
-    />
-  );
-};
-
-export default LayoutRenderer;
+export default memo(LayoutRenderer);

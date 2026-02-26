@@ -23,7 +23,14 @@ export const TREEBANK_DATA = {
       { arabic: "وَهُوَ", transliteration: "wahuwa", meaning: { en: "and He is", ur: "اور وہ ہے", ar: "وهو" }, pos: "CONJ+PRON", posLabel: "CONJ+PRON", grammar: { type: "subject" } },
       { arabic: "الْعَزِيزُ", transliteration: "al-ʿazīzu", meaning: { en: "the Almighty", ur: "غالب", ar: "العزيز" }, pos: "ADJ", posLabel: "ADJ", grammar: { case: "nominative" } },
       { arabic: "الْحَكِيمُ", transliteration: "al-ḥakīmu", meaning: { en: "the Wise", ur: "حکمت والا", ar: "الحكيم" }, pos: "ADJ", posLabel: "ADJ", grammar: { case: "nominative" } }
-    ]
+    ],
+    structure: {
+      relationships: [
+        { from: 4, to: 5, label: 'جار + مجرور' },
+        { from: 5, to: 6, label: 'عطف' },
+        { from: 8, to: 9, label: 'موصوف + صفت' }
+      ]
+    }
   },
 
   2: {
@@ -41,7 +48,16 @@ export const TREEBANK_DATA = {
       { arabic: "كُلِّ", transliteration: "kulli", meaning: { en: "every", ur: "ہر", ar: "كل" }, pos: "N", posLabel: "N", grammar: { case: "genitive" } },
       { arabic: "شَيْءٍ", transliteration: "shayʾin", meaning: { en: "thing", ur: "چیز", ar: "شيء" }, pos: "N", posLabel: "N", grammar: { case: "genitive" } },
       { arabic: "قَدِيرٌ", transliteration: "qadīrun", meaning: { en: "Capable", ur: "قادر", ar: "قدير" }, pos: "ADJ", posLabel: "ADJ", grammar: { case: "nominative" } }
-    ]
+    ],
+    structure: {
+      relationships: [
+        { from: 2, to: 3, label: 'مضاف + مضاف إليه' },
+        { from: 3, to: 4, label: 'عطف' },
+        { from: 5, to: 6, label: 'عطف' },
+        { from: 8, to: 9, label: 'جار + مجرور' },
+        { from: 9, to: 10, label: 'مضاف + مضاف إليه' }
+      ]
+    }
   },
 
   3: {
@@ -57,7 +73,15 @@ export const TREEBANK_DATA = {
       { arabic: "بِكُلِّ", transliteration: "bikulli", meaning: { en: "of every", ur: "ہر", ar: "بكل" }, pos: "P+N", posLabel: "P+N", grammar: { case: "genitive" } },
       { arabic: "شَيْءٍ", transliteration: "shayʾin", meaning: { en: "thing", ur: "چیز کو", ar: "شيء" }, pos: "N", posLabel: "N", grammar: { case: "genitive" } },
       { arabic: "عَلِيمٌ", transliteration: "ʿalīmun", meaning: { en: "Knowing", ur: "جاننے والا", ar: "عليم" }, pos: "ADJ", posLabel: "ADJ", grammar: { case: "nominative" } }
-    ]
+    ],
+    structure: {
+      relationships: [
+        { from: 1, to: 2, label: 'مبتدأ + خبر' },
+        { from: 2, to: 3, label: 'عطف' },
+        { from: 3, to: 4, label: 'عطف' },
+        { from: 4, to: 5, label: 'عطف' }
+      ]
+    }
   },
 
   4: {
@@ -76,7 +100,17 @@ export const TREEBANK_DATA = {
       { arabic: "اسْتَوَىٰ", transliteration: "istawā", meaning: { en: "established Himself", ur: "مستوی ہوا", ar: "استوى" }, pos: "V", posLabel: "V", grammar: { form: "VIII", root: "س-و-ي" } },
       { arabic: "عَلَى", transliteration: "ʿalā", meaning: { en: "upon", ur: "پر", ar: "على" }, pos: "P", posLabel: "P", grammar: { role: "preposition" } },
       { arabic: "الْعَرْشِ", transliteration: "al-ʿarshi", meaning: { en: "the Throne", ur: "عرش", ar: "العرش" }, pos: "N", posLabel: "N", grammar: { case: "genitive" } }
-    ]
+    ],
+    structure: {
+      relationships: [
+        { from: 2, to: 3, label: 'موصول + صلة' },
+        { from: 3, to: 4, label: 'فعل + مفعول به' },
+        { from: 4, to: 5, label: 'عطف' },
+        { from: 6, to: 7, label: 'جار + مجرور' },
+        { from: 7, to: 8, label: 'مضاف + مضاف إليه' },
+        { from: 11, to: 12, label: 'جار + مجرور' }
+      ]
+    }
   },
 
   5: {
@@ -91,7 +125,14 @@ export const TREEBANK_DATA = {
       { arabic: "اللَّهِ", transliteration: "Allāhi", meaning: { en: "Allah", ur: "اللہ", ar: "الله" }, pos: "N", posLabel: "N", grammar: { case: "genitive" } },
       { arabic: "تُرْجَعُ", transliteration: "turjaʿu", meaning: { en: "will be returned", ur: "لوٹائے جائیں گے", ar: "ترجع" }, pos: "V", posLabel: "V", grammar: { form: "I", voice: "passive", root: "ر-ج-ع" } },
       { arabic: "الْأُمُورُ", transliteration: "al-umūru", meaning: { en: "the matters", ur: "سب معاملات", ar: "الأمور" }, pos: "N", posLabel: "N", grammar: { case: "nominative", number: "plural" } }
-    ]
+    ],
+    structure: {
+      relationships: [
+        { from: 2, to: 3, label: 'مضاف + مضاف إليه' },
+        { from: 3, to: 4, label: 'عطف' },
+        { from: 7, to: 8, label: 'فعل + فاعل' }
+      ]
+    }
   },
 
   6: {
@@ -110,7 +151,16 @@ export const TREEBANK_DATA = {
       { arabic: "عَلِيمٌ", transliteration: "ʿalīmun", meaning: { en: "Knowing", ur: "جاننے والا", ar: "عليم" }, pos: "ADJ", posLabel: "ADJ", grammar: { case: "nominative" } },
       { arabic: "بِذَاتِ", transliteration: "bidhāti", meaning: { en: "of what is in", ur: "سینوں کی", ar: "بذات" }, pos: "P+N", posLabel: "P+N", grammar: { case: "genitive" } },
       { arabic: "الصُّدُورِ", transliteration: "al-ṣudūri", meaning: { en: "the breasts", ur: "باتوں کو", ar: "الصدور" }, pos: "N", posLabel: "N", grammar: { case: "genitive", number: "plural" } }
-    ]
+    ],
+    structure: {
+      relationships: [
+        { from: 1, to: 2, label: 'فعل + مفعول به' },
+        { from: 3, to: 4, label: 'جار + مجرور' },
+        { from: 5, to: 6, label: 'فعل + مفعول به' },
+        { from: 1, to: 5, label: 'عطف' },
+        { from: 7, to: 8, label: 'جار + مجرور' }
+      ]
+    }
   },
 
   7: {
@@ -125,7 +175,14 @@ export const TREEBANK_DATA = {
       { arabic: "جَعَلَكُم", transliteration: "jaʿalakum", meaning: { en: "He made you", ur: "اس نے تمہیں بنایا", ar: "جعلكم" }, pos: "V", posLabel: "V", grammar: { form: "I", root: "ج-ع-ل" } },
       { arabic: "مُّسْتَخْلَفِينَ", transliteration: "mustakhlifīna", meaning: { en: "trustees", ur: "خلیفہ", ar: "مستخلفين" }, pos: "AP", posLabel: "AP", grammar: { case: "accusative", root: "خ-ل-ف" } },
       { arabic: "فِيهِ", transliteration: "fīhi", meaning: { en: "therein", ur: "اس میں", ar: "فيه" }, pos: "P+PRON", posLabel: "P+PRON", grammar: { role: "location" } }
-    ]
+    ],
+    structure: {
+      relationships: [
+        { from: 1, to: 4, label: 'عطف' },
+        { from: 6, to: 7, label: 'فعل + مفعول به' },
+        { from: 6, to: 7, label: 'حال' }
+      ]
+    }
   },
 
   8: {
@@ -147,7 +204,15 @@ export const TREEBANK_DATA = {
       { arabic: "إِن", transliteration: "in", meaning: { en: "if", ur: "اگر", ar: "إن" }, pos: "COND", posLabel: "COND", grammar: { type: "conditional" } },
       { arabic: "كُنتُم", transliteration: "kuntum", meaning: { en: "you are", ur: "تم ہو", ar: "كنتم" }, pos: "V", posLabel: "V", grammar: { type: "kāna" } },
       { arabic: "مُّؤْمِنِينَ", transliteration: "muʾminīna", meaning: { en: "believers", ur: "مومن", ar: "مؤمنين" }, pos: "AP", posLabel: "AP", grammar: { case: "accusative", number: "plural" } }
-    ]
+    ],
+    structure: {
+      relationships: [
+        { from: 3, to: 4, label: 'نفی + فعل' },
+        { from: 11, to: 12, label: 'فعل + مفعول به' },
+        { from: 14, to: 15, label: 'فعل + مفعول به' },
+        { from: 14, to: 15, label: 'حال' }
+      ]
+    }
   },
 
   9: {
@@ -166,7 +231,16 @@ export const TREEBANK_DATA = {
       { arabic: "الظُّلُمَاتِ", transliteration: "al-ẓulumāti", meaning: { en: "darknesses", ur: "اندھیروں", ar: "الظلمات" }, pos: "N", posLabel: "N", grammar: { case: "genitive", number: "plural" } },
       { arabic: "إِلَى", transliteration: "ilā", meaning: { en: "into", ur: "کی طرف", ar: "إلى" }, pos: "P", posLabel: "P", grammar: { role: "direction" } },
       { arabic: "النُّورِ", transliteration: "al-nūri", meaning: { en: "the light", ur: "روشنی", ar: "النور" }, pos: "N", posLabel: "N", grammar: { case: "genitive" } }
-    ]
+    ],
+    structure: {
+      relationships: [
+        { from: 2, to: 3, label: 'موصول + صلة' },
+        { from: 4, to: 5, label: 'جار + مجرور' },
+        { from: 6, to: 7, label: 'موصوف + صفت' },
+        { from: 9, to: 10, label: 'جار + مجرور' },
+        { from: 11, to: 12, label: 'جار + مجرور' }
+      ]
+    }
   },
 
   10: {
@@ -184,7 +258,16 @@ export const TREEBANK_DATA = {
       { arabic: "مِيرَاثُ", transliteration: "mīrāthu", meaning: { en: "the heritage", ur: "میراث", ar: "ميراث" }, pos: "N", posLabel: "N", grammar: { case: "nominative", root: "و-ر-ث" } },
       { arabic: "السَّمَاوَاتِ", transliteration: "al-samāwāti", meaning: { en: "of heavens", ur: "آسمانوں", ar: "السماوات" }, pos: "N", posLabel: "N", grammar: { case: "genitive" } },
       { arabic: "وَالْأَرْضِ", transliteration: "wal-arḍi", meaning: { en: "and earth", ur: "اور زمین", ar: "والأرض" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { case: "genitive" } }
-    ]
+    ],
+    structure: {
+      relationships: [
+        { from: 3, to: 4, label: 'نفی + فعل' },
+        { from: 5, to: 6, label: 'جار + مجرور' },
+        { from: 6, to: 7, label: 'مضاف + مضاف إليه' },
+        { from: 9, to: 10, label: 'مضاف + مضاف إليه' },
+        { from: 10, to: 11, label: 'عطف' }
+      ]
+    }
   },
 
   11: {
@@ -203,7 +286,15 @@ export const TREEBANK_DATA = {
       { arabic: "وَلَهُ", transliteration: "walahu", meaning: { en: "and for him", ur: "اور اس کے لیے ہے", ar: "وله" }, pos: "CONJ+P+PRON", posLabel: "CONJ+P+PRON", grammar: { role: "predicate" } },
       { arabic: "أَجْرٌ", transliteration: "ajrun", meaning: { en: "a reward", ur: "اجر", ar: "أجر" }, pos: "N", posLabel: "N", grammar: { case: "nominative" } },
       { arabic: "كَرِيمٌ", transliteration: "karīmun", meaning: { en: "noble", ur: "عزت والا", ar: "كريم" }, pos: "ADJ", posLabel: "ADJ", grammar: { case: "nominative" } }
-    ]
+    ],
+    structure: {
+      relationships: [
+        { from: 3, to: 4, label: 'موصول + صلة' },
+        { from: 4, to: 5, label: 'فعل + مفعول به' },
+        { from: 6, to: 7, label: 'موصوف + صفت' },
+        { from: 11, to: 12, label: 'موصوف + صفت' }
+      ]
+    }
   },
 
   12: {
@@ -219,7 +310,14 @@ export const TREEBANK_DATA = {
       { arabic: "بَيْنَ", transliteration: "bayna", meaning: { en: "before", ur: "سامنے", ar: "بين" }, pos: "N", posLabel: "N", grammar: { role: "preposition" } },
       { arabic: "أَيْدِيهِمْ", transliteration: "aydīhim", meaning: { en: "them", ur: "ان کے", ar: "أيديهم" }, pos: "N", posLabel: "N", grammar: { case: "genitive", number: "plural" } },
       { arabic: "وَبِأَيْمَانِهِم", transliteration: "wabi-aymānihim", meaning: { en: "and on their right", ur: "اور ان کے دائیں طرف", ar: "وبأيمانهم" }, pos: "CONJ+P+N", posLabel: "CONJ+P+N", grammar: { case: "genitive" } }
-    ]
+    ],
+    structure: {
+      relationships: [
+        { from: 2, to: 3, label: 'فعل + مفعول به' },
+        { from: 2, to: 3, label: 'حال' },
+        { from: 5, to: 6, label: 'فعل + فاعل' }
+      ]
+    }
   },
 
   13: {
@@ -236,7 +334,13 @@ export const TREEBANK_DATA = {
       { arabic: "نَقْتَبِسْ", transliteration: "naqtabis", meaning: { en: "we may acquire", ur: "ہم لیں", ar: "نقتبس" }, pos: "V", posLabel: "V", grammar: { form: "VIII", root: "ق-ب-س" } },
       { arabic: "مِن", transliteration: "min", meaning: { en: "from", ur: "سے", ar: "من" }, pos: "P", posLabel: "P", grammar: { role: "source" } },
       { arabic: "نُّورِكُمْ", transliteration: "nūrikum", meaning: { en: "your light", ur: "تمہارے نور", ar: "نوركم" }, pos: "N", posLabel: "N", grammar: { case: "genitive" } }
-    ]
+    ],
+    structure: {
+      relationships: [
+        { from: 2, to: 3, label: 'فعل + فاعل' },
+        { from: 9, to: 10, label: 'جار + مجرور' }
+      ]
+    }
   },
 
   14: {
@@ -254,7 +358,14 @@ export const TREEBANK_DATA = {
       { arabic: "أَنفُسَكُمْ", transliteration: "anfusakum", meaning: { en: "yourselves", ur: "اپنے آپ کو", ar: "أنفسكم" }, pos: "N", posLabel: "N", grammar: { case: "accusative" } },
       { arabic: "وَتَرَبَّصْتُمْ", transliteration: "watarabbaṣtum", meaning: { en: "and awaited", ur: "اور انتظار کیا", ar: "وتربصتم" }, pos: "CONJ+V", posLabel: "CONJ+V", grammar: { form: "V", root: "ر-ب-ص" } },
       { arabic: "وَارْتَبْتُمْ", transliteration: "wartabtum", meaning: { en: "and doubted", ur: "اور شک کیا", ar: "وارتبتم" }, pos: "CONJ+V", posLabel: "CONJ+V", grammar: { form: "VIII", root: "ر-ي-ب" } }
-    ]
+    ],
+    structure: {
+      relationships: [
+        { from: 8, to: 9, label: 'فعل + مفعول به' },
+        { from: 8, to: 10, label: 'عطف' },
+        { from: 10, to: 11, label: 'عطف' }
+      ]
+    }
   },
 
   15: {
@@ -276,7 +387,17 @@ export const TREEBANK_DATA = {
       { arabic: "مَوْلَاكُمْ", transliteration: "mawlākum", meaning: { en: "your proper place", ur: "تمہارا ٹھکانہ", ar: "مولاكم" }, pos: "N", posLabel: "N", grammar: { case: "nominative" } },
       { arabic: "وَبِئْسَ", transliteration: "wabiʾsa", meaning: { en: "and wretched", ur: "اور برا ہے", ar: "وبئس" }, pos: "CONJ+V", posLabel: "CONJ+V", grammar: { type: "blame" } },
       { arabic: "الْمَصِيرُ", transliteration: "al-maṣīru", meaning: { en: "the destination", ur: "ٹھکانہ", ar: "المصير" }, pos: "N", posLabel: "N", grammar: { case: "nominative" } }
-    ]
+    ],
+    structure: {
+      relationships: [
+        { from: 2, to: 3, label: 'نفی + فعل' },
+        { from: 8, to: 9, label: 'موصول + صلة' },
+        { from: 9, to: 10, label: 'فعل + فاعل' },
+        { from: 12, to: 13, label: 'مبتدأ + خبر' },
+        { from: 14, to: 15, label: 'فعل + فاعل' },
+        { from: 9, to: 14, label: 'عطف' }
+      ]
+    }
   },
 
   16: {
@@ -296,7 +417,14 @@ export const TREEBANK_DATA = {
       { arabic: "نَزَلَ", transliteration: "nazala", meaning: { en: "has descended", ur: "اترا ہے", ar: "نزل" }, pos: "V", posLabel: "V", grammar: { form: "I", root: "ن-ز-ل" } },
       { arabic: "مِنَ", transliteration: "mina", meaning: { en: "of", ur: "سے", ar: "من" }, pos: "P", posLabel: "P", grammar: { role: "partitive" } },
       { arabic: "الْحَقِّ", transliteration: "al-ḥaqqi", meaning: { en: "the truth", ur: "حق", ar: "الحق" }, pos: "N", posLabel: "N", grammar: { case: "genitive" } }
-    ]
+    ],
+    structure: {
+      relationships: [
+        { from: 6, to: 7, label: 'فعل + فاعل' },
+        { from: 10, to: 11, label: 'موصول + صلة' },
+        { from: 12, to: 13, label: 'جار + مجرور' }
+      ]
+    }
   },
 
   17: {
@@ -316,7 +444,12 @@ export const TREEBANK_DATA = {
       { arabic: "الْآيَاتِ", transliteration: "al-āyāti", meaning: { en: "the signs", ur: "نشانیاں", ar: "الآيات" }, pos: "N", posLabel: "N", grammar: { case: "accusative", number: "plural" } },
       { arabic: "لَعَلَّكُمْ", transliteration: "laʿallakum", meaning: { en: "that you may", ur: "تاکہ تم", ar: "لعلكم" }, pos: "PART+PRON", posLabel: "PART+PRON", grammar: { type: "hope" } },
       { arabic: "تَعْقِلُونَ", transliteration: "taʿqilūna", meaning: { en: "understand", ur: "سمجھو", ar: "تعقلون" }, pos: "V", posLabel: "V", grammar: { form: "I", root: "ع-ق-ل" } }
-    ]
+    ],
+    structure: {
+      relationships: [
+        { from: 4, to: 5, label: 'فعل + مفعول به' }
+      ]
+    }
   },
 
   18: {
@@ -335,7 +468,14 @@ export const TREEBANK_DATA = {
       { arabic: "وَلَهُمْ", transliteration: "walahum", meaning: { en: "and for them", ur: "اور ان کے لیے", ar: "ولهم" }, pos: "CONJ+P+PRON", posLabel: "CONJ+P+PRON", grammar: { role: "predicate" } },
       { arabic: "أَجْرٌ", transliteration: "ajrun", meaning: { en: "is a reward", ur: "اجر ہے", ar: "أجر" }, pos: "N", posLabel: "N", grammar: { case: "nominative" } },
       { arabic: "كَرِيمٌ", transliteration: "karīmun", meaning: { en: "noble", ur: "عزت والا", ar: "كريم" }, pos: "ADJ", posLabel: "ADJ", grammar: { case: "nominative" } }
-    ]
+    ],
+    structure: {
+      relationships: [
+        { from: 4, to: 5, label: 'فعل + مفعول به' },
+        { from: 6, to: 7, label: 'موصوف + صفت' },
+        { from: 11, to: 12, label: 'موصوف + صفت' }
+      ]
+    }
   },
 
   19: {
@@ -355,7 +495,15 @@ export const TREEBANK_DATA = {
       { arabic: "لَهُمْ", transliteration: "lahum", meaning: { en: "For them", ur: "ان کے لیے ہے", ar: "لهم" }, pos: "P+PRON", posLabel: "P+PRON", grammar: { role: "predicate" } },
       { arabic: "أَجْرُهُمْ", transliteration: "ajruhum", meaning: { en: "is their reward", ur: "ان کا اجر", ar: "أجرهم" }, pos: "N", posLabel: "N", grammar: { case: "nominative" } },
       { arabic: "وَنُورُهُمْ", transliteration: "wanūruhum", meaning: { en: "and their light", ur: "اور ان کا نور", ar: "ونورهم" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { case: "nominative" } }
-    ]
+    ],
+    structure: {
+      relationships: [
+        { from: 1, to: 2, label: 'موصول + صلة' },
+        { from: 6, to: 7, label: 'مبتدأ + خبر' },
+        { from: 7, to: 8, label: 'عطف' },
+        { from: 12, to: 13, label: 'عطف' }
+      ]
+    }
   },
 
   20: {
@@ -375,7 +523,18 @@ export const TREEBANK_DATA = {
       { arabic: "فِي", transliteration: "fī", meaning: { en: "in", ur: "میں", ar: "في" }, pos: "P", posLabel: "P", grammar: { role: "preposition" } },
       { arabic: "الْأَمْوَالِ", transliteration: "al-amwāli", meaning: { en: "wealth", ur: "مال", ar: "الأموال" }, pos: "N", posLabel: "N", grammar: { case: "genitive", number: "plural" } },
       { arabic: "وَالْأَوْلَادِ", transliteration: "wal-awlādi", meaning: { en: "and children", ur: "اور اولاد میں", ar: "والأولاد" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { case: "genitive", number: "plural" } }
-    ]
+    ],
+    structure: {
+      relationships: [
+        { from: 3, to: 4, label: 'موصوف + صفت' },
+        { from: 5, to: 6, label: 'عطف' },
+        { from: 6, to: 7, label: 'عطف' },
+        { from: 7, to: 8, label: 'عطف' },
+        { from: 8, to: 10, label: 'عطف' },
+        { from: 11, to: 12, label: 'جار + مجرور' },
+        { from: 12, to: 13, label: 'عطف' }
+      ]
+    }
   },
 
   21: {
@@ -397,7 +556,16 @@ export const TREEBANK_DATA = {
       { arabic: "آمَنُوا", transliteration: "āmanū", meaning: { en: "believed", ur: "ایمان لائے", ar: "آمنوا" }, pos: "V", posLabel: "V", grammar: { form: "IV" } },
       { arabic: "بِاللَّهِ", transliteration: "billāhi", meaning: { en: "in Allah", ur: "اللہ پر", ar: "بالله" }, pos: "P+N", posLabel: "P+N", grammar: { case: "genitive" } },
       { arabic: "وَرُسُلِهِ", transliteration: "warusulihi", meaning: { en: "and His messengers", ur: "اور اس کے رسولوں پر", ar: "ورسله" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { case: "genitive" } }
-    ]
+    ],
+    structure: {
+      relationships: [
+        { from: 2, to: 3, label: 'جار + مجرور' },
+        { from: 4, to: 5, label: 'جار + مجرور' },
+        { from: 5, to: 6, label: 'عطف' },
+        { from: 9, to: 10, label: 'عطف' },
+        { from: 10, to: 15, label: 'عطف' }
+      ]
+    }
   },
 
   22: {
@@ -420,7 +588,16 @@ export const TREEBANK_DATA = {
       { arabic: "قَبْلِ", transliteration: "qabli", meaning: { en: "before", ur: "پہلے", ar: "قبل" }, pos: "N", posLabel: "N", grammar: { role: "temporal" } },
       { arabic: "أَن", transliteration: "an", meaning: { en: "that", ur: "کہ", ar: "أن" }, pos: "CONJ", posLabel: "CONJ", grammar: { type: "subordinating" } },
       { arabic: "نَّبْرَأَهَا", transliteration: "nabraʾahā", meaning: { en: "We created it", ur: "ہم پیدا کریں", ar: "نبرأها" }, pos: "V", posLabel: "V", grammar: { form: "I", root: "ب-ر-أ" } }
-    ]
+    ],
+    structure: {
+      relationships: [
+        { from: 1, to: 2, label: 'نفی + فعل' },
+        { from: 3, to: 4, label: 'جار + مجرور' },
+        { from: 5, to: 6, label: 'جار + مجرور' },
+        { from: 8, to: 9, label: 'جار + مجرور' },
+        { from: 11, to: 12, label: 'جار + مجرور' }
+      ]
+    }
   },
 
   23: {
@@ -442,7 +619,17 @@ export const TREEBANK_DATA = {
       { arabic: "كُلَّ", transliteration: "kulla", meaning: { en: "every", ur: "ہر", ar: "كل" }, pos: "N", posLabel: "N", grammar: { case: "accusative" } },
       { arabic: "مُخْتَالٍ", transliteration: "mukhtālin", meaning: { en: "self-deluded", ur: "اکڑ باز", ar: "مختال" }, pos: "AP", posLabel: "AP", grammar: { case: "genitive", root: "خ-ي-ل" } },
       { arabic: "فَخُورٍ", transliteration: "fakhūrin", meaning: { en: "boastful", ur: "فخر کرنے والا", ar: "فخور" }, pos: "ADJ", posLabel: "ADJ", grammar: { case: "genitive", root: "ف-خ-ر" } }
-    ]
+    ],
+    structure: {
+      relationships: [
+        { from: 4, to: 5, label: 'موصول + صلة' },
+        { from: 6, to: 7, label: 'نفی + فعل' },
+        { from: 9, to: 10, label: 'فعل + فاعل' },
+        { from: 11, to: 12, label: 'نفی + فعل' },
+        { from: 12, to: 13, label: 'فعل + مفعول به' },
+        { from: 14, to: 15, label: 'موصوف + صفت' }
+      ]
+    }
   },
 
   24: {
@@ -461,7 +648,17 @@ export const TREEBANK_DATA = {
       { arabic: "هُوَ", transliteration: "huwa", meaning: { en: "He", ur: "وہی ہے", ar: "هو" }, pos: "PRON", posLabel: "PRON", grammar: { person: "3rd" } },
       { arabic: "الْغَنِيُّ", transliteration: "al-ghaniyyu", meaning: { en: "the Free of need", ur: "بے نیاز", ar: "الغني" }, pos: "ADJ", posLabel: "ADJ", grammar: { case: "nominative" } },
       { arabic: "الْحَمِيدُ", transliteration: "al-ḥamīdu", meaning: { en: "the Praiseworthy", ur: "قابل حمد", ar: "الحميد" }, pos: "ADJ", posLabel: "ADJ", grammar: { case: "nominative" } }
-    ]
+    ],
+    structure: {
+      relationships: [
+        { from: 1, to: 2, label: 'موصول + صلة' },
+        { from: 3, to: 4, label: 'فعل + مفعول به' },
+        { from: 2, to: 3, label: 'عطف' },
+        { from: 6, to: 7, label: 'موصول + صلة' },
+        { from: 10, to: 11, label: 'مبتدأ + خبر' },
+        { from: 11, to: 12, label: 'موصوف + صفت' }
+      ]
+    }
   },
 
   25: {
@@ -486,7 +683,17 @@ export const TREEBANK_DATA = {
       { arabic: "شَدِيدٌ", transliteration: "shadīdun", meaning: { en: "strong", ur: "بڑی", ar: "شديد" }, pos: "ADJ", posLabel: "ADJ", grammar: { case: "nominative" } },
       { arabic: "وَمَنَافِعُ", transliteration: "wamanāfiʿu", meaning: { en: "and benefits", ur: "اور فائدے", ar: "ومنافع" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { case: "nominative", number: "plural" } },
       { arabic: "لِلنَّاسِ", transliteration: "linnāsi", meaning: { en: "for people", ur: "لوگوں کے لیے", ar: "للناس" }, pos: "P+N", posLabel: "P+N", grammar: { case: "genitive" } }
-    ]
+    ],
+    structure: {
+      relationships: [
+        { from: 2, to: 3, label: 'فعل + مفعول به' },
+        { from: 2, to: 5, label: 'عطف' },
+        { from: 7, to: 8, label: 'عطف' },
+        { from: 12, to: 13, label: 'فعل + مفعول به' },
+        { from: 15, to: 16, label: 'موصوف + صفت' },
+        { from: 15, to: 17, label: 'عطف' }
+      ]
+    }
   },
 
   26: {
@@ -502,7 +709,16 @@ export const TREEBANK_DATA = {
       { arabic: "ذُرِّيَّتِهِمَا", transliteration: "dhurriyyatihimā", meaning: { en: "their descendants", ur: "ان دونوں کی اولاد", ar: "ذريتهما" }, pos: "N", posLabel: "N", grammar: { case: "genitive", number: "dual" } },
       { arabic: "النُّبُوَّةَ", transliteration: "al-nubuwwata", meaning: { en: "prophethood", ur: "نبوت", ar: "النبوة" }, pos: "N", posLabel: "N", grammar: { case: "accusative" } },
       { arabic: "وَالْكِتَابَ", transliteration: "wal-kitāba", meaning: { en: "and the Book", ur: "اور کتاب", ar: "والكتاب" }, pos: "CONJ+N", posLabel: "CONJ+N", grammar: { case: "accusative" } }
-    ]
+    ],
+    structure: {
+      relationships: [
+        { from: 2, to: 3, label: 'فعل + مفعول به' },
+        { from: 3, to: 4, label: 'عطف' },
+        { from: 2, to: 5, label: 'عطف' },
+        { from: 6, to: 7, label: 'جار + مجرور' },
+        { from: 8, to: 9, label: 'عطف' }
+      ]
+    }
   },
 
   27: {
@@ -520,7 +736,16 @@ export const TREEBANK_DATA = {
       { arabic: "مَرْيَمَ", transliteration: "Maryama", meaning: { en: "of Mary", ur: "مریم کے", ar: "مريم" }, pos: "N", posLabel: "N", grammar: { case: "genitive" } },
       { arabic: "وَآتَيْنَاهُ", transliteration: "waʾātaynāhu", meaning: { en: "and We gave him", ur: "اور ہم نے دی", ar: "وآتيناه" }, pos: "CONJ+V", posLabel: "CONJ+V", grammar: { form: "IV", root: "أ-ت-ي" } },
       { arabic: "الْإِنجِيلَ", transliteration: "al-Injīla", meaning: { en: "the Gospel", ur: "انجیل", ar: "الإنجيل" }, pos: "N", posLabel: "N", grammar: { case: "accusative" } }
-    ]
+    ],
+    structure: {
+      relationships: [
+        { from: 3, to: 4, label: 'جار + مجرور' },
+        { from: 2, to: 6, label: 'عطف' },
+        { from: 8, to: 9, label: 'مضاف + مضاف إليه' },
+        { from: 10, to: 11, label: 'فعل + مفعول به' },
+        { from: 6, to: 10, label: 'عطف' }
+      ]
+    }
   },
 
   28: {
@@ -546,7 +771,18 @@ export const TREEBANK_DATA = {
       { arabic: "بِهِ", transliteration: "bihi", meaning: { en: "with it", ur: "اس میں", ar: "به" }, pos: "P+PRON", posLabel: "P+PRON", grammar: { role: "instrument" } },
       { arabic: "وَيَغْفِرْ", transliteration: "wayaghfir", meaning: { en: "and forgive", ur: "اور معاف کرے گا", ar: "ويغفر" }, pos: "CONJ+V", posLabel: "CONJ+V", grammar: { form: "I", root: "غ-ف-ر" } },
       { arabic: "لَكُمْ", transliteration: "lakum", meaning: { en: "you", ur: "تمہیں", ar: "لكم" }, pos: "P+PRON", posLabel: "P+PRON", grammar: { role: "indirect object" } }
-    ]
+    ],
+    structure: {
+      relationships: [
+        { from: 3, to: 4, label: 'موصول + صلة' },
+        { from: 5, to: 6, label: 'فعل + مفعول به' },
+        { from: 5, to: 7, label: 'عطف' },
+        { from: 9, to: 10, label: 'فعل + مفعول به' },
+        { from: 11, to: 12, label: 'جار + مجرور' },
+        { from: 9, to: 13, label: 'عطف' },
+        { from: 16, to: 18, label: 'عطف' }
+      ]
+    }
   },
 
   29: {
@@ -575,7 +811,21 @@ export const TREEBANK_DATA = {
       { arabic: "ذُو", transliteration: "dhū", meaning: { en: "is Owner", ur: "والا ہے", ar: "ذو" }, pos: "N", posLabel: "N", grammar: { case: "nominative" } },
       { arabic: "الْفَضْلِ", transliteration: "al-faḍli", meaning: { en: "of bounty", ur: "فضل", ar: "الفضل" }, pos: "N", posLabel: "N", grammar: { case: "genitive" } },
       { arabic: "الْعَظِيمِ", transliteration: "al-ʿaẓīmi", meaning: { en: "the Great", ur: "بڑے", ar: "العظيم" }, pos: "ADJ", posLabel: "ADJ", grammar: { case: "genitive" } }
-    ]
+    ],
+    structure: {
+      relationships: [
+        { from: 2, to: 3, label: 'فعل + فاعل' },
+        { from: 3, to: 4, label: 'مضاف + مضاف إليه' },
+        { from: 5, to: 6, label: 'نفی + فعل' },
+        { from: 7, to: 8, label: 'جار + مجرور' },
+        { from: 9, to: 10, label: 'جار + مجرور' },
+        { from: 10, to: 11, label: 'مضاف + مضاف إليه' },
+        { from: 17, to: 18, label: 'موصول + صلة' },
+        { from: 18, to: 19, label: 'فعل + فاعل' },
+        { from: 20, to: 21, label: 'مضاف + مضاف إليه' },
+        { from: 21, to: 22, label: 'موصوف + صفت' }
+      ]
+    }
   }
 };
 

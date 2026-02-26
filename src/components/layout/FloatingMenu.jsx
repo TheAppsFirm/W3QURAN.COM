@@ -216,7 +216,7 @@ function FloatingMenu({ view, setView, darkMode, onDonate, onMindMap, onMood, on
       {showMore && (
         <div
           className="fixed left-1/2 -translate-x-1/2 z-[55] w-[95vw] sm:w-auto max-w-[420px]"
-          style={{ bottom: '100px' }}
+          style={{ bottom: 'max(100px, calc(env(safe-area-inset-bottom, 0px) + 92px))' }}
         >
           <div
             className="relative p-4 sm:p-5 rounded-3xl shadow-2xl backdrop-blur-xl border overflow-hidden"
@@ -285,7 +285,7 @@ function FloatingMenu({ view, setView, darkMode, onDonate, onMindMap, onMood, on
       <div
         style={{
           position: 'fixed',
-          bottom: '16px',
+          bottom: 'max(16px, calc(env(safe-area-inset-bottom, 0px) + 8px))',
           left: '50%',
           transform: 'translateX(-50%)',
           zIndex: 9999,

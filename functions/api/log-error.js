@@ -26,6 +26,10 @@ export async function onRequest(context) {
     });
   }
 
+  if (!env.DB) {
+    return new Response(JSON.stringify({ success: true }), { status: 200, headers: corsHeaders });
+  }
+
   try {
     const errorData = await request.json();
 

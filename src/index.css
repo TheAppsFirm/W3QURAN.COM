@@ -117,9 +117,18 @@ body {
   text-align: right;
 }
 
+/* Jameel Noori Nastaleeq — loaded locally */
+@font-face {
+  font-family: 'Jameel Noori Nastaleeq';
+  src: url('/fonts/JameelNooriNastaleeq.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* Urdu Font — Nastaleeq style */
 .font-urdu {
-  font-family: 'Noto Nastaliq Urdu', 'Jameel Noori Nastaleeq', 'Nastaliq', 'Urdu Typesetting', serif;
+  font-family: 'Jameel Noori Nastaleeq', 'Noto Nastaliq Urdu', 'Nastaliq', 'Urdu Typesetting', serif;
   direction: rtl;
   text-align: right;
   line-height: 2.2;
@@ -371,6 +380,98 @@ nav[aria-label="Main navigation"] * {
     opacity: 1;
     transform: scale(1);
   }
+}
+
+/* ====== Time Machine — Cinematic Animations ====== */
+
+/* Scene crossfade transitions */
+.tmSceneEnter {
+  animation: tmFadeIn 0.8s ease-out forwards;
+}
+.tmSceneExit {
+  animation: tmFadeOut 0.8s ease-in forwards;
+}
+@keyframes tmFadeIn {
+  from { opacity: 0; transform: scale(0.98); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes tmFadeOut {
+  from { opacity: 1; transform: scale(1); }
+  to   { opacity: 0; transform: scale(1.02); }
+}
+
+/* Scene content stagger fade */
+.tmSceneContentFade {
+  animation: tmContentFade 1s ease-out 0.3s both;
+}
+@keyframes tmContentFade {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Verse glow effect */
+.tmVerseGlow {
+  text-shadow: 0 0 30px rgba(251, 191, 36, 0.3), 0 0 60px rgba(251, 191, 36, 0.15);
+}
+
+/* Floating particles */
+@keyframes tmParticleFloat {
+  0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.2; }
+  25%      { transform: translate(12px, -20px) scale(1.2); opacity: 0.4; }
+  50%      { transform: translate(-8px, -35px) scale(0.9); opacity: 0.15; }
+  75%      { transform: translate(15px, -15px) scale(1.1); opacity: 0.35; }
+}
+
+/* Timeline active dot pulse */
+.tmTimelineDotActive {
+  animation: tmDotPulse 2s ease-in-out infinite;
+}
+@keyframes tmDotPulse {
+  0%, 100% { box-shadow: 0 0 6px currentColor; }
+  50%      { box-shadow: 0 0 14px currentColor; }
+}
+
+/* Verse reciting visual feedback */
+.tmVerseReciting {
+  animation: tmRecitingPulse 1.5s ease-in-out infinite;
+}
+@keyframes tmRecitingPulse {
+  0%, 100% { text-shadow: 0 0 20px rgba(245, 158, 11, 0.4), 0 0 40px rgba(245, 158, 11, 0.2); }
+  50% { text-shadow: 0 0 30px rgba(245, 158, 11, 0.7), 0 0 60px rgba(245, 158, 11, 0.4), 0 0 80px rgba(245, 158, 11, 0.2); }
+}
+
+/* Mini map container */
+.tmMiniMap .leaflet-container {
+  background: #1a1a2e !important;
+  border-radius: 0.75rem;
+}
+.tmMiniMap .leaflet-control-attribution {
+  display: none !important;
+}
+
+/* Expanded map */
+.tmExpandedMap {
+  background: #1a1a2e !important;
+}
+.tmExpandedMap .leaflet-control-attribution {
+  display: none !important;
+}
+.tmExpandedMap .leaflet-control-zoom a {
+  background: rgba(0,0,0,0.6) !important;
+  color: #fff !important;
+  border-color: rgba(255,255,255,0.1) !important;
+}
+.tmMapTooltip {
+  background: rgba(15, 23, 42, 0.9) !important;
+  border: 1px solid rgba(245, 158, 11, 0.3) !important;
+  border-radius: 8px !important;
+  color: #e2e8f0 !important;
+  padding: 6px 10px !important;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4) !important;
+  font-family: system-ui, sans-serif !important;
+}
+.tmMapTooltip::before {
+  border-top-color: rgba(15, 23, 42, 0.9) !important;
 }
 
 @keyframes slide-in-right {

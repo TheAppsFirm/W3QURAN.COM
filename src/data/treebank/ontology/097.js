@@ -14,23 +14,24 @@ export const ONTOLOGY = {
   categories: {
     quranRevelation: {
       name: "The Quran's Descent",
+      nameUr: "نزولِ قرآن",
       nameArabic: "نزول القرآن",
       color: '#3B82F6',
       icon: 'Book',
-      description: "The moment the Quran began its revelation",
+      description: { en: "The moment the Quran began its revelation", ur: "وہ لمحہ جب قرآن کا نزول شروع ہوا" },
       concepts: [
         {
           term: "أَنزَلْنَاهُ",
           transliteration: "Anzalnaahu",
-          meaning: "We sent it down",
-          explanation: "The 'it' refers to the Quran. Scholars discuss: either the entire Quran descended to Bayt al-'Izzah in the lowest heaven, then gradually revealed over 23 years, OR the first verses descended this night.",
+          meaning: { en: "We sent it down", ur: "ہم نے اسے نازل کیا" },
+          explanation: { en: "The 'it' refers to the Quran. Scholars discuss: either the entire Quran descended to Bayt al-'Izzah in the lowest heaven, then gradually revealed over 23 years, OR the first verses descended this night.", ur: "'اسے' سے مراد قرآن ہے۔ علماء کی بحث: یا تو پورا قرآن بیت العزہ (آسمان دنیا) پر نازل ہوا، پھر 23 سال میں تدریجاً اترا، یا اس رات پہلی آیات نازل ہوئیں۔" },
           verseRef: "97:1"
         },
         {
           term: "لَيْلَة القَدْر",
           transliteration: "Laylat al-Qadr",
-          meaning: "The Night of Power/Decree",
-          explanation: "Multiple meanings of قَدْر: (1) Decree - destinies determined (2) Power - immense spiritual power (3) Honor - most honored night (4) Measure - Quran's portions measured out.",
+          meaning: { en: "The Night of Power/Decree", ur: "شبِ قدر / تقدیر کی رات" },
+          explanation: { en: "Multiple meanings of قَدْر: (1) Decree - destinies determined (2) Power - immense spiritual power (3) Honor - most honored night (4) Measure - Quran's portions measured out.", ur: "قَدْر کے متعدد معانی: (1) تقدیر - قسمتوں کا فیصلہ (2) قدرت - عظیم روحانی طاقت (3) عزت - سب سے بامقام رات (4) مقدار - قرآن کے حصے مقرر کیے گئے۔" },
           verseRef: "97:1-3"
         }
       ]
@@ -38,16 +39,17 @@ export const ONTOLOGY = {
 
     nightVirtue: {
       name: "The Night's Virtue",
+      nameUr: "رات کی فضیلت",
       nameArabic: "فضل الليلة",
       color: '#8B5CF6',
       icon: 'Moon',
-      description: "Why this night is extraordinary",
+      description: { en: "Why this night is extraordinary", ur: "یہ رات کیوں غیر معمولی ہے" },
       concepts: [
         {
           term: "خَيْرٌ مِن أَلْفِ شَهْر",
           transliteration: "Khayrun min alfi shahr",
-          meaning: "Better than a thousand months",
-          explanation: "1000 months ≈ 83.3 years - a lifetime. Worship on this one night equals more than 83 years of worship. This was given to the Ummah whose lifespans are shorter than previous nations.",
+          meaning: { en: "Better than a thousand months", ur: "ہزار مہینوں سے بہتر" },
+          explanation: { en: "1000 months ≈ 83.3 years - a lifetime. Worship on this one night equals more than 83 years of worship. This was given to the Ummah whose lifespans are shorter than previous nations.", ur: "1000 مہینے ≈ 83.3 سال - ایک پوری زندگی۔ اس ایک رات کی عبادت 83 سال سے زیادہ عبادت کے برابر ہے۔ یہ اس امت کو عطا کی گئی جن کی عمریں پچھلی امتوں سے کم ہیں۔" },
           verseRef: "97:3"
         }
       ]
@@ -55,30 +57,31 @@ export const ONTOLOGY = {
 
     angelicDescent: {
       name: "Angelic Descent",
+      nameUr: "فرشتوں کا نزول",
       nameArabic: "نزول الملائكة",
       color: '#F59E0B',
       icon: 'Star',
-      description: "The angels and Spirit descend this night",
+      description: { en: "The angels and Spirit descend this night", ur: "فرشتے اور روح اس رات نازل ہوتے ہیں" },
       concepts: [
         {
           term: "تَنَزَّلُ المَلَائِكَة",
           transliteration: "Tanazzal al-Malaa'ikah",
-          meaning: "The angels descend",
-          explanation: "Form V (تَفَعَّل) indicates gradual, repeated descent - angels keep coming down throughout the night. More angels descend this night than at any other time.",
+          meaning: { en: "The angels descend", ur: "فرشتے اترتے ہیں" },
+          explanation: { en: "Form V (تَفَعَّل) indicates gradual, repeated descent - angels keep coming down throughout the night. More angels descend this night than at any other time.", ur: "باب تَفَعُّل بتدریج اور بار بار نزول کی نشاندہی کرتا ہے - پوری رات فرشتے اترتے رہتے ہیں۔ اس رات کسی بھی اور وقت سے زیادہ فرشتے نازل ہوتے ہیں۔" },
           verseRef: "97:4"
         },
         {
           term: "الرُّوح",
           transliteration: "Ar-Rooh",
-          meaning: "The Spirit (Jibreel)",
-          explanation: "Jibreel (Gabriel) mentioned separately from angels due to his special honor. He brought the Quran down, and he descends on this night.",
+          meaning: { en: "The Spirit (Jibreel)", ur: "روح (جبریل علیہ السلام)" },
+          explanation: { en: "Jibreel (Gabriel) mentioned separately from angels due to his special honor. He brought the Quran down, and he descends on this night.", ur: "جبریل علیہ السلام کو ان کے خاص مقام کی وجہ سے فرشتوں سے الگ ذکر کیا گیا۔ وہ قرآن لے کر آئے اور اس رات نازل ہوتے ہیں۔" },
           verseRef: "97:4"
         },
         {
           term: "بِإِذْنِ رَبِّهِم مِن كُلِّ أَمْر",
           transliteration: "Bi-idhni rabbihim min kulli amr",
-          meaning: "By permission of their Lord for every matter",
-          explanation: "Angels descend with decrees for the coming year - provisions, deaths, births, all matters determined.",
+          meaning: { en: "By permission of their Lord for every matter", ur: "اپنے رب کے حکم سے ہر معاملے کے لیے" },
+          explanation: { en: "Angels descend with decrees for the coming year - provisions, deaths, births, all matters determined.", ur: "فرشتے آنے والے سال کے فیصلے لے کر اترتے ہیں - رزق، موت، پیدائش، تمام معاملات مقرر ہوتے ہیں۔" },
           verseRef: "97:4"
         }
       ]
@@ -86,23 +89,24 @@ export const ONTOLOGY = {
 
     nightPeace: {
       name: "Complete Peace",
+      nameUr: "مکمل سلامتی",
       nameArabic: "السلام التام",
       color: '#10B981',
       icon: 'Heart',
-      description: "The night is pure peace until dawn",
+      description: { en: "The night is pure peace until dawn", ur: "یہ رات فجر تک خالص سلامتی ہے" },
       concepts: [
         {
           term: "سَلَامٌ هِيَ",
           transliteration: "Salaamun hiya",
-          meaning: "Peace it is",
-          explanation: "Predicate fronted for emphasis - the night IS peace itself. No evil, no disturbance, complete spiritual serenity. Angels greet believers with peace.",
+          meaning: { en: "Peace it is", ur: "وہ سراسر سلامتی ہے" },
+          explanation: { en: "Predicate fronted for emphasis - the night IS peace itself. No evil, no disturbance, complete spiritual serenity. Angels greet believers with peace.", ur: "تقدیم خبر تاکید کے لیے - رات خود سلامتی ہے۔ کوئی برائی نہیں، کوئی خلل نہیں، مکمل روحانی سکون۔ فرشتے ایمان والوں کو سلام کرتے ہیں۔" },
           verseRef: "97:5"
         },
         {
           term: "حَتَّى مَطْلَعِ الفَجْر",
           transliteration: "Hattaa matla' al-fajr",
-          meaning: "Until the emergence of dawn",
-          explanation: "The blessed state continues until dawn - then normal time resumes. This defines the window for special worship.",
+          meaning: { en: "Until the emergence of dawn", ur: "فجر طلوع ہونے تک" },
+          explanation: { en: "The blessed state continues until dawn - then normal time resumes. This defines the window for special worship.", ur: "یہ برکت والی کیفیت فجر تک جاری رہتی ہے - پھر عام وقت شروع ہوتا ہے۔ یہ خصوصی عبادت کی مدت متعین کرتی ہے۔" },
           verseRef: "97:5"
         }
       ]
@@ -114,21 +118,21 @@ export const ONTOLOGY = {
       from: "أَنزَلْنَاهُ",
       to: "لَيْلَة القَدْر",
       type: "event-time",
-      description: "Quran revealed during this specific night",
+      description: { en: "Quran revealed during this specific night", ur: "قرآن اس مخصوص رات میں نازل ہوا" },
       explanation: "The most significant revelation at the most significant time"
     },
     {
       from: "لَيْلَة القَدْر",
       to: "خَيْر من ألف شهر",
       type: "value",
-      description: "Night's value equals 83+ years",
+      description: { en: "Night's value equals 83+ years", ur: "رات کی قدر 83 سال سے زیادہ کے برابر" },
       explanation: "Divine compensation for shorter lifespans"
     },
     {
       from: "الملائكة والروح",
       to: "سَلَام",
       type: "causation",
-      description: "Angels bring peace",
+      description: { en: "Angels bring peace", ur: "فرشتے سلامتی لاتے ہیں" },
       explanation: "Their descent fills the night with peace and blessings"
     }
   ],
@@ -136,44 +140,44 @@ export const ONTOLOGY = {
   thematicFlow: {
     title: "From Revelation to Peace",
     titleArabic: "من التنزيل إلى السلام",
-    description: "The surah moves from the event to its significance to its atmosphere",
+    description: { en: "The surah moves from the event to its significance to its atmosphere", ur: "سورت واقعے سے اس کی اہمیت اور پھر اس کی فضا کی طرف بڑھتی ہے" },
     stages: [
       {
         stage: 1,
         theme: "The Event",
         verses: "97:1",
-        description: "Quran revealed on this night"
+        description: { en: "Quran revealed on this night", ur: "اس رات قرآن نازل ہوا" }
       },
       {
         stage: 2,
         theme: "The Question",
         verses: "97:2",
-        description: "What is this night? (Building importance)"
+        description: { en: "What is this night? (Building importance)", ur: "یہ رات کیا ہے؟ (اہمیت کا اظہار)" }
       },
       {
         stage: 3,
         theme: "The Value",
         verses: "97:3",
-        description: "Better than 1000 months"
+        description: { en: "Better than 1000 months", ur: "ہزار مہینوں سے بہتر" }
       },
       {
         stage: 4,
         theme: "The Activity",
         verses: "97:4",
-        description: "Angels and Spirit descend"
+        description: { en: "Angels and Spirit descend", ur: "فرشتے اور روح نازل ہوتے ہیں" }
       },
       {
         stage: 5,
         theme: "The Atmosphere",
         verses: "97:5",
-        description: "Pure peace until dawn"
+        description: { en: "Pure peace until dawn", ur: "فجر تک خالص سلامتی" }
       }
     ]
   },
 
   whenIsLaylatulQadr: {
     title: "Finding Laylat al-Qadr",
-    description: "When does this night occur?",
+    description: { en: "When does this night occur?", ur: "یہ رات کب آتی ہے؟" },
     positions: [
       {
         view: "Ramadan",
@@ -277,8 +281,8 @@ export const ONTOLOGY = {
   },
 
   uniqueInsight: {
-    title: "Why 1000 Months?",
-    insight: "The Prophet ﷺ was shown the lifespans of previous nations - Nuh lived 950 years, some prophets lived centuries. The Muslim Ummah's average lifespan is 60-70 years. How could they match those rewards? Allah gave Laylat al-Qadr: one night = 1000 months (83.3 years). A Muslim who catches this night for just 10 years has earned equivalent of 833 years of worship. This is divine compensation and mercy.",
+    title: { en: "Why 1000 Months?", ur: "ہزار مہینے کیوں؟" },
+    insight: { en: "The Prophet ﷺ was shown the lifespans of previous nations - Nuh lived 950 years, some prophets lived centuries. The Muslim Ummah's average lifespan is 60-70 years. How could they match those rewards? Allah gave Laylat al-Qadr: one night = 1000 months (83.3 years). A Muslim who catches this night for just 10 years has earned equivalent of 833 years of worship. This is divine compensation and mercy.", ur: "نبی ﷺ کو پچھلی امتوں کی عمریں دکھائی گئیں - نوح علیہ السلام 950 سال زندہ رہے، بعض انبیاء صدیوں تک۔ مسلم امت کی اوسط عمر 60-70 سال ہے۔ وہ ان ثوابات کو کیسے پا سکتے ہیں؟ Allah نے لیلۃ القدر عطا کی: ایک رات = 1000 مہینے (83.3 سال)۔ جو مسلمان صرف 10 سال یہ رات پائے اس نے 833 سال کی عبادت کے برابر ثواب کمایا۔ یہ الٰہی تلافی اور رحمت ہے۔" },
     mathematicalBeauty: "If someone catches Laylat al-Qadr every year for 50 years = equivalent to 4,166 years of worship"
   },
 

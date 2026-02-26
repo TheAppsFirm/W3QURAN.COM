@@ -119,7 +119,12 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "وَ (oath) + اللَّيْلِ (sworn object) + إِذَا يَغْشَىٰ (temporal clause)"
+    dependencyStructure: "وَ (oath) + اللَّيْلِ (sworn object) + إِذَا يَغْشَىٰ (temporal clause)",
+    structure: {
+      relationships: [
+      { from: 2, to: 3, label: 'شرط + فعل' }
+      ],
+    },
   },
 
   2: {
@@ -213,7 +218,12 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "وَ (oath) + النَّهَارِ (sworn object) + إِذَا تَجَلَّىٰ (temporal clause)"
+    dependencyStructure: "وَ (oath) + النَّهَارِ (sworn object) + إِذَا تَجَلَّىٰ (temporal clause)",
+    structure: {
+      relationships: [
+      { from: 2, to: 3, label: 'شرط + فعل' }
+      ],
+    },
   },
 
   3: {
@@ -335,7 +345,12 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "وَ (oath) + مَا (relative) + خَلَقَ (verb) + الذَّكَرَ وَالْأُنثَىٰ (objects)"
+    dependencyStructure: "وَ (oath) + مَا (relative) + خَلَقَ (verb) + الذَّكَرَ وَالْأُنثَىٰ (objects)",
+    structure: {
+      relationships: [
+      { from: 1, to: 2, label: 'موصول + صلة' }
+      ],
+    },
   },
 
   4: {
@@ -432,7 +447,12 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "إِنَّ (emphasis) + سَعْيَكُمْ (subject) + لَشَتَّىٰ (predicate) - Main thesis after oaths"
+    dependencyStructure: "إِنَّ (emphasis) + سَعْيَكُمْ (subject) + لَشَتَّىٰ (predicate) - Main thesis after oaths",
+    structure: {
+      relationships: [
+      { from: 2, to: 3, label: 'موصوف + صفت' }
+      ],
+    },
   },
 
   5: {
@@ -550,7 +570,12 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "فَأَمَّا (conditional) + مَنْ (subject) + أَعْطَىٰ وَاتَّقَىٰ (qualities)"
+    dependencyStructure: "فَأَمَّا (conditional) + مَنْ (subject) + أَعْطَىٰ وَاتَّقَىٰ (qualities)",
+    structure: {
+      relationships: [
+      { from: 2, to: 3, label: 'موصول + صلة' }
+      ],
+    },
   },
 
   6: {
@@ -562,7 +587,12 @@ export const TREEBANK_DATA = {
       hi: "और अच्छी बात की तस्दीक़ की",
       bn: "এবং উত্তম বিষয়কে সত্য মেনেছে",
       tr: "Ve en güzeli (cenneti) tasdik ederse",
-      id: "Dan membenarkan (pahala) yang terbaik"
+      id: "Dan membenarkan (pahala) yang terbaik",
+    structure: {
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' }
+      ],
+    },
     },
     words: [
       {
@@ -637,7 +667,12 @@ export const TREEBANK_DATA = {
       hi: "तो हम उसे आसानी की ओर ले जाएँगे",
       bn: "তাকে আমরা সহজ পথে পরিচালিত করব",
       tr: "Biz de onu en kolaya hazırlarız",
-      id: "Maka akan Kami mudahkan baginya jalan menuju kemudahan"
+      id: "Maka akan Kami mudahkan baginya jalan menuju kemudahan",
+    structure: {
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' }
+      ],
+    },
     },
     words: [
       {
@@ -817,7 +852,12 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "وَأَمَّا (conditional) + مَن (subject) + بَخِلَ وَاسْتَغْنَىٰ (qualities)"
+    dependencyStructure: "وَأَمَّا (conditional) + مَن (subject) + بَخِلَ وَاسْتَغْنَىٰ (qualities)",
+    structure: {
+      relationships: [
+      { from: 2, to: 3, label: 'موصول + صلة' }
+      ],
+    },
   },
 
   9: {
@@ -829,7 +869,12 @@ export const TREEBANK_DATA = {
       hi: "और अच्छी बात को झुठलाया",
       bn: "এবং উত্তম বিষয়কে মিথ্যা মনে করেছে",
       tr: "Ve en güzeli (cenneti) yalanlarsa",
-      id: "Dan mendustakan (pahala) yang terbaik"
+      id: "Dan mendustakan (pahala) yang terbaik",
+    structure: {
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' }
+      ],
+    },
     },
     words: [
       {
@@ -894,7 +939,12 @@ export const TREEBANK_DATA = {
       hi: "तो हम उसे मुश्किल की ओर ले जाएँगे",
       bn: "তাকে আমরা কঠিন পথে পরিচালিত করব",
       tr: "Biz de onu en zora hazırlarız",
-      id: "Maka akan Kami mudahkan baginya jalan menuju kesukaran"
+      id: "Maka akan Kami mudahkan baginya jalan menuju kesukaran",
+    structure: {
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' }
+      ],
+    },
     },
     words: [
       {
@@ -1116,7 +1166,14 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "وَمَا (negative) + يُغْنِي عَنْهُ (verb) + مَالُهُ (subject) + إِذَا تَرَدَّىٰ (temporal clause)"
+    dependencyStructure: "وَمَا (negative) + يُغْنِي عَنْهُ (verb) + مَالُهُ (subject) + إِذَا تَرَدَّىٰ (temporal clause)",
+    structure: {
+      relationships: [
+      { from: 1, to: 2, label: 'نفی + فعل' },
+      { from: 3, to: 4, label: 'جار + مجرور' },
+      { from: 5, to: 6, label: 'شرط + فعل' }
+      ],
+    },
   },
 
   12: {
@@ -1203,7 +1260,12 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "إِنَّ (emphasis) + عَلَيْنَا (predicate) + لَلْهُدَىٰ (subject)"
+    dependencyStructure: "إِنَّ (emphasis) + عَلَيْنَا (predicate) + لَلْهُدَىٰ (subject)",
+    structure: {
+      relationships: [
+      { from: 2, to: 3, label: 'جار + مجرور' }
+      ],
+    },
   },
 
   13: {
@@ -1313,7 +1375,12 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "وَإِنَّ (emphasis) + لَنَا (predicate) + لَلْآخِرَةَ وَالْأُولَىٰ (subject)"
+    dependencyStructure: "وَإِنَّ (emphasis) + لَنَا (predicate) + لَلْآخِرَةَ وَالْأُولَىٰ (subject)",
+    structure: {
+      relationships: [
+      { from: 2, to: 3, label: 'جار + مجرور' }
+      ],
+    },
   },
 
   14: {
@@ -1325,7 +1392,13 @@ export const TREEBANK_DATA = {
       hi: "तो मैंने तुम्हें आग से डराया जो भड़क रही है",
       bn: "অতএব আমি তোমাদের সতর্ক করলাম প্রজ্বলিত আগুন সম্পর্কে",
       tr: "Ben de sizi alevli ateşe karşı uyardım",
-      id: "Maka Aku memperingatkan kalian dengan api yang menyala-nyala"
+      id: "Maka Aku memperingatkan kalian dengan api yang menyala-nyala",
+    structure: {
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' }
+      ],
+    },
     },
     words: [
       {
@@ -1528,7 +1601,12 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "لَا (negative) + يَصْلَاهَا (verb) + إِلَّا (exception) + الْأَشْقَى (subject)"
+    dependencyStructure: "لَا (negative) + يَصْلَاهَا (verb) + إِلَّا (exception) + الْأَشْقَى (subject)",
+    structure: {
+      relationships: [
+      { from: 1, to: 2, label: 'نفی + فعل' }
+      ],
+    },
   },
 
   16: {
@@ -1616,7 +1694,12 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "الَّذِي (relative) + كَذَّبَ (verb) + وَتَوَلَّىٰ (verb)"
+    dependencyStructure: "الَّذِي (relative) + كَذَّبَ (verb) + وَتَوَلَّىٰ (verb)",
+    structure: {
+      relationships: [
+      { from: 1, to: 2, label: 'موصول + صلة' }
+      ],
+    },
   },
 
   17: {
@@ -1628,7 +1711,10 @@ export const TREEBANK_DATA = {
       hi: "और उससे बचाया जाएगा वह जो सबसे ज़्यादा मुत्तक़ी है",
       bn: "এবং তা থেকে দূরে রাখা হবে সবচেয়ে মুত্তাকী ব্যক্তিকে",
       tr: "En muttaki olan ondan uzaklaştırılacaktır",
-      id: "Dan akan dijauhkan darinya orang yang paling bertakwa"
+      id: "Dan akan dijauhkan darinya orang yang paling bertakwa",
+    structure: {
+      relationships: [{ from: 1, to: 2, label: 'موصوف + صفت' }],
+    },
     },
     words: [
       {
@@ -1804,7 +1890,12 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "الَّذِي (relative) + يُؤْتِي مَالَهُ (verb+object) + يَتَزَكَّىٰ (purpose clause)"
+    dependencyStructure: "الَّذِي (relative) + يُؤْتِي مَالَهُ (verb+object) + يَتَزَكَّىٰ (purpose clause)",
+    structure: {
+      relationships: [
+      { from: 1, to: 2, label: 'موصول + صلة' }
+      ],
+    },
   },
 
   19: {
@@ -1947,7 +2038,12 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "وَمَا (negative) + لِأَحَدٍ عِندَهُ (locative) + مِن نِّعْمَةٍ (subject) + تُجْزَىٰ (adjective)"
+    dependencyStructure: "وَمَا (negative) + لِأَحَدٍ عِندَهُ (locative) + مِن نِّعْمَةٍ (subject) + تُجْزَىٰ (adjective)",
+    structure: {
+      relationships: [
+      { from: 4, to: 5, label: 'جار + مجرور' }
+      ],
+    },
   },
 
   20: {
@@ -2087,7 +2183,12 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "إِلَّا (exception) + ابْتِغَاءَ (verbal noun) + وَجْهِ رَبِّهِ الْأَعْلَىٰ (genitive chain)"
+    dependencyStructure: "إِلَّا (exception) + ابْتِغَاءَ (verbal noun) + وَجْهِ رَبِّهِ الْأَعْلَىٰ (genitive chain)",
+    structure: {
+      relationships: [
+      { from: 4, to: 5, label: 'موصوف + صفت' }
+      ],
+    },
   },
 
   21: {
@@ -2099,7 +2200,10 @@ export const TREEBANK_DATA = {
       hi: "और अनक़रीब वह राज़ी हो जाएगा",
       bn: "এবং অচিরেই সে সন্তুষ্ট হবে",
       tr: "Ve elbette o razı olacaktır",
-      id: "Dan kelak dia pasti akan mendapat keridaan"
+      id: "Dan kelak dia pasti akan mendapat keridaan",
+    structure: {
+      relationships: [{ from: 2, to: 3, label: 'فعل + فاعل' }],
+    },
     },
     words: [
       {

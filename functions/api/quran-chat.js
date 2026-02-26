@@ -302,10 +302,10 @@ const VOICE_SETTINGS = {
   ar: { voice: 'echo', speed: 0.9 },    // Warm male, slower for Arabic clarity
 };
 
-// Generate TTS audio using OpenAI - optimized for speed
+// Generate TTS audio using OpenAI HD for high-quality voice
 async function generateTTS(env, text, language = 'en') {
-  // Skip TTS for very long responses (faster cutoff)
-  if (text.length > 800) {
+  // Skip TTS for very long responses
+  if (text.length > 1500) {
     return null;
   }
 
@@ -320,10 +320,10 @@ async function generateTTS(env, text, language = 'en') {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'tts-1', // Standard model - 2x faster than HD
-        input: text.substring(0, 800), // Limit text for speed
+        model: 'tts-1-hd', // HD model for better quality
+        input: text.substring(0, 1500),
         voice: settings.voice,
-        speed: settings.speed * 1.1, // Slightly faster speech
+        speed: settings.speed,
       }),
     });
 
@@ -383,6 +383,10 @@ export async function onRequest(context) {
     });
   }
 
+  if (!env.DB) {
+    return new Response(JSON.stringify({ error: 'Service unavailable' }), { status: 503, headers: corsHeaders });
+  }
+
   try {
     // Verify user is logged in
     let user;
@@ -393,7 +397,6 @@ export async function onRequest(context) {
       return new Response(JSON.stringify({
         error: 'Session verification failed',
         code: 'SESSION_ERROR',
-        details: sessionError.message
       }), {
         status: 500,
         headers: corsHeaders,
@@ -419,7 +422,6 @@ export async function onRequest(context) {
       return new Response(JSON.stringify({
         error: 'Invalid request body',
         code: 'PARSE_ERROR',
-        details: parseError.message
       }), {
         status: 400,
         headers: corsHeaders,
@@ -428,6 +430,13 @@ export async function onRequest(context) {
 
     const { message, conversationHistory = [], language = 'en', includeTTS = false, voiceLanguage } = body;
     const ttsLanguage = voiceLanguage || language; // Use voiceLanguage if provided, otherwise use language
+
+    if (message?.length > 5000) {
+      return new Response(JSON.stringify({ error: 'Message too long', code: 'MESSAGE_TOO_LONG' }), {
+        status: 400,
+        headers: corsHeaders,
+      });
+    }
 
     if (!message || message.trim().length === 0) {
       return new Response(JSON.stringify({ error: 'Message is required' }), {
@@ -448,7 +457,6 @@ export async function onRequest(context) {
       return new Response(JSON.stringify({
         error: 'Failed to fetch user credits',
         code: 'CREDITS_ERROR',
-        details: creditsError.message
       }), {
         status: 500,
         headers: corsHeaders,
@@ -504,7 +512,6 @@ export async function onRequest(context) {
       return new Response(JSON.stringify({
         error: 'AI service temporarily unavailable',
         code: 'OPENAI_ERROR',
-        details: openAIError.message
       }), {
         status: 503,
         headers: corsHeaders,
@@ -551,7 +558,13 @@ export async function onRequest(context) {
     }
 
     // Get updated credits/usage
-    const updatedCredits = await getUserCredits(env, user.user_id);
+    let updatedCredits;
+    try {
+      updatedCredits = await getUserCredits(env, user.user_id);
+    } catch (creditsUpdateError) {
+      console.error('[QuranChat] Failed to fetch updated credits:', creditsUpdateError);
+      updatedCredits = credits; // fallback to pre-deduction credits
+    }
 
     // Build response based on access type
     let creditsResponse;
@@ -605,7 +618,6 @@ export async function onRequest(context) {
     return new Response(JSON.stringify({
       error: userMessage,
       code: errorCode,
-      details: error.message
     }), {
       status: 500,
       headers: corsHeaders,

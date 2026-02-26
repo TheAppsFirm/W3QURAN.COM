@@ -127,6 +127,10 @@ const SURAH_109_TREEBANK = {
         { word: 'أَيُّهَا', role: 'vocative-connector' },
         { word: 'الْكَافِرُونَ', role: 'munada (addressee)' },
       ],
+      relationships: [
+        { from: 2, to: 3, label: 'نداء' },
+        { from: 3, to: 4, label: 'نداء' }
+      ],
     },
   },
 
@@ -239,6 +243,10 @@ const SURAH_109_TREEBANK = {
         { word: 'أَعْبُدُ', role: 'main-verb' },
         { word: 'مَا تَعْبُدُونَ', role: 'relative-clause (object)' },
       ],
+      relationships: [
+        { from: 1, to: 2, label: 'نفی + فعل' },
+        { from: 3, to: 4, label: 'موصول + صلة' }
+      ],
     },
   },
 
@@ -348,6 +356,10 @@ const SURAH_109_TREEBANK = {
         { word: 'أَنتُمْ', role: 'subject' },
         { word: 'عَابِدُونَ', role: 'predicate' },
         { word: 'مَا أَعْبُدُ', role: 'relative-clause (object of worship)' },
+      ],
+      relationships: [
+        { from: 2, to: 3, label: 'مبتدأ + خبر' },
+        { from: 4, to: 5, label: 'موصول + صلة' }
       ],
     },
   },
@@ -467,6 +479,10 @@ const SURAH_109_TREEBANK = {
         { word: 'أَنَا', role: 'subject' },
         { word: 'عَابِدٌ', role: 'predicate' },
         { word: 'مَّا عَبَدتُّمْ', role: 'relative-clause (object of worship)' },
+      ],
+      relationships: [
+        { from: 2, to: 3, label: 'مبتدأ + خبر' },
+        { from: 4, to: 5, label: 'موصول + صلة' }
       ],
     },
   },
@@ -592,6 +608,10 @@ const SURAH_109_TREEBANK = {
         { word: 'عَابِدُونَ', role: 'predicate' },
         { word: 'مَا أَعْبُدُ', role: 'relative-clause (object of worship)' },
       ],
+      relationships: [
+        { from: 2, to: 3, label: 'مبتدأ + خبر' },
+        { from: 4, to: 5, label: 'موصول + صلة' }
+      ],
     },
   },
 
@@ -715,6 +735,9 @@ const SURAH_109_TREEBANK = {
         { word: 'دِينُكُمْ', role: 'subject-1 (delayed)' },
         { word: 'وَلِيَ', role: 'conjunction + predicate-2' },
         { word: 'دِينِ', role: 'subject-2 (delayed)' },
+      ],
+      relationships: [
+        { from: 2, to: 3, label: 'مبتدأ + خبر' }
       ],
     },
   },

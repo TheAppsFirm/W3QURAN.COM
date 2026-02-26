@@ -17,6 +17,9 @@ const SURAH_103_TREEBANK = {
       bn: 'সময়ের শপথ',
       tr: "Asra (zamana) yemin olsun ki",
       id: 'Demi masa',
+    structure: {
+      relationships: [],
+    },
     },
     words: [
       {
@@ -223,6 +226,10 @@ const SURAH_103_TREEBANK = {
         { word: 'الْإِنسَانَ', role: 'ism-inna', subject: true },
         { word: 'لَفِي', role: 'emphatic-preposition' },
         { word: 'خُسْرٍ', role: 'khabar-inna', predicate: true },
+      ],
+      relationships: [
+        { from: 1, to: 2, label: 'توکید' },
+        { from: 2, to: 4, label: 'مبتدأ + خبر' }
       ],
     },
   },
@@ -549,6 +556,12 @@ const SURAH_103_TREEBANK = {
         { word: 'وَعَمِلُوا الصَّالِحَاتِ', role: 'verb-2', condition: '2-deeds' },
         { word: 'وَتَوَاصَوْا بِالْحَقِّ', role: 'verb-3', condition: '3-truth' },
         { word: 'وَتَوَاصَوْا بِالصَّبْرِ', role: 'verb-4', condition: '4-patience' },
+      ],
+      relationships: [
+        { from: 2, to: 3, label: 'موصول + صلة' },
+        { from: 3, to: 4, label: 'عطف' },
+        { from: 4, to: 6, label: 'عطف' },
+        { from: 6, to: 8, label: 'عطف' }
       ],
     },
   },

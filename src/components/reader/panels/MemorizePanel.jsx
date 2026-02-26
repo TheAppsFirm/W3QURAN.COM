@@ -10,7 +10,7 @@
  * Follows Single Responsibility Principle - handles only memorization settings
  */
 
-import { memo, useState, useEffect } from 'react';
+import { memo, useState, useEffect, useRef } from 'react';
 import { Icons } from '../../common/Icons';
 import { useTranslation } from '../../../contexts/LocaleContext';
 
@@ -35,16 +35,19 @@ const MemorizePanel = memo(function MemorizePanel({
   const { t } = useTranslation();
   const [hideLevel, setHideLevel] = useState(currentSettings?.hideLevel || 0);
   const [repeatCount, setRepeatCount] = useState(currentSettings?.repeatCount || 3);
+  const prevSettingsRef = useRef({ hideLevel, repeatCount });
 
-  // Notify parent of settings changes
+  // Notify parent of settings changes — only when values actually change
   useEffect(() => {
+    if (prevSettingsRef.current.hideLevel === hideLevel && prevSettingsRef.current.repeatCount === repeatCount) return;
+    prevSettingsRef.current = { hideLevel, repeatCount };
     onSettingsChange({ hideLevel, repeatCount });
   }, [hideLevel, repeatCount, onSettingsChange]);
 
   return (
     <div className="h-full flex flex-col">
       {/* Header */}
-      <div className="flex-shrink-0 flex items-center justify-between pb-3 border-b border-white/20">
+      <div className="flex-shrink-0 flex items-center justify-between pb-3">
         <div className="flex items-center gap-2">
           <div className="w-10 h-10 rounded-full bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center">
             <Icons.Brain className="w-5 h-5 text-white" />

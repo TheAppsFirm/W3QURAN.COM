@@ -1,0 +1,101 @@
+<svg viewBox="0 0 1200 630" width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0A0A0A"/>
+      <stop offset="50%" stop-color="#1A1A1A"/>
+      <stop offset="100%" stop-color="#0F0F0F"/>
+    </linearGradient>
+    <linearGradient id="gold2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#BF953F"/>
+      <stop offset="25%" stop-color="#FCF6BA"/>
+      <stop offset="50%" stop-color="#B38728"/>
+      <stop offset="75%" stop-color="#FBF5B7"/>
+      <stop offset="100%" stop-color="#AA771C"/>
+    </linearGradient>
+    <linearGradient id="gold2v" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FCF6BA"/>
+      <stop offset="50%" stop-color="#D4AF37"/>
+      <stop offset="100%" stop-color="#AA771C"/>
+    </linearGradient>
+    <radialGradient id="goldglow" cx="50%" cy="40%" r="30%">
+      <stop offset="0%" stop-color="#D4AF37" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#0A0A0A" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg2)"/>
+  <rect width="1200" height="630" fill="url(#goldglow)"/>
+
+  <!-- Subtle diagonal lines -->
+  <g opacity="0.03">
+    <line x1="0" y1="0" x2="1200" y2="630" stroke="#D4AF37" stroke-width="0.5"/>
+    <line x1="200" y1="0" x2="1400" y2="630" stroke="#D4AF37" stroke-width="0.5"/>
+    <line x1="400" y1="0" x2="1600" y2="630" stroke="#D4AF37" stroke-width="0.5"/>
+    <line x1="-200" y1="0" x2="1000" y2="630" stroke="#D4AF37" stroke-width="0.5"/>
+    <line x1="-400" y1="0" x2="800" y2="630" stroke="#D4AF37" stroke-width="0.5"/>
+  </g>
+
+  <!-- Gold ornamental border -->
+  <rect x="24" y="24" width="1152" height="582" rx="4" fill="none" stroke="url(#gold2)" stroke-width="1.5" opacity="0.6"/>
+  <!-- Corner ornaments -->
+  <g opacity="0.5">
+    <path d="M24,80 L24,24 L80,24" fill="none" stroke="url(#gold2)" stroke-width="2.5"/>
+    <path d="M1120,24 L1176,24 L1176,80" fill="none" stroke="url(#gold2)" stroke-width="2.5"/>
+    <path d="M1176,550 L1176,606 L1120,606" fill="none" stroke="url(#gold2)" stroke-width="2.5"/>
+    <path d="M80,606 L24,606 L24,550" fill="none" stroke="url(#gold2)" stroke-width="2.5"/>
+  </g>
+
+  <!-- Bismillah in Arabic (decorative, top) -->
+  <text x="600" y="100" text-anchor="middle" fill="url(#gold2v)" font-family="'Scheherazade New', 'Amiri', serif" font-size="28" opacity="0.6" direction="rtl">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</text>
+
+  <!-- Central mihrab - larger, more ornate -->
+  <g transform="translate(600,250)">
+    <!-- Outer arch with gold -->
+    <path d="M-65,80 L-65,-15 C-65,-75 0,-115 0,-115 C0,-115 65,-75 65,-15 L65,80"
+          fill="none" stroke="url(#gold2)" stroke-width="2.5" stroke-linecap="round" opacity="0.8"/>
+    <!-- Middle arch -->
+    <path d="M-48,80 L-48,-8 C-48,-55 0,-88 0,-88 C0,-88 48,-55 48,-8 L48,80"
+          fill="none" stroke="url(#gold2)" stroke-width="1" stroke-linecap="round" opacity="0.4"/>
+    <!-- Inner arch -->
+    <path d="M-32,80 L-32,0 C-32,-38 0,-62 0,-62 C0,-62 32,-38 32,0 L32,80"
+          fill="rgba(212,175,55,0.05)" stroke="url(#gold2)" stroke-width="0.5" stroke-linecap="round" opacity="0.3"/>
+    <!-- Light beam -->
+    <ellipse cx="0" cy="-5" rx="12" ry="35" fill="rgba(212,175,55,0.08)"/>
+    <!-- Crescent and star at apex -->
+    <circle cx="0" cy="-110" r="6" fill="#D4AF37" opacity="0.9"/>
+    <circle cx="0" cy="-110" r="12" fill="none" stroke="#D4AF37" stroke-width="0.5" opacity="0.3"/>
+  </g>
+
+  <!-- w3Quran text - gold -->
+  <text x="600" y="410" text-anchor="middle" fill="url(#gold2)" font-family="'Plus Jakarta Sans', 'Segoe UI', sans-serif" font-size="72" font-weight="800" letter-spacing="-1">w3Quran</text>
+
+  <!-- Subtitle -->
+  <text x="600" y="455" text-anchor="middle" fill="rgba(212,175,55,0.5)" font-family="'Plus Jakarta Sans', 'Segoe UI', sans-serif" font-size="22" font-weight="300" letter-spacing="4">INTERACTIVE QURAN EXPLORER</text>
+
+  <!-- Feature pills - gold outline -->
+  <g transform="translate(600,520)">
+    <g transform="translate(-420,0)">
+      <rect x="-65" y="-18" width="130" height="36" rx="18" fill="none" stroke="rgba(212,175,55,0.3)" stroke-width="1"/>
+      <text x="0" y="5" text-anchor="middle" fill="rgba(212,175,55,0.6)" font-family="'Plus Jakarta Sans', sans-serif" font-size="13" letter-spacing="1">114 Surahs</text>
+    </g>
+    <g transform="translate(-210,0)">
+      <rect x="-50" y="-18" width="100" height="36" rx="18" fill="none" stroke="rgba(212,175,55,0.3)" stroke-width="1"/>
+      <text x="0" y="5" text-anchor="middle" fill="rgba(212,175,55,0.6)" font-family="'Plus Jakarta Sans', sans-serif" font-size="13" letter-spacing="1">Audio</text>
+    </g>
+    <g transform="translate(0,0)">
+      <rect x="-72" y="-18" width="144" height="36" rx="18" fill="none" stroke="rgba(212,175,55,0.3)" stroke-width="1"/>
+      <text x="0" y="5" text-anchor="middle" fill="rgba(212,175,55,0.6)" font-family="'Plus Jakarta Sans', sans-serif" font-size="13" letter-spacing="1">Word-by-Word</text>
+    </g>
+    <g transform="translate(210,0)">
+      <rect x="-60" y="-18" width="120" height="36" rx="18" fill="none" stroke="rgba(212,175,55,0.3)" stroke-width="1"/>
+      <text x="0" y="5" text-anchor="middle" fill="rgba(212,175,55,0.6)" font-family="'Plus Jakarta Sans', sans-serif" font-size="13" letter-spacing="1">Kids Mode</text>
+    </g>
+    <g transform="translate(420,0)">
+      <rect x="-60" y="-18" width="120" height="36" rx="18" fill="none" stroke="rgba(212,175,55,0.3)" stroke-width="1"/>
+      <text x="0" y="5" text-anchor="middle" fill="rgba(212,175,55,0.6)" font-family="'Plus Jakarta Sans', sans-serif" font-size="13" letter-spacing="1">Daily Verse</text>
+    </g>
+  </g>
+
+  <text x="1170" y="610" text-anchor="end" fill="rgba(212,175,55,0.2)" font-family="'Plus Jakarta Sans', sans-serif" font-size="12">w3quran.com</text>
+</svg>

@@ -18,6 +18,9 @@ const SURAH_108_TREEBANK = {
       bn: 'নিশ্চয়ই আমি আপনাকে কাউসার দান করেছি',
       tr: 'Şüphesiz biz sana Kevseri verdik',
       id: 'Sesungguhnya Kami telah memberikan kepadamu Al-Kautsar',
+    structure: {
+      relationships: [{ from: 2, to: 3, label: 'فعل + فاعل' }],
+    },
     },
     words: [
       {
@@ -282,6 +285,9 @@ const SURAH_108_TREEBANK = {
         { word: 'لِرَبِّكَ', role: 'prep-phrase', dependsOn: 'صَلِّ' },
         { word: 'وَانْحَرْ', role: 'main-verb-2', coordinated: 'صَلِّ' },
       ],
+      relationships: [
+        { from: 1, to: 3, label: 'عطف' }
+      ],
     },
   },
 
@@ -431,6 +437,11 @@ const SURAH_108_TREEBANK = {
         { word: 'شَانِئَكَ', role: 'ism-inna', subject: true },
         { word: 'هُوَ', role: 'separation-pronoun', emphasizes: 'الْأَبْتَرُ' },
         { word: 'الْأَبْتَرُ', role: 'khabar-inna', predicate: true },
+      ],
+      relationships: [
+        { from: 1, to: 2, label: 'توکید' },
+        { from: 2, to: 4, label: 'مبتدأ + خبر' },
+        { from: 3, to: 4, label: 'ضمیر فصل + خبر' }
       ],
     },
   },

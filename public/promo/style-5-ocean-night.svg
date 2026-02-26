@@ -1,0 +1,97 @@
+<svg viewBox="0 0 1200 630" width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg5" x1="50%" y1="0%" x2="50%" y2="100%">
+      <stop offset="0%" stop-color="#020617"/>
+      <stop offset="50%" stop-color="#0F172A"/>
+      <stop offset="100%" stop-color="#1E3A5F"/>
+    </linearGradient>
+    <radialGradient id="nebula5" cx="30%" cy="40%" r="50%">
+      <stop offset="0%" stop-color="#3B82F6" stop-opacity="0.1"/>
+      <stop offset="100%" stop-color="#020617" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="nebula5b" cx="70%" cy="60%" r="40%">
+      <stop offset="0%" stop-color="#8B5CF6" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#020617" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="blue5" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#3B82F6"/>
+      <stop offset="50%" stop-color="#06B6D4"/>
+      <stop offset="100%" stop-color="#8B5CF6"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Deep space background -->
+  <rect width="1200" height="630" fill="url(#bg5)"/>
+  <rect width="1200" height="630" fill="url(#nebula5)"/>
+  <rect width="1200" height="630" fill="url(#nebula5b)"/>
+
+  <!-- Stars -->
+  <g opacity="0.7">
+    <circle cx="80" cy="50" r="1.5" fill="white"/><circle cx="160" cy="120" r="1" fill="white"/>
+    <circle cx="240" cy="30" r="2" fill="white"/><circle cx="350" cy="90" r="1" fill="white"/>
+    <circle cx="420" cy="160" r="1.5" fill="white"/><circle cx="520" cy="45" r="1" fill="white"/>
+    <circle cx="680" cy="70" r="1.5" fill="white"/><circle cx="750" cy="140" r="1" fill="white"/>
+    <circle cx="830" cy="35" r="2" fill="white"/><circle cx="920" cy="110" r="1" fill="white"/>
+    <circle cx="1020" cy="55" r="1.5" fill="white"/><circle cx="1100" cy="130" r="1" fill="white"/>
+    <circle cx="130" cy="200" r="0.8" fill="white"/><circle cx="300" cy="180" r="0.8" fill="white"/>
+    <circle cx="600" cy="25" r="0.8" fill="white"/><circle cx="870" cy="180" r="0.8" fill="white"/>
+    <circle cx="1050" cy="200" r="0.8" fill="white"/><circle cx="50" cy="300" r="0.8" fill="white"/>
+    <circle cx="1150" cy="250" r="0.8" fill="white"/><circle cx="200" cy="350" r="0.8" fill="white"/>
+  </g>
+
+  <!-- Glowing arch - neon blue -->
+  <g transform="translate(600,235)">
+    <!-- Glow behind -->
+    <path d="M-50,65 L-50,-8 C-50,-55 0,-90 0,-90 C0,-90 50,-55 50,-8 L50,65"
+          fill="none" stroke="#3B82F6" stroke-width="8" opacity="0.08"/>
+    <!-- Outer arch -->
+    <path d="M-50,65 L-50,-8 C-50,-55 0,-90 0,-90 C0,-90 50,-55 50,-8 L50,65"
+          fill="none" stroke="url(#blue5)" stroke-width="2.5" stroke-linecap="round" opacity="0.8"/>
+    <!-- Inner arch -->
+    <path d="M-33,65 L-33,0 C-33,-35 0,-60 0,-60 C0,-60 33,-35 33,0 L33,65"
+          fill="rgba(59,130,246,0.04)" stroke="url(#blue5)" stroke-width="1" stroke-linecap="round" opacity="0.4"/>
+    <!-- Floating orb -->
+    <circle cx="0" cy="-15" r="8" fill="rgba(6,182,212,0.15)"/>
+    <circle cx="0" cy="-15" r="4" fill="rgba(6,182,212,0.3)"/>
+    <circle cx="0" cy="-15" r="1.5" fill="white" opacity="0.8"/>
+    <!-- Apex star -->
+    <circle cx="0" cy="-86" r="4" fill="white" opacity="0.9"/>
+    <circle cx="0" cy="-86" r="8" fill="none" stroke="#06B6D4" stroke-width="0.5" opacity="0.5"/>
+    <circle cx="0" cy="-86" r="14" fill="none" stroke="#06B6D4" stroke-width="0.3" opacity="0.2"/>
+  </g>
+
+  <!-- w3Quran text -->
+  <text x="600" y="385" text-anchor="middle" fill="white" font-family="'Plus Jakarta Sans', 'Segoe UI', sans-serif" font-size="68" font-weight="800" letter-spacing="-1">w3Quran</text>
+
+  <!-- Gradient underline -->
+  <rect x="480" y="398" width="240" height="2.5" rx="1" fill="url(#blue5)" opacity="0.5"/>
+
+  <!-- Subtitle -->
+  <text x="600" y="430" text-anchor="middle" fill="rgba(147,197,253,0.7)" font-family="'Plus Jakarta Sans', 'Segoe UI', sans-serif" font-size="20" font-weight="400" letter-spacing="2">Interactive Quran Explorer</text>
+
+  <!-- Feature pills - glass effect -->
+  <g transform="translate(600,500)">
+    <g transform="translate(-420,0)">
+      <rect x="-65" y="-18" width="130" height="36" rx="18" fill="rgba(59,130,246,0.1)" stroke="rgba(59,130,246,0.3)" stroke-width="1"/>
+      <text x="0" y="5" text-anchor="middle" fill="rgba(147,197,253,0.8)" font-family="'Plus Jakarta Sans', sans-serif" font-size="14">114 Surahs</text>
+    </g>
+    <g transform="translate(-210,0)">
+      <rect x="-50" y="-18" width="100" height="36" rx="18" fill="rgba(6,182,212,0.1)" stroke="rgba(6,182,212,0.3)" stroke-width="1"/>
+      <text x="0" y="5" text-anchor="middle" fill="rgba(147,197,253,0.8)" font-family="'Plus Jakarta Sans', sans-serif" font-size="14">Audio</text>
+    </g>
+    <g transform="translate(0,0)">
+      <rect x="-72" y="-18" width="144" height="36" rx="18" fill="rgba(59,130,246,0.1)" stroke="rgba(59,130,246,0.3)" stroke-width="1"/>
+      <text x="0" y="5" text-anchor="middle" fill="rgba(147,197,253,0.8)" font-family="'Plus Jakarta Sans', sans-serif" font-size="14">Word-by-Word</text>
+    </g>
+    <g transform="translate(210,0)">
+      <rect x="-60" y="-18" width="120" height="36" rx="18" fill="rgba(6,182,212,0.1)" stroke="rgba(6,182,212,0.3)" stroke-width="1"/>
+      <text x="0" y="5" text-anchor="middle" fill="rgba(147,197,253,0.8)" font-family="'Plus Jakarta Sans', sans-serif" font-size="14">Kids Mode</text>
+    </g>
+    <g transform="translate(420,0)">
+      <rect x="-60" y="-18" width="120" height="36" rx="18" fill="rgba(59,130,246,0.1)" stroke="rgba(59,130,246,0.3)" stroke-width="1"/>
+      <text x="0" y="5" text-anchor="middle" fill="rgba(147,197,253,0.8)" font-family="'Plus Jakarta Sans', sans-serif" font-size="14">Daily Verse</text>
+    </g>
+  </g>
+
+  <text x="1170" y="610" text-anchor="end" fill="rgba(147,197,253,0.2)" font-family="'Plus Jakarta Sans', sans-serif" font-size="12">w3quran.com</text>
+</svg>

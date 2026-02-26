@@ -43,7 +43,10 @@ export const TREEBANK_DATA = {
         grammar: { role: "vocative noun", case: "nominative", definite: true },
         features: { form: "V", participle: "active", meaning: "one who wraps himself" }
       }
-    ]
+    ],
+    structure: {
+      relationships: [],
+    },
   },
 
   2: {
@@ -87,7 +90,12 @@ export const TREEBANK_DATA = {
         posLabel: "ADJ",
         grammar: { role: "exception", case: "accusative" }
       }
-    ]
+    ],
+    structure: {
+      relationships: [
+      { from: 1, to: 2, label: 'فعل + مفعول به' }
+      ]
+    }
   },
 
   3: {
@@ -142,7 +150,10 @@ export const TREEBANK_DATA = {
         posLabel: "ADJ",
         grammar: { role: "adverbial accusative", case: "accusative" }
       }
-    ]
+    ],
+    structure: {
+      relationships: [],
+    },
   },
 
   4: {
@@ -207,7 +218,13 @@ export const TREEBANK_DATA = {
         grammar: { role: "cognate accusative", case: "accusative" },
         features: { form: "II verbal noun", emphasis: "intensive" }
       }
-    ]
+    ],
+    structure: {
+      relationships: [
+      { from: 1, to: 2, label: 'عطف' },
+      { from: 4, to: 5, label: 'فعل + مفعول به' }
+      ]
+    }
   },
 
   5: {
@@ -262,7 +279,13 @@ export const TREEBANK_DATA = {
         posLabel: "ADJ",
         grammar: { role: "adjective", case: "accusative" }
       }
-    ]
+    ],
+    structure: {
+      relationships: [
+      { from: 2, to: 4, label: 'فعل + مفعول به' },
+      { from: 4, to: 5, label: 'موصوف + صفت' }
+      ]
+    }
   },
 
   6: {
@@ -344,7 +367,14 @@ export const TREEBANK_DATA = {
         posLabel: "N",
         grammar: { role: "specification accusative", case: "accusative" }
       }
-    ]
+    ],
+    structure: {
+      relationships: [
+      { from: 2, to: 3, label: 'مضاف + مضاف إليه' },
+      { from: 4, to: 5, label: 'مبتدأ + خبر' },
+      { from: 4, to: 7, label: 'مبتدأ + خبر' }
+      ]
+    }
   },
 
   7: {
@@ -406,7 +436,13 @@ export const TREEBANK_DATA = {
         posLabel: "ADJ",
         grammar: { role: "adjective", case: "accusative" }
       }
-    ]
+    ],
+    structure: {
+      relationships: [
+      { from: 3, to: 4, label: 'جار + مجرور' },
+      { from: 5, to: 6, label: 'موصوف + صفت' }
+      ]
+    }
   },
 
   8: {
@@ -472,7 +508,14 @@ export const TREEBANK_DATA = {
         grammar: { role: "cognate accusative", case: "accusative" },
         features: { form: "II verbal noun", emphasis: "intensive" }
       }
-    ]
+    ],
+    structure: {
+      relationships: [
+      { from: 1, to: 2, label: 'فعل + مفعول به' },
+      { from: 2, to: 3, label: 'مضاف + مضاف إليه' },
+      { from: 4, to: 6, label: 'فعل + مفعول به' }
+      ]
+    }
   },
 
   9: {
@@ -562,7 +605,14 @@ export const TREEBANK_DATA = {
         posLabel: "N",
         grammar: { role: "second object (mafʿūl bihi thānī)", case: "accusative" }
       }
-    ]
+    ],
+    structure: {
+      relationships: [
+      { from: 1, to: 2, label: 'مضاف + مضاف إليه' },
+      { from: 2, to: 3, label: 'مضاف + مضاف إليه' },
+      { from: 8, to: 9, label: 'فعل + مفعول به' }
+      ]
+    }
   },
 
   10: {
@@ -636,7 +686,15 @@ export const TREEBANK_DATA = {
         posLabel: "ADJ",
         grammar: { role: "adjective", case: "accusative" }
       }
-    ]
+    ],
+    structure: {
+      relationships: [
+      { from: 3, to: 4, label: 'موصول + صلة' },
+      { from: 4, to: 6, label: 'فعل + مفعول به' },
+      { from: 5, to: 6, label: 'فعل + مفعول به' },
+      { from: 6, to: 7, label: 'موصوف + صفت' }
+      ]
+    }
   },
 
   11: {
@@ -702,7 +760,13 @@ export const TREEBANK_DATA = {
         posLabel: "ADJ",
         grammar: { role: "adverbial accusative", case: "accusative" }
       }
-    ]
+    ],
+    structure: {
+      relationships: [
+      { from: 1, to: 2, label: 'فعل + مفعول به' },
+      { from: 3, to: 4, label: 'مضاف + مضاف إليه' }
+      ]
+    }
   },
 
   12: {
@@ -746,7 +810,10 @@ export const TREEBANK_DATA = {
         posLabel: "N",
         grammar: { role: "conjunction + noun", case: "accusative" }
       }
-    ]
+    ],
+    structure: {
+      relationships: [{ from: 2, to: 3, label: 'جار + مجرور' }],
+    },
   },
 
   13: {
@@ -798,7 +865,13 @@ export const TREEBANK_DATA = {
         posLabel: "ADJ",
         grammar: { role: "adjective", case: "accusative" }
       }
-    ]
+    ],
+    structure: {
+      relationships: [
+      { from: 2, to: 3, label: 'مضاف + مضاف إليه' },
+      { from: 4, to: 5, label: 'موصوف + صفت' }
+      ]
+    }
   },
 
   14: {
@@ -880,7 +953,15 @@ export const TREEBANK_DATA = {
         grammar: { role: "adjective", case: "accusative" },
         features: { pattern: "faʿīl", meaning: "poured/flowing" }
       }
-    ]
+    ],
+    structure: {
+      relationships: [
+      { from: 2, to: 3, label: 'فعل + فاعل' },
+      { from: 5, to: 6, label: 'فعل + فاعل' },
+      { from: 5, to: 7, label: 'فعل + مفعول به' },
+      { from: 7, to: 8, label: 'موصوف + صفت' }
+      ]
+    }
   },
 
   15: {
@@ -993,7 +1074,14 @@ export const TREEBANK_DATA = {
         posLabel: "N",
         grammar: { role: "direct object", case: "accusative" }
       }
-    ]
+    ],
+    structure: {
+      relationships: [
+      { from: 2, to: 4, label: 'فعل + مفعول به' },
+      { from: 8, to: 11, label: 'فعل + مفعول به' },
+      { from: 9, to: 10, label: 'جار + مجرور' }
+      ]
+    }
   },
 
   16: {
@@ -1058,7 +1146,15 @@ export const TREEBANK_DATA = {
         posLabel: "ADJ",
         grammar: { role: "adjective", case: "accusative" }
       }
-    ]
+    ],
+    structure: {
+      relationships: [
+      { from: 1, to: 2, label: 'فعل + فاعل' },
+      { from: 1, to: 3, label: 'فعل + مفعول به' },
+      { from: 4, to: 5, label: 'فعل + مفعول به' },
+      { from: 5, to: 6, label: 'موصوف + صفت' }
+      ]
+    }
   },
 
   17: {
@@ -1140,7 +1236,14 @@ export const TREEBANK_DATA = {
         posLabel: "ADJ",
         grammar: { role: "second object", case: "accusative" }
       }
-    ]
+    ],
+    structure: {
+      relationships: [
+      { from: 4, to: 5, label: 'فعل + مفعول به' },
+      { from: 6, to: 7, label: 'فعل + مفعول به' },
+      { from: 7, to: 8, label: 'موصوف + صفت' }
+      ]
+    }
   },
 
   18: {
@@ -1206,7 +1309,14 @@ export const TREEBANK_DATA = {
         grammar: { role: "predicate of kāna", case: "accusative" },
         features: { participle: "passive" }
       }
-    ]
+    ],
+    structure: {
+      relationships: [
+      { from: 1, to: 2, label: 'مبتدأ + خبر' },
+      { from: 4, to: 5, label: 'فعل + فاعل' },
+      { from: 4, to: 6, label: 'فعل + مفعول به' }
+      ]
+    }
   },
 
   19: {
@@ -1298,7 +1408,14 @@ export const TREEBANK_DATA = {
         posLabel: "N",
         grammar: { role: "direct object", case: "accusative" }
       }
-    ]
+    ],
+    structure: {
+      relationships: [
+      { from: 5, to: 9, label: 'فعل + مفعول به' },
+      { from: 6, to: 9, label: 'فعل + مفعول به' },
+      { from: 7, to: 8, label: 'جار + مجرور' }
+      ]
+    }
   },
 
   20: {
@@ -2043,7 +2160,32 @@ export const TREEBANK_DATA = {
         grammar: { role: "predicate", case: "nominative" },
         features: { pattern: "faʿīl", intensive: true }
       }
-    ]
+    ],
+    structure: {
+      relationships: [
+      { from: 7, to: 8, label: 'جار + مجرور' },
+      { from: 8, to: 9, label: 'مضاف + مضاف إليه' },
+      { from: 17, to: 18, label: 'فعل + مفعول به' },
+      { from: 22, to: 23, label: 'نفی + فعل' },
+      { from: 27, to: 28, label: 'موصول + صلة' },
+      { from: 29, to: 30, label: 'جار + مجرور' },
+      { from: 38, to: 39, label: 'جار + مجرور' },
+      { from: 41, to: 42, label: 'جار + مجرور' },
+      { from: 42, to: 43, label: 'مضاف + مضاف إليه' },
+      { from: 46, to: 47, label: 'جار + مجرور' },
+      { from: 47, to: 48, label: 'مضاف + مضاف إليه' },
+      { from: 50, to: 51, label: 'موصول + صلة' },
+      { from: 53, to: 54, label: 'فعل + مفعول به' },
+      { from: 55, to: 56, label: 'فعل + مفعول به' },
+      { from: 57, to: 58, label: 'فعل + مفعول به' },
+      { from: 59, to: 60, label: 'موصوف + صفت' },
+      { from: 61, to: 62, label: 'موصول + صلة' },
+      { from: 64, to: 65, label: 'جار + مجرور' },
+      { from: 67, to: 68, label: 'جار + مجرور' },
+      { from: 69, to: 70, label: 'مبتدأ + خبر' },
+      { from: 73, to: 74, label: 'فعل + مفعول به' }
+      ]
+    }
   }
 };
 

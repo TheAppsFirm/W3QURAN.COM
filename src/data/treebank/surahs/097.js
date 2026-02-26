@@ -179,7 +179,13 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(إِنَّآ)[emphasis+subject] → (أَنزَلْنَٰهُ)[verb+object] → (فِى لَيْلَةِ ٱلْقَدْرِ)[prep-phrase]"
+    dependencyStructure: "(إِنَّآ)[emphasis+subject] → (أَنزَلْنَٰهُ)[verb+object] → (فِى لَيْلَةِ ٱلْقَدْرِ)[prep-phrase]",
+    structure: {
+      relationships: [
+      { from: 3, to: 4, label: 'جار + مجرور' },
+      { from: 4, to: 5, label: 'مضاف + مضاف إليه' }
+      ],
+    },
   },
 
   2: {
@@ -307,7 +313,13 @@ export const TREEBANK_DATA = {
         case: "genitive"
       }
     ],
-    dependencyStructure: "(وَمَآ)[interrogative] → (أَدْرَىٰكَ)[verb] → (مَا لَيْلَةُ ٱلْقَدْرِ)[embedded-question]"
+    dependencyStructure: "(وَمَآ)[interrogative] → (أَدْرَىٰكَ)[verb] → (مَا لَيْلَةُ ٱلْقَدْرِ)[embedded-question]",
+    structure: {
+      relationships: [
+      { from: 2, to: 4, label: 'فعل + فاعل' },
+      { from: 4, to: 5, label: 'مضاف + مضاف إليه' }
+      ],
+    },
   },
 
   3: {
@@ -473,7 +485,12 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(لَيْلَةُ ٱلْقَدْرِ)[subject] → (خَيْرٌ)[predicate] → (مِّنْ أَلْفِ شَهْرٍ)[comparison]"
+    dependencyStructure: "(لَيْلَةُ ٱلْقَدْرِ)[subject] → (خَيْرٌ)[predicate] → (مِّنْ أَلْفِ شَهْرٍ)[comparison]",
+    structure: {
+      relationships: [
+      { from: 4, to: 5, label: 'جار + مجرور' }
+      ],
+    },
   },
 
   4: {
@@ -725,7 +742,14 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(تَنَزَّلُ)[verb] → (ٱلْمَلَٰٓئِكَةُ وَٱلرُّوحُ)[subject] → (فِيهَا)[location] → (بِإِذْنِ رَبِّهِم)[manner] → (مِّن كُلِّ أَمْرٍ)[purpose]"
+    dependencyStructure: "(تَنَزَّلُ)[verb] → (ٱلْمَلَٰٓئِكَةُ وَٱلرُّوحُ)[subject] → (فِيهَا)[location] → (بِإِذْنِ رَبِّهِم)[manner] → (مِّن كُلِّ أَمْرٍ)[purpose]",
+    structure: {
+      relationships: [
+      { from: 1, to: 2, label: 'فعل + فاعل' },
+      { from: 1, to: 3, label: 'فعل + فاعل' },
+      { from: 7, to: 8, label: 'جار + مجرور' }
+      ],
+    },
   },
 
   5: {
@@ -883,7 +907,12 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(سَلَٰمٌ)[predicate] → (هِىَ)[subject] → (حَتَّىٰ مَطْلَعِ ٱلْفَجْرِ)[time-limit]"
+    dependencyStructure: "(سَلَٰمٌ)[predicate] → (هِىَ)[subject] → (حَتَّىٰ مَطْلَعِ ٱلْفَجْرِ)[time-limit]",
+    structure: {
+      relationships: [
+      { from: 3, to: 4, label: 'جار + مجرور' }
+      ],
+    },
   }
 };
 

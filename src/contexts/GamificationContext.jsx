@@ -145,12 +145,13 @@ export function GamificationProvider({ children }) {
   // Load from server on auth
   useEffect(() => {
     if (!isAuthenticated) return;
+    let cancelled = false;
     (async () => {
       try {
         const res = await fetch('/api/user/sync?type=gamification', { credentials: 'include' });
-        if (!res.ok) return;
+        if (!res.ok || cancelled) return;
         const { data: serverResponse } = await res.json();
-        if (serverResponse?.gamification?.data) {
+        if (!cancelled && serverResponse?.gamification?.data) {
           const localData = getGamificationData();
           const merged = mergeData(localData, serverResponse.gamification.data);
           saveGamificationData(merged);
@@ -160,6 +161,7 @@ export function GamificationProvider({ children }) {
         // Use local data
       }
     })();
+    return () => { cancelled = true; };
   }, [isAuthenticated]);
 
   // Auto-sync every 60s (stable deps — no thrashing)
@@ -292,15 +294,15 @@ export function GamificationProvider({ children }) {
     processResults(beforeXP);
   }, [isActive, processResults]);
 
-  // --- Derived values ---
+  // --- Derived values (memoized to preserve referential identity) ---
 
   const xp = data.xp || 0;
   const level = data.level || 1;
-  const levelInfo = getLevelInfo(xp);
-  const streak = data.streaks || { current: 0, best: 0 };
-  const achievements = data.achievements || [];
-  const dailyChallenges = data.dailyChallenges || [];
-  const stats = data.stats || {};
+  const levelInfo = useMemo(() => getLevelInfo(xp), [xp]);
+  const streak = useMemo(() => data.streaks || { current: 0, best: 0 }, [data.streaks]);
+  const achievements = useMemo(() => data.achievements || [], [data.achievements]);
+  const dailyChallenges = useMemo(() => data.dailyChallenges || [], [data.dailyChallenges]);
+  const stats = useMemo(() => data.stats || {}, [data.stats]);
 
   const value = useMemo(() => ({
     xp, level, levelInfo, streak, achievements, dailyChallenges, stats,

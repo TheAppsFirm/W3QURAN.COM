@@ -178,7 +178,16 @@ export const TREEBANK_DATA = {
         advanced: { rootFamily: ["بَيَان (clarification)", "بَيِّن (clear)", "تَبْيِين (explanation)"], frequency: "Root appears 523 times", balagha: "The surah's title - the decisive proof", memoryHook: "Bayyinah = clear evidence/proof" }
       }
     ],
-    dependencyStructure: "(لَم)[neg] → (يَكُنِ)[verb] ← (الَّذِينَ)[subject] → (كَفَرُوا)[relative clause] → (مِن أَهْلِ الكِتَابِ وَالمُشْرِكِينَ)[partitive] | (مُنفَكِّينَ)[predicate] ← (حَتَّى)[until] → (تَأْتِيَهُمُ)[verb] ← (البَيِّنَةُ)[subject]"
+    dependencyStructure: "(لَم)[neg] → (يَكُنِ)[verb] ← (الَّذِينَ)[subject] → (كَفَرُوا)[relative clause] → (مِن أَهْلِ الكِتَابِ وَالمُشْرِكِينَ)[partitive] | (مُنفَكِّينَ)[predicate] ← (حَتَّى)[until] → (تَأْتِيَهُمُ)[verb] ← (البَيِّنَةُ)[subject]",
+    structure: {
+      relationships: [
+      { from: 1, to: 2, label: 'نفی + فعل' },
+      { from: 3, to: 4, label: 'موصول + صلة' },
+      { from: 5, to: 6, label: 'جار + مجرور' },
+      { from: 6, to: 7, label: 'مضاف + مضاف إليه' },
+      { from: 11, to: 12, label: 'فعل + فاعل' }
+      ],
+    },
   },
 
   2: {
@@ -264,7 +273,14 @@ export const TREEBANK_DATA = {
         advanced: { rootFamily: ["طَهَارَة (purity)", "طَاهِر (pure)", "تَطْهِير (purification)"], verbForm: "Form II passive participle", balagha: "Scriptures purified from error and falsehood", memoryHook: "Mutahharah = purified (tahir = pure)" }
       }
     ],
-    dependencyStructure: "(رَسُولٌ)[badal] ← (مِنَ اللَّهِ)[source] | (يَتْلُو)[verb] → (صُحُفًا)[object] ← (مُطَهَّرَةً)[adj]"
+    dependencyStructure: "(رَسُولٌ)[badal] ← (مِنَ اللَّهِ)[source] | (يَتْلُو)[verb] → (صُحُفًا)[object] ← (مُطَهَّرَةً)[adj]",
+    structure: {
+      relationships: [
+      { from: 2, to: 3, label: 'جار + مجرور' },
+      { from: 4, to: 5, label: 'فعل + مفعول به' },
+      { from: 5, to: 6, label: 'موصوف + صفت' }
+      ],
+    },
   },
 
   3: {
@@ -315,7 +331,12 @@ export const TREEBANK_DATA = {
         advanced: { rootFamily: ["قَامَ (to stand)", "قِيَام (standing)", "مُسْتَقِيم (straight)", "قِيمَة (value)"], balagha: "Same root as mustaqeem - straight, correct, valuable", memoryHook: "Qayyimah = valuable/correct (from qiyam = standing upright)" }
       }
     ],
-    dependencyStructure: "(فِيهَا)[locative] ← (كُتُبٌ)[subject] ← (قَيِّمَةٌ)[adj]"
+    dependencyStructure: "(فِيهَا)[locative] ← (كُتُبٌ)[subject] ← (قَيِّمَةٌ)[adj]",
+    structure: {
+      relationships: [
+      { from: 2, to: 3, label: 'موصوف + صفت' }
+      ],
+    },
   },
 
   4: {
@@ -455,7 +476,18 @@ export const TREEBANK_DATA = {
         advanced: { balagha: "Ironic: they divided AFTER truth came, not before" }
       }
     ],
-    dependencyStructure: "(وَ)[conj] → (مَا)[neg] → (تَفَرَّقَ)[verb] ← (الَّذِينَ أُوتُوا الكِتَابَ)[subject] | (إِلَّا)[except] → (مِن بَعْدِ)[temporal] ← (مَا جَاءَتْهُمُ البَيِّنَةُ)[clause]"
+    dependencyStructure: "(وَ)[conj] → (مَا)[neg] → (تَفَرَّقَ)[verb] ← (الَّذِينَ أُوتُوا الكِتَابَ)[subject] | (إِلَّا)[except] → (مِن بَعْدِ)[temporal] ← (مَا جَاءَتْهُمُ البَيِّنَةُ)[clause]",
+    structure: {
+      relationships: [
+      { from: 1, to: 2, label: 'نفی + فعل' },
+      { from: 2, to: 5, label: 'فعل + مفعول به' },
+      { from: 3, to: 4, label: 'موصول + صلة' },
+      { from: 4, to: 5, label: 'فعل + مفعول به' },
+      { from: 7, to: 8, label: 'جار + مجرور' },
+      { from: 9, to: 10, label: 'موصول + صلة' },
+      { from: 10, to: 11, label: 'فعل + فاعل' }
+      ],
+    },
   },
 
   5: {
@@ -653,7 +685,19 @@ export const TREEBANK_DATA = {
         advanced: { balagha: "Deen al-Qayyimah = the religion that is straight/correct", memoryHook: "Qayyimah = correct/valuable (same root as mustaqeem)" }
       }
     ],
-    dependencyStructure: "(وَ)[conj] → (مَا)[neg] → (أُمِرُوا)[verb] → (إِلَّا)[except] → (لِيَعْبُدُوا اللَّهَ)[purpose clause] ← (مُخْلِصِينَ)[state1] + (حُنَفَاءَ)[state2] | (وَيُقِيمُوا الصَّلَاةَ)[parallel] + (وَيُؤْتُوا الزَّكَاةَ)[parallel] | (وَذٰلِكَ)[subject] ← (دِينُ القَيِّمَةِ)[predicate]"
+    dependencyStructure: "(وَ)[conj] → (مَا)[neg] → (أُمِرُوا)[verb] → (إِلَّا)[except] → (لِيَعْبُدُوا اللَّهَ)[purpose clause] ← (مُخْلِصِينَ)[state1] + (حُنَفَاءَ)[state2] | (وَيُقِيمُوا الصَّلَاةَ)[parallel] + (وَيُؤْتُوا الزَّكَاةَ)[parallel] | (وَذٰلِكَ)[subject] ← (دِينُ القَيِّمَةِ)[predicate]",
+    structure: {
+      relationships: [
+      { from: 1, to: 2, label: 'نفی + فعل' },
+      { from: 2, to: 5, label: 'فعل + مفعول به' },
+      { from: 4, to: 5, label: 'فعل + مفعول به' },
+      { from: 4, to: 10, label: 'عطف' },
+      { from: 10, to: 11, label: 'فعل + مفعول به' },
+      { from: 10, to: 12, label: 'عطف' },
+      { from: 12, to: 13, label: 'فعل + مفعول به' },
+      { from: 15, to: 16, label: 'مضاف + مضاف إليه' }
+      ],
+    },
   },
 
   6: {
@@ -805,7 +849,15 @@ export const TREEBANK_DATA = {
         advanced: { rootFamily: ["بَرَأَ (to create)", "بَارِئ (Creator)"], balagha: "Bariyyah = all created beings", memoryHook: "Bariyyah = creation (al-Baari' = The Creator)" }
       }
     ],
-    dependencyStructure: "(إِنَّ)[emphasis] → (الَّذِينَ كَفَرُوا)[subject] ← (مِن أَهْلِ الكِتَابِ وَالمُشْرِكِينَ)[partitive] → (فِي نَارِ جَهَنَّمَ)[predicate] ← (خَالِدِينَ فِيهَا)[state] | (أُولٰئِكَ)[subject2] → (هُمْ شَرُّ البَرِيَّةِ)[predicate2]"
+    dependencyStructure: "(إِنَّ)[emphasis] → (الَّذِينَ كَفَرُوا)[subject] ← (مِن أَهْلِ الكِتَابِ وَالمُشْرِكِينَ)[partitive] → (فِي نَارِ جَهَنَّمَ)[predicate] ← (خَالِدِينَ فِيهَا)[state] | (أُولٰئِكَ)[subject2] → (هُمْ شَرُّ البَرِيَّةِ)[predicate2]",
+    structure: {
+      relationships: [
+      { from: 1, to: 2, label: 'توکید' },
+      { from: 2, to: 3, label: 'موصول + صلة' },
+      { from: 4, to: 5, label: 'مضاف + مضاف إليه' },
+      { from: 11, to: 12, label: 'مضاف + مضاف إليه' }
+      ],
+    },
   },
 
   7: {
@@ -922,7 +974,17 @@ export const TREEBANK_DATA = {
         grammarRole: "Genitive (mudaf ilayhi)"
       }
     ],
-    dependencyStructure: "(إِنَّ)[emphasis] → (الَّذِينَ آمَنُوا وَعَمِلُوا الصَّالِحَاتِ)[subject] | (أُولٰئِكَ)[predicate subject] → (هُمْ خَيْرُ البَرِيَّةِ)[predicate]"
+    dependencyStructure: "(إِنَّ)[emphasis] → (الَّذِينَ آمَنُوا وَعَمِلُوا الصَّالِحَاتِ)[subject] | (أُولٰئِكَ)[predicate subject] → (هُمْ خَيْرُ البَرِيَّةِ)[predicate]",
+    structure: {
+      relationships: [
+      { from: 1, to: 2, label: 'توکید' },
+      { from: 2, to: 3, label: 'موصول + صلة' },
+      { from: 3, to: 5, label: 'فعل + مفعول به' },
+      { from: 3, to: 4, label: 'عطف' },
+      { from: 4, to: 5, label: 'فعل + مفعول به' },
+      { from: 8, to: 9, label: 'مضاف + مضاف إليه' }
+      ],
+    },
   },
 
   8: {
@@ -1154,7 +1216,18 @@ export const TREEBANK_DATA = {
         grammarRole: "Direct object (accusative) + possessive"
       }
     ],
-    dependencyStructure: "(جَزَاؤُهُمْ)[subject] → (عِندَ رَبِّهِمْ)[location] ← (جَنَّاتُ عَدْنٍ)[predicate] ← (تَجْرِي مِن تَحْتِهَا الأَنْهَارُ)[descriptive clause] ← (خَالِدِينَ فِيهَا أَبَدًا)[state] | (رَضِيَ اللَّهُ عَنْهُمْ)[clause1] + (وَرَضُوا عَنْهُ)[clause2] | (ذٰلِكَ)[subject] → (لِمَنْ خَشِيَ رَبَّهُ)[predicate]"
+    dependencyStructure: "(جَزَاؤُهُمْ)[subject] → (عِندَ رَبِّهِمْ)[location] ← (جَنَّاتُ عَدْنٍ)[predicate] ← (تَجْرِي مِن تَحْتِهَا الأَنْهَارُ)[descriptive clause] ← (خَالِدِينَ فِيهَا أَبَدًا)[state] | (رَضِيَ اللَّهُ عَنْهُمْ)[clause1] + (وَرَضُوا عَنْهُ)[clause2] | (ذٰلِكَ)[subject] → (لِمَنْ خَشِيَ رَبَّهُ)[predicate]",
+    structure: {
+      relationships: [
+      { from: 1, to: 4, label: 'مبتدأ + خبر' },
+      { from: 2, to: 3, label: 'جار + مجرور' },
+      { from: 4, to: 5, label: 'مضاف + مضاف إليه' },
+      { from: 6, to: 8, label: 'فعل + فاعل' },
+      { from: 11, to: 12, label: 'فعل + فاعل' },
+      { from: 11, to: 14, label: 'عطف' },
+      { from: 18, to: 19, label: 'فعل + مفعول به' }
+      ],
+    },
   }
 };
 

@@ -33,7 +33,10 @@ export const TREEBANK_DATA = {
       hi: "कसम है चाश्त की रोशनी की",
       bn: "শপথ পূর্বাহ্নের উজ্জ্বলতার",
       tr: "Kuşluk vaktine andolsun",
-      id: "Demi waktu duha"
+      id: "Demi waktu duha",
+    structure: {
+      relationships: [],
+    },
     },
     words: [
       {
@@ -168,7 +171,12 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(وَ)[oath] → (اللَّيْلِ)[noun] → (إِذَا)[conditional] → (سَجَىٰ)[verb]"
+    dependencyStructure: "(وَ)[oath] → (اللَّيْلِ)[noun] → (إِذَا)[conditional] → (سَجَىٰ)[verb]",
+    structure: {
+      relationships: [
+      { from: 2, to: 3, label: 'شرط + فعل' }
+      ],
+    },
   },
 
   3: {
@@ -325,7 +333,14 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(مَا)[neg] → (وَدَّعَكَ)[verb+obj] ← (رَبُّكَ)[subject] | (وَ)[conj] → (مَا)[neg] → (قَلَىٰ)[verb]"
+    dependencyStructure: "(مَا)[neg] → (وَدَّعَكَ)[verb+obj] ← (رَبُّكَ)[subject] | (وَ)[conj] → (مَا)[neg] → (قَلَىٰ)[verb]",
+    structure: {
+      relationships: [
+      { from: 1, to: 2, label: 'نفی + فعل' },
+      { from: 2, to: 3, label: 'فعل + فاعل' },
+      { from: 4, to: 5, label: 'نفی + فعل' }
+      ],
+    },
   },
 
   4: {
@@ -476,7 +491,12 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(وَ)[conj] → (لَ)[emphasis] → (الآخِرَةُ)[subject] ← (خَيْرٌ)[predicate] → (لَكَ)[beneficiary] → (مِنَ)[comparison] → (الأُولَىٰ)[compared to]"
+    dependencyStructure: "(وَ)[conj] → (لَ)[emphasis] → (الآخِرَةُ)[subject] ← (خَيْرٌ)[predicate] → (لَكَ)[beneficiary] → (مِنَ)[comparison] → (الأُولَىٰ)[compared to]",
+    structure: {
+      relationships: [
+      { from: 4, to: 5, label: 'جار + مجرور' }
+      ],
+    },
   },
 
   5: {
@@ -607,7 +627,13 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(وَ)[conj] → (لَ)[emphasis] → (سَوْفَ)[future] → (يُعْطِيكَ)[verb+obj] ← (رَبُّكَ)[subject] | (فَ)[result] → (تَرْضَىٰ)[verb]"
+    dependencyStructure: "(وَ)[conj] → (لَ)[emphasis] → (سَوْفَ)[future] → (يُعْطِيكَ)[verb+obj] ← (رَبُّكَ)[subject] | (فَ)[result] → (تَرْضَىٰ)[verb]",
+    structure: {
+      relationships: [
+      { from: 2, to: 3, label: 'فعل + فاعل' },
+      { from: 2, to: 4, label: 'عطف' }
+      ],
+    },
   },
 
   6: {
@@ -737,7 +763,13 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(أَ)[int] → (لَم)[neg] → (يَجِدْكَ)[verb+obj] ← (يَتِيمًا)[state] | (فَ)[result] → (آوَىٰ)[verb]"
+    dependencyStructure: "(أَ)[int] → (لَم)[neg] → (يَجِدْكَ)[verb+obj] ← (يَتِيمًا)[state] | (فَ)[result] → (آوَىٰ)[verb]",
+    structure: {
+      relationships: [
+      { from: 1, to: 2, label: 'نفی + فعل' },
+      { from: 2, to: 4, label: 'عطف' }
+      ],
+    },
   },
 
   7: {
@@ -838,7 +870,12 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(وَ)[conj] → (وَجَدَكَ)[verb+obj] ← (ضَالًّا)[state] | (فَ)[result] → (هَدَىٰ)[verb]"
+    dependencyStructure: "(وَ)[conj] → (وَجَدَكَ)[verb+obj] ← (ضَالًّا)[state] | (فَ)[result] → (هَدَىٰ)[verb]",
+    structure: {
+      relationships: [
+      { from: 1, to: 3, label: 'عطف' }
+      ],
+    },
   },
 
   8: {
@@ -935,7 +972,12 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(وَ)[conj] → (وَجَدَكَ)[verb+obj] ← (عَائِلًا)[state] | (فَ)[result] → (أَغْنَىٰ)[verb]"
+    dependencyStructure: "(وَ)[conj] → (وَجَدَكَ)[verb+obj] ← (عَائِلًا)[state] | (فَ)[result] → (أَغْنَىٰ)[verb]",
+    structure: {
+      relationships: [
+      { from: 1, to: 3, label: 'عطف' }
+      ],
+    },
   },
 
   9: {
@@ -1055,7 +1097,12 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(فَ)[result] → (أَمَّا)[conditional] → (اليَتِيمَ)[topic] | (فَ)[result] → (لَا)[prohibition] → (تَقْهَرْ)[verb]"
+    dependencyStructure: "(فَ)[result] → (أَمَّا)[conditional] → (اليَتِيمَ)[topic] | (فَ)[result] → (لَا)[prohibition] → (تَقْهَرْ)[verb]",
+    structure: {
+      relationships: [
+      { from: 3, to: 4, label: 'نفی + فعل' }
+      ],
+    },
   },
 
   10: {
@@ -1171,7 +1218,12 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(وَ)[conj] → (أَمَّا)[conditional] → (السَّائِلَ)[topic] | (فَ)[result] → (لَا)[prohibition] → (تَنْهَرْ)[verb]"
+    dependencyStructure: "(وَ)[conj] → (أَمَّا)[conditional] → (السَّائِلَ)[topic] | (فَ)[result] → (لَا)[prohibition] → (تَنْهَرْ)[verb]",
+    structure: {
+      relationships: [
+      { from: 3, to: 4, label: 'نفی + فعل' }
+      ],
+    },
   },
 
   11: {
@@ -1292,7 +1344,12 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(وَ)[conj] → (أَمَّا)[conditional] → (بِنِعْمَةِ)[prep phrase] ← (رَبِّكَ)[genitive] | (فَ)[result] → (حَدِّثْ)[imperative]"
+    dependencyStructure: "(وَ)[conj] → (أَمَّا)[conditional] → (بِنِعْمَةِ)[prep phrase] ← (رَبِّكَ)[genitive] | (فَ)[result] → (حَدِّثْ)[imperative]",
+    structure: {
+      relationships: [
+      { from: 2, to: 3, label: 'مضاف + مضاف إليه' }
+      ],
+    },
   }
 };
 

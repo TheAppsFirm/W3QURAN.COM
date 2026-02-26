@@ -14,23 +14,24 @@ export const ONTOLOGY = {
   categories: {
     divineOaths: {
       name: "Divine Oaths",
+      nameUr: "الٰہی قسمیں",
       nameArabic: "القسم الإلهي",
       color: '#F59E0B',
       icon: 'Sun',
-      description: "Allah swears by two contrasting times",
+      description: { en: "Allah swears by two contrasting times", ur: "اللہ دو متضاد اوقات کی قسم کھاتا ہے" },
       concepts: [
         {
           term: "الضُّحَى",
           transliteration: "Ad-Duha",
-          meaning: "The Morning Brightness",
-          explanation: "The time when the sun rises high and spreads its light. Symbolizes clarity, hope, and the return of revelation after a pause. Light after darkness.",
+          meaning: { en: "The Morning Brightness", ur: "چاشت کی روشنی" },
+          explanation: { en: "The time when the sun rises high and spreads its light. Symbolizes clarity, hope, and the return of revelation after a pause. Light after darkness.", ur: "وہ وقت جب سورج بلند ہو کر روشنی پھیلاتا ہے۔ وضاحت، امید اور وقفے کے بعد وحی کی واپسی کی علامت۔ تاریکی کے بعد روشنی۔" },
           verseRef: "93:1"
         },
         {
           term: "اللَّيْل إِذَا سَجَى",
           transliteration: "Al-Layl idha Sajaa",
-          meaning: "The Night when it settles",
-          explanation: "Night that becomes still and peaceful. Represents the period when revelation paused (fatrah), but even in this 'darkness', there was calm purpose. Not frightening, but serene.",
+          meaning: { en: "The Night when it settles", ur: "رات جب سکون سے چھا جائے" },
+          explanation: { en: "Night that becomes still and peaceful. Represents the period when revelation paused (fatrah), but even in this 'darkness', there was calm purpose. Not frightening, but serene.", ur: "رات جو ساکن اور پرسکون ہو جائے۔ وحی کے وقفے (فترۃ) کی نمائندگی، لیکن اس 'تاریکی' میں بھی پرسکون مقصد تھا۔ خوفناک نہیں بلکہ پرسکون۔" },
           verseRef: "93:2"
         }
       ]
@@ -38,23 +39,24 @@ export const ONTOLOGY = {
 
     divineReassurance: {
       name: "Divine Reassurance",
+      nameUr: "الٰہی تسلی",
       nameArabic: "التطمين الإلهي",
       color: '#8B5CF6',
       icon: 'Heart',
-      description: "Allah's comfort to His Messenger",
+      description: { en: "Allah's comfort to His Messenger", ur: "اللہ کا اپنے رسول کو تسلی دینا" },
       concepts: [
         {
           term: "مَا وَدَّعَكَ رَبُّكَ",
           transliteration: "Maa wadda'aka Rabbuka",
-          meaning: "Your Lord has not abandoned you",
-          explanation: "Direct negation of the accusation that Allah had forsaken the Prophet when revelation paused. Wadda'a = to bid farewell, abandon. Allah NEVER does this to His beloved.",
+          meaning: { en: "Your Lord has not abandoned you", ur: "آپ کے رب نے آپ کو نہیں چھوڑا" },
+          explanation: { en: "Direct negation of the accusation that Allah had forsaken the Prophet when revelation paused. Wadda'a = to bid farewell, abandon. Allah NEVER does this to His beloved.", ur: "اس الزام کی براہ راست نفی کہ وحی رکنے پر اللہ نے نبی کو چھوڑ دیا۔ ودّع = الوداع کرنا، چھوڑنا۔ اللہ اپنے محبوب کے ساتھ ایسا کبھی نہیں کرتا۔" },
           verseRef: "93:3"
         },
         {
           term: "وَمَا قَلَى",
           transliteration: "Wa maa Qalaa",
-          meaning: "Nor has He detested you",
-          explanation: "Qalaa = to detest, hate with abandonment. Stronger than wadda'a. Not only didn't Allah leave, He never even felt displeasure. The Prophet remains beloved.",
+          meaning: { en: "Nor has He detested you", ur: "اور نہ ناراض ہوا" },
+          explanation: { en: "Qalaa = to detest, hate with abandonment. Stronger than wadda'a. Not only didn't Allah leave, He never even felt displeasure. The Prophet remains beloved.", ur: "قلیٰ = نفرت کرنا، چھوڑ کر۔ ودّع سے زیادہ شدید۔ اللہ نے نہ صرف نہیں چھوڑا بلکہ کبھی ناراضگی بھی محسوس نہیں کی۔ نبی محبوب رہے۔" },
           verseRef: "93:3"
         }
       ]
@@ -62,23 +64,24 @@ export const ONTOLOGY = {
 
     futurePromises: {
       name: "Promises of the Future",
+      nameUr: "مستقبل کے وعدے",
       nameArabic: "وعود المستقبل",
       color: '#10B981',
       icon: 'Sparkles',
-      description: "What awaits the Prophet",
+      description: { en: "What awaits the Prophet", ur: "نبی کے لیے کیا انتظار ہے" },
       concepts: [
         {
           term: "الآخِرَة خَيْر مِنَ الأُولَى",
           transliteration: "Al-Aakhiratu khayrun minal-Oola",
-          meaning: "The Hereafter is better than this life",
-          explanation: "Whatever difficulties now, the eternal future is incomparably better. The 'first life' (oola) implies there IS a 'last life' (aakhirah) - logic of hope.",
+          meaning: { en: "The Hereafter is better than this life", ur: "آخرت دنیا سے بہتر ہے" },
+          explanation: { en: "Whatever difficulties now, the eternal future is incomparably better. The 'first life' (oola) implies there IS a 'last life' (aakhirah) - logic of hope.", ur: "ابھی جو بھی مشکلات ہوں، ابدی مستقبل بے مثال بہتر ہے۔ 'پہلی زندگی' (اولیٰ) سے مراد ہے کہ 'آخری زندگی' (آخرۃ) ہے - امید کی منطق۔" },
           verseRef: "93:4"
         },
         {
           term: "لَسَوْفَ يُعْطِيكَ رَبُّكَ فَتَرْضَى",
           transliteration: "La-sawfa yu'teeka Rabbuka fa-tardaa",
-          meaning: "Your Lord will give you until you are satisfied",
-          explanation: "Triple emphasis: la + sawfa + verb. Absolute certainty of future giving. The giving is unspecified = unlimited. Prophet will intercede until satisfied.",
+          meaning: { en: "Your Lord will give you until you are satisfied", ur: "آپ کا رب آپ کو اتنا دے گا کہ آپ راضی ہو جائیں گے" },
+          explanation: { en: "Triple emphasis: la + sawfa + verb. Absolute certainty of future giving. The giving is unspecified = unlimited. Prophet will intercede until satisfied.", ur: "تین تاکیدیں: لَ + سوف + فعل۔ مستقبل میں عطا کا مطلق یقین۔ عطا غیر متعین = لامحدود۔ نبی شفاعت کریں گے یہاں تک کہ راضی ہوں۔" },
           verseRef: "93:5"
         }
       ]
@@ -86,30 +89,31 @@ export const ONTOLOGY = {
 
     pastBlessings: {
       name: "Past Blessings Recalled",
+      nameUr: "ماضی کی نعمتوں کی یاد",
       nameArabic: "النعم الماضية",
       color: '#3B82F6',
       icon: 'Star',
-      description: "Three states transformed by Allah",
+      description: { en: "Three states transformed by Allah", ur: "اللہ کی بدلی ہوئی تین حالتیں" },
       concepts: [
         {
           term: "يَتِيمًا فَآوَى",
           transliteration: "Yateeman fa-Aawaa",
-          meaning: "Orphan, so He sheltered",
-          explanation: "Prophet's father died before his birth, mother when he was 6. Yet Allah sheltered him through Abdul-Muttalib, then Abu Talib. Never truly alone.",
+          meaning: { en: "Orphan, so He sheltered", ur: "یتیم تھے تو ٹھکانا دیا" },
+          explanation: { en: "Prophet's father died before his birth, mother when he was 6. Yet Allah sheltered him through Abdul-Muttalib, then Abu Talib. Never truly alone.", ur: "نبی کے والد ولادت سے پہلے، والدہ 6 سال کی عمر میں فوت ہوئیں۔ پھر بھی اللہ نے عبدالمطلب، پھر ابو طالب کے ذریعے پناہ دی۔ کبھی واقعی اکیلے نہیں رہے۔" },
           verseRef: "93:6"
         },
         {
           term: "ضَالًّا فَهَدَى",
           transliteration: "Daallan fa-Hadaa",
-          meaning: "Unaware, so He guided",
-          explanation: "NOT morally astray - seeking truth before finding it. The Prophet searched for truth (tahannuth in Hira) and Allah guided him to complete revelation.",
+          meaning: { en: "Unaware, so He guided", ur: "راستہ ڈھونڈ رہے تھے تو ہدایت دی" },
+          explanation: { en: "NOT morally astray - seeking truth before finding it. The Prophet searched for truth (tahannuth in Hira) and Allah guided him to complete revelation.", ur: "اخلاقی طور پر گمراہ نہیں - حق ملنے سے پہلے تلاش میں تھے۔ نبی نے حق کی تلاش کی (حرا میں تحنث) اور اللہ نے مکمل وحی کی طرف رہنمائی فرمائی۔" },
           verseRef: "93:7"
         },
         {
           term: "عَائِلًا فَأَغْنَى",
           transliteration: "'Aa'ilan fa-Aghnaa",
-          meaning: "Poor, so He enriched",
-          explanation: "Prophet was not wealthy. Allah enriched him through Khadijah's support, trade, and especially through contentment (ghina an-nafs). True richness.",
+          meaning: { en: "Poor, so He enriched", ur: "محتاج تھے تو غنی کر دیا" },
+          explanation: { en: "Prophet was not wealthy. Allah enriched him through Khadijah's support, trade, and especially through contentment (ghina an-nafs). True richness.", ur: "نبی مالدار نہیں تھے۔ اللہ نے حضرت خدیجہ کی مدد، تجارت اور خاص طور پر قناعت (غنائے نفس) کے ذریعے غنی کیا۔ حقیقی دولتمندی۔" },
           verseRef: "93:8"
         }
       ]
@@ -117,30 +121,31 @@ export const ONTOLOGY = {
 
     ethicalCommands: {
       name: "Ethical Commands",
+      nameUr: "اخلاقی احکامات",
       nameArabic: "الأوامر الأخلاقية",
       color: '#22C55E',
       icon: 'Users',
-      description: "Three commands based on past blessings",
+      description: { en: "Three commands based on past blessings", ur: "ماضی کی نعمتوں پر مبنی تین احکام" },
       concepts: [
         {
           term: "فَلَا تَقْهَرْ اليَتِيم",
           transliteration: "Fa-laa Taqhar al-Yateem",
-          meaning: "Do not oppress the orphan",
-          explanation: "Since you were orphaned and Allah sheltered you, never use power against orphans. Qahr = to overpower, humiliate, dominate. Protect the vulnerable.",
+          meaning: { en: "Do not oppress the orphan", ur: "یتیم پر ظلم نہ کرو" },
+          explanation: { en: "Since you were orphaned and Allah sheltered you, never use power against orphans. Qahr = to overpower, humiliate, dominate. Protect the vulnerable.", ur: "چونکہ آپ یتیم تھے اور اللہ نے پناہ دی، کبھی یتیموں پر طاقت نہ استعمال کریں۔ قہر = دبانا، ذلیل کرنا، غلبہ پانا۔ کمزوروں کی حفاظت کریں۔" },
           verseRef: "93:9"
         },
         {
           term: "فَلَا تَنْهَرْ السَّائِل",
           transliteration: "Fa-laa Tanhar as-Saa'il",
-          meaning: "Do not rebuke the petitioner",
-          explanation: "Since you were in need and Allah provided, don't rebuff those who ask - whether for money or knowledge. Nahr = harsh rebuke. Even if you can't help, be gentle.",
+          meaning: { en: "Do not rebuke the petitioner", ur: "سوال کرنے والے کو نہ جھڑکو" },
+          explanation: { en: "Since you were in need and Allah provided, don't rebuff those who ask - whether for money or knowledge. Nahr = harsh rebuke. Even if you can't help, be gentle.", ur: "چونکہ آپ محتاج تھے اور اللہ نے فراہم کیا، مانگنے والوں کو مت دھتکارو - چاہے مال مانگیں یا علم۔ نہر = سخت جھڑکنا۔ اگر مدد نہ کر سکو تو بھی نرمی سے پیش آؤ۔" },
           verseRef: "93:10"
         },
         {
           term: "فَحَدِّثْ بِنِعْمَة رَبِّك",
           transliteration: "Fa-Haddith bi-Ni'mati Rabbik",
-          meaning: "Proclaim the blessing of your Lord",
-          explanation: "Since Allah guided you, share that guidance. Express gratitude through proclamation. The greatest blessing (prophethood/Quran) must be shared with all.",
+          meaning: { en: "Proclaim the blessing of your Lord", ur: "اپنے رب کی نعمت بیان کرو" },
+          explanation: { en: "Since Allah guided you, share that guidance. Express gratitude through proclamation. The greatest blessing (prophethood/Quran) must be shared with all.", ur: "چونکہ اللہ نے ہدایت دی، وہ ہدایت بانٹو۔ اعلان کے ذریعے شکر ادا کرو۔ سب سے بڑی نعمت (نبوت/قرآن) سب کے ساتھ بانٹنی چاہیے۔" },
           verseRef: "93:11"
         }
       ]
@@ -152,73 +157,73 @@ export const ONTOLOGY = {
       from: "الضحى",
       to: "الليل",
       type: "contrast",
-      description: "Light after darkness",
-      explanation: "Both are from Allah - times of revelation and pause both serve purpose"
+      description: { en: "Light after darkness", ur: "تاریکی کے بعد روشنی" },
+      explanation: { en: "Both are from Allah - times of revelation and pause both serve purpose", ur: "دونوں اللہ کی طرف سے ہیں - وحی اور وقفے دونوں کا مقصد ہے" }
     },
     {
       from: "يتيما فآوى",
       to: "فلا تقهر اليتيم",
       type: "causation",
-      description: "Experience leads to empathy",
-      explanation: "You were orphaned → protect orphans"
+      description: { en: "Experience leads to empathy", ur: "تجربہ ہمدردی کی طرف لے جاتا ہے" },
+      explanation: { en: "You were orphaned → protect orphans", ur: "آپ یتیم تھے → یتیموں کی حفاظت کرو" }
     },
     {
       from: "عائلا فأغنى",
       to: "فلا تنهر السائل",
       type: "causation",
-      description: "Need leads to generosity",
-      explanation: "You were in need → help the needy"
+      description: { en: "Need leads to generosity", ur: "ضرورت سخاوت کی طرف لے جاتی ہے" },
+      explanation: { en: "You were in need → help the needy", ur: "آپ محتاج تھے → محتاجوں کی مدد کرو" }
     },
     {
       from: "ضالا فهدى",
       to: "فحدث بنعمة ربك",
       type: "causation",
-      description: "Guidance leads to sharing",
-      explanation: "You were guided → share the guidance"
+      description: { en: "Guidance leads to sharing", ur: "ہدایت بانٹنے کی طرف لے جاتی ہے" },
+      explanation: { en: "You were guided → share the guidance", ur: "آپ کو ہدایت ملی → ہدایت بانٹو" }
     }
   ],
 
   thematicFlow: {
     title: "From Darkness to Duty",
     titleArabic: "من الظلمة إلى الواجب",
-    description: "The surah moves from comfort to command",
+    description: { en: "The surah moves from comfort to command", ur: "سورت تسلی سے حکم کی طرف بڑھتی ہے" },
     stages: [
       {
         stage: 1,
         theme: "Divine Oaths",
         verses: "93:1-2",
-        description: "Light and calm night - both from Allah"
+        description: { en: "Light and calm night - both from Allah", ur: "روشنی اور پرسکون رات - دونوں اللہ کی طرف سے" }
       },
       {
         stage: 2,
         theme: "Reassurance",
         verses: "93:3",
-        description: "Allah has NOT abandoned or hated you"
+        description: { en: "Allah has NOT abandoned or hated you", ur: "اللہ نے آپ کو نہ چھوڑا نہ ناراضگی اختیار کی" }
       },
       {
         stage: 3,
         theme: "Future Promise",
         verses: "93:4-5",
-        description: "The future is better; you will be satisfied"
+        description: { en: "The future is better; you will be satisfied", ur: "مستقبل بہتر ہے؛ آپ راضی ہوں گے" }
       },
       {
         stage: 4,
         theme: "Past Blessings",
         verses: "93:6-8",
-        description: "Three transformations: orphan, seeker, poor"
+        description: { en: "Three transformations: orphan, seeker, poor", ur: "تین تبدیلیاں: یتیم، متلاشی، محتاج" }
       },
       {
         stage: 5,
         theme: "Ethical Commands",
         verses: "93:9-11",
-        description: "Three commands based on three blessings"
+        description: { en: "Three commands based on three blessings", ur: "تین نعمتوں پر مبنی تین احکام" }
       }
     ]
   },
 
   backgroundContext: {
     title: "Revelation Background",
-    description: "Why this surah was revealed",
+    description: { en: "Why this surah was revealed", ur: "یہ سورت کیوں نازل ہوئی" },
     events: [
       {
         event: "The Pause (Fatrah)",
@@ -230,7 +235,7 @@ export const ONTOLOGY = {
       },
       {
         event: "The Prophet's Distress",
-        detail: "The Prophet ﷺ felt great sadness at the pause in revelation"
+        detail: "The Prophet felt great sadness at the pause in revelation"
       },
       {
         event: "The Comfort",
@@ -323,8 +328,8 @@ export const ONTOLOGY = {
   },
 
   uniqueInsight: {
-    title: "The Architecture of Comfort",
-    insight: "This surah is a masterclass in divine consolation. It begins with OATHS (verses 1-2) that establish credibility. Then NEGATION of the accusation (verse 3). Then FUTURE PROMISES (verses 4-5) to redirect focus from present pain. Then PAST EVIDENCE (verses 6-8) proving Allah's consistent care - if He helped before, why would He abandon now? Finally, PRACTICAL COMMANDS (verses 9-11) that turn grief into purpose. The structure teaches us HOW to comfort others: acknowledge their pain, promise future good, remind of past blessings, and give them meaningful action. Notice the three-part pattern: orphan→shelter, lost→guided, poor→enriched, then: orphan→don't oppress, petitioner→don't rebuke, blessing→proclaim. Your past struggles become your present mission.",
+    title: { en: "The Architecture of Comfort", ur: "تسلی کا فن تعمیر" },
+    insight: { en: "This surah is a masterclass in divine consolation. It begins with OATHS (verses 1-2) that establish credibility. Then NEGATION of the accusation (verse 3). Then FUTURE PROMISES (verses 4-5) to redirect focus from present pain. Then PAST EVIDENCE (verses 6-8) proving Allah's consistent care - if He helped before, why would He abandon now? Finally, PRACTICAL COMMANDS (verses 9-11) that turn grief into purpose. The structure teaches us HOW to comfort others: acknowledge their pain, promise future good, remind of past blessings, and give them meaningful action. Notice the three-part pattern: orphan-shelter, lost-guided, poor-enriched, then: orphan-don't oppress, petitioner-don't rebuke, blessing-proclaim. Your past struggles become your present mission.", ur: "یہ سورت الٰہی تسلی کا شاہکار ہے۔ قسموں (آیت 1-2) سے شروع ہوتی ہے جو اعتبار قائم کرتی ہیں۔ پھر الزام کی نفی (آیت 3)۔ پھر مستقبل کے وعدے (آیت 4-5) تاکہ موجودہ تکلیف سے توجہ ہٹائی جائے۔ پھر ماضی کے شواہد (آیت 6-8) اللہ کی مسلسل نگہداشت ثابت کرتے ہوئے - اگر پہلے مدد کی تو اب کیوں چھوڑے گا؟ آخر میں عملی احکام (آیت 9-11) جو غم کو مقصد میں بدل دیتے ہیں۔ ساخت ہمیں سکھاتی ہے کہ دوسروں کو کیسے تسلی دیں۔ تین حصوں کا نمونہ: یتیم-پناہ، گم-ہدایت، محتاج-غنی، پھر: یتیم-ظلم نہ کرو، سائل-جھڑکو نہیں، نعمت-بیان کرو۔ آپ کی ماضی کی مشکلات آپ کا موجودہ مشن بن جاتی ہیں۔" },
     modernRelevance: "For anyone feeling abandoned by Allah - through depression, hardship, or spiritual drought - this surah is the answer. The 'night' always settles peacefully before the 'duha' arrives."
   },
 
@@ -355,7 +360,7 @@ export const ONTOLOGY = {
   },
 
   comparisonTable: {
-    title: "Three Blessings → Three Commands",
+    title: "Three Blessings - Three Commands",
     headers: ["Past State", "Allah's Gift", "Your Duty"],
     rows: [
       {
@@ -378,7 +383,7 @@ export const ONTOLOGY = {
 
   connectionToAshSharh: {
     title: "Twin Surahs: Ad-Duha and Ash-Sharh",
-    description: "Often considered a pair, possibly one surah",
+    description: { en: "Often considered a pair, possibly one surah", ur: "اکثر ایک جوڑی سمجھی جاتی ہیں، شاید ایک ہی سورت" },
     aspects: [
       {
         aspect: "Theme",
@@ -408,10 +413,10 @@ export const ONTOLOGY = {
       "Verses 1-2: Two oaths (duha, night)",
       "Verse 3: Negation (didn't abandon, didn't hate)",
       "Verses 4-5: Future promises (aakhirah better, you'll be satisfied)",
-      "Verses 6-8: Three past blessings (orphan→shelter, lost→guided, poor→enriched)",
+      "Verses 6-8: Three past blessings (orphan-shelter, lost-guided, poor-enriched)",
       "Verses 9-11: Three commands (don't oppress, don't rebuke, proclaim)"
     ],
-    mnemonic: "Oaths → Negation → Promises → Past → Commands"
+    mnemonic: "Oaths - Negation - Promises - Past - Commands"
   },
 
   spiritualPrescription: {

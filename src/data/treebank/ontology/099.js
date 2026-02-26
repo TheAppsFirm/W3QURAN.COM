@@ -14,23 +14,24 @@ export const ONTOLOGY = {
   categories: {
     cosmicEvent: {
       name: "The Final Earthquake",
+      nameUr: "عظیم زلزلہ",
       nameArabic: "الزلزلة الكبرى",
       color: '#EF4444',
       icon: 'Globe',
-      description: "The earth-shattering event marking the end",
+      description: { en: "The earth-shattering event marking the end", ur: "زمین کو ہلا دینے والا واقعہ جو قیامت کی علامت ہے" },
       concepts: [
         {
           term: "زُلْزِلَت زِلْزَالَهَا",
           transliteration: "Zulzilat zilzaalahaa",
-          meaning: "Shaken with ITS earthquake",
-          explanation: "Cognate accusative emphasizes this is THE earthquake - earth's destined, final tremor. Not any earthquake, but the one it was created for.",
+          meaning: { en: "Shaken with ITS earthquake", ur: "اپنے مقررہ زلزلے سے ہلا دی گئی" },
+          explanation: { en: "Cognate accusative emphasizes this is THE earthquake - earth's destined, final tremor. Not any earthquake, but the one it was created for.", ur: "مفعول مطلق اس بات پر زور دیتا ہے کہ یہ وہ زلزلہ ہے - زمین کا مقدر، آخری جھٹکا۔ کوئی عام زلزلہ نہیں بلکہ وہ جس کے لیے زمین بنائی گئی۔" },
           verseRef: "99:1"
         },
         {
           term: "أَخْرَجَت أَثْقَالَهَا",
           transliteration: "Akhrajat athqaalahaa",
-          meaning: "Expels its burdens",
-          explanation: "Earth releases: dead bodies (resurrection), hidden treasures, recorded events. Everything concealed is brought forth.",
+          meaning: { en: "Expels its burdens", ur: "اپنے بوجھ باہر نکالتی ہے" },
+          explanation: { en: "Earth releases: dead bodies (resurrection), hidden treasures, recorded events. Everything concealed is brought forth.", ur: "زمین باہر نکالتی ہے: مردہ جسم (قیامت)، چھپے خزانے، درج شدہ واقعات۔ ہر چھپی ہوئی چیز سامنے آتی ہے۔" },
           verseRef: "99:2"
         }
       ]
@@ -38,23 +39,24 @@ export const ONTOLOGY = {
 
     earthAsWitness: {
       name: "Earth as Divine Witness",
+      nameUr: "زمین بطور الٰہی گواہ",
       nameArabic: "الأرض شاهدة",
       color: '#06B6D4',
       icon: 'Eye',
-      description: "The earth testifies about all that occurred on it",
+      description: { en: "The earth testifies about all that occurred on it", ur: "زمین ہر اس چیز کی گواہی دیتی ہے جو اس پر ہوئی" },
       concepts: [
         {
           term: "تُحَدِّثُ أَخْبَارَهَا",
           transliteration: "Tuhaddith akhbaarahaa",
-          meaning: "It will report its news",
-          explanation: "Form II intensive - earth narrates in detail every event that occurred on it. Every sin, every good deed, every secret - earth witnessed and will testify.",
+          meaning: { en: "It will report its news", ur: "وہ اپنی خبریں بیان کرے گی" },
+          explanation: { en: "Form II intensive - earth narrates in detail every event that occurred on it. Every sin, every good deed, every secret - earth witnessed and will testify.", ur: "باب تفعیل شدت کے لیے - زمین تفصیل سے ہر واقعہ بیان کرتی ہے جو اس پر ہوا۔ ہر گناہ، ہر نیکی، ہر راز - زمین نے دیکھا اور گواہی دے گی۔" },
           verseRef: "99:4"
         },
         {
           term: "بِأَنَّ رَبَّك أَوْحَى لَهَا",
           transliteration: "Bi-anna Rabbaka awhaa lahaa",
-          meaning: "Because your Lord commanded it",
-          explanation: "Earth speaks by divine command - Allah instructs His creation to testify. Even inanimate objects obey.",
+          meaning: { en: "Because your Lord commanded it", ur: "کیونکہ تمہارے رب نے اسے حکم دیا" },
+          explanation: { en: "Earth speaks by divine command - Allah instructs His creation to testify. Even inanimate objects obey.", ur: "زمین الٰہی حکم سے بولتی ہے - Allah اپنی مخلوق کو گواہی کا حکم دیتا ہے۔ بے جان چیزیں بھی اطاعت کرتی ہیں۔" },
           verseRef: "99:5"
         }
       ]
@@ -62,23 +64,24 @@ export const ONTOLOGY = {
 
     humanScattering: {
       name: "Human Classification",
+      nameUr: "انسانوں کی درجہ بندی",
       nameArabic: "تصنيف البشر",
       color: '#8B5CF6',
       icon: 'Users',
-      description: "People emerge separated by their deeds",
+      description: { en: "People emerge separated by their deeds", ur: "لوگ اپنے اعمال کے مطابق الگ الگ نکلتے ہیں" },
       concepts: [
         {
           term: "يَصْدُرُ النَّاسُ أَشْتَاتًا",
           transliteration: "Yasdur an-naas ashtaatan",
-          meaning: "People proceed in scattered groups",
-          explanation: "Humanity exits graves separated - not by race or wealth, but by deeds. Different destinations based on different records.",
+          meaning: { en: "People proceed in scattered groups", ur: "لوگ مختلف گروہوں میں بکھرے ہوئے نکلتے ہیں" },
+          explanation: { en: "Humanity exits graves separated - not by race or wealth, but by deeds. Different destinations based on different records.", ur: "انسانیت قبروں سے الگ الگ نکلتی ہے - نسل یا دولت سے نہیں بلکہ اعمال سے۔ مختلف اعمال نامے کی بنا پر مختلف منازل۔" },
           verseRef: "99:6"
         },
         {
           term: "لِيُرَوْا أَعْمَالَهُم",
           transliteration: "Li-yuraw a'maalahum",
-          meaning: "To be shown their deeds",
-          explanation: "Purpose: everyone sees their own record - nothing hidden, nothing forgotten.",
+          meaning: { en: "To be shown their deeds", ur: "تاکہ انہیں ان کے اعمال دکھائے جائیں" },
+          explanation: { en: "Purpose: everyone sees their own record - nothing hidden, nothing forgotten.", ur: "مقصد: ہر شخص اپنا اعمال نامہ دیکھے - کچھ چھپا نہیں، کچھ بھولا نہیں۔" },
           verseRef: "99:6"
         }
       ]
@@ -86,30 +89,31 @@ export const ONTOLOGY = {
 
     atomicJustice: {
       name: "Atomic-Level Accountability",
+      nameUr: "ذرّہ برابر جوابدہی",
       nameArabic: "حساب مثقال الذرة",
       color: '#F59E0B',
       icon: 'Scale',
-      description: "Perfect justice down to the smallest deed",
+      description: { en: "Perfect justice down to the smallest deed", ur: "چھوٹے سے چھوٹے عمل تک مکمل انصاف" },
       concepts: [
         {
           term: "مِثْقَال ذَرَّة خَيْرًا",
           transliteration: "Mithqaal dharrah khayran",
-          meaning: "Atom's weight of good",
-          explanation: "Even the tiniest good deed is recorded and rewarded. No kindness is too small to matter.",
+          meaning: { en: "Atom's weight of good", ur: "ذرہ برابر نیکی" },
+          explanation: { en: "Even the tiniest good deed is recorded and rewarded. No kindness is too small to matter.", ur: "چھوٹی سے چھوٹی نیکی بھی درج اور اجر کے قابل ہے۔ کوئی بھلائی اتنی چھوٹی نہیں کہ اہمیت نہ رکھے۔" },
           verseRef: "99:7"
         },
         {
           term: "مِثْقَال ذَرَّة شَرًّا",
           transliteration: "Mithqaal dharrah sharran",
-          meaning: "Atom's weight of evil",
-          explanation: "Even the smallest sin is recorded. No wrong escapes accountability.",
+          meaning: { en: "Atom's weight of evil", ur: "ذرہ برابر برائی" },
+          explanation: { en: "Even the smallest sin is recorded. No wrong escapes accountability.", ur: "چھوٹے سے چھوٹا گناہ بھی درج ہوتا ہے۔ کوئی غلطی حساب سے نہیں بچتی۔" },
           verseRef: "99:8"
         },
         {
           term: "يَرَهُ",
           transliteration: "Yarahu",
-          meaning: "Will see it",
-          explanation: "The person SEES their deed - transformed into reward or punishment, the deed is witnessed.",
+          meaning: { en: "Will see it", ur: "اسے دیکھ لے گا" },
+          explanation: { en: "The person SEES their deed - transformed into reward or punishment, the deed is witnessed.", ur: "شخص اپنا عمل دیکھتا ہے - اجر یا سزا میں تبدیل شدہ، عمل کا مشاہدہ ہوتا ہے۔" },
           verseRef: "99:7-8"
         }
       ]
@@ -121,28 +125,28 @@ export const ONTOLOGY = {
       from: "الزلزلة",
       to: "أثقال",
       type: "causation",
-      description: "Earthquake causes burdens to emerge",
+      description: { en: "Earthquake causes burdens to emerge", ur: "زلزلہ بوجھ کے نکلنے کا سبب بنتا ہے" },
       explanation: "The shaking forces earth to release everything hidden"
     },
     {
       from: "أخبارها",
       to: "أوحى لها",
       type: "enablement",
-      description: "Divine command enables earth's testimony",
+      description: { en: "Divine command enables earth's testimony", ur: "الٰہی حکم زمین کی گواہی کو ممکن بناتا ہے" },
       explanation: "Earth speaks because Allah commanded it"
     },
     {
       from: "أشتاتا",
       to: "ليروا أعمالهم",
       type: "purpose",
-      description: "Separation is for showing deeds",
+      description: { en: "Separation is for showing deeds", ur: "جدائی اعمال دکھانے کے لیے ہے" },
       explanation: "Groups form based on what will be shown"
     },
     {
       from: "مثقال ذرة خير",
       to: "مثقال ذرة شر",
       type: "parallel",
-      description: "Perfect symmetry of justice",
+      description: { en: "Perfect symmetry of justice", ur: "انصاف کی مکمل ہم آہنگی" },
       explanation: "Same standard for good and evil - complete fairness"
     }
   ],
@@ -150,60 +154,60 @@ export const ONTOLOGY = {
   thematicFlow: {
     title: "From Earthquake to Accountability",
     titleArabic: "من الزلزلة إلى الحساب",
-    description: "The surah moves from cosmic event to individual reckoning",
+    description: { en: "The surah moves from cosmic event to individual reckoning", ur: "سورت کائناتی واقعے سے انفرادی حساب کتاب کی طرف بڑھتی ہے" },
     stages: [
       {
         stage: 1,
         theme: "The Event",
         verses: "99:1-2",
-        description: "Earth shakes and expels its burdens"
+        description: { en: "Earth shakes and expels its burdens", ur: "زمین ہلتی ہے اور اپنے بوجھ نکالتی ہے" }
       },
       {
         stage: 2,
         theme: "Human Reaction",
         verses: "99:3",
-        description: "Human confusion at the event"
+        description: { en: "Human confusion at the event", ur: "واقعے پر انسان کی حیرانی" }
       },
       {
         stage: 3,
         theme: "Earth's Testimony",
         verses: "99:4-5",
-        description: "Earth reports by divine command"
+        description: { en: "Earth reports by divine command", ur: "زمین الٰہی حکم سے خبریں بیان کرتی ہے" }
       },
       {
         stage: 4,
         theme: "Human Separation",
         verses: "99:6",
-        description: "People emerge in groups to see deeds"
+        description: { en: "People emerge in groups to see deeds", ur: "لوگ گروہوں میں اعمال دیکھنے نکلتے ہیں" }
       },
       {
         stage: 5,
         theme: "Perfect Justice",
         verses: "99:7-8",
-        description: "Atomic-level accountability"
+        description: { en: "Atomic-level accountability", ur: "ذرّہ برابر حساب" }
       }
     ]
   },
 
   theAtomVerses: {
     title: "The Atom Verses (7-8)",
-    significance: "Among the most memorized and quoted verses in the Quran",
+    significance: { en: "Among the most memorized and quoted verses in the Quran", ur: "قرآن کی سب سے زیادہ حفظ اور حوالہ دی جانے والی آیات میں سے" },
     details: [
       {
         aspect: "Universal Principle",
-        description: "Establishes that NO deed is insignificant - every action matters"
+        description: { en: "Establishes that NO deed is insignificant - every action matters", ur: "یہ ثابت کرتا ہے کہ کوئی عمل معمولی نہیں - ہر عمل اہمیت رکھتا ہے" }
       },
       {
         aspect: "Perfect Symmetry",
-        description: "Identical structure for good and evil shows equal, fair treatment"
+        description: { en: "Identical structure for good and evil shows equal, fair treatment", ur: "نیکی اور برائی کے لیے ایک جیسی ساخت مساوی اور منصفانہ سلوک ظاہر کرتی ہے" }
       },
       {
         aspect: "ذَرَّة (Atom)",
-        description: "Smallest conceivable particle - now understood as 'atom' in Arabic"
+        description: { en: "Smallest conceivable particle - now understood as 'atom' in Arabic", ur: "قابلِ تصور سب سے چھوٹا ذرہ - اب عربی میں 'ایٹم' کے معنی میں استعمال ہوتا ہے" }
       },
       {
         aspect: "يَرَهُ (Will See It)",
-        description: "Active seeing - the person witnesses their deed in transformed form"
+        description: { en: "Active seeing - the person witnesses their deed in transformed form", ur: "فعال مشاہدہ - شخص اپنے عمل کو تبدیل شدہ شکل میں دیکھتا ہے" }
       }
     ],
     modernRelevance: "In an age of 'small sins don't matter', these verses remind that everything counts"
@@ -287,8 +291,8 @@ export const ONTOLOGY = {
   },
 
   uniqueInsight: {
-    title: "The Earth's Memory",
-    insight: "This surah reveals that the earth is not merely passive ground - it's a divine recording device. Every footstep toward sin or prayer, every secret meeting, every hidden act of kindness or cruelty - earth remembers. And on Judgment Day, by Allah's command, it will testify. The most private sins and the most hidden charities will be announced by the very ground they occurred upon. This transforms how we understand privacy and accountability.",
+    title: { en: "The Earth's Memory", ur: "زمین کی یادداشت" },
+    insight: { en: "This surah reveals that the earth is not merely passive ground - it's a divine recording device. Every footstep toward sin or prayer, every secret meeting, every hidden act of kindness or cruelty - earth remembers. And on Judgment Day, by Allah's command, it will testify. The most private sins and the most hidden charities will be announced by the very ground they occurred upon. This transforms how we understand privacy and accountability.", ur: "یہ سورت ظاہر کرتی ہے کہ زمین محض بے جان سطح نہیں - یہ ایک الٰہی ریکارڈنگ آلہ ہے۔ گناہ یا نماز کی طرف ہر قدم، ہر خفیہ ملاقات، ہر چھپی ہوئی بھلائی یا ظلم - زمین یاد رکھتی ہے۔ اور قیامت کے دن، Allah کے حکم سے، یہ گواہی دے گی۔ سب سے نجی گناہ اور سب سے چھپے صدقے اسی زمین سے اعلان ہوں گے جہاں وہ ہوئے۔ یہ رازداری اور جوابدہی کے بارے میں ہماری سمجھ کو بدل دیتا ہے۔" },
     modernRelevance: "In an age of surveillance and digital footprints, this surah anticipated that nothing is truly private. But unlike human surveillance, divine recording is perfect, just, and for ultimate accountability."
   },
 

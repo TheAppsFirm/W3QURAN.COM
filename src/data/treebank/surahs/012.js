@@ -113,6 +113,11 @@ const SURAH_12_TREEBANK = {
         { type: 'mubtada', word: 'تِلْكَ', role: 'subject' },
         { type: 'khabar', word: 'آيَاتُ الْكِتَابِ الْمُبِينِ', role: 'predicate' },
       ],
+      relationships: [
+        { from: 2, to: 3, label: 'مبتدأ + خبر' },
+        { from: 3, to: 4, label: 'مضاف + مضاف إليه' },
+        { from: 4, to: 5, label: 'موصوف + صفت' },
+      ],
       explanation: {
         en: 'Opening with disconnected letters, then a nominal sentence: "These are the verses of the clear Book"',
         ur: 'حروف مقطعات سے آغاز، پھر جملہ اسمیہ: "یہ واضح کتاب کی آیات ہیں"',
@@ -243,6 +248,10 @@ const SURAH_12_TREEBANK = {
         { type: 'verb', word: 'أَنزَلْنَاهُ', role: 'main verb' },
         { type: 'haal', word: 'قُرْآنًا عَرَبِيًّا', role: 'circumstantial' },
         { type: 'purpose', word: 'لَّعَلَّكُمْ تَعْقِلُونَ', role: 'purpose clause' },
+      ],
+      relationships: [
+        { from: 2, to: 3, label: 'حال' },
+        { from: 3, to: 4, label: 'موصوف + صفت' },
       ],
       explanation: {
         en: 'Emphatic statement with purpose: "We sent it down as Arabic Quran SO THAT you understand"',
@@ -555,6 +564,13 @@ const SURAH_12_TREEBANK = {
         { type: 'mafool', word: 'أَحْسَنَ الْقَصَصِ', role: 'object' },
         { type: 'conditional', word: 'وَإِن كُنتَ...', role: 'concessive clause' },
       ],
+      relationships: [
+        { from: 1, to: 2, label: 'مبتدأ + خبر' },
+        { from: 4, to: 5, label: 'مضاف + مضاف إليه' },
+        { from: 7, to: 9, label: 'فعل + مفعول به' },
+        { from: 9, to: 10, label: 'بدل' },
+        { from: 13, to: 14, label: 'جار + مجرور' },
+      ],
       explanation: {
         en: 'Main clause (We narrate the best story) + concessive clause (though you were unaware)',
         ur: 'اصل جملہ (ہم بہترین قصہ سناتے ہیں) + تسلیمی جملہ (اگرچہ تم بے خبر تھے)',
@@ -866,6 +882,16 @@ const SURAH_12_TREEBANK = {
         { type: 'vocative', word: 'يَا أَبَتِ', role: 'address' },
         { type: 'dream-content', word: 'إِنِّي رَأَيْتُ...', role: 'dream description' },
       ],
+      relationships: [
+        { from: 2, to: 3, label: 'فعل + فاعل' },
+        { from: 2, to: 9, label: 'فعل + مفعول به' },
+        { from: 8, to: 9, label: 'فعل + مفعول به' },
+        { from: 9, to: 10, label: 'تمییز' },
+        { from: 10, to: 11, label: 'تمییز' },
+        { from: 11, to: 12, label: 'عطف' },
+        { from: 11, to: 13, label: 'عطف' },
+        { from: 14, to: 16, label: 'حال' },
+      ],
       explanation: {
         en: 'Narrative introducing Yusuf\'s dream: temporal marker + speech act + vocative + dream content',
         ur: 'یوسف کے خواب کا بیان: وقت کا ظرف + فعل کلام + ندا + خواب کا مضمون',
@@ -1176,6 +1202,13 @@ const SURAH_12_TREEBANK = {
         { type: 'vocative', word: 'يَا بُنَيَّ', role: 'affectionate address' },
         { type: 'prohibition', word: 'لَا تَقْصُصْ', role: 'warning' },
         { type: 'reason', word: 'إِنَّ الشَّيْطَانَ...', role: 'explanation' },
+      ],
+      relationships: [
+        { from: 1, to: 6, label: 'فعل + مفعول به' },
+        { from: 4, to: 5, label: 'نفی + فعل' },
+        { from: 5, to: 6, label: 'فعل + مفعول به' },
+        { from: 7, to: 8, label: 'جار + مجرور' },
+        { from: 15, to: 16, label: 'موصوف + صفت' },
       ],
       explanation: {
         en: 'Father\'s warning: prohibition + consequence + reason (Satan\'s enmity)',
@@ -1649,6 +1682,21 @@ const SURAH_12_TREEBANK = {
         { type: 'comparison', word: 'كَمَا أَتَمَّهَا', role: 'historical precedent' },
         { type: 'affirmation', word: 'إِنَّ رَبَّكَ عَلِيمٌ حَكِيمٌ', role: 'divine attributes' },
       ],
+      relationships: [
+        { from: 2, to: 3, label: 'فعل + فاعل' },
+        { from: 2, to: 9, label: 'فعل + مفعول به' },
+        { from: 4, to: 9, label: 'فعل + مفعول به' },
+        { from: 2, to: 4, label: 'عطف' },
+        { from: 5, to: 6, label: 'جار + مجرور' },
+        { from: 6, to: 7, label: 'مضاف + مضاف إليه' },
+        { from: 8, to: 9, label: 'فعل + مفعول به' },
+        { from: 4, to: 8, label: 'عطف' },
+        { from: 12, to: 13, label: 'مضاف + مضاف إليه' },
+        { from: 16, to: 17, label: 'جار + مجرور' },
+        { from: 18, to: 19, label: 'جار + مجرور' },
+        { from: 18, to: 20, label: 'بدل' },
+        { from: 20, to: 21, label: 'عطف' },
+      ],
       explanation: {
         en: 'Father\'s prophecy of three blessings, comparing to ancestors, affirming divine wisdom',
         ur: 'باپ کی تین نعمتوں کی پیشگوئی، آباء سے موازنہ، الٰہی حکمت کی تصدیق',
@@ -1798,6 +1846,11 @@ const SURAH_12_TREEBANK = {
         { type: 'location', word: 'فِي يُوسُفَ وَإِخْوَتِهِ', role: 'source of signs' },
         { type: 'subject', word: 'آيَاتٌ', role: 'what exists' },
         { type: 'beneficiary', word: 'لِّلسَّائِلِينَ', role: 'for whom' },
+      ],
+      relationships: [
+        { from: 2, to: 6, label: 'فعل + فاعل' },
+        { from: 3, to: 4, label: 'جار + مجرور' },
+        { from: 4, to: 5, label: 'عطف' },
       ],
       explanation: {
         en: 'Emphatic declaration that signs exist in this story for seekers',
@@ -2092,6 +2145,13 @@ const SURAH_12_TREEBANK = {
         { type: 'contrast', word: 'وَنَحْنُ عُصْبَةٌ', role: 'their claim' },
         { type: 'accusation', word: 'إِنَّ أَبَانَا لَفِي ضَلَالٍ', role: 'false accusation' },
       ],
+      relationships: [
+        { from: 3, to: 5, label: 'مبتدأ + خبر' },
+        { from: 3, to: 4, label: 'عطف' },
+        { from: 6, to: 7, label: 'جار + مجرور' },
+        { from: 9, to: 10, label: 'مبتدأ + خبر' },
+        { from: 14, to: 15, label: 'موصوف + صفت' },
+      ],
       explanation: {
         en: 'Brothers\' jealous speech: complaint about favoritism + accusation against father',
         ur: 'بھائیوں کی حسد بھری بات: امتیازی سلوک کی شکایت + باپ پر الزام',
@@ -2366,6 +2426,15 @@ const SURAH_12_TREEBANK = {
         { type: 'command2', word: 'اطْرَحُوهُ أَرْضًا', role: 'second option' },
         { type: 'result', word: 'يَخْلُ لَكُمْ وَجْهُ أَبِيكُمْ', role: 'expected benefit' },
         { type: 'promise', word: 'وَتَكُونُوا...صَالِحِينَ', role: 'self-deception' },
+      ],
+      relationships: [
+        { from: 1, to: 8, label: 'فعل + فاعل' },
+        { from: 1, to: 2, label: 'فعل + مفعول به' },
+        { from: 4, to: 8, label: 'فعل + فاعل' },
+        { from: 8, to: 9, label: 'مضاف + مضاف إليه' },
+        { from: 4, to: 10, label: 'عطف' },
+        { from: 11, to: 12, label: 'جار + مجرور' },
+        { from: 13, to: 14, label: 'موصوف + صفت' },
       ],
       explanation: {
         en: 'Brothers\' evil plot: two options + expected result + self-justification',
@@ -2679,6 +2748,19 @@ const SURAH_12_TREEBANK = {
         { type: 'outcome', word: 'يَلْتَقِطْهُ بَعْضُ السَّيَّارَةِ', role: 'expected result' },
         { type: 'condition', word: 'إِن كُنتُمْ فَاعِلِينَ', role: 'reluctant participation' },
       ],
+      relationships: [
+        { from: 1, to: 2, label: 'فعل + فاعل' },
+        { from: 1, to: 6, label: 'فعل + مفعول به' },
+        { from: 2, to: 3, label: 'موصوف + صفت' },
+        { from: 4, to: 5, label: 'نفی + فعل' },
+        { from: 5, to: 12, label: 'فعل + فاعل' },
+        { from: 5, to: 6, label: 'فعل + مفعول به' },
+        { from: 7, to: 12, label: 'فعل + فاعل' },
+        { from: 5, to: 7, label: 'عطف' },
+        { from: 8, to: 9, label: 'جار + مجرور' },
+        { from: 9, to: 10, label: 'مضاف + مضاف إليه' },
+        { from: 12, to: 13, label: 'مضاف + مضاف إليه' },
+      ],
       explanation: {
         en: 'One brother suggests lesser evil: no murder, just abandonment',
         ur: 'ایک بھائی کم برائی تجویز کرتا ہے: قتل نہیں، صرف چھوڑ دینا',
@@ -2921,6 +3003,13 @@ const SURAH_12_TREEBANK = {
         en: 'Brothers\' deceptive persuasion: question father\'s trust + claim sincerity',
         ur: 'بھائیوں کی فریب دہ گفتگو: باپ کے اعتماد پر سوال + خیرخواہی کا دعویٰ',
       },
+    
+       relationships: [
+        { from: 2, to: 3, label: 'نداء' },
+        { from: 6, to: 7, label: 'نفی + فعل' },
+        { from: 8, to: 9, label: 'جار + مجرور' },
+        { from: 7, to: 10, label: 'حال' }
+      ],
     },
   },
 
@@ -3082,6 +3171,9 @@ const SURAH_12_TREEBANK = {
         { type: 'command', word: 'أَرْسِلْهُ مَعَنَا غَدًا', role: 'the request' },
         { type: 'purpose', word: 'يَرْتَعْ وَيَلْعَبْ', role: 'stated reason' },
         { type: 'promise', word: 'وَإِنَّا لَهُ لَحَافِظُونَ', role: 'false guarantee' },
+      ],
+      relationships: [
+        { from: 4, to: 5, label: 'عطف' },
       ],
       explanation: {
         en: 'Brothers\' request: send Yusuf + innocent activities + protection promise',
@@ -3339,6 +3431,14 @@ const SURAH_12_TREEBANK = {
         { type: 'concern-2', word: 'وَأَخَافُ أَن يَأْكُلَهُ الذِّئْبُ', role: 'fear of wolf' },
         { type: 'circumstance', word: 'وَأَنتُمْ عَنْهُ غَافِلُونَ', role: 'their negligence' },
       ],
+      relationships: [
+        { from: 1, to: 10, label: 'فعل + فاعل' },
+        { from: 5, to: 10, label: 'فعل + فاعل' },
+        { from: 7, to: 10, label: 'فعل + فاعل' },
+        { from: 5, to: 7, label: 'عطف' },
+        { from: 9, to: 10, label: 'فعل + فاعل' },
+        { from: 11, to: 13, label: 'مبتدأ + خبر' },
+      ],
       explanation: {
         en: 'Father\'s two concerns: grief at departure + fear of wolf during negligence',
         ur: 'باپ کی دو فکریں: جدائی کا غم + غفلت میں بھیڑیے کا خوف',
@@ -3522,6 +3622,10 @@ const SURAH_12_TREEBANK = {
         { type: 'condition', word: 'لَئِنْ أَكَلَهُ الذِّئْبُ', role: 'hypothetical' },
         { type: 'circumstance', word: 'وَنَحْنُ عُصْبَةٌ', role: 'their strength' },
         { type: 'result', word: 'إِنَّا إِذًا لَّخَاسِرُونَ', role: 'admission of failure' },
+      ],
+      relationships: [
+        { from: 1, to: 4, label: 'فعل + فاعل' },
+        { from: 5, to: 6, label: 'مبتدأ + خبر' },
       ],
       explanation: {
         en: 'Brothers\' counter: if wolf eats him despite us being strong, we\'re failures',
@@ -3853,10 +3957,3234 @@ const SURAH_12_TREEBANK = {
         { type: 'prophecy', word: 'لَتُنَبِّئَنَّهُم', role: 'future promise' },
         { type: 'circumstance', word: 'وَهُمْ لَا يَشْعُرُونَ', role: 'brothers\' ignorance' },
       ],
+      relationships: [
+        { from: 2, to: 4, label: 'عطف' },
+        { from: 7, to: 8, label: 'جار + مجرور' },
+        { from: 8, to: 9, label: 'مضاف + مضاف إليه' },
+        { from: 6, to: 10, label: 'عطف' },
+        { from: 13, to: 14, label: 'بدل' },
+        { from: 15, to: 17, label: 'مبتدأ + خبر' },
+      ],
       explanation: {
         en: 'Climactic moment: brothers\' betrayal + divine revelation to comfort Yusuf + prophecy',
         ur: 'اہم لمحہ: بھائیوں کی دغابازی + یوسف کو تسلی کی وحی + پیشگوئی',
       },
+    },
+  },
+
+  11: {
+    text: "قَالُوا۟ يَـٰٓأَبَانَا مَا لَكَ لَا تَأْمَ۫نَّا عَلَىٰ يُوسُفَ وَإِنَّا لَهُۥ لَنَـٰصِحُونَ",
+    translation: {
+      en: "",
+      ur: "(یہ مشورہ کر کے وہ یعقوب سے) کہنے لگے کہ اباجان کیا سبب ہے کہ آپ یوسف کے بارے میں ہمارا اعتبار نہیں کرتے حالانکہ ہم اس کے خیرخواہ ہیں",
+    },
+    words: [
+      { id: '12:11:1', arabic: "قَالُوا۟", transliteration: "qālū", pos: ['V'], posLabel: 'V', root: "ق و ل", meaning: { en: "They said", ur: "وہ لوگ کہا" } },
+      { id: '12:11:2', arabic: "يَـٰٓأَبَانَا", transliteration: "yāabānā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "O our father", ur: "اے our باپ" } },
+      { id: '12:11:3', arabic: "مَا", transliteration: "mā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Why", ur: "Why" } },
+      { id: '12:11:4', arabic: "لَكَ", transliteration: "laka", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(do) you", ur: "(do) تم" } },
+      { id: '12:11:5', arabic: "لَا", transliteration: "lā", pos: ['NEG'], posLabel: 'NEG', root: null, meaning: { en: "not", ur: "نہیں" } },
+      { id: '12:11:6', arabic: "تَأْمَ۫نَّا", transliteration: "tamannā", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "trust us", ur: "trust us" } },
+      { id: '12:11:7', arabic: "عَلَىٰ", transliteration: "ʿalā", pos: ['PREP'], posLabel: 'PREP', root: null, meaning: { en: "with", ur: "ساتھ" } },
+      { id: '12:11:8', arabic: "يُوسُفَ", transliteration: "yūsufa", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Yusuf", ur: "Yusuf" } },
+      { id: '12:11:9', arabic: "وَإِنَّا", transliteration: "wa-innā", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "while indeed, we", ur: "while بیشک, ہم" } },
+      { id: '12:11:10', arabic: "لَهُۥ", transliteration: "lahu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(are) for him", ur: "(are) for him" } },
+      { id: '12:11:11', arabic: "لَنَـٰصِحُونَ", transliteration: "lanāṣiḥūna", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "surely well-wishers", ur: "یقیناً well-wishers" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 1, to: 2, label: 'فعل + فاعل' },
+        { from: 5, to: 6, label: 'نفی + فعل' },
+        { from: 7, to: 8, label: 'جار + مجرور' }
+      ],
+    },
+  },
+  16: {
+    text: "وَجَآءُوٓ أَبَاهُمْ عِشَآءًۭ يَبْكُونَ",
+    translation: {
+      en: "",
+      ur: "(یہ حرکت کرکے) وہ رات کے وقت باپ کے پاس روتے ہوئے آئے",
+    },
+    words: [
+      { id: '12:16:1', arabic: "وَجَآءُوٓ", transliteration: "wajāū", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "And they came", ur: "اور وہ لوگ came" } },
+      { id: '12:16:2', arabic: "أَبَاهُمْ", transliteration: "abāhum", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(to) their father", ur: "(کو) their باپ" } },
+      { id: '12:16:3', arabic: "عِشَآءًۭ", transliteration: "ʿishāan", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "early at night", ur: "early at رات" } },
+      { id: '12:16:4', arabic: "يَبْكُونَ", transliteration: "yabkūna", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "weeping", ur: "weeping" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' }
+      ],
+    },
+  },
+  17: {
+    text: "قَالُوا۟ يَـٰٓأَبَانَآ إِنَّا ذَهَبْنَا نَسْتَبِقُ وَتَرَكْنَا يُوسُفَ عِندَ مَتَـٰعِنَا فَأَكَلَهُ ٱلذِّئْبُ ۖ وَمَآ أَنتَ بِمُؤْمِنٍۢ لَّنَا وَلَوْ كُنَّا صَـٰدِقِينَ",
+    translation: {
+      en: "",
+      ur: "(اور) کہنے لگے کہ اباجان ہم تو دوڑنے اور ایک دوسرے سے آگے نکلنے میں مصروف ہوگئے اور یوسف کو اپنے اسباب کے پاس چھوڑ گئے تو اسے بھیڑیا کھا گیا۔ اور آپ ہماری بات کو گو ہم سچ ہی کہتے ہوں باور نہیں کریں گے",
+    },
+    words: [
+      { id: '12:17:1', arabic: "قَالُوا۟", transliteration: "qālū", pos: ['V'], posLabel: 'V', root: "ق و ل", meaning: { en: "They said", ur: "وہ لوگ کہا" } },
+      { id: '12:17:2', arabic: "يَـٰٓأَبَانَآ", transliteration: "yāabānā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "O our father", ur: "اے our باپ" } },
+      { id: '12:17:3', arabic: "إِنَّا", transliteration: "innā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Indeed, we", ur: "بیشک, ہم" } },
+      { id: '12:17:4', arabic: "ذَهَبْنَا", transliteration: "dhahabnā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "[we] went", ur: "[ہم] went" } },
+      { id: '12:17:5', arabic: "نَسْتَبِقُ", transliteration: "nastabiqu", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "racing each other", ur: "racing ہر other" } },
+      { id: '12:17:6', arabic: "وَتَرَكْنَا", transliteration: "wataraknā", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "and we left", ur: "اور ہم left" } },
+      { id: '12:17:7', arabic: "يُوسُفَ", transliteration: "yūsufa", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Yusuf", ur: "Yusuf" } },
+      { id: '12:17:8', arabic: "عِندَ", transliteration: "ʿinda", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "with", ur: "ساتھ" } },
+      { id: '12:17:9', arabic: "مَتَـٰعِنَا", transliteration: "matāʿinā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "our possessions", ur: "our possessions" } },
+      { id: '12:17:10', arabic: "فَأَكَلَهُ", transliteration: "fa-akalahu", pos: ['CONJ+V'], posLabel: 'CONJ+V', root: null, meaning: { en: "and ate him", ur: "اور ate him" } },
+      { id: '12:17:11', arabic: "ٱلذِّئْبُ ۖ", transliteration: "l-dhi'bu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "the wolf", ur: "the wolf" } },
+      { id: '12:17:12', arabic: "وَمَآ", transliteration: "wamā", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "But not", ur: "لیکن نہیں" } },
+      { id: '12:17:13', arabic: "أَنتَ", transliteration: "anta", pos: ['PRON'], posLabel: 'PRON', root: null, meaning: { en: "you", ur: "تم" } },
+      { id: '12:17:14', arabic: "بِمُؤْمِنٍۢ", transliteration: "bimu'minin", pos: ['P+N'], posLabel: 'P+N', root: null, meaning: { en: "(will) believe", ur: "(will) ایمان لانا" } },
+      { id: '12:17:15', arabic: "لَّنَا", transliteration: "lanā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "us", ur: "us" } },
+      { id: '12:17:16', arabic: "وَلَوْ", transliteration: "walaw", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "even if", ur: "even if" } },
+      { id: '12:17:17', arabic: "كُنَّا", transliteration: "kunnā", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "we are", ur: "ہم are" } },
+      { id: '12:17:18', arabic: "صَـٰدِقِينَ", transliteration: "ṣādiqīna", pos: ['ADJ'], posLabel: 'ADJ', root: null, meaning: { en: "truthful", ur: "truthful" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 1, to: 2, label: 'فعل + فاعل' },
+        { from: 14, to: 15, label: 'جار + مجرور' }
+      ],
+    },
+  },
+  18: {
+    text: "وَجَآءُو عَلَىٰ قَمِيصِهِۦ بِدَمٍۢ كَذِبٍۢ ۚ قَالَ بَلْ سَوَّلَتْ لَكُمْ أَنفُسُكُمْ أَمْرًۭا ۖ فَصَبْرٌۭ جَمِيلٌۭ ۖ وَٱللَّهُ ٱلْمُسْتَعَانُ عَلَىٰ مَا تَصِفُونَ",
+    translation: {
+      en: "",
+      ur: "اور ان کے کرتے پر جھوٹ موٹ کا لہو بھی لگا لائے۔ یعقوب نے کہا (کہ حقیقت حال یوں نہیں ہے) بلکہ تم اپنے دل سے (یہ) بات بنا لائے ہو۔ اچھا صبر (کہ وہی) خوب (ہے) اور جو تم بیان کرتے ہو اس کے بارے میں خدا ہی سے مدد مطلوب ہے",
+    },
+    words: [
+      { id: '12:18:1', arabic: "وَجَآءُو", transliteration: "wajāū", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "And they brought", ur: "اور وہ لوگ brought" } },
+      { id: '12:18:2', arabic: "عَلَىٰ", transliteration: "ʿalā", pos: ['PREP'], posLabel: 'PREP', root: null, meaning: { en: "upon", ur: "پر" } },
+      { id: '12:18:3', arabic: "قَمِيصِهِۦ", transliteration: "qamīṣihi", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "his shirt", ur: "his shirt" } },
+      { id: '12:18:4', arabic: "بِدَمٍۢ", transliteration: "bidamin", pos: ['P+N'], posLabel: 'P+N', root: null, meaning: { en: "with false blood", ur: "ساتھ جھوٹ blood" } },
+      { id: '12:18:5', arabic: "كَذِبٍۢ ۚ", transliteration: "kadhibin", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "with false blood", ur: "ساتھ جھوٹ blood" } },
+      { id: '12:18:6', arabic: "قَالَ", transliteration: "qāla", pos: ['V'], posLabel: 'V', root: "ق و ل", meaning: { en: "He said", ur: "وہ کہا" } },
+      { id: '12:18:7', arabic: "بَلْ", transliteration: "bal", pos: ['CONJ'], posLabel: 'CONJ', root: null, meaning: { en: "Nay", ur: "Nay" } },
+      { id: '12:18:8', arabic: "سَوَّلَتْ", transliteration: "sawwalat", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "has enticed you", ur: "has enticed تم" } },
+      { id: '12:18:9', arabic: "لَكُمْ", transliteration: "lakum", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "has enticed you", ur: "has enticed تم" } },
+      { id: '12:18:10', arabic: "أَنفُسُكُمْ", transliteration: "anfusukum", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "your souls", ur: "your souls" } },
+      { id: '12:18:11', arabic: "أَمْرًۭا ۖ", transliteration: "amran", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(to) a matter", ur: "(کو) a matter" } },
+      { id: '12:18:12', arabic: "فَصَبْرٌۭ", transliteration: "faṣabrun", pos: ['CONJ+V'], posLabel: 'CONJ+V', root: null, meaning: { en: "so patience", ur: "so patience" } },
+      { id: '12:18:13', arabic: "جَمِيلٌۭ ۖ", transliteration: "jamīlun", pos: ['ADJ'], posLabel: 'ADJ', root: null, meaning: { en: "(is) beautiful", ur: "(is) beautiful" } },
+      { id: '12:18:14', arabic: "وَٱللَّهُ", transliteration: "wal-lahu", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "And Allah", ur: "اور اللہ" } },
+      { id: '12:18:15', arabic: "ٱلْمُسْتَعَانُ", transliteration: "l-mus'taʿānu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(is) the One sought for help", ur: "(is) the One sought for help" } },
+      { id: '12:18:16', arabic: "عَلَىٰ", transliteration: "ʿalā", pos: ['PREP'], posLabel: 'PREP', root: null, meaning: { en: "against", ur: "against" } },
+      { id: '12:18:17', arabic: "مَا", transliteration: "mā", pos: ['REL'], posLabel: 'REL', root: null, meaning: { en: "what", ur: "کیا" } },
+      { id: '12:18:18', arabic: "تَصِفُونَ", transliteration: "taṣifūna", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "you describe", ur: "تم describe" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 2, to: 3, label: 'جار + مجرور' },
+        { from: 4, to: 5, label: 'جار + مجرور' },
+        { from: 17, to: 18, label: 'موصول + صلة' }
+      ],
+    },
+  },
+  19: {
+    text: "وَجَآءَتْ سَيَّارَةٌۭ فَأَرْسَلُوا۟ وَارِدَهُمْ فَأَدْلَىٰ دَلْوَهُۥ ۖ قَالَ يَـٰبُشْرَىٰ هَـٰذَا غُلَـٰمٌۭ ۚ وَأَسَرُّوهُ بِضَـٰعَةًۭ ۚ وَٱللَّهُ عَلِيمٌۢ بِمَا يَعْمَلُونَ",
+    translation: {
+      en: "",
+      ur: "(اب خدا کی شان دیکھو کہ اس کنویں کے قریب) ایک قافلہ آوارد ہوا اور انہوں نے (پانی کے لیے) اپنا سقا بھیجا۔ اس نے کنویں میں ڈول لٹکایا (تو یوسف اس سے لٹک گئے) وہ بولا زہے قسمت یہ تو (نہایت حسین) لڑکا ہے۔ اور اس کو قیمتی سرمایہ سمجھ کر چھپا لیا اور جو کچھ وہ کرتے تھے خدا کو سب معلوم تھا",
+    },
+    words: [
+      { id: '12:19:1', arabic: "وَجَآءَتْ", transliteration: "wajāat", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "And there came", ur: "اور there came" } },
+      { id: '12:19:2', arabic: "سَيَّارَةٌۭ", transliteration: "sayyāratun", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "a caravan", ur: "a caravan" } },
+      { id: '12:19:3', arabic: "فَأَرْسَلُوا۟", transliteration: "fa-arsalū", pos: ['CONJ+V'], posLabel: 'CONJ+V', root: null, meaning: { en: "and they sent", ur: "اور وہ لوگ sent" } },
+      { id: '12:19:4', arabic: "وَارِدَهُمْ", transliteration: "wāridahum", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "their water drawer", ur: "their پانی drawer" } },
+      { id: '12:19:5', arabic: "فَأَدْلَىٰ", transliteration: "fa-adlā", pos: ['CONJ+V'], posLabel: 'CONJ+V', root: null, meaning: { en: "then he let down", ur: "پھر وہ let down" } },
+      { id: '12:19:6', arabic: "دَلْوَهُۥ ۖ", transliteration: "dalwahu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "his bucket", ur: "his bucket" } },
+      { id: '12:19:7', arabic: "قَالَ", transliteration: "qāla", pos: ['V'], posLabel: 'V', root: "ق و ل", meaning: { en: "He said", ur: "وہ کہا" } },
+      { id: '12:19:8', arabic: "يَـٰبُشْرَىٰ", transliteration: "yābush'rā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "O good news", ur: "اے اچھا news" } },
+      { id: '12:19:9', arabic: "هَـٰذَا", transliteration: "hādhā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "This", ur: "This" } },
+      { id: '12:19:10', arabic: "غُلَـٰمٌۭ ۚ", transliteration: "ghulāmun", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(is) a boy", ur: "(is) a boy" } },
+      { id: '12:19:11', arabic: "وَأَسَرُّوهُ", transliteration: "wa-asarrūhu", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "And they hid him", ur: "اور وہ لوگ hid him" } },
+      { id: '12:19:12', arabic: "بِضَـٰعَةًۭ ۚ", transliteration: "biḍāʿatan", pos: ['P+N'], posLabel: 'P+N', root: null, meaning: { en: "(as) a merchandise", ur: "(as) a merchandise" } },
+      { id: '12:19:13', arabic: "وَٱللَّهُ", transliteration: "wal-lahu", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "And Allah", ur: "اور اللہ" } },
+      { id: '12:19:14', arabic: "عَلِيمٌۢ", transliteration: "ʿalīmun", pos: ['ADJ'], posLabel: 'ADJ', root: "ع ل م", meaning: { en: "(is) All-Knower", ur: "(is) سب-Knower" } },
+      { id: '12:19:15', arabic: "بِمَا", transliteration: "bimā", pos: ['P+N'], posLabel: 'P+N', root: null, meaning: { en: "of what", ur: "of کیا" } },
+      { id: '12:19:16', arabic: "يَعْمَلُونَ", transliteration: "yaʿmalūna", pos: ['V'], posLabel: 'V', root: "ع م ل", meaning: { en: "they do", ur: "وہ لوگ do" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 7, to: 8, label: 'فعل + فاعل' }
+      ],
+    },
+  },
+  20: {
+    text: "وَشَرَوْهُ بِثَمَنٍۭ بَخْسٍۢ دَرَٰهِمَ مَعْدُودَةٍۢ وَكَانُوا۟ فِيهِ مِنَ ٱلزَّٰهِدِينَ",
+    translation: {
+      en: "",
+      ur: "اور اس کو تھوڑی سی قیمت (یعنی) معدودے چند درہموں پر بیچ ڈالا۔ اور انہیں ان (کے بارے) میں کچھ لالچ نہ تھا",
+    },
+    words: [
+      { id: '12:20:1', arabic: "وَشَرَوْهُ", transliteration: "washarawhu", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "And they sold him", ur: "اور وہ لوگ sold him" } },
+      { id: '12:20:2', arabic: "بِثَمَنٍۭ", transliteration: "bithamanin", pos: ['P+N'], posLabel: 'P+N', root: null, meaning: { en: "for a price", ur: "for a price" } },
+      { id: '12:20:3', arabic: "بَخْسٍۢ", transliteration: "bakhsin", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "very low", ur: "very low" } },
+      { id: '12:20:4', arabic: "دَرَٰهِمَ", transliteration: "darāhima", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "dirhams", ur: "dirhams" } },
+      { id: '12:20:5', arabic: "مَعْدُودَةٍۢ", transliteration: "maʿdūdatin", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "few", ur: "few" } },
+      { id: '12:20:6', arabic: "وَكَانُوا۟", transliteration: "wakānū", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: "ك و ن", meaning: { en: "and they were", ur: "اور وہ لوگ were" } },
+      { id: '12:20:7', arabic: "فِيهِ", transliteration: "fīhi", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "about him", ur: "about him" } },
+      { id: '12:20:8', arabic: "مِنَ", transliteration: "mina", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "of", ur: "of" } },
+      { id: '12:20:9', arabic: "ٱلزَّٰهِدِينَ", transliteration: "l-zāhidīna", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "those keen to give up", ur: "those keen کو give up" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 2, to: 3, label: 'جار + مجرور' }
+      ],
+    },
+  },
+  21: {
+    text: "وَقَالَ ٱلَّذِى ٱشْتَرَىٰهُ مِن مِّصْرَ لِٱمْرَأَتِهِۦٓ أَكْرِمِى مَثْوَىٰهُ عَسَىٰٓ أَن يَنفَعَنَآ أَوْ نَتَّخِذَهُۥ وَلَدًۭا ۚ وَكَذَٰلِكَ مَكَّنَّا لِيُوسُفَ فِى ٱلْأَرْضِ وَلِنُعَلِّمَهُۥ مِن تَأْوِيلِ ٱلْأَحَادِيثِ ۚ وَٱللَّهُ غَالِبٌ عَلَىٰٓ أَمْرِهِۦ وَلَـٰكِنَّ أَكْثَرَ ٱلنَّاسِ لَا يَعْلَمُونَ",
+    translation: {
+      en: "",
+      ur: "اور مصر میں جس شخص نے اس کو خریدا اس نے اپنی بیوی سے (جس کا نام زلیخا تھا) کہا کہ اس کو عزت واکرام سے رکھو عجب نہیں کہ یہ ہمیں فائدہ دے یا ہم اسے بیٹا بنالیں۔ اس طرح ہم نے یوسف کو سرزمین (مصر) میں جگہ دی اور غرض یہ تھی کہ ہم ان کو (خواب کی) باتوں کی تعبیر سکھائیں اور خدا اپنے کام پر غالب ہے لیکن اکثر لوگ نہیں جانتے",
+    },
+    words: [
+      { id: '12:21:1', arabic: "وَقَالَ", transliteration: "waqāla", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: "ق و ل", meaning: { en: "And said", ur: "اور کہا" } },
+      { id: '12:21:2', arabic: "ٱلَّذِى", transliteration: "alladhī", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "the one who", ur: "the one جو" } },
+      { id: '12:21:3', arabic: "ٱشْتَرَىٰهُ", transliteration: "ish'tarāhu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "bought him", ur: "bought him" } },
+      { id: '12:21:4', arabic: "مِن", transliteration: "min", pos: ['PREP'], posLabel: 'PREP', root: null, meaning: { en: "of", ur: "of" } },
+      { id: '12:21:5', arabic: "مِّصْرَ", transliteration: "miṣ'ra", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Egypt", ur: "Egypt" } },
+      { id: '12:21:6', arabic: "لِٱمْرَأَتِهِۦٓ", transliteration: "li-im'ra-atihi", pos: ['P+N'], posLabel: 'P+N', root: null, meaning: { en: "to his wife", ur: "کو his wife" } },
+      { id: '12:21:7', arabic: "أَكْرِمِى", transliteration: "akrimī", pos: ['ADJ'], posLabel: 'ADJ', root: null, meaning: { en: "Make comfortable", ur: "Make comfortable" } },
+      { id: '12:21:8', arabic: "مَثْوَىٰهُ", transliteration: "mathwāhu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "his stay", ur: "his stay" } },
+      { id: '12:21:9', arabic: "عَسَىٰٓ", transliteration: "ʿasā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Perhaps", ur: "Perhaps" } },
+      { id: '12:21:10', arabic: "أَن", transliteration: "an", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "that", ur: "وہ" } },
+      { id: '12:21:11', arabic: "يَنفَعَنَآ", transliteration: "yanfaʿanā", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "(he) will benefit us", ur: "(وہ) will benefit us" } },
+      { id: '12:21:12', arabic: "أَوْ", transliteration: "aw", pos: ['CONJ'], posLabel: 'CONJ', root: null, meaning: { en: "or", ur: "یا" } },
+      { id: '12:21:13', arabic: "نَتَّخِذَهُۥ", transliteration: "nattakhidhahu", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "we will take him", ur: "ہم will take him" } },
+      { id: '12:21:14', arabic: "وَلَدًۭا ۚ", transliteration: "waladan", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "(as) a son", ur: "(as) a بیٹا" } },
+      { id: '12:21:15', arabic: "وَكَذَٰلِكَ", transliteration: "wakadhālika", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "And thus", ur: "اور thus" } },
+      { id: '12:21:16', arabic: "مَكَّنَّا", transliteration: "makkannā", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "We established", ur: "ہم established" } },
+      { id: '12:21:17', arabic: "لِيُوسُفَ", transliteration: "liyūsufa", pos: ['P+N'], posLabel: 'P+N', root: null, meaning: { en: "Yusuf", ur: "Yusuf" } },
+      { id: '12:21:18', arabic: "فِى", transliteration: "fī", pos: ['PREP'], posLabel: 'PREP', root: null, meaning: { en: "in", ur: "میں" } },
+      { id: '12:21:19', arabic: "ٱلْأَرْضِ", transliteration: "l-arḍi", pos: ['N'], posLabel: 'N', root: "أ ر ض", meaning: { en: "the land", ur: "the land" } },
+      { id: '12:21:20', arabic: "وَلِنُعَلِّمَهُۥ", transliteration: "walinuʿallimahu", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "that We might teach him", ur: "وہ ہم might teach him" } },
+      { id: '12:21:21', arabic: "مِن", transliteration: "min", pos: ['PREP'], posLabel: 'PREP', root: null, meaning: { en: "(the) interpretation of", ur: "(the) interpretation of" } },
+      { id: '12:21:22', arabic: "تَأْوِيلِ", transliteration: "tawīli", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "(the) interpretation of", ur: "(the) interpretation of" } },
+      { id: '12:21:23', arabic: "ٱلْأَحَادِيثِ ۚ", transliteration: "l-aḥādīthi", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "the events", ur: "the events" } },
+      { id: '12:21:24', arabic: "وَٱللَّهُ", transliteration: "wal-lahu", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "And Allah", ur: "اور اللہ" } },
+      { id: '12:21:25', arabic: "غَالِبٌ", transliteration: "ghālibun", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(is) Predominant", ur: "(is) Predominant" } },
+      { id: '12:21:26', arabic: "عَلَىٰٓ", transliteration: "ʿalā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "over", ur: "اوپر" } },
+      { id: '12:21:27', arabic: "أَمْرِهِۦ", transliteration: "amrihi", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "His affairs", ur: "His affairs" } },
+      { id: '12:21:28', arabic: "وَلَـٰكِنَّ", transliteration: "walākinna", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "but", ur: "لیکن" } },
+      { id: '12:21:29', arabic: "أَكْثَرَ", transliteration: "akthara", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "most", ur: "most" } },
+      { id: '12:21:30', arabic: "ٱلنَّاسِ", transliteration: "l-nāsi", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(of) the people", ur: "(of) the لوگ" } },
+      { id: '12:21:31', arabic: "لَا", transliteration: "lā", pos: ['NEG'], posLabel: 'NEG', root: null, meaning: { en: "(do) not", ur: "(do) نہیں" } },
+      { id: '12:21:32', arabic: "يَعْلَمُونَ", transliteration: "yaʿlamūna", pos: ['V'], posLabel: 'V', root: "ع ل م", meaning: { en: "know", ur: "جاننا" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 4, to: 5, label: 'جار + مجرور' },
+        { from: 18, to: 19, label: 'جار + مجرور' },
+        { from: 22, to: 23, label: 'فعل + فاعل' },
+        { from: 29, to: 30, label: 'مضاف + مضاف إليه' },
+        { from: 31, to: 32, label: 'نفی + فعل' }
+      ],
+    },
+  },
+  22: {
+    text: "وَلَمَّا بَلَغَ أَشُدَّهُۥٓ ءَاتَيْنَـٰهُ حُكْمًۭا وَعِلْمًۭا ۚ وَكَذَٰلِكَ نَجْزِى ٱلْمُحْسِنِينَ",
+    translation: {
+      en: "",
+      ur: "اور جب وہ اپنی جوانی کو پہنچے تو ہم نے ان کو دانائی اور علم بخشا۔ اور نیکوکاروں کو ہم اسی طرح بدلہ دیا کرتے ہیں",
+    },
+    words: [
+      { id: '12:22:1', arabic: "وَلَمَّا", transliteration: "walammā", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "And when", ur: "اور when" } },
+      { id: '12:22:2', arabic: "بَلَغَ", transliteration: "balagha", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "he reached", ur: "وہ reached" } },
+      { id: '12:22:3', arabic: "أَشُدَّهُۥٓ", transliteration: "ashuddahu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "his maturity", ur: "his maturity" } },
+      { id: '12:22:4', arabic: "ءَاتَيْنَـٰهُ", transliteration: "ātaynāhu", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "We gave him", ur: "ہم gave him" } },
+      { id: '12:22:5', arabic: "حُكْمًۭا", transliteration: "ḥuk'man", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "wisdom", ur: "wisdom" } },
+      { id: '12:22:6', arabic: "وَعِلْمًۭا ۚ", transliteration: "waʿil'man", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "and knowledge", ur: "اور knowledge" } },
+      { id: '12:22:7', arabic: "وَكَذَٰلِكَ", transliteration: "wakadhālika", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "And thus", ur: "اور thus" } },
+      { id: '12:22:8', arabic: "نَجْزِى", transliteration: "najzī", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "We reward", ur: "ہم ثواب" } },
+      { id: '12:22:9', arabic: "ٱلْمُحْسِنِينَ", transliteration: "l-muḥ'sinīna", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "the good-doers", ur: "the اچھا-doers" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 2, to: 3, label: 'فعل + فاعل' },
+        { from: 4, to: 5, label: 'فعل + فاعل' },
+        { from: 8, to: 9, label: 'فعل + فاعل' }
+      ],
+    },
+  },
+  23: {
+    text: "وَرَٰوَدَتْهُ ٱلَّتِى هُوَ فِى بَيْتِهَا عَن نَّفْسِهِۦ وَغَلَّقَتِ ٱلْأَبْوَٰبَ وَقَالَتْ هَيْتَ لَكَ ۚ قَالَ مَعَاذَ ٱللَّهِ ۖ إِنَّهُۥ رَبِّىٓ أَحْسَنَ مَثْوَاىَ ۖ إِنَّهُۥ لَا يُفْلِحُ ٱلظَّـٰلِمُونَ",
+    translation: {
+      en: "",
+      ur: "تو جس عورت کے گھر میں وہ رہتے تھے اس نے ان کو اپنی طرف مائل کرنا چاہا اور دروازے بند کرکے کہنے لگی (یوسف) جلدی آؤ۔ انہوں نے کہا کہ خدا پناہ میں رکھے (وہ یعنی تمہارے میاں) تو میرے آقا ہیں انہوں نے مجھے اچھی طرح سے رکھا ہے (میں ایسا ظلم نہیں کرسکتا) بےشک ظالم لوگ فلاح نہیں پائیں گے",
+    },
+    words: [
+      { id: '12:23:1', arabic: "وَرَٰوَدَتْهُ", transliteration: "warāwadathu", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "And sought to seduce him", ur: "اور sought کو seduce him" } },
+      { id: '12:23:2', arabic: "ٱلَّتِى", transliteration: "allatī", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "she who", ur: "she جو" } },
+      { id: '12:23:3', arabic: "هُوَ", transliteration: "huwa", pos: ['PRON'], posLabel: 'PRON', root: null, meaning: { en: "he (was)", ur: "وہ (was)" } },
+      { id: '12:23:4', arabic: "فِى", transliteration: "fī", pos: ['PREP'], posLabel: 'PREP', root: null, meaning: { en: "in", ur: "میں" } },
+      { id: '12:23:5', arabic: "بَيْتِهَا", transliteration: "baytihā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "her house", ur: "her house" } },
+      { id: '12:23:6', arabic: "عَن", transliteration: "ʿan", pos: ['PREP'], posLabel: 'PREP', root: null, meaning: { en: "from", ur: "سے" } },
+      { id: '12:23:7', arabic: "نَّفْسِهِۦ", transliteration: "nafsihi", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "his self", ur: "his self" } },
+      { id: '12:23:8', arabic: "وَغَلَّقَتِ", transliteration: "waghallaqati", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "And she closed", ur: "اور she closed" } },
+      { id: '12:23:9', arabic: "ٱلْأَبْوَٰبَ", transliteration: "l-abwāba", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "the doors", ur: "the doors" } },
+      { id: '12:23:10', arabic: "وَقَالَتْ", transliteration: "waqālat", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: "ق و ل", meaning: { en: "and she said", ur: "اور she کہا" } },
+      { id: '12:23:11', arabic: "هَيْتَ", transliteration: "hayta", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Come on", ur: "Come پر" } },
+      { id: '12:23:12', arabic: "لَكَ ۚ", transliteration: "laka", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "you", ur: "تم" } },
+      { id: '12:23:13', arabic: "قَالَ", transliteration: "qāla", pos: ['V'], posLabel: 'V', root: "ق و ل", meaning: { en: "He said", ur: "وہ کہا" } },
+      { id: '12:23:14', arabic: "مَعَاذَ", transliteration: "maʿādha", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "I seek refuge in Allah", ur: "میں seek refuge میں اللہ" } },
+      { id: '12:23:15', arabic: "ٱللَّهِ ۖ", transliteration: "l-lahi", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "I seek refuge in Allah", ur: "میں seek refuge میں اللہ" } },
+      { id: '12:23:16', arabic: "إِنَّهُۥ", transliteration: "innahu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Indeed, he", ur: "بیشک, وہ" } },
+      { id: '12:23:17', arabic: "رَبِّىٓ", transliteration: "rabbī", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(is) my lord", ur: "(is) my رب" } },
+      { id: '12:23:18', arabic: "أَحْسَنَ", transliteration: "aḥsana", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(who has) made good", ur: "(جو has) made اچھا" } },
+      { id: '12:23:19', arabic: "مَثْوَاىَ ۖ", transliteration: "mathwāya", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "my stay", ur: "my stay" } },
+      { id: '12:23:20', arabic: "إِنَّهُۥ", transliteration: "innahu", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "Indeed", ur: "بیشک" } },
+      { id: '12:23:21', arabic: "لَا", transliteration: "lā", pos: ['NEG'], posLabel: 'NEG', root: null, meaning: { en: "not", ur: "نہیں" } },
+      { id: '12:23:22', arabic: "يُفْلِحُ", transliteration: "yuf'liḥu", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "will succeed", ur: "will succeed" } },
+      { id: '12:23:23', arabic: "ٱلظَّـٰلِمُونَ", transliteration: "l-ẓālimūna", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "the wrongdoers", ur: "the wrongdoers" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 4, to: 5, label: 'جار + مجرور' },
+        { from: 13, to: 14, label: 'فعل + فاعل' },
+        { from: 21, to: 22, label: 'نفی + فعل' },
+        { from: 22, to: 23, label: 'فعل + فاعل' }
+      ],
+    },
+  },
+  24: {
+    text: "وَلَقَدْ هَمَّتْ بِهِۦ ۖ وَهَمَّ بِهَا لَوْلَآ أَن رَّءَا بُرْهَـٰنَ رَبِّهِۦ ۚ كَذَٰلِكَ لِنَصْرِفَ عَنْهُ ٱلسُّوٓءَ وَٱلْفَحْشَآءَ ۚ إِنَّهُۥ مِنْ عِبَادِنَا ٱلْمُخْلَصِينَ",
+    translation: {
+      en: "",
+      ur: "اور اس عورت نے ان کا قصد کیا اور انہوں نے اس کا قصد کیا۔ اگر وہ اپنے پروردگار کی نشانی نہ دیکھتے (تو جو ہوتا ہوتا) یوں اس لیے (کیا گیا) کہ ہم ان سے برائی اور بےحیائی کو روک دیں۔ بےشک وہ ہمارے خالص بندوں میں سے تھے",
+    },
+    words: [
+      { id: '12:24:1', arabic: "وَلَقَدْ", transliteration: "walaqad", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "And certainly", ur: "اور certainly" } },
+      { id: '12:24:2', arabic: "هَمَّتْ", transliteration: "hammat", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "she did desire", ur: "she did desire" } },
+      { id: '12:24:3', arabic: "بِهِۦ ۖ", transliteration: "bihi", pos: ['P+N'], posLabel: 'P+N', root: null, meaning: { en: "him", ur: "him" } },
+      { id: '12:24:4', arabic: "وَهَمَّ", transliteration: "wahamma", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "and he would have desired", ur: "اور وہ would have desired" } },
+      { id: '12:24:5', arabic: "بِهَا", transliteration: "bihā", pos: ['P+N'], posLabel: 'P+N', root: null, meaning: { en: "her", ur: "her" } },
+      { id: '12:24:6', arabic: "لَوْلَآ", transliteration: "lawlā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "if not", ur: "if نہیں" } },
+      { id: '12:24:7', arabic: "أَن", transliteration: "an", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "that", ur: "وہ" } },
+      { id: '12:24:8', arabic: "رَّءَا", transliteration: "raā", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "he saw", ur: "وہ saw" } },
+      { id: '12:24:9', arabic: "بُرْهَـٰنَ", transliteration: "bur'hāna", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "the proof", ur: "the proof" } },
+      { id: '12:24:10', arabic: "رَبِّهِۦ ۚ", transliteration: "rabbihi", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(of) his Lord", ur: "(of) his رب" } },
+      { id: '12:24:11', arabic: "كَذَٰلِكَ", transliteration: "kadhālika", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Thus", ur: "Thus" } },
+      { id: '12:24:12', arabic: "لِنَصْرِفَ", transliteration: "linaṣrifa", pos: ['P+N'], posLabel: 'P+N', root: null, meaning: { en: "that We might avert", ur: "وہ ہم might avert" } },
+      { id: '12:24:13', arabic: "عَنْهُ", transliteration: "ʿanhu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "from him", ur: "سے him" } },
+      { id: '12:24:14', arabic: "ٱلسُّوٓءَ", transliteration: "l-sūa", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "the evil", ur: "the برا" } },
+      { id: '12:24:15', arabic: "وَٱلْفَحْشَآءَ ۚ", transliteration: "wal-faḥshāa", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "and the immorality", ur: "اور the immorality" } },
+      { id: '12:24:16', arabic: "إِنَّهُۥ", transliteration: "innahu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Indeed, he", ur: "بیشک, وہ" } },
+      { id: '12:24:17', arabic: "مِنْ", transliteration: "min", pos: ['PREP'], posLabel: 'PREP', root: null, meaning: { en: "(was) of", ur: "(was) of" } },
+      { id: '12:24:18', arabic: "عِبَادِنَا", transliteration: "ʿibādinā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Our slaves", ur: "Our slaves" } },
+      { id: '12:24:19', arabic: "ٱلْمُخْلَصِينَ", transliteration: "l-mukh'laṣīna", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "the sincere", ur: "the sincere" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 5, to: 6, label: 'جار + مجرور' },
+        { from: 8, to: 9, label: 'فعل + فاعل' },
+        { from: 12, to: 13, label: 'جار + مجرور' },
+        { from: 13, to: 14, label: 'مضاف + مضاف إليه' },
+        { from: 17, to: 18, label: 'جار + مجرور' },
+        { from: 18, to: 19, label: 'مضاف + مضاف إليه' }
+      ],
+    },
+  },
+  25: {
+    text: "وَٱسْتَبَقَا ٱلْبَابَ وَقَدَّتْ قَمِيصَهُۥ مِن دُبُرٍۢ وَأَلْفَيَا سَيِّدَهَا لَدَا ٱلْبَابِ ۚ قَالَتْ مَا جَزَآءُ مَنْ أَرَادَ بِأَهْلِكَ سُوٓءًا إِلَّآ أَن يُسْجَنَ أَوْ عَذَابٌ أَلِيمٌۭ",
+    translation: {
+      en: "",
+      ur: "اور دونوں دروازے کی طرف بھاگے (آگے یوسف اور پیچھے زلیخا) اور عورت نے ان کا کرتا پیچھے سے (پکڑ کر جو کھینچا تو) پھاڑ ڈالا اور دونوں کو دروازے کے پاس عورت کا خاوند مل گیا تو عورت بولی کہ جو شخص تمہاری بیوی کے ساتھ برا ارادہ کرے اس کی اس کے سوا کیا سزا ہے کہ یا تو قید کیا جائے یا دکھ کا عذاب دیا جائے",
+    },
+    words: [
+      { id: '12:25:1', arabic: "وَٱسْتَبَقَا", transliteration: "wa-is'tabaqā", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "And they both raced", ur: "اور وہ لوگ both raced" } },
+      { id: '12:25:2', arabic: "ٱلْبَابَ", transliteration: "l-bāba", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(to) the door", ur: "(کو) the door" } },
+      { id: '12:25:3', arabic: "وَقَدَّتْ", transliteration: "waqaddat", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "and she tore", ur: "اور she tore" } },
+      { id: '12:25:4', arabic: "قَمِيصَهُۥ", transliteration: "qamīṣahu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "his shirt", ur: "his shirt" } },
+      { id: '12:25:5', arabic: "مِن", transliteration: "min", pos: ['PREP'], posLabel: 'PREP', root: null, meaning: { en: "from", ur: "سے" } },
+      { id: '12:25:6', arabic: "دُبُرٍۢ", transliteration: "duburin", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "the back", ur: "the back" } },
+      { id: '12:25:7', arabic: "وَأَلْفَيَا", transliteration: "wa-alfayā", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "and they both found", ur: "اور وہ لوگ both found" } },
+      { id: '12:25:8', arabic: "سَيِّدَهَا", transliteration: "sayyidahā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "her husband", ur: "her husband" } },
+      { id: '12:25:9', arabic: "لَدَا", transliteration: "ladā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "at", ur: "at" } },
+      { id: '12:25:10', arabic: "ٱلْبَابِ ۚ", transliteration: "l-bābi", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "the door", ur: "the door" } },
+      { id: '12:25:11', arabic: "قَالَتْ", transliteration: "qālat", pos: ['N'], posLabel: 'N', root: "ق و ل", meaning: { en: "She said", ur: "She کہا" } },
+      { id: '12:25:12', arabic: "مَا", transliteration: "mā", pos: ['REL'], posLabel: 'REL', root: null, meaning: { en: "What", ur: "کیا" } },
+      { id: '12:25:13', arabic: "جَزَآءُ", transliteration: "jazāu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(is) the recompense", ur: "(is) the recompense" } },
+      { id: '12:25:14', arabic: "مَنْ", transliteration: "man", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(of one) who", ur: "(of one) جو" } },
+      { id: '12:25:15', arabic: "أَرَادَ", transliteration: "arāda", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "intended", ur: "intended" } },
+      { id: '12:25:16', arabic: "بِأَهْلِكَ", transliteration: "bi-ahlika", pos: ['P+N'], posLabel: 'P+N', root: "أ ه ل", meaning: { en: "for your wife", ur: "for your wife" } },
+      { id: '12:25:17', arabic: "سُوٓءًا", transliteration: "sūan", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "evil", ur: "برا" } },
+      { id: '12:25:18', arabic: "إِلَّآ", transliteration: "illā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "except", ur: "سوائے" } },
+      { id: '12:25:19', arabic: "أَن", transliteration: "an", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "that", ur: "وہ" } },
+      { id: '12:25:20', arabic: "يُسْجَنَ", transliteration: "yus'jana", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "he be imprisoned", ur: "وہ be imprisoned" } },
+      { id: '12:25:21', arabic: "أَوْ", transliteration: "aw", pos: ['CONJ'], posLabel: 'CONJ', root: null, meaning: { en: "or", ur: "یا" } },
+      { id: '12:25:22', arabic: "عَذَابٌ", transliteration: "ʿadhābun", pos: ['N'], posLabel: 'N', root: "ع ذ ب", meaning: { en: "a punishment", ur: "a عذاب" } },
+      { id: '12:25:23', arabic: "أَلِيمٌۭ", transliteration: "alīmun", pos: ['ADJ'], posLabel: 'ADJ', root: null, meaning: { en: "painful", ur: "painful" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 5, to: 6, label: 'جار + مجرور' },
+        { from: 9, to: 10, label: 'مضاف + مضاف إليه' },
+        { from: 13, to: 14, label: 'مضاف + مضاف إليه' },
+        { from: 16, to: 17, label: 'جار + مجرور' },
+        { from: 22, to: 23, label: 'موصوف + صفت' }
+      ],
+    },
+  },
+  26: {
+    text: "قَالَ هِىَ رَٰوَدَتْنِى عَن نَّفْسِى ۚ وَشَهِدَ شَاهِدٌۭ مِّنْ أَهْلِهَآ إِن كَانَ قَمِيصُهُۥ قُدَّ مِن قُبُلٍۢ فَصَدَقَتْ وَهُوَ مِنَ ٱلْكَـٰذِبِينَ",
+    translation: {
+      en: "",
+      ur: "یوسف نے کہا اسی نے مجھ کو اپنی طرف مائل کرنا چاہا تھا۔ اس کے قبیلے میں سے ایک فیصلہ کرنے والے نے فیصلہ کیا کہ اگر اس کا کرتا آگے سے پھٹا تو یہ سچی اور یوسف جھوٹا",
+    },
+    words: [
+      { id: '12:26:1', arabic: "قَالَ", transliteration: "qāla", pos: ['V'], posLabel: 'V', root: "ق و ل", meaning: { en: "He said", ur: "وہ کہا" } },
+      { id: '12:26:2', arabic: "هِىَ", transliteration: "hiya", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "She", ur: "She" } },
+      { id: '12:26:3', arabic: "رَٰوَدَتْنِى", transliteration: "rāwadatnī", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "sought to seduce me", ur: "sought کو seduce me" } },
+      { id: '12:26:4', arabic: "عَن", transliteration: "ʿan", pos: ['PREP'], posLabel: 'PREP', root: null, meaning: { en: "about", ur: "about" } },
+      { id: '12:26:5', arabic: "نَّفْسِى ۚ", transliteration: "nafsī", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "myself", ur: "myself" } },
+      { id: '12:26:6', arabic: "وَشَهِدَ", transliteration: "washahida", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "And testified", ur: "اور testified" } },
+      { id: '12:26:7', arabic: "شَاهِدٌۭ", transliteration: "shāhidun", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "a witness", ur: "a witness" } },
+      { id: '12:26:8', arabic: "مِّنْ", transliteration: "min", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "of", ur: "of" } },
+      { id: '12:26:9', arabic: "أَهْلِهَآ", transliteration: "ahlihā", pos: ['N'], posLabel: 'N', root: "أ ه ل", meaning: { en: "her family", ur: "her family" } },
+      { id: '12:26:10', arabic: "إِن", transliteration: "in", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "If", ur: "If" } },
+      { id: '12:26:11', arabic: "كَانَ", transliteration: "kāna", pos: ['N'], posLabel: 'N', root: "ك و ن", meaning: { en: "[is]", ur: "[is]" } },
+      { id: '12:26:12', arabic: "قَمِيصُهُۥ", transliteration: "qamīṣuhu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "his shirt", ur: "his shirt" } },
+      { id: '12:26:13', arabic: "قُدَّ", transliteration: "qudda", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(is) torn", ur: "(is) torn" } },
+      { id: '12:26:14', arabic: "مِن", transliteration: "min", pos: ['PREP'], posLabel: 'PREP', root: null, meaning: { en: "from", ur: "سے" } },
+      { id: '12:26:15', arabic: "قُبُلٍۢ", transliteration: "qubulin", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "the front", ur: "the front" } },
+      { id: '12:26:16', arabic: "فَصَدَقَتْ", transliteration: "faṣadaqat", pos: ['CONJ+V'], posLabel: 'CONJ+V', root: null, meaning: { en: "then she has spoken the truth", ur: "پھر she has spoken the سچ" } },
+      { id: '12:26:17', arabic: "وَهُوَ", transliteration: "wahuwa", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "and he", ur: "اور وہ" } },
+      { id: '12:26:18', arabic: "مِنَ", transliteration: "mina", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(is) of", ur: "(is) of" } },
+      { id: '12:26:19', arabic: "ٱلْكَـٰذِبِينَ", transliteration: "l-kādhibīna", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "the liars", ur: "the liars" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 1, to: 2, label: 'فعل + فاعل' },
+        { from: 14, to: 15, label: 'جار + مجرور' },
+        { from: 18, to: 19, label: 'مضاف + مضاف إليه' }
+      ],
+    },
+  },
+  27: {
+    text: "وَإِن كَانَ قَمِيصُهُۥ قُدَّ مِن دُبُرٍۢ فَكَذَبَتْ وَهُوَ مِنَ ٱلصَّـٰدِقِينَ",
+    translation: {
+      en: "",
+      ur: "اور اگر کرتا پیچھے سے پھٹا ہو تو یہ جھوٹی اور وہ سچا ہے",
+    },
+    words: [
+      { id: '12:27:1', arabic: "وَإِن", transliteration: "wa-in", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "But if", ur: "لیکن if" } },
+      { id: '12:27:2', arabic: "كَانَ", transliteration: "kāna", pos: ['N'], posLabel: 'N', root: "ك و ن", meaning: { en: "[is]", ur: "[is]" } },
+      { id: '12:27:3', arabic: "قَمِيصُهُۥ", transliteration: "qamīṣuhu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "his shirt", ur: "his shirt" } },
+      { id: '12:27:4', arabic: "قُدَّ", transliteration: "qudda", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(is) torn", ur: "(is) torn" } },
+      { id: '12:27:5', arabic: "مِن", transliteration: "min", pos: ['PREP'], posLabel: 'PREP', root: null, meaning: { en: "from", ur: "سے" } },
+      { id: '12:27:6', arabic: "دُبُرٍۢ", transliteration: "duburin", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(the) back", ur: "(the) back" } },
+      { id: '12:27:7', arabic: "فَكَذَبَتْ", transliteration: "fakadhabat", pos: ['CONJ+V'], posLabel: 'CONJ+V', root: null, meaning: { en: "then she has lied", ur: "پھر she has lied" } },
+      { id: '12:27:8', arabic: "وَهُوَ", transliteration: "wahuwa", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "and he", ur: "اور وہ" } },
+      { id: '12:27:9', arabic: "مِنَ", transliteration: "mina", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(is) of", ur: "(is) of" } },
+      { id: '12:27:10', arabic: "ٱلصَّـٰدِقِينَ", transliteration: "l-ṣādiqīna", pos: ['ADJ'], posLabel: 'ADJ', root: null, meaning: { en: "the truthful", ur: "the truthful" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 5, to: 6, label: 'جار + مجرور' },
+        { from: 9, to: 10, label: 'موصوف + صفت' }
+      ],
+    },
+  },
+  28: {
+    text: "فَلَمَّا رَءَا قَمِيصَهُۥ قُدَّ مِن دُبُرٍۢ قَالَ إِنَّهُۥ مِن كَيْدِكُنَّ ۖ إِنَّ كَيْدَكُنَّ عَظِيمٌۭ",
+    translation: {
+      en: "",
+      ur: "اور جب اس کا کرتا دیکھا (تو) پیچھے سے پھٹا تھا (تب اس نے زلیخا سے کہا) کہ یہ تمہارا ہی فریب ہے۔ اور کچھ شک نہیں کہ تم عورتوں کے فریب بڑے (بھاری) ہوتے ہیں",
+    },
+    words: [
+      { id: '12:28:1', arabic: "فَلَمَّا", transliteration: "falammā", pos: ['CONJ+V'], posLabel: 'CONJ+V', root: null, meaning: { en: "So when", ur: "So when" } },
+      { id: '12:28:2', arabic: "رَءَا", transliteration: "raā", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "he saw", ur: "وہ saw" } },
+      { id: '12:28:3', arabic: "قَمِيصَهُۥ", transliteration: "qamīṣahu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "his shirt", ur: "his shirt" } },
+      { id: '12:28:4', arabic: "قُدَّ", transliteration: "qudda", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "torn", ur: "torn" } },
+      { id: '12:28:5', arabic: "مِن", transliteration: "min", pos: ['PREP'], posLabel: 'PREP', root: null, meaning: { en: "from", ur: "سے" } },
+      { id: '12:28:6', arabic: "دُبُرٍۢ", transliteration: "duburin", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(the) back", ur: "(the) back" } },
+      { id: '12:28:7', arabic: "قَالَ", transliteration: "qāla", pos: ['V'], posLabel: 'V', root: "ق و ل", meaning: { en: "he said", ur: "وہ کہا" } },
+      { id: '12:28:8', arabic: "إِنَّهُۥ", transliteration: "innahu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Indeed, it", ur: "بیشک, it" } },
+      { id: '12:28:9', arabic: "مِن", transliteration: "min", pos: ['PREP'], posLabel: 'PREP', root: null, meaning: { en: "(is) of", ur: "(is) of" } },
+      { id: '12:28:10', arabic: "كَيْدِكُنَّ ۖ", transliteration: "kaydikunna", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "your plot", ur: "your plot" } },
+      { id: '12:28:11', arabic: "إِنَّ", transliteration: "inna", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "Indeed", ur: "بیشک" } },
+      { id: '12:28:12', arabic: "كَيْدَكُنَّ", transliteration: "kaydakunna", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "your plot", ur: "your plot" } },
+      { id: '12:28:13', arabic: "عَظِيمٌۭ", transliteration: "ʿaẓīmun", pos: ['ADJ'], posLabel: 'ADJ', root: null, meaning: { en: "(is) great", ur: "(is) great" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 2, to: 3, label: 'فعل + فاعل' },
+        { from: 5, to: 6, label: 'جار + مجرور' },
+        { from: 7, to: 8, label: 'فعل + فاعل' },
+        { from: 9, to: 10, label: 'جار + مجرور' },
+        { from: 11, to: 12, label: 'فعل + فاعل' },
+        { from: 12, to: 13, label: 'موصوف + صفت' }
+      ],
+    },
+  },
+  29: {
+    text: "يُوسُفُ أَعْرِضْ عَنْ هَـٰذَا ۚ وَٱسْتَغْفِرِى لِذَنۢبِكِ ۖ إِنَّكِ كُنتِ مِنَ ٱلْخَاطِـِٔينَ",
+    translation: {
+      en: "",
+      ur: "یوسف اس بات کا خیال نہ کر۔ اور (زلیخا) تو اپنے گناہوں کی بخشش مانگ، بےشک خطا تیری ہے",
+    },
+    words: [
+      { id: '12:29:1', arabic: "يُوسُفُ", transliteration: "yūsufu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Yusuf", ur: "Yusuf" } },
+      { id: '12:29:2', arabic: "أَعْرِضْ", transliteration: "aʿriḍ", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "turn away", ur: "turn away" } },
+      { id: '12:29:3', arabic: "عَنْ", transliteration: "ʿan", pos: ['PREP'], posLabel: 'PREP', root: null, meaning: { en: "from", ur: "سے" } },
+      { id: '12:29:4', arabic: "هَـٰذَا ۚ", transliteration: "hādhā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "this", ur: "this" } },
+      { id: '12:29:5', arabic: "وَٱسْتَغْفِرِى", transliteration: "wa-is'taghfirī", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "And ask forgiveness", ur: "اور ask مغفرت" } },
+      { id: '12:29:6', arabic: "لِذَنۢبِكِ ۖ", transliteration: "lidhanbiki", pos: ['P+N'], posLabel: 'P+N', root: null, meaning: { en: "for your sin", ur: "for your sin" } },
+      { id: '12:29:7', arabic: "إِنَّكِ", transliteration: "innaki", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Indeed, you", ur: "بیشک, تم" } },
+      { id: '12:29:8', arabic: "كُنتِ", transliteration: "kunti", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "are", ur: "are" } },
+      { id: '12:29:9', arabic: "مِنَ", transliteration: "mina", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "of", ur: "of" } },
+      { id: '12:29:10', arabic: "ٱلْخَاطِـِٔينَ", transliteration: "l-khāṭiīna", pos: ['ADJ'], posLabel: 'ADJ', root: null, meaning: { en: "the sinful", ur: "the sinful" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 3, to: 4, label: 'جار + مجرور' },
+        { from: 6, to: 7, label: 'جار + مجرور' },
+        { from: 9, to: 10, label: 'موصوف + صفت' }
+      ],
+    },
+  },
+  30: {
+    text: "۞ وَقَالَ نِسْوَةٌۭ فِى ٱلْمَدِينَةِ ٱمْرَأَتُ ٱلْعَزِيزِ تُرَٰوِدُ فَتَىٰهَا عَن نَّفْسِهِۦ ۖ قَدْ شَغَفَهَا حُبًّا ۖ إِنَّا لَنَرَىٰهَا فِى ضَلَـٰلٍۢ مُّبِينٍۢ",
+    translation: {
+      en: "",
+      ur: "اور شہر میں عورتیں گفتگوئیں کرنے لگیں کہ عزیز کی بیوی اپنے غلام کو اپنی طرف مائل کرنا چاہتی ہے۔ اور اس کی محبت اس کے دل میں گھر کرگئی ہے۔ ہم دیکھتی ہیں کہ وہ صریح گمراہی میں ہے",
+    },
+    words: [
+      { id: '12:30:1', arabic: "۞ وَقَالَ", transliteration: "waqāla", pos: ['N'], posLabel: 'N', root: "ق و ل", meaning: { en: "And said", ur: "اور کہا" } },
+      { id: '12:30:2', arabic: "نِسْوَةٌۭ", transliteration: "nis'watun", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "women", ur: "women" } },
+      { id: '12:30:3', arabic: "فِى", transliteration: "fī", pos: ['PREP'], posLabel: 'PREP', root: null, meaning: { en: "in", ur: "میں" } },
+      { id: '12:30:4', arabic: "ٱلْمَدِينَةِ", transliteration: "l-madīnati", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "the city", ur: "the city" } },
+      { id: '12:30:5', arabic: "ٱمْرَأَتُ", transliteration: "im'ra-atu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "The wife of", ur: "The wife of" } },
+      { id: '12:30:6', arabic: "ٱلْعَزِيزِ", transliteration: "l-ʿazīzi", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Aziz", ur: "Aziz" } },
+      { id: '12:30:7', arabic: "تُرَٰوِدُ", transliteration: "turāwidu", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "(is) seeking to seduce", ur: "(is) seeking کو seduce" } },
+      { id: '12:30:8', arabic: "فَتَىٰهَا", transliteration: "fatāhā", pos: ['CONJ+V'], posLabel: 'CONJ+V', root: null, meaning: { en: "her slave boy", ur: "her slave boy" } },
+      { id: '12:30:9', arabic: "عَن", transliteration: "ʿan", pos: ['PREP'], posLabel: 'PREP', root: null, meaning: { en: "about", ur: "about" } },
+      { id: '12:30:10', arabic: "نَّفْسِهِۦ ۖ", transliteration: "nafsihi", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "himself", ur: "himself" } },
+      { id: '12:30:11', arabic: "قَدْ", transliteration: "qad", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "indeed", ur: "بیشک" } },
+      { id: '12:30:12', arabic: "شَغَفَهَا", transliteration: "shaghafahā", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "he has impassioned her", ur: "وہ has impassioned her" } },
+      { id: '12:30:13', arabic: "حُبًّا ۖ", transliteration: "ḥubban", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(with) love", ur: "(ساتھ) love" } },
+      { id: '12:30:14', arabic: "إِنَّا", transliteration: "innā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Indeed, we", ur: "بیشک, ہم" } },
+      { id: '12:30:15', arabic: "لَنَرَىٰهَا", transliteration: "lanarāhā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "[we] surely see her", ur: "[ہم] یقیناً دیکھنا her" } },
+      { id: '12:30:16', arabic: "فِى", transliteration: "fī", pos: ['PREP'], posLabel: 'PREP', root: null, meaning: { en: "in", ur: "میں" } },
+      { id: '12:30:17', arabic: "ضَلَـٰلٍۢ", transliteration: "ḍalālin", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "an error", ur: "an error" } },
+      { id: '12:30:18', arabic: "مُّبِينٍۢ", transliteration: "mubīnin", pos: ['ADJ'], posLabel: 'ADJ', root: null, meaning: { en: "clear", ur: "clear" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 3, to: 4, label: 'جار + مجرور' },
+        { from: 12, to: 13, label: 'فعل + فاعل' },
+        { from: 16, to: 17, label: 'جار + مجرور' },
+        { from: 17, to: 18, label: 'موصوف + صفت' }
+      ],
+    },
+  },
+  31: {
+    text: "فَلَمَّا سَمِعَتْ بِمَكْرِهِنَّ أَرْسَلَتْ إِلَيْهِنَّ وَأَعْتَدَتْ لَهُنَّ مُتَّكَـًۭٔا وَءَاتَتْ كُلَّ وَٰحِدَةٍۢ مِّنْهُنَّ سِكِّينًۭا وَقَالَتِ ٱخْرُجْ عَلَيْهِنَّ ۖ فَلَمَّا رَأَيْنَهُۥٓ أَكْبَرْنَهُۥ وَقَطَّعْنَ أَيْدِيَهُنَّ وَقُلْنَ حَـٰشَ لِلَّهِ مَا هَـٰذَا بَشَرًا إِنْ هَـٰذَآ إِلَّا مَلَكٌۭ كَرِيمٌۭ",
+    translation: {
+      en: "",
+      ur: "جب زلیخا نے ان عورتوں کی (گفتگو جو حقیقت میں دیدار یوسف کے لیے ایک) چال (تھی) سنی تو ان کے پاس (دعوت کا) پیغام بھیجا اور ان کے لیے ایک محفل مرتب کی۔ اور (پھل تراشنے کے لیے) ہر ایک کو ایک چھری دی اور (یوسف سے) کہا کہ ان کے سامنے باہر آؤ۔ جب عورتوں نے ان کو دیکھا تو ان کا رعب (حسن) ان پر (ایسا) چھا گیا کہ (پھل تراشتے تراشتے) اپنے ہاتھ کاٹ لیے اور بےساختہ بول اٹھیں کہ سبحان الله (یہ حسن) یہ آدمی نہیں کوئی بزرگ فرشتہ ہے",
+    },
+    words: [
+      { id: '12:31:1', arabic: "فَلَمَّا", transliteration: "falammā", pos: ['CONJ+V'], posLabel: 'CONJ+V', root: null, meaning: { en: "So when", ur: "So when" } },
+      { id: '12:31:2', arabic: "سَمِعَتْ", transliteration: "samiʿat", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "she heard", ur: "she heard" } },
+      { id: '12:31:3', arabic: "بِمَكْرِهِنَّ", transliteration: "bimakrihinna", pos: ['P+N'], posLabel: 'P+N', root: null, meaning: { en: "of their scheming", ur: "of their scheming" } },
+      { id: '12:31:4', arabic: "أَرْسَلَتْ", transliteration: "arsalat", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "she sent", ur: "she sent" } },
+      { id: '12:31:5', arabic: "إِلَيْهِنَّ", transliteration: "ilayhinna", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "for them", ur: "for them" } },
+      { id: '12:31:6', arabic: "وَأَعْتَدَتْ", transliteration: "wa-aʿtadat", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "and she prepared", ur: "اور she prepared" } },
+      { id: '12:31:7', arabic: "لَهُنَّ", transliteration: "lahunna", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "for them", ur: "for them" } },
+      { id: '12:31:8', arabic: "مُتَّكَـًۭٔا", transliteration: "muttaka-an", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "a banquet", ur: "a banquet" } },
+      { id: '12:31:9', arabic: "وَءَاتَتْ", transliteration: "waātat", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "and she gave", ur: "اور she gave" } },
+      { id: '12:31:10', arabic: "كُلَّ", transliteration: "kulla", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "each", ur: "ہر" } },
+      { id: '12:31:11', arabic: "وَٰحِدَةٍۢ", transliteration: "wāḥidatin", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "one", ur: "one" } },
+      { id: '12:31:12', arabic: "مِّنْهُنَّ", transliteration: "min'hunna", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "of them", ur: "of them" } },
+      { id: '12:31:13', arabic: "سِكِّينًۭا", transliteration: "sikkīnan", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "a knife", ur: "a knife" } },
+      { id: '12:31:14', arabic: "وَقَالَتِ", transliteration: "waqālati", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: "ق و ل", meaning: { en: "and she said", ur: "اور she کہا" } },
+      { id: '12:31:15', arabic: "ٱخْرُجْ", transliteration: "ukh'ruj", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Come out", ur: "Come out" } },
+      { id: '12:31:16', arabic: "عَلَيْهِنَّ ۖ", transliteration: "ʿalayhinna", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "before them", ur: "پہلے them" } },
+      { id: '12:31:17', arabic: "فَلَمَّا", transliteration: "falammā", pos: ['CONJ+V'], posLabel: 'CONJ+V', root: null, meaning: { en: "Then when", ur: "پھر when" } },
+      { id: '12:31:18', arabic: "رَأَيْنَهُۥٓ", transliteration: "ra-aynahu", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "they saw him", ur: "وہ لوگ saw him" } },
+      { id: '12:31:19', arabic: "أَكْبَرْنَهُۥ", transliteration: "akbarnahu", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "they greatly admired him", ur: "وہ لوگ greatly admired him" } },
+      { id: '12:31:20', arabic: "وَقَطَّعْنَ", transliteration: "waqaṭṭaʿna", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "and cut", ur: "اور cut" } },
+      { id: '12:31:21', arabic: "أَيْدِيَهُنَّ", transliteration: "aydiyahunna", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "their hands", ur: "their hands" } },
+      { id: '12:31:22', arabic: "وَقُلْنَ", transliteration: "waqul'na", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: "ق و ل", meaning: { en: "they said", ur: "وہ لوگ کہا" } },
+      { id: '12:31:23', arabic: "حَـٰشَ", transliteration: "ḥāsha", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Forbid", ur: "Forbid" } },
+      { id: '12:31:24', arabic: "لِلَّهِ", transliteration: "lillahi", pos: ['P+N'], posLabel: 'P+N', root: null, meaning: { en: "Allah", ur: "اللہ" } },
+      { id: '12:31:25', arabic: "مَا", transliteration: "mā", pos: ['NEG'], posLabel: 'NEG', root: null, meaning: { en: "not", ur: "نہیں" } },
+      { id: '12:31:26', arabic: "هَـٰذَا", transliteration: "hādhā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(is) this", ur: "(is) this" } },
+      { id: '12:31:27', arabic: "بَشَرًا", transliteration: "basharan", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "a man", ur: "a man" } },
+      { id: '12:31:28', arabic: "إِنْ", transliteration: "in", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "not", ur: "نہیں" } },
+      { id: '12:31:29', arabic: "هَـٰذَآ", transliteration: "hādhā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(is) this", ur: "(is) this" } },
+      { id: '12:31:30', arabic: "إِلَّا", transliteration: "illā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "but", ur: "لیکن" } },
+      { id: '12:31:31', arabic: "مَلَكٌۭ", transliteration: "malakun", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "an angel", ur: "an angel" } },
+      { id: '12:31:32', arabic: "كَرِيمٌۭ", transliteration: "karīmun", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "noble", ur: "noble" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 3, to: 4, label: 'جار + مجرور' }
+      ],
+    },
+  },
+  32: {
+    text: "قَالَتْ فَذَٰلِكُنَّ ٱلَّذِى لُمْتُنَّنِى فِيهِ ۖ وَلَقَدْ رَٰوَدتُّهُۥ عَن نَّفْسِهِۦ فَٱسْتَعْصَمَ ۖ وَلَئِن لَّمْ يَفْعَلْ مَآ ءَامُرُهُۥ لَيُسْجَنَنَّ وَلَيَكُونًۭا مِّنَ ٱلصَّـٰغِرِينَ",
+    translation: {
+      en: "",
+      ur: "تب زلیخا نے کہا یہ وہی ہے جس کے بارے میں تم مجھے طعنے دیتی تھیں۔ اور بےشک میں نے اس کو اپنی طرف مائل کرنا چاہا مگر یہ بچا رہا۔ اور اگر یہ وہ کام نہ کرے گا جو میں اسے کہتی ہوں تو قید کردیا جائے گا اور ذلیل ہوگا",
+    },
+    words: [
+      { id: '12:32:1', arabic: "قَالَتْ", transliteration: "qālat", pos: ['N'], posLabel: 'N', root: "ق و ل", meaning: { en: "She said", ur: "She کہا" } },
+      { id: '12:32:2', arabic: "فَذَٰلِكُنَّ", transliteration: "fadhālikunna", pos: ['CONJ+V'], posLabel: 'CONJ+V', root: null, meaning: { en: "That", ur: "وہ" } },
+      { id: '12:32:3', arabic: "ٱلَّذِى", transliteration: "alladhī", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(is) the one", ur: "(is) the one" } },
+      { id: '12:32:4', arabic: "لُمْتُنَّنِى", transliteration: "lum'tunnanī", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "you blamed me", ur: "تم blamed me" } },
+      { id: '12:32:5', arabic: "فِيهِ ۖ", transliteration: "fīhi", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "about him", ur: "about him" } },
+      { id: '12:32:6', arabic: "وَلَقَدْ", transliteration: "walaqad", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "And certainly", ur: "اور certainly" } },
+      { id: '12:32:7', arabic: "رَٰوَدتُّهُۥ", transliteration: "rāwadttuhu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "I sought to seduce him", ur: "میں sought کو seduce him" } },
+      { id: '12:32:8', arabic: "عَن", transliteration: "ʿan", pos: ['PREP'], posLabel: 'PREP', root: null, meaning: { en: "[from]", ur: "[سے]" } },
+      { id: '12:32:9', arabic: "نَّفْسِهِۦ", transliteration: "nafsihi", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "[himself]", ur: "[himself]" } },
+      { id: '12:32:10', arabic: "فَٱسْتَعْصَمَ ۖ", transliteration: "fa-is'taʿṣama", pos: ['CONJ+V'], posLabel: 'CONJ+V', root: null, meaning: { en: "but he saved himself", ur: "لیکن وہ saved himself" } },
+      { id: '12:32:11', arabic: "وَلَئِن", transliteration: "wala-in", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "and if", ur: "اور if" } },
+      { id: '12:32:12', arabic: "لَّمْ", transliteration: "lam", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "not", ur: "نہیں" } },
+      { id: '12:32:13', arabic: "يَفْعَلْ", transliteration: "yafʿal", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "he does", ur: "وہ does" } },
+      { id: '12:32:14', arabic: "مَآ", transliteration: "mā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "what", ur: "کیا" } },
+      { id: '12:32:15', arabic: "ءَامُرُهُۥ", transliteration: "āmuruhu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "I order him", ur: "میں order him" } },
+      { id: '12:32:16', arabic: "لَيُسْجَنَنَّ", transliteration: "layus'jananna", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "surely, he will be imprisoned", ur: "یقیناً, وہ will be imprisoned" } },
+      { id: '12:32:17', arabic: "وَلَيَكُونًۭا", transliteration: "walayakūnan", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "and certainly will be", ur: "اور certainly will be" } },
+      { id: '12:32:18', arabic: "مِّنَ", transliteration: "mina", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "of", ur: "of" } },
+      { id: '12:32:19', arabic: "ٱلصَّـٰغِرِينَ", transliteration: "l-ṣāghirīna", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "those who are disgraced", ur: "جو لوگ are disgraced" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 4, to: 5, label: 'فعل + فاعل' },
+        { from: 13, to: 14, label: 'فعل + فاعل' }
+      ],
+    },
+  },
+  33: {
+    text: "قَالَ رَبِّ ٱلسِّجْنُ أَحَبُّ إِلَىَّ مِمَّا يَدْعُونَنِىٓ إِلَيْهِ ۖ وَإِلَّا تَصْرِفْ عَنِّى كَيْدَهُنَّ أَصْبُ إِلَيْهِنَّ وَأَكُن مِّنَ ٱلْجَـٰهِلِينَ",
+    translation: {
+      en: "",
+      ur: "یوسف نے دعا کی کہ پروردگار جس کام کی طرف یہ مجھے بلاتی ہیں اس کی نسبت مجھے قید پسند ہے۔ اور اگر تو مجھ سے ان کے فریب کو نہ ہٹائے گا تو میں ان کی طرف مائل ہوجاؤں گا اور نادانوں میں داخل ہوجاؤں گا",
+    },
+    words: [
+      { id: '12:33:1', arabic: "قَالَ", transliteration: "qāla", pos: ['V'], posLabel: 'V', root: "ق و ل", meaning: { en: "He said", ur: "وہ کہا" } },
+      { id: '12:33:2', arabic: "رَبِّ", transliteration: "rabbi", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "My Lord", ur: "My رب" } },
+      { id: '12:33:3', arabic: "ٱلسِّجْنُ", transliteration: "l-sij'nu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "the prison", ur: "the prison" } },
+      { id: '12:33:4', arabic: "أَحَبُّ", transliteration: "aḥabbu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(is) dearer", ur: "(is) dearer" } },
+      { id: '12:33:5', arabic: "إِلَىَّ", transliteration: "ilayya", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "to me", ur: "کو me" } },
+      { id: '12:33:6', arabic: "مِمَّا", transliteration: "mimmā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "than what", ur: "than کیا" } },
+      { id: '12:33:7', arabic: "يَدْعُونَنِىٓ", transliteration: "yadʿūnanī", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "they invite me", ur: "وہ لوگ invite me" } },
+      { id: '12:33:8', arabic: "إِلَيْهِ ۖ", transliteration: "ilayhi", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "to it", ur: "کو it" } },
+      { id: '12:33:9', arabic: "وَإِلَّا", transliteration: "wa-illā", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "And unless", ur: "اور unless" } },
+      { id: '12:33:10', arabic: "تَصْرِفْ", transliteration: "taṣrif", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "You turn away", ur: "تم turn away" } },
+      { id: '12:33:11', arabic: "عَنِّى", transliteration: "ʿannī", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "from me", ur: "سے me" } },
+      { id: '12:33:12', arabic: "كَيْدَهُنَّ", transliteration: "kaydahunna", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "their plot", ur: "their plot" } },
+      { id: '12:33:13', arabic: "أَصْبُ", transliteration: "aṣbu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "I might incline", ur: "میں might incline" } },
+      { id: '12:33:14', arabic: "إِلَيْهِنَّ", transliteration: "ilayhinna", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "towards them", ur: "towards them" } },
+      { id: '12:33:15', arabic: "وَأَكُن", transliteration: "wa-akun", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "and [I] be", ur: "اور [میں] be" } },
+      { id: '12:33:16', arabic: "مِّنَ", transliteration: "mina", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "of", ur: "of" } },
+      { id: '12:33:17', arabic: "ٱلْجَـٰهِلِينَ", transliteration: "l-jāhilīna", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "the ignorant", ur: "the ignorant" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 1, to: 2, label: 'فعل + فاعل' },
+        { from: 2, to: 3, label: 'مضاف + مضاف إليه' },
+        { from: 7, to: 8, label: 'فعل + فاعل' },
+        { from: 10, to: 11, label: 'فعل + فاعل' },
+        { from: 16, to: 17, label: 'مضاف + مضاف إليه' }
+      ],
+    },
+  },
+  34: {
+    text: "فَٱسْتَجَابَ لَهُۥ رَبُّهُۥ فَصَرَفَ عَنْهُ كَيْدَهُنَّ ۚ إِنَّهُۥ هُوَ ٱلسَّمِيعُ ٱلْعَلِيمُ",
+    translation: {
+      en: "",
+      ur: "تو خدا نے ان کی دعا قبول کرلی اور ان سے عورتوں کا مکر دفع کر دیا۔ بےشک وہ سننے (اور) جاننے والا ہے",
+    },
+    words: [
+      { id: '12:34:1', arabic: "فَٱسْتَجَابَ", transliteration: "fa-is'tajāba", pos: ['CONJ+V'], posLabel: 'CONJ+V', root: null, meaning: { en: "So responded", ur: "So responded" } },
+      { id: '12:34:2', arabic: "لَهُۥ", transliteration: "lahu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "to him", ur: "کو him" } },
+      { id: '12:34:3', arabic: "رَبُّهُۥ", transliteration: "rabbuhu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "his Lord", ur: "his رب" } },
+      { id: '12:34:4', arabic: "فَصَرَفَ", transliteration: "faṣarafa", pos: ['CONJ+V'], posLabel: 'CONJ+V', root: null, meaning: { en: "and turned away", ur: "اور turned away" } },
+      { id: '12:34:5', arabic: "عَنْهُ", transliteration: "ʿanhu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "from him", ur: "سے him" } },
+      { id: '12:34:6', arabic: "كَيْدَهُنَّ ۚ", transliteration: "kaydahunna", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "their plot", ur: "their plot" } },
+      { id: '12:34:7', arabic: "إِنَّهُۥ", transliteration: "innahu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Indeed, [He]", ur: "بیشک, [وہ]" } },
+      { id: '12:34:8', arabic: "هُوَ", transliteration: "huwa", pos: ['PRON'], posLabel: 'PRON', root: null, meaning: { en: "He", ur: "وہ" } },
+      { id: '12:34:9', arabic: "ٱلسَّمِيعُ", transliteration: "l-samīʿu", pos: ['ADJ'], posLabel: 'ADJ', root: null, meaning: { en: "(is) All-Hearer", ur: "(is) سب-Hearer" } },
+      { id: '12:34:10', arabic: "ٱلْعَلِيمُ", transliteration: "l-ʿalīmu", pos: ['ADJ'], posLabel: 'ADJ', root: null, meaning: { en: "All-Knower", ur: "سب-Knower" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 1, to: 4, label: 'عطف' }
+      ],
+    },
+  },
+  35: {
+    text: "ثُمَّ بَدَا لَهُم مِّنۢ بَعْدِ مَا رَأَوُا۟ ٱلْـَٔايَـٰتِ لَيَسْجُنُنَّهُۥ حَتَّىٰ حِينٍۢ",
+    translation: {
+      en: "",
+      ur: "پھر باوجود اس کے کہ وہ لوگ نشان دیکھ چکے تھے ان کی رائے یہی ٹھہری کہ کچھ عرصہ کے لیے ان کو قید ہی کردیں",
+    },
+    words: [
+      { id: '12:35:1', arabic: "ثُمَّ", transliteration: "thumma", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Then", ur: "پھر" } },
+      { id: '12:35:2', arabic: "بَدَا", transliteration: "badā", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "(it) appeared", ur: "(it) appeared" } },
+      { id: '12:35:3', arabic: "لَهُم", transliteration: "lahum", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "to them", ur: "کو them" } },
+      { id: '12:35:4', arabic: "مِّنۢ", transliteration: "min", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "after", ur: "بعد" } },
+      { id: '12:35:5', arabic: "بَعْدِ", transliteration: "baʿdi", pos: ['N'], posLabel: 'N', root: "ب ع د", meaning: { en: "after", ur: "بعد" } },
+      { id: '12:35:6', arabic: "مَا", transliteration: "mā", pos: ['REL'], posLabel: 'REL', root: null, meaning: { en: "[what]", ur: "[کیا]" } },
+      { id: '12:35:7', arabic: "رَأَوُا۟", transliteration: "ra-awū", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "they had seen", ur: "وہ لوگ had seen" } },
+      { id: '12:35:8', arabic: "ٱلْـَٔايَـٰتِ", transliteration: "l-āyāti", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "the signs", ur: "the نشانیاں" } },
+      { id: '12:35:9', arabic: "لَيَسْجُنُنَّهُۥ", transliteration: "layasjununnahu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "surely they should imprison him", ur: "یقیناً وہ لوگ should imprison him" } },
+      { id: '12:35:10', arabic: "حَتَّىٰ", transliteration: "ḥattā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "until", ur: "until" } },
+      { id: '12:35:11', arabic: "حِينٍۢ", transliteration: "ḥīnin", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "a time", ur: "a وقت" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 2, to: 3, label: 'فعل + فاعل' },
+        { from: 6, to: 7, label: 'موصول + صلة' },
+        { from: 7, to: 8, label: 'فعل + فاعل' }
+      ],
+    },
+  },
+  36: {
+    text: "وَدَخَلَ مَعَهُ ٱلسِّجْنَ فَتَيَانِ ۖ قَالَ أَحَدُهُمَآ إِنِّىٓ أَرَىٰنِىٓ أَعْصِرُ خَمْرًۭا ۖ وَقَالَ ٱلْـَٔاخَرُ إِنِّىٓ أَرَىٰنِىٓ أَحْمِلُ فَوْقَ رَأْسِى خُبْزًۭا تَأْكُلُ ٱلطَّيْرُ مِنْهُ ۖ نَبِّئْنَا بِتَأْوِيلِهِۦٓ ۖ إِنَّا نَرَىٰكَ مِنَ ٱلْمُحْسِنِينَ",
+    translation: {
+      en: "",
+      ur: "اور ان کے ساتھ دو اور جوان بھی داخل زندان ہوئے۔ ایک نے ان میں سے کہا کہ (میں نے خواب دیکھا ہے) دیکھتا (کیا) ہوں کہ شراب (کے لیے انگور) نچوڑ رہا ہوں۔ دوسرے نے کہا کہ (میں نے بھی خواب دیکھا ہے) میں یہ دیکھتا ہوں کہ اپنے سر پر روٹیاں اٹھائے ہوئے ہوں اور جانور ان میں سے کھا رہے (ہیں تو) ہمیں ان کی تعبیر بتا دیجیئے کہ ہم تمہیں نیکوکار دیکھتے ہیں",
+    },
+    words: [
+      { id: '12:36:1', arabic: "وَدَخَلَ", transliteration: "wadakhala", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "And entered", ur: "اور entered" } },
+      { id: '12:36:2', arabic: "مَعَهُ", transliteration: "maʿahu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "with him", ur: "ساتھ him" } },
+      { id: '12:36:3', arabic: "ٱلسِّجْنَ", transliteration: "l-sij'na", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(in) the prison", ur: "(میں) the prison" } },
+      { id: '12:36:4', arabic: "فَتَيَانِ ۖ", transliteration: "fatayāni", pos: ['CONJ+V'], posLabel: 'CONJ+V', root: null, meaning: { en: "two young men", ur: "two young men" } },
+      { id: '12:36:5', arabic: "قَالَ", transliteration: "qāla", pos: ['N'], posLabel: 'N', root: "ق و ل", meaning: { en: "Said", ur: "کہا" } },
+      { id: '12:36:6', arabic: "أَحَدُهُمَآ", transliteration: "aḥaduhumā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "one of them", ur: "one of them" } },
+      { id: '12:36:7', arabic: "إِنِّىٓ", transliteration: "innī", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Indeed, I", ur: "بیشک, میں" } },
+      { id: '12:36:8', arabic: "أَرَىٰنِىٓ", transliteration: "arānī", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "[I] see myself", ur: "[میں] دیکھنا myself" } },
+      { id: '12:36:9', arabic: "أَعْصِرُ", transliteration: "aʿṣiru", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "pressing", ur: "pressing" } },
+      { id: '12:36:10', arabic: "خَمْرًۭا ۖ", transliteration: "khamran", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "wine", ur: "wine" } },
+      { id: '12:36:11', arabic: "وَقَالَ", transliteration: "waqāla", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: "ق و ل", meaning: { en: "And said", ur: "اور کہا" } },
+      { id: '12:36:12', arabic: "ٱلْـَٔاخَرُ", transliteration: "l-ākharu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "the other", ur: "the other" } },
+      { id: '12:36:13', arabic: "إِنِّىٓ", transliteration: "innī", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Indeed, I", ur: "بیشک, میں" } },
+      { id: '12:36:14', arabic: "أَرَىٰنِىٓ", transliteration: "arānī", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "[I] see myself", ur: "[میں] دیکھنا myself" } },
+      { id: '12:36:15', arabic: "أَحْمِلُ", transliteration: "aḥmilu", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "[I am] carrying", ur: "[میں am] carrying" } },
+      { id: '12:36:16', arabic: "فَوْقَ", transliteration: "fawqa", pos: ['CONJ+V'], posLabel: 'CONJ+V', root: null, meaning: { en: "over", ur: "اوپر" } },
+      { id: '12:36:17', arabic: "رَأْسِى", transliteration: "rasī", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "my head", ur: "my head" } },
+      { id: '12:36:18', arabic: "خُبْزًۭا", transliteration: "khub'zan", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "bread", ur: "bread" } },
+      { id: '12:36:19', arabic: "تَأْكُلُ", transliteration: "takulu", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "(were) eating", ur: "(were) eating" } },
+      { id: '12:36:20', arabic: "ٱلطَّيْرُ", transliteration: "l-ṭayru", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "the birds", ur: "the birds" } },
+      { id: '12:36:21', arabic: "مِنْهُ ۖ", transliteration: "min'hu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "from it", ur: "سے it" } },
+      { id: '12:36:22', arabic: "نَبِّئْنَا", transliteration: "nabbi'nā", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "Inform us", ur: "Inform us" } },
+      { id: '12:36:23', arabic: "بِتَأْوِيلِهِۦٓ ۖ", transliteration: "bitawīlihi", pos: ['P+N'], posLabel: 'P+N', root: null, meaning: { en: "of its interpretation", ur: "of its interpretation" } },
+      { id: '12:36:24', arabic: "إِنَّا", transliteration: "innā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "indeed, we", ur: "بیشک, ہم" } },
+      { id: '12:36:25', arabic: "نَرَىٰكَ", transliteration: "narāka", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "[we] see you", ur: "[ہم] دیکھنا تم" } },
+      { id: '12:36:26', arabic: "مِنَ", transliteration: "mina", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "of", ur: "of" } },
+      { id: '12:36:27', arabic: "ٱلْمُحْسِنِينَ", transliteration: "l-muḥ'sinīna", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "the good-doers", ur: "the اچھا-doers" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 2, to: 3, label: 'مضاف + مضاف إليه' },
+        { from: 5, to: 6, label: 'مضاف + مضاف إليه' },
+        { from: 9, to: 10, label: 'فعل + فاعل' },
+        { from: 19, to: 20, label: 'فعل + فاعل' },
+        { from: 23, to: 24, label: 'جار + مجرور' },
+        { from: 25, to: 26, label: 'فعل + فاعل' },
+        { from: 26, to: 27, label: 'مضاف + مضاف إليه' }
+      ],
+    },
+  },
+  37: {
+    text: "قَالَ لَا يَأْتِيكُمَا طَعَامٌۭ تُرْزَقَانِهِۦٓ إِلَّا نَبَّأْتُكُمَا بِتَأْوِيلِهِۦ قَبْلَ أَن يَأْتِيَكُمَا ۚ ذَٰلِكُمَا مِمَّا عَلَّمَنِى رَبِّىٓ ۚ إِنِّى تَرَكْتُ مِلَّةَ قَوْمٍۢ لَّا يُؤْمِنُونَ بِٱللَّهِ وَهُم بِٱلْـَٔاخِرَةِ هُمْ كَـٰفِرُونَ",
+    translation: {
+      en: "",
+      ur: "یوسف نے کہا کہ جو کھانا تم کو ملنے والا ہے وہ آنے نہیں پائے گا کہ میں اس سے پہلے تم کو اس کی تعبیر بتادوں گا۔ یہ ان (باتوں) میں سے ہے جو میرے پروردگار نے مجھے سکھائی ہیں جو لوگ خدا پر ایمان نہیں لاتے اور روز آخرت سے انکار کرتے ہیں میں ان کا مذہب چھوڑے ہوئے ہوں",
+    },
+    words: [
+      { id: '12:37:1', arabic: "قَالَ", transliteration: "qāla", pos: ['V'], posLabel: 'V', root: "ق و ل", meaning: { en: "He said", ur: "وہ کہا" } },
+      { id: '12:37:2', arabic: "لَا", transliteration: "lā", pos: ['NEG'], posLabel: 'NEG', root: null, meaning: { en: "Not", ur: "نہیں" } },
+      { id: '12:37:3', arabic: "يَأْتِيكُمَا", transliteration: "yatīkumā", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "(will) come to both of you", ur: "(will) come کو both of تم" } },
+      { id: '12:37:4', arabic: "طَعَامٌۭ", transliteration: "ṭaʿāmun", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "food", ur: "food" } },
+      { id: '12:37:5', arabic: "تُرْزَقَانِهِۦٓ", transliteration: "tur'zaqānihi", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "you are provided with", ur: "تم are provided ساتھ" } },
+      { id: '12:37:6', arabic: "إِلَّا", transliteration: "illā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "but", ur: "لیکن" } },
+      { id: '12:37:7', arabic: "نَبَّأْتُكُمَا", transliteration: "nabbatukumā", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "I will inform both of you", ur: "میں will inform both of تم" } },
+      { id: '12:37:8', arabic: "بِتَأْوِيلِهِۦ", transliteration: "bitawīlihi", pos: ['P+N'], posLabel: 'P+N', root: null, meaning: { en: "of its interpretation", ur: "of its interpretation" } },
+      { id: '12:37:9', arabic: "قَبْلَ", transliteration: "qabla", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "before", ur: "پہلے" } },
+      { id: '12:37:10', arabic: "أَن", transliteration: "an", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "[that]", ur: "[وہ]" } },
+      { id: '12:37:11', arabic: "يَأْتِيَكُمَا ۚ", transliteration: "yatiyakumā", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "[it] comes to both of you", ur: "[it] comes کو both of تم" } },
+      { id: '12:37:12', arabic: "ذَٰلِكُمَا", transliteration: "dhālikumā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "That", ur: "وہ" } },
+      { id: '12:37:13', arabic: "مِمَّا", transliteration: "mimmā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(is) of what", ur: "(is) of کیا" } },
+      { id: '12:37:14', arabic: "عَلَّمَنِى", transliteration: "ʿallamanī", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "has taught me", ur: "has taught me" } },
+      { id: '12:37:15', arabic: "رَبِّىٓ ۚ", transliteration: "rabbī", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "my Lord", ur: "my رب" } },
+      { id: '12:37:16', arabic: "إِنِّى", transliteration: "innī", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Indeed, I", ur: "بیشک, میں" } },
+      { id: '12:37:17', arabic: "تَرَكْتُ", transliteration: "taraktu", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "[I] abandon", ur: "[میں] abandon" } },
+      { id: '12:37:18', arabic: "مِلَّةَ", transliteration: "millata", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(the) religion", ur: "(the) religion" } },
+      { id: '12:37:19', arabic: "قَوْمٍۢ", transliteration: "qawmin", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(of) a people", ur: "(of) a لوگ" } },
+      { id: '12:37:20', arabic: "لَّا", transliteration: "lā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "not", ur: "نہیں" } },
+      { id: '12:37:21', arabic: "يُؤْمِنُونَ", transliteration: "yu'minūna", pos: ['V'], posLabel: 'V', root: "أ م ن", meaning: { en: "they believe", ur: "وہ لوگ ایمان لانا" } },
+      { id: '12:37:22', arabic: "بِٱللَّهِ", transliteration: "bil-lahi", pos: ['P+N'], posLabel: 'P+N', root: null, meaning: { en: "in Allah", ur: "میں اللہ" } },
+      { id: '12:37:23', arabic: "وَهُم", transliteration: "wahum", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "and they", ur: "اور وہ لوگ" } },
+      { id: '12:37:24', arabic: "بِٱلْـَٔاخِرَةِ", transliteration: "bil-ākhirati", pos: ['P+N'], posLabel: 'P+N', root: null, meaning: { en: "in the Hereafter", ur: "میں the آخرت" } },
+      { id: '12:37:25', arabic: "هُمْ", transliteration: "hum", pos: ['PRON'], posLabel: 'PRON', root: null, meaning: { en: "[they]", ur: "[وہ لوگ]" } },
+      { id: '12:37:26', arabic: "كَـٰفِرُونَ", transliteration: "kāfirūna", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(are) disbelievers", ur: "(are) کافر" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 2, to: 3, label: 'نفی + فعل' },
+        { from: 3, to: 4, label: 'فعل + فاعل' },
+        { from: 5, to: 6, label: 'فعل + فاعل' },
+        { from: 8, to: 9, label: 'جار + مجرور' },
+        { from: 11, to: 12, label: 'فعل + فاعل' },
+        { from: 12, to: 13, label: 'مضاف + مضاف إليه' },
+        { from: 17, to: 18, label: 'فعل + فاعل' }
+      ],
+    },
+  },
+  38: {
+    text: "وَٱتَّبَعْتُ مِلَّةَ ءَابَآءِىٓ إِبْرَٰهِيمَ وَإِسْحَـٰقَ وَيَعْقُوبَ ۚ مَا كَانَ لَنَآ أَن نُّشْرِكَ بِٱللَّهِ مِن شَىْءٍۢ ۚ ذَٰلِكَ مِن فَضْلِ ٱللَّهِ عَلَيْنَا وَعَلَى ٱلنَّاسِ وَلَـٰكِنَّ أَكْثَرَ ٱلنَّاسِ لَا يَشْكُرُونَ",
+    translation: {
+      en: "",
+      ur: "اور اپنے باپ دادا ابراہیم اور اسحاق اور یعقوب کے مذہب پر چلتا ہوں۔ ہمیں شایاں نہیں ہے کہ کسی چیز کو خدا کے ساتھ شریک بنائیں۔ یہ خدا کا فضل ہے ہم پر بھی اور لوگوں پر بھی ہے لیکن اکثر لوگ شکر نہیں کرتے",
+    },
+    words: [
+      { id: '12:38:1', arabic: "وَٱتَّبَعْتُ", transliteration: "wa-ittabaʿtu", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "And I follow", ur: "اور میں follow" } },
+      { id: '12:38:2', arabic: "مِلَّةَ", transliteration: "millata", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(the) religion", ur: "(the) religion" } },
+      { id: '12:38:3', arabic: "ءَابَآءِىٓ", transliteration: "ābāī", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(of) my forefathers", ur: "(of) my forefathers" } },
+      { id: '12:38:4', arabic: "إِبْرَٰهِيمَ", transliteration: "ib'rāhīma", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Ibrahim", ur: "Ibrahim" } },
+      { id: '12:38:5', arabic: "وَإِسْحَـٰقَ", transliteration: "wa-is'ḥāqa", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "and Isaac", ur: "اور Isaac" } },
+      { id: '12:38:6', arabic: "وَيَعْقُوبَ ۚ", transliteration: "wayaʿqūba", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "and Yaqub", ur: "اور Yaqub" } },
+      { id: '12:38:7', arabic: "مَا", transliteration: "mā", pos: ['NEG'], posLabel: 'NEG', root: null, meaning: { en: "Not", ur: "نہیں" } },
+      { id: '12:38:8', arabic: "كَانَ", transliteration: "kāna", pos: ['N'], posLabel: 'N', root: "ك و ن", meaning: { en: "was", ur: "was" } },
+      { id: '12:38:9', arabic: "لَنَآ", transliteration: "lanā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "for us", ur: "for us" } },
+      { id: '12:38:10', arabic: "أَن", transliteration: "an", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "that", ur: "وہ" } },
+      { id: '12:38:11', arabic: "نُّشْرِكَ", transliteration: "nush'rika", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "we associate", ur: "ہم associate" } },
+      { id: '12:38:12', arabic: "بِٱللَّهِ", transliteration: "bil-lahi", pos: ['P+N'], posLabel: 'P+N', root: null, meaning: { en: "with Allah", ur: "ساتھ اللہ" } },
+      { id: '12:38:13', arabic: "مِن", transliteration: "min", pos: ['PREP'], posLabel: 'PREP', root: null, meaning: { en: "any", ur: "any" } },
+      { id: '12:38:14', arabic: "شَىْءٍۢ ۚ", transliteration: "shayin", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "thing", ur: "thing" } },
+      { id: '12:38:15', arabic: "ذَٰلِكَ", transliteration: "dhālika", pos: ['DEM'], posLabel: 'DEM', root: null, meaning: { en: "That", ur: "وہ" } },
+      { id: '12:38:16', arabic: "مِن", transliteration: "min", pos: ['PREP'], posLabel: 'PREP', root: null, meaning: { en: "(is) from", ur: "(is) سے" } },
+      { id: '12:38:17', arabic: "فَضْلِ", transliteration: "faḍli", pos: ['CONJ+V'], posLabel: 'CONJ+V', root: null, meaning: { en: "(the) Grace", ur: "(the) Grace" } },
+      { id: '12:38:18', arabic: "ٱللَّهِ", transliteration: "l-lahi", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(of) Allah", ur: "(of) اللہ" } },
+      { id: '12:38:19', arabic: "عَلَيْنَا", transliteration: "ʿalaynā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "upon us", ur: "پر us" } },
+      { id: '12:38:20', arabic: "وَعَلَى", transliteration: "waʿalā", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "and upon", ur: "اور پر" } },
+      { id: '12:38:21', arabic: "ٱلنَّاسِ", transliteration: "l-nāsi", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "the mankind", ur: "the mankind" } },
+      { id: '12:38:22', arabic: "وَلَـٰكِنَّ", transliteration: "walākinna", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "but", ur: "لیکن" } },
+      { id: '12:38:23', arabic: "أَكْثَرَ", transliteration: "akthara", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "most", ur: "most" } },
+      { id: '12:38:24', arabic: "ٱلنَّاسِ", transliteration: "l-nāsi", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(of) the men", ur: "(of) the men" } },
+      { id: '12:38:25', arabic: "لَا", transliteration: "lā", pos: ['NEG'], posLabel: 'NEG', root: null, meaning: { en: "(are) not", ur: "(are) نہیں" } },
+      { id: '12:38:26', arabic: "يَشْكُرُونَ", transliteration: "yashkurūna", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "grateful", ur: "grateful" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 23, to: 24, label: 'مضاف + مضاف إليه' },
+        { from: 25, to: 26, label: 'نفی + فعل' }
+      ],
+    },
+  },
+  39: {
+    text: "يَـٰصَـٰحِبَىِ ٱلسِّجْنِ ءَأَرْبَابٌۭ مُّتَفَرِّقُونَ خَيْرٌ أَمِ ٱللَّهُ ٱلْوَٰحِدُ ٱلْقَهَّارُ",
+    translation: {
+      en: "",
+      ur: "میرے جیل خانے کے رفیقو! بھلا کئی جدا جدا آقا اچھے یا (ایک) خدائے یکتا وغالب؟",
+    },
+    words: [
+      { id: '12:39:1', arabic: "يَـٰصَـٰحِبَىِ", transliteration: "yāṣāḥibayi", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "O my two companions", ur: "اے my two companions" } },
+      { id: '12:39:2', arabic: "ٱلسِّجْنِ", transliteration: "l-sij'ni", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(of) the prison", ur: "(of) the prison" } },
+      { id: '12:39:3', arabic: "ءَأَرْبَابٌۭ", transliteration: "a-arbābun", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "Are lords", ur: "Are lords" } },
+      { id: '12:39:4', arabic: "مُّتَفَرِّقُونَ", transliteration: "mutafarriqūna", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "separate", ur: "separate" } },
+      { id: '12:39:5', arabic: "خَيْرٌ", transliteration: "khayrun", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "better", ur: "better" } },
+      { id: '12:39:6', arabic: "أَمِ", transliteration: "ami", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "or", ur: "یا" } },
+      { id: '12:39:7', arabic: "ٱللَّهُ", transliteration: "l-lahu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Allah", ur: "اللہ" } },
+      { id: '12:39:8', arabic: "ٱلْوَٰحِدُ", transliteration: "l-wāḥidu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "the One", ur: "the One" } },
+      { id: '12:39:9', arabic: "ٱلْقَهَّارُ", transliteration: "l-qahāru", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "the Irresistible", ur: "the Irresistible" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 1, to: 2, label: 'مضاف + مضاف إليه' },
+        { from: 3, to: 4, label: 'فعل + فاعل' },
+        { from: 7, to: 8, label: 'مضاف + مضاف إليه' },
+        { from: 8, to: 9, label: 'مضاف + مضاف إليه' }
+      ],
+    },
+  },
+  40: {
+    text: "مَا تَعْبُدُونَ مِن دُونِهِۦٓ إِلَّآ أَسْمَآءًۭ سَمَّيْتُمُوهَآ أَنتُمْ وَءَابَآؤُكُم مَّآ أَنزَلَ ٱللَّهُ بِهَا مِن سُلْطَـٰنٍ ۚ إِنِ ٱلْحُكْمُ إِلَّا لِلَّهِ ۚ أَمَرَ أَلَّا تَعْبُدُوٓا۟ إِلَّآ إِيَّاهُ ۚ ذَٰلِكَ ٱلدِّينُ ٱلْقَيِّمُ وَلَـٰكِنَّ أَكْثَرَ ٱلنَّاسِ لَا يَعْلَمُونَ",
+    translation: {
+      en: "",
+      ur: "جن چیزوں کی تم خدا کے سوا پرستش کرتے ہو وہ صرف نام ہی نام ہیں جو تم نے اور تمہارے باپ دادا نے رکھ لیے ہیں۔ خدا نے ان کی کوئی سند نازل نہیں کی۔ (سن رکھو کہ) خدا کے سوا کسی کی حکومت نہیں ہے۔ اس نے ارشاد فرمایا ہے کہ اس کے سوا کسی کی عبادت نہ کرو۔ یہی سیدھا دین ہے لیکن اکثر لوگ نہیں جانتے",
+    },
+    words: [
+      { id: '12:40:1', arabic: "مَا", transliteration: "mā", pos: ['NEG'], posLabel: 'NEG', root: null, meaning: { en: "Not", ur: "نہیں" } },
+      { id: '12:40:2', arabic: "تَعْبُدُونَ", transliteration: "taʿbudūna", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "you worship", ur: "تم عبادت" } },
+      { id: '12:40:3', arabic: "مِن", transliteration: "min", pos: ['PREP'], posLabel: 'PREP', root: null, meaning: { en: "besides Him", ur: "besides Him" } },
+      { id: '12:40:4', arabic: "دُونِهِۦٓ", transliteration: "dūnihi", pos: ['N'], posLabel: 'N', root: "د و ن", meaning: { en: "besides Him", ur: "besides Him" } },
+      { id: '12:40:5', arabic: "إِلَّآ", transliteration: "illā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "but", ur: "لیکن" } },
+      { id: '12:40:6', arabic: "أَسْمَآءًۭ", transliteration: "asmāan", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "names", ur: "names" } },
+      { id: '12:40:7', arabic: "سَمَّيْتُمُوهَآ", transliteration: "sammaytumūhā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "which you have named them", ur: "جو تم have named them" } },
+      { id: '12:40:8', arabic: "أَنتُمْ", transliteration: "antum", pos: ['PRON'], posLabel: 'PRON', root: null, meaning: { en: "you", ur: "تم" } },
+      { id: '12:40:9', arabic: "وَءَابَآؤُكُم", transliteration: "waābāukum", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "and your forefathers", ur: "اور your forefathers" } },
+      { id: '12:40:10', arabic: "مَّآ", transliteration: "mā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "not", ur: "نہیں" } },
+      { id: '12:40:11', arabic: "أَنزَلَ", transliteration: "anzala", pos: ['N'], posLabel: 'N', root: "ن ز ل", meaning: { en: "(has) sent down", ur: "(has) sent down" } },
+      { id: '12:40:12', arabic: "ٱللَّهُ", transliteration: "l-lahu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Allah", ur: "اللہ" } },
+      { id: '12:40:13', arabic: "بِهَا", transliteration: "bihā", pos: ['P+N'], posLabel: 'P+N', root: null, meaning: { en: "for it", ur: "for it" } },
+      { id: '12:40:14', arabic: "مِن", transliteration: "min", pos: ['PREP'], posLabel: 'PREP', root: null, meaning: { en: "any", ur: "any" } },
+      { id: '12:40:15', arabic: "سُلْطَـٰنٍ ۚ", transliteration: "sul'ṭānin", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "authority", ur: "authority" } },
+      { id: '12:40:16', arabic: "إِنِ", transliteration: "ini", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Not", ur: "نہیں" } },
+      { id: '12:40:17', arabic: "ٱلْحُكْمُ", transliteration: "l-ḥuk'mu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(is) the command", ur: "(is) the command" } },
+      { id: '12:40:18', arabic: "إِلَّا", transliteration: "illā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "but", ur: "لیکن" } },
+      { id: '12:40:19', arabic: "لِلَّهِ ۚ", transliteration: "lillahi", pos: ['P+N'], posLabel: 'P+N', root: null, meaning: { en: "for Allah", ur: "for اللہ" } },
+      { id: '12:40:20', arabic: "أَمَرَ", transliteration: "amara", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "He has commanded", ur: "وہ has commanded" } },
+      { id: '12:40:21', arabic: "أَلَّا", transliteration: "allā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "that not", ur: "وہ نہیں" } },
+      { id: '12:40:22', arabic: "تَعْبُدُوٓا۟", transliteration: "taʿbudū", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "you worship", ur: "تم عبادت" } },
+      { id: '12:40:23', arabic: "إِلَّآ", transliteration: "illā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "but", ur: "لیکن" } },
+      { id: '12:40:24', arabic: "إِيَّاهُ ۚ", transliteration: "iyyāhu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Him Alone", ur: "Him Alone" } },
+      { id: '12:40:25', arabic: "ذَٰلِكَ", transliteration: "dhālika", pos: ['DEM'], posLabel: 'DEM', root: null, meaning: { en: "That", ur: "وہ" } },
+      { id: '12:40:26', arabic: "ٱلدِّينُ", transliteration: "l-dīnu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(is) the religion", ur: "(is) the religion" } },
+      { id: '12:40:27', arabic: "ٱلْقَيِّمُ", transliteration: "l-qayimu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "the right", ur: "the right" } },
+      { id: '12:40:28', arabic: "وَلَـٰكِنَّ", transliteration: "walākinna", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "but", ur: "لیکن" } },
+      { id: '12:40:29', arabic: "أَكْثَرَ", transliteration: "akthara", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "most", ur: "most" } },
+      { id: '12:40:30', arabic: "ٱلنَّاسِ", transliteration: "l-nāsi", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "[the] men", ur: "[the] men" } },
+      { id: '12:40:31', arabic: "لَا", transliteration: "lā", pos: ['NEG'], posLabel: 'NEG', root: null, meaning: { en: "(do) not", ur: "(do) نہیں" } },
+      { id: '12:40:32', arabic: "يَعْلَمُونَ", transliteration: "yaʿlamūna", pos: ['V'], posLabel: 'V', root: "ع ل م", meaning: { en: "know", ur: "جاننا" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 1, to: 2, label: 'نفی + فعل' },
+        { from: 3, to: 4, label: 'جار + مجرور' },
+        { from: 14, to: 15, label: 'جار + مجرور' },
+        { from: 16, to: 17, label: 'مضاف + مضاف إليه' },
+        { from: 20, to: 21, label: 'فعل + فاعل' },
+        { from: 22, to: 23, label: 'فعل + فاعل' },
+        { from: 26, to: 27, label: 'مضاف + مضاف إليه' },
+        { from: 31, to: 32, label: 'نفی + فعل' }
+      ],
+    },
+  },
+  41: {
+    text: "يَـٰصَـٰحِبَىِ ٱلسِّجْنِ أَمَّآ أَحَدُكُمَا فَيَسْقِى رَبَّهُۥ خَمْرًۭا ۖ وَأَمَّا ٱلْـَٔاخَرُ فَيُصْلَبُ فَتَأْكُلُ ٱلطَّيْرُ مِن رَّأْسِهِۦ ۚ قُضِىَ ٱلْأَمْرُ ٱلَّذِى فِيهِ تَسْتَفْتِيَانِ",
+    translation: {
+      en: "",
+      ur: "میرے جیل خانے کے رفیقو! تم میں سے ایک (جو پہلا خواب بیان کرنے والا ہے وہ) تو اپنے آقا کو شراب پلایا کرے گا اور جو دوسرا ہے وہ سولی دیا جائے گا اور جانور اس کا سر کھا جائیں گے۔ جو امر تم مجھ سے پوچھتے تھے وہ فیصلہ ہوچکا ہے",
+    },
+    words: [
+      { id: '12:41:1', arabic: "يَـٰصَـٰحِبَىِ", transliteration: "yāṣāḥibayi", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "O my two companions", ur: "اے my two companions" } },
+      { id: '12:41:2', arabic: "ٱلسِّجْنِ", transliteration: "l-sij'ni", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(of) the prison", ur: "(of) the prison" } },
+      { id: '12:41:3', arabic: "أَمَّآ", transliteration: "ammā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "As for", ur: "As for" } },
+      { id: '12:41:4', arabic: "أَحَدُكُمَا", transliteration: "aḥadukumā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "one of you", ur: "one of تم" } },
+      { id: '12:41:5', arabic: "فَيَسْقِى", transliteration: "fayasqī", pos: ['CONJ+V'], posLabel: 'CONJ+V', root: null, meaning: { en: "he will give drink", ur: "وہ will give drink" } },
+      { id: '12:41:6', arabic: "رَبَّهُۥ", transliteration: "rabbahu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(to) his master", ur: "(کو) his master" } },
+      { id: '12:41:7', arabic: "خَمْرًۭا ۖ", transliteration: "khamran", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "wine", ur: "wine" } },
+      { id: '12:41:8', arabic: "وَأَمَّا", transliteration: "wa-ammā", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "and as for", ur: "اور as for" } },
+      { id: '12:41:9', arabic: "ٱلْـَٔاخَرُ", transliteration: "l-ākharu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "the other", ur: "the other" } },
+      { id: '12:41:10', arabic: "فَيُصْلَبُ", transliteration: "fayuṣ'labu", pos: ['CONJ+V'], posLabel: 'CONJ+V', root: null, meaning: { en: "he will be crucified", ur: "وہ will be crucified" } },
+      { id: '12:41:11', arabic: "فَتَأْكُلُ", transliteration: "fatakulu", pos: ['CONJ+V'], posLabel: 'CONJ+V', root: null, meaning: { en: "and will eat", ur: "اور will eat" } },
+      { id: '12:41:12', arabic: "ٱلطَّيْرُ", transliteration: "l-ṭayru", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "the birds", ur: "the birds" } },
+      { id: '12:41:13', arabic: "مِن", transliteration: "min", pos: ['PREP'], posLabel: 'PREP', root: null, meaning: { en: "from", ur: "سے" } },
+      { id: '12:41:14', arabic: "رَّأْسِهِۦ ۚ", transliteration: "rasihi", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "his head", ur: "his head" } },
+      { id: '12:41:15', arabic: "قُضِىَ", transliteration: "quḍiya", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "Has been decreed", ur: "Has been decreed" } },
+      { id: '12:41:16', arabic: "ٱلْأَمْرُ", transliteration: "l-amru", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "the matter", ur: "the matter" } },
+      { id: '12:41:17', arabic: "ٱلَّذِى", transliteration: "alladhī", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "about which", ur: "about جو" } },
+      { id: '12:41:18', arabic: "فِيهِ", transliteration: "fīhi", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "about which", ur: "about جو" } },
+      { id: '12:41:19', arabic: "تَسْتَفْتِيَانِ", transliteration: "tastaftiyāni", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "you both inquire", ur: "تم both inquire" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 1, to: 2, label: 'مضاف + مضاف إليه' },
+        { from: 3, to: 4, label: 'مضاف + مضاف إليه' },
+        { from: 13, to: 14, label: 'جار + مجرور' },
+        { from: 15, to: 16, label: 'فعل + فاعل' }
+      ],
+    },
+  },
+  42: {
+    text: "وَقَالَ لِلَّذِى ظَنَّ أَنَّهُۥ نَاجٍۢ مِّنْهُمَا ٱذْكُرْنِى عِندَ رَبِّكَ فَأَنسَىٰهُ ٱلشَّيْطَـٰنُ ذِكْرَ رَبِّهِۦ فَلَبِثَ فِى ٱلسِّجْنِ بِضْعَ سِنِينَ",
+    translation: {
+      en: "",
+      ur: "اور دونوں شخصوں میں سے جس کی نسبت (یوسف نے) خیال کیا کہ وہ رہائی پا جائے گا اس سے کہا کہ اپنے آقا سے میرا ذکر بھی کرنا لیکن شیطان نے ان کا اپنے آقا سے ذکر کرنا بھلا دیا اور یوسف کئی برس جیل خانے میں رہے",
+    },
+    words: [
+      { id: '12:42:1', arabic: "وَقَالَ", transliteration: "waqāla", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: "ق و ل", meaning: { en: "And he said", ur: "اور وہ کہا" } },
+      { id: '12:42:2', arabic: "لِلَّذِى", transliteration: "lilladhī", pos: ['P+N'], posLabel: 'P+N', root: null, meaning: { en: "to the one whom", ur: "کو the one whom" } },
+      { id: '12:42:3', arabic: "ظَنَّ", transliteration: "ẓanna", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "he thought", ur: "وہ thought" } },
+      { id: '12:42:4', arabic: "أَنَّهُۥ", transliteration: "annahu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "that he", ur: "وہ وہ" } },
+      { id: '12:42:5', arabic: "نَاجٍۢ", transliteration: "nājin", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "(would be) saved", ur: "(would be) saved" } },
+      { id: '12:42:6', arabic: "مِّنْهُمَا", transliteration: "min'humā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "of both of them", ur: "of both of them" } },
+      { id: '12:42:7', arabic: "ٱذْكُرْنِى", transliteration: "udh'kur'nī", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Mention me", ur: "Mention me" } },
+      { id: '12:42:8', arabic: "عِندَ", transliteration: "ʿinda", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "to", ur: "کو" } },
+      { id: '12:42:9', arabic: "رَبِّكَ", transliteration: "rabbika", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "your master", ur: "your master" } },
+      { id: '12:42:10', arabic: "فَأَنسَىٰهُ", transliteration: "fa-ansāhu", pos: ['CONJ+V'], posLabel: 'CONJ+V', root: null, meaning: { en: "But made him forget", ur: "لیکن made him forget" } },
+      { id: '12:42:11', arabic: "ٱلشَّيْطَـٰنُ", transliteration: "l-shayṭānu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "the Shaitaan", ur: "the Shaitaan" } },
+      { id: '12:42:12', arabic: "ذِكْرَ", transliteration: "dhik'ra", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(the) mention", ur: "(the) mention" } },
+      { id: '12:42:13', arabic: "رَبِّهِۦ", transliteration: "rabbihi", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(to) his master", ur: "(کو) his master" } },
+      { id: '12:42:14', arabic: "فَلَبِثَ", transliteration: "falabitha", pos: ['CONJ+V'], posLabel: 'CONJ+V', root: null, meaning: { en: "so he remained", ur: "so وہ remained" } },
+      { id: '12:42:15', arabic: "فِى", transliteration: "fī", pos: ['PREP'], posLabel: 'PREP', root: null, meaning: { en: "in", ur: "میں" } },
+      { id: '12:42:16', arabic: "ٱلسِّجْنِ", transliteration: "l-sij'ni", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "the prison", ur: "the prison" } },
+      { id: '12:42:17', arabic: "بِضْعَ", transliteration: "biḍ'ʿa", pos: ['P+N'], posLabel: 'P+N', root: null, meaning: { en: "several", ur: "several" } },
+      { id: '12:42:18', arabic: "سِنِينَ", transliteration: "sinīna", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "years", ur: "years" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 3, to: 4, label: 'فعل + فاعل' },
+        { from: 5, to: 6, label: 'فعل + فاعل' },
+        { from: 15, to: 16, label: 'جار + مجرور' },
+        { from: 17, to: 18, label: 'جار + مجرور' }
+      ],
+    },
+  },
+  43: {
+    text: "وَقَالَ ٱلْمَلِكُ إِنِّىٓ أَرَىٰ سَبْعَ بَقَرَٰتٍۢ سِمَانٍۢ يَأْكُلُهُنَّ سَبْعٌ عِجَافٌۭ وَسَبْعَ سُنۢبُلَـٰتٍ خُضْرٍۢ وَأُخَرَ يَابِسَـٰتٍۢ ۖ يَـٰٓأَيُّهَا ٱلْمَلَأُ أَفْتُونِى فِى رُءْيَـٰىَ إِن كُنتُمْ لِلرُّءْيَا تَعْبُرُونَ",
+    translation: {
+      en: "",
+      ur: "اور بادشاہ نے کہا کہ میں (نے خواب دیکھا ہے) دیکھتا (کیا) ہوں کہ سات موٹی گائیں ہیں جن کو سات دبلی گائیں کھا رہی ہیں اور سات خوشے سبز ہیں اور (سات) خشک۔ اے سردارو! اگر تم خوابوں کی تعبیر دے سکتے ہو تو مجھے میرے خواب کی تعبیر بتاؤ",
+    },
+    words: [
+      { id: '12:43:1', arabic: "وَقَالَ", transliteration: "waqāla", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: "ق و ل", meaning: { en: "And said", ur: "اور کہا" } },
+      { id: '12:43:2', arabic: "ٱلْمَلِكُ", transliteration: "l-maliku", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "the king", ur: "the king" } },
+      { id: '12:43:3', arabic: "إِنِّىٓ", transliteration: "innī", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Indeed, I", ur: "بیشک, میں" } },
+      { id: '12:43:4', arabic: "أَرَىٰ", transliteration: "arā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "[I] have seen", ur: "[میں] have seen" } },
+      { id: '12:43:5', arabic: "سَبْعَ", transliteration: "sabʿa", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "seven", ur: "seven" } },
+      { id: '12:43:6', arabic: "بَقَرَٰتٍۢ", transliteration: "baqarātin", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "cows", ur: "cows" } },
+      { id: '12:43:7', arabic: "سِمَانٍۢ", transliteration: "simānin", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "fat", ur: "fat" } },
+      { id: '12:43:8', arabic: "يَأْكُلُهُنَّ", transliteration: "yakuluhunna", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "eating them", ur: "eating them" } },
+      { id: '12:43:9', arabic: "سَبْعٌ", transliteration: "sabʿun", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "seven", ur: "seven" } },
+      { id: '12:43:10', arabic: "عِجَافٌۭ", transliteration: "ʿijāfun", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "lean ones", ur: "lean ones" } },
+      { id: '12:43:11', arabic: "وَسَبْعَ", transliteration: "wasabʿa", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "and seven", ur: "اور seven" } },
+      { id: '12:43:12', arabic: "سُنۢبُلَـٰتٍ", transliteration: "sunbulātin", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "ears (of corn)", ur: "ears (of corn)" } },
+      { id: '12:43:13', arabic: "خُضْرٍۢ", transliteration: "khuḍ'rin", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "green", ur: "green" } },
+      { id: '12:43:14', arabic: "وَأُخَرَ", transliteration: "wa-ukhara", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "and others", ur: "اور others" } },
+      { id: '12:43:15', arabic: "يَابِسَـٰتٍۢ ۖ", transliteration: "yābisātin", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "dry", ur: "dry" } },
+      { id: '12:43:16', arabic: "يَـٰٓأَيُّهَا", transliteration: "yāayyuhā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "O", ur: "اے" } },
+      { id: '12:43:17', arabic: "ٱلْمَلَأُ", transliteration: "l-mala-u", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "chiefs", ur: "chiefs" } },
+      { id: '12:43:18', arabic: "أَفْتُونِى", transliteration: "aftūnī", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Explain to me", ur: "Explain کو me" } },
+      { id: '12:43:19', arabic: "فِى", transliteration: "fī", pos: ['PREP'], posLabel: 'PREP', root: null, meaning: { en: "about", ur: "about" } },
+      { id: '12:43:20', arabic: "رُءْيَـٰىَ", transliteration: "ru'yāya", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "my vision", ur: "my vision" } },
+      { id: '12:43:21', arabic: "إِن", transliteration: "in", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "if", ur: "if" } },
+      { id: '12:43:22', arabic: "كُنتُمْ", transliteration: "kuntum", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "you can", ur: "تم can" } },
+      { id: '12:43:23', arabic: "لِلرُّءْيَا", transliteration: "lilrru'yā", pos: ['P+N'], posLabel: 'P+N', root: null, meaning: { en: "of visions", ur: "of visions" } },
+      { id: '12:43:24', arabic: "تَعْبُرُونَ", transliteration: "taʿburūna", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "interpret", ur: "interpret" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 2, to: 3, label: 'فعل + فاعل' },
+        { from: 8, to: 9, label: 'فعل + فاعل' },
+        { from: 19, to: 20, label: 'جار + مجرور' }
+      ],
+    },
+  },
+  44: {
+    text: "قَالُوٓا۟ أَضْغَـٰثُ أَحْلَـٰمٍۢ ۖ وَمَا نَحْنُ بِتَأْوِيلِ ٱلْأَحْلَـٰمِ بِعَـٰلِمِينَ",
+    translation: {
+      en: "",
+      ur: "انہوں نے کہا یہ تو پریشان سے خواب ہیں۔ اور ہمیں ایسے خوابوں کی تعبیر نہیں آتی",
+    },
+    words: [
+      { id: '12:44:1', arabic: "قَالُوٓا۟", transliteration: "qālū", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "They said", ur: "وہ لوگ کہا" } },
+      { id: '12:44:2', arabic: "أَضْغَـٰثُ", transliteration: "aḍghāthu", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "Confused", ur: "Confused" } },
+      { id: '12:44:3', arabic: "أَحْلَـٰمٍۢ ۖ", transliteration: "aḥlāmin", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "dreams", ur: "dreams" } },
+      { id: '12:44:4', arabic: "وَمَا", transliteration: "wamā", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "and not", ur: "اور نہیں" } },
+      { id: '12:44:5', arabic: "نَحْنُ", transliteration: "naḥnu", pos: ['PRON'], posLabel: 'PRON', root: null, meaning: { en: "we", ur: "ہم" } },
+      { id: '12:44:6', arabic: "بِتَأْوِيلِ", transliteration: "bitawīli", pos: ['P+N'], posLabel: 'P+N', root: null, meaning: { en: "(are) in the interpretation", ur: "(are) میں the interpretation" } },
+      { id: '12:44:7', arabic: "ٱلْأَحْلَـٰمِ", transliteration: "l-aḥlāmi", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(of) the dreams", ur: "(of) the dreams" } },
+      { id: '12:44:8', arabic: "بِعَـٰلِمِينَ", transliteration: "biʿālimīna", pos: ['P+N'], posLabel: 'P+N', root: null, meaning: { en: "learned", ur: "learned" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 2, to: 3, label: 'فعل + فاعل' },
+        { from: 6, to: 7, label: 'جار + مجرور' }
+      ],
+    },
+  },
+  45: {
+    text: "وَقَالَ ٱلَّذِى نَجَا مِنْهُمَا وَٱدَّكَرَ بَعْدَ أُمَّةٍ أَنَا۠ أُنَبِّئُكُم بِتَأْوِيلِهِۦ فَأَرْسِلُونِ",
+    translation: {
+      en: "",
+      ur: "اب وہ شخص جو دونوں قیدیوں میں سے رہائی پا گیا تھا اور جسے مدت کے بعد وہ بات یاد آگئی بول اٹھا کہ میں آپ کو اس کی تعبیر (لا) بتاتا ہوں مجھے (جیل خانے) جانے کی اجازت دے دیجیئے",
+    },
+    words: [
+      { id: '12:45:1', arabic: "وَقَالَ", transliteration: "waqāla", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: "ق و ل", meaning: { en: "But said", ur: "لیکن کہا" } },
+      { id: '12:45:2', arabic: "ٱلَّذِى", transliteration: "alladhī", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "the one who", ur: "the one جو" } },
+      { id: '12:45:3', arabic: "نَجَا", transliteration: "najā", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "was saved", ur: "was saved" } },
+      { id: '12:45:4', arabic: "مِنْهُمَا", transliteration: "min'humā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "of the two", ur: "of the two" } },
+      { id: '12:45:5', arabic: "وَٱدَّكَرَ", transliteration: "wa-iddakara", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "and remembered", ur: "اور remembered" } },
+      { id: '12:45:6', arabic: "بَعْدَ", transliteration: "baʿda", pos: ['N'], posLabel: 'N', root: "ب ع د", meaning: { en: "after", ur: "بعد" } },
+      { id: '12:45:7', arabic: "أُمَّةٍ", transliteration: "ummatin", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "a period", ur: "a period" } },
+      { id: '12:45:8', arabic: "أَنَا۠", transliteration: "anā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "I", ur: "میں" } },
+      { id: '12:45:9', arabic: "أُنَبِّئُكُم", transliteration: "unabbi-ukum", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "[I] will inform you", ur: "[میں] will inform تم" } },
+      { id: '12:45:10', arabic: "بِتَأْوِيلِهِۦ", transliteration: "bitawīlihi", pos: ['P+N'], posLabel: 'P+N', root: null, meaning: { en: "of its interpretation", ur: "of its interpretation" } },
+      { id: '12:45:11', arabic: "فَأَرْسِلُونِ", transliteration: "fa-arsilūni", pos: ['CONJ+V'], posLabel: 'CONJ+V', root: null, meaning: { en: "so send me forth", ur: "so send me forth" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 3, to: 4, label: 'فعل + فاعل' }
+      ],
+    },
+  },
+  46: {
+    text: "يُوسُفُ أَيُّهَا ٱلصِّدِّيقُ أَفْتِنَا فِى سَبْعِ بَقَرَٰتٍۢ سِمَانٍۢ يَأْكُلُهُنَّ سَبْعٌ عِجَافٌۭ وَسَبْعِ سُنۢبُلَـٰتٍ خُضْرٍۢ وَأُخَرَ يَابِسَـٰتٍۢ لَّعَلِّىٓ أَرْجِعُ إِلَى ٱلنَّاسِ لَعَلَّهُمْ يَعْلَمُونَ",
+    translation: {
+      en: "",
+      ur: "(غرض وہ یوسف کے پاس آیا اور کہنے لگا) یوسف اے بڑے سچے (یوسف) ہمیں اس خواب کی تعبیر بتایئے کہ سات موٹی گائیوں کو سات دبلی گائیں کھا رہی ہیں۔ اور سات خوشے سبز ہیں اور سات سوکھے تاکہ میں لوگوں کے پاس واپس جا (کر تعبیر بتاؤں)۔ عجب نہیں کہ وہ (تمہاری قدر) جانیں",
+    },
+    words: [
+      { id: '12:46:1', arabic: "يُوسُفُ", transliteration: "yūsufu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Yusuf", ur: "Yusuf" } },
+      { id: '12:46:2', arabic: "أَيُّهَا", transliteration: "ayyuhā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "O", ur: "اے" } },
+      { id: '12:46:3', arabic: "ٱلصِّدِّيقُ", transliteration: "l-ṣidīqu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "the truthful one", ur: "the truthful one" } },
+      { id: '12:46:4', arabic: "أَفْتِنَا", transliteration: "aftinā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Explain to us", ur: "Explain کو us" } },
+      { id: '12:46:5', arabic: "فِى", transliteration: "fī", pos: ['PREP'], posLabel: 'PREP', root: null, meaning: { en: "about", ur: "about" } },
+      { id: '12:46:6', arabic: "سَبْعِ", transliteration: "sabʿi", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(the) seven", ur: "(the) seven" } },
+      { id: '12:46:7', arabic: "بَقَرَٰتٍۢ", transliteration: "baqarātin", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "cows", ur: "cows" } },
+      { id: '12:46:8', arabic: "سِمَانٍۢ", transliteration: "simānin", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "fat", ur: "fat" } },
+      { id: '12:46:9', arabic: "يَأْكُلُهُنَّ", transliteration: "yakuluhunna", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "eating them", ur: "eating them" } },
+      { id: '12:46:10', arabic: "سَبْعٌ", transliteration: "sabʿun", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "seven", ur: "seven" } },
+      { id: '12:46:11', arabic: "عِجَافٌۭ", transliteration: "ʿijāfun", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "lean ones", ur: "lean ones" } },
+      { id: '12:46:12', arabic: "وَسَبْعِ", transliteration: "wasabʿi", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "and seven", ur: "اور seven" } },
+      { id: '12:46:13', arabic: "سُنۢبُلَـٰتٍ", transliteration: "sunbulātin", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "ears (of corn)", ur: "ears (of corn)" } },
+      { id: '12:46:14', arabic: "خُضْرٍۢ", transliteration: "khuḍ'rin", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "green", ur: "green" } },
+      { id: '12:46:15', arabic: "وَأُخَرَ", transliteration: "wa-ukhara", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "and other", ur: "اور other" } },
+      { id: '12:46:16', arabic: "يَابِسَـٰتٍۢ", transliteration: "yābisātin", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "dry", ur: "dry" } },
+      { id: '12:46:17', arabic: "لَّعَلِّىٓ", transliteration: "laʿallī", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "that I may", ur: "وہ میں may" } },
+      { id: '12:46:18', arabic: "أَرْجِعُ", transliteration: "arjiʿu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "return", ur: "return" } },
+      { id: '12:46:19', arabic: "إِلَى", transliteration: "ilā", pos: ['PREP'], posLabel: 'PREP', root: null, meaning: { en: "to", ur: "کو" } },
+      { id: '12:46:20', arabic: "ٱلنَّاسِ", transliteration: "l-nāsi", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "the people", ur: "the لوگ" } },
+      { id: '12:46:21', arabic: "لَعَلَّهُمْ", transliteration: "laʿallahum", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "so that they may", ur: "so وہ وہ لوگ may" } },
+      { id: '12:46:22', arabic: "يَعْلَمُونَ", transliteration: "yaʿlamūna", pos: ['V'], posLabel: 'V', root: "ع ل م", meaning: { en: "know", ur: "جاننا" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 2, to: 3, label: 'مضاف + مضاف إليه' },
+        { from: 5, to: 6, label: 'جار + مجرور' },
+        { from: 9, to: 10, label: 'فعل + فاعل' },
+        { from: 19, to: 20, label: 'جار + مجرور' }
+      ],
+    },
+  },
+  47: {
+    text: "قَالَ تَزْرَعُونَ سَبْعَ سِنِينَ دَأَبًۭا فَمَا حَصَدتُّمْ فَذَرُوهُ فِى سُنۢبُلِهِۦٓ إِلَّا قَلِيلًۭا مِّمَّا تَأْكُلُونَ",
+    translation: {
+      en: "",
+      ur: "انہوں نے کہا کہ تم لوگ سات سال متواتر کھیتی کرتے رہوگے تو جو (غلّہ) کاٹو تو تھوڑے سے غلّے کے سوا جو کھانے میں آئے اسے خوشوں میں ہی رہنے دینا",
+    },
+    words: [
+      { id: '12:47:1', arabic: "قَالَ", transliteration: "qāla", pos: ['V'], posLabel: 'V', root: "ق و ل", meaning: { en: "He said", ur: "وہ کہا" } },
+      { id: '12:47:2', arabic: "تَزْرَعُونَ", transliteration: "tazraʿūna", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "You will sow", ur: "تم will sow" } },
+      { id: '12:47:3', arabic: "سَبْعَ", transliteration: "sabʿa", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(for) seven", ur: "(for) seven" } },
+      { id: '12:47:4', arabic: "سِنِينَ", transliteration: "sinīna", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "years", ur: "years" } },
+      { id: '12:47:5', arabic: "دَأَبًۭا", transliteration: "da-aban", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "as usual", ur: "as usual" } },
+      { id: '12:47:6', arabic: "فَمَا", transliteration: "famā", pos: ['CONJ+V'], posLabel: 'CONJ+V', root: null, meaning: { en: "and that which", ur: "اور وہ جو" } },
+      { id: '12:47:7', arabic: "حَصَدتُّمْ", transliteration: "ḥaṣadttum", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "you reap", ur: "تم reap" } },
+      { id: '12:47:8', arabic: "فَذَرُوهُ", transliteration: "fadharūhu", pos: ['CONJ+V'], posLabel: 'CONJ+V', root: null, meaning: { en: "so leave it", ur: "so leave it" } },
+      { id: '12:47:9', arabic: "فِى", transliteration: "fī", pos: ['PREP'], posLabel: 'PREP', root: null, meaning: { en: "in", ur: "میں" } },
+      { id: '12:47:10', arabic: "سُنۢبُلِهِۦٓ", transliteration: "sunbulihi", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "its ears", ur: "its ears" } },
+      { id: '12:47:11', arabic: "إِلَّا", transliteration: "illā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "except", ur: "سوائے" } },
+      { id: '12:47:12', arabic: "قَلِيلًۭا", transliteration: "qalīlan", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "a little", ur: "a little" } },
+      { id: '12:47:13', arabic: "مِّمَّا", transliteration: "mimmā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "from which", ur: "سے جو" } },
+      { id: '12:47:14', arabic: "تَأْكُلُونَ", transliteration: "takulūna", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "you (will) eat", ur: "تم (will) eat" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 2, to: 3, label: 'فعل + فاعل' },
+        { from: 9, to: 10, label: 'جار + مجرور' }
+      ],
+    },
+  },
+  48: {
+    text: "ثُمَّ يَأْتِى مِنۢ بَعْدِ ذَٰلِكَ سَبْعٌۭ شِدَادٌۭ يَأْكُلْنَ مَا قَدَّمْتُمْ لَهُنَّ إِلَّا قَلِيلًۭا مِّمَّا تُحْصِنُونَ",
+    translation: {
+      en: "",
+      ur: "پھر اس کے بعد (خشک سالی کے) سات سخت (سال) آئیں گے کہ جو (غلّہ) تم نے جمع کر رکھا ہوگا وہ اس سب کو کھا جائیں گے۔ صرف وہی تھوڑا سا رہ جائے گا جو تم احتیاط سے رکھ چھوڑو گے",
+    },
+    words: [
+      { id: '12:48:1', arabic: "ثُمَّ", transliteration: "thumma", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Then", ur: "پھر" } },
+      { id: '12:48:2', arabic: "يَأْتِى", transliteration: "yatī", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "will come", ur: "will come" } },
+      { id: '12:48:3', arabic: "مِنۢ", transliteration: "min", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "after", ur: "بعد" } },
+      { id: '12:48:4', arabic: "بَعْدِ", transliteration: "baʿdi", pos: ['N'], posLabel: 'N', root: "ب ع د", meaning: { en: "after", ur: "بعد" } },
+      { id: '12:48:5', arabic: "ذَٰلِكَ", transliteration: "dhālika", pos: ['DEM'], posLabel: 'DEM', root: null, meaning: { en: "that", ur: "وہ" } },
+      { id: '12:48:6', arabic: "سَبْعٌۭ", transliteration: "sabʿun", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "seven", ur: "seven" } },
+      { id: '12:48:7', arabic: "شِدَادٌۭ", transliteration: "shidādun", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "hard (years)", ur: "hard (years)" } },
+      { id: '12:48:8', arabic: "يَأْكُلْنَ", transliteration: "yakul'na", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "(which will) consume", ur: "(جو will) consume" } },
+      { id: '12:48:9', arabic: "مَا", transliteration: "mā", pos: ['REL'], posLabel: 'REL', root: null, meaning: { en: "what", ur: "کیا" } },
+      { id: '12:48:10', arabic: "قَدَّمْتُمْ", transliteration: "qaddamtum", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "you advanced", ur: "تم advanced" } },
+      { id: '12:48:11', arabic: "لَهُنَّ", transliteration: "lahunna", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "for them", ur: "for them" } },
+      { id: '12:48:12', arabic: "إِلَّا", transliteration: "illā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "except", ur: "سوائے" } },
+      { id: '12:48:13', arabic: "قَلِيلًۭا", transliteration: "qalīlan", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "a little", ur: "a little" } },
+      { id: '12:48:14', arabic: "مِّمَّا", transliteration: "mimmā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "of what", ur: "of کیا" } },
+      { id: '12:48:15', arabic: "تُحْصِنُونَ", transliteration: "tuḥ'ṣinūna", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "you (will) store", ur: "تم (will) store" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 2, to: 3, label: 'فعل + فاعل' },
+        { from: 9, to: 10, label: 'موصول + صلة' },
+        { from: 10, to: 11, label: 'فعل + فاعل' },
+        { from: 13, to: 14, label: 'مضاف + مضاف إليه' }
+      ],
+    },
+  },
+  49: {
+    text: "ثُمَّ يَأْتِى مِنۢ بَعْدِ ذَٰلِكَ عَامٌۭ فِيهِ يُغَاثُ ٱلنَّاسُ وَفِيهِ يَعْصِرُونَ",
+    translation: {
+      en: "",
+      ur: "پھر اس کے بعد ایک سال آئے گا کہ خوب مینہ برسے گا اور لوگ اس میں رس نچوڑیں گے",
+    },
+    words: [
+      { id: '12:49:1', arabic: "ثُمَّ", transliteration: "thumma", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Then", ur: "پھر" } },
+      { id: '12:49:2', arabic: "يَأْتِى", transliteration: "yatī", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "will come", ur: "will come" } },
+      { id: '12:49:3', arabic: "مِنۢ", transliteration: "min", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "after", ur: "بعد" } },
+      { id: '12:49:4', arabic: "بَعْدِ", transliteration: "baʿdi", pos: ['N'], posLabel: 'N', root: "ب ع د", meaning: { en: "after", ur: "بعد" } },
+      { id: '12:49:5', arabic: "ذَٰلِكَ", transliteration: "dhālika", pos: ['DEM'], posLabel: 'DEM', root: null, meaning: { en: "that", ur: "وہ" } },
+      { id: '12:49:6', arabic: "عَامٌۭ", transliteration: "ʿāmun", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "a year", ur: "a year" } },
+      { id: '12:49:7', arabic: "فِيهِ", transliteration: "fīhi", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "in it", ur: "میں it" } },
+      { id: '12:49:8', arabic: "يُغَاثُ", transliteration: "yughāthu", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "will be given abundant rain", ur: "will be given abundant rain" } },
+      { id: '12:49:9', arabic: "ٱلنَّاسُ", transliteration: "l-nāsu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "the people", ur: "the لوگ" } },
+      { id: '12:49:10', arabic: "وَفِيهِ", transliteration: "wafīhi", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "and in it", ur: "اور میں it" } },
+      { id: '12:49:11', arabic: "يَعْصِرُونَ", transliteration: "yaʿṣirūna", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "they will press", ur: "وہ لوگ will press" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 2, to: 3, label: 'فعل + فاعل' },
+        { from: 8, to: 9, label: 'فعل + فاعل' }
+      ],
+    },
+  },
+  50: {
+    text: "وَقَالَ ٱلْمَلِكُ ٱئْتُونِى بِهِۦ ۖ فَلَمَّا جَآءَهُ ٱلرَّسُولُ قَالَ ٱرْجِعْ إِلَىٰ رَبِّكَ فَسْـَٔلْهُ مَا بَالُ ٱلنِّسْوَةِ ٱلَّـٰتِى قَطَّعْنَ أَيْدِيَهُنَّ ۚ إِنَّ رَبِّى بِكَيْدِهِنَّ عَلِيمٌۭ",
+    translation: {
+      en: "",
+      ur: "(یہ تعبیر سن کر) بادشاہ نے حکم دیا کہ یوسف کو میرے پاس لے آؤ۔ جب قاصد ان کے پاس گیا تو انہوں نے کہا کہ اپنے آقا کے پاس واپس جاؤ اور ان سے پوچھو کہ ان عورتوں کا کیا حال ہے جنہوں نے اپنے ہاتھ کاٹ لیے تھے۔ بےشک میرا پروردگار ان کے مکروں سے خوب واقف ہے",
+    },
+    words: [
+      { id: '12:50:1', arabic: "وَقَالَ", transliteration: "waqāla", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: "ق و ل", meaning: { en: "And said", ur: "اور کہا" } },
+      { id: '12:50:2', arabic: "ٱلْمَلِكُ", transliteration: "l-maliku", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "the king", ur: "the king" } },
+      { id: '12:50:3', arabic: "ٱئْتُونِى", transliteration: "i'tūnī", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Bring him to me", ur: "Bring him کو me" } },
+      { id: '12:50:4', arabic: "بِهِۦ ۖ", transliteration: "bihi", pos: ['P+N'], posLabel: 'P+N', root: null, meaning: { en: "Bring him to me", ur: "Bring him کو me" } },
+      { id: '12:50:5', arabic: "فَلَمَّا", transliteration: "falammā", pos: ['CONJ+V'], posLabel: 'CONJ+V', root: null, meaning: { en: "But when", ur: "لیکن when" } },
+      { id: '12:50:6', arabic: "جَآءَهُ", transliteration: "jāahu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "came to him", ur: "came کو him" } },
+      { id: '12:50:7', arabic: "ٱلرَّسُولُ", transliteration: "l-rasūlu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "the messenger", ur: "the رسول" } },
+      { id: '12:50:8', arabic: "قَالَ", transliteration: "qāla", pos: ['V'], posLabel: 'V', root: "ق و ل", meaning: { en: "he said", ur: "وہ کہا" } },
+      { id: '12:50:9', arabic: "ٱرْجِعْ", transliteration: "ir'jiʿ", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Return", ur: "Return" } },
+      { id: '12:50:10', arabic: "إِلَىٰ", transliteration: "ilā", pos: ['PREP'], posLabel: 'PREP', root: null, meaning: { en: "to", ur: "کو" } },
+      { id: '12:50:11', arabic: "رَبِّكَ", transliteration: "rabbika", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "your lord", ur: "your رب" } },
+      { id: '12:50:12', arabic: "فَسْـَٔلْهُ", transliteration: "fasalhu", pos: ['CONJ+V'], posLabel: 'CONJ+V', root: null, meaning: { en: "and ask him", ur: "اور ask him" } },
+      { id: '12:50:13', arabic: "مَا", transliteration: "mā", pos: ['REL'], posLabel: 'REL', root: null, meaning: { en: "what", ur: "کیا" } },
+      { id: '12:50:14', arabic: "بَالُ", transliteration: "bālu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(is the) case", ur: "(is the) case" } },
+      { id: '12:50:15', arabic: "ٱلنِّسْوَةِ", transliteration: "l-nis'wati", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(of) the women", ur: "(of) the women" } },
+      { id: '12:50:16', arabic: "ٱلَّـٰتِى", transliteration: "allātī", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "who", ur: "جو" } },
+      { id: '12:50:17', arabic: "قَطَّعْنَ", transliteration: "qaṭṭaʿna", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "cut", ur: "cut" } },
+      { id: '12:50:18', arabic: "أَيْدِيَهُنَّ ۚ", transliteration: "aydiyahunna", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "their hands", ur: "their hands" } },
+      { id: '12:50:19', arabic: "إِنَّ", transliteration: "inna", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "Indeed", ur: "بیشک" } },
+      { id: '12:50:20', arabic: "رَبِّى", transliteration: "rabbī", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "my Lord", ur: "my رب" } },
+      { id: '12:50:21', arabic: "بِكَيْدِهِنَّ", transliteration: "bikaydihinna", pos: ['P+N'], posLabel: 'P+N', root: null, meaning: { en: "of their plot", ur: "of their plot" } },
+      { id: '12:50:22', arabic: "عَلِيمٌۭ", transliteration: "ʿalīmun", pos: ['ADJ'], posLabel: 'ADJ', root: "ع ل م", meaning: { en: "(is) All-Knower", ur: "(is) سب-Knower" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 2, to: 3, label: 'فعل + فاعل' },
+        { from: 6, to: 7, label: 'مضاف + مضاف إليه' },
+        { from: 8, to: 9, label: 'فعل + فاعل' },
+        { from: 10, to: 11, label: 'جار + مجرور' },
+        { from: 14, to: 15, label: 'مضاف + مضاف إليه' },
+        { from: 19, to: 20, label: 'فعل + فاعل' }
+      ],
+    },
+  },
+  51: {
+    text: "قَالَ مَا خَطْبُكُنَّ إِذْ رَٰوَدتُّنَّ يُوسُفَ عَن نَّفْسِهِۦ ۚ قُلْنَ حَـٰشَ لِلَّهِ مَا عَلِمْنَا عَلَيْهِ مِن سُوٓءٍۢ ۚ قَالَتِ ٱمْرَأَتُ ٱلْعَزِيزِ ٱلْـَٔـٰنَ حَصْحَصَ ٱلْحَقُّ أَنَا۠ رَٰوَدتُّهُۥ عَن نَّفْسِهِۦ وَإِنَّهُۥ لَمِنَ ٱلصَّـٰدِقِينَ",
+    translation: {
+      en: "",
+      ur: "بادشاہ نے عورتوں سے پوچھا کہ بھلا اس وقت کیا ہوا تھا جب تم نے یوسف کو اپنی طرف مائل کرنا چاہا۔ سب بول اٹھیں کہ حاش َللهِ ہم نے اس میں کوئی برائی معلوم نہیں کی۔ عزیز کی عورت نے کہا اب سچی بات تو ظاہر ہو ہی گئی ہے۔ (اصل یہ ہے کہ) میں نے اس کو اپنی طرف مائل کرنا چاہا تھا اور بےشک وہ سچا ہے",
+    },
+    words: [
+      { id: '12:51:1', arabic: "قَالَ", transliteration: "qāla", pos: ['V'], posLabel: 'V', root: "ق و ل", meaning: { en: "He said", ur: "وہ کہا" } },
+      { id: '12:51:2', arabic: "مَا", transliteration: "mā", pos: ['REL'], posLabel: 'REL', root: null, meaning: { en: "What", ur: "کیا" } },
+      { id: '12:51:3', arabic: "خَطْبُكُنَّ", transliteration: "khaṭbukunna", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(was) your affair", ur: "(was) your affair" } },
+      { id: '12:51:4', arabic: "إِذْ", transliteration: "idh", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "when", ur: "when" } },
+      { id: '12:51:5', arabic: "رَٰوَدتُّنَّ", transliteration: "rāwadttunna", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "you sought to seduce", ur: "تم sought کو seduce" } },
+      { id: '12:51:6', arabic: "يُوسُفَ", transliteration: "yūsufa", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Yusuf", ur: "Yusuf" } },
+      { id: '12:51:7', arabic: "عَن", transliteration: "ʿan", pos: ['PREP'], posLabel: 'PREP', root: null, meaning: { en: "from", ur: "سے" } },
+      { id: '12:51:8', arabic: "نَّفْسِهِۦ ۚ", transliteration: "nafsihi", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "himself", ur: "himself" } },
+      { id: '12:51:9', arabic: "قُلْنَ", transliteration: "qul'na", pos: ['V'], posLabel: 'V', root: "ق و ل", meaning: { en: "They said", ur: "وہ لوگ کہا" } },
+      { id: '12:51:10', arabic: "حَـٰشَ", transliteration: "ḥāsha", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Allah forbid", ur: "اللہ forbid" } },
+      { id: '12:51:11', arabic: "لِلَّهِ", transliteration: "lillahi", pos: ['P+N'], posLabel: 'P+N', root: null, meaning: { en: "Allah forbid", ur: "اللہ forbid" } },
+      { id: '12:51:12', arabic: "مَا", transliteration: "mā", pos: ['NEG'], posLabel: 'NEG', root: null, meaning: { en: "Not", ur: "نہیں" } },
+      { id: '12:51:13', arabic: "عَلِمْنَا", transliteration: "ʿalim'nā", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "we know", ur: "ہم جاننا" } },
+      { id: '12:51:14', arabic: "عَلَيْهِ", transliteration: "ʿalayhi", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "about him", ur: "about him" } },
+      { id: '12:51:15', arabic: "مِن", transliteration: "min", pos: ['PREP'], posLabel: 'PREP', root: null, meaning: { en: "any", ur: "any" } },
+      { id: '12:51:16', arabic: "سُوٓءٍۢ ۚ", transliteration: "sūin", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "evil", ur: "برا" } },
+      { id: '12:51:17', arabic: "قَالَتِ", transliteration: "qālati", pos: ['N'], posLabel: 'N', root: "ق و ل", meaning: { en: "Said", ur: "کہا" } },
+      { id: '12:51:18', arabic: "ٱمْرَأَتُ", transliteration: "im'ra-atu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(the) wife", ur: "(the) wife" } },
+      { id: '12:51:19', arabic: "ٱلْعَزِيزِ", transliteration: "l-ʿazīzi", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(of) Aziz", ur: "(of) Aziz" } },
+      { id: '12:51:20', arabic: "ٱلْـَٔـٰنَ", transliteration: "l-āna", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Now", ur: "Now" } },
+      { id: '12:51:21', arabic: "حَصْحَصَ", transliteration: "ḥaṣḥaṣa", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(is) manifest", ur: "(is) manifest" } },
+      { id: '12:51:22', arabic: "ٱلْحَقُّ", transliteration: "l-ḥaqu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "the truth", ur: "the سچ" } },
+      { id: '12:51:23', arabic: "أَنَا۠", transliteration: "anā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "I", ur: "میں" } },
+      { id: '12:51:24', arabic: "رَٰوَدتُّهُۥ", transliteration: "rāwadttuhu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "sought to seduce him", ur: "sought کو seduce him" } },
+      { id: '12:51:25', arabic: "عَن", transliteration: "ʿan", pos: ['PREP'], posLabel: 'PREP', root: null, meaning: { en: "from", ur: "سے" } },
+      { id: '12:51:26', arabic: "نَّفْسِهِۦ", transliteration: "nafsihi", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "himself", ur: "himself" } },
+      { id: '12:51:27', arabic: "وَإِنَّهُۥ", transliteration: "wa-innahu", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "and indeed, he", ur: "اور بیشک, وہ" } },
+      { id: '12:51:28', arabic: "لَمِنَ", transliteration: "lamina", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(is) surely of", ur: "(is) یقیناً of" } },
+      { id: '12:51:29', arabic: "ٱلصَّـٰدِقِينَ", transliteration: "l-ṣādiqīna", pos: ['ADJ'], posLabel: 'ADJ', root: null, meaning: { en: "the truthful", ur: "the truthful" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 5, to: 6, label: 'فعل + فاعل' },
+        { from: 9, to: 10, label: 'فعل + فاعل' },
+        { from: 12, to: 13, label: 'نفی + فعل' },
+        { from: 13, to: 14, label: 'فعل + فاعل' },
+        { from: 15, to: 16, label: 'جار + مجرور' },
+        { from: 21, to: 22, label: 'مضاف + مضاف إليه' },
+        { from: 28, to: 29, label: 'موصوف + صفت' }
+      ],
+    },
+  },
+  52: {
+    text: "ذَٰلِكَ لِيَعْلَمَ أَنِّى لَمْ أَخُنْهُ بِٱلْغَيْبِ وَأَنَّ ٱللَّهَ لَا يَهْدِى كَيْدَ ٱلْخَآئِنِينَ",
+    translation: {
+      en: "",
+      ur: "(یوسف نے کہا کہ میں نے) یہ بات اس لیے (پوچھی ہے) کہ عزیز کو یقین ہوجائے کہ میں نے اس کی پیٹھ پیچھے اس کی (امانت میں خیانت نہیں کی) اور خدا خیانت کرنے والوں کے مکروں کو روبراہ نہیں کرتا",
+    },
+    words: [
+      { id: '12:52:1', arabic: "ذَٰلِكَ", transliteration: "dhālika", pos: ['DEM'], posLabel: 'DEM', root: null, meaning: { en: "That", ur: "وہ" } },
+      { id: '12:52:2', arabic: "لِيَعْلَمَ", transliteration: "liyaʿlama", pos: ['P+N'], posLabel: 'P+N', root: null, meaning: { en: "he may know", ur: "وہ may جاننا" } },
+      { id: '12:52:3', arabic: "أَنِّى", transliteration: "annī", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "that I", ur: "وہ میں" } },
+      { id: '12:52:4', arabic: "لَمْ", transliteration: "lam", pos: ['NEG'], posLabel: 'NEG', root: null, meaning: { en: "not", ur: "نہیں" } },
+      { id: '12:52:5', arabic: "أَخُنْهُ", transliteration: "akhun'hu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "[I] betray him", ur: "[میں] betray him" } },
+      { id: '12:52:6', arabic: "بِٱلْغَيْبِ", transliteration: "bil-ghaybi", pos: ['P+N'], posLabel: 'P+N', root: null, meaning: { en: "in secret", ur: "میں secret" } },
+      { id: '12:52:7', arabic: "وَأَنَّ", transliteration: "wa-anna", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "and that", ur: "اور وہ" } },
+      { id: '12:52:8', arabic: "ٱللَّهَ", transliteration: "l-laha", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Allah", ur: "اللہ" } },
+      { id: '12:52:9', arabic: "لَا", transliteration: "lā", pos: ['NEG'], posLabel: 'NEG', root: null, meaning: { en: "(does) not", ur: "(does) نہیں" } },
+      { id: '12:52:10', arabic: "يَهْدِى", transliteration: "yahdī", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "guide", ur: "guide" } },
+      { id: '12:52:11', arabic: "كَيْدَ", transliteration: "kayda", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(the) plan", ur: "(the) plan" } },
+      { id: '12:52:12', arabic: "ٱلْخَآئِنِينَ", transliteration: "l-khāinīna", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(of) the betrayers", ur: "(of) the betrayers" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 2, to: 3, label: 'جار + مجرور' },
+        { from: 9, to: 10, label: 'نفی + فعل' },
+        { from: 10, to: 11, label: 'فعل + فاعل' },
+        { from: 11, to: 12, label: 'مضاف + مضاف إليه' }
+      ],
+    },
+  },
+  53: {
+    text: "۞ وَمَآ أُبَرِّئُ نَفْسِىٓ ۚ إِنَّ ٱلنَّفْسَ لَأَمَّارَةٌۢ بِٱلسُّوٓءِ إِلَّا مَا رَحِمَ رَبِّىٓ ۚ إِنَّ رَبِّى غَفُورٌۭ رَّحِيمٌۭ",
+    translation: {
+      en: "",
+      ur: "اور میں اپنے تئیں پاک صاف نہیں کہتا کیونکہ نفس امارہ (انسان کو) برائی سکھاتا رہتا ہے۔ مگر یہ کہ میرا پروردگار رحم کرے گا۔ بےشک میرا پروردگار بخشنے والا مہربان ہے",
+    },
+    words: [
+      { id: '12:53:1', arabic: "۞ وَمَآ", transliteration: "wamā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "And not", ur: "اور نہیں" } },
+      { id: '12:53:2', arabic: "أُبَرِّئُ", transliteration: "ubarri-u", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "I absolve", ur: "میں absolve" } },
+      { id: '12:53:3', arabic: "نَفْسِىٓ ۚ", transliteration: "nafsī", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "myself", ur: "myself" } },
+      { id: '12:53:4', arabic: "إِنَّ", transliteration: "inna", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "Indeed", ur: "بیشک" } },
+      { id: '12:53:5', arabic: "ٱلنَّفْسَ", transliteration: "l-nafsa", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "the soul", ur: "the روح" } },
+      { id: '12:53:6', arabic: "لَأَمَّارَةٌۢ", transliteration: "la-ammāratun", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(is) a certain enjoiner", ur: "(is) a certain enjoiner" } },
+      { id: '12:53:7', arabic: "بِٱلسُّوٓءِ", transliteration: "bil-sūi", pos: ['P+N'], posLabel: 'P+N', root: null, meaning: { en: "of evil", ur: "of برا" } },
+      { id: '12:53:8', arabic: "إِلَّا", transliteration: "illā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "unless", ur: "unless" } },
+      { id: '12:53:9', arabic: "مَا", transliteration: "mā", pos: ['REL'], posLabel: 'REL', root: null, meaning: { en: "[that]", ur: "[وہ]" } },
+      { id: '12:53:10', arabic: "رَحِمَ", transliteration: "raḥima", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "bestows Mercy", ur: "bestows رحمت" } },
+      { id: '12:53:11', arabic: "رَبِّىٓ ۚ", transliteration: "rabbī", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "my Lord", ur: "my رب" } },
+      { id: '12:53:12', arabic: "إِنَّ", transliteration: "inna", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "Indeed", ur: "بیشک" } },
+      { id: '12:53:13', arabic: "رَبِّى", transliteration: "rabbī", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "my Lord", ur: "my رب" } },
+      { id: '12:53:14', arabic: "غَفُورٌۭ", transliteration: "ghafūrun", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "(is) Oft-Forgiving", ur: "(is) Oft-Forgiving" } },
+      { id: '12:53:15', arabic: "رَّحِيمٌۭ", transliteration: "raḥīmun", pos: ['ADJ'], posLabel: 'ADJ', root: null, meaning: { en: "Most Merciful", ur: "بہت مہربان" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 4, to: 5, label: 'فعل + فاعل' },
+        { from: 7, to: 8, label: 'جار + مجرور' },
+        { from: 12, to: 13, label: 'فعل + فاعل' }
+      ],
+    },
+  },
+  54: {
+    text: "وَقَالَ ٱلْمَلِكُ ٱئْتُونِى بِهِۦٓ أَسْتَخْلِصْهُ لِنَفْسِى ۖ فَلَمَّا كَلَّمَهُۥ قَالَ إِنَّكَ ٱلْيَوْمَ لَدَيْنَا مَكِينٌ أَمِينٌۭ",
+    translation: {
+      en: "",
+      ur: "بادشاہ نے حکم دیا کہ اسے میرے پاس لاؤ میں اسے اپنا مصاحب خاص بناؤں گا۔ پھر جب ان سے گفتگو کی تو کہا کہ آج سے تم ہمارے ہاں صاحب منزلت اور صاحبِ اعتبار ہو",
+    },
+    words: [
+      { id: '12:54:1', arabic: "وَقَالَ", transliteration: "waqāla", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: "ق و ل", meaning: { en: "And said", ur: "اور کہا" } },
+      { id: '12:54:2', arabic: "ٱلْمَلِكُ", transliteration: "l-maliku", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "the king", ur: "the king" } },
+      { id: '12:54:3', arabic: "ٱئْتُونِى", transliteration: "i'tūnī", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Bring him to me", ur: "Bring him کو me" } },
+      { id: '12:54:4', arabic: "بِهِۦٓ", transliteration: "bihi", pos: ['P+N'], posLabel: 'P+N', root: null, meaning: { en: "Bring him to me", ur: "Bring him کو me" } },
+      { id: '12:54:5', arabic: "أَسْتَخْلِصْهُ", transliteration: "astakhliṣ'hu", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "I will select him", ur: "میں will select him" } },
+      { id: '12:54:6', arabic: "لِنَفْسِى ۖ", transliteration: "linafsī", pos: ['P+N'], posLabel: 'P+N', root: null, meaning: { en: "for myself", ur: "for myself" } },
+      { id: '12:54:7', arabic: "فَلَمَّا", transliteration: "falammā", pos: ['CONJ+V'], posLabel: 'CONJ+V', root: null, meaning: { en: "Then when", ur: "پھر when" } },
+      { id: '12:54:8', arabic: "كَلَّمَهُۥ", transliteration: "kallamahu", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "he spoke to him", ur: "وہ spoke کو him" } },
+      { id: '12:54:9', arabic: "قَالَ", transliteration: "qāla", pos: ['V'], posLabel: 'V', root: "ق و ل", meaning: { en: "he said", ur: "وہ کہا" } },
+      { id: '12:54:10', arabic: "إِنَّكَ", transliteration: "innaka", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Indeed, you", ur: "بیشک, تم" } },
+      { id: '12:54:11', arabic: "ٱلْيَوْمَ", transliteration: "l-yawma", pos: ['N'], posLabel: 'N', root: "ي و م", meaning: { en: "(are) today", ur: "(are) today" } },
+      { id: '12:54:12', arabic: "لَدَيْنَا", transliteration: "ladaynā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "with us", ur: "ساتھ us" } },
+      { id: '12:54:13', arabic: "مَكِينٌ", transliteration: "makīnun", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "firmly established", ur: "firmly established" } },
+      { id: '12:54:14', arabic: "أَمِينٌۭ", transliteration: "amīnun", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "(and) trusted", ur: "(اور) trusted" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 2, to: 3, label: 'فعل + فاعل' },
+        { from: 9, to: 10, label: 'فعل + فاعل' }
+      ],
+    },
+  },
+  55: {
+    text: "قَالَ ٱجْعَلْنِى عَلَىٰ خَزَآئِنِ ٱلْأَرْضِ ۖ إِنِّى حَفِيظٌ عَلِيمٌۭ",
+    translation: {
+      en: "",
+      ur: "(یوسف نے) کہا مجھے اس ملک کے خزانوں پر مقرر کر دیجیئے کیونکہ میں حفاظت بھی کرسکتا ہوں اور اس کام سے واقف ہوں",
+    },
+    words: [
+      { id: '12:55:1', arabic: "قَالَ", transliteration: "qāla", pos: ['V'], posLabel: 'V', root: "ق و ل", meaning: { en: "He said", ur: "وہ کہا" } },
+      { id: '12:55:2', arabic: "ٱجْعَلْنِى", transliteration: "ij'ʿalnī", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Appoint me", ur: "Appoint me" } },
+      { id: '12:55:3', arabic: "عَلَىٰ", transliteration: "ʿalā", pos: ['PREP'], posLabel: 'PREP', root: null, meaning: { en: "over", ur: "اوپر" } },
+      { id: '12:55:4', arabic: "خَزَآئِنِ", transliteration: "khazāini", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(the) treasuries", ur: "(the) treasuries" } },
+      { id: '12:55:5', arabic: "ٱلْأَرْضِ ۖ", transliteration: "l-arḍi", pos: ['N'], posLabel: 'N', root: "أ ر ض", meaning: { en: "(of) the land", ur: "(of) the land" } },
+      { id: '12:55:6', arabic: "إِنِّى", transliteration: "innī", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Indeed, I", ur: "بیشک, میں" } },
+      { id: '12:55:7', arabic: "حَفِيظٌ", transliteration: "ḥafīẓun", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "(will be) a guardian", ur: "(will be) a guardian" } },
+      { id: '12:55:8', arabic: "عَلِيمٌۭ", transliteration: "ʿalīmun", pos: ['V'], posLabel: 'V', root: "ع ل م", meaning: { en: "knowing", ur: "knowing" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 1, to: 2, label: 'فعل + فاعل' },
+        { from: 3, to: 4, label: 'جار + مجرور' },
+        { from: 4, to: 5, label: 'مضاف + مضاف إليه' }
+      ],
+    },
+  },
+  56: {
+    text: "وَكَذَٰلِكَ مَكَّنَّا لِيُوسُفَ فِى ٱلْأَرْضِ يَتَبَوَّأُ مِنْهَا حَيْثُ يَشَآءُ ۚ نُصِيبُ بِرَحْمَتِنَا مَن نَّشَآءُ ۖ وَلَا نُضِيعُ أَجْرَ ٱلْمُحْسِنِينَ",
+    translation: {
+      en: "",
+      ur: "اس طرح ہم نے یوسف کو ملک (مصر) میں جگہ دی اور وہ اس ملک میں جہاں چاہتے تھے رہتے تھے۔ ہم اپنی رحمت جس پر چاہتے ہیں کرتے ہیں اور نیکوکاروں کے اجر کو ضائع نہیں کرتے",
+    },
+    words: [
+      { id: '12:56:1', arabic: "وَكَذَٰلِكَ", transliteration: "wakadhālika", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "And thus", ur: "اور thus" } },
+      { id: '12:56:2', arabic: "مَكَّنَّا", transliteration: "makkannā", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "We established", ur: "ہم established" } },
+      { id: '12:56:3', arabic: "لِيُوسُفَ", transliteration: "liyūsufa", pos: ['P+N'], posLabel: 'P+N', root: null, meaning: { en: "[to] Yusuf", ur: "[کو] Yusuf" } },
+      { id: '12:56:4', arabic: "فِى", transliteration: "fī", pos: ['PREP'], posLabel: 'PREP', root: null, meaning: { en: "in", ur: "میں" } },
+      { id: '12:56:5', arabic: "ٱلْأَرْضِ", transliteration: "l-arḍi", pos: ['N'], posLabel: 'N', root: "أ ر ض", meaning: { en: "the land", ur: "the land" } },
+      { id: '12:56:6', arabic: "يَتَبَوَّأُ", transliteration: "yatabawwa-u", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "to settle", ur: "کو settle" } },
+      { id: '12:56:7', arabic: "مِنْهَا", transliteration: "min'hā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "therein", ur: "اس میں" } },
+      { id: '12:56:8', arabic: "حَيْثُ", transliteration: "ḥaythu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "where ever", ur: "where ever" } },
+      { id: '12:56:9', arabic: "يَشَآءُ ۚ", transliteration: "yashāu", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "he willed", ur: "وہ willed" } },
+      { id: '12:56:10', arabic: "نُصِيبُ", transliteration: "nuṣību", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "We bestow", ur: "ہم bestow" } },
+      { id: '12:56:11', arabic: "بِرَحْمَتِنَا", transliteration: "biraḥmatinā", pos: ['P+N'], posLabel: 'P+N', root: "ر ح م", meaning: { en: "Our Mercy", ur: "Our رحمت" } },
+      { id: '12:56:12', arabic: "مَن", transliteration: "man", pos: ['REL'], posLabel: 'REL', root: null, meaning: { en: "(on) whom", ur: "(پر) whom" } },
+      { id: '12:56:13', arabic: "نَّشَآءُ ۖ", transliteration: "nashāu", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "We will", ur: "ہم will" } },
+      { id: '12:56:14', arabic: "وَلَا", transliteration: "walā", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "And not", ur: "اور نہیں" } },
+      { id: '12:56:15', arabic: "نُضِيعُ", transliteration: "nuḍīʿu", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "We let go waste", ur: "ہم let go waste" } },
+      { id: '12:56:16', arabic: "أَجْرَ", transliteration: "ajra", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(the) reward", ur: "(the) ثواب" } },
+      { id: '12:56:17', arabic: "ٱلْمُحْسِنِينَ", transliteration: "l-muḥ'sinīna", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(of) the good-doers", ur: "(of) the اچھا-doers" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 4, to: 5, label: 'جار + مجرور' },
+        { from: 6, to: 7, label: 'فعل + فاعل' },
+        { from: 12, to: 13, label: 'موصول + صلة' },
+        { from: 15, to: 16, label: 'فعل + فاعل' },
+        { from: 16, to: 17, label: 'مضاف + مضاف إليه' }
+      ],
+    },
+  },
+  57: {
+    text: "وَلَأَجْرُ ٱلْـَٔاخِرَةِ خَيْرٌۭ لِّلَّذِينَ ءَامَنُوا۟ وَكَانُوا۟ يَتَّقُونَ",
+    translation: {
+      en: "",
+      ur: "اور جو لوگ ایمان لائے اور ڈرتے رہے ان کے لیے آخرت کا اجر بہت بہتر ہے",
+    },
+    words: [
+      { id: '12:57:1', arabic: "وَلَأَجْرُ", transliteration: "wala-ajru", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "And surely (the) reward", ur: "اور یقیناً (the) ثواب" } },
+      { id: '12:57:2', arabic: "ٱلْـَٔاخِرَةِ", transliteration: "l-ākhirati", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(of) the Hereafter", ur: "(of) the آخرت" } },
+      { id: '12:57:3', arabic: "خَيْرٌۭ", transliteration: "khayrun", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(is) better", ur: "(is) better" } },
+      { id: '12:57:4', arabic: "لِّلَّذِينَ", transliteration: "lilladhīna", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "for those who", ur: "for جو لوگ" } },
+      { id: '12:57:5', arabic: "ءَامَنُوا۟", transliteration: "āmanū", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "believe", ur: "ایمان لانا" } },
+      { id: '12:57:6', arabic: "وَكَانُوا۟", transliteration: "wakānū", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: "ك و ن", meaning: { en: "and are", ur: "اور are" } },
+      { id: '12:57:7', arabic: "يَتَّقُونَ", transliteration: "yattaqūna", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "God conscious", ur: "اللہ conscious" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' },
+        { from: 4, to: 5, label: 'تعلق' },
+        { from: 5, to: 6, label: 'تعلق' },
+        { from: 6, to: 7, label: 'تعلق' }
+      ],
+    },
+  },
+  58: {
+    text: "وَجَآءَ إِخْوَةُ يُوسُفَ فَدَخَلُوا۟ عَلَيْهِ فَعَرَفَهُمْ وَهُمْ لَهُۥ مُنكِرُونَ",
+    translation: {
+      en: "",
+      ur: "اور یوسف کے بھائی (کنعان سے مصر میں غلّہ خریدنے کے لیے) آئے تو یوسف کے پاس گئے تو یوسف نے ان کو پہچان لیا اور وہ ان کو نہ پہچان سکے",
+    },
+    words: [
+      { id: '12:58:1', arabic: "وَجَآءَ", transliteration: "wajāa", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "And came", ur: "اور came" } },
+      { id: '12:58:2', arabic: "إِخْوَةُ", transliteration: "ikh'watu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(the) brothers", ur: "(the) brothers" } },
+      { id: '12:58:3', arabic: "يُوسُفَ", transliteration: "yūsufa", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(of) Yusuf", ur: "(of) Yusuf" } },
+      { id: '12:58:4', arabic: "فَدَخَلُوا۟", transliteration: "fadakhalū", pos: ['CONJ+V'], posLabel: 'CONJ+V', root: null, meaning: { en: "and they entered", ur: "اور وہ لوگ entered" } },
+      { id: '12:58:5', arabic: "عَلَيْهِ", transliteration: "ʿalayhi", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "upon him", ur: "پر him" } },
+      { id: '12:58:6', arabic: "فَعَرَفَهُمْ", transliteration: "faʿarafahum", pos: ['CONJ+V'], posLabel: 'CONJ+V', root: null, meaning: { en: "and he recognized them", ur: "اور وہ recognized them" } },
+      { id: '12:58:7', arabic: "وَهُمْ", transliteration: "wahum", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "but they", ur: "لیکن وہ لوگ" } },
+      { id: '12:58:8', arabic: "لَهُۥ", transliteration: "lahu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "knew him not", ur: "knew him نہیں" } },
+      { id: '12:58:9', arabic: "مُنكِرُونَ", transliteration: "munkirūna", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "knew him not", ur: "knew him نہیں" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 4, to: 6, label: 'عطف' }
+      ],
+    },
+  },
+  59: {
+    text: "وَلَمَّا جَهَّزَهُم بِجَهَازِهِمْ قَالَ ٱئْتُونِى بِأَخٍۢ لَّكُم مِّنْ أَبِيكُمْ ۚ أَلَا تَرَوْنَ أَنِّىٓ أُوفِى ٱلْكَيْلَ وَأَنَا۠ خَيْرُ ٱلْمُنزِلِينَ",
+    translation: {
+      en: "",
+      ur: "جب یوسف نے ان کے لیے ان کا سامان تیار کر دیا تو کہا کہ (پھر آنا تو) جو باپ کی طرف سے تمہارا ایک اور بھائی ہے اسے بھی میرے پاس لیتے آنا۔ کیا تم نہیں دیکھتے کہ میں ناپ بھی پوری پوری دیتا ہوں اور مہمانداری بھی خوب کرتا ہوں",
+    },
+    words: [
+      { id: '12:59:1', arabic: "وَلَمَّا", transliteration: "walammā", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "And when", ur: "اور when" } },
+      { id: '12:59:2', arabic: "جَهَّزَهُم", transliteration: "jahhazahum", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "he had furnished them", ur: "وہ had furnished them" } },
+      { id: '12:59:3', arabic: "بِجَهَازِهِمْ", transliteration: "bijahāzihim", pos: ['P+N'], posLabel: 'P+N', root: null, meaning: { en: "with their supplies", ur: "ساتھ their supplies" } },
+      { id: '12:59:4', arabic: "قَالَ", transliteration: "qāla", pos: ['V'], posLabel: 'V', root: "ق و ل", meaning: { en: "he said", ur: "وہ کہا" } },
+      { id: '12:59:5', arabic: "ٱئْتُونِى", transliteration: "i'tūnī", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Bring to me", ur: "Bring کو me" } },
+      { id: '12:59:6', arabic: "بِأَخٍۢ", transliteration: "bi-akhin", pos: ['P+N'], posLabel: 'P+N', root: null, meaning: { en: "a brother", ur: "a brother" } },
+      { id: '12:59:7', arabic: "لَّكُم", transliteration: "lakum", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "of yours", ur: "of yours" } },
+      { id: '12:59:8', arabic: "مِّنْ", transliteration: "min", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "from", ur: "سے" } },
+      { id: '12:59:9', arabic: "أَبِيكُمْ ۚ", transliteration: "abīkum", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "your father", ur: "your باپ" } },
+      { id: '12:59:10', arabic: "أَلَا", transliteration: "alā", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "Do not", ur: "Do نہیں" } },
+      { id: '12:59:11', arabic: "تَرَوْنَ", transliteration: "tarawna", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "you see", ur: "تم دیکھنا" } },
+      { id: '12:59:12', arabic: "أَنِّىٓ", transliteration: "annī", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "that I", ur: "وہ میں" } },
+      { id: '12:59:13', arabic: "أُوفِى", transliteration: "ūfī", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "[I] give full", ur: "[میں] give full" } },
+      { id: '12:59:14', arabic: "ٱلْكَيْلَ", transliteration: "l-kayla", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "[the] measure", ur: "[the] measure" } },
+      { id: '12:59:15', arabic: "وَأَنَا۠", transliteration: "wa-anā", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "and that I am", ur: "اور وہ میں am" } },
+      { id: '12:59:16', arabic: "خَيْرُ", transliteration: "khayru", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(the) best", ur: "(the) best" } },
+      { id: '12:59:17', arabic: "ٱلْمُنزِلِينَ", transliteration: "l-munzilīna", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(of) the hosts", ur: "(of) the hosts" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 4, to: 5, label: 'فعل + فاعل' },
+        { from: 6, to: 7, label: 'جار + مجرور' },
+        { from: 11, to: 12, label: 'فعل + فاعل' },
+        { from: 16, to: 17, label: 'مضاف + مضاف إليه' }
+      ],
+    },
+  },
+  60: {
+    text: "فَإِن لَّمْ تَأْتُونِى بِهِۦ فَلَا كَيْلَ لَكُمْ عِندِى وَلَا تَقْرَبُونِ",
+    translation: {
+      en: "",
+      ur: "اور اگر تم اسے میرے پاس نہ لاؤ گے تو نہ تمہیں میرے ہاں سے غلّہ ملے گا اور نہ تم میرے پاس ہی آسکو گے",
+    },
+    words: [
+      { id: '12:60:1', arabic: "فَإِن", transliteration: "fa-in", pos: ['CONJ+V'], posLabel: 'CONJ+V', root: null, meaning: { en: "But if", ur: "لیکن if" } },
+      { id: '12:60:2', arabic: "لَّمْ", transliteration: "lam", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "not", ur: "نہیں" } },
+      { id: '12:60:3', arabic: "تَأْتُونِى", transliteration: "tatūnī", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "you bring him to me", ur: "تم bring him کو me" } },
+      { id: '12:60:4', arabic: "بِهِۦ", transliteration: "bihi", pos: ['P+N'], posLabel: 'P+N', root: null, meaning: { en: "you bring him to me", ur: "تم bring him کو me" } },
+      { id: '12:60:5', arabic: "فَلَا", transliteration: "falā", pos: ['CONJ+V'], posLabel: 'CONJ+V', root: null, meaning: { en: "then (there will be) no", ur: "پھر (there will be) نہیں" } },
+      { id: '12:60:6', arabic: "كَيْلَ", transliteration: "kayla", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "measure", ur: "measure" } },
+      { id: '12:60:7', arabic: "لَكُمْ", transliteration: "lakum", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "for you", ur: "for تم" } },
+      { id: '12:60:8', arabic: "عِندِى", transliteration: "ʿindī", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "from me", ur: "سے me" } },
+      { id: '12:60:9', arabic: "وَلَا", transliteration: "walā", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "and not", ur: "اور نہیں" } },
+      { id: '12:60:10', arabic: "تَقْرَبُونِ", transliteration: "taqrabūni", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "you will come near me", ur: "تم will come near me" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 3, to: 5, label: 'عطف' }
+      ],
+    },
+  },
+  61: {
+    text: "قَالُوا۟ سَنُرَٰوِدُ عَنْهُ أَبَاهُ وَإِنَّا لَفَـٰعِلُونَ",
+    translation: {
+      en: "",
+      ur: "انہوں نے کہا کہ ہم اس کے بارے میں اس کے والد سے تذکرہ کریں گے اور ہم (یہ کام) کرکے رہیں گے",
+    },
+    words: [
+      { id: '12:61:1', arabic: "قَالُوا۟", transliteration: "qālū", pos: ['V'], posLabel: 'V', root: "ق و ل", meaning: { en: "They said", ur: "وہ لوگ کہا" } },
+      { id: '12:61:2', arabic: "سَنُرَٰوِدُ", transliteration: "sanurāwidu", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "We will try to get permission", ur: "ہم will try کو get permission" } },
+      { id: '12:61:3', arabic: "عَنْهُ", transliteration: "ʿanhu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "for him", ur: "for him" } },
+      { id: '12:61:4', arabic: "أَبَاهُ", transliteration: "abāhu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(from) his father", ur: "(سے) his باپ" } },
+      { id: '12:61:5', arabic: "وَإِنَّا", transliteration: "wa-innā", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "and indeed we", ur: "اور بیشک ہم" } },
+      { id: '12:61:6', arabic: "لَفَـٰعِلُونَ", transliteration: "lafāʿilūna", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "surely will do", ur: "یقیناً will do" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 2, to: 3, label: 'فعل + فاعل' }
+      ],
+    },
+  },
+  62: {
+    text: "وَقَالَ لِفِتْيَـٰنِهِ ٱجْعَلُوا۟ بِضَـٰعَتَهُمْ فِى رِحَالِهِمْ لَعَلَّهُمْ يَعْرِفُونَهَآ إِذَا ٱنقَلَبُوٓا۟ إِلَىٰٓ أَهْلِهِمْ لَعَلَّهُمْ يَرْجِعُونَ",
+    translation: {
+      en: "",
+      ur: "(اور یوسف نے) اپنے خدام سے کہا کہ ان کا سرمایہ (یعنی غلّے کی قیمت) ان کے شلیتوں میں رکھ دو عجب نہیں کہ جب یہ اپنے اہل وعیال میں جائیں تو اسے پہچان لیں (اور) عجب نہیں کہ پھر یہاں آئیں",
+    },
+    words: [
+      { id: '12:62:1', arabic: "وَقَالَ", transliteration: "waqāla", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: "ق و ل", meaning: { en: "And he said", ur: "اور وہ کہا" } },
+      { id: '12:62:2', arabic: "لِفِتْيَـٰنِهِ", transliteration: "lifit'yānihi", pos: ['P+N'], posLabel: 'P+N', root: null, meaning: { en: "to his servants", ur: "کو his بندے" } },
+      { id: '12:62:3', arabic: "ٱجْعَلُوا۟", transliteration: "ij'ʿalū", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Put", ur: "Put" } },
+      { id: '12:62:4', arabic: "بِضَـٰعَتَهُمْ", transliteration: "biḍāʿatahum", pos: ['P+N'], posLabel: 'P+N', root: null, meaning: { en: "their merchandise", ur: "their merchandise" } },
+      { id: '12:62:5', arabic: "فِى", transliteration: "fī", pos: ['PREP'], posLabel: 'PREP', root: null, meaning: { en: "in", ur: "میں" } },
+      { id: '12:62:6', arabic: "رِحَالِهِمْ", transliteration: "riḥālihim", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "their saddlebags", ur: "their saddlebags" } },
+      { id: '12:62:7', arabic: "لَعَلَّهُمْ", transliteration: "laʿallahum", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "so that they", ur: "so وہ وہ لوگ" } },
+      { id: '12:62:8', arabic: "يَعْرِفُونَهَآ", transliteration: "yaʿrifūnahā", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "may recognize it", ur: "may recognize it" } },
+      { id: '12:62:9', arabic: "إِذَا", transliteration: "idhā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "when", ur: "when" } },
+      { id: '12:62:10', arabic: "ٱنقَلَبُوٓا۟", transliteration: "inqalabū", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "they go back", ur: "وہ لوگ go back" } },
+      { id: '12:62:11', arabic: "إِلَىٰٓ", transliteration: "ilā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "to", ur: "کو" } },
+      { id: '12:62:12', arabic: "أَهْلِهِمْ", transliteration: "ahlihim", pos: ['N'], posLabel: 'N', root: "أ ه ل", meaning: { en: "their people", ur: "their لوگ" } },
+      { id: '12:62:13', arabic: "لَعَلَّهُمْ", transliteration: "laʿallahum", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "so that they may", ur: "so وہ وہ لوگ may" } },
+      { id: '12:62:14', arabic: "يَرْجِعُونَ", transliteration: "yarjiʿūna", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "return", ur: "return" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 2, to: 3, label: 'جار + مجرور' },
+        { from: 5, to: 6, label: 'جار + مجرور' },
+        { from: 8, to: 9, label: 'فعل + فاعل' },
+        { from: 10, to: 11, label: 'فعل + فاعل' }
+      ],
+    },
+  },
+  63: {
+    text: "فَلَمَّا رَجَعُوٓا۟ إِلَىٰٓ أَبِيهِمْ قَالُوا۟ يَـٰٓأَبَانَا مُنِعَ مِنَّا ٱلْكَيْلُ فَأَرْسِلْ مَعَنَآ أَخَانَا نَكْتَلْ وَإِنَّا لَهُۥ لَحَـٰفِظُونَ",
+    translation: {
+      en: "",
+      ur: "جب وہ اپنے باپ کے پاس واپس گئے تو کہنے لگے کہ ابّا (جب تک ہم بنیامین کو ساتھ نہ لے جائیں) ہمارے لیے غلّے کی بندش کر دی گئی ہے تو ہمارے ساتھ ہمارے بھائی کو بھیج دے تاکہ ہم پھر غلّہ لائیں اور ہم اس کے نگہبان ہیں",
+    },
+    words: [
+      { id: '12:63:1', arabic: "فَلَمَّا", transliteration: "falammā", pos: ['CONJ+V'], posLabel: 'CONJ+V', root: null, meaning: { en: "So when", ur: "So when" } },
+      { id: '12:63:2', arabic: "رَجَعُوٓا۟", transliteration: "rajaʿū", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "they returned", ur: "وہ لوگ returned" } },
+      { id: '12:63:3', arabic: "إِلَىٰٓ", transliteration: "ilā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "to", ur: "کو" } },
+      { id: '12:63:4', arabic: "أَبِيهِمْ", transliteration: "abīhim", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "their father", ur: "their باپ" } },
+      { id: '12:63:5', arabic: "قَالُوا۟", transliteration: "qālū", pos: ['V'], posLabel: 'V', root: "ق و ل", meaning: { en: "they said", ur: "وہ لوگ کہا" } },
+      { id: '12:63:6', arabic: "يَـٰٓأَبَانَا", transliteration: "yāabānā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "O our father", ur: "اے our باپ" } },
+      { id: '12:63:7', arabic: "مُنِعَ", transliteration: "muniʿa", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "Has been denied", ur: "Has been denied" } },
+      { id: '12:63:8', arabic: "مِنَّا", transliteration: "minnā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "to us", ur: "کو us" } },
+      { id: '12:63:9', arabic: "ٱلْكَيْلُ", transliteration: "l-kaylu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "the measure", ur: "the measure" } },
+      { id: '12:63:10', arabic: "فَأَرْسِلْ", transliteration: "fa-arsil", pos: ['CONJ+V'], posLabel: 'CONJ+V', root: null, meaning: { en: "so send", ur: "so send" } },
+      { id: '12:63:11', arabic: "مَعَنَآ", transliteration: "maʿanā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "with us", ur: "ساتھ us" } },
+      { id: '12:63:12', arabic: "أَخَانَا", transliteration: "akhānā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "our brother", ur: "our brother" } },
+      { id: '12:63:13', arabic: "نَكْتَلْ", transliteration: "naktal", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "(that) we will get measure", ur: "(وہ) ہم will get measure" } },
+      { id: '12:63:14', arabic: "وَإِنَّا", transliteration: "wa-innā", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "And indeed, we", ur: "اور بیشک, ہم" } },
+      { id: '12:63:15', arabic: "لَهُۥ", transliteration: "lahu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "for him", ur: "for him" } },
+      { id: '12:63:16', arabic: "لَحَـٰفِظُونَ", transliteration: "laḥāfiẓūna", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(will) surely (be) guardians", ur: "(will) یقیناً (be) guardians" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 2, to: 3, label: 'فعل + فاعل' },
+        { from: 5, to: 6, label: 'فعل + فاعل' },
+        { from: 7, to: 8, label: 'فعل + فاعل' },
+        { from: 8, to: 9, label: 'مضاف + مضاف إليه' }
+      ],
+    },
+  },
+  64: {
+    text: "قَالَ هَلْ ءَامَنُكُمْ عَلَيْهِ إِلَّا كَمَآ أَمِنتُكُمْ عَلَىٰٓ أَخِيهِ مِن قَبْلُ ۖ فَٱللَّهُ خَيْرٌ حَـٰفِظًۭا ۖ وَهُوَ أَرْحَمُ ٱلرَّٰحِمِينَ",
+    translation: {
+      en: "",
+      ur: "(یعقوب نے) کہا کہ میں اس کے بارے میں تمہارا اعتبار نہیں کرتا مگر ویسا ہی جیسا اس کے بھائی کے بارے میں کیا تھا۔ سو خدا ہی بہتر نگہبان ہے۔ اور وہ سب سے زیادہ رحم کرنے والا ہے",
+    },
+    words: [
+      { id: '12:64:1', arabic: "قَالَ", transliteration: "qāla", pos: ['V'], posLabel: 'V', root: "ق و ل", meaning: { en: "He said", ur: "وہ کہا" } },
+      { id: '12:64:2', arabic: "هَلْ", transliteration: "hal", pos: ['INTG'], posLabel: 'INTG', root: null, meaning: { en: "Should", ur: "Should" } },
+      { id: '12:64:3', arabic: "ءَامَنُكُمْ", transliteration: "āmanukum", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "I entrust you", ur: "میں entrust تم" } },
+      { id: '12:64:4', arabic: "عَلَيْهِ", transliteration: "ʿalayhi", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "with him", ur: "ساتھ him" } },
+      { id: '12:64:5', arabic: "إِلَّا", transliteration: "illā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "except", ur: "سوائے" } },
+      { id: '12:64:6', arabic: "كَمَآ", transliteration: "kamā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "as", ur: "as" } },
+      { id: '12:64:7', arabic: "أَمِنتُكُمْ", transliteration: "amintukum", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "I entrusted you", ur: "میں entrusted تم" } },
+      { id: '12:64:8', arabic: "عَلَىٰٓ", transliteration: "ʿalā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "with", ur: "ساتھ" } },
+      { id: '12:64:9', arabic: "أَخِيهِ", transliteration: "akhīhi", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "his brother", ur: "his brother" } },
+      { id: '12:64:10', arabic: "مِن", transliteration: "min", pos: ['PREP'], posLabel: 'PREP', root: null, meaning: { en: "before", ur: "پہلے" } },
+      { id: '12:64:11', arabic: "قَبْلُ ۖ", transliteration: "qablu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "before", ur: "پہلے" } },
+      { id: '12:64:12', arabic: "فَٱللَّهُ", transliteration: "fal-lahu", pos: ['CONJ+V'], posLabel: 'CONJ+V', root: null, meaning: { en: "But Allah", ur: "لیکن اللہ" } },
+      { id: '12:64:13', arabic: "خَيْرٌ", transliteration: "khayrun", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(is) the best", ur: "(is) the best" } },
+      { id: '12:64:14', arabic: "حَـٰفِظًۭا ۖ", transliteration: "ḥāfiẓan", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Guardian", ur: "Guardian" } },
+      { id: '12:64:15', arabic: "وَهُوَ", transliteration: "wahuwa", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "and He", ur: "اور وہ" } },
+      { id: '12:64:16', arabic: "أَرْحَمُ", transliteration: "arḥamu", pos: ['ADJ'], posLabel: 'ADJ', root: null, meaning: { en: "(is the) Most Merciful", ur: "(is the) بہت مہربان" } },
+      { id: '12:64:17', arabic: "ٱلرَّٰحِمِينَ", transliteration: "l-rāḥimīna", pos: ['ADJ'], posLabel: 'ADJ', root: null, meaning: { en: "(of) the merciful", ur: "(of) the merciful" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 10, to: 11, label: 'جار + مجرور' }
+      ],
+    },
+  },
+  65: {
+    text: "وَلَمَّا فَتَحُوا۟ مَتَـٰعَهُمْ وَجَدُوا۟ بِضَـٰعَتَهُمْ رُدَّتْ إِلَيْهِمْ ۖ قَالُوا۟ يَـٰٓأَبَانَا مَا نَبْغِى ۖ هَـٰذِهِۦ بِضَـٰعَتُنَا رُدَّتْ إِلَيْنَا ۖ وَنَمِيرُ أَهْلَنَا وَنَحْفَظُ أَخَانَا وَنَزْدَادُ كَيْلَ بَعِيرٍۢ ۖ ذَٰلِكَ كَيْلٌۭ يَسِيرٌۭ",
+    translation: {
+      en: "",
+      ur: "اور جب انہوں نے اپنا اسباب کھولا تو دیکھا کہ ان کا سرمایہ واپس کر دیا گیا ہے۔ کہنے لگے ابّا ہمیں (اور) کیا چاہیئے (دیکھیے) یہ ہماری پونجی بھی ہمیں واپس کر دی گئی ہے۔ اب ہم اپنے اہل وعیال کے لیے پھر غلّہ لائیں گے اور اپنے بھائی کی نگہبانی کریں گے اور ایک بار شتر زیادہ لائیں گے (کہ) یہ غلّہ جو ہم لائے ہیں تھوڑا ہے",
+    },
+    words: [
+      { id: '12:65:1', arabic: "وَلَمَّا", transliteration: "walammā", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "And when", ur: "اور when" } },
+      { id: '12:65:2', arabic: "فَتَحُوا۟", transliteration: "fataḥū", pos: ['CONJ+V'], posLabel: 'CONJ+V', root: null, meaning: { en: "they opened", ur: "وہ لوگ opened" } },
+      { id: '12:65:3', arabic: "مَتَـٰعَهُمْ", transliteration: "matāʿahum", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "their baggage", ur: "their baggage" } },
+      { id: '12:65:4', arabic: "وَجَدُوا۟", transliteration: "wajadū", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "they found", ur: "وہ لوگ found" } },
+      { id: '12:65:5', arabic: "بِضَـٰعَتَهُمْ", transliteration: "biḍāʿatahum", pos: ['P+N'], posLabel: 'P+N', root: null, meaning: { en: "their merchandise", ur: "their merchandise" } },
+      { id: '12:65:6', arabic: "رُدَّتْ", transliteration: "ruddat", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "returned", ur: "returned" } },
+      { id: '12:65:7', arabic: "إِلَيْهِمْ ۖ", transliteration: "ilayhim", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "to them", ur: "کو them" } },
+      { id: '12:65:8', arabic: "قَالُوا۟", transliteration: "qālū", pos: ['V'], posLabel: 'V', root: "ق و ل", meaning: { en: "They said", ur: "وہ لوگ کہا" } },
+      { id: '12:65:9', arabic: "يَـٰٓأَبَانَا", transliteration: "yāabānā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "O our father", ur: "اے our باپ" } },
+      { id: '12:65:10', arabic: "مَا", transliteration: "mā", pos: ['REL'], posLabel: 'REL', root: null, meaning: { en: "What", ur: "کیا" } },
+      { id: '12:65:11', arabic: "نَبْغِى ۖ", transliteration: "nabghī", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "(could) we desire", ur: "(could) ہم desire" } },
+      { id: '12:65:12', arabic: "هَـٰذِهِۦ", transliteration: "hādhihi", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "This", ur: "This" } },
+      { id: '12:65:13', arabic: "بِضَـٰعَتُنَا", transliteration: "biḍāʿatunā", pos: ['P+N'], posLabel: 'P+N', root: null, meaning: { en: "(is) our merchandise", ur: "(is) our merchandise" } },
+      { id: '12:65:14', arabic: "رُدَّتْ", transliteration: "ruddat", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "returned", ur: "returned" } },
+      { id: '12:65:15', arabic: "إِلَيْنَا ۖ", transliteration: "ilaynā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "to us", ur: "کو us" } },
+      { id: '12:65:16', arabic: "وَنَمِيرُ", transliteration: "wanamīru", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "And we will get provision", ur: "اور ہم will get provision" } },
+      { id: '12:65:17', arabic: "أَهْلَنَا", transliteration: "ahlanā", pos: ['N'], posLabel: 'N', root: "أ ه ل", meaning: { en: "(for) our family", ur: "(for) our family" } },
+      { id: '12:65:18', arabic: "وَنَحْفَظُ", transliteration: "wanaḥfaẓu", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "and we will protect", ur: "اور ہم will protect" } },
+      { id: '12:65:19', arabic: "أَخَانَا", transliteration: "akhānā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "our brother", ur: "our brother" } },
+      { id: '12:65:20', arabic: "وَنَزْدَادُ", transliteration: "wanazdādu", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "and get an increase", ur: "اور get an increase" } },
+      { id: '12:65:21', arabic: "كَيْلَ", transliteration: "kayla", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "measure", ur: "measure" } },
+      { id: '12:65:22', arabic: "بَعِيرٍۢ ۖ", transliteration: "baʿīrin", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(of) a camel's (load)", ur: "(of) a camel's (load)" } },
+      { id: '12:65:23', arabic: "ذَٰلِكَ", transliteration: "dhālika", pos: ['DEM'], posLabel: 'DEM', root: null, meaning: { en: "That", ur: "وہ" } },
+      { id: '12:65:24', arabic: "كَيْلٌۭ", transliteration: "kaylun", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(is) a measurement", ur: "(is) a measurement" } },
+      { id: '12:65:25', arabic: "يَسِيرٌۭ", transliteration: "yasīrun", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "easy", ur: "easy" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 6, to: 7, label: 'فعل + فاعل' },
+        { from: 8, to: 9, label: 'فعل + فاعل' },
+        { from: 10, to: 11, label: 'موصول + صلة' },
+        { from: 11, to: 12, label: 'فعل + فاعل' },
+        { from: 14, to: 15, label: 'فعل + فاعل' },
+        { from: 21, to: 22, label: 'مضاف + مضاف إليه' }
+      ],
+    },
+  },
+  66: {
+    text: "قَالَ لَنْ أُرْسِلَهُۥ مَعَكُمْ حَتَّىٰ تُؤْتُونِ مَوْثِقًۭا مِّنَ ٱللَّهِ لَتَأْتُنَّنِى بِهِۦٓ إِلَّآ أَن يُحَاطَ بِكُمْ ۖ فَلَمَّآ ءَاتَوْهُ مَوْثِقَهُمْ قَالَ ٱللَّهُ عَلَىٰ مَا نَقُولُ وَكِيلٌۭ",
+    translation: {
+      en: "",
+      ur: "(یعقوب نے) کہا جب تک تم خدا کا عہد نہ دو کہ اس کو میرے پاس (صحیح سالم) لے آؤ گے میں اسے ہرگز تمہارے ساتھ نہیں بھیجنے کا۔ مگر یہ کہ تم گھیر لیے جاؤ (یعنی بےبس ہوجاؤ تو مجبوری ہے) جب انہوں نے ان سے عہد کرلیا تو (یعقوب نے) کہا کہ جو قول وقرار ہم کر رہے ہیں اس کا خدا ضامن ہے",
+    },
+    words: [
+      { id: '12:66:1', arabic: "قَالَ", transliteration: "qāla", pos: ['V'], posLabel: 'V', root: "ق و ل", meaning: { en: "He said", ur: "وہ کہا" } },
+      { id: '12:66:2', arabic: "لَنْ", transliteration: "lan", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Never", ur: "Never" } },
+      { id: '12:66:3', arabic: "أُرْسِلَهُۥ", transliteration: "ur'silahu", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "will I send him", ur: "will میں send him" } },
+      { id: '12:66:4', arabic: "مَعَكُمْ", transliteration: "maʿakum", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "with you", ur: "ساتھ تم" } },
+      { id: '12:66:5', arabic: "حَتَّىٰ", transliteration: "ḥattā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "until", ur: "until" } },
+      { id: '12:66:6', arabic: "تُؤْتُونِ", transliteration: "tu'tūni", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "you give to me", ur: "تم give کو me" } },
+      { id: '12:66:7', arabic: "مَوْثِقًۭا", transliteration: "mawthiqan", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "a promise", ur: "a promise" } },
+      { id: '12:66:8', arabic: "مِّنَ", transliteration: "mina", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "by", ur: "by" } },
+      { id: '12:66:9', arabic: "ٱللَّهِ", transliteration: "l-lahi", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Allah", ur: "اللہ" } },
+      { id: '12:66:10', arabic: "لَتَأْتُنَّنِى", transliteration: "latatunnanī", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "that surely you will bring him to me", ur: "وہ یقیناً تم will bring him کو me" } },
+      { id: '12:66:11', arabic: "بِهِۦٓ", transliteration: "bihi", pos: ['P+N'], posLabel: 'P+N', root: null, meaning: { en: "that surely you will bring him to me", ur: "وہ یقیناً تم will bring him کو me" } },
+      { id: '12:66:12', arabic: "إِلَّآ", transliteration: "illā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "unless", ur: "unless" } },
+      { id: '12:66:13', arabic: "أَن", transliteration: "an", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "that", ur: "وہ" } },
+      { id: '12:66:14', arabic: "يُحَاطَ", transliteration: "yuḥāṭa", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "you are surrounded", ur: "تم are surrounded" } },
+      { id: '12:66:15', arabic: "بِكُمْ ۖ", transliteration: "bikum", pos: ['P+N'], posLabel: 'P+N', root: null, meaning: { en: "you are surrounded", ur: "تم are surrounded" } },
+      { id: '12:66:16', arabic: "فَلَمَّآ", transliteration: "falammā", pos: ['CONJ+V'], posLabel: 'CONJ+V', root: null, meaning: { en: "And when", ur: "اور when" } },
+      { id: '12:66:17', arabic: "ءَاتَوْهُ", transliteration: "ātawhu", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "they had given him", ur: "وہ لوگ had given him" } },
+      { id: '12:66:18', arabic: "مَوْثِقَهُمْ", transliteration: "mawthiqahum", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "their promise", ur: "their promise" } },
+      { id: '12:66:19', arabic: "قَالَ", transliteration: "qāla", pos: ['V'], posLabel: 'V', root: "ق و ل", meaning: { en: "he said", ur: "وہ کہا" } },
+      { id: '12:66:20', arabic: "ٱللَّهُ", transliteration: "l-lahu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Allah", ur: "اللہ" } },
+      { id: '12:66:21', arabic: "عَلَىٰ", transliteration: "ʿalā", pos: ['PREP'], posLabel: 'PREP', root: null, meaning: { en: "over", ur: "اوپر" } },
+      { id: '12:66:22', arabic: "مَا", transliteration: "mā", pos: ['REL'], posLabel: 'REL', root: null, meaning: { en: "what", ur: "کیا" } },
+      { id: '12:66:23', arabic: "نَقُولُ", transliteration: "naqūlu", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "we say", ur: "ہم کہو" } },
+      { id: '12:66:24', arabic: "وَكِيلٌۭ", transliteration: "wakīlun", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "(is) a Guardian", ur: "(is) a Guardian" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 1, to: 2, label: 'فعل + فاعل' },
+        { from: 3, to: 4, label: 'فعل + فاعل' },
+        { from: 6, to: 7, label: 'فعل + فاعل' },
+        { from: 11, to: 12, label: 'جار + مجرور' },
+        { from: 17, to: 18, label: 'فعل + فاعل' },
+        { from: 19, to: 20, label: 'فعل + فاعل' },
+        { from: 22, to: 23, label: 'موصول + صلة' }
+      ],
+    },
+  },
+  67: {
+    text: "وَقَالَ يَـٰبَنِىَّ لَا تَدْخُلُوا۟ مِنۢ بَابٍۢ وَٰحِدٍۢ وَٱدْخُلُوا۟ مِنْ أَبْوَٰبٍۢ مُّتَفَرِّقَةٍۢ ۖ وَمَآ أُغْنِى عَنكُم مِّنَ ٱللَّهِ مِن شَىْءٍ ۖ إِنِ ٱلْحُكْمُ إِلَّا لِلَّهِ ۖ عَلَيْهِ تَوَكَّلْتُ ۖ وَعَلَيْهِ فَلْيَتَوَكَّلِ ٱلْمُتَوَكِّلُونَ",
+    translation: {
+      en: "",
+      ur: "اور ہدایت کی کہ بیٹا ایک ہی دروازے سے داخل نہ ہونا بلکہ جدا جدا دروازوں سے داخل ہونا۔ اور میں خدا کی تقدیر کو تم سے نہیں روک سکتا۔ بےشک حکم اسی کا ہے میں اسی پر بھروسہ رکھتا ہوں۔ اور اہلِ توکل کو اسی پر بھروسہ رکھنا چاہیئے",
+    },
+    words: [
+      { id: '12:67:1', arabic: "وَقَالَ", transliteration: "waqāla", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: "ق و ل", meaning: { en: "And he said", ur: "اور وہ کہا" } },
+      { id: '12:67:2', arabic: "يَـٰبَنِىَّ", transliteration: "yābaniyya", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "O my sons", ur: "اے my sons" } },
+      { id: '12:67:3', arabic: "لَا", transliteration: "lā", pos: ['NEG'], posLabel: 'NEG', root: null, meaning: { en: "(Do) not", ur: "(Do) نہیں" } },
+      { id: '12:67:4', arabic: "تَدْخُلُوا۟", transliteration: "tadkhulū", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "enter", ur: "enter" } },
+      { id: '12:67:5', arabic: "مِنۢ", transliteration: "min", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "from", ur: "سے" } },
+      { id: '12:67:6', arabic: "بَابٍۢ", transliteration: "bābin", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "one gate", ur: "one gate" } },
+      { id: '12:67:7', arabic: "وَٰحِدٍۢ", transliteration: "wāḥidin", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "one gate", ur: "one gate" } },
+      { id: '12:67:8', arabic: "وَٱدْخُلُوا۟", transliteration: "wa-ud'khulū", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "but enter", ur: "لیکن enter" } },
+      { id: '12:67:9', arabic: "مِنْ", transliteration: "min", pos: ['PREP'], posLabel: 'PREP', root: null, meaning: { en: "from", ur: "سے" } },
+      { id: '12:67:10', arabic: "أَبْوَٰبٍۢ", transliteration: "abwābin", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "gates", ur: "gates" } },
+      { id: '12:67:11', arabic: "مُّتَفَرِّقَةٍۢ ۖ", transliteration: "mutafarriqatin", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "different", ur: "different" } },
+      { id: '12:67:12', arabic: "وَمَآ", transliteration: "wamā", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "And not", ur: "اور نہیں" } },
+      { id: '12:67:13', arabic: "أُغْنِى", transliteration: "ugh'nī", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "I can avail", ur: "میں can avail" } },
+      { id: '12:67:14', arabic: "عَنكُم", transliteration: "ʿankum", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "you", ur: "تم" } },
+      { id: '12:67:15', arabic: "مِّنَ", transliteration: "mina", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "against", ur: "against" } },
+      { id: '12:67:16', arabic: "ٱللَّهِ", transliteration: "l-lahi", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Allah", ur: "اللہ" } },
+      { id: '12:67:17', arabic: "مِن", transliteration: "min", pos: ['PREP'], posLabel: 'PREP', root: null, meaning: { en: "any", ur: "any" } },
+      { id: '12:67:18', arabic: "شَىْءٍ ۖ", transliteration: "shayin", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "thing", ur: "thing" } },
+      { id: '12:67:19', arabic: "إِنِ", transliteration: "ini", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Not", ur: "نہیں" } },
+      { id: '12:67:20', arabic: "ٱلْحُكْمُ", transliteration: "l-ḥuk'mu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(is) the decision", ur: "(is) the decision" } },
+      { id: '12:67:21', arabic: "إِلَّا", transliteration: "illā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "except", ur: "سوائے" } },
+      { id: '12:67:22', arabic: "لِلَّهِ ۖ", transliteration: "lillahi", pos: ['P+N'], posLabel: 'P+N', root: null, meaning: { en: "with Allah", ur: "ساتھ اللہ" } },
+      { id: '12:67:23', arabic: "عَلَيْهِ", transliteration: "ʿalayhi", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "upon Him", ur: "پر Him" } },
+      { id: '12:67:24', arabic: "تَوَكَّلْتُ ۖ", transliteration: "tawakkaltu", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "I put my trust", ur: "میں put my trust" } },
+      { id: '12:67:25', arabic: "وَعَلَيْهِ", transliteration: "waʿalayhi", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "and upon Him", ur: "اور پر Him" } },
+      { id: '12:67:26', arabic: "فَلْيَتَوَكَّلِ", transliteration: "falyatawakkali", pos: ['CONJ+V'], posLabel: 'CONJ+V', root: null, meaning: { en: "let put (their) trust", ur: "let put (their) trust" } },
+      { id: '12:67:27', arabic: "ٱلْمُتَوَكِّلُونَ", transliteration: "l-mutawakilūna", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "the ones who put trust", ur: "the ones جو put trust" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 3, to: 4, label: 'نفی + فعل' },
+        { from: 4, to: 5, label: 'فعل + فاعل' },
+        { from: 9, to: 10, label: 'جار + مجرور' },
+        { from: 18, to: 19, label: 'فعل + فاعل' },
+        { from: 19, to: 20, label: 'مضاف + مضاف إليه' },
+        { from: 22, to: 23, label: 'جار + مجرور' }
+      ],
+    },
+  },
+  68: {
+    text: "وَلَمَّا دَخَلُوا۟ مِنْ حَيْثُ أَمَرَهُمْ أَبُوهُم مَّا كَانَ يُغْنِى عَنْهُم مِّنَ ٱللَّهِ مِن شَىْءٍ إِلَّا حَاجَةًۭ فِى نَفْسِ يَعْقُوبَ قَضَىٰهَا ۚ وَإِنَّهُۥ لَذُو عِلْمٍۢ لِّمَا عَلَّمْنَـٰهُ وَلَـٰكِنَّ أَكْثَرَ ٱلنَّاسِ لَا يَعْلَمُونَ",
+    translation: {
+      en: "",
+      ur: "اور جب وہ ان ان مقامات سے داخل ہوئے جہاں جہاں سے (داخل ہونے کے لیے) باپ نے ان سے کہا تھا تو وہ تدبیر خدا کے حکم کو ذرا بھی نہیں ٹال سکتی تھی ہاں وہ یعقوب کے دل کی خواہش تھی جو انہوں نے پوری کی تھی۔ اور بےشک وہ صاحبِ علم تھے کیونکہ ہم نے ان کو علم سکھایا تھا لیکن اکثر لوگ نہیں جانتے",
+    },
+    words: [
+      { id: '12:68:1', arabic: "وَلَمَّا", transliteration: "walammā", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "And when", ur: "اور when" } },
+      { id: '12:68:2', arabic: "دَخَلُوا۟", transliteration: "dakhalū", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "they entered", ur: "وہ لوگ entered" } },
+      { id: '12:68:3', arabic: "مِنْ", transliteration: "min", pos: ['PREP'], posLabel: 'PREP', root: null, meaning: { en: "from", ur: "سے" } },
+      { id: '12:68:4', arabic: "حَيْثُ", transliteration: "ḥaythu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "where", ur: "where" } },
+      { id: '12:68:5', arabic: "أَمَرَهُمْ", transliteration: "amarahum", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "ordered them", ur: "ordered them" } },
+      { id: '12:68:6', arabic: "أَبُوهُم", transliteration: "abūhum", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "their father", ur: "their باپ" } },
+      { id: '12:68:7', arabic: "مَّا", transliteration: "mā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "not", ur: "نہیں" } },
+      { id: '12:68:8', arabic: "كَانَ", transliteration: "kāna", pos: ['N'], posLabel: 'N', root: "ك و ن", meaning: { en: "it", ur: "it" } },
+      { id: '12:68:9', arabic: "يُغْنِى", transliteration: "yugh'nī", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "avail(ed)", ur: "avail(ed)" } },
+      { id: '12:68:10', arabic: "عَنْهُم", transliteration: "ʿanhum", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "them", ur: "them" } },
+      { id: '12:68:11', arabic: "مِّنَ", transliteration: "mina", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "against", ur: "against" } },
+      { id: '12:68:12', arabic: "ٱللَّهِ", transliteration: "l-lahi", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Allah", ur: "اللہ" } },
+      { id: '12:68:13', arabic: "مِن", transliteration: "min", pos: ['PREP'], posLabel: 'PREP', root: null, meaning: { en: "any", ur: "any" } },
+      { id: '12:68:14', arabic: "شَىْءٍ", transliteration: "shayin", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "thing", ur: "thing" } },
+      { id: '12:68:15', arabic: "إِلَّا", transliteration: "illā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "but", ur: "لیکن" } },
+      { id: '12:68:16', arabic: "حَاجَةًۭ", transliteration: "ḥājatan", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "(it was) a need", ur: "(it was) a need" } },
+      { id: '12:68:17', arabic: "فِى", transliteration: "fī", pos: ['PREP'], posLabel: 'PREP', root: null, meaning: { en: "of", ur: "of" } },
+      { id: '12:68:18', arabic: "نَفْسِ", transliteration: "nafsi", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "Yaqub's soul", ur: "Yaqub's روح" } },
+      { id: '12:68:19', arabic: "يَعْقُوبَ", transliteration: "yaʿqūba", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "Yaqub's soul", ur: "Yaqub's روح" } },
+      { id: '12:68:20', arabic: "قَضَىٰهَا ۚ", transliteration: "qaḍāhā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "which he carried out", ur: "جو وہ carried out" } },
+      { id: '12:68:21', arabic: "وَإِنَّهُۥ", transliteration: "wa-innahu", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "And indeed, he", ur: "اور بیشک, وہ" } },
+      { id: '12:68:22', arabic: "لَذُو", transliteration: "ladhū", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(was) a possessor", ur: "(was) a possessor" } },
+      { id: '12:68:23', arabic: "عِلْمٍۢ", transliteration: "ʿil'min", pos: ['N'], posLabel: 'N', root: "ع ل م", meaning: { en: "(of) knowledge", ur: "(of) knowledge" } },
+      { id: '12:68:24', arabic: "لِّمَا", transliteration: "limā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "because", ur: "because" } },
+      { id: '12:68:25', arabic: "عَلَّمْنَـٰهُ", transliteration: "ʿallamnāhu", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "We had taught him", ur: "ہم had taught him" } },
+      { id: '12:68:26', arabic: "وَلَـٰكِنَّ", transliteration: "walākinna", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "but", ur: "لیکن" } },
+      { id: '12:68:27', arabic: "أَكْثَرَ", transliteration: "akthara", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "most", ur: "most" } },
+      { id: '12:68:28', arabic: "ٱلنَّاسِ", transliteration: "l-nāsi", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(of) the people", ur: "(of) the لوگ" } },
+      { id: '12:68:29', arabic: "لَا", transliteration: "lā", pos: ['NEG'], posLabel: 'NEG', root: null, meaning: { en: "(do) not", ur: "(do) نہیں" } },
+      { id: '12:68:30', arabic: "يَعْلَمُونَ", transliteration: "yaʿlamūna", pos: ['V'], posLabel: 'V', root: "ع ل م", meaning: { en: "know", ur: "جاننا" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 3, to: 4, label: 'جار + مجرور' },
+        { from: 9, to: 10, label: 'فعل + فاعل' },
+        { from: 14, to: 15, label: 'فعل + فاعل' },
+        { from: 19, to: 20, label: 'فعل + فاعل' },
+        { from: 27, to: 28, label: 'مضاف + مضاف إليه' },
+        { from: 29, to: 30, label: 'نفی + فعل' }
+      ],
+    },
+  },
+  69: {
+    text: "وَلَمَّا دَخَلُوا۟ عَلَىٰ يُوسُفَ ءَاوَىٰٓ إِلَيْهِ أَخَاهُ ۖ قَالَ إِنِّىٓ أَنَا۠ أَخُوكَ فَلَا تَبْتَئِسْ بِمَا كَانُوا۟ يَعْمَلُونَ",
+    translation: {
+      en: "",
+      ur: "اور جب وہ لوگ یوسف کے پاس پہنچے تو یوسف نے اپنے حقیقی بھائی کو اپنے پاس جگہ دی اور کہا کہ میں تمہارا بھائی ہوں تو جو سلوک یہ (ہمارے ساتھ) کرتے رہے ہیں اس پر افسوس نہ کرنا",
+    },
+    words: [
+      { id: '12:69:1', arabic: "وَلَمَّا", transliteration: "walammā", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "And when", ur: "اور when" } },
+      { id: '12:69:2', arabic: "دَخَلُوا۟", transliteration: "dakhalū", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "they entered", ur: "وہ لوگ entered" } },
+      { id: '12:69:3', arabic: "عَلَىٰ", transliteration: "ʿalā", pos: ['PREP'], posLabel: 'PREP', root: null, meaning: { en: "upon", ur: "پر" } },
+      { id: '12:69:4', arabic: "يُوسُفَ", transliteration: "yūsufa", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Yusuf", ur: "Yusuf" } },
+      { id: '12:69:5', arabic: "ءَاوَىٰٓ", transliteration: "āwā", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "he took", ur: "وہ took" } },
+      { id: '12:69:6', arabic: "إِلَيْهِ", transliteration: "ilayhi", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "to himself", ur: "کو himself" } },
+      { id: '12:69:7', arabic: "أَخَاهُ ۖ", transliteration: "akhāhu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "his brother", ur: "his brother" } },
+      { id: '12:69:8', arabic: "قَالَ", transliteration: "qāla", pos: ['V'], posLabel: 'V', root: "ق و ل", meaning: { en: "He said", ur: "وہ کہا" } },
+      { id: '12:69:9', arabic: "إِنِّىٓ", transliteration: "innī", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Indeed, I", ur: "بیشک, میں" } },
+      { id: '12:69:10', arabic: "أَنَا۠", transliteration: "anā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "[I] am", ur: "[میں] am" } },
+      { id: '12:69:11', arabic: "أَخُوكَ", transliteration: "akhūka", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "your brother", ur: "your brother" } },
+      { id: '12:69:12', arabic: "فَلَا", transliteration: "falā", pos: ['CONJ+V'], posLabel: 'CONJ+V', root: null, meaning: { en: "so (do) not", ur: "so (do) نہیں" } },
+      { id: '12:69:13', arabic: "تَبْتَئِسْ", transliteration: "tabta-is", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "grieve", ur: "grieve" } },
+      { id: '12:69:14', arabic: "بِمَا", transliteration: "bimā", pos: ['P+N'], posLabel: 'P+N', root: null, meaning: { en: "for what", ur: "for کیا" } },
+      { id: '12:69:15', arabic: "كَانُوا۟", transliteration: "kānū", pos: ['V'], posLabel: 'V', root: "ك و ن", meaning: { en: "they used (to)", ur: "وہ لوگ used (کو)" } },
+      { id: '12:69:16', arabic: "يَعْمَلُونَ", transliteration: "yaʿmalūna", pos: ['V'], posLabel: 'V', root: "ع م ل", meaning: { en: "do", ur: "do" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 3, to: 4, label: 'جار + مجرور' },
+        { from: 5, to: 6, label: 'فعل + فاعل' },
+        { from: 8, to: 9, label: 'فعل + فاعل' }
+      ],
+    },
+  },
+  70: {
+    text: "فَلَمَّا جَهَّزَهُم بِجَهَازِهِمْ جَعَلَ ٱلسِّقَايَةَ فِى رَحْلِ أَخِيهِ ثُمَّ أَذَّنَ مُؤَذِّنٌ أَيَّتُهَا ٱلْعِيرُ إِنَّكُمْ لَسَـٰرِقُونَ",
+    translation: {
+      en: "",
+      ur: "جب ان کا اسباب تیار کر دیا تو اپنے بھائی کے شلیتے میں گلاس رکھ دیا اور پھر (جب وہ آبادی سے باہر نکل گئے تو) ایک پکارنے والے نے آواز دی کہ قافلے والو تم تو چور ہو",
+    },
+    words: [
+      { id: '12:70:1', arabic: "فَلَمَّا", transliteration: "falammā", pos: ['CONJ+V'], posLabel: 'CONJ+V', root: null, meaning: { en: "So when", ur: "So when" } },
+      { id: '12:70:2', arabic: "جَهَّزَهُم", transliteration: "jahhazahum", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "he had furnished them", ur: "وہ had furnished them" } },
+      { id: '12:70:3', arabic: "بِجَهَازِهِمْ", transliteration: "bijahāzihim", pos: ['P+N'], posLabel: 'P+N', root: null, meaning: { en: "with their supplies", ur: "ساتھ their supplies" } },
+      { id: '12:70:4', arabic: "جَعَلَ", transliteration: "jaʿala", pos: ['V'], posLabel: 'V', root: "ج ع ل", meaning: { en: "he put", ur: "وہ put" } },
+      { id: '12:70:5', arabic: "ٱلسِّقَايَةَ", transliteration: "l-siqāyata", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "the drinking cup", ur: "the drinking cup" } },
+      { id: '12:70:6', arabic: "فِى", transliteration: "fī", pos: ['PREP'], posLabel: 'PREP', root: null, meaning: { en: "in", ur: "میں" } },
+      { id: '12:70:7', arabic: "رَحْلِ", transliteration: "raḥli", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "the bag", ur: "the bag" } },
+      { id: '12:70:8', arabic: "أَخِيهِ", transliteration: "akhīhi", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(of) his brother", ur: "(of) his brother" } },
+      { id: '12:70:9', arabic: "ثُمَّ", transliteration: "thumma", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Then", ur: "پھر" } },
+      { id: '12:70:10', arabic: "أَذَّنَ", transliteration: "adhana", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "called out", ur: "called out" } },
+      { id: '12:70:11', arabic: "مُؤَذِّنٌ", transliteration: "mu-adhinun", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "an announcer", ur: "an announcer" } },
+      { id: '12:70:12', arabic: "أَيَّتُهَا", transliteration: "ayyatuhā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "O you", ur: "اے تم" } },
+      { id: '12:70:13', arabic: "ٱلْعِيرُ", transliteration: "l-ʿīru", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(in) the caravan", ur: "(میں) the caravan" } },
+      { id: '12:70:14', arabic: "إِنَّكُمْ", transliteration: "innakum", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Indeed, you", ur: "بیشک, تم" } },
+      { id: '12:70:15', arabic: "لَسَـٰرِقُونَ", transliteration: "lasāriqūna", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "surely (are) thieves", ur: "یقیناً (are) thieves" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 4, to: 5, label: 'فعل + فاعل' },
+        { from: 6, to: 7, label: 'جار + مجرور' },
+        { from: 12, to: 13, label: 'مضاف + مضاف إليه' }
+      ],
+    },
+  },
+  71: {
+    text: "قَالُوا۟ وَأَقْبَلُوا۟ عَلَيْهِم مَّاذَا تَفْقِدُونَ",
+    translation: {
+      en: "",
+      ur: "وہ ان کی طرف متوجہ ہو کر کہنے لگے تمہاری کیا چیز کھوئی گئی ہے",
+    },
+    words: [
+      { id: '12:71:1', arabic: "قَالُوا۟", transliteration: "qālū", pos: ['V'], posLabel: 'V', root: "ق و ل", meaning: { en: "They said", ur: "وہ لوگ کہا" } },
+      { id: '12:71:2', arabic: "وَأَقْبَلُوا۟", transliteration: "wa-aqbalū", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "turning towards", ur: "turning towards" } },
+      { id: '12:71:3', arabic: "عَلَيْهِم", transliteration: "ʿalayhim", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "them", ur: "them" } },
+      { id: '12:71:4', arabic: "مَّاذَا", transliteration: "mādhā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "What (is it)", ur: "کیا (is it)" } },
+      { id: '12:71:5', arabic: "تَفْقِدُونَ", transliteration: "tafqidūna", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "you miss", ur: "تم miss" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' },
+        { from: 4, to: 5, label: 'تعلق' }
+      ],
+    },
+  },
+  72: {
+    text: "قَالُوا۟ نَفْقِدُ صُوَاعَ ٱلْمَلِكِ وَلِمَن جَآءَ بِهِۦ حِمْلُ بَعِيرٍۢ وَأَنَا۠ بِهِۦ زَعِيمٌۭ",
+    translation: {
+      en: "",
+      ur: "وہ بولے کہ بادشاہ (کے پانی پینے) کا گلاس کھویا گیا ہے اور جو شخص اس کو لے آئے اس کے لیے ایک بار شتر (انعام) اور میں اس کا ضامن ہوں",
+    },
+    words: [
+      { id: '12:72:1', arabic: "قَالُوا۟", transliteration: "qālū", pos: ['V'], posLabel: 'V', root: "ق و ل", meaning: { en: "They said", ur: "وہ لوگ کہا" } },
+      { id: '12:72:2', arabic: "نَفْقِدُ", transliteration: "nafqidu", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "We are missing", ur: "ہم are missing" } },
+      { id: '12:72:3', arabic: "صُوَاعَ", transliteration: "ṣuwāʿa", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(the) cup", ur: "(the) cup" } },
+      { id: '12:72:4', arabic: "ٱلْمَلِكِ", transliteration: "l-maliki", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "(of) the king", ur: "(of) the king" } },
+      { id: '12:72:5', arabic: "وَلِمَن", transliteration: "waliman", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "And for (one) who", ur: "اور for (one) جو" } },
+      { id: '12:72:6', arabic: "جَآءَ", transliteration: "jāa", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "brings", ur: "brings" } },
+      { id: '12:72:7', arabic: "بِهِۦ", transliteration: "bihi", pos: ['P+N'], posLabel: 'P+N', root: null, meaning: { en: "it", ur: "it" } },
+      { id: '12:72:8', arabic: "حِمْلُ", transliteration: "ḥim'lu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(is) a load", ur: "(is) a load" } },
+      { id: '12:72:9', arabic: "بَعِيرٍۢ", transliteration: "baʿīrin", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(of) a camel", ur: "(of) a camel" } },
+      { id: '12:72:10', arabic: "وَأَنَا۠", transliteration: "wa-anā", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "and I", ur: "اور میں" } },
+      { id: '12:72:11', arabic: "بِهِۦ", transliteration: "bihi", pos: ['P+N'], posLabel: 'P+N', root: null, meaning: { en: "for it", ur: "for it" } },
+      { id: '12:72:12', arabic: "زَعِيمٌۭ", transliteration: "zaʿīmun", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(is) responsible", ur: "(is) responsible" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 2, to: 3, label: 'فعل + فاعل' },
+        { from: 7, to: 8, label: 'جار + مجرور' },
+        { from: 11, to: 12, label: 'جار + مجرور' }
+      ],
+    },
+  },
+  73: {
+    text: "قَالُوا۟ تَٱللَّهِ لَقَدْ عَلِمْتُم مَّا جِئْنَا لِنُفْسِدَ فِى ٱلْأَرْضِ وَمَا كُنَّا سَـٰرِقِينَ",
+    translation: {
+      en: "",
+      ur: "وہ کہنے لگے کہ خدا کی قسم تم کو معلوم ہے کہ ہم (اس) ملک میں اس لیے نہیں آئے کہ خرابی کریں اور نہ ہم چوری کیا کرتے ہیں",
+    },
+    words: [
+      { id: '12:73:1', arabic: "قَالُوا۟", transliteration: "qālū", pos: ['V'], posLabel: 'V', root: "ق و ل", meaning: { en: "They said", ur: "وہ لوگ کہا" } },
+      { id: '12:73:2', arabic: "تَٱللَّهِ", transliteration: "tal-lahi", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "By Allah", ur: "By اللہ" } },
+      { id: '12:73:3', arabic: "لَقَدْ", transliteration: "laqad", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "certainly", ur: "certainly" } },
+      { id: '12:73:4', arabic: "عَلِمْتُم", transliteration: "ʿalim'tum", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "you know", ur: "تم جاننا" } },
+      { id: '12:73:5', arabic: "مَّا", transliteration: "mā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "not", ur: "نہیں" } },
+      { id: '12:73:6', arabic: "جِئْنَا", transliteration: "ji'nā", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "we came", ur: "ہم came" } },
+      { id: '12:73:7', arabic: "لِنُفْسِدَ", transliteration: "linuf'sida", pos: ['P+N'], posLabel: 'P+N', root: null, meaning: { en: "that we cause corruption", ur: "وہ ہم cause corruption" } },
+      { id: '12:73:8', arabic: "فِى", transliteration: "fī", pos: ['PREP'], posLabel: 'PREP', root: null, meaning: { en: "in", ur: "میں" } },
+      { id: '12:73:9', arabic: "ٱلْأَرْضِ", transliteration: "l-arḍi", pos: ['N'], posLabel: 'N', root: "أ ر ض", meaning: { en: "the land", ur: "the land" } },
+      { id: '12:73:10', arabic: "وَمَا", transliteration: "wamā", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "and not", ur: "اور نہیں" } },
+      { id: '12:73:11', arabic: "كُنَّا", transliteration: "kunnā", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "we are", ur: "ہم are" } },
+      { id: '12:73:12', arabic: "سَـٰرِقِينَ", transliteration: "sāriqīna", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "thieves", ur: "thieves" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 2, to: 3, label: 'فعل + فاعل' },
+        { from: 4, to: 5, label: 'فعل + فاعل' },
+        { from: 8, to: 9, label: 'جار + مجرور' },
+        { from: 11, to: 12, label: 'فعل + فاعل' }
+      ],
+    },
+  },
+  74: {
+    text: "قَالُوا۟ فَمَا جَزَٰٓؤُهُۥٓ إِن كُنتُمْ كَـٰذِبِينَ",
+    translation: {
+      en: "",
+      ur: "بولے کہ اگر تم جھوٹے نکلے (یعنی چوری ثابت ہوئی) تو اس کی سزا کیا",
+    },
+    words: [
+      { id: '12:74:1', arabic: "قَالُوا۟", transliteration: "qālū", pos: ['V'], posLabel: 'V', root: "ق و ل", meaning: { en: "They said", ur: "وہ لوگ کہا" } },
+      { id: '12:74:2', arabic: "فَمَا", transliteration: "famā", pos: ['CONJ+V'], posLabel: 'CONJ+V', root: null, meaning: { en: "Then what", ur: "پھر کیا" } },
+      { id: '12:74:3', arabic: "جَزَٰٓؤُهُۥٓ", transliteration: "jazāuhu", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "(will be the) recompense (of) it", ur: "(will be the) recompense (of) it" } },
+      { id: '12:74:4', arabic: "إِن", transliteration: "in", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "if", ur: "if" } },
+      { id: '12:74:5', arabic: "كُنتُمْ", transliteration: "kuntum", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "you are", ur: "تم are" } },
+      { id: '12:74:6', arabic: "كَـٰذِبِينَ", transliteration: "kādhibīna", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "liars", ur: "liars" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 3, to: 4, label: 'فعل + فاعل' },
+        { from: 5, to: 6, label: 'فعل + فاعل' }
+      ],
+    },
+  },
+  75: {
+    text: "قَالُوا۟ جَزَٰٓؤُهُۥ مَن وُجِدَ فِى رَحْلِهِۦ فَهُوَ جَزَٰٓؤُهُۥ ۚ كَذَٰلِكَ نَجْزِى ٱلظَّـٰلِمِينَ",
+    translation: {
+      en: "",
+      ur: "انہوں نے کہا کہ اس کی سزا یہ ہے کہ جس کے شلیتے میں وہ دستیاب ہو وہی اس کا بدل قرار دیا جائے ہم ظالموں کو یہی سزا دیا کرتے ہیں",
+    },
+    words: [
+      { id: '12:75:1', arabic: "قَالُوا۟", transliteration: "qālū", pos: ['V'], posLabel: 'V', root: "ق و ل", meaning: { en: "They said", ur: "وہ لوگ کہا" } },
+      { id: '12:75:2', arabic: "جَزَٰٓؤُهُۥ", transliteration: "jazāuhu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Its recompense", ur: "Its recompense" } },
+      { id: '12:75:3', arabic: "مَن", transliteration: "man", pos: ['REL'], posLabel: 'REL', root: null, meaning: { en: "(is that one) who", ur: "(is وہ one) جو" } },
+      { id: '12:75:4', arabic: "وُجِدَ", transliteration: "wujida", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "it is found", ur: "it is found" } },
+      { id: '12:75:5', arabic: "فِى", transliteration: "fī", pos: ['PREP'], posLabel: 'PREP', root: null, meaning: { en: "in", ur: "میں" } },
+      { id: '12:75:6', arabic: "رَحْلِهِۦ", transliteration: "raḥlihi", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "his bag", ur: "his bag" } },
+      { id: '12:75:7', arabic: "فَهُوَ", transliteration: "fahuwa", pos: ['CONJ+V'], posLabel: 'CONJ+V', root: null, meaning: { en: "then he", ur: "پھر وہ" } },
+      { id: '12:75:8', arabic: "جَزَٰٓؤُهُۥ ۚ", transliteration: "jazāuhu", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "(will be) his recompense", ur: "(will be) his recompense" } },
+      { id: '12:75:9', arabic: "كَذَٰلِكَ", transliteration: "kadhālika", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Thus", ur: "Thus" } },
+      { id: '12:75:10', arabic: "نَجْزِى", transliteration: "najzī", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "(do) we recompense", ur: "(do) ہم recompense" } },
+      { id: '12:75:11', arabic: "ٱلظَّـٰلِمِينَ", transliteration: "l-ẓālimīna", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "the wrongdoers", ur: "the wrongdoers" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 1, to: 2, label: 'فعل + فاعل' },
+        { from: 5, to: 6, label: 'جار + مجرور' },
+        { from: 8, to: 9, label: 'فعل + فاعل' },
+        { from: 10, to: 11, label: 'فعل + فاعل' }
+      ],
+    },
+  },
+  76: {
+    text: "فَبَدَأَ بِأَوْعِيَتِهِمْ قَبْلَ وِعَآءِ أَخِيهِ ثُمَّ ٱسْتَخْرَجَهَا مِن وِعَآءِ أَخِيهِ ۚ كَذَٰلِكَ كِدْنَا لِيُوسُفَ ۖ مَا كَانَ لِيَأْخُذَ أَخَاهُ فِى دِينِ ٱلْمَلِكِ إِلَّآ أَن يَشَآءَ ٱللَّهُ ۚ نَرْفَعُ دَرَجَـٰتٍۢ مَّن نَّشَآءُ ۗ وَفَوْقَ كُلِّ ذِى عِلْمٍ عَلِيمٌۭ",
+    translation: {
+      en: "",
+      ur: "پھر یوسف نے اپنے بھائی کے شلیتے سے پہلے ان کے شلیتوں کو دیکھنا شروع کیا پھر اپنے بھائی کے شلیتے میں سے اس کو نکال لیا۔ اس طرح ہم نے یوسف کے لیے تدبیر کی (ورنہ) بادشاہ کے قانون کے مطابق وہ مشیتِ خدا کے سوا اپنے بھائی کو لے نہیں سکتے تھے۔ ہم جس کے لیے چاہتے ہیں درجے بلند کرتے ہیں۔ اور ہر علم والے سے دوسرا علم والا بڑھ کر ہے",
+    },
+    words: [
+      { id: '12:76:1', arabic: "فَبَدَأَ", transliteration: "fabada-a", pos: ['CONJ+V'], posLabel: 'CONJ+V', root: null, meaning: { en: "So he began", ur: "So وہ began" } },
+      { id: '12:76:2', arabic: "بِأَوْعِيَتِهِمْ", transliteration: "bi-awʿiyatihim", pos: ['P+N'], posLabel: 'P+N', root: null, meaning: { en: "with their bags", ur: "ساتھ their bags" } },
+      { id: '12:76:3', arabic: "قَبْلَ", transliteration: "qabla", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "before", ur: "پہلے" } },
+      { id: '12:76:4', arabic: "وِعَآءِ", transliteration: "wiʿāi", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(the) bag", ur: "(the) bag" } },
+      { id: '12:76:5', arabic: "أَخِيهِ", transliteration: "akhīhi", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(of) his brother", ur: "(of) his brother" } },
+      { id: '12:76:6', arabic: "ثُمَّ", transliteration: "thumma", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "then", ur: "پھر" } },
+      { id: '12:76:7', arabic: "ٱسْتَخْرَجَهَا", transliteration: "is'takhrajahā", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "he brought it out", ur: "وہ brought it out" } },
+      { id: '12:76:8', arabic: "مِن", transliteration: "min", pos: ['PREP'], posLabel: 'PREP', root: null, meaning: { en: "from", ur: "سے" } },
+      { id: '12:76:9', arabic: "وِعَآءِ", transliteration: "wiʿāi", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(the) bag", ur: "(the) bag" } },
+      { id: '12:76:10', arabic: "أَخِيهِ ۚ", transliteration: "akhīhi", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(of) his brother", ur: "(of) his brother" } },
+      { id: '12:76:11', arabic: "كَذَٰلِكَ", transliteration: "kadhālika", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Thus", ur: "Thus" } },
+      { id: '12:76:12', arabic: "كِدْنَا", transliteration: "kid'nā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(did) We plan", ur: "(did) ہم plan" } },
+      { id: '12:76:13', arabic: "لِيُوسُفَ ۖ", transliteration: "liyūsufa", pos: ['P+N'], posLabel: 'P+N', root: null, meaning: { en: "for Yusuf", ur: "for Yusuf" } },
+      { id: '12:76:14', arabic: "مَا", transliteration: "mā", pos: ['NEG'], posLabel: 'NEG', root: null, meaning: { en: "He could not", ur: "وہ could نہیں" } },
+      { id: '12:76:15', arabic: "كَانَ", transliteration: "kāna", pos: ['V'], posLabel: 'V', root: "ك و ن", meaning: { en: "He could not", ur: "وہ could نہیں" } },
+      { id: '12:76:16', arabic: "لِيَأْخُذَ", transliteration: "liyakhudha", pos: ['P+N'], posLabel: 'P+N', root: null, meaning: { en: "take", ur: "take" } },
+      { id: '12:76:17', arabic: "أَخَاهُ", transliteration: "akhāhu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "his brother", ur: "his brother" } },
+      { id: '12:76:18', arabic: "فِى", transliteration: "fī", pos: ['PREP'], posLabel: 'PREP', root: null, meaning: { en: "by", ur: "by" } },
+      { id: '12:76:19', arabic: "دِينِ", transliteration: "dīni", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "the law", ur: "the law" } },
+      { id: '12:76:20', arabic: "ٱلْمَلِكِ", transliteration: "l-maliki", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "(of) the king", ur: "(of) the king" } },
+      { id: '12:76:21', arabic: "إِلَّآ", transliteration: "illā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "except", ur: "سوائے" } },
+      { id: '12:76:22', arabic: "أَن", transliteration: "an", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "that", ur: "وہ" } },
+      { id: '12:76:23', arabic: "يَشَآءَ", transliteration: "yashāa", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "Allah willed", ur: "اللہ willed" } },
+      { id: '12:76:24', arabic: "ٱللَّهُ ۚ", transliteration: "l-lahu", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "Allah willed", ur: "اللہ willed" } },
+      { id: '12:76:25', arabic: "نَرْفَعُ", transliteration: "narfaʿu", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "We raise", ur: "ہم raise" } },
+      { id: '12:76:26', arabic: "دَرَجَـٰتٍۢ", transliteration: "darajātin", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(in) degrees", ur: "(میں) degrees" } },
+      { id: '12:76:27', arabic: "مَّن", transliteration: "man", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "whom", ur: "whom" } },
+      { id: '12:76:28', arabic: "نَّشَآءُ ۗ", transliteration: "nashāu", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "We will", ur: "ہم will" } },
+      { id: '12:76:29', arabic: "وَفَوْقَ", transliteration: "wafawqa", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "but over", ur: "لیکن اوپر" } },
+      { id: '12:76:30', arabic: "كُلِّ", transliteration: "kulli", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "every", ur: "ہر" } },
+      { id: '12:76:31', arabic: "ذِى", transliteration: "dhī", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "possessor", ur: "possessor" } },
+      { id: '12:76:32', arabic: "عِلْمٍ", transliteration: "ʿil'min", pos: ['N'], posLabel: 'N', root: "ع ل م", meaning: { en: "(of) knowledge", ur: "(of) knowledge" } },
+      { id: '12:76:33', arabic: "عَلِيمٌۭ", transliteration: "ʿalīmun", pos: ['ADJ'], posLabel: 'ADJ', root: "ع ل م", meaning: { en: "(is) the All-Knower", ur: "(is) the سب-Knower" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 2, to: 3, label: 'جار + مجرور' },
+        { from: 8, to: 9, label: 'جار + مجرور' },
+        { from: 14, to: 15, label: 'نفی + فعل' },
+        { from: 16, to: 17, label: 'جار + مجرور' },
+        { from: 18, to: 19, label: 'جار + مجرور' },
+        { from: 20, to: 21, label: 'فعل + فاعل' },
+        { from: 25, to: 26, label: 'فعل + فاعل' },
+        { from: 32, to: 33, label: 'موصوف + صفت' }
+      ],
+    },
+  },
+  77: {
+    text: "۞ قَالُوٓا۟ إِن يَسْرِقْ فَقَدْ سَرَقَ أَخٌۭ لَّهُۥ مِن قَبْلُ ۚ فَأَسَرَّهَا يُوسُفُ فِى نَفْسِهِۦ وَلَمْ يُبْدِهَا لَهُمْ ۚ قَالَ أَنتُمْ شَرٌّۭ مَّكَانًۭا ۖ وَٱللَّهُ أَعْلَمُ بِمَا تَصِفُونَ",
+    translation: {
+      en: "",
+      ur: "(برادران یوسف نے) کہا کہ اگر اس نے چوری کی ہو تو (کچھ عجب نہیں کہ) اس کے ایک بھائی نے بھی پہلے چوری کی تھی یوسف نے اس بات کو اپنے دل میں مخفی رکھا اور ان پر ظاہر نہ ہونے دیا (اور) کہا کہ تم بڑے بدقماش ہو۔ اور جو تم بیان کرتے ہو خدا اسے خوب جانتا ہے",
+    },
+    words: [
+      { id: '12:77:1', arabic: "۞ قَالُوٓا۟", transliteration: "qālū", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "They said", ur: "وہ لوگ کہا" } },
+      { id: '12:77:2', arabic: "إِن", transliteration: "in", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "If", ur: "If" } },
+      { id: '12:77:3', arabic: "يَسْرِقْ", transliteration: "yasriq", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "he steals ", ur: "وہ steals " } },
+      { id: '12:77:4', arabic: "فَقَدْ", transliteration: "faqad", pos: ['CONJ+V'], posLabel: 'CONJ+V', root: null, meaning: { en: "then verily", ur: "پھر بیشک" } },
+      { id: '12:77:5', arabic: "سَرَقَ", transliteration: "saraqa", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "stole", ur: "stole" } },
+      { id: '12:77:6', arabic: "أَخٌۭ", transliteration: "akhun", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "a brother", ur: "a brother" } },
+      { id: '12:77:7', arabic: "لَّهُۥ", transliteration: "lahu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "of his", ur: "of his" } },
+      { id: '12:77:8', arabic: "مِن", transliteration: "min", pos: ['PREP'], posLabel: 'PREP', root: null, meaning: { en: "before", ur: "پہلے" } },
+      { id: '12:77:9', arabic: "قَبْلُ ۚ", transliteration: "qablu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "before", ur: "پہلے" } },
+      { id: '12:77:10', arabic: "فَأَسَرَّهَا", transliteration: "fa-asarrahā", pos: ['CONJ+V'], posLabel: 'CONJ+V', root: null, meaning: { en: "But Yusuf kept it secret", ur: "لیکن Yusuf kept it secret" } },
+      { id: '12:77:11', arabic: "يُوسُفُ", transliteration: "yūsufu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "But Yusuf kept it secret", ur: "لیکن Yusuf kept it secret" } },
+      { id: '12:77:12', arabic: "فِى", transliteration: "fī", pos: ['PREP'], posLabel: 'PREP', root: null, meaning: { en: "within", ur: "within" } },
+      { id: '12:77:13', arabic: "نَفْسِهِۦ", transliteration: "nafsihi", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "himself", ur: "himself" } },
+      { id: '12:77:14', arabic: "وَلَمْ", transliteration: "walam", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "and (did) not", ur: "اور (did) نہیں" } },
+      { id: '12:77:15', arabic: "يُبْدِهَا", transliteration: "yub'dihā", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "reveal it", ur: "reveal it" } },
+      { id: '12:77:16', arabic: "لَهُمْ ۚ", transliteration: "lahum", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "to them", ur: "کو them" } },
+      { id: '12:77:17', arabic: "قَالَ", transliteration: "qāla", pos: ['V'], posLabel: 'V', root: "ق و ل", meaning: { en: "He said", ur: "وہ کہا" } },
+      { id: '12:77:18', arabic: "أَنتُمْ", transliteration: "antum", pos: ['PRON'], posLabel: 'PRON', root: null, meaning: { en: "You", ur: "تم" } },
+      { id: '12:77:19', arabic: "شَرٌّۭ", transliteration: "sharrun", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(are the) worse", ur: "(are the) worse" } },
+      { id: '12:77:20', arabic: "مَّكَانًۭا ۖ", transliteration: "makānan", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(in) position", ur: "(میں) position" } },
+      { id: '12:77:21', arabic: "وَٱللَّهُ", transliteration: "wal-lahu", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "and Allah", ur: "اور اللہ" } },
+      { id: '12:77:22', arabic: "أَعْلَمُ", transliteration: "aʿlamu", pos: ['N'], posLabel: 'N', root: "ع ل م", meaning: { en: "knows best", ur: "knows best" } },
+      { id: '12:77:23', arabic: "بِمَا", transliteration: "bimā", pos: ['P+N'], posLabel: 'P+N', root: null, meaning: { en: "of what", ur: "of کیا" } },
+      { id: '12:77:24', arabic: "تَصِفُونَ", transliteration: "taṣifūna", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "you describe", ur: "تم describe" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 1, to: 2, label: 'فعل + فاعل' },
+        { from: 6, to: 7, label: 'مضاف + مضاف إليه' },
+        { from: 8, to: 9, label: 'جار + مجرور' },
+        { from: 15, to: 16, label: 'فعل + فاعل' }
+      ],
+    },
+  },
+  78: {
+    text: "قَالُوا۟ يَـٰٓأَيُّهَا ٱلْعَزِيزُ إِنَّ لَهُۥٓ أَبًۭا شَيْخًۭا كَبِيرًۭا فَخُذْ أَحَدَنَا مَكَانَهُۥٓ ۖ إِنَّا نَرَىٰكَ مِنَ ٱلْمُحْسِنِينَ",
+    translation: {
+      en: "",
+      ur: "وہ کہنے لگے کہ اے عزیز اس کے والد بہت بوڑھے ہیں (اور اس سے بہت محبت رکھتے ہیں) تو (اس کو چھوڑ دیجیےاور) اس کی جگہ ہم میں سے کسی کو رکھ لیجیئے۔ ہم دیکھتے ہیں کہ آپ احسان کرنے والے ہیں",
+    },
+    words: [
+      { id: '12:78:1', arabic: "قَالُوا۟", transliteration: "qālū", pos: ['V'], posLabel: 'V', root: "ق و ل", meaning: { en: "They said", ur: "وہ لوگ کہا" } },
+      { id: '12:78:2', arabic: "يَـٰٓأَيُّهَا", transliteration: "yāayyuhā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "O", ur: "اے" } },
+      { id: '12:78:3', arabic: "ٱلْعَزِيزُ", transliteration: "l-ʿazīzu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Aziz", ur: "Aziz" } },
+      { id: '12:78:4', arabic: "إِنَّ", transliteration: "inna", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "Indeed", ur: "بیشک" } },
+      { id: '12:78:5', arabic: "لَهُۥٓ", transliteration: "lahu", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "he has", ur: "وہ has" } },
+      { id: '12:78:6', arabic: "أَبًۭا", transliteration: "aban", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "a father", ur: "a باپ" } },
+      { id: '12:78:7', arabic: "شَيْخًۭا", transliteration: "shaykhan", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "old", ur: "old" } },
+      { id: '12:78:8', arabic: "كَبِيرًۭا", transliteration: "kabīran", pos: ['ADJ'], posLabel: 'ADJ', root: null, meaning: { en: "[great]", ur: "[great]" } },
+      { id: '12:78:9', arabic: "فَخُذْ", transliteration: "fakhudh", pos: ['CONJ+V'], posLabel: 'CONJ+V', root: null, meaning: { en: "so take", ur: "so take" } },
+      { id: '12:78:10', arabic: "أَحَدَنَا", transliteration: "aḥadanā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "one of us", ur: "one of us" } },
+      { id: '12:78:11', arabic: "مَكَانَهُۥٓ ۖ", transliteration: "makānahu", pos: ['N'], posLabel: 'N', root: "ك و ن", meaning: { en: "(in) his place", ur: "(میں) his place" } },
+      { id: '12:78:12', arabic: "إِنَّا", transliteration: "innā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Indeed, we", ur: "بیشک, ہم" } },
+      { id: '12:78:13', arabic: "نَرَىٰكَ", transliteration: "narāka", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "[we] see you", ur: "[ہم] دیکھنا تم" } },
+      { id: '12:78:14', arabic: "مِنَ", transliteration: "mina", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "of", ur: "of" } },
+      { id: '12:78:15', arabic: "ٱلْمُحْسِنِينَ", transliteration: "l-muḥ'sinīna", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "the good-doers", ur: "the اچھا-doers" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 1, to: 2, label: 'فعل + فاعل' },
+        { from: 5, to: 6, label: 'فعل + فاعل' },
+        { from: 7, to: 8, label: 'موصوف + صفت' },
+        { from: 13, to: 14, label: 'فعل + فاعل' },
+        { from: 14, to: 15, label: 'مضاف + مضاف إليه' }
+      ],
+    },
+  },
+  79: {
+    text: "قَالَ مَعَاذَ ٱللَّهِ أَن نَّأْخُذَ إِلَّا مَن وَجَدْنَا مَتَـٰعَنَا عِندَهُۥٓ إِنَّآ إِذًۭا لَّظَـٰلِمُونَ",
+    translation: {
+      en: "",
+      ur: "(یوسف نے) کہا کہ خدا پناہ میں رکھے کہ جس شخص کے پاس ہم نے اپنی چیز پائی ہے اس کے سوا کسی اور کو پکڑ لیں ایسا کریں تو ہم (بڑے) بےانصاف ہیں",
+    },
+    words: [
+      { id: '12:79:1', arabic: "قَالَ", transliteration: "qāla", pos: ['V'], posLabel: 'V', root: "ق و ل", meaning: { en: "He said", ur: "وہ کہا" } },
+      { id: '12:79:2', arabic: "مَعَاذَ", transliteration: "maʿādha", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Allah forbid", ur: "اللہ forbid" } },
+      { id: '12:79:3', arabic: "ٱللَّهِ", transliteration: "l-lahi", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Allah forbid", ur: "اللہ forbid" } },
+      { id: '12:79:4', arabic: "أَن", transliteration: "an", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "that", ur: "وہ" } },
+      { id: '12:79:5', arabic: "نَّأْخُذَ", transliteration: "nakhudha", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "we take", ur: "ہم take" } },
+      { id: '12:79:6', arabic: "إِلَّا", transliteration: "illā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "except", ur: "سوائے" } },
+      { id: '12:79:7', arabic: "مَن", transliteration: "man", pos: ['REL'], posLabel: 'REL', root: null, meaning: { en: "(one) who", ur: "(one) جو" } },
+      { id: '12:79:8', arabic: "وَجَدْنَا", transliteration: "wajadnā", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "we found", ur: "ہم found" } },
+      { id: '12:79:9', arabic: "مَتَـٰعَنَا", transliteration: "matāʿanā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "our possession", ur: "our possession" } },
+      { id: '12:79:10', arabic: "عِندَهُۥٓ", transliteration: "ʿindahu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "with him", ur: "ساتھ him" } },
+      { id: '12:79:11', arabic: "إِنَّآ", transliteration: "innā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Indeed, we", ur: "بیشک, ہم" } },
+      { id: '12:79:12', arabic: "إِذًۭا", transliteration: "idhan", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "then", ur: "پھر" } },
+      { id: '12:79:13', arabic: "لَّظَـٰلِمُونَ", transliteration: "laẓālimūna", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "surely (would be) wrongdoers", ur: "یقیناً (would be) wrongdoers" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 1, to: 2, label: 'فعل + فاعل' },
+        { from: 5, to: 6, label: 'فعل + فاعل' }
+      ],
+    },
+  },
+  80: {
+    text: "فَلَمَّا ٱسْتَيْـَٔسُوا۟ مِنْهُ خَلَصُوا۟ نَجِيًّۭا ۖ قَالَ كَبِيرُهُمْ أَلَمْ تَعْلَمُوٓا۟ أَنَّ أَبَاكُمْ قَدْ أَخَذَ عَلَيْكُم مَّوْثِقًۭا مِّنَ ٱللَّهِ وَمِن قَبْلُ مَا فَرَّطتُمْ فِى يُوسُفَ ۖ فَلَنْ أَبْرَحَ ٱلْأَرْضَ حَتَّىٰ يَأْذَنَ لِىٓ أَبِىٓ أَوْ يَحْكُمَ ٱللَّهُ لِى ۖ وَهُوَ خَيْرُ ٱلْحَـٰكِمِينَ",
+    translation: {
+      en: "",
+      ur: "جب وہ اس سے ناامید ہوگئے تو الگ ہو کر صلاح کرنے لگے۔ سب سے بڑے نے کہا کیا تم نہیں جانتے کہ تمہارے والد نے تم سے خدا کا عہد لیا ہے اور اس سے پہلے بھی تم یوسف کے بارے میں قصور کر چکے ہو تو جب تک والد صاحب مجھے حکم نہ دیں میں تو اس جگہ سے ہلنے کا نہیں یا خدا میرے لیے کوئی اور تدبیر کرے۔ اور وہ سب سے بہتر فیصلہ کرنے والا ہے",
+    },
+    words: [
+      { id: '12:80:1', arabic: "فَلَمَّا", transliteration: "falammā", pos: ['CONJ+V'], posLabel: 'CONJ+V', root: null, meaning: { en: "So when", ur: "So when" } },
+      { id: '12:80:2', arabic: "ٱسْتَيْـَٔسُوا۟", transliteration: "is'tayasū", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "they despaired", ur: "وہ لوگ despaired" } },
+      { id: '12:80:3', arabic: "مِنْهُ", transliteration: "min'hu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "of him", ur: "of him" } },
+      { id: '12:80:4', arabic: "خَلَصُوا۟", transliteration: "khalaṣū", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "they secluded themselves", ur: "وہ لوگ secluded themselves" } },
+      { id: '12:80:5', arabic: "نَجِيًّۭا ۖ", transliteration: "najiyyan", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "(in) private consultation", ur: "(میں) private consultation" } },
+      { id: '12:80:6', arabic: "قَالَ", transliteration: "qāla", pos: ['N'], posLabel: 'N', root: "ق و ل", meaning: { en: "Said", ur: "کہا" } },
+      { id: '12:80:7', arabic: "كَبِيرُهُمْ", transliteration: "kabīruhum", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "the eldest among them", ur: "the eldest among them" } },
+      { id: '12:80:8', arabic: "أَلَمْ", transliteration: "alam", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "Do not", ur: "Do نہیں" } },
+      { id: '12:80:9', arabic: "تَعْلَمُوٓا۟", transliteration: "taʿlamū", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "you know", ur: "تم جاننا" } },
+      { id: '12:80:10', arabic: "أَنَّ", transliteration: "anna", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "that", ur: "وہ" } },
+      { id: '12:80:11', arabic: "أَبَاكُمْ", transliteration: "abākum", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "your father", ur: "your باپ" } },
+      { id: '12:80:12', arabic: "قَدْ", transliteration: "qad", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "has taken", ur: "has taken" } },
+      { id: '12:80:13', arabic: "أَخَذَ", transliteration: "akhadha", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "has taken", ur: "has taken" } },
+      { id: '12:80:14', arabic: "عَلَيْكُم", transliteration: "ʿalaykum", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "upon you", ur: "پر تم" } },
+      { id: '12:80:15', arabic: "مَّوْثِقًۭا", transliteration: "mawthiqan", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "a promise", ur: "a promise" } },
+      { id: '12:80:16', arabic: "مِّنَ", transliteration: "mina", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "by", ur: "by" } },
+      { id: '12:80:17', arabic: "ٱللَّهِ", transliteration: "l-lahi", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Allah", ur: "اللہ" } },
+      { id: '12:80:18', arabic: "وَمِن", transliteration: "wamin", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "and before", ur: "اور پہلے" } },
+      { id: '12:80:19', arabic: "قَبْلُ", transliteration: "qablu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "and before", ur: "اور پہلے" } },
+      { id: '12:80:20', arabic: "مَا", transliteration: "mā", pos: ['REL'], posLabel: 'REL', root: null, meaning: { en: "that", ur: "وہ" } },
+      { id: '12:80:21', arabic: "فَرَّطتُمْ", transliteration: "farraṭtum", pos: ['CONJ+V'], posLabel: 'CONJ+V', root: null, meaning: { en: "you failed", ur: "تم failed" } },
+      { id: '12:80:22', arabic: "فِى", transliteration: "fī", pos: ['PREP'], posLabel: 'PREP', root: null, meaning: { en: "concerning", ur: "concerning" } },
+      { id: '12:80:23', arabic: "يُوسُفَ ۖ", transliteration: "yūsufa", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Yusuf", ur: "Yusuf" } },
+      { id: '12:80:24', arabic: "فَلَنْ", transliteration: "falan", pos: ['CONJ+V'], posLabel: 'CONJ+V', root: null, meaning: { en: "So never", ur: "So never" } },
+      { id: '12:80:25', arabic: "أَبْرَحَ", transliteration: "abraḥa", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "will I leave", ur: "will میں leave" } },
+      { id: '12:80:26', arabic: "ٱلْأَرْضَ", transliteration: "l-arḍa", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "the land", ur: "the land" } },
+      { id: '12:80:27', arabic: "حَتَّىٰ", transliteration: "ḥattā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "until", ur: "until" } },
+      { id: '12:80:28', arabic: "يَأْذَنَ", transliteration: "yadhana", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "permits", ur: "permits" } },
+      { id: '12:80:29', arabic: "لِىٓ", transliteration: "lī", pos: ['P+N'], posLabel: 'P+N', root: null, meaning: { en: "me", ur: "me" } },
+      { id: '12:80:30', arabic: "أَبِىٓ", transliteration: "abī", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "my father", ur: "my باپ" } },
+      { id: '12:80:31', arabic: "أَوْ", transliteration: "aw", pos: ['CONJ'], posLabel: 'CONJ', root: null, meaning: { en: "or", ur: "یا" } },
+      { id: '12:80:32', arabic: "يَحْكُمَ", transliteration: "yaḥkuma", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "Allah decides", ur: "اللہ decides" } },
+      { id: '12:80:33', arabic: "ٱللَّهُ", transliteration: "l-lahu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Allah decides", ur: "اللہ decides" } },
+      { id: '12:80:34', arabic: "لِى ۖ", transliteration: "lī", pos: ['P+N'], posLabel: 'P+N', root: null, meaning: { en: "for me", ur: "for me" } },
+      { id: '12:80:35', arabic: "وَهُوَ", transliteration: "wahuwa", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "and He", ur: "اور وہ" } },
+      { id: '12:80:36', arabic: "خَيْرُ", transliteration: "khayru", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(is) the Best", ur: "(is) the Best" } },
+      { id: '12:80:37', arabic: "ٱلْحَـٰكِمِينَ", transliteration: "l-ḥākimīna", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(of) the judges", ur: "(of) the judges" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 2, to: 3, label: 'فعل + فاعل' },
+        { from: 5, to: 6, label: 'فعل + فاعل' },
+        { from: 6, to: 7, label: 'مضاف + مضاف إليه' },
+        { from: 9, to: 10, label: 'فعل + فاعل' },
+        { from: 22, to: 23, label: 'جار + مجرور' },
+        { from: 25, to: 26, label: 'فعل + فاعل' },
+        { from: 29, to: 30, label: 'جار + مجرور' },
+        { from: 32, to: 33, label: 'فعل + فاعل' },
+        { from: 36, to: 37, label: 'مضاف + مضاف إليه' }
+      ],
+    },
+  },
+  81: {
+    text: "ٱرْجِعُوٓا۟ إِلَىٰٓ أَبِيكُمْ فَقُولُوا۟ يَـٰٓأَبَانَآ إِنَّ ٱبْنَكَ سَرَقَ وَمَا شَهِدْنَآ إِلَّا بِمَا عَلِمْنَا وَمَا كُنَّا لِلْغَيْبِ حَـٰفِظِينَ",
+    translation: {
+      en: "",
+      ur: "تم سب والد صاحب کے پاس واپس جاؤ اور کہو کہ ابا آپ کے صاحبزادے نے (وہاں جا کر) چوری کی۔ اور ہم نے اپنی دانست کے مطابق آپ سے (اس کے لے آنے کا) عہد کیا تھا مگر ہم غیب کی باتوں کو جاننے اور یاد رکھنے والے تو نہیں تھے",
+    },
+    words: [
+      { id: '12:81:1', arabic: "ٱرْجِعُوٓا۟", transliteration: "ir'jiʿū", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Return", ur: "Return" } },
+      { id: '12:81:2', arabic: "إِلَىٰٓ", transliteration: "ilā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "to", ur: "کو" } },
+      { id: '12:81:3', arabic: "أَبِيكُمْ", transliteration: "abīkum", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "your father", ur: "your باپ" } },
+      { id: '12:81:4', arabic: "فَقُولُوا۟", transliteration: "faqūlū", pos: ['CONJ+V'], posLabel: 'CONJ+V', root: null, meaning: { en: "and say", ur: "اور کہو" } },
+      { id: '12:81:5', arabic: "يَـٰٓأَبَانَآ", transliteration: "yāabānā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "'O our father", ur: "'اے our باپ" } },
+      { id: '12:81:6', arabic: "إِنَّ", transliteration: "inna", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "Indeed", ur: "بیشک" } },
+      { id: '12:81:7', arabic: "ٱبْنَكَ", transliteration: "ib'naka", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "your son", ur: "your بیٹا" } },
+      { id: '12:81:8', arabic: "سَرَقَ", transliteration: "saraqa", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "has stolen", ur: "has stolen" } },
+      { id: '12:81:9', arabic: "وَمَا", transliteration: "wamā", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "and not", ur: "اور نہیں" } },
+      { id: '12:81:10', arabic: "شَهِدْنَآ", transliteration: "shahid'nā", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "we testify", ur: "ہم testify" } },
+      { id: '12:81:11', arabic: "إِلَّا", transliteration: "illā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "except", ur: "سوائے" } },
+      { id: '12:81:12', arabic: "بِمَا", transliteration: "bimā", pos: ['P+N'], posLabel: 'P+N', root: null, meaning: { en: "of what", ur: "of کیا" } },
+      { id: '12:81:13', arabic: "عَلِمْنَا", transliteration: "ʿalim'nā", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "we knew", ur: "ہم knew" } },
+      { id: '12:81:14', arabic: "وَمَا", transliteration: "wamā", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "And not", ur: "اور نہیں" } },
+      { id: '12:81:15', arabic: "كُنَّا", transliteration: "kunnā", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "we were", ur: "ہم were" } },
+      { id: '12:81:16', arabic: "لِلْغَيْبِ", transliteration: "lil'ghaybi", pos: ['P+N'], posLabel: 'P+N', root: null, meaning: { en: "of the unseen", ur: "of the unseen" } },
+      { id: '12:81:17', arabic: "حَـٰفِظِينَ", transliteration: "ḥāfiẓīna", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "guardians", ur: "guardians" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 6, to: 7, label: 'فعل + فاعل' },
+        { from: 10, to: 11, label: 'فعل + فاعل' },
+        { from: 16, to: 17, label: 'جار + مجرور' }
+      ],
+    },
+  },
+  82: {
+    text: "وَسْـَٔلِ ٱلْقَرْيَةَ ٱلَّتِى كُنَّا فِيهَا وَٱلْعِيرَ ٱلَّتِىٓ أَقْبَلْنَا فِيهَا ۖ وَإِنَّا لَصَـٰدِقُونَ",
+    translation: {
+      en: "",
+      ur: "اور جس بستی میں ہم (ٹھہرے) تھے وہاں سے (یعنی اہل مصر سے) اور جس قافلے میں آئے ہیں اس سے دریافت کر لیجیئے اور ہم اس بیان میں بالکل سچے ہیں",
+    },
+    words: [
+      { id: '12:82:1', arabic: "وَسْـَٔلِ", transliteration: "wasali", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "And ask", ur: "اور ask" } },
+      { id: '12:82:2', arabic: "ٱلْقَرْيَةَ", transliteration: "l-qaryata", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "the town", ur: "the town" } },
+      { id: '12:82:3', arabic: "ٱلَّتِى", transliteration: "allatī", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "where", ur: "where" } },
+      { id: '12:82:4', arabic: "كُنَّا", transliteration: "kunnā", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "we were", ur: "ہم were" } },
+      { id: '12:82:5', arabic: "فِيهَا", transliteration: "fīhā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "[in it]", ur: "[میں it]" } },
+      { id: '12:82:6', arabic: "وَٱلْعِيرَ", transliteration: "wal-ʿīra", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "and the caravan", ur: "اور the caravan" } },
+      { id: '12:82:7', arabic: "ٱلَّتِىٓ", transliteration: "allatī", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "which", ur: "جو" } },
+      { id: '12:82:8', arabic: "أَقْبَلْنَا", transliteration: "aqbalnā", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "we returned", ur: "ہم returned" } },
+      { id: '12:82:9', arabic: "فِيهَا ۖ", transliteration: "fīhā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "[in it]", ur: "[میں it]" } },
+      { id: '12:82:10', arabic: "وَإِنَّا", transliteration: "wa-innā", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "And indeed, we", ur: "اور بیشک, ہم" } },
+      { id: '12:82:11', arabic: "لَصَـٰدِقُونَ", transliteration: "laṣādiqūna", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "surely (are) truthful.'", ur: "یقیناً (are) truthful.'" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 4, to: 5, label: 'فعل + فاعل' },
+        { from: 8, to: 9, label: 'فعل + فاعل' }
+      ],
+    },
+  },
+  83: {
+    text: "قَالَ بَلْ سَوَّلَتْ لَكُمْ أَنفُسُكُمْ أَمْرًۭا ۖ فَصَبْرٌۭ جَمِيلٌ ۖ عَسَى ٱللَّهُ أَن يَأْتِيَنِى بِهِمْ جَمِيعًا ۚ إِنَّهُۥ هُوَ ٱلْعَلِيمُ ٱلْحَكِيمُ",
+    translation: {
+      en: "",
+      ur: "(جب انہوں نے یہ بات یعقوب سے آ کر کہی تو) انہوں نے کہا کہ (حقیقت یوں نہیں ہے) بلکہ یہ بات تم نے اپنے دل سے بنالی ہے تو صبر ہی بہتر ہے۔ عجب نہیں کہ خدا ان سب کو میرے پاس لے آئے۔ بےشک وہ دانا (اور) حکمت والا ہے",
+    },
+    words: [
+      { id: '12:83:1', arabic: "قَالَ", transliteration: "qāla", pos: ['V'], posLabel: 'V', root: "ق و ل", meaning: { en: "He said", ur: "وہ کہا" } },
+      { id: '12:83:2', arabic: "بَلْ", transliteration: "bal", pos: ['CONJ'], posLabel: 'CONJ', root: null, meaning: { en: "Nay", ur: "Nay" } },
+      { id: '12:83:3', arabic: "سَوَّلَتْ", transliteration: "sawwalat", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "have enticed", ur: "have enticed" } },
+      { id: '12:83:4', arabic: "لَكُمْ", transliteration: "lakum", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "you", ur: "تم" } },
+      { id: '12:83:5', arabic: "أَنفُسُكُمْ", transliteration: "anfusukum", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "your souls", ur: "your souls" } },
+      { id: '12:83:6', arabic: "أَمْرًۭا ۖ", transliteration: "amran", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "something", ur: "something" } },
+      { id: '12:83:7', arabic: "فَصَبْرٌۭ", transliteration: "faṣabrun", pos: ['CONJ+V'], posLabel: 'CONJ+V', root: null, meaning: { en: "so patience", ur: "so patience" } },
+      { id: '12:83:8', arabic: "جَمِيلٌ ۖ", transliteration: "jamīlun", pos: ['ADJ'], posLabel: 'ADJ', root: null, meaning: { en: "(is) beautiful", ur: "(is) beautiful" } },
+      { id: '12:83:9', arabic: "عَسَى", transliteration: "ʿasā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Perhaps", ur: "Perhaps" } },
+      { id: '12:83:10', arabic: "ٱللَّهُ", transliteration: "l-lahu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Allah", ur: "اللہ" } },
+      { id: '12:83:11', arabic: "أَن", transliteration: "an", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "will bring them to me", ur: "will bring them کو me" } },
+      { id: '12:83:12', arabic: "يَأْتِيَنِى", transliteration: "yatiyanī", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "will bring them to me", ur: "will bring them کو me" } },
+      { id: '12:83:13', arabic: "بِهِمْ", transliteration: "bihim", pos: ['P+N'], posLabel: 'P+N', root: null, meaning: { en: "will bring them to me", ur: "will bring them کو me" } },
+      { id: '12:83:14', arabic: "جَمِيعًا ۚ", transliteration: "jamīʿan", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "all", ur: "سب" } },
+      { id: '12:83:15', arabic: "إِنَّهُۥ", transliteration: "innahu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Indeed, He", ur: "بیشک, وہ" } },
+      { id: '12:83:16', arabic: "هُوَ", transliteration: "huwa", pos: ['PRON'], posLabel: 'PRON', root: null, meaning: { en: "He", ur: "وہ" } },
+      { id: '12:83:17', arabic: "ٱلْعَلِيمُ", transliteration: "l-ʿalīmu", pos: ['ADJ'], posLabel: 'ADJ', root: null, meaning: { en: "(is) the All-Knower", ur: "(is) the سب-Knower" } },
+      { id: '12:83:18', arabic: "ٱلْحَكِيمُ", transliteration: "l-ḥakīmu", pos: ['ADJ'], posLabel: 'ADJ', root: null, meaning: { en: "All-Wise", ur: "حکمت والا" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 3, to: 4, label: 'فعل + فاعل' },
+        { from: 13, to: 14, label: 'جار + مجرور' }
+      ],
+    },
+  },
+  84: {
+    text: "وَتَوَلَّىٰ عَنْهُمْ وَقَالَ يَـٰٓأَسَفَىٰ عَلَىٰ يُوسُفَ وَٱبْيَضَّتْ عَيْنَاهُ مِنَ ٱلْحُزْنِ فَهُوَ كَظِيمٌۭ",
+    translation: {
+      en: "",
+      ur: "پھر ان کے پاس سے چلے گئے اور کہنے لگے ہائے افسوس یوسف (ہائے افسوس) اور رنج والم میں (اس قدر روئے کہ) ان کی آنکھیں سفید ہوگئیں اور ان کا دل غم سے بھر رہا تھا",
+    },
+    words: [
+      { id: '12:84:1', arabic: "وَتَوَلَّىٰ", transliteration: "watawallā", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "And he turned away", ur: "اور وہ turned away" } },
+      { id: '12:84:2', arabic: "عَنْهُمْ", transliteration: "ʿanhum", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "from them", ur: "سے them" } },
+      { id: '12:84:3', arabic: "وَقَالَ", transliteration: "waqāla", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: "ق و ل", meaning: { en: "and said", ur: "اور کہا" } },
+      { id: '12:84:4', arabic: "يَـٰٓأَسَفَىٰ", transliteration: "yāasafā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Alas, my grief", ur: "Alas, my grief" } },
+      { id: '12:84:5', arabic: "عَلَىٰ", transliteration: "ʿalā", pos: ['PREP'], posLabel: 'PREP', root: null, meaning: { en: "over", ur: "اوپر" } },
+      { id: '12:84:6', arabic: "يُوسُفَ", transliteration: "yūsufa", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Yusuf", ur: "Yusuf" } },
+      { id: '12:84:7', arabic: "وَٱبْيَضَّتْ", transliteration: "wa-ib'yaḍḍat", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "And became white", ur: "اور became white" } },
+      { id: '12:84:8', arabic: "عَيْنَاهُ", transliteration: "ʿaynāhu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "his eyes", ur: "his eyes" } },
+      { id: '12:84:9', arabic: "مِنَ", transliteration: "mina", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "from", ur: "سے" } },
+      { id: '12:84:10', arabic: "ٱلْحُزْنِ", transliteration: "l-ḥuz'ni", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "the grief", ur: "the grief" } },
+      { id: '12:84:11', arabic: "فَهُوَ", transliteration: "fahuwa", pos: ['CONJ+V'], posLabel: 'CONJ+V', root: null, meaning: { en: "and he (was)", ur: "اور وہ (was)" } },
+      { id: '12:84:12', arabic: "كَظِيمٌۭ", transliteration: "kaẓīmun", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "a suppressor", ur: "a suppressor" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 5, to: 6, label: 'جار + مجرور' },
+        { from: 9, to: 10, label: 'مضاف + مضاف إليه' }
+      ],
+    },
+  },
+  85: {
+    text: "قَالُوا۟ تَٱللَّهِ تَفْتَؤُا۟ تَذْكُرُ يُوسُفَ حَتَّىٰ تَكُونَ حَرَضًا أَوْ تَكُونَ مِنَ ٱلْهَـٰلِكِينَ",
+    translation: {
+      en: "",
+      ur: "بیٹے کہنے لگے کہ والله اگر آپ یوسف کو اسی طرح یاد ہی کرتے رہیں گے تو یا تو بیمار ہوجائیں گے یا جان ہی دے دیں گے",
+    },
+    words: [
+      { id: '12:85:1', arabic: "قَالُوا۟", transliteration: "qālū", pos: ['V'], posLabel: 'V', root: "ق و ل", meaning: { en: "They said", ur: "وہ لوگ کہا" } },
+      { id: '12:85:2', arabic: "تَٱللَّهِ", transliteration: "tal-lahi", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "By Allah", ur: "By اللہ" } },
+      { id: '12:85:3', arabic: "تَفْتَؤُا۟", transliteration: "tafta-u", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "you will not cease", ur: "تم will نہیں cease" } },
+      { id: '12:85:4', arabic: "تَذْكُرُ", transliteration: "tadhkuru", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "remembering", ur: "remembering" } },
+      { id: '12:85:5', arabic: "يُوسُفَ", transliteration: "yūsufa", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Yusuf", ur: "Yusuf" } },
+      { id: '12:85:6', arabic: "حَتَّىٰ", transliteration: "ḥattā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "until", ur: "until" } },
+      { id: '12:85:7', arabic: "تَكُونَ", transliteration: "takūna", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "you become", ur: "تم become" } },
+      { id: '12:85:8', arabic: "حَرَضًا", transliteration: "ḥaraḍan", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "fatally ill", ur: "fatally ill" } },
+      { id: '12:85:9', arabic: "أَوْ", transliteration: "aw", pos: ['CONJ'], posLabel: 'CONJ', root: null, meaning: { en: "or", ur: "یا" } },
+      { id: '12:85:10', arabic: "تَكُونَ", transliteration: "takūna", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "become", ur: "become" } },
+      { id: '12:85:11', arabic: "مِنَ", transliteration: "mina", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "of", ur: "of" } },
+      { id: '12:85:12', arabic: "ٱلْهَـٰلِكِينَ", transliteration: "l-hālikīna", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "those who perish", ur: "جو لوگ perish" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 4, to: 5, label: 'فعل + فاعل' },
+        { from: 7, to: 8, label: 'فعل + فاعل' },
+        { from: 10, to: 11, label: 'فعل + فاعل' }
+      ],
+    },
+  },
+  86: {
+    text: "قَالَ إِنَّمَآ أَشْكُوا۟ بَثِّى وَحُزْنِىٓ إِلَى ٱللَّهِ وَأَعْلَمُ مِنَ ٱللَّهِ مَا لَا تَعْلَمُونَ",
+    translation: {
+      en: "",
+      ur: "انہوں نے کہا کہ میں اپنے غم واندوہ کا اظہار خدا سے کرتا ہوں۔ اور خدا کی طرف سے وہ باتیں جانتا ہوں جو تم نہیں جانتے",
+    },
+    words: [
+      { id: '12:86:1', arabic: "قَالَ", transliteration: "qāla", pos: ['V'], posLabel: 'V', root: "ق و ل", meaning: { en: "He said", ur: "وہ کہا" } },
+      { id: '12:86:2', arabic: "إِنَّمَآ", transliteration: "innamā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Only", ur: "صرف" } },
+      { id: '12:86:3', arabic: "أَشْكُوا۟", transliteration: "ashkū", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "I complain", ur: "میں complain" } },
+      { id: '12:86:4', arabic: "بَثِّى", transliteration: "bathī", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "(of) my suffering", ur: "(of) my suffering" } },
+      { id: '12:86:5', arabic: "وَحُزْنِىٓ", transliteration: "waḥuz'nī", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "and my grief", ur: "اور my grief" } },
+      { id: '12:86:6', arabic: "إِلَى", transliteration: "ilā", pos: ['PREP'], posLabel: 'PREP', root: null, meaning: { en: "to", ur: "کو" } },
+      { id: '12:86:7', arabic: "ٱللَّهِ", transliteration: "l-lahi", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Allah", ur: "اللہ" } },
+      { id: '12:86:8', arabic: "وَأَعْلَمُ", transliteration: "wa-aʿlamu", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: "ع ل م", meaning: { en: "and I know", ur: "اور میں جاننا" } },
+      { id: '12:86:9', arabic: "مِنَ", transliteration: "mina", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "from", ur: "سے" } },
+      { id: '12:86:10', arabic: "ٱللَّهِ", transliteration: "l-lahi", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Allah", ur: "اللہ" } },
+      { id: '12:86:11', arabic: "مَا", transliteration: "mā", pos: ['REL'], posLabel: 'REL', root: null, meaning: { en: "what", ur: "کیا" } },
+      { id: '12:86:12', arabic: "لَا", transliteration: "lā", pos: ['NEG'], posLabel: 'NEG', root: null, meaning: { en: "not", ur: "نہیں" } },
+      { id: '12:86:13', arabic: "تَعْلَمُونَ", transliteration: "taʿlamūna", pos: ['V'], posLabel: 'V', root: "ع ل م", meaning: { en: "you know", ur: "تم جاننا" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 1, to: 2, label: 'فعل + فاعل' },
+        { from: 6, to: 7, label: 'جار + مجرور' },
+        { from: 12, to: 13, label: 'نفی + فعل' }
+      ],
+    },
+  },
+  87: {
+    text: "يَـٰبَنِىَّ ٱذْهَبُوا۟ فَتَحَسَّسُوا۟ مِن يُوسُفَ وَأَخِيهِ وَلَا تَا۟يْـَٔسُوا۟ مِن رَّوْحِ ٱللَّهِ ۖ إِنَّهُۥ لَا يَا۟يْـَٔسُ مِن رَّوْحِ ٱللَّهِ إِلَّا ٱلْقَوْمُ ٱلْكَـٰفِرُونَ",
+    translation: {
+      en: "",
+      ur: "بیٹا (یوں کرو کہ ایک دفعہ پھر) جاؤ اور یوسف اور اس کے بھائی کو تلاش کرو اور خدا کی رحمت سے ناامید نہ ہو۔ کہ خدا کی رحمت سے بےایمان لوگ ناامید ہوا کرتے ہیں",
+    },
+    words: [
+      { id: '12:87:1', arabic: "يَـٰبَنِىَّ", transliteration: "yābaniyya", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "O my sons", ur: "اے my sons" } },
+      { id: '12:87:2', arabic: "ٱذْهَبُوا۟", transliteration: "idh'habū", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Go", ur: "Go" } },
+      { id: '12:87:3', arabic: "فَتَحَسَّسُوا۟", transliteration: "fataḥassasū", pos: ['CONJ+V'], posLabel: 'CONJ+V', root: null, meaning: { en: "and inquire", ur: "اور inquire" } },
+      { id: '12:87:4', arabic: "مِن", transliteration: "min", pos: ['PREP'], posLabel: 'PREP', root: null, meaning: { en: "about", ur: "about" } },
+      { id: '12:87:5', arabic: "يُوسُفَ", transliteration: "yūsufa", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Yusuf", ur: "Yusuf" } },
+      { id: '12:87:6', arabic: "وَأَخِيهِ", transliteration: "wa-akhīhi", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "and his brother", ur: "اور his brother" } },
+      { id: '12:87:7', arabic: "وَلَا", transliteration: "walā", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "and not", ur: "اور نہیں" } },
+      { id: '12:87:8', arabic: "تَا۟يْـَٔسُوا۟", transliteration: "tāy'asū", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "despair", ur: "despair" } },
+      { id: '12:87:9', arabic: "مِن", transliteration: "min", pos: ['PREP'], posLabel: 'PREP', root: null, meaning: { en: "of", ur: "of" } },
+      { id: '12:87:10', arabic: "رَّوْحِ", transliteration: "rawḥi", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(the) Mercy of Allah", ur: "(the) رحمت of اللہ" } },
+      { id: '12:87:11', arabic: "ٱللَّهِ ۖ", transliteration: "l-lahi", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(the) Mercy of Allah", ur: "(the) رحمت of اللہ" } },
+      { id: '12:87:12', arabic: "إِنَّهُۥ", transliteration: "innahu", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "Indeed", ur: "بیشک" } },
+      { id: '12:87:13', arabic: "لَا", transliteration: "lā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "none", ur: "none" } },
+      { id: '12:87:14', arabic: "يَا۟يْـَٔسُ", transliteration: "yāy'asu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "despairs", ur: "despairs" } },
+      { id: '12:87:15', arabic: "مِن", transliteration: "min", pos: ['PREP'], posLabel: 'PREP', root: null, meaning: { en: "of", ur: "of" } },
+      { id: '12:87:16', arabic: "رَّوْحِ", transliteration: "rawḥi", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(the) Mercy of Allah", ur: "(the) رحمت of اللہ" } },
+      { id: '12:87:17', arabic: "ٱللَّهِ", transliteration: "l-lahi", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(the) Mercy of Allah", ur: "(the) رحمت of اللہ" } },
+      { id: '12:87:18', arabic: "إِلَّا", transliteration: "illā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "except", ur: "سوائے" } },
+      { id: '12:87:19', arabic: "ٱلْقَوْمُ", transliteration: "l-qawmu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "the people", ur: "the لوگ" } },
+      { id: '12:87:20', arabic: "ٱلْكَـٰفِرُونَ", transliteration: "l-kāfirūna", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "the disbelievers", ur: "the کافر" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 4, to: 5, label: 'جار + مجرور' },
+        { from: 9, to: 10, label: 'جار + مجرور' },
+        { from: 10, to: 11, label: 'مضاف + مضاف إليه' },
+        { from: 12, to: 13, label: 'فعل + فاعل' },
+        { from: 15, to: 16, label: 'جار + مجرور' },
+        { from: 16, to: 17, label: 'مضاف + مضاف إليه' },
+        { from: 18, to: 19, label: 'مضاف + مضاف إليه' },
+        { from: 19, to: 20, label: 'مضاف + مضاف إليه' }
+      ],
+    },
+  },
+  88: {
+    text: "فَلَمَّا دَخَلُوا۟ عَلَيْهِ قَالُوا۟ يَـٰٓأَيُّهَا ٱلْعَزِيزُ مَسَّنَا وَأَهْلَنَا ٱلضُّرُّ وَجِئْنَا بِبِضَـٰعَةٍۢ مُّزْجَىٰةٍۢ فَأَوْفِ لَنَا ٱلْكَيْلَ وَتَصَدَّقْ عَلَيْنَآ ۖ إِنَّ ٱللَّهَ يَجْزِى ٱلْمُتَصَدِّقِينَ",
+    translation: {
+      en: "",
+      ur: "جب وہ یوسف کے پاس گئے تو کہنے لگے کہ عزیز ہمیں اور ہمارے اہل وعیال کو بڑی تکلیف ہو رہی ہے اور ہم تھوڑا سا سرمایہ لائے ہیں آپ ہمیں (اس کے عوض) پورا غلّہ دے دیجیئے اور خیرات کیجیئے۔ کہ خدا خیرات کرنے والوں کو ثواب دیتا ہے",
+    },
+    words: [
+      { id: '12:88:1', arabic: "فَلَمَّا", transliteration: "falammā", pos: ['CONJ+V'], posLabel: 'CONJ+V', root: null, meaning: { en: "So when", ur: "So when" } },
+      { id: '12:88:2', arabic: "دَخَلُوا۟", transliteration: "dakhalū", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "they entered", ur: "وہ لوگ entered" } },
+      { id: '12:88:3', arabic: "عَلَيْهِ", transliteration: "ʿalayhi", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "upon him", ur: "پر him" } },
+      { id: '12:88:4', arabic: "قَالُوا۟", transliteration: "qālū", pos: ['V'], posLabel: 'V', root: "ق و ل", meaning: { en: "they said", ur: "وہ لوگ کہا" } },
+      { id: '12:88:5', arabic: "يَـٰٓأَيُّهَا", transliteration: "yāayyuhā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "O Aziz", ur: "اے Aziz" } },
+      { id: '12:88:6', arabic: "ٱلْعَزِيزُ", transliteration: "l-ʿazīzu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "O Aziz", ur: "اے Aziz" } },
+      { id: '12:88:7', arabic: "مَسَّنَا", transliteration: "massanā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Has touched us", ur: "Has touched us" } },
+      { id: '12:88:8', arabic: "وَأَهْلَنَا", transliteration: "wa-ahlanā", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: "أ ه ل", meaning: { en: "and our family", ur: "اور our family" } },
+      { id: '12:88:9', arabic: "ٱلضُّرُّ", transliteration: "l-ḍuru", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "the adversity", ur: "the adversity" } },
+      { id: '12:88:10', arabic: "وَجِئْنَا", transliteration: "waji'nā", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "and we have come", ur: "اور ہم have come" } },
+      { id: '12:88:11', arabic: "بِبِضَـٰعَةٍۢ", transliteration: "bibiḍāʿatin", pos: ['P+N'], posLabel: 'P+N', root: null, meaning: { en: "with goods", ur: "ساتھ goods" } },
+      { id: '12:88:12', arabic: "مُّزْجَىٰةٍۢ", transliteration: "muz'jātin", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(of) little value", ur: "(of) little value" } },
+      { id: '12:88:13', arabic: "فَأَوْفِ", transliteration: "fa-awfi", pos: ['CONJ+V'], posLabel: 'CONJ+V', root: null, meaning: { en: "but pay (in) full", ur: "لیکن pay (میں) full" } },
+      { id: '12:88:14', arabic: "لَنَا", transliteration: "lanā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "to us", ur: "کو us" } },
+      { id: '12:88:15', arabic: "ٱلْكَيْلَ", transliteration: "l-kayla", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "the measure", ur: "the measure" } },
+      { id: '12:88:16', arabic: "وَتَصَدَّقْ", transliteration: "wataṣaddaq", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "and be charitable", ur: "اور be charitable" } },
+      { id: '12:88:17', arabic: "عَلَيْنَآ ۖ", transliteration: "ʿalaynā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "to us", ur: "کو us" } },
+      { id: '12:88:18', arabic: "إِنَّ", transliteration: "inna", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "Indeed", ur: "بیشک" } },
+      { id: '12:88:19', arabic: "ٱللَّهَ", transliteration: "l-laha", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Allah", ur: "اللہ" } },
+      { id: '12:88:20', arabic: "يَجْزِى", transliteration: "yajzī", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "rewards", ur: "rewards" } },
+      { id: '12:88:21', arabic: "ٱلْمُتَصَدِّقِينَ", transliteration: "l-mutaṣadiqīna", pos: ['ADJ'], posLabel: 'ADJ', root: null, meaning: { en: "the charitable", ur: "the charitable" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 2, to: 3, label: 'فعل + فاعل' },
+        { from: 4, to: 5, label: 'فعل + فاعل' },
+        { from: 11, to: 12, label: 'جار + مجرور' },
+        { from: 14, to: 15, label: 'مضاف + مضاف إليه' },
+        { from: 18, to: 19, label: 'فعل + فاعل' }
+      ],
+    },
+  },
+  89: {
+    text: "قَالَ هَلْ عَلِمْتُم مَّا فَعَلْتُم بِيُوسُفَ وَأَخِيهِ إِذْ أَنتُمْ جَـٰهِلُونَ",
+    translation: {
+      en: "",
+      ur: "(یوسف نے) کہا تمہیں معلوم ہے جب تم نادانی میں پھنسے ہوئے تھے تو تم نے یوسف اور اس کے بھائی کے ساتھ کیا کیا تھا",
+    },
+    words: [
+      { id: '12:89:1', arabic: "قَالَ", transliteration: "qāla", pos: ['V'], posLabel: 'V', root: "ق و ل", meaning: { en: "He said", ur: "وہ کہا" } },
+      { id: '12:89:2', arabic: "هَلْ", transliteration: "hal", pos: ['INTG'], posLabel: 'INTG', root: null, meaning: { en: "Do", ur: "Do" } },
+      { id: '12:89:3', arabic: "عَلِمْتُم", transliteration: "ʿalim'tum", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "you know", ur: "تم جاننا" } },
+      { id: '12:89:4', arabic: "مَّا", transliteration: "mā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "what", ur: "کیا" } },
+      { id: '12:89:5', arabic: "فَعَلْتُم", transliteration: "faʿaltum", pos: ['CONJ+V'], posLabel: 'CONJ+V', root: null, meaning: { en: "you did", ur: "تم did" } },
+      { id: '12:89:6', arabic: "بِيُوسُفَ", transliteration: "biyūsufa", pos: ['P+N'], posLabel: 'P+N', root: null, meaning: { en: "with Yusuf", ur: "ساتھ Yusuf" } },
+      { id: '12:89:7', arabic: "وَأَخِيهِ", transliteration: "wa-akhīhi", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "and his brother", ur: "اور his brother" } },
+      { id: '12:89:8', arabic: "إِذْ", transliteration: "idh", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "when", ur: "when" } },
+      { id: '12:89:9', arabic: "أَنتُمْ", transliteration: "antum", pos: ['PRON'], posLabel: 'PRON', root: null, meaning: { en: "you were", ur: "تم were" } },
+      { id: '12:89:10', arabic: "جَـٰهِلُونَ", transliteration: "jāhilūna", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "ignorant", ur: "ignorant" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 3, to: 4, label: 'فعل + فاعل' }
+      ],
+    },
+  },
+  90: {
+    text: "قَالُوٓا۟ أَءِنَّكَ لَأَنتَ يُوسُفُ ۖ قَالَ أَنَا۠ يُوسُفُ وَهَـٰذَآ أَخِى ۖ قَدْ مَنَّ ٱللَّهُ عَلَيْنَآ ۖ إِنَّهُۥ مَن يَتَّقِ وَيَصْبِرْ فَإِنَّ ٱللَّهَ لَا يُضِيعُ أَجْرَ ٱلْمُحْسِنِينَ",
+    translation: {
+      en: "",
+      ur: "وہ بولے کیا تم ہی یوسف ہو؟ انہوں نے کہا ہاں میں ہی یوسف ہوں۔ اور (بنیامین کی طرف اشارہ کرکے کہنے لگے) یہ میرا بھائی ہے خدا نے ہم پر بڑا احسان کیا ہے۔ جو شخص خدا سے ڈرتا اور صبر کرتا ہے تو خدا نیکوکاروں کا اجر ضائع نہیں کرتا",
+    },
+    words: [
+      { id: '12:90:1', arabic: "قَالُوٓا۟", transliteration: "qālū", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "They said", ur: "وہ لوگ کہا" } },
+      { id: '12:90:2', arabic: "أَءِنَّكَ", transliteration: "a-innaka", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "Are you indeed", ur: "Are تم بیشک" } },
+      { id: '12:90:3', arabic: "لَأَنتَ", transliteration: "la-anta", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "surely you", ur: "یقیناً تم" } },
+      { id: '12:90:4', arabic: "يُوسُفُ ۖ", transliteration: "yūsufu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Yusuf", ur: "Yusuf" } },
+      { id: '12:90:5', arabic: "قَالَ", transliteration: "qāla", pos: ['V'], posLabel: 'V', root: "ق و ل", meaning: { en: "He said", ur: "وہ کہا" } },
+      { id: '12:90:6', arabic: "أَنَا۠", transliteration: "anā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "I am", ur: "میں am" } },
+      { id: '12:90:7', arabic: "يُوسُفُ", transliteration: "yūsufu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Yusuf", ur: "Yusuf" } },
+      { id: '12:90:8', arabic: "وَهَـٰذَآ", transliteration: "wahādhā", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "and this", ur: "اور this" } },
+      { id: '12:90:9', arabic: "أَخِى ۖ", transliteration: "akhī", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(is) my brother", ur: "(is) my brother" } },
+      { id: '12:90:10', arabic: "قَدْ", transliteration: "qad", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "Indeed", ur: "بیشک" } },
+      { id: '12:90:11', arabic: "مَنَّ", transliteration: "manna", pos: ['ADJ'], posLabel: 'ADJ', root: null, meaning: { en: "Allah has been gracious", ur: "اللہ has been gracious" } },
+      { id: '12:90:12', arabic: "ٱللَّهُ", transliteration: "l-lahu", pos: ['ADJ'], posLabel: 'ADJ', root: null, meaning: { en: "Allah has been gracious", ur: "اللہ has been gracious" } },
+      { id: '12:90:13', arabic: "عَلَيْنَآ ۖ", transliteration: "ʿalaynā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "to us", ur: "کو us" } },
+      { id: '12:90:14', arabic: "إِنَّهُۥ", transliteration: "innahu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Indeed, he", ur: "بیشک, وہ" } },
+      { id: '12:90:15', arabic: "مَن", transliteration: "man", pos: ['REL'], posLabel: 'REL', root: null, meaning: { en: "who", ur: "جو" } },
+      { id: '12:90:16', arabic: "يَتَّقِ", transliteration: "yattaqi", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "fears Allah", ur: "fears اللہ" } },
+      { id: '12:90:17', arabic: "وَيَصْبِرْ", transliteration: "wayaṣbir", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "and (is) patient", ur: "اور (is) patient" } },
+      { id: '12:90:18', arabic: "فَإِنَّ", transliteration: "fa-inna", pos: ['CONJ+V'], posLabel: 'CONJ+V', root: null, meaning: { en: "then indeed", ur: "پھر بیشک" } },
+      { id: '12:90:19', arabic: "ٱللَّهَ", transliteration: "l-laha", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Allah", ur: "اللہ" } },
+      { id: '12:90:20', arabic: "لَا", transliteration: "lā", pos: ['NEG'], posLabel: 'NEG', root: null, meaning: { en: "(does) not", ur: "(does) نہیں" } },
+      { id: '12:90:21', arabic: "يُضِيعُ", transliteration: "yuḍīʿu", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "let go waste", ur: "let go waste" } },
+      { id: '12:90:22', arabic: "أَجْرَ", transliteration: "ajra", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(the) reward", ur: "(the) ثواب" } },
+      { id: '12:90:23', arabic: "ٱلْمُحْسِنِينَ", transliteration: "l-muḥ'sinīna", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(of) the good-doers", ur: "(of) the اچھا-doers" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 2, to: 3, label: 'فعل + فاعل' },
+        { from: 5, to: 6, label: 'فعل + فاعل' },
+        { from: 15, to: 16, label: 'موصول + صلة' },
+        { from: 20, to: 21, label: 'نفی + فعل' },
+        { from: 21, to: 22, label: 'فعل + فاعل' },
+        { from: 22, to: 23, label: 'مضاف + مضاف إليه' }
+      ],
+    },
+  },
+  91: {
+    text: "قَالُوا۟ تَٱللَّهِ لَقَدْ ءَاثَرَكَ ٱللَّهُ عَلَيْنَا وَإِن كُنَّا لَخَـٰطِـِٔينَ",
+    translation: {
+      en: "",
+      ur: "وہ بولے خدا کی قسم خدا نے تم کو ہم پر فضیلت بخشی ہے اور بےشک ہم خطاکار تھے",
+    },
+    words: [
+      { id: '12:91:1', arabic: "قَالُوا۟", transliteration: "qālū", pos: ['V'], posLabel: 'V', root: "ق و ل", meaning: { en: "They said", ur: "وہ لوگ کہا" } },
+      { id: '12:91:2', arabic: "تَٱللَّهِ", transliteration: "tal-lahi", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "By Allah", ur: "By اللہ" } },
+      { id: '12:91:3', arabic: "لَقَدْ", transliteration: "laqad", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "certainly", ur: "certainly" } },
+      { id: '12:91:4', arabic: "ءَاثَرَكَ", transliteration: "ātharaka", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Allah has preferred you", ur: "اللہ has preferred تم" } },
+      { id: '12:91:5', arabic: "ٱللَّهُ", transliteration: "l-lahu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Allah has preferred you", ur: "اللہ has preferred تم" } },
+      { id: '12:91:6', arabic: "عَلَيْنَا", transliteration: "ʿalaynā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "over us", ur: "اوپر us" } },
+      { id: '12:91:7', arabic: "وَإِن", transliteration: "wa-in", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "and indeed", ur: "اور بیشک" } },
+      { id: '12:91:8', arabic: "كُنَّا", transliteration: "kunnā", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "we have been", ur: "ہم have been" } },
+      { id: '12:91:9', arabic: "لَخَـٰطِـِٔينَ", transliteration: "lakhāṭiīna", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "sinners", ur: "sinners" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 2, to: 3, label: 'فعل + فاعل' },
+        { from: 8, to: 9, label: 'فعل + فاعل' }
+      ],
+    },
+  },
+  92: {
+    text: "قَالَ لَا تَثْرِيبَ عَلَيْكُمُ ٱلْيَوْمَ ۖ يَغْفِرُ ٱللَّهُ لَكُمْ ۖ وَهُوَ أَرْحَمُ ٱلرَّٰحِمِينَ",
+    translation: {
+      en: "",
+      ur: "(یوسف نے) کہا کہ آج کے دن سے تم پر کچھ عتاب (وملامت) نہیں ہے۔ خدا تم کو معاف کرے۔ اور وہ بہت رحم کرنے والا ہے",
+    },
+    words: [
+      { id: '12:92:1', arabic: "قَالَ", transliteration: "qāla", pos: ['V'], posLabel: 'V', root: "ق و ل", meaning: { en: "He said", ur: "وہ کہا" } },
+      { id: '12:92:2', arabic: "لَا", transliteration: "lā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "No", ur: "نہیں" } },
+      { id: '12:92:3', arabic: "تَثْرِيبَ", transliteration: "tathrība", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "blame", ur: "blame" } },
+      { id: '12:92:4', arabic: "عَلَيْكُمُ", transliteration: "ʿalaykumu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "upon you", ur: "پر تم" } },
+      { id: '12:92:5', arabic: "ٱلْيَوْمَ ۖ", transliteration: "l-yawma", pos: ['N'], posLabel: 'N', root: "ي و م", meaning: { en: "today", ur: "today" } },
+      { id: '12:92:6', arabic: "يَغْفِرُ", transliteration: "yaghfiru", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "Allah will forgive", ur: "اللہ will forgive" } },
+      { id: '12:92:7', arabic: "ٱللَّهُ", transliteration: "l-lahu", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "Allah will forgive", ur: "اللہ will forgive" } },
+      { id: '12:92:8', arabic: "لَكُمْ ۖ", transliteration: "lakum", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "you", ur: "تم" } },
+      { id: '12:92:9', arabic: "وَهُوَ", transliteration: "wahuwa", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "and He", ur: "اور وہ" } },
+      { id: '12:92:10', arabic: "أَرْحَمُ", transliteration: "arḥamu", pos: ['ADJ'], posLabel: 'ADJ', root: null, meaning: { en: "(is) the Most Merciful", ur: "(is) the بہت مہربان" } },
+      { id: '12:92:11', arabic: "ٱلرَّٰحِمِينَ", transliteration: "l-rāḥimīna", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(of) those who show mercy", ur: "(of) جو لوگ show رحمت" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 1, to: 2, label: 'فعل + فاعل' },
+        { from: 3, to: 4, label: 'فعل + فاعل' },
+        { from: 7, to: 8, label: 'فعل + فاعل' }
+      ],
+    },
+  },
+  93: {
+    text: "ٱذْهَبُوا۟ بِقَمِيصِى هَـٰذَا فَأَلْقُوهُ عَلَىٰ وَجْهِ أَبِى يَأْتِ بَصِيرًۭا وَأْتُونِى بِأَهْلِكُمْ أَجْمَعِينَ",
+    translation: {
+      en: "",
+      ur: "یہ میرا کرتہ لے جاؤ اور اسے والد صاحب کے منہ پر ڈال دو۔ وہ بینا ہو جائیں گے۔ اور اپنے تمام اہل وعیال کو میرے پاس لے آؤ",
+    },
+    words: [
+      { id: '12:93:1', arabic: "ٱذْهَبُوا۟", transliteration: "idh'habū", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Go", ur: "Go" } },
+      { id: '12:93:2', arabic: "بِقَمِيصِى", transliteration: "biqamīṣī", pos: ['P+N'], posLabel: 'P+N', root: null, meaning: { en: "with this shirt of mine", ur: "ساتھ this shirt of mine" } },
+      { id: '12:93:3', arabic: "هَـٰذَا", transliteration: "hādhā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "with this shirt of mine", ur: "ساتھ this shirt of mine" } },
+      { id: '12:93:4', arabic: "فَأَلْقُوهُ", transliteration: "fa-alqūhu", pos: ['CONJ+V'], posLabel: 'CONJ+V', root: null, meaning: { en: "and cast it", ur: "اور cast it" } },
+      { id: '12:93:5', arabic: "عَلَىٰ", transliteration: "ʿalā", pos: ['PREP'], posLabel: 'PREP', root: null, meaning: { en: "over", ur: "اوپر" } },
+      { id: '12:93:6', arabic: "وَجْهِ", transliteration: "wajhi", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "(the) face", ur: "(the) face" } },
+      { id: '12:93:7', arabic: "أَبِى", transliteration: "abī", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(of) my father", ur: "(of) my باپ" } },
+      { id: '12:93:8', arabic: "يَأْتِ", transliteration: "yati", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "he will regain sight", ur: "وہ will regain sight" } },
+      { id: '12:93:9', arabic: "بَصِيرًۭا", transliteration: "baṣīran", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "he will regain sight", ur: "وہ will regain sight" } },
+      { id: '12:93:10', arabic: "وَأْتُونِى", transliteration: "watūnī", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "And bring to me", ur: "اور bring کو me" } },
+      { id: '12:93:11', arabic: "بِأَهْلِكُمْ", transliteration: "bi-ahlikum", pos: ['P+N'], posLabel: 'P+N', root: "أ ه ل", meaning: { en: "your family", ur: "your family" } },
+      { id: '12:93:12', arabic: "أَجْمَعِينَ", transliteration: "ajmaʿīna", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "all together", ur: "سب together" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 2, to: 3, label: 'جار + مجرور' },
+        { from: 11, to: 12, label: 'جار + مجرور' }
+      ],
+    },
+  },
+  94: {
+    text: "وَلَمَّا فَصَلَتِ ٱلْعِيرُ قَالَ أَبُوهُمْ إِنِّى لَأَجِدُ رِيحَ يُوسُفَ ۖ لَوْلَآ أَن تُفَنِّدُونِ",
+    translation: {
+      en: "",
+      ur: "اور جب قافلہ (مصر سے) روانہ ہوا تو ان کے والد کہنے لگے کہ اگر مجھ کو یہ نہ کہو کہ (بوڑھا) بہک گیا ہے تو مجھے تو یوسف کی بو آ رہی ہے",
+    },
+    words: [
+      { id: '12:94:1', arabic: "وَلَمَّا", transliteration: "walammā", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "And when", ur: "اور when" } },
+      { id: '12:94:2', arabic: "فَصَلَتِ", transliteration: "faṣalati", pos: ['CONJ+V'], posLabel: 'CONJ+V', root: null, meaning: { en: "departed", ur: "departed" } },
+      { id: '12:94:3', arabic: "ٱلْعِيرُ", transliteration: "l-ʿīru", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "the caravan", ur: "the caravan" } },
+      { id: '12:94:4', arabic: "قَالَ", transliteration: "qāla", pos: ['N'], posLabel: 'N', root: "ق و ل", meaning: { en: "their father said", ur: "their باپ کہا" } },
+      { id: '12:94:5', arabic: "أَبُوهُمْ", transliteration: "abūhum", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "their father said", ur: "their باپ کہا" } },
+      { id: '12:94:6', arabic: "إِنِّى", transliteration: "innī", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Indeed, I", ur: "بیشک, میں" } },
+      { id: '12:94:7', arabic: "لَأَجِدُ", transliteration: "la-ajidu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "[I] find", ur: "[میں] find" } },
+      { id: '12:94:8', arabic: "رِيحَ", transliteration: "rīḥa", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(the) smell", ur: "(the) smell" } },
+      { id: '12:94:9', arabic: "يُوسُفَ ۖ", transliteration: "yūsufa", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(of) Yusuf", ur: "(of) Yusuf" } },
+      { id: '12:94:10', arabic: "لَوْلَآ", transliteration: "lawlā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "if not", ur: "if نہیں" } },
+      { id: '12:94:11', arabic: "أَن", transliteration: "an", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "that", ur: "وہ" } },
+      { id: '12:94:12', arabic: "تُفَنِّدُونِ", transliteration: "tufannidūni", pos: ['V'], posLabel: 'V', root: "د و ن", meaning: { en: "you think me weakened in mind", ur: "تم think me weakened میں mind" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' },
+        { from: 4, to: 5, label: 'تعلق' },
+        { from: 5, to: 6, label: 'تعلق' },
+        { from: 6, to: 7, label: 'تعلق' },
+        { from: 7, to: 8, label: 'تعلق' },
+        { from: 8, to: 9, label: 'تعلق' },
+        { from: 9, to: 10, label: 'تعلق' },
+        { from: 10, to: 11, label: 'تعلق' },
+        { from: 11, to: 12, label: 'تعلق' }
+      ],
+    },
+  },
+  95: {
+    text: "قَالُوا۟ تَٱللَّهِ إِنَّكَ لَفِى ضَلَـٰلِكَ ٱلْقَدِيمِ",
+    translation: {
+      en: "",
+      ur: "وہ بولے کہ والله آپ اسی قدیم غلطی میں (مبتلا) ہیں",
+    },
+    words: [
+      { id: '12:95:1', arabic: "قَالُوا۟", transliteration: "qālū", pos: ['V'], posLabel: 'V', root: "ق و ل", meaning: { en: "They said", ur: "وہ لوگ کہا" } },
+      { id: '12:95:2', arabic: "تَٱللَّهِ", transliteration: "tal-lahi", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "By Allah", ur: "By اللہ" } },
+      { id: '12:95:3', arabic: "إِنَّكَ", transliteration: "innaka", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "indeed, you", ur: "بیشک, تم" } },
+      { id: '12:95:4', arabic: "لَفِى", transliteration: "lafī", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "surely (are) in", ur: "یقیناً (are) میں" } },
+      { id: '12:95:5', arabic: "ضَلَـٰلِكَ", transliteration: "ḍalālika", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "your error", ur: "your error" } },
+      { id: '12:95:6', arabic: "ٱلْقَدِيمِ", transliteration: "l-qadīmi", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "old", ur: "old" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 2, to: 3, label: 'فعل + فاعل' }
+      ],
+    },
+  },
+  96: {
+    text: "فَلَمَّآ أَن جَآءَ ٱلْبَشِيرُ أَلْقَىٰهُ عَلَىٰ وَجْهِهِۦ فَٱرْتَدَّ بَصِيرًۭا ۖ قَالَ أَلَمْ أَقُل لَّكُمْ إِنِّىٓ أَعْلَمُ مِنَ ٱللَّهِ مَا لَا تَعْلَمُونَ",
+    translation: {
+      en: "",
+      ur: "جب خوشخبری دینے والا آ پہنچا تو کرتہ یعقوب کے منہ پر ڈال دیا اور وہ بینا ہو گئے (اور بیٹوں سے) کہنے لگے کیا میں نے تم سے نہیں کہا تھا کہ میں خدا کی طرف سے وہ باتیں جانتا ہوں جو تم نہیں جانتے",
+    },
+    words: [
+      { id: '12:96:1', arabic: "فَلَمَّآ", transliteration: "falammā", pos: ['CONJ+V'], posLabel: 'CONJ+V', root: null, meaning: { en: "Then when", ur: "پھر when" } },
+      { id: '12:96:2', arabic: "أَن", transliteration: "an", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "[that]", ur: "[وہ]" } },
+      { id: '12:96:3', arabic: "جَآءَ", transliteration: "jāa", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "arrived", ur: "arrived" } },
+      { id: '12:96:4', arabic: "ٱلْبَشِيرُ", transliteration: "l-bashīru", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "the bearer of glad tidings", ur: "the bearer of glad tidings" } },
+      { id: '12:96:5', arabic: "أَلْقَىٰهُ", transliteration: "alqāhu", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "he cast it", ur: "وہ cast it" } },
+      { id: '12:96:6', arabic: "عَلَىٰ", transliteration: "ʿalā", pos: ['PREP'], posLabel: 'PREP', root: null, meaning: { en: "over", ur: "اوپر" } },
+      { id: '12:96:7', arabic: "وَجْهِهِۦ", transliteration: "wajhihi", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "his face", ur: "his face" } },
+      { id: '12:96:8', arabic: "فَٱرْتَدَّ", transliteration: "fa-ir'tadda", pos: ['CONJ+V'], posLabel: 'CONJ+V', root: null, meaning: { en: "then returned (his) sight", ur: "پھر returned (his) sight" } },
+      { id: '12:96:9', arabic: "بَصِيرًۭا ۖ", transliteration: "baṣīran", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "then returned (his) sight", ur: "پھر returned (his) sight" } },
+      { id: '12:96:10', arabic: "قَالَ", transliteration: "qāla", pos: ['V'], posLabel: 'V', root: "ق و ل", meaning: { en: "He said", ur: "وہ کہا" } },
+      { id: '12:96:11', arabic: "أَلَمْ", transliteration: "alam", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "Did not", ur: "Did نہیں" } },
+      { id: '12:96:12', arabic: "أَقُل", transliteration: "aqul", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "I say", ur: "میں کہو" } },
+      { id: '12:96:13', arabic: "لَّكُمْ", transliteration: "lakum", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "to you", ur: "کو تم" } },
+      { id: '12:96:14', arabic: "إِنِّىٓ", transliteration: "innī", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "indeed, I", ur: "بیشک, میں" } },
+      { id: '12:96:15', arabic: "أَعْلَمُ", transliteration: "aʿlamu", pos: ['N'], posLabel: 'N', root: "ع ل م", meaning: { en: "[I] know", ur: "[میں] جاننا" } },
+      { id: '12:96:16', arabic: "مِنَ", transliteration: "mina", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "from", ur: "سے" } },
+      { id: '12:96:17', arabic: "ٱللَّهِ", transliteration: "l-lahi", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Allah", ur: "اللہ" } },
+      { id: '12:96:18', arabic: "مَا", transliteration: "mā", pos: ['REL'], posLabel: 'REL', root: null, meaning: { en: "what", ur: "کیا" } },
+      { id: '12:96:19', arabic: "لَا", transliteration: "lā", pos: ['NEG'], posLabel: 'NEG', root: null, meaning: { en: "not", ur: "نہیں" } },
+      { id: '12:96:20', arabic: "تَعْلَمُونَ", transliteration: "taʿlamūna", pos: ['V'], posLabel: 'V', root: "ع ل م", meaning: { en: "you know", ur: "تم جاننا" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 3, to: 4, label: 'فعل + فاعل' },
+        { from: 11, to: 12, label: 'فعل + فاعل' },
+        { from: 19, to: 20, label: 'نفی + فعل' }
+      ],
+    },
+  },
+  97: {
+    text: "قَالُوا۟ يَـٰٓأَبَانَا ٱسْتَغْفِرْ لَنَا ذُنُوبَنَآ إِنَّا كُنَّا خَـٰطِـِٔينَ",
+    translation: {
+      en: "",
+      ur: "بیٹوں نے کہا کہ ابا ہمارے لیے ہمارے گناہ کی مغفرت مانگیئے۔ بےشک ہم خطاکار تھے",
+    },
+    words: [
+      { id: '12:97:1', arabic: "قَالُوا۟", transliteration: "qālū", pos: ['V'], posLabel: 'V', root: "ق و ل", meaning: { en: "They said", ur: "وہ لوگ کہا" } },
+      { id: '12:97:2', arabic: "يَـٰٓأَبَانَا", transliteration: "yāabānā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "O our father", ur: "اے our باپ" } },
+      { id: '12:97:3', arabic: "ٱسْتَغْفِرْ", transliteration: "is'taghfir", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Ask forgiveness", ur: "Ask مغفرت" } },
+      { id: '12:97:4', arabic: "لَنَا", transliteration: "lanā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "for us", ur: "for us" } },
+      { id: '12:97:5', arabic: "ذُنُوبَنَآ", transliteration: "dhunūbanā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(of) our sins", ur: "(of) our sins" } },
+      { id: '12:97:6', arabic: "إِنَّا", transliteration: "innā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Indeed, we", ur: "بیشک, ہم" } },
+      { id: '12:97:7', arabic: "كُنَّا", transliteration: "kunnā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "have been", ur: "have been" } },
+      { id: '12:97:8', arabic: "خَـٰطِـِٔينَ", transliteration: "khāṭiīna", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "sinners", ur: "sinners" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 1, to: 2, label: 'فعل + فاعل' }
+      ],
+    },
+  },
+  98: {
+    text: "قَالَ سَوْفَ أَسْتَغْفِرُ لَكُمْ رَبِّىٓ ۖ إِنَّهُۥ هُوَ ٱلْغَفُورُ ٱلرَّحِيمُ",
+    translation: {
+      en: "",
+      ur: "انہوں نے کہا کہ میں اپنے پروردگار سے تمہارے لیے بخشش مانگوں گا۔ بےشک وہ بخشنے والا مہربان ہے",
+    },
+    words: [
+      { id: '12:98:1', arabic: "قَالَ", transliteration: "qāla", pos: ['V'], posLabel: 'V', root: "ق و ل", meaning: { en: "He said", ur: "وہ کہا" } },
+      { id: '12:98:2', arabic: "سَوْفَ", transliteration: "sawfa", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Soon", ur: "Soon" } },
+      { id: '12:98:3', arabic: "أَسْتَغْفِرُ", transliteration: "astaghfiru", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "I will ask forgiveness", ur: "میں will ask مغفرت" } },
+      { id: '12:98:4', arabic: "لَكُمْ", transliteration: "lakum", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "for you", ur: "for تم" } },
+      { id: '12:98:5', arabic: "رَبِّىٓ ۖ", transliteration: "rabbī", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(from) my Lord", ur: "(سے) my رب" } },
+      { id: '12:98:6', arabic: "إِنَّهُۥ", transliteration: "innahu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Indeed, He", ur: "بیشک, وہ" } },
+      { id: '12:98:7', arabic: "هُوَ", transliteration: "huwa", pos: ['PRON'], posLabel: 'PRON', root: null, meaning: { en: "He", ur: "وہ" } },
+      { id: '12:98:8', arabic: "ٱلْغَفُورُ", transliteration: "l-ghafūru", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "(is) the Oft-Forgiving", ur: "(is) the Oft-Forgiving" } },
+      { id: '12:98:9', arabic: "ٱلرَّحِيمُ", transliteration: "l-raḥīmu", pos: ['ADJ'], posLabel: 'ADJ', root: null, meaning: { en: "the Most Merciful", ur: "the بہت مہربان" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 1, to: 2, label: 'فعل + فاعل' },
+        { from: 3, to: 4, label: 'فعل + فاعل' }
+      ],
+    },
+  },
+  99: {
+    text: "فَلَمَّا دَخَلُوا۟ عَلَىٰ يُوسُفَ ءَاوَىٰٓ إِلَيْهِ أَبَوَيْهِ وَقَالَ ٱدْخُلُوا۟ مِصْرَ إِن شَآءَ ٱللَّهُ ءَامِنِينَ",
+    translation: {
+      en: "",
+      ur: "جب یہ (سب لوگ) یوسف کے پاس پہنچے تو یوسف نے اپنے والدین کو اپنے پاس بٹھایا اور کہا مصر میں داخل ہو جائیے خدا نے چاہا تو جمع خاطر سے رہیئے گا",
+    },
+    words: [
+      { id: '12:99:1', arabic: "فَلَمَّا", transliteration: "falammā", pos: ['CONJ+V'], posLabel: 'CONJ+V', root: null, meaning: { en: "Then when", ur: "پھر when" } },
+      { id: '12:99:2', arabic: "دَخَلُوا۟", transliteration: "dakhalū", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "they entered", ur: "وہ لوگ entered" } },
+      { id: '12:99:3', arabic: "عَلَىٰ", transliteration: "ʿalā", pos: ['PREP'], posLabel: 'PREP', root: null, meaning: { en: "upon", ur: "پر" } },
+      { id: '12:99:4', arabic: "يُوسُفَ", transliteration: "yūsufa", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Yusuf", ur: "Yusuf" } },
+      { id: '12:99:5', arabic: "ءَاوَىٰٓ", transliteration: "āwā", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "he took", ur: "وہ took" } },
+      { id: '12:99:6', arabic: "إِلَيْهِ", transliteration: "ilayhi", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "to himself", ur: "کو himself" } },
+      { id: '12:99:7', arabic: "أَبَوَيْهِ", transliteration: "abawayhi", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "his parents", ur: "his parents" } },
+      { id: '12:99:8', arabic: "وَقَالَ", transliteration: "waqāla", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: "ق و ل", meaning: { en: "and said", ur: "اور کہا" } },
+      { id: '12:99:9', arabic: "ٱدْخُلُوا۟", transliteration: "ud'khulū", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Enter", ur: "Enter" } },
+      { id: '12:99:10', arabic: "مِصْرَ", transliteration: "miṣ'ra", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Egypt", ur: "Egypt" } },
+      { id: '12:99:11', arabic: "إِن", transliteration: "in", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "if", ur: "if" } },
+      { id: '12:99:12', arabic: "شَآءَ", transliteration: "shāa", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Allah wills", ur: "اللہ wills" } },
+      { id: '12:99:13', arabic: "ٱللَّهُ", transliteration: "l-lahu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Allah wills", ur: "اللہ wills" } },
+      { id: '12:99:14', arabic: "ءَامِنِينَ", transliteration: "āminīna", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "safe", ur: "safe" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 3, to: 4, label: 'جار + مجرور' },
+        { from: 5, to: 6, label: 'فعل + فاعل' }
+      ],
+    },
+  },
+  100: {
+    text: "وَرَفَعَ أَبَوَيْهِ عَلَى ٱلْعَرْشِ وَخَرُّوا۟ لَهُۥ سُجَّدًۭا ۖ وَقَالَ يَـٰٓأَبَتِ هَـٰذَا تَأْوِيلُ رُءْيَـٰىَ مِن قَبْلُ قَدْ جَعَلَهَا رَبِّى حَقًّۭا ۖ وَقَدْ أَحْسَنَ بِىٓ إِذْ أَخْرَجَنِى مِنَ ٱلسِّجْنِ وَجَآءَ بِكُم مِّنَ ٱلْبَدْوِ مِنۢ بَعْدِ أَن نَّزَغَ ٱلشَّيْطَـٰنُ بَيْنِى وَبَيْنَ إِخْوَتِىٓ ۚ إِنَّ رَبِّى لَطِيفٌۭ لِّمَا يَشَآءُ ۚ إِنَّهُۥ هُوَ ٱلْعَلِيمُ ٱلْحَكِيمُ",
+    translation: {
+      en: "",
+      ur: "اور اپنے والدین کو تخت پر بٹھایا اور سب یوسفؑ کے آگے سجدہ میں گر پڑے اور (اس وقت) یوسف نے کہا ابا جان یہ میرے اس خواب کی تعبیر ہے جو میں نے پہلے (بچپن میں) دیکھا تھا۔ میرے پروردگار نے اسے سچ کر دکھایا اور اس نے مجھ پر (بہت سے) احسان کئے ہیں کہ مجھ کو جیل خانے سے نکالا۔ اور اس کے بعد کہ شیطان نے مجھ میں اور میرے بھائیوں میں فساد ڈال دیا تھا۔ آپ کو گاؤں سے یہاں لایا۔ بےشک میرا پروردگار جو چاہتا ہے تدبیر سے کرتا ہے۔ وہ دانا (اور) حکمت والا ہے",
+    },
+    words: [
+      { id: '12:100:1', arabic: "وَرَفَعَ", transliteration: "warafaʿa", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "And he raised", ur: "اور وہ raised" } },
+      { id: '12:100:2', arabic: "أَبَوَيْهِ", transliteration: "abawayhi", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "his parents", ur: "his parents" } },
+      { id: '12:100:3', arabic: "عَلَى", transliteration: "ʿalā", pos: ['PREP'], posLabel: 'PREP', root: null, meaning: { en: "upon", ur: "پر" } },
+      { id: '12:100:4', arabic: "ٱلْعَرْشِ", transliteration: "l-ʿarshi", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "the throne", ur: "the throne" } },
+      { id: '12:100:5', arabic: "وَخَرُّوا۟", transliteration: "wakharrū", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "and they fell down", ur: "اور وہ لوگ fell down" } },
+      { id: '12:100:6', arabic: "لَهُۥ", transliteration: "lahu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "to him", ur: "کو him" } },
+      { id: '12:100:7', arabic: "سُجَّدًۭا ۖ", transliteration: "sujjadan", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "prostrate", ur: "prostrate" } },
+      { id: '12:100:8', arabic: "وَقَالَ", transliteration: "waqāla", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: "ق و ل", meaning: { en: "And he said", ur: "اور وہ کہا" } },
+      { id: '12:100:9', arabic: "يَـٰٓأَبَتِ", transliteration: "yāabati", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "O my father", ur: "اے my باپ" } },
+      { id: '12:100:10', arabic: "هَـٰذَا", transliteration: "hādhā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "This", ur: "This" } },
+      { id: '12:100:11', arabic: "تَأْوِيلُ", transliteration: "tawīlu", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "(is the) interpretation", ur: "(is the) interpretation" } },
+      { id: '12:100:12', arabic: "رُءْيَـٰىَ", transliteration: "ru'yāya", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(of) my dream", ur: "(of) my dream" } },
+      { id: '12:100:13', arabic: "مِن", transliteration: "min", pos: ['PREP'], posLabel: 'PREP', root: null, meaning: { en: "(of) before", ur: "(of) پہلے" } },
+      { id: '12:100:14', arabic: "قَبْلُ", transliteration: "qablu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(of) before", ur: "(of) پہلے" } },
+      { id: '12:100:15', arabic: "قَدْ", transliteration: "qad", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Verily", ur: "بیشک" } },
+      { id: '12:100:16', arabic: "جَعَلَهَا", transliteration: "jaʿalahā", pos: ['N'], posLabel: 'N', root: "ج ع ل", meaning: { en: "has made it", ur: "has made it" } },
+      { id: '12:100:17', arabic: "رَبِّى", transliteration: "rabbī", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "my Lord", ur: "my رب" } },
+      { id: '12:100:18', arabic: "حَقًّۭا ۖ", transliteration: "ḥaqqan", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "true", ur: "true" } },
+      { id: '12:100:19', arabic: "وَقَدْ", transliteration: "waqad", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "And indeed", ur: "اور بیشک" } },
+      { id: '12:100:20', arabic: "أَحْسَنَ", transliteration: "aḥsana", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "He was good", ur: "وہ was اچھا" } },
+      { id: '12:100:21', arabic: "بِىٓ", transliteration: "bī", pos: ['P+N'], posLabel: 'P+N', root: null, meaning: { en: "to me", ur: "کو me" } },
+      { id: '12:100:22', arabic: "إِذْ", transliteration: "idh", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "when", ur: "when" } },
+      { id: '12:100:23', arabic: "أَخْرَجَنِى", transliteration: "akhrajanī", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "He took me out", ur: "وہ took me out" } },
+      { id: '12:100:24', arabic: "مِنَ", transliteration: "mina", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "of", ur: "of" } },
+      { id: '12:100:25', arabic: "ٱلسِّجْنِ", transliteration: "l-sij'ni", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "the prison", ur: "the prison" } },
+      { id: '12:100:26', arabic: "وَجَآءَ", transliteration: "wajāa", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "and brought", ur: "اور brought" } },
+      { id: '12:100:27', arabic: "بِكُم", transliteration: "bikum", pos: ['P+N'], posLabel: 'P+N', root: null, meaning: { en: "you", ur: "تم" } },
+      { id: '12:100:28', arabic: "مِّنَ", transliteration: "mina", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "from", ur: "سے" } },
+      { id: '12:100:29', arabic: "ٱلْبَدْوِ", transliteration: "l-badwi", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "the bedouin life", ur: "the bedouin زندگی" } },
+      { id: '12:100:30', arabic: "مِنۢ", transliteration: "min", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "after", ur: "بعد" } },
+      { id: '12:100:31', arabic: "بَعْدِ", transliteration: "baʿdi", pos: ['N'], posLabel: 'N', root: "ب ع د", meaning: { en: "after", ur: "بعد" } },
+      { id: '12:100:32', arabic: "أَن", transliteration: "an", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "[that]", ur: "[وہ]" } },
+      { id: '12:100:33', arabic: "نَّزَغَ", transliteration: "nazagha", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "had caused discord", ur: "had caused discord" } },
+      { id: '12:100:34', arabic: "ٱلشَّيْطَـٰنُ", transliteration: "l-shayṭānu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "the Shaitaan", ur: "the Shaitaan" } },
+      { id: '12:100:35', arabic: "بَيْنِى", transliteration: "baynī", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "between me", ur: "درمیان me" } },
+      { id: '12:100:36', arabic: "وَبَيْنَ", transliteration: "wabayna", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "and between", ur: "اور درمیان" } },
+      { id: '12:100:37', arabic: "إِخْوَتِىٓ ۚ", transliteration: "ikh'watī", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "my brothers", ur: "my brothers" } },
+      { id: '12:100:38', arabic: "إِنَّ", transliteration: "inna", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "Indeed", ur: "بیشک" } },
+      { id: '12:100:39', arabic: "رَبِّى", transliteration: "rabbī", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "my Lord", ur: "my رب" } },
+      { id: '12:100:40', arabic: "لَطِيفٌۭ", transliteration: "laṭīfun", pos: ['ADJ'], posLabel: 'ADJ', root: null, meaning: { en: "(is) Most Subtle", ur: "(is) Most Subtle" } },
+      { id: '12:100:41', arabic: "لِّمَا", transliteration: "limā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "to what", ur: "کو کیا" } },
+      { id: '12:100:42', arabic: "يَشَآءُ ۚ", transliteration: "yashāu", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "He wills", ur: "وہ wills" } },
+      { id: '12:100:43', arabic: "إِنَّهُۥ", transliteration: "innahu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Indeed, He", ur: "بیشک, وہ" } },
+      { id: '12:100:44', arabic: "هُوَ", transliteration: "huwa", pos: ['PRON'], posLabel: 'PRON', root: null, meaning: { en: "He", ur: "وہ" } },
+      { id: '12:100:45', arabic: "ٱلْعَلِيمُ", transliteration: "l-ʿalīmu", pos: ['ADJ'], posLabel: 'ADJ', root: null, meaning: { en: "(is) the All-Knower", ur: "(is) the سب-Knower" } },
+      { id: '12:100:46', arabic: "ٱلْحَكِيمُ", transliteration: "l-ḥakīmu", pos: ['ADJ'], posLabel: 'ADJ', root: null, meaning: { en: "the All-Wise", ur: "the حکمت والا" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 3, to: 4, label: 'جار + مجرور' },
+        { from: 11, to: 12, label: 'فعل + فاعل' },
+        { from: 13, to: 14, label: 'جار + مجرور' },
+        { from: 21, to: 22, label: 'جار + مجرور' },
+        { from: 23, to: 24, label: 'فعل + فاعل' },
+        { from: 24, to: 25, label: 'مضاف + مضاف إليه' },
+        { from: 27, to: 28, label: 'جار + مجرور' },
+        { from: 28, to: 29, label: 'مضاف + مضاف إليه' },
+        { from: 33, to: 34, label: 'فعل + فاعل' },
+        { from: 38, to: 39, label: 'فعل + فاعل' },
+        { from: 39, to: 40, label: 'موصوف + صفت' },
+        { from: 42, to: 43, label: 'فعل + فاعل' }
+      ],
+    },
+  },
+  101: {
+    text: "۞ رَبِّ قَدْ ءَاتَيْتَنِى مِنَ ٱلْمُلْكِ وَعَلَّمْتَنِى مِن تَأْوِيلِ ٱلْأَحَادِيثِ ۚ فَاطِرَ ٱلسَّمَـٰوَٰتِ وَٱلْأَرْضِ أَنتَ وَلِىِّۦ فِى ٱلدُّنْيَا وَٱلْـَٔاخِرَةِ ۖ تَوَفَّنِى مُسْلِمًۭا وَأَلْحِقْنِى بِٱلصَّـٰلِحِينَ",
+    translation: {
+      en: "",
+      ur: "(جب یہ سب باتیں ہولیں تو یوسف نے خدا سے دعا کی کہ) اے میرے پروردگار تو نے مجھ کو حکومت سے بہرہ دیا اور خوابوں کی تعبیر کا علم بخشا۔ اے آسمانوں اور زمین کے پیدا کرنے والے تو ہی دنیا اور آخرت میں میرا کارساز ہے۔ تو مجھے (دنیا سے) اپنی اطاعت (کی حالت) میں اٹھائیو اور (آخرت میں) اپنے نیک بندوں میں داخل کیجیو",
+    },
+    words: [
+      { id: '12:101:1', arabic: "۞ رَبِّ", transliteration: "rabbi", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "My Lord", ur: "My رب" } },
+      { id: '12:101:2', arabic: "قَدْ", transliteration: "qad", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "indeed", ur: "بیشک" } },
+      { id: '12:101:3', arabic: "ءَاتَيْتَنِى", transliteration: "ātaytanī", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "you have given me", ur: "تم have given me" } },
+      { id: '12:101:4', arabic: "مِنَ", transliteration: "mina", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "of", ur: "of" } },
+      { id: '12:101:5', arabic: "ٱلْمُلْكِ", transliteration: "l-mul'ki", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "the sovereignty", ur: "the sovereignty" } },
+      { id: '12:101:6', arabic: "وَعَلَّمْتَنِى", transliteration: "waʿallamtanī", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "and taught me", ur: "اور taught me" } },
+      { id: '12:101:7', arabic: "مِن", transliteration: "min", pos: ['PREP'], posLabel: 'PREP', root: null, meaning: { en: "of", ur: "of" } },
+      { id: '12:101:8', arabic: "تَأْوِيلِ", transliteration: "tawīli", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "the interpretation", ur: "the interpretation" } },
+      { id: '12:101:9', arabic: "ٱلْأَحَادِيثِ ۚ", transliteration: "l-aḥādīthi", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "of the events", ur: "of the events" } },
+      { id: '12:101:10', arabic: "فَاطِرَ", transliteration: "fāṭira", pos: ['CONJ+V'], posLabel: 'CONJ+V', root: null, meaning: { en: "Creator", ur: "Creator" } },
+      { id: '12:101:11', arabic: "ٱلسَّمَـٰوَٰتِ", transliteration: "l-samāwāti", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(of) the heavens", ur: "(of) the آسمان" } },
+      { id: '12:101:12', arabic: "وَٱلْأَرْضِ", transliteration: "wal-arḍi", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: "أ ر ض", meaning: { en: "and the earth", ur: "اور زمین" } },
+      { id: '12:101:13', arabic: "أَنتَ", transliteration: "anta", pos: ['PRON'], posLabel: 'PRON', root: null, meaning: { en: "You", ur: "تم" } },
+      { id: '12:101:14', arabic: "وَلِىِّۦ", transliteration: "waliyyī", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "(are) my Protector", ur: "(are) my Protector" } },
+      { id: '12:101:15', arabic: "فِى", transliteration: "fī", pos: ['PREP'], posLabel: 'PREP', root: null, meaning: { en: "in", ur: "میں" } },
+      { id: '12:101:16', arabic: "ٱلدُّنْيَا", transliteration: "l-dun'yā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "the world", ur: "the دنیا" } },
+      { id: '12:101:17', arabic: "وَٱلْـَٔاخِرَةِ ۖ", transliteration: "wal-ākhirati", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "and the Hereafter", ur: "اور the آخرت" } },
+      { id: '12:101:18', arabic: "تَوَفَّنِى", transliteration: "tawaffanī", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "Cause me to die", ur: "Cause me کو die" } },
+      { id: '12:101:19', arabic: "مُسْلِمًۭا", transliteration: "mus'liman", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(as) a Muslim", ur: "(as) a Muslim" } },
+      { id: '12:101:20', arabic: "وَأَلْحِقْنِى", transliteration: "wa-alḥiq'nī", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "and join me", ur: "اور join me" } },
+      { id: '12:101:21', arabic: "بِٱلصَّـٰلِحِينَ", transliteration: "bil-ṣāliḥīna", pos: ['P+N'], posLabel: 'P+N', root: null, meaning: { en: "with the righteous", ur: "ساتھ the نیک" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 3, to: 4, label: 'فعل + فاعل' },
+        { from: 4, to: 5, label: 'مضاف + مضاف إليه' },
+        { from: 8, to: 9, label: 'فعل + فاعل' },
+        { from: 15, to: 16, label: 'جار + مجرور' },
+        { from: 18, to: 19, label: 'فعل + فاعل' }
+      ],
+    },
+  },
+  102: {
+    text: "ذَٰلِكَ مِنْ أَنۢبَآءِ ٱلْغَيْبِ نُوحِيهِ إِلَيْكَ ۖ وَمَا كُنتَ لَدَيْهِمْ إِذْ أَجْمَعُوٓا۟ أَمْرَهُمْ وَهُمْ يَمْكُرُونَ",
+    translation: {
+      en: "",
+      ur: "(اے پیغمبر) یہ اخبار غیب میں سے ہیں جو ہم تمہاری طرف بھیجتے ہیں اور جب برادران یوسف نے اپنی بات پر اتفاق کیا تھا اور وہ فریب کر رہے تھے تو تم ان کے پاس تو نہ تھے",
+    },
+    words: [
+      { id: '12:102:1', arabic: "ذَٰلِكَ", transliteration: "dhālika", pos: ['DEM'], posLabel: 'DEM', root: null, meaning: { en: "That", ur: "وہ" } },
+      { id: '12:102:2', arabic: "مِنْ", transliteration: "min", pos: ['PREP'], posLabel: 'PREP', root: null, meaning: { en: "(is) from", ur: "(is) سے" } },
+      { id: '12:102:3', arabic: "أَنۢبَآءِ", transliteration: "anbāi", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "the news", ur: "the news" } },
+      { id: '12:102:4', arabic: "ٱلْغَيْبِ", transliteration: "l-ghaybi", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(of) the unseen", ur: "(of) the unseen" } },
+      { id: '12:102:5', arabic: "نُوحِيهِ", transliteration: "nūḥīhi", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "which We reveal", ur: "جو ہم reveal" } },
+      { id: '12:102:6', arabic: "إِلَيْكَ ۖ", transliteration: "ilayka", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "to you", ur: "کو تم" } },
+      { id: '12:102:7', arabic: "وَمَا", transliteration: "wamā", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "And not", ur: "اور نہیں" } },
+      { id: '12:102:8', arabic: "كُنتَ", transliteration: "kunta", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "you were", ur: "تم were" } },
+      { id: '12:102:9', arabic: "لَدَيْهِمْ", transliteration: "ladayhim", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "with them", ur: "ساتھ them" } },
+      { id: '12:102:10', arabic: "إِذْ", transliteration: "idh", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "when", ur: "when" } },
+      { id: '12:102:11', arabic: "أَجْمَعُوٓا۟", transliteration: "ajmaʿū", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "they put together", ur: "وہ لوگ put together" } },
+      { id: '12:102:12', arabic: "أَمْرَهُمْ", transliteration: "amrahum", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "their plan", ur: "their plan" } },
+      { id: '12:102:13', arabic: "وَهُمْ", transliteration: "wahum", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "while they", ur: "while وہ لوگ" } },
+      { id: '12:102:14', arabic: "يَمْكُرُونَ", transliteration: "yamkurūna", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "(were) plotting", ur: "(were) plotting" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 2, to: 3, label: 'جار + مجرور' },
+        { from: 3, to: 4, label: 'مضاف + مضاف إليه' },
+        { from: 8, to: 9, label: 'فعل + فاعل' },
+        { from: 11, to: 12, label: 'فعل + فاعل' }
+      ],
+    },
+  },
+  103: {
+    text: "وَمَآ أَكْثَرُ ٱلنَّاسِ وَلَوْ حَرَصْتَ بِمُؤْمِنِينَ",
+    translation: {
+      en: "",
+      ur: "اور بہت سے آدمی گو تم (کتنی ہی) خواہش کرو ایمان لانے والے نہیں ہیں",
+    },
+    words: [
+      { id: '12:103:1', arabic: "وَمَآ", transliteration: "wamā", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "And not", ur: "اور نہیں" } },
+      { id: '12:103:2', arabic: "أَكْثَرُ", transliteration: "aktharu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "most", ur: "most" } },
+      { id: '12:103:3', arabic: "ٱلنَّاسِ", transliteration: "l-nāsi", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(of) the mankind", ur: "(of) the mankind" } },
+      { id: '12:103:4', arabic: "وَلَوْ", transliteration: "walaw", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "even though", ur: "even though" } },
+      { id: '12:103:5', arabic: "حَرَصْتَ", transliteration: "ḥaraṣta", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "you desire", ur: "تم desire" } },
+      { id: '12:103:6', arabic: "بِمُؤْمِنِينَ", transliteration: "bimu'minīna", pos: ['P+N'], posLabel: 'P+N', root: null, meaning: { en: "(will be) believers", ur: "(will be) مومنین" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 2, to: 3, label: 'مضاف + مضاف إليه' }
+      ],
+    },
+  },
+  104: {
+    text: "وَمَا تَسْـَٔلُهُمْ عَلَيْهِ مِنْ أَجْرٍ ۚ إِنْ هُوَ إِلَّا ذِكْرٌۭ لِّلْعَـٰلَمِينَ",
+    translation: {
+      en: "",
+      ur: "اور تم ان سے اس (خیر خواہی) کا کچھ صلا بھی تو نہیں مانگتے۔ یہ قرآن اور کچھ نہیں تمام عالم کے لیے نصیحت ہے",
+    },
+    words: [
+      { id: '12:104:1', arabic: "وَمَا", transliteration: "wamā", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "And not", ur: "اور نہیں" } },
+      { id: '12:104:2', arabic: "تَسْـَٔلُهُمْ", transliteration: "tasaluhum", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "you ask them", ur: "تم ask them" } },
+      { id: '12:104:3', arabic: "عَلَيْهِ", transliteration: "ʿalayhi", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "for it", ur: "for it" } },
+      { id: '12:104:4', arabic: "مِنْ", transliteration: "min", pos: ['PREP'], posLabel: 'PREP', root: null, meaning: { en: "any", ur: "any" } },
+      { id: '12:104:5', arabic: "أَجْرٍ ۚ", transliteration: "ajrin", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "reward", ur: "ثواب" } },
+      { id: '12:104:6', arabic: "إِنْ", transliteration: "in", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Not", ur: "نہیں" } },
+      { id: '12:104:7', arabic: "هُوَ", transliteration: "huwa", pos: ['PRON'], posLabel: 'PRON', root: null, meaning: { en: "(is) it", ur: "(is) it" } },
+      { id: '12:104:8', arabic: "إِلَّا", transliteration: "illā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "but", ur: "لیکن" } },
+      { id: '12:104:9', arabic: "ذِكْرٌۭ", transliteration: "dhik'run", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "a reminder", ur: "a reminder" } },
+      { id: '12:104:10', arabic: "لِّلْعَـٰلَمِينَ", transliteration: "lil'ʿālamīna", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "to the worlds", ur: "کو the worlds" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 2, to: 3, label: 'فعل + فاعل' },
+        { from: 4, to: 5, label: 'جار + مجرور' },
+        { from: 9, to: 10, label: 'مضاف + مضاف إليه' }
+      ],
+    },
+  },
+  105: {
+    text: "وَكَأَيِّن مِّنْ ءَايَةٍۢ فِى ٱلسَّمَـٰوَٰتِ وَٱلْأَرْضِ يَمُرُّونَ عَلَيْهَا وَهُمْ عَنْهَا مُعْرِضُونَ",
+    translation: {
+      en: "",
+      ur: "اور آسمان و زمین میں بہت سی نشانیاں ہیں جن پر یہ گزرتے ہیں اور ان سے اعراض کرتے ہیں",
+    },
+    words: [
+      { id: '12:105:1', arabic: "وَكَأَيِّن", transliteration: "waka-ayyin", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "And how many", ur: "اور how many" } },
+      { id: '12:105:2', arabic: "مِّنْ", transliteration: "min", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "of", ur: "of" } },
+      { id: '12:105:3', arabic: "ءَايَةٍۢ", transliteration: "āyatin", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "a Sign", ur: "a نشانی" } },
+      { id: '12:105:4', arabic: "فِى", transliteration: "fī", pos: ['PREP'], posLabel: 'PREP', root: null, meaning: { en: "in", ur: "میں" } },
+      { id: '12:105:5', arabic: "ٱلسَّمَـٰوَٰتِ", transliteration: "l-samāwāti", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "the heavens", ur: "the آسمان" } },
+      { id: '12:105:6', arabic: "وَٱلْأَرْضِ", transliteration: "wal-arḍi", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: "أ ر ض", meaning: { en: "and the earth", ur: "اور زمین" } },
+      { id: '12:105:7', arabic: "يَمُرُّونَ", transliteration: "yamurrūna", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "they pass", ur: "وہ لوگ pass" } },
+      { id: '12:105:8', arabic: "عَلَيْهَا", transliteration: "ʿalayhā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "over it", ur: "اوپر it" } },
+      { id: '12:105:9', arabic: "وَهُمْ", transliteration: "wahum", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "while they", ur: "while وہ لوگ" } },
+      { id: '12:105:10', arabic: "عَنْهَا", transliteration: "ʿanhā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(are) from them", ur: "(are) سے them" } },
+      { id: '12:105:11', arabic: "مُعْرِضُونَ", transliteration: "muʿ'riḍūna", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "the ones who turn away", ur: "the ones جو turn away" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 4, to: 5, label: 'جار + مجرور' },
+        { from: 7, to: 8, label: 'فعل + فاعل' },
+        { from: 10, to: 11, label: 'مضاف + مضاف إليه' }
+      ],
+    },
+  },
+  106: {
+    text: "وَمَا يُؤْمِنُ أَكْثَرُهُم بِٱللَّهِ إِلَّا وَهُم مُّشْرِكُونَ",
+    translation: {
+      en: "",
+      ur: "اور یہ اکثر خدا پر ایمان نہیں رکھتے۔ مگر (اس کے ساتھ) شرک کرتے ہیں",
+    },
+    words: [
+      { id: '12:106:1', arabic: "وَمَا", transliteration: "wamā", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "And not", ur: "اور نہیں" } },
+      { id: '12:106:2', arabic: "يُؤْمِنُ", transliteration: "yu'minu", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "believe", ur: "ایمان لانا" } },
+      { id: '12:106:3', arabic: "أَكْثَرُهُم", transliteration: "aktharuhum", pos: ['ADJ'], posLabel: 'ADJ', root: null, meaning: { en: "most of them", ur: "most of them" } },
+      { id: '12:106:4', arabic: "بِٱللَّهِ", transliteration: "bil-lahi", pos: ['P+N'], posLabel: 'P+N', root: null, meaning: { en: "in Allah", ur: "میں اللہ" } },
+      { id: '12:106:5', arabic: "إِلَّا", transliteration: "illā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "except", ur: "سوائے" } },
+      { id: '12:106:6', arabic: "وَهُم", transliteration: "wahum", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "while they", ur: "while وہ لوگ" } },
+      { id: '12:106:7', arabic: "مُّشْرِكُونَ", transliteration: "mush'rikūna", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "associate partners with Him", ur: "associate partners ساتھ Him" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 4, to: 5, label: 'جار + مجرور' }
+      ],
+    },
+  },
+  107: {
+    text: "أَفَأَمِنُوٓا۟ أَن تَأْتِيَهُمْ غَـٰشِيَةٌۭ مِّنْ عَذَابِ ٱللَّهِ أَوْ تَأْتِيَهُمُ ٱلسَّاعَةُ بَغْتَةًۭ وَهُمْ لَا يَشْعُرُونَ",
+    translation: {
+      en: "",
+      ur: "کیا یہ اس (بات) سے بےخوف ہیں کہ ان پر خدا کا عذاب نازل ہو کر ان کو ڈھانپ لے یا ان پر ناگہاں قیامت آجائے اور انہیں خبر بھی نہ ہو",
+    },
+    words: [
+      { id: '12:107:1', arabic: "أَفَأَمِنُوٓا۟", transliteration: "afa-aminū", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "Do they then feel secure", ur: "Do وہ لوگ پھر feel secure" } },
+      { id: '12:107:2', arabic: "أَن", transliteration: "an", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(against) that", ur: "(against) وہ" } },
+      { id: '12:107:3', arabic: "تَأْتِيَهُمْ", transliteration: "tatiyahum", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "comes to them", ur: "comes کو them" } },
+      { id: '12:107:4', arabic: "غَـٰشِيَةٌۭ", transliteration: "ghāshiyatun", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "an overwhelming", ur: "an overwhelming" } },
+      { id: '12:107:5', arabic: "مِّنْ", transliteration: "min", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "[of]", ur: "[of]" } },
+      { id: '12:107:6', arabic: "عَذَابِ", transliteration: "ʿadhābi", pos: ['N'], posLabel: 'N', root: "ع ذ ب", meaning: { en: "punishment", ur: "عذاب" } },
+      { id: '12:107:7', arabic: "ٱللَّهِ", transliteration: "l-lahi", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(of) Allah", ur: "(of) اللہ" } },
+      { id: '12:107:8', arabic: "أَوْ", transliteration: "aw", pos: ['CONJ'], posLabel: 'CONJ', root: null, meaning: { en: "or", ur: "یا" } },
+      { id: '12:107:9', arabic: "تَأْتِيَهُمُ", transliteration: "tatiyahumu", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "comes to them", ur: "comes کو them" } },
+      { id: '12:107:10', arabic: "ٱلسَّاعَةُ", transliteration: "l-sāʿatu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "the Hour", ur: "the Hour" } },
+      { id: '12:107:11', arabic: "بَغْتَةًۭ", transliteration: "baghtatan", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "suddenly", ur: "suddenly" } },
+      { id: '12:107:12', arabic: "وَهُمْ", transliteration: "wahum", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "while they", ur: "while وہ لوگ" } },
+      { id: '12:107:13', arabic: "لَا", transliteration: "lā", pos: ['NEG'], posLabel: 'NEG', root: null, meaning: { en: "(do) not", ur: "(do) نہیں" } },
+      { id: '12:107:14', arabic: "يَشْعُرُونَ", transliteration: "yashʿurūna", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "perceive", ur: "perceive" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 1, to: 2, label: 'فعل + فاعل' },
+        { from: 4, to: 5, label: 'فعل + فاعل' },
+        { from: 9, to: 10, label: 'فعل + فاعل' },
+        { from: 13, to: 14, label: 'نفی + فعل' }
+      ],
+    },
+  },
+  108: {
+    text: "قُلْ هَـٰذِهِۦ سَبِيلِىٓ أَدْعُوٓا۟ إِلَى ٱللَّهِ ۚ عَلَىٰ بَصِيرَةٍ أَنَا۠ وَمَنِ ٱتَّبَعَنِى ۖ وَسُبْحَـٰنَ ٱللَّهِ وَمَآ أَنَا۠ مِنَ ٱلْمُشْرِكِينَ",
+    translation: {
+      en: "",
+      ur: "کہہ دو میرا رستہ تو یہ ہے میں خدا کی طرف بلاتا ہوں (از روئے یقین وبرہان) سمجھ بوجھ کر میں بھی (لوگوں کو خدا کی طرف بلاتا ہوں) اور میرے پیرو بھی۔ اور خدا پاک ہے۔ اور میں شرک کرنے والوں میں سے نہیں ہوں",
+    },
+    words: [
+      { id: '12:108:1', arabic: "قُلْ", transliteration: "qul", pos: ['N'], posLabel: 'N', root: "ق و ل", meaning: { en: "Say", ur: "کہو" } },
+      { id: '12:108:2', arabic: "هَـٰذِهِۦ", transliteration: "hādhihi", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "This", ur: "This" } },
+      { id: '12:108:3', arabic: "سَبِيلِىٓ", transliteration: "sabīlī", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(is) my way", ur: "(is) my راستہ" } },
+      { id: '12:108:4', arabic: "أَدْعُوٓا۟", transliteration: "adʿū", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "I invite", ur: "میں invite" } },
+      { id: '12:108:5', arabic: "إِلَى", transliteration: "ilā", pos: ['PREP'], posLabel: 'PREP', root: null, meaning: { en: "to", ur: "کو" } },
+      { id: '12:108:6', arabic: "ٱللَّهِ ۚ", transliteration: "l-lahi", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Allah", ur: "اللہ" } },
+      { id: '12:108:7', arabic: "عَلَىٰ", transliteration: "ʿalā", pos: ['PREP'], posLabel: 'PREP', root: null, meaning: { en: "with", ur: "ساتھ" } },
+      { id: '12:108:8', arabic: "بَصِيرَةٍ", transliteration: "baṣīratin", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "insight", ur: "insight" } },
+      { id: '12:108:9', arabic: "أَنَا۠", transliteration: "anā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "I", ur: "میں" } },
+      { id: '12:108:10', arabic: "وَمَنِ", transliteration: "wamani", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "and whoever", ur: "اور whoever" } },
+      { id: '12:108:11', arabic: "ٱتَّبَعَنِى ۖ", transliteration: "ittabaʿanī", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "follows me", ur: "follows me" } },
+      { id: '12:108:12', arabic: "وَسُبْحَـٰنَ", transliteration: "wasub'ḥāna", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "And Glory be", ur: "اور Glory be" } },
+      { id: '12:108:13', arabic: "ٱللَّهِ", transliteration: "l-lahi", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(to) Allah", ur: "(کو) اللہ" } },
+      { id: '12:108:14', arabic: "وَمَآ", transliteration: "wamā", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "and not", ur: "اور نہیں" } },
+      { id: '12:108:15', arabic: "أَنَا۠", transliteration: "anā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "I am", ur: "میں am" } },
+      { id: '12:108:16', arabic: "مِنَ", transliteration: "mina", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "of", ur: "of" } },
+      { id: '12:108:17', arabic: "ٱلْمُشْرِكِينَ", transliteration: "l-mush'rikīna", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "the polytheists", ur: "the polytheists" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 5, to: 6, label: 'جار + مجرور' },
+        { from: 7, to: 8, label: 'جار + مجرور' },
+        { from: 16, to: 17, label: 'مضاف + مضاف إليه' }
+      ],
+    },
+  },
+  109: {
+    text: "وَمَآ أَرْسَلْنَا مِن قَبْلِكَ إِلَّا رِجَالًۭا نُّوحِىٓ إِلَيْهِم مِّنْ أَهْلِ ٱلْقُرَىٰٓ ۗ أَفَلَمْ يَسِيرُوا۟ فِى ٱلْأَرْضِ فَيَنظُرُوا۟ كَيْفَ كَانَ عَـٰقِبَةُ ٱلَّذِينَ مِن قَبْلِهِمْ ۗ وَلَدَارُ ٱلْـَٔاخِرَةِ خَيْرٌۭ لِّلَّذِينَ ٱتَّقَوْا۟ ۗ أَفَلَا تَعْقِلُونَ",
+    translation: {
+      en: "",
+      ur: "اور ہم نے تم سے پہلے بستیوں کے رہنے والوں میں سے مرد ہی بھیجے تھے جن کی طرف ہم وحی بھیجتے تھے۔ کیا ان لوگوں نے ملک میں سیر (وسیاحت) نہیں کی کہ دیکھ لیتے کہ جو لوگ ان سے پہلے تھے ان کا انجام کیا ہوا۔ اور متّقیوں کے لیے آخرت کا گھر بہت اچھا ہے۔ کیا تم سمجھتے نہیں؟",
+    },
+    words: [
+      { id: '12:109:1', arabic: "وَمَآ", transliteration: "wamā", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "And not", ur: "اور نہیں" } },
+      { id: '12:109:2', arabic: "أَرْسَلْنَا", transliteration: "arsalnā", pos: ['V'], posLabel: 'V', root: "ر س ل", meaning: { en: "We sent", ur: "ہم sent" } },
+      { id: '12:109:3', arabic: "مِن", transliteration: "min", pos: ['PREP'], posLabel: 'PREP', root: null, meaning: { en: "before you", ur: "پہلے تم" } },
+      { id: '12:109:4', arabic: "قَبْلِكَ", transliteration: "qablika", pos: ['N'], posLabel: 'N', root: "ق ب ل", meaning: { en: "before you", ur: "پہلے تم" } },
+      { id: '12:109:5', arabic: "إِلَّا", transliteration: "illā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "but", ur: "لیکن" } },
+      { id: '12:109:6', arabic: "رِجَالًۭا", transliteration: "rijālan", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "men", ur: "men" } },
+      { id: '12:109:7', arabic: "نُّوحِىٓ", transliteration: "nūḥī", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "We revealed", ur: "ہم revealed" } },
+      { id: '12:109:8', arabic: "إِلَيْهِم", transliteration: "ilayhim", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "to them", ur: "کو them" } },
+      { id: '12:109:9', arabic: "مِّنْ", transliteration: "min", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "from (among)", ur: "سے (among)" } },
+      { id: '12:109:10', arabic: "أَهْلِ", transliteration: "ahli", pos: ['N'], posLabel: 'N', root: "أ ه ل", meaning: { en: "(the) people", ur: "(the) لوگ" } },
+      { id: '12:109:11', arabic: "ٱلْقُرَىٰٓ ۗ", transliteration: "l-qurā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(of) the townships", ur: "(of) the townships" } },
+      { id: '12:109:12', arabic: "أَفَلَمْ", transliteration: "afalam", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "So have not", ur: "So have نہیں" } },
+      { id: '12:109:13', arabic: "يَسِيرُوا۟", transliteration: "yasīrū", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "they traveled", ur: "وہ لوگ traveled" } },
+      { id: '12:109:14', arabic: "فِى", transliteration: "fī", pos: ['PREP'], posLabel: 'PREP', root: null, meaning: { en: "in", ur: "میں" } },
+      { id: '12:109:15', arabic: "ٱلْأَرْضِ", transliteration: "l-arḍi", pos: ['N'], posLabel: 'N', root: "أ ر ض", meaning: { en: "the earth", ur: "زمین" } },
+      { id: '12:109:16', arabic: "فَيَنظُرُوا۟", transliteration: "fayanẓurū", pos: ['CONJ+V'], posLabel: 'CONJ+V', root: null, meaning: { en: "and seen", ur: "اور seen" } },
+      { id: '12:109:17', arabic: "كَيْفَ", transliteration: "kayfa", pos: ['INTG'], posLabel: 'INTG', root: null, meaning: { en: "how", ur: "how" } },
+      { id: '12:109:18', arabic: "كَانَ", transliteration: "kāna", pos: ['N'], posLabel: 'N', root: "ك و ن", meaning: { en: "was", ur: "was" } },
+      { id: '12:109:19', arabic: "عَـٰقِبَةُ", transliteration: "ʿāqibatu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(the) end", ur: "(the) end" } },
+      { id: '12:109:20', arabic: "ٱلَّذِينَ", transliteration: "alladhīna", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(of) those who", ur: "(of) جو لوگ" } },
+      { id: '12:109:21', arabic: "مِن", transliteration: "min", pos: ['PREP'], posLabel: 'PREP', root: null, meaning: { en: "(were) before them", ur: "(were) پہلے them" } },
+      { id: '12:109:22', arabic: "قَبْلِهِمْ ۗ", transliteration: "qablihim", pos: ['N'], posLabel: 'N', root: "ق ب ل", meaning: { en: "(were) before them", ur: "(were) پہلے them" } },
+      { id: '12:109:23', arabic: "وَلَدَارُ", transliteration: "waladāru", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "And surely the home", ur: "اور یقیناً the home" } },
+      { id: '12:109:24', arabic: "ٱلْـَٔاخِرَةِ", transliteration: "l-ākhirati", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(of) the Hereafter", ur: "(of) the آخرت" } },
+      { id: '12:109:25', arabic: "خَيْرٌۭ", transliteration: "khayrun", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(is) best", ur: "(is) best" } },
+      { id: '12:109:26', arabic: "لِّلَّذِينَ", transliteration: "lilladhīna", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "for those who", ur: "for جو لوگ" } },
+      { id: '12:109:27', arabic: "ٱتَّقَوْا۟ ۗ", transliteration: "ittaqaw", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "fear Allah", ur: "ڈرنا اللہ" } },
+      { id: '12:109:28', arabic: "أَفَلَا", transliteration: "afalā", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "Then will not", ur: "پھر will نہیں" } },
+      { id: '12:109:29', arabic: "تَعْقِلُونَ", transliteration: "taʿqilūna", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "you use reason", ur: "تم use reason" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 3, to: 4, label: 'جار + مجرور' },
+        { from: 7, to: 8, label: 'فعل + فاعل' },
+        { from: 10, to: 11, label: 'مضاف + مضاف إليه' },
+        { from: 14, to: 15, label: 'جار + مجرور' },
+        { from: 21, to: 22, label: 'جار + مجرور' }
+      ],
+    },
+  },
+  110: {
+    text: "حَتَّىٰٓ إِذَا ٱسْتَيْـَٔسَ ٱلرُّسُلُ وَظَنُّوٓا۟ أَنَّهُمْ قَدْ كُذِبُوا۟ جَآءَهُمْ نَصْرُنَا فَنُجِّىَ مَن نَّشَآءُ ۖ وَلَا يُرَدُّ بَأْسُنَا عَنِ ٱلْقَوْمِ ٱلْمُجْرِمِينَ",
+    translation: {
+      en: "",
+      ur: "یہاں تک کہ جب پیغمبر ناامید ہوگئے اور انہوں نے خیال کیا کہ اپنی نصرت کے بارے میں جو بات انہوں نے کہی تھی (اس میں) وہ سچے نہ نکلے تو ان کے پاس ہماری مدد آ پہنچی۔ پھر جسے ہم نے چاہا بچا دیا۔ اور ہمارا عذاب (اتر کر) گنہگار لوگوں سے پھرا نہیں کرتا",
+    },
+    words: [
+      { id: '12:110:1', arabic: "حَتَّىٰٓ", transliteration: "ḥattā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Until", ur: "Until" } },
+      { id: '12:110:2', arabic: "إِذَا", transliteration: "idhā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "when", ur: "when" } },
+      { id: '12:110:3', arabic: "ٱسْتَيْـَٔسَ", transliteration: "is'tayasa", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "gave up hope", ur: "gave up hope" } },
+      { id: '12:110:4', arabic: "ٱلرُّسُلُ", transliteration: "l-rusulu", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "the Messengers", ur: "the Messengers" } },
+      { id: '12:110:5', arabic: "وَظَنُّوٓا۟", transliteration: "waẓannū", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "and thought", ur: "اور thought" } },
+      { id: '12:110:6', arabic: "أَنَّهُمْ", transliteration: "annahum", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "that they", ur: "وہ وہ لوگ" } },
+      { id: '12:110:7', arabic: "قَدْ", transliteration: "qad", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "certainly", ur: "certainly" } },
+      { id: '12:110:8', arabic: "كُذِبُوا۟", transliteration: "kudhibū", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "were denied", ur: "were denied" } },
+      { id: '12:110:9', arabic: "جَآءَهُمْ", transliteration: "jāahum", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "then came to them", ur: "پھر came کو them" } },
+      { id: '12:110:10', arabic: "نَصْرُنَا", transliteration: "naṣrunā", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "Our help", ur: "Our help" } },
+      { id: '12:110:11', arabic: "فَنُجِّىَ", transliteration: "fanujjiya", pos: ['CONJ+V'], posLabel: 'CONJ+V', root: null, meaning: { en: "and was saved", ur: "اور was saved" } },
+      { id: '12:110:12', arabic: "مَن", transliteration: "man", pos: ['REL'], posLabel: 'REL', root: null, meaning: { en: "whom", ur: "whom" } },
+      { id: '12:110:13', arabic: "نَّشَآءُ ۖ", transliteration: "nashāu", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "We willed", ur: "ہم willed" } },
+      { id: '12:110:14', arabic: "وَلَا", transliteration: "walā", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "And not", ur: "اور نہیں" } },
+      { id: '12:110:15', arabic: "يُرَدُّ", transliteration: "yuraddu", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "(can) be repelled", ur: "(can) be repelled" } },
+      { id: '12:110:16', arabic: "بَأْسُنَا", transliteration: "basunā", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Our punishment", ur: "Our عذاب" } },
+      { id: '12:110:17', arabic: "عَنِ", transliteration: "ʿani", pos: ['PREP'], posLabel: 'PREP', root: null, meaning: { en: "from", ur: "سے" } },
+      { id: '12:110:18', arabic: "ٱلْقَوْمِ", transliteration: "l-qawmi", pos: ['N'], posLabel: 'N', root: "ق و م", meaning: { en: "the people", ur: "the لوگ" } },
+      { id: '12:110:19', arabic: "ٱلْمُجْرِمِينَ", transliteration: "l-muj'rimīna", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(who are) criminals", ur: "(جو are) criminals" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 3, to: 4, label: 'مضاف + مضاف إليه' },
+        { from: 8, to: 9, label: 'فعل + فاعل' },
+        { from: 12, to: 13, label: 'موصول + صلة' },
+        { from: 15, to: 16, label: 'فعل + فاعل' },
+        { from: 17, to: 18, label: 'جار + مجرور' }
+      ],
+    },
+  },
+  111: {
+    text: "لَقَدْ كَانَ فِى قَصَصِهِمْ عِبْرَةٌۭ لِّأُو۟لِى ٱلْأَلْبَـٰبِ ۗ مَا كَانَ حَدِيثًۭا يُفْتَرَىٰ وَلَـٰكِن تَصْدِيقَ ٱلَّذِى بَيْنَ يَدَيْهِ وَتَفْصِيلَ كُلِّ شَىْءٍۢ وَهُدًۭى وَرَحْمَةًۭ لِّقَوْمٍۢ يُؤْمِنُونَ",
+    translation: {
+      en: "",
+      ur: "ان کے قصے میں عقلمندوں کے لیے عبرت ہے۔ یہ (قرآن) ایسی بات نہیں ہے جو (اپنے دل سے) بنائی گئی ہو بلکہ جو (کتابیں) اس سے پہلے نازل ہوئی ہیں ان کی تصدیق (کرنے والا) ہے اور مومنوں کے لیے ہدایت اور رحمت ہے",
+    },
+    words: [
+      { id: '12:111:1', arabic: "لَقَدْ", transliteration: "laqad", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "Verily", ur: "بیشک" } },
+      { id: '12:111:2', arabic: "كَانَ", transliteration: "kāna", pos: ['N'], posLabel: 'N', root: "ك و ن", meaning: { en: "(there) is", ur: "(there) is" } },
+      { id: '12:111:3', arabic: "فِى", transliteration: "fī", pos: ['PREP'], posLabel: 'PREP', root: null, meaning: { en: "in", ur: "میں" } },
+      { id: '12:111:4', arabic: "قَصَصِهِمْ", transliteration: "qaṣaṣihim", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "their stories", ur: "their stories" } },
+      { id: '12:111:5', arabic: "عِبْرَةٌۭ", transliteration: "ʿib'ratun", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "a lesson", ur: "a lesson" } },
+      { id: '12:111:6', arabic: "لِّأُو۟لِى", transliteration: "li-ulī", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "for men", ur: "for men" } },
+      { id: '12:111:7', arabic: "ٱلْأَلْبَـٰبِ ۗ", transliteration: "l-albābi", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "(of) understanding", ur: "(of) understanding" } },
+      { id: '12:111:8', arabic: "مَا", transliteration: "mā", pos: ['NEG'], posLabel: 'NEG', root: null, meaning: { en: "Not", ur: "نہیں" } },
+      { id: '12:111:9', arabic: "كَانَ", transliteration: "kāna", pos: ['N'], posLabel: 'N', root: "ك و ن", meaning: { en: "(it) is", ur: "(it) is" } },
+      { id: '12:111:10', arabic: "حَدِيثًۭا", transliteration: "ḥadīthan", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "a narration", ur: "a narration" } },
+      { id: '12:111:11', arabic: "يُفْتَرَىٰ", transliteration: "yuf'tarā", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "invented", ur: "invented" } },
+      { id: '12:111:12', arabic: "وَلَـٰكِن", transliteration: "walākin", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "but", ur: "لیکن" } },
+      { id: '12:111:13', arabic: "تَصْدِيقَ", transliteration: "taṣdīqa", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "a confirmation", ur: "a confirmation" } },
+      { id: '12:111:14', arabic: "ٱلَّذِى", transliteration: "alladhī", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(of that) which", ur: "(of وہ) جو" } },
+      { id: '12:111:15', arabic: "بَيْنَ", transliteration: "bayna", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(was) before it", ur: "(was) پہلے it" } },
+      { id: '12:111:16', arabic: "يَدَيْهِ", transliteration: "yadayhi", pos: ['V'], posLabel: 'V', root: null, meaning: { en: "(was) before it", ur: "(was) پہلے it" } },
+      { id: '12:111:17', arabic: "وَتَفْصِيلَ", transliteration: "watafṣīla", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "and a detailed explanation", ur: "اور a detailed explanation" } },
+      { id: '12:111:18', arabic: "كُلِّ", transliteration: "kulli", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "(of) all", ur: "(of) سب" } },
+      { id: '12:111:19', arabic: "شَىْءٍۢ", transliteration: "shayin", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "things", ur: "things" } },
+      { id: '12:111:20', arabic: "وَهُدًۭى", transliteration: "wahudan", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: null, meaning: { en: "and a guidance", ur: "اور a guidance" } },
+      { id: '12:111:21', arabic: "وَرَحْمَةًۭ", transliteration: "waraḥmatan", pos: ['CONJ+N'], posLabel: 'CONJ+N', root: "ر ح م", meaning: { en: "and mercy", ur: "اور رحمت" } },
+      { id: '12:111:22', arabic: "لِّقَوْمٍۢ", transliteration: "liqawmin", pos: ['N'], posLabel: 'N', root: null, meaning: { en: "for a people", ur: "for a لوگ" } },
+      { id: '12:111:23', arabic: "يُؤْمِنُونَ", transliteration: "yu'minūna", pos: ['V'], posLabel: 'V', root: "أ م ن", meaning: { en: "who believe", ur: "جو ایمان لانا" } }
+    ],
+    structure: {
+      relationships: [
+        { from: 3, to: 4, label: 'جار + مجرور' },
+        { from: 13, to: 14, label: 'فعل + فاعل' }
+      ],
     },
   },
 };

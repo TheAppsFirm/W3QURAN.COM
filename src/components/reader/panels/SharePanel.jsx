@@ -307,7 +307,7 @@ const SharePanel = memo(function SharePanel({
   return (
     <div className="h-full flex flex-col">
       {/* Header */}
-      <div className="flex-shrink-0 flex items-center justify-between pb-3 border-b border-white/20">
+      <div className="flex-shrink-0 flex items-center justify-between pb-3">
         <div className="flex items-center gap-2">
           <div className="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center">
             <Icons.Share className="w-5 h-5 text-white" />

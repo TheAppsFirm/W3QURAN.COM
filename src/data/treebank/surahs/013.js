@@ -374,6 +374,15 @@ const SURAH_13_TREEBANK = {
         { type: 'khabar', word: 'الْحَقُّ', role: 'predicate' },
         { type: 'istidrak', word: 'وَلَٰكِنَّ أَكْثَرَ النَّاسِ لَا يُؤْمِنُونَ', role: 'exception clause' },
       ],
+      relationships: [
+        { from: 2, to: 3, label: 'مبتدأ + خبر' },
+        { from: 3, to: 4, label: 'مضاف + مضاف إليه' },
+        { from: 5, to: 6, label: 'موصول + صلة' },
+        { from: 5, to: 10, label: 'مبتدأ + خبر' },
+        { from: 8, to: 9, label: 'جار + مجرور' },
+        { from: 12, to: 13, label: 'مضاف + مضاف إليه' },
+        { from: 14, to: 15, label: 'نفی + فعل' },
+      ],
       explanation: {
         en: 'Complex verse with: 1) Disconnected letters, 2) Nominal sentence about verses, 3) Another nominal sentence about revelation being truth, 4) Exception: most people do not believe',
         ur: 'پیچیدہ آیت: 1) حروف مقطعات، 2) آیات کے بارے میں جملہ اسمیہ، 3) وحی کے حق ہونے کا جملہ، 4) استثناء: اکثر لوگ ایمان نہیں لاتے',
@@ -904,6 +913,29 @@ const SURAH_13_TREEBANK = {
         { type: 'verb', word: 'يُفَصِّلُ الْآيَاتِ', role: 'statement' },
         { type: 'taraji', word: 'لَعَلَّكُمْ بِلِقَاءِ رَبِّكُمْ تُوقِنُونَ', role: 'purpose' },
       ],
+      relationships: [
+        { from: 1, to: 2, label: 'موصوف + صفت' },
+        { from: 1, to: 16, label: 'مبتدأ + خبر' },
+        { from: 2, to: 3, label: 'موصول + صلة' },
+        { from: 3, to: 4, label: 'فعل + مفعول به' },
+        { from: 5, to: 6, label: 'مضاف + مضاف إليه' },
+        { from: 6, to: 7, label: 'موصوف + صفت' },
+        { from: 7, to: 13, label: 'فعل + مفعول به' },
+        { from: 8, to: 9, label: 'عطف' },
+        { from: 9, to: 13, label: 'فعل + مفعول به' },
+        { from: 9, to: 14, label: 'فعل + مفعول به' },
+        { from: 10, to: 11, label: 'جار + مجرور' },
+        { from: 12, to: 13, label: 'فعل + مفعول به' },
+        { from: 12, to: 14, label: 'فعل + مفعول به' },
+        { from: 15, to: 26, label: 'مبتدأ + خبر' },
+        { from: 16, to: 20, label: 'فعل + مفعول به' },
+        { from: 16, to: 22, label: 'فعل + مفعول به' },
+        { from: 17, to: 18, label: 'موصوف + صفت' },
+        { from: 19, to: 20, label: 'فعل + مفعول به' },
+        { from: 19, to: 22, label: 'فعل + مفعول به' },
+        { from: 21, to: 22, label: 'فعل + مفعول به' },
+        { from: 24, to: 25, label: 'مضاف + مضاف إليه' },
+      ],
       explanation: {
         en: 'Grand verse describing Allah\'s cosmic actions: raising heavens, establishing on Throne, subjecting celestial bodies, managing affairs, detailing signs - all so humans attain certainty.',
         ur: 'عظیم آیت جو اللہ کے کائناتی افعال بیان کرتی ہے: آسمان بلند کرنا، عرش پر استوا، سورج چاند مسخر کرنا، امور کی تدبیر، نشانیاں تفصیل سے بیان کرنا - سب تاکہ انسان یقین حاصل کریں۔',
@@ -1302,6 +1334,26 @@ const SURAH_13_TREEBANK = {
         { type: 'verb', word: 'جَعَلَ فِيهَا زَوْجَيْنِ اثْنَيْنِ', role: 'statement' },
         { type: 'verb', word: 'يُغْشِي اللَّيْلَ النَّهَارَ', role: 'statement' },
         { type: 'tawkeed', word: 'إِنَّ فِي ذَٰلِكَ لَآيَاتٍ', role: 'emphatic statement' },
+      ],
+      relationships: [
+        { from: 1, to: 2, label: 'مبتدأ + خبر' },
+        { from: 2, to: 3, label: 'موصول + صلة' },
+        { from: 3, to: 4, label: 'فعل + مفعول به' },
+        { from: 3, to: 7, label: 'فعل + مفعول به' },
+        { from: 3, to: 8, label: 'فعل + مفعول به' },
+        { from: 5, to: 7, label: 'فعل + مفعول به' },
+        { from: 5, to: 8, label: 'فعل + مفعول به' },
+        { from: 9, to: 10, label: 'جار + مجرور' },
+        { from: 10, to: 11, label: 'مضاف + مضاف إليه' },
+        { from: 12, to: 14, label: 'فعل + مفعول به' },
+        { from: 12, to: 17, label: 'فعل + مفعول به' },
+        { from: 12, to: 18, label: 'فعل + مفعول به' },
+        { from: 14, to: 15, label: 'موصوف + صفت' },
+        { from: 16, to: 17, label: 'فعل + مفعول به' },
+        { from: 16, to: 18, label: 'فعل + مفعول به' },
+        { from: 18, to: 19, label: 'توکید' },
+        { from: 20, to: 21, label: 'جار + مجرور' },
+        { from: 23, to: 24, label: 'موصوف + صفت' },
       ],
       explanation: {
         en: 'Continues describing Allah\'s earthly signs: spreading earth, placing mountains/rivers, creating pairs, alternating night/day - all signs for thinking people.',
@@ -1745,6 +1797,25 @@ const SURAH_13_TREEBANK = {
         { type: 'verb', word: 'وَنُفَضِّلُ بَعْضَهَا', role: 'divine action' },
         { type: 'tawkeed', word: 'إِنَّ فِي ذَٰلِكَ لَآيَاتٍ', role: 'emphatic conclusion' },
       ],
+      relationships: [
+        { from: 1, to: 2, label: 'جار + مجرور' },
+        { from: 3, to: 4, label: 'موصوف + صفت' },
+        { from: 5, to: 6, label: 'عطف' },
+        { from: 6, to: 7, label: 'جار + مجرور' },
+        { from: 8, to: 9, label: 'عطف' },
+        { from: 9, to: 10, label: 'موصوف + صفت' },
+        { from: 9, to: 10, label: 'عطف' },
+        { from: 11, to: 12, label: 'مضاف + مضاف إليه' },
+        { from: 11, to: 12, label: 'عطف' },
+        { from: 13, to: 17, label: 'فعل + مفعول به' },
+        { from: 14, to: 15, label: 'موصوف + صفت' },
+        { from: 16, to: 17, label: 'فعل + مفعول به' },
+        { from: 18, to: 19, label: 'جار + مجرور' },
+        { from: 20, to: 21, label: 'جار + مجرور' },
+        { from: 21, to: 22, label: 'توکید' },
+        { from: 23, to: 24, label: 'جار + مجرور' },
+        { from: 26, to: 27, label: 'موصوف + صفت' },
+      ],
       explanation: {
         en: 'Describes agricultural diversity: neighboring plots, various gardens - all watered equally yet differing in produce. Signs for people who use reason.',
         ur: 'زرعی تنوع کی تصویر: پڑوسی قطعات، مختلف باغات - سب ایک پانی سے سیراب مگر پیداوار میں مختلف۔ عقل والوں کے لیے نشانیاں۔',
@@ -2135,6 +2206,21 @@ const SURAH_13_TREEBANK = {
         { type: 'ism-ishara', word: 'وَأُولَٰئِكَ الْأَغْلَالُ', role: 'punishment 1' },
         { type: 'ism-ishara', word: 'وَأُولَٰئِكَ أَصْحَابُ النَّارِ', role: 'punishment 2' },
       ],
+      relationships: [
+        { from: 1, to: 2, label: 'شرط + فعل الشرط' },
+        { from: 2, to: 3, label: 'فعل الشرط + جواب الشرط' },
+        { from: 4, to: 7, label: 'مبتدأ + خبر' },
+        { from: 5, to: 6, label: 'استفهام + فعل' },
+        { from: 8, to: 9, label: 'استفهام' },
+        { from: 9, to: 10, label: 'جار + مجرور' },
+        { from: 10, to: 11, label: 'موصوف + صفت' },
+        { from: 12, to: 13, label: 'مبتدأ + خبر' },
+        { from: 13, to: 14, label: 'موصول + صلة' },
+        { from: 16, to: 21, label: 'مبتدأ + خبر' },
+        { from: 17, to: 25, label: 'مبتدأ + خبر' },
+        { from: 18, to: 19, label: 'جار + مجرور' },
+        { from: 21, to: 22, label: 'مضاف + مضاف إليه' },
+      ],
       explanation: {
         en: 'Conditional addressing Prophet: if you wonder, their denial of resurrection is truly astonishing. Three أُولَٰئِكَ identify disbelievers and their punishment.',
         ur: 'شرطیہ جملہ نبی ﷺ کو مخاطب: اگر تم تعجب کرو تو ان کا انکار قیامت واقعی حیرت انگیز ہے۔ تین أُولَٰئِكَ کافروں اور ان کی سزا کی نشاندہی۔',
@@ -2463,6 +2549,17 @@ const SURAH_13_TREEBANK = {
         { type: 'inna', word: 'وَإِنَّ رَبَّكَ لَذُو مَغْفِرَةٍ', role: 'emphatic about mercy' },
         { type: 'inna', word: 'وَإِنَّ رَبَّكَ لَشَدِيدُ الْعِقَابِ', role: 'emphatic about punishment' },
       ],
+      relationships: [
+        { from: 1, to: 5, label: 'حال' },
+        { from: 3, to: 4, label: 'مضاف + مضاف إليه' },
+        { from: 6, to: 9, label: 'فعل + فاعل' },
+        { from: 7, to: 8, label: 'جار + مجرور' },
+        { from: 9, to: 10, label: 'توکید' },
+        { from: 12, to: 13, label: 'مضاف + مضاف إليه' },
+        { from: 15, to: 16, label: 'جار + مجرور' },
+        { from: 16, to: 17, label: 'توکید' },
+        { from: 19, to: 20, label: 'مضاف + مضاف إليه' },
+      ],
       explanation: {
         en: 'Addresses those who mockingly ask for punishment. Reminds of past examples, then balances Allah\'s forgiveness with His severe punishment.',
         ur: 'ان کو خطاب جو مذاق میں سزا مانگتے ہیں۔ گزشتہ مثالیں یاد دلاتا ہے، پھر اللہ کی مغفرت اور سخت سزا میں توازن۔',
@@ -2712,12 +2809,417 @@ const SURAH_13_TREEBANK = {
         { type: 'hasr', word: 'إِنَّمَا أَنتَ مُنذِرٌ', role: 'restrictive response' },
         { type: 'nominal', word: 'وَلِكُلِّ قَوْمٍ هَادٍ', role: 'universal principle' },
       ],
+      relationships: [
+        { from: 1, to: 2, label: 'فعل + فاعل' },
+        { from: 2, to: 3, label: 'موصول + صلة' },
+        { from: 3, to: 7, label: 'فعل + فاعل' },
+        { from: 4, to: 5, label: 'تحذیر + فعل' },
+        { from: 5, to: 7, label: 'فعل + فاعل' },
+        { from: 8, to: 9, label: 'جار + مجرور' },
+        { from: 10, to: 11, label: 'حصر' },
+        { from: 11, to: 12, label: 'مبتدأ + خبر' },
+        { from: 13, to: 14, label: 'مضاف + مضاف إليه' },
+      ],
       explanation: {
         en: 'Disbelievers demand miraculous signs. Allah responds: Prophet is only a warner, and every nation has its guide. Signs are already present in creation.',
         ur: 'کافر معجزانہ نشانیاں مانگتے ہیں۔ اللہ کا جواب: نبی صرف ڈرانے والا ہے، ہر قوم کا رہنما ہے۔ نشانیاں تخلیق میں پہلے سے موجود ہیں۔',
       },
     },
   },
+
+  8: {
+    text: 'اللَّهُ يَعْلَمُ مَا تَحْمِلُ كُلُّ أُنثَىٰ وَمَا تَغِيضُ الْأَرْحَامُ وَمَا تَزْدَادُ وَكُلُّ شَيْءٍ عِندَهُ بِمِقْدَارٍ',
+    translation: {
+      en: 'Allah knows what every female carries and what the wombs lose or exceed. And everything with Him is by due measure.',
+      ur: 'اللہ جانتا ہے جو کچھ ہر مادہ اٹھاتی ہے اور رحم جو کم کرتے ہیں اور جو بڑھاتے ہیں اور ہر چیز اس کے نزدیک ایک اندازے سے ہے',
+    },
+    words: [
+      { id: '13:8:1', position: 1, arabic: 'اللَّهُ', transliteration: 'Allahu', pos: ['N'], posLabel: 'N', root: null, meaning: { en: 'Allah', ur: 'اللہ' }, grammarRole: 'mubtada' },
+      { id: '13:8:2', position: 2, arabic: 'يَعْلَمُ', transliteration: 'ya\'lamu', pos: ['V'], posLabel: 'V', root: 'ع ل م', meaning: { en: 'knows', ur: 'جانتا ہے' }, grammarRole: 'pred' },
+      { id: '13:8:3', position: 3, arabic: 'مَا', transliteration: 'ma', pos: ['REL'], posLabel: 'REL', root: null, meaning: { en: 'what', ur: 'جو کچھ' }, grammarRole: 'mafool' },
+      { id: '13:8:4', position: 4, arabic: 'تَحْمِلُ', transliteration: 'tahmilu', pos: ['V'], posLabel: 'V', root: 'ح م ل', meaning: { en: 'carries', ur: 'اٹھاتی ہے' }, grammarRole: 'silah' },
+      { id: '13:8:5', position: 5, arabic: 'كُلُّ', transliteration: 'kullu', pos: ['N'], posLabel: 'N', root: null, meaning: { en: 'every', ur: 'ہر' }, grammarRole: 'faa\'il', case: 'marfoo' },
+      { id: '13:8:6', position: 6, arabic: 'أُنثَىٰ', transliteration: 'untha', pos: ['N'], posLabel: 'N', root: 'أ ن ث', meaning: { en: 'female', ur: 'مادہ' }, grammarRole: 'mudhafIlayh', case: 'majroor' },
+      { id: '13:8:7', position: 7, arabic: 'وَمَا', transliteration: 'wama', pos: ['CONJ', 'REL'], posLabel: 'CONJ+REL', root: null, meaning: { en: 'and what', ur: 'اور جو' }, grammarRole: 'atf' },
+      { id: '13:8:8', position: 8, arabic: 'تَغِيضُ', transliteration: 'taghidu', pos: ['V'], posLabel: 'V', root: 'غ ي ض', meaning: { en: 'lose/decrease', ur: 'کم کرتے ہیں' }, grammarRole: 'silah' },
+      { id: '13:8:9', position: 9, arabic: 'الْأَرْحَامُ', transliteration: 'al-arhamu', pos: ['N'], posLabel: 'N', root: 'ر ح م', meaning: { en: 'the wombs', ur: 'رحم' }, grammarRole: 'faa\'il', case: 'marfoo' },
+      { id: '13:8:10', position: 10, arabic: 'وَمَا', transliteration: 'wama', pos: ['CONJ', 'REL'], posLabel: 'CONJ+REL', root: null, meaning: { en: 'and what', ur: 'اور جو' }, grammarRole: 'atf' },
+      { id: '13:8:11', position: 11, arabic: 'تَزْدَادُ', transliteration: 'tazdadu', pos: ['V'], posLabel: 'V', root: 'ز ي د', meaning: { en: 'increases', ur: 'بڑھاتے ہیں' }, grammarRole: 'silah' },
+      { id: '13:8:12', position: 12, arabic: 'وَكُلُّ', transliteration: 'wakullu', pos: ['CONJ', 'N'], posLabel: 'CONJ+N', root: null, meaning: { en: 'And everything', ur: 'اور ہر' }, grammarRole: 'mubtada', case: 'marfoo' },
+      { id: '13:8:13', position: 13, arabic: 'شَيْءٍ', transliteration: 'shay\'in', pos: ['N'], posLabel: 'N', root: null, meaning: { en: 'thing', ur: 'چیز' }, grammarRole: 'mudhafIlayh', case: 'majroor' },
+      { id: '13:8:14', position: 14, arabic: 'عِندَهُ', transliteration: '\'indahu', pos: ['N', 'PRON'], posLabel: 'N+PRON', root: null, meaning: { en: 'with Him', ur: 'اس کے پاس' }, grammarRole: 'zarf' },
+      { id: '13:8:15', position: 15, arabic: 'بِمِقْدَارٍ', transliteration: 'bi-miqdarin', pos: ['P', 'N'], posLabel: 'P+N', root: 'ق د ر', meaning: { en: 'by due measure', ur: 'اندازے سے' }, grammarRole: 'pred' },
+    ],
+    structure: {
+      relationships: [
+        { from: 1, to: 2, label: 'مبتدأ + خبر' },
+        { from: 5, to: 6, label: 'مضاف + مضاف إليه' },
+        { from: 12, to: 13, label: 'مضاف + مضاف إليه' },
+      ],
+    },
+  },
+
+  9: {
+    text: 'عَالِمُ الْغَيْبِ وَالشَّهَادَةِ الْكَبِيرُ الْمُتَعَالِ',
+    translation: {
+      en: 'Knower of the unseen and the witnessed, the Grand, the Exalted.',
+      ur: 'غیب اور ظاہر کا جاننے والا بڑا بلند و بالا ہے',
+    },
+    words: [
+      { id: '13:9:1', position: 1, arabic: 'عَالِمُ', transliteration: '\'alimu', pos: ['N'], posLabel: 'N', root: 'ع ل م', meaning: { en: 'Knower', ur: 'جاننے والا' }, grammarRole: 'pred', case: 'marfoo' },
+      { id: '13:9:2', position: 2, arabic: 'الْغَيْبِ', transliteration: 'al-ghaybi', pos: ['N'], posLabel: 'N', root: 'غ ي ب', meaning: { en: 'of the unseen', ur: 'غیب کا' }, grammarRole: 'mudhafIlayh', case: 'majroor' },
+      { id: '13:9:3', position: 3, arabic: 'وَالشَّهَادَةِ', transliteration: 'wash-shahadati', pos: ['CONJ', 'N'], posLabel: 'CONJ+N', root: 'ش ه د', meaning: { en: 'and the witnessed', ur: 'اور ظاہر کا' }, grammarRole: 'atf', case: 'majroor' },
+      { id: '13:9:4', position: 4, arabic: 'الْكَبِيرُ', transliteration: 'al-kabiru', pos: ['ADJ'], posLabel: 'ADJ', root: 'ك ب ر', meaning: { en: 'the Grand', ur: 'بڑا' }, grammarRole: 'sifah', case: 'marfoo' },
+      { id: '13:9:5', position: 5, arabic: 'الْمُتَعَالِ', transliteration: 'al-muta\'ali', pos: ['ADJ'], posLabel: 'ADJ', root: 'ع ل و', meaning: { en: 'the Exalted', ur: 'بلند و بالا' }, grammarRole: 'sifah', case: 'marfoo' },
+    ],
+    structure: {
+      relationships: [
+        { from: 1, to: 2, label: 'مضاف + مضاف إليه' },
+        { from: 4, to: 5, label: 'موصوف + صفت' },
+      ],
+    },
+  },
+
+  10: {
+    text: 'سَوَاءٌ مِّنكُم مَّنْ أَسَرَّ الْقَوْلَ وَمَن جَهَرَ بِهِ وَمَنْ هُوَ مُسْتَخْفٍ بِاللَّيْلِ وَسَارِبٌ بِالنَّهَارِ',
+    translation: {
+      en: 'It is the same whether any of you conceals his speech or publicizes it, whether he hides by night or goes forth by day.',
+      ur: 'تم میں سے جو بات چھپائے اور جو ظاہر کرے اور جو رات کو چھپے اور دن کو چلے برابر ہے',
+    },
+    words: [
+      { id: '13:10:1', position: 1, arabic: 'سَوَاءٌ', transliteration: 'sawa\'un', pos: ['N'], posLabel: 'N', root: 'س و ي', meaning: { en: 'Equal/same', ur: 'برابر ہے' }, grammarRole: 'pred', case: 'marfoo' },
+      { id: '13:10:2', position: 2, arabic: 'مِّنكُم', transliteration: 'minkum', pos: ['P', 'PRON'], posLabel: 'P+PRON', root: null, meaning: { en: 'among you', ur: 'تم میں سے' }, grammarRole: 'jarr-majrur' },
+      { id: '13:10:3', position: 3, arabic: 'مَّنْ', transliteration: 'man', pos: ['REL'], posLabel: 'REL', root: null, meaning: { en: 'is he who', ur: 'جو' }, grammarRole: 'mubtada' },
+      { id: '13:10:4', position: 4, arabic: 'أَسَرَّ', transliteration: 'asarra', pos: ['V'], posLabel: 'V', root: 'س ر ر', meaning: { en: 'conceals', ur: 'چھپائے' }, grammarRole: 'silah' },
+      { id: '13:10:5', position: 5, arabic: 'الْقَوْلَ', transliteration: 'al-qawla', pos: ['N'], posLabel: 'N', root: 'ق و ل', meaning: { en: 'the speech', ur: 'بات' }, grammarRole: 'mafool', case: 'mansoob' },
+      { id: '13:10:6', position: 6, arabic: 'وَمَن', transliteration: 'waman', pos: ['CONJ', 'REL'], posLabel: 'CONJ+REL', root: null, meaning: { en: 'and he who', ur: 'اور جو' }, grammarRole: 'atf' },
+      { id: '13:10:7', position: 7, arabic: 'جَهَرَ', transliteration: 'jahara', pos: ['V'], posLabel: 'V', root: 'ج ه ر', meaning: { en: 'publicizes', ur: 'ظاہر کرے' }, grammarRole: 'silah' },
+      { id: '13:10:8', position: 8, arabic: 'بِهِ', transliteration: 'bihi', pos: ['P', 'PRON'], posLabel: 'P+PRON', root: null, meaning: { en: 'it', ur: 'اسے' }, grammarRole: 'jarr-majrur' },
+      { id: '13:10:9', position: 9, arabic: 'وَمَنْ', transliteration: 'waman', pos: ['CONJ', 'REL'], posLabel: 'CONJ+REL', root: null, meaning: { en: 'and he who', ur: 'اور جو' }, grammarRole: 'atf' },
+      { id: '13:10:10', position: 10, arabic: 'هُوَ', transliteration: 'huwa', pos: ['PRON'], posLabel: 'PRON', root: null, meaning: { en: 'he is', ur: 'وہ' }, grammarRole: 'mubtada' },
+      { id: '13:10:11', position: 11, arabic: 'مُسْتَخْفٍ', transliteration: 'mustakhfin', pos: ['N'], posLabel: 'N', root: 'خ ف ي', meaning: { en: 'one hiding', ur: 'چھپنے والا' }, grammarRole: 'pred' },
+      { id: '13:10:12', position: 12, arabic: 'بِاللَّيْلِ', transliteration: 'bil-layli', pos: ['P', 'N'], posLabel: 'P+N', root: 'ل ي ل', meaning: { en: 'by night', ur: 'رات کو' }, grammarRole: 'jarr-majrur' },
+      { id: '13:10:13', position: 13, arabic: 'وَسَارِبٌ', transliteration: 'wasaribun', pos: ['CONJ', 'N'], posLabel: 'CONJ+N', root: 'س ر ب', meaning: { en: 'and one going forth', ur: 'اور چلنے والا' }, grammarRole: 'atf' },
+      { id: '13:10:14', position: 14, arabic: 'بِالنَّهَارِ', transliteration: 'bin-nahari', pos: ['P', 'N'], posLabel: 'P+N', root: 'ن ه ر', meaning: { en: 'by day', ur: 'دن کو' }, grammarRole: 'jarr-majrur' },
+    ],
+    structure: {
+      relationships: [
+        { from: 4, to: 5, label: 'فعل + مفعول به' },
+        { from: 10, to: 11, label: 'مبتدأ + خبر' },
+      ],
+    },
+  },
+
+  11: {
+    text: 'لَهُ مُعَقِّبَاتٌ مِّن بَيْنِ يَدَيْهِ وَمِنْ خَلْفِهِ يَحْفَظُونَهُ مِنْ أَمْرِ اللَّهِ',
+    translation: {
+      en: 'For him are successive angels before and behind him who protect him by the decree of Allah.',
+      ur: 'اس کے لیے آگے پیچھے پہرے دار فرشتے ہیں جو اللہ کے حکم سے اس کی حفاظت کرتے ہیں',
+    },
+    words: [
+      { id: '13:11:1', position: 1, arabic: 'لَهُ', transliteration: 'lahu', pos: ['P', 'PRON'], posLabel: 'P+PRON', root: null, meaning: { en: 'For him are', ur: 'اس کے لیے' }, grammarRole: 'pred' },
+      { id: '13:11:2', position: 2, arabic: 'مُعَقِّبَاتٌ', transliteration: 'mu\'aqqibatun', pos: ['N'], posLabel: 'N', root: 'ع ق ب', meaning: { en: 'successive angels', ur: 'پہرے دار فرشتے' }, grammarRole: 'mubtada', case: 'marfoo' },
+      { id: '13:11:3', position: 3, arabic: 'مِّن', transliteration: 'min', pos: ['P'], posLabel: 'P', root: null, meaning: { en: 'from', ur: 'سے' }, grammarRole: 'jarr' },
+      { id: '13:11:4', position: 4, arabic: 'بَيْنِ', transliteration: 'bayni', pos: ['N'], posLabel: 'N', root: null, meaning: { en: 'before', ur: 'آگے' }, grammarRole: 'majrur' },
+      { id: '13:11:5', position: 5, arabic: 'يَدَيْهِ', transliteration: 'yadayhi', pos: ['N', 'PRON'], posLabel: 'N+PRON', root: 'ي د ي', meaning: { en: 'him (lit. his hands)', ur: 'اس کے' }, grammarRole: 'mudhafIlayh' },
+      { id: '13:11:6', position: 6, arabic: 'وَمِنْ', transliteration: 'wamin', pos: ['CONJ', 'P'], posLabel: 'CONJ+P', root: null, meaning: { en: 'and from', ur: 'اور' }, grammarRole: 'atf' },
+      { id: '13:11:7', position: 7, arabic: 'خَلْفِهِ', transliteration: 'khalfihi', pos: ['N', 'PRON'], posLabel: 'N+PRON', root: 'خ ل ف', meaning: { en: 'behind him', ur: 'پیچھے سے' }, grammarRole: 'majrur' },
+      { id: '13:11:8', position: 8, arabic: 'يَحْفَظُونَهُ', transliteration: 'yahfazunahu', pos: ['V'], posLabel: 'V', root: 'ح ف ظ', meaning: { en: 'they protect him', ur: 'اس کی حفاظت کرتے ہیں' }, grammarRole: 'sifah' },
+      { id: '13:11:9', position: 9, arabic: 'مِنْ', transliteration: 'min', pos: ['P'], posLabel: 'P', root: null, meaning: { en: 'by', ur: 'سے' }, grammarRole: 'jarr' },
+      { id: '13:11:10', position: 10, arabic: 'أَمْرِ', transliteration: 'amri', pos: ['N'], posLabel: 'N', root: 'أ م ر', meaning: { en: 'the decree', ur: 'حکم' }, grammarRole: 'majrur', case: 'majroor' },
+      { id: '13:11:11', position: 11, arabic: 'اللَّهِ', transliteration: 'Allahi', pos: ['N'], posLabel: 'N', root: null, meaning: { en: 'of Allah', ur: 'اللہ کے' }, grammarRole: 'mudhafIlayh', case: 'majroor' },
+    ],
+    structure: {
+      relationships: [
+        { from: 4, to: 5, label: 'مضاف + مضاف إليه' },
+        { from: 10, to: 11, label: 'مضاف + مضاف إليه' },
+      ],
+    },
+  },
+
+  12: {
+    text: 'هُوَ الَّذِي يُرِيكُمُ الْبَرْقَ خَوْفًا وَطَمَعًا وَيُنشِئُ السَّحَابَ الثِّقَالَ',
+    translation: {
+      en: 'It is He who shows you lightning, causing fear and aspiration, and generates the heavy clouds.',
+      ur: 'وہی ہے جو تمہیں بجلی دکھاتا ہے ڈرانے اور لالچ دینے کو اور بھاری بادل اٹھاتا ہے',
+    },
+    words: [
+      { id: '13:12:1', position: 1, arabic: 'هُوَ', transliteration: 'huwa', pos: ['PRON'], posLabel: 'PRON', root: null, meaning: { en: 'He', ur: 'وہی' }, grammarRole: 'mubtada' },
+      { id: '13:12:2', position: 2, arabic: 'الَّذِي', transliteration: 'alladhi', pos: ['REL'], posLabel: 'REL', root: null, meaning: { en: 'is the One who', ur: 'جو' }, grammarRole: 'pred' },
+      { id: '13:12:3', position: 3, arabic: 'يُرِيكُمُ', transliteration: 'yurikumu', pos: ['V'], posLabel: 'V', root: 'ر أ ي', meaning: { en: 'shows you', ur: 'تمہیں دکھاتا ہے' }, grammarRole: 'silah' },
+      { id: '13:12:4', position: 4, arabic: 'الْبَرْقَ', transliteration: 'al-barqa', pos: ['N'], posLabel: 'N', root: 'ب ر ق', meaning: { en: 'the lightning', ur: 'بجلی' }, grammarRole: 'mafool', case: 'mansoob' },
+      { id: '13:12:5', position: 5, arabic: 'خَوْفًا', transliteration: 'khawfan', pos: ['N'], posLabel: 'N', root: 'خ و ف', meaning: { en: 'causing fear', ur: 'ڈرانے کو' }, grammarRole: 'hal', case: 'mansoob' },
+      { id: '13:12:6', position: 6, arabic: 'وَطَمَعًا', transliteration: 'watama\'an', pos: ['CONJ', 'N'], posLabel: 'CONJ+N', root: 'ط م ع', meaning: { en: 'and aspiration', ur: 'اور لالچ' }, grammarRole: 'atf', case: 'mansoob' },
+      { id: '13:12:7', position: 7, arabic: 'وَيُنشِئُ', transliteration: 'wayunshi\'u', pos: ['CONJ', 'V'], posLabel: 'CONJ+V', root: 'ن ش أ', meaning: { en: 'and generates', ur: 'اور اٹھاتا ہے' }, grammarRole: 'atf' },
+      { id: '13:12:8', position: 8, arabic: 'السَّحَابَ', transliteration: 'al-sahaba', pos: ['N'], posLabel: 'N', root: 'س ح ب', meaning: { en: 'the clouds', ur: 'بادل' }, grammarRole: 'mafool', case: 'mansoob' },
+      { id: '13:12:9', position: 9, arabic: 'الثِّقَالَ', transliteration: 'al-thiqala', pos: ['ADJ'], posLabel: 'ADJ', root: 'ث ق ل', meaning: { en: 'heavy', ur: 'بھاری' }, grammarRole: 'sifah', case: 'mansoob' },
+    ],
+    structure: {
+      relationships: [
+        { from: 1, to: 2, label: 'مبتدأ + خبر' },
+        { from: 3, to: 4, label: 'فعل + مفعول به' },
+        { from: 8, to: 9, label: 'موصوف + صفت' },
+      ],
+    },
+  },
+
+  13: {
+    text: 'وَيُسَبِّحُ الرَّعْدُ بِحَمْدِهِ وَالْمَلَائِكَةُ مِنْ خِيفَتِهِ وَيُرْسِلُ الصَّوَاعِقَ فَيُصِيبُ بِهَا مَن يَشَاءُ وَهُمْ يُجَادِلُونَ فِي اللَّهِ وَهُوَ شَدِيدُ الْمِحَالِ',
+    translation: {
+      en: 'And the thunder exalts with His praise, and the angels from fear of Him. And He sends thunderbolts and strikes therewith whom He wills while they dispute about Allah; and He is severe in assault.',
+      ur: 'اور بادل اس کی حمد کے ساتھ تسبیح کرتے ہیں اور فرشتے اس کے خوف سے اور وہ بجلیاں بھیجتا ہے پھر جسے چاہتا ہے اس سے مارتا ہے جبکہ وہ اللہ کے بارے میں جھگڑتے ہیں اور وہ سخت عذاب والا ہے',
+    },
+    words: [
+      { id: '13:13:1', position: 1, arabic: 'وَيُسَبِّحُ', transliteration: 'wayusabbihu', pos: ['CONJ', 'V'], posLabel: 'CONJ+V', root: 'س ب ح', meaning: { en: 'And exalts', ur: 'اور تسبیح کرتا ہے' }, grammarRole: 'fi\'l' },
+      { id: '13:13:2', position: 2, arabic: 'الرَّعْدُ', transliteration: 'al-ra\'du', pos: ['N'], posLabel: 'N', root: 'ر ع د', meaning: { en: 'the thunder', ur: 'بادل' }, grammarRole: 'faa\'il', case: 'marfoo' },
+      { id: '13:13:3', position: 3, arabic: 'بِحَمْدِهِ', transliteration: 'bihamdihi', pos: ['P', 'N'], posLabel: 'P+N', root: 'ح م د', meaning: { en: 'with His praise', ur: 'اس کی حمد کے ساتھ' }, grammarRole: 'jarr-majrur' },
+      { id: '13:13:4', position: 4, arabic: 'وَالْمَلَائِكَةُ', transliteration: 'wal-mala\'ikatu', pos: ['CONJ', 'N'], posLabel: 'CONJ+N', root: 'م ل ك', meaning: { en: 'and the angels', ur: 'اور فرشتے' }, grammarRole: 'atf', case: 'marfoo' },
+      { id: '13:13:5', position: 5, arabic: 'مِنْ', transliteration: 'min', pos: ['P'], posLabel: 'P', root: null, meaning: { en: 'from', ur: 'سے' }, grammarRole: 'jarr' },
+      { id: '13:13:6', position: 6, arabic: 'خِيفَتِهِ', transliteration: 'khifatihi', pos: ['N', 'PRON'], posLabel: 'N+PRON', root: 'خ و ف', meaning: { en: 'fear of Him', ur: 'اس کے خوف' }, grammarRole: 'majrur' },
+      { id: '13:13:7', position: 7, arabic: 'وَيُرْسِلُ', transliteration: 'wayursilu', pos: ['CONJ', 'V'], posLabel: 'CONJ+V', root: 'ر س ل', meaning: { en: 'And He sends', ur: 'اور بھیجتا ہے' }, grammarRole: 'atf' },
+      { id: '13:13:8', position: 8, arabic: 'الصَّوَاعِقَ', transliteration: 'al-sawa\'iqa', pos: ['N'], posLabel: 'N', root: 'ص ع ق', meaning: { en: 'the thunderbolts', ur: 'بجلیاں' }, grammarRole: 'mafool', case: 'mansoob' },
+      { id: '13:13:9', position: 9, arabic: 'فَيُصِيبُ', transliteration: 'fayusibu', pos: ['CONJ', 'V'], posLabel: 'CONJ+V', root: 'ص و ب', meaning: { en: 'and strikes', ur: 'پھر مارتا ہے' }, grammarRole: 'atf' },
+      { id: '13:13:10', position: 10, arabic: 'بِهَا', transliteration: 'biha', pos: ['P', 'PRON'], posLabel: 'P+PRON', root: null, meaning: { en: 'therewith', ur: 'اس سے' }, grammarRole: 'jarr-majrur' },
+      { id: '13:13:11', position: 11, arabic: 'مَن', transliteration: 'man', pos: ['REL'], posLabel: 'REL', root: null, meaning: { en: 'whom', ur: 'جسے' }, grammarRole: 'mafool' },
+      { id: '13:13:12', position: 12, arabic: 'يَشَاءُ', transliteration: 'yasha\'u', pos: ['V'], posLabel: 'V', root: 'ش ي أ', meaning: { en: 'He wills', ur: 'چاہتا ہے' }, grammarRole: 'silah' },
+      { id: '13:13:13', position: 13, arabic: 'وَهُمْ', transliteration: 'wahum', pos: ['CONJ', 'PRON'], posLabel: 'CONJ+PRON', root: null, meaning: { en: 'while they', ur: 'اور وہ' }, grammarRole: 'hal' },
+      { id: '13:13:14', position: 14, arabic: 'يُجَادِلُونَ', transliteration: 'yujadiluna', pos: ['V'], posLabel: 'V', root: 'ج د ل', meaning: { en: 'dispute', ur: 'جھگڑتے ہیں' }, grammarRole: 'pred' },
+      { id: '13:13:15', position: 15, arabic: 'فِي', transliteration: 'fi', pos: ['P'], posLabel: 'P', root: null, meaning: { en: 'about', ur: 'بارے میں' }, grammarRole: 'jarr' },
+      { id: '13:13:16', position: 16, arabic: 'اللَّهِ', transliteration: 'Allahi', pos: ['N'], posLabel: 'N', root: null, meaning: { en: 'Allah', ur: 'اللہ کے' }, grammarRole: 'majrur' },
+      { id: '13:13:17', position: 17, arabic: 'وَهُوَ', transliteration: 'wahuwa', pos: ['CONJ', 'PRON'], posLabel: 'CONJ+PRON', root: null, meaning: { en: 'and He is', ur: 'اور وہ' }, grammarRole: 'mubtada' },
+      { id: '13:13:18', position: 18, arabic: 'شَدِيدُ', transliteration: 'shadidu', pos: ['ADJ'], posLabel: 'ADJ', root: 'ش د د', meaning: { en: 'severe in', ur: 'سخت' }, grammarRole: 'pred', case: 'marfoo' },
+      { id: '13:13:19', position: 19, arabic: 'الْمِحَالِ', transliteration: 'al-mihali', pos: ['N'], posLabel: 'N', root: 'م ح ل', meaning: { en: 'assault', ur: 'عذاب والا' }, grammarRole: 'mudhafIlayh', case: 'majroor' },
+    ],
+    structure: {
+      relationships: [
+        { from: 1, to: 2, label: 'فعل + فاعل' },
+        { from: 7, to: 8, label: 'فعل + مفعول به' },
+        { from: 15, to: 16, label: 'جار + مجرور' },
+        { from: 18, to: 19, label: 'مضاف + مضاف إليه' },
+      ],
+    },
+  },
+
+  14: {
+    text: 'لَهُ دَعْوَةُ الْحَقِّ وَالَّذِينَ يَدْعُونَ مِن دُونِهِ لَا يَسْتَجِيبُونَ لَهُم بِشَيْءٍ',
+    translation: {
+      en: 'To Him is the supplication of truth. And those they call upon besides Him do not respond to them with a thing.',
+      ur: 'سچی پکار اسی کی ہے اور جنہیں یہ اس کے سوا پکارتے ہیں وہ ان کو کسی چیز میں جواب نہیں دیتے',
+    },
+    words: [
+      { id: '13:14:1', position: 1, arabic: 'لَهُ', transliteration: 'lahu', pos: ['P', 'PRON'], posLabel: 'P+PRON', root: null, meaning: { en: 'To Him', ur: 'اسی کی ہے' }, grammarRole: 'pred' },
+      { id: '13:14:2', position: 2, arabic: 'دَعْوَةُ', transliteration: 'da\'watu', pos: ['N'], posLabel: 'N', root: 'د ع و', meaning: { en: 'the supplication', ur: 'پکار' }, grammarRole: 'mubtada', case: 'marfoo' },
+      { id: '13:14:3', position: 3, arabic: 'الْحَقِّ', transliteration: 'al-haqqi', pos: ['N'], posLabel: 'N', root: 'ح ق ق', meaning: { en: 'of truth', ur: 'سچی' }, grammarRole: 'mudhafIlayh', case: 'majroor' },
+      { id: '13:14:4', position: 4, arabic: 'وَالَّذِينَ', transliteration: 'walladhina', pos: ['CONJ', 'REL'], posLabel: 'CONJ+REL', root: null, meaning: { en: 'And those whom', ur: 'اور جنہیں' }, grammarRole: 'mubtada' },
+      { id: '13:14:5', position: 5, arabic: 'يَدْعُونَ', transliteration: 'yad\'una', pos: ['V'], posLabel: 'V', root: 'د ع و', meaning: { en: 'they call upon', ur: 'یہ پکارتے ہیں' }, grammarRole: 'silah' },
+      { id: '13:14:6', position: 6, arabic: 'مِن', transliteration: 'min', pos: ['P'], posLabel: 'P', root: null, meaning: { en: 'besides', ur: 'سوا' }, grammarRole: 'jarr' },
+      { id: '13:14:7', position: 7, arabic: 'دُونِهِ', transliteration: 'dunihi', pos: ['N', 'PRON'], posLabel: 'N+PRON', root: null, meaning: { en: 'Him', ur: 'اس کے' }, grammarRole: 'majrur' },
+      { id: '13:14:8', position: 8, arabic: 'لَا', transliteration: 'la', pos: ['NEG'], posLabel: 'NEG', root: null, meaning: { en: 'not', ur: 'نہیں' }, grammarRole: 'nafi' },
+      { id: '13:14:9', position: 9, arabic: 'يَسْتَجِيبُونَ', transliteration: 'yastajibuna', pos: ['V'], posLabel: 'V', root: 'ج و ب', meaning: { en: 'they respond', ur: 'جواب دیتے' }, grammarRole: 'pred' },
+      { id: '13:14:10', position: 10, arabic: 'لَهُم', transliteration: 'lahum', pos: ['P', 'PRON'], posLabel: 'P+PRON', root: null, meaning: { en: 'to them', ur: 'ان کو' }, grammarRole: 'jarr-majrur' },
+      { id: '13:14:11', position: 11, arabic: 'بِشَيْءٍ', transliteration: 'bishay\'in', pos: ['P', 'N'], posLabel: 'P+N', root: null, meaning: { en: 'with a thing', ur: 'کسی چیز میں' }, grammarRole: 'jarr-majrur' },
+    ],
+    structure: {
+      relationships: [
+        { from: 2, to: 3, label: 'مضاف + مضاف إليه' },
+        { from: 6, to: 7, label: 'جار + مجرور' },
+        { from: 8, to: 9, label: 'نفی + فعل' },
+      ],
+    },
+  },
+
+  15: {
+    text: 'وَلِلَّهِ يَسْجُدُ مَن فِي السَّمَاوَاتِ وَالْأَرْضِ طَوْعًا وَكَرْهًا وَظِلَالُهُم بِالْغُدُوِّ وَالْآصَالِ',
+    translation: {
+      en: 'And to Allah prostrates whoever is within the heavens and the earth, willingly or by compulsion, and their shadows as well, in the mornings and afternoons.',
+      ur: 'اور اللہ ہی کو سجدہ کرتے ہیں جو آسمانوں اور زمین میں ہیں خوشی سے یا مجبوری سے اور ان کے سائے بھی صبح اور شام',
+    },
+    words: [
+      { id: '13:15:1', position: 1, arabic: 'وَلِلَّهِ', transliteration: 'walillahi', pos: ['CONJ', 'P', 'N'], posLabel: 'CONJ+P+N', root: null, meaning: { en: 'And to Allah', ur: 'اور اللہ ہی کو' }, grammarRole: 'jarr-majrur' },
+      { id: '13:15:2', position: 2, arabic: 'يَسْجُدُ', transliteration: 'yasjudu', pos: ['V'], posLabel: 'V', root: 'س ج د', meaning: { en: 'prostrates', ur: 'سجدہ کرتے ہیں' }, grammarRole: 'fi\'l' },
+      { id: '13:15:3', position: 3, arabic: 'مَن', transliteration: 'man', pos: ['REL'], posLabel: 'REL', root: null, meaning: { en: 'whoever', ur: 'جو کوئی' }, grammarRole: 'faa\'il' },
+      { id: '13:15:4', position: 4, arabic: 'فِي', transliteration: 'fi', pos: ['P'], posLabel: 'P', root: null, meaning: { en: 'is in', ur: 'میں ہے' }, grammarRole: 'jarr' },
+      { id: '13:15:5', position: 5, arabic: 'السَّمَاوَاتِ', transliteration: 'al-samawati', pos: ['N'], posLabel: 'N', root: null, meaning: { en: 'the heavens', ur: 'آسمانوں' }, grammarRole: 'majrur' },
+      { id: '13:15:6', position: 6, arabic: 'وَالْأَرْضِ', transliteration: 'wal-ardi', pos: ['CONJ', 'N'], posLabel: 'CONJ+N', root: null, meaning: { en: 'and the earth', ur: 'اور زمین' }, grammarRole: 'atf' },
+      { id: '13:15:7', position: 7, arabic: 'طَوْعًا', transliteration: 'taw\'an', pos: ['N'], posLabel: 'N', root: 'ط و ع', meaning: { en: 'willingly', ur: 'خوشی سے' }, grammarRole: 'hal', case: 'mansoob' },
+      { id: '13:15:8', position: 8, arabic: 'وَكَرْهًا', transliteration: 'wakarhan', pos: ['CONJ', 'N'], posLabel: 'CONJ+N', root: 'ك ر ه', meaning: { en: 'or by compulsion', ur: 'یا مجبوری سے' }, grammarRole: 'atf', case: 'mansoob' },
+      { id: '13:15:9', position: 9, arabic: 'وَظِلَالُهُم', transliteration: 'wazilaluhum', pos: ['CONJ', 'N', 'PRON'], posLabel: 'CONJ+N+PRON', root: 'ظ ل ل', meaning: { en: 'and their shadows', ur: 'اور ان کے سائے' }, grammarRole: 'atf' },
+      { id: '13:15:10', position: 10, arabic: 'بِالْغُدُوِّ', transliteration: 'bil-ghuduwwi', pos: ['P', 'N'], posLabel: 'P+N', root: 'غ د و', meaning: { en: 'in the mornings', ur: 'صبح کو' }, grammarRole: 'jarr-majrur' },
+      { id: '13:15:11', position: 11, arabic: 'وَالْآصَالِ', transliteration: 'wal-asali', pos: ['CONJ', 'N'], posLabel: 'CONJ+N', root: 'أ ص ل', meaning: { en: 'and afternoons', ur: 'اور شام کو' }, grammarRole: 'atf' },
+    ],
+    structure: {
+      relationships: [
+        { from: 2, to: 3, label: 'فعل + فاعل' },
+        { from: 4, to: 5, label: 'جار + مجرور' },
+      ],
+    },
+  },
+
+  16: {
+    text: 'قُلْ مَن رَّبُّ السَّمَاوَاتِ وَالْأَرْضِ قُلِ اللَّهُ',
+    translation: { en: 'Say, "Who is the Lord of the heavens and earth?" Say, "Allah."', ur: 'کہو آسمانوں اور زمین کا رب کون ہے؟ کہو اللہ' },
+    words: [
+      { id: '13:16:1', position: 1, arabic: 'قُلْ', transliteration: 'qul', pos: ['V'], posLabel: 'V', root: 'ق و ل', meaning: { en: 'Say', ur: 'کہو' }, grammarRole: 'fi\'l' },
+      { id: '13:16:2', position: 2, arabic: 'مَن', transliteration: 'man', pos: ['Q'], posLabel: 'Q', root: null, meaning: { en: 'Who is', ur: 'کون ہے' }, grammarRole: 'mubtada' },
+      { id: '13:16:3', position: 3, arabic: 'رَّبُّ', transliteration: 'rabbu', pos: ['N'], posLabel: 'N', root: 'ر ب ب', meaning: { en: 'the Lord of', ur: 'رب' }, grammarRole: 'pred', case: 'marfoo' },
+      { id: '13:16:4', position: 4, arabic: 'السَّمَاوَاتِ', transliteration: 'al-samawati', pos: ['N'], posLabel: 'N', root: null, meaning: { en: 'the heavens', ur: 'آسمانوں' }, grammarRole: 'mudhafIlayh', case: 'majroor' },
+      { id: '13:16:5', position: 5, arabic: 'وَالْأَرْضِ', transliteration: 'wal-ardi', pos: ['CONJ', 'N'], posLabel: 'CONJ+N', root: null, meaning: { en: 'and the earth', ur: 'اور زمین کا' }, grammarRole: 'atf' },
+      { id: '13:16:6', position: 6, arabic: 'قُلِ', transliteration: 'quli', pos: ['V'], posLabel: 'V', root: 'ق و ل', meaning: { en: 'Say', ur: 'کہو' }, grammarRole: 'fi\'l' },
+      { id: '13:16:7', position: 7, arabic: 'اللَّهُ', transliteration: 'Allahu', pos: ['N'], posLabel: 'N', root: null, meaning: { en: 'Allah', ur: 'اللہ' }, grammarRole: 'mubtada', case: 'marfoo' },
+    ],
+    structure: { relationships: [{ from: 3, to: 4, label: 'مضاف + مضاف إليه' }] },
+  },
+
+  17: {
+    text: 'أَنزَلَ مِنَ السَّمَاءِ مَاءً فَسَالَتْ أَوْدِيَةٌ بِقَدَرِهَا',
+    translation: { en: 'He sends down water from the sky, and channels flow according to their measure.', ur: 'اس نے آسمان سے پانی اتارا تو نالے اپنے اندازے کے مطابق بہہ نکلے' },
+    words: [
+      { id: '13:17:1', position: 1, arabic: 'أَنزَلَ', transliteration: 'anzala', pos: ['V'], posLabel: 'V', root: 'ن ز ل', meaning: { en: 'He sent down', ur: 'اتارا' }, grammarRole: 'fi\'l' },
+      { id: '13:17:2', position: 2, arabic: 'مِنَ', transliteration: 'mina', pos: ['P'], posLabel: 'P', root: null, meaning: { en: 'from', ur: 'سے' }, grammarRole: 'jarr' },
+      { id: '13:17:3', position: 3, arabic: 'السَّمَاءِ', transliteration: 'al-sama\'i', pos: ['N'], posLabel: 'N', root: null, meaning: { en: 'the sky', ur: 'آسمان' }, grammarRole: 'majrur' },
+      { id: '13:17:4', position: 4, arabic: 'مَاءً', transliteration: 'ma\'an', pos: ['N'], posLabel: 'N', root: 'م و ه', meaning: { en: 'water', ur: 'پانی' }, grammarRole: 'mafool', case: 'mansoob' },
+      { id: '13:17:5', position: 5, arabic: 'فَسَالَتْ', transliteration: 'fasalat', pos: ['CONJ', 'V'], posLabel: 'CONJ+V', root: 'س ي ل', meaning: { en: 'and flowed', ur: 'تو بہہ نکلے' }, grammarRole: 'atf' },
+      { id: '13:17:6', position: 6, arabic: 'أَوْدِيَةٌ', transliteration: 'awdiyatun', pos: ['N'], posLabel: 'N', root: 'و د ي', meaning: { en: 'channels/valleys', ur: 'نالے' }, grammarRole: 'faa\'il', case: 'marfoo' },
+      { id: '13:17:7', position: 7, arabic: 'بِقَدَرِهَا', transliteration: 'biqadariha', pos: ['P', 'N'], posLabel: 'P+N', root: 'ق د ر', meaning: { en: 'according to their measure', ur: 'اپنے اندازے سے' }, grammarRole: 'jarr-majrur' },
+    ],
+    structure: { relationships: [{ from: 2, to: 3, label: 'جار + مجرور' }, { from: 5, to: 6, label: 'فعل + فاعل' }] },
+  },
+
+  18: {
+    text: 'لِلَّذِينَ اسْتَجَابُوا لِرَبِّهِمُ الْحُسْنَىٰ وَالَّذِينَ لَمْ يَسْتَجِيبُوا لَهُ لَوْ أَنَّ لَهُم مَّا فِي الْأَرْضِ جَمِيعًا وَمِثْلَهُ مَعَهُ لَافْتَدَوْا بِهِ',
+    translation: { en: 'For those who responded to their Lord is the best. But those who did not respond to Him - if they had all that is in the earth and the like of it with it, they would ransom themselves thereby.', ur: 'جن لوگوں نے اپنے رب کی بات مانی ان کے لیے بھلائی ہے اور جنہوں نے نہ مانی اگر زمین میں جو کچھ ہے سب ان کا ہوتا بلکہ اتنا اور بھی تو فدیے میں دے ڈالتے' },
+    words: [
+      { id: '13:18:1', position: 1, arabic: 'لِلَّذِينَ', transliteration: 'lilladhina', pos: ['P', 'REL'], posLabel: 'P+REL', root: null, meaning: { en: 'For those who', ur: 'ان لوگوں کے لیے جنہوں نے' }, grammarRole: 'jarr-majrur' },
+      { id: '13:18:2', position: 2, arabic: 'اسْتَجَابُوا', transliteration: 'istajabuu', pos: ['V'], posLabel: 'V', root: 'ج و ب', meaning: { en: 'responded', ur: 'قبول کیا' }, grammarRole: 'silah' },
+      { id: '13:18:3', position: 3, arabic: 'لِرَبِّهِمُ', transliteration: 'lirabbihimu', pos: ['P', 'N'], posLabel: 'P+N', root: 'ر ب ب', meaning: { en: 'to their Lord', ur: 'اپنے رب کی بات' }, grammarRole: 'jarr-majrur' },
+      { id: '13:18:4', position: 4, arabic: 'الْحُسْنَىٰ', transliteration: 'al-husna', pos: ['ADJ'], posLabel: 'ADJ', root: 'ح س ن', meaning: { en: 'is the best', ur: 'بھلائی ہے' }, grammarRole: 'mubtada', case: 'marfoo' },
+    ],
+    structure: { relationships: [{ from: 1, to: 2, label: 'موصول + صلة' }] },
+  },
+
+  19: {
+    text: 'أَفَمَن يَعْلَمُ أَنَّمَا أُنزِلَ إِلَيْكَ مِن رَّبِّكَ الْحَقُّ كَمَنْ هُوَ أَعْمَىٰ إِنَّمَا يَتَذَكَّرُ أُولُو الْأَلْبَابِ',
+    translation: { en: 'Then is he who knows that what has been revealed to you from your Lord is the truth like one who is blind? Only those of understanding will take heed.', ur: 'بھلا جو شخص جانتا ہے کہ جو تیرے رب کی طرف سے نازل ہوا حق ہے وہ اندھے جیسا ہو سکتا ہے؟ نصیحت صرف عقل والے حاصل کرتے ہیں' },
+    words: [
+      { id: '13:19:1', position: 1, arabic: 'أَفَمَن', transliteration: 'afaman', pos: ['Q', 'CONJ', 'REL'], posLabel: 'Q+CONJ+REL', root: null, meaning: { en: 'Then is he who', ur: 'بھلا جو' }, grammarRole: 'mubtada' },
+      { id: '13:19:2', position: 2, arabic: 'يَعْلَمُ', transliteration: 'ya\'lamu', pos: ['V'], posLabel: 'V', root: 'ع ل م', meaning: { en: 'knows', ur: 'جانتا ہے' }, grammarRole: 'silah' },
+      { id: '13:19:3', position: 3, arabic: 'أَنَّمَا', transliteration: 'annama', pos: ['PART'], posLabel: 'PART', root: null, meaning: { en: 'that what', ur: 'کہ جو' }, grammarRole: 'mafool' },
+      { id: '13:19:4', position: 4, arabic: 'أُنزِلَ', transliteration: 'unzila', pos: ['V'], posLabel: 'V', root: 'ن ز ل', meaning: { en: 'was revealed', ur: 'نازل ہوا' }, grammarRole: 'silah' },
+      { id: '13:19:5', position: 5, arabic: 'إِلَيْكَ', transliteration: 'ilayka', pos: ['P', 'PRON'], posLabel: 'P+PRON', root: null, meaning: { en: 'to you', ur: 'تیری طرف' }, grammarRole: 'jarr-majrur' },
+      { id: '13:19:6', position: 6, arabic: 'مِن', transliteration: 'min', pos: ['P'], posLabel: 'P', root: null, meaning: { en: 'from', ur: 'سے' }, grammarRole: 'jarr' },
+      { id: '13:19:7', position: 7, arabic: 'رَّبِّكَ', transliteration: 'rabbika', pos: ['N', 'PRON'], posLabel: 'N+PRON', root: 'ر ب ب', meaning: { en: 'your Lord', ur: 'تیرے رب' }, grammarRole: 'majrur' },
+      { id: '13:19:8', position: 8, arabic: 'الْحَقُّ', transliteration: 'al-haqqu', pos: ['N'], posLabel: 'N', root: 'ح ق ق', meaning: { en: 'is the truth', ur: 'حق ہے' }, grammarRole: 'pred', case: 'marfoo' },
+      { id: '13:19:9', position: 9, arabic: 'كَمَنْ', transliteration: 'kaman', pos: ['P', 'REL'], posLabel: 'P+REL', root: null, meaning: { en: 'like one who', ur: 'اس جیسا جو' }, grammarRole: 'pred' },
+      { id: '13:19:10', position: 10, arabic: 'هُوَ', transliteration: 'huwa', pos: ['PRON'], posLabel: 'PRON', root: null, meaning: { en: 'he is', ur: 'وہ' }, grammarRole: 'mubtada' },
+      { id: '13:19:11', position: 11, arabic: 'أَعْمَىٰ', transliteration: 'a\'ma', pos: ['ADJ'], posLabel: 'ADJ', root: 'ع م ي', meaning: { en: 'blind', ur: 'اندھا ہے' }, grammarRole: 'pred' },
+      { id: '13:19:12', position: 12, arabic: 'إِنَّمَا', transliteration: 'innama', pos: ['PART'], posLabel: 'PART', root: null, meaning: { en: 'Only', ur: 'صرف' }, grammarRole: 'hasr' },
+      { id: '13:19:13', position: 13, arabic: 'يَتَذَكَّرُ', transliteration: 'yatadhakkaru', pos: ['V'], posLabel: 'V', root: 'ذ ك ر', meaning: { en: 'take heed', ur: 'نصیحت حاصل کرتے ہیں' }, grammarRole: 'fi\'l' },
+      { id: '13:19:14', position: 14, arabic: 'أُولُو', transliteration: 'uluu', pos: ['N'], posLabel: 'N', root: null, meaning: { en: 'those of', ur: 'والے' }, grammarRole: 'faa\'il', case: 'marfoo' },
+      { id: '13:19:15', position: 15, arabic: 'الْأَلْبَابِ', transliteration: 'al-albabi', pos: ['N'], posLabel: 'N', root: 'ل ب ب', meaning: { en: 'understanding', ur: 'عقل' }, grammarRole: 'mudhafIlayh', case: 'majroor' },
+    ],
+    structure: { relationships: [{ from: 10, to: 11, label: 'مبتدأ + خبر' }, { from: 14, to: 15, label: 'مضاف + مضاف إليه' }] },
+  },
+
+  20: {
+    text: 'الَّذِينَ يُوفُونَ بِعَهْدِ اللَّهِ وَلَا يَنقُضُونَ الْمِيثَاقَ',
+    translation: { en: 'Those who fulfill the covenant of Allah and do not break the contract.', ur: 'وہ جو اللہ کا عہد پورا کرتے ہیں اور میثاق نہیں توڑتے' },
+    words: [
+      { id: '13:20:1', position: 1, arabic: 'الَّذِينَ', transliteration: 'alladhina', pos: ['REL'], posLabel: 'REL', root: null, meaning: { en: 'Those who', ur: 'وہ جو' }, grammarRole: 'sifah' },
+      { id: '13:20:2', position: 2, arabic: 'يُوفُونَ', transliteration: 'yufuna', pos: ['V'], posLabel: 'V', root: 'و ف ي', meaning: { en: 'fulfill', ur: 'پورا کرتے ہیں' }, grammarRole: 'silah' },
+      { id: '13:20:3', position: 3, arabic: 'بِعَهْدِ', transliteration: 'bi\'ahdi', pos: ['P', 'N'], posLabel: 'P+N', root: 'ع ه د', meaning: { en: 'the covenant of', ur: 'عہد' }, grammarRole: 'jarr-majrur' },
+      { id: '13:20:4', position: 4, arabic: 'اللَّهِ', transliteration: 'Allahi', pos: ['N'], posLabel: 'N', root: null, meaning: { en: 'Allah', ur: 'اللہ کا' }, grammarRole: 'mudhafIlayh' },
+      { id: '13:20:5', position: 5, arabic: 'وَلَا', transliteration: 'wala', pos: ['CONJ', 'NEG'], posLabel: 'CONJ+NEG', root: null, meaning: { en: 'and do not', ur: 'اور نہیں' }, grammarRole: 'atf' },
+      { id: '13:20:6', position: 6, arabic: 'يَنقُضُونَ', transliteration: 'yanquduna', pos: ['V'], posLabel: 'V', root: 'ن ق ض', meaning: { en: 'break', ur: 'توڑتے' }, grammarRole: 'fi\'l' },
+      { id: '13:20:7', position: 7, arabic: 'الْمِيثَاقَ', transliteration: 'al-mithaqa', pos: ['N'], posLabel: 'N', root: 'و ث ق', meaning: { en: 'the contract', ur: 'میثاق' }, grammarRole: 'mafool', case: 'mansoob' },
+    ],
+    structure: { relationships: [{ from: 3, to: 4, label: 'مضاف + مضاف إليه' }, { from: 6, to: 7, label: 'فعل + مفعول به' }] },
+  },
+
+  21: {
+    text: 'وَالَّذِينَ يَصِلُونَ مَا أَمَرَ اللَّهُ بِهِ أَن يُوصَلَ وَيَخْشَوْنَ رَبَّهُمْ وَيَخَافُونَ سُوءَ الْحِسَابِ',
+    translation: { en: 'And those who join that which Allah has ordered to be joined and fear their Lord and are afraid of the evil of account.', ur: 'اور جو لوگ ان رشتوں کو جوڑتے ہیں جن کو اللہ نے جوڑنے کا حکم دیا اور اپنے رب سے ڈرتے ہیں اور برے حساب سے خوفزدہ رہتے ہیں' },
+    words: [
+      { id: '13:21:1', position: 1, arabic: 'وَالَّذِينَ', transliteration: 'walladhina', pos: ['CONJ', 'REL'], posLabel: 'CONJ+REL', root: null, meaning: { en: 'And those who', ur: 'اور جو لوگ' }, grammarRole: 'atf' },
+      { id: '13:21:2', position: 2, arabic: 'يَصِلُونَ', transliteration: 'yasiluna', pos: ['V'], posLabel: 'V', root: 'و ص ل', meaning: { en: 'join', ur: 'جوڑتے ہیں' }, grammarRole: 'silah' },
+      { id: '13:21:3', position: 3, arabic: 'مَا', transliteration: 'ma', pos: ['REL'], posLabel: 'REL', root: null, meaning: { en: 'that which', ur: 'جو' }, grammarRole: 'mafool' },
+      { id: '13:21:4', position: 4, arabic: 'أَمَرَ', transliteration: 'amara', pos: ['V'], posLabel: 'V', root: 'أ م ر', meaning: { en: 'ordered', ur: 'حکم دیا' }, grammarRole: 'silah' },
+      { id: '13:21:5', position: 5, arabic: 'اللَّهُ', transliteration: 'Allahu', pos: ['N'], posLabel: 'N', root: null, meaning: { en: 'Allah', ur: 'اللہ نے' }, grammarRole: 'faa\'il' },
+      { id: '13:21:6', position: 6, arabic: 'بِهِ', transliteration: 'bihi', pos: ['P', 'PRON'], posLabel: 'P+PRON', root: null, meaning: { en: 'of it', ur: 'اس کا' }, grammarRole: 'jarr-majrur' },
+      { id: '13:21:7', position: 7, arabic: 'أَن', transliteration: 'an', pos: ['PART'], posLabel: 'PART', root: null, meaning: { en: 'to', ur: 'کہ' }, grammarRole: 'masdariyyah' },
+      { id: '13:21:8', position: 8, arabic: 'يُوصَلَ', transliteration: 'yusala', pos: ['V'], posLabel: 'V', root: 'و ص ل', meaning: { en: 'be joined', ur: 'جوڑا جائے' }, grammarRole: 'fi\'l' },
+      { id: '13:21:9', position: 9, arabic: 'وَيَخْشَوْنَ', transliteration: 'wayakhshawna', pos: ['CONJ', 'V'], posLabel: 'CONJ+V', root: 'خ ش ي', meaning: { en: 'and fear', ur: 'اور ڈرتے ہیں' }, grammarRole: 'atf' },
+      { id: '13:21:10', position: 10, arabic: 'رَبَّهُمْ', transliteration: 'rabbahum', pos: ['N', 'PRON'], posLabel: 'N+PRON', root: 'ر ب ب', meaning: { en: 'their Lord', ur: 'اپنے رب سے' }, grammarRole: 'mafool' },
+      { id: '13:21:11', position: 11, arabic: 'وَيَخَافُونَ', transliteration: 'wayakhafuna', pos: ['CONJ', 'V'], posLabel: 'CONJ+V', root: 'خ و ف', meaning: { en: 'and are afraid of', ur: 'اور خوفزدہ رہتے ہیں' }, grammarRole: 'atf' },
+      { id: '13:21:12', position: 12, arabic: 'سُوءَ', transliteration: 'su\'a', pos: ['N'], posLabel: 'N', root: 'س و أ', meaning: { en: 'the evil of', ur: 'برے' }, grammarRole: 'mafool', case: 'mansoob' },
+      { id: '13:21:13', position: 13, arabic: 'الْحِسَابِ', transliteration: 'al-hisabi', pos: ['N'], posLabel: 'N', root: 'ح س ب', meaning: { en: 'the account', ur: 'حساب سے' }, grammarRole: 'mudhafIlayh', case: 'majroor' },
+    ],
+    structure: { relationships: [{ from: 4, to: 5, label: 'فعل + فاعل' }, { from: 9, to: 10, label: 'فعل + مفعول به' }, { from: 12, to: 13, label: 'مضاف + مضاف إليه' }] },
+  },
+
+  22: {
+    text: 'وَالَّذِينَ صَبَرُوا ابْتِغَاءَ وَجْهِ رَبِّهِمْ وَأَقَامُوا الصَّلَاةَ وَأَنفَقُوا مِمَّا رَزَقْنَاهُمْ سِرًّا وَعَلَانِيَةً وَيَدْرَءُونَ بِالْحَسَنَةِ السَّيِّئَةَ أُولَٰئِكَ لَهُمْ عُقْبَى الدَّارِ',
+    translation: { en: 'And those who are patient, seeking the countenance of their Lord, and establish prayer and spend from what We have provided for them secretly and publicly, and prevent evil with good - those will have the good consequence of home.', ur: 'اور جنہوں نے اپنے رب کی رضا کے لیے صبر کیا اور نماز قائم کی اور ہم نے جو کچھ ان کو دیا ہے اس میں سے پوشیدہ اور علانیہ خرچ کیا اور برائی کو بھلائی سے دفع کرتے ہیں ان کے لیے آخرت کا گھر ہے' },
+    words: [
+      { id: '13:22:1', position: 1, arabic: 'وَالَّذِينَ', transliteration: 'walladhina', pos: ['CONJ', 'REL'], posLabel: 'CONJ+REL', root: null, meaning: { en: 'And those who', ur: 'اور جنہوں نے' }, grammarRole: 'atf' },
+      { id: '13:22:2', position: 2, arabic: 'صَبَرُوا', transliteration: 'sabaru', pos: ['V'], posLabel: 'V', root: 'ص ب ر', meaning: { en: 'are patient', ur: 'صبر کیا' }, grammarRole: 'silah' },
+      { id: '13:22:3', position: 3, arabic: 'ابْتِغَاءَ', transliteration: 'ibtighaa\'a', pos: ['N'], posLabel: 'N', root: 'ب غ ي', meaning: { en: 'seeking', ur: 'طلب' }, grammarRole: 'mafool', case: 'mansoob' },
+      { id: '13:22:4', position: 4, arabic: 'وَجْهِ', transliteration: 'wajhi', pos: ['N'], posLabel: 'N', root: 'و ج ه', meaning: { en: 'the countenance of', ur: 'رضا' }, grammarRole: 'mudhafIlayh' },
+      { id: '13:22:5', position: 5, arabic: 'رَبِّهِمْ', transliteration: 'rabbihim', pos: ['N', 'PRON'], posLabel: 'N+PRON', root: 'ر ب ب', meaning: { en: 'their Lord', ur: 'اپنے رب کی' }, grammarRole: 'mudhafIlayh' },
+      { id: '13:22:6', position: 6, arabic: 'وَأَقَامُوا', transliteration: 'wa-aqamu', pos: ['CONJ', 'V'], posLabel: 'CONJ+V', root: 'ق و م', meaning: { en: 'and establish', ur: 'اور قائم کی' }, grammarRole: 'atf' },
+      { id: '13:22:7', position: 7, arabic: 'الصَّلَاةَ', transliteration: 'al-salata', pos: ['N'], posLabel: 'N', root: 'ص ل و', meaning: { en: 'prayer', ur: 'نماز' }, grammarRole: 'mafool', case: 'mansoob' },
+      { id: '13:22:8', position: 8, arabic: 'أُولَٰئِكَ', transliteration: 'ula\'ika', pos: ['DEM'], posLabel: 'DEM', root: null, meaning: { en: 'those', ur: 'ان کے لیے' }, grammarRole: 'mubtada' },
+      { id: '13:22:9', position: 9, arabic: 'لَهُمْ', transliteration: 'lahum', pos: ['P', 'PRON'], posLabel: 'P+PRON', root: null, meaning: { en: 'for them is', ur: 'ہے' }, grammarRole: 'pred' },
+      { id: '13:22:10', position: 10, arabic: 'عُقْبَى', transliteration: '\'uqba', pos: ['N'], posLabel: 'N', root: 'ع ق ب', meaning: { en: 'the good consequence of', ur: 'انجام' }, grammarRole: 'mubtada' },
+      { id: '13:22:11', position: 11, arabic: 'الدَّارِ', transliteration: 'al-dari', pos: ['N'], posLabel: 'N', root: 'د و ر', meaning: { en: 'the home', ur: 'گھر کا' }, grammarRole: 'mudhafIlayh', case: 'majroor' },
+    ],
+    structure: { relationships: [{ from: 4, to: 5, label: 'مضاف + مضاف إليه' }, { from: 6, to: 7, label: 'فعل + مفعول به' }, { from: 10, to: 11, label: 'مضاف + مضاف إليه' }] },
+  },
+
+  23: { text: 'جَنَّاتُ عَدْنٍ يَدْخُلُونَهَا وَمَن صَلَحَ مِنْ آبَائِهِمْ وَأَزْوَاجِهِمْ وَذُرِّيَّاتِهِمْ', translation: { en: 'Gardens of perpetual residence; they will enter them with whoever were righteous among their fathers, spouses, and descendants.', ur: 'سدا بہار باغات جن میں وہ داخل ہوں گے اور ان کے باپ دادا بیویوں اور اولاد میں سے جو نیک ہوں' }, words: [{ id: '13:23:1', position: 1, arabic: 'جَنَّاتُ', transliteration: 'jannatu', pos: ['N'], posLabel: 'N', root: 'ج ن ن', meaning: { en: 'Gardens', ur: 'باغات' }, grammarRole: 'badal', case: 'marfoo' }, { id: '13:23:2', position: 2, arabic: 'عَدْنٍ', transliteration: '\'adnin', pos: ['N'], posLabel: 'N', root: 'ع د ن', meaning: { en: 'of perpetual residence', ur: 'سدا بہار' }, grammarRole: 'mudhafIlayh', case: 'majroor' }, { id: '13:23:3', position: 3, arabic: 'يَدْخُلُونَهَا', transliteration: 'yadkhulunaha', pos: ['V'], posLabel: 'V', root: 'د خ ل', meaning: { en: 'they will enter them', ur: 'وہ داخل ہوں گے' }, grammarRole: 'fi\'l' }], structure: { relationships: [{ from: 1, to: 2, label: 'مضاف + مضاف إليه' }] } },
+
+  24: { text: 'وَالْمَلَائِكَةُ يَدْخُلُونَ عَلَيْهِم مِّن كُلِّ بَابٍ', translation: { en: 'And the angels will enter upon them from every gate.', ur: 'اور فرشتے ہر دروازے سے ان کے پاس آئیں گے' }, words: [{ id: '13:24:1', position: 1, arabic: 'وَالْمَلَائِكَةُ', transliteration: 'wal-mala\'ikatu', pos: ['CONJ', 'N'], posLabel: 'CONJ+N', root: 'م ل ك', meaning: { en: 'And the angels', ur: 'اور فرشتے' }, grammarRole: 'mubtada' }, { id: '13:24:2', position: 2, arabic: 'يَدْخُلُونَ', transliteration: 'yadkhuluna', pos: ['V'], posLabel: 'V', root: 'د خ ل', meaning: { en: 'will enter', ur: 'داخل ہوں گے' }, grammarRole: 'pred' }, { id: '13:24:3', position: 3, arabic: 'عَلَيْهِم', transliteration: '\'alayhim', pos: ['P', 'PRON'], posLabel: 'P+PRON', root: null, meaning: { en: 'upon them', ur: 'ان کے پاس' }, grammarRole: 'jarr-majrur' }, { id: '13:24:4', position: 4, arabic: 'مِّن', transliteration: 'min', pos: ['P'], posLabel: 'P', root: null, meaning: { en: 'from', ur: 'سے' }, grammarRole: 'jarr' }, { id: '13:24:5', position: 5, arabic: 'كُلِّ', transliteration: 'kulli', pos: ['N'], posLabel: 'N', root: null, meaning: { en: 'every', ur: 'ہر' }, grammarRole: 'majrur' }, { id: '13:24:6', position: 6, arabic: 'بَابٍ', transliteration: 'babin', pos: ['N'], posLabel: 'N', root: 'ب و ب', meaning: { en: 'gate', ur: 'دروازے' }, grammarRole: 'mudhafIlayh', case: 'majroor' }], structure: { relationships: [{ from: 5, to: 6, label: 'مضاف + مضاف إليه' }] } },
+
+  25: { text: 'سَلَامٌ عَلَيْكُم بِمَا صَبَرْتُمْ فَنِعْمَ عُقْبَى الدَّارِ', translation: { en: '"Peace be upon you for what you patiently endured. And excellent is the final home."', ur: 'تم پر سلام ہو اس صبر کے بدلے جو تم نے کیا پس آخرت کا گھر کیا خوب ہے' }, words: [{ id: '13:25:1', position: 1, arabic: 'سَلَامٌ', transliteration: 'salamun', pos: ['N'], posLabel: 'N', root: 'س ل م', meaning: { en: 'Peace', ur: 'سلام' }, grammarRole: 'mubtada', case: 'marfoo' }, { id: '13:25:2', position: 2, arabic: 'عَلَيْكُم', transliteration: '\'alaykum', pos: ['P', 'PRON'], posLabel: 'P+PRON', root: null, meaning: { en: 'be upon you', ur: 'تم پر' }, grammarRole: 'pred' }, { id: '13:25:3', position: 3, arabic: 'بِمَا', transliteration: 'bima', pos: ['P', 'REL'], posLabel: 'P+REL', root: null, meaning: { en: 'for what', ur: 'اس کے بدلے جو' }, grammarRole: 'jarr-majrur' }, { id: '13:25:4', position: 4, arabic: 'صَبَرْتُمْ', transliteration: 'sabartum', pos: ['V'], posLabel: 'V', root: 'ص ب ر', meaning: { en: 'you patiently endured', ur: 'تم نے صبر کیا' }, grammarRole: 'silah' }, { id: '13:25:5', position: 5, arabic: 'فَنِعْمَ', transliteration: 'fani\'ma', pos: ['CONJ', 'V'], posLabel: 'CONJ+V', root: 'ن ع م', meaning: { en: 'And excellent is', ur: 'پس کیا خوب ہے' }, grammarRole: 'fi\'l' }, { id: '13:25:6', position: 6, arabic: 'عُقْبَى', transliteration: '\'uqba', pos: ['N'], posLabel: 'N', root: 'ع ق ب', meaning: { en: 'the final', ur: 'انجام' }, grammarRole: 'faa\'il' }, { id: '13:25:7', position: 7, arabic: 'الدَّارِ', transliteration: 'al-dari', pos: ['N'], posLabel: 'N', root: 'د و ر', meaning: { en: 'home', ur: 'گھر کا' }, grammarRole: 'mudhafIlayh', case: 'majroor' }], structure: { relationships: [{ from: 6, to: 7, label: 'مضاف + مضاف إليه' }] } },
+
+  26: { text: 'وَالَّذِينَ يَنقُضُونَ عَهْدَ اللَّهِ مِن بَعْدِ مِيثَاقِهِ وَيَقْطَعُونَ مَا أَمَرَ اللَّهُ بِهِ أَن يُوصَلَ وَيُفْسِدُونَ فِي الْأَرْضِ أُولَٰئِكَ لَهُمُ اللَّعْنَةُ وَلَهُمْ سُوءُ الدَّارِ', translation: { en: 'But those who break the covenant of Allah after contracting it and sever that which Allah has ordered to be joined and spread corruption on earth - for them is the curse, and they will have the worst home.', ur: 'اور جو لوگ اللہ کا عہد پکا کرنے کے بعد توڑ ڈالتے ہیں اور جن رشتوں کو اللہ نے جوڑنے کا حکم دیا ان کو کاٹتے ہیں اور زمین میں فساد کرتے ہیں ان پر لعنت ہے اور ان کے لیے برا گھر ہے' }, words: [{ id: '13:26:1', position: 1, arabic: 'وَالَّذِينَ', transliteration: 'walladhina', pos: ['CONJ', 'REL'], posLabel: 'CONJ+REL', root: null, meaning: { en: 'But those who', ur: 'اور جو لوگ' }, grammarRole: 'mubtada' }, { id: '13:26:2', position: 2, arabic: 'يَنقُضُونَ', transliteration: 'yanquduna', pos: ['V'], posLabel: 'V', root: 'ن ق ض', meaning: { en: 'break', ur: 'توڑ ڈالتے ہیں' }, grammarRole: 'silah' }, { id: '13:26:3', position: 3, arabic: 'عَهْدَ', transliteration: '\'ahda', pos: ['N'], posLabel: 'N', root: 'ع ه د', meaning: { en: 'the covenant of', ur: 'عہد' }, grammarRole: 'mafool', case: 'mansoob' }, { id: '13:26:4', position: 4, arabic: 'اللَّهِ', transliteration: 'Allahi', pos: ['N'], posLabel: 'N', root: null, meaning: { en: 'Allah', ur: 'اللہ کا' }, grammarRole: 'mudhafIlayh' }, { id: '13:26:5', position: 5, arabic: 'أُولَٰئِكَ', transliteration: 'ula\'ika', pos: ['DEM'], posLabel: 'DEM', root: null, meaning: { en: 'those', ur: 'ان پر' }, grammarRole: 'mubtada' }, { id: '13:26:6', position: 6, arabic: 'لَهُمُ', transliteration: 'lahumu', pos: ['P', 'PRON'], posLabel: 'P+PRON', root: null, meaning: { en: 'for them is', ur: 'ان کے لیے ہے' }, grammarRole: 'pred' }, { id: '13:26:7', position: 7, arabic: 'اللَّعْنَةُ', transliteration: 'al-la\'natu', pos: ['N'], posLabel: 'N', root: 'ل ع ن', meaning: { en: 'the curse', ur: 'لعنت' }, grammarRole: 'mubtada', case: 'marfoo' }, { id: '13:26:8', position: 8, arabic: 'وَلَهُمْ', transliteration: 'walahum', pos: ['CONJ', 'P', 'PRON'], posLabel: 'CONJ+P+PRON', root: null, meaning: { en: 'and for them', ur: 'اور ان کے لیے' }, grammarRole: 'atf' }, { id: '13:26:9', position: 9, arabic: 'سُوءُ', transliteration: 'su\'u', pos: ['N'], posLabel: 'N', root: 'س و أ', meaning: { en: 'the worst', ur: 'برا' }, grammarRole: 'mubtada' }, { id: '13:26:10', position: 10, arabic: 'الدَّارِ', transliteration: 'al-dari', pos: ['N'], posLabel: 'N', root: 'د و ر', meaning: { en: 'home', ur: 'گھر' }, grammarRole: 'mudhafIlayh', case: 'majroor' }], structure: { relationships: [{ from: 2, to: 3, label: 'فعل + مفعول به' }, { from: 3, to: 4, label: 'مضاف + مضاف إليه' }, { from: 9, to: 10, label: 'مضاف + مضاف إليه' }] } },
+
+  27: { text: 'اللَّهُ يَبْسُطُ الرِّزْقَ لِمَن يَشَاءُ وَيَقْدِرُ وَفَرِحُوا بِالْحَيَاةِ الدُّنْيَا وَمَا الْحَيَاةُ الدُّنْيَا فِي الْآخِرَةِ إِلَّا مَتَاعٌ', translation: { en: 'Allah extends provision for whom He wills and restricts. And they rejoice in the worldly life, while the worldly life is not, compared to the Hereafter, except brief enjoyment.', ur: 'اللہ جس کے لیے چاہتا ہے رزق کشادہ کرتا ہے اور تنگ کرتا ہے اور وہ دنیا کی زندگی سے خوش ہیں حالانکہ آخرت کے مقابلے میں دنیا محض ایک متاع ہے' }, words: [{ id: '13:27:1', position: 1, arabic: 'اللَّهُ', transliteration: 'Allahu', pos: ['N'], posLabel: 'N', root: null, meaning: { en: 'Allah', ur: 'اللہ' }, grammarRole: 'mubtada' }, { id: '13:27:2', position: 2, arabic: 'يَبْسُطُ', transliteration: 'yabsutu', pos: ['V'], posLabel: 'V', root: 'ب س ط', meaning: { en: 'extends', ur: 'کشادہ کرتا ہے' }, grammarRole: 'pred' }, { id: '13:27:3', position: 3, arabic: 'الرِّزْقَ', transliteration: 'al-rizqa', pos: ['N'], posLabel: 'N', root: 'ر ز ق', meaning: { en: 'provision', ur: 'رزق' }, grammarRole: 'mafool', case: 'mansoob' }, { id: '13:27:4', position: 4, arabic: 'إِلَّا', transliteration: 'illa', pos: ['PART'], posLabel: 'PART', root: null, meaning: { en: 'except', ur: 'مگر' }, grammarRole: 'istithnaa' }, { id: '13:27:5', position: 5, arabic: 'مَتَاعٌ', transliteration: 'mata\'un', pos: ['N'], posLabel: 'N', root: 'م ت ع', meaning: { en: 'brief enjoyment', ur: 'متاع' }, grammarRole: 'pred', case: 'marfoo' }], structure: { relationships: [{ from: 2, to: 3, label: 'فعل + مفعول به' }] } },
+
+  28: { text: 'الَّذِينَ آمَنُوا وَتَطْمَئِنُّ قُلُوبُهُم بِذِكْرِ اللَّهِ أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ', translation: { en: 'Those who believe and whose hearts find rest in the remembrance of Allah. Verily, in the remembrance of Allah do hearts find rest.', ur: 'وہ جو ایمان لائے اور اللہ کے ذکر سے جن کے دل مطمئن ہوتے ہیں۔ سن لو اللہ کے ذکر سے ہی دل مطمئن ہوتے ہیں' }, words: [{ id: '13:28:1', position: 1, arabic: 'الَّذِينَ', transliteration: 'alladhina', pos: ['REL'], posLabel: 'REL', root: null, meaning: { en: 'Those who', ur: 'وہ جو' }, grammarRole: 'mubtada' }, { id: '13:28:2', position: 2, arabic: 'آمَنُوا', transliteration: 'amanu', pos: ['V'], posLabel: 'V', root: 'أ م ن', meaning: { en: 'believe', ur: 'ایمان لائے' }, grammarRole: 'silah' }, { id: '13:28:3', position: 3, arabic: 'وَتَطْمَئِنُّ', transliteration: 'watatma\'innu', pos: ['CONJ', 'V'], posLabel: 'CONJ+V', root: 'ط م ن', meaning: { en: 'and find rest', ur: 'اور مطمئن ہوتے ہیں' }, grammarRole: 'atf' }, { id: '13:28:4', position: 4, arabic: 'قُلُوبُهُم', transliteration: 'qulubuhum', pos: ['N', 'PRON'], posLabel: 'N+PRON', root: 'ق ل ب', meaning: { en: 'their hearts', ur: 'ان کے دل' }, grammarRole: 'faa\'il' }, { id: '13:28:5', position: 5, arabic: 'بِذِكْرِ', transliteration: 'bidhikri', pos: ['P', 'N'], posLabel: 'P+N', root: 'ذ ك ر', meaning: { en: 'in the remembrance of', ur: 'ذکر سے' }, grammarRole: 'jarr-majrur' }, { id: '13:28:6', position: 6, arabic: 'اللَّهِ', transliteration: 'Allahi', pos: ['N'], posLabel: 'N', root: null, meaning: { en: 'Allah', ur: 'اللہ کے' }, grammarRole: 'mudhafIlayh' }, { id: '13:28:7', position: 7, arabic: 'أَلَا', transliteration: 'ala', pos: ['PART'], posLabel: 'PART', root: null, meaning: { en: 'Verily', ur: 'سن لو' }, grammarRole: 'tanbih' }, { id: '13:28:8', position: 8, arabic: 'بِذِكْرِ', transliteration: 'bidhikri', pos: ['P', 'N'], posLabel: 'P+N', root: 'ذ ك ر', meaning: { en: 'in the remembrance of', ur: 'ذکر سے' }, grammarRole: 'jarr-majrur' }, { id: '13:28:9', position: 9, arabic: 'اللَّهِ', transliteration: 'Allahi', pos: ['N'], posLabel: 'N', root: null, meaning: { en: 'Allah', ur: 'اللہ کے' }, grammarRole: 'mudhafIlayh' }, { id: '13:28:10', position: 10, arabic: 'تَطْمَئِنُّ', transliteration: 'tatma\'innu', pos: ['V'], posLabel: 'V', root: 'ط م ن', meaning: { en: 'find rest', ur: 'مطمئن ہوتے ہیں' }, grammarRole: 'fi\'l' }, { id: '13:28:11', position: 11, arabic: 'الْقُلُوبُ', transliteration: 'al-qulubu', pos: ['N'], posLabel: 'N', root: 'ق ل ب', meaning: { en: 'the hearts', ur: 'دل' }, grammarRole: 'faa\'il', case: 'marfoo' }], structure: { relationships: [{ from: 3, to: 4, label: 'فعل + فاعل' }, { from: 5, to: 6, label: 'مضاف + مضاف إليه' }, { from: 10, to: 11, label: 'فعل + فاعل' }] } },
+
+  29: { text: 'الَّذِينَ آمَنُوا وَعَمِلُوا الصَّالِحَاتِ طُوبَىٰ لَهُمْ وَحُسْنُ مَآبٍ', translation: { en: 'Those who believe and do righteous deeds - a good state is theirs and a good return.', ur: 'جو لوگ ایمان لائے اور نیک عمل کیے ان کے لیے خوشی ہے اور اچھا ٹھکانا ہے' }, words: [{ id: '13:29:1', position: 1, arabic: 'الَّذِينَ', transliteration: 'alladhina', pos: ['REL'], posLabel: 'REL', root: null, meaning: { en: 'Those who', ur: 'جو لوگ' }, grammarRole: 'mubtada' }, { id: '13:29:2', position: 2, arabic: 'آمَنُوا', transliteration: 'amanu', pos: ['V'], posLabel: 'V', root: 'أ م ن', meaning: { en: 'believe', ur: 'ایمان لائے' }, grammarRole: 'silah' }, { id: '13:29:3', position: 3, arabic: 'وَعَمِلُوا', transliteration: 'wa\'amilu', pos: ['CONJ', 'V'], posLabel: 'CONJ+V', root: 'ع م ل', meaning: { en: 'and do', ur: 'اور کیے' }, grammarRole: 'atf' }, { id: '13:29:4', position: 4, arabic: 'الصَّالِحَاتِ', transliteration: 'al-salihati', pos: ['N'], posLabel: 'N', root: 'ص ل ح', meaning: { en: 'righteous deeds', ur: 'نیک عمل' }, grammarRole: 'mafool' }, { id: '13:29:5', position: 5, arabic: 'طُوبَىٰ', transliteration: 'tuba', pos: ['N'], posLabel: 'N', root: 'ط ي ب', meaning: { en: 'good state / blessedness', ur: 'خوشی' }, grammarRole: 'mubtada' }, { id: '13:29:6', position: 6, arabic: 'لَهُمْ', transliteration: 'lahum', pos: ['P', 'PRON'], posLabel: 'P+PRON', root: null, meaning: { en: 'is theirs', ur: 'ان کے لیے ہے' }, grammarRole: 'pred' }, { id: '13:29:7', position: 7, arabic: 'وَحُسْنُ', transliteration: 'wahusnu', pos: ['CONJ', 'N'], posLabel: 'CONJ+N', root: 'ح س ن', meaning: { en: 'and a good', ur: 'اور اچھا' }, grammarRole: 'atf' }, { id: '13:29:8', position: 8, arabic: 'مَآبٍ', transliteration: 'ma\'abin', pos: ['N'], posLabel: 'N', root: 'أ و ب', meaning: { en: 'return', ur: 'ٹھکانا' }, grammarRole: 'mudhafIlayh', case: 'majroor' }], structure: { relationships: [{ from: 3, to: 4, label: 'فعل + مفعول به' }, { from: 7, to: 8, label: 'مضاف + مضاف إليه' }] } },
+
+  30: { text: 'كَذَٰلِكَ أَرْسَلْنَاكَ فِي أُمَّةٍ قَدْ خَلَتْ مِن قَبْلِهَا أُمَمٌ لِّتَتْلُوَ عَلَيْهِمُ الَّذِي أَوْحَيْنَا إِلَيْكَ', translation: { en: 'Thus We have sent you to a community before which other communities have passed on, that you might recite to them what We revealed to you.', ur: 'اسی طرح ہم نے تمہیں ایک امت میں بھیجا جس سے پہلے اور امتیں گزر چکی ہیں تاکہ تم ان کو وہ پڑھ کر سناؤ جو ہم نے تم پر وحی کیا ہے' }, words: [{ id: '13:30:1', position: 1, arabic: 'كَذَٰلِكَ', transliteration: 'kadhalika', pos: ['DEM'], posLabel: 'DEM', root: null, meaning: { en: 'Thus', ur: 'اسی طرح' }, grammarRole: 'hal' }, { id: '13:30:2', position: 2, arabic: 'أَرْسَلْنَاكَ', transliteration: 'arsalnaka', pos: ['V'], posLabel: 'V', root: 'ر س ل', meaning: { en: 'We have sent you', ur: 'ہم نے تمہیں بھیجا' }, grammarRole: 'fi\'l' }, { id: '13:30:3', position: 3, arabic: 'فِي', transliteration: 'fi', pos: ['P'], posLabel: 'P', root: null, meaning: { en: 'to', ur: 'میں' }, grammarRole: 'jarr' }, { id: '13:30:4', position: 4, arabic: 'أُمَّةٍ', transliteration: 'ummatin', pos: ['N'], posLabel: 'N', root: 'أ م م', meaning: { en: 'a community', ur: 'امت' }, grammarRole: 'majrur', case: 'majroor' }], structure: { relationships: [{ from: 3, to: 4, label: 'جار + مجرور' }] } },
+
+  31: { text: 'وَلَوْ أَنَّ قُرْآنًا سُيِّرَتْ بِهِ الْجِبَالُ أَوْ قُطِّعَتْ بِهِ الْأَرْضُ أَوْ كُلِّمَ بِهِ الْمَوْتَىٰ بَل لِّلَّهِ الْأَمْرُ جَمِيعًا', translation: { en: 'And if there was any Quran by which the mountains would be removed or the earth split or the dead spoken to, but to Allah belongs the affair entirely.', ur: 'اگر کوئی قرآن ایسا ہوتا جس سے پہاڑ چلائے جاتے یا زمین ٹکڑے ٹکڑے کی جاتی یا مردوں سے بات کی جاتی بلکہ سارا اختیار اللہ ہی کا ہے' }, words: [{ id: '13:31:1', position: 1, arabic: 'وَلَوْ', transliteration: 'walaw', pos: ['CONJ', 'COND'], posLabel: 'CONJ+COND', root: null, meaning: { en: 'And if', ur: 'اور اگر' }, grammarRole: 'shart' }, { id: '13:31:2', position: 2, arabic: 'أَنَّ', transliteration: 'anna', pos: ['PART'], posLabel: 'PART', root: null, meaning: { en: 'that', ur: 'کہ' }, grammarRole: 'masdariyyah' }, { id: '13:31:3', position: 3, arabic: 'قُرْآنًا', transliteration: 'qur\'anan', pos: ['N'], posLabel: 'N', root: 'ق ر أ', meaning: { en: 'a Quran', ur: 'قرآن' }, grammarRole: 'subj', case: 'mansoob' }, { id: '13:31:4', position: 4, arabic: 'بَل', transliteration: 'bal', pos: ['PART'], posLabel: 'PART', root: null, meaning: { en: 'Rather', ur: 'بلکہ' }, grammarRole: 'idrab' }, { id: '13:31:5', position: 5, arabic: 'لِّلَّهِ', transliteration: 'lillahi', pos: ['P', 'N'], posLabel: 'P+N', root: null, meaning: { en: 'to Allah belongs', ur: 'اللہ ہی کا ہے' }, grammarRole: 'pred' }, { id: '13:31:6', position: 6, arabic: 'الْأَمْرُ', transliteration: 'al-amru', pos: ['N'], posLabel: 'N', root: 'أ م ر', meaning: { en: 'the affair', ur: 'معاملہ' }, grammarRole: 'mubtada', case: 'marfoo' }, { id: '13:31:7', position: 7, arabic: 'جَمِيعًا', transliteration: 'jami\'an', pos: ['N'], posLabel: 'N', root: 'ج م ع', meaning: { en: 'entirely', ur: 'سارا' }, grammarRole: 'hal', case: 'mansoob' }], structure: { relationships: [
+        { from: 3, to: 5, label: 'مبتدأ + خبر' }
+      ] } },
+
+  32: { text: 'أَفَلَمْ يَيْأَسِ الَّذِينَ آمَنُوا أَن لَّوْ يَشَاءُ اللَّهُ لَهَدَى النَّاسَ جَمِيعًا', translation: { en: 'Then have those who believed not accepted that had Allah willed, He would have guided the people, all of them?', ur: 'کیا ایمان والوں نے ابھی تک نہیں جانا کہ اگر اللہ چاہتا تو سب لوگوں کو ہدایت دے دیتا' }, words: [{ id: '13:32:1', position: 1, arabic: 'أَفَلَمْ', transliteration: 'afalam', pos: ['Q', 'CONJ', 'NEG'], posLabel: 'Q+CONJ+NEG', root: null, meaning: { en: 'Then have not', ur: 'کیا نہیں' }, grammarRole: 'istifham' }, { id: '13:32:2', position: 2, arabic: 'يَيْأَسِ', transliteration: 'yay\'asi', pos: ['V'], posLabel: 'V', root: 'ي أ س', meaning: { en: 'accepted / known', ur: 'جانا' }, grammarRole: 'fi\'l' }, { id: '13:32:3', position: 3, arabic: 'الَّذِينَ', transliteration: 'alladhina', pos: ['REL'], posLabel: 'REL', root: null, meaning: { en: 'those who', ur: 'وہ جو' }, grammarRole: 'faa\'il' }, { id: '13:32:4', position: 4, arabic: 'آمَنُوا', transliteration: 'amanu', pos: ['V'], posLabel: 'V', root: 'أ م ن', meaning: { en: 'believed', ur: 'ایمان لائے' }, grammarRole: 'silah' }], structure: { relationships: [{ from: 2, to: 3, label: 'فعل + فاعل' }] } },
+
+  33: { text: 'أَمْ مَن هُوَ قَانِتٌ آنَاءَ اللَّيْلِ سَاجِدًا وَقَائِمًا يَحْذَرُ الْآخِرَةَ وَيَرْجُو رَحْمَةَ رَبِّهِ', translation: { en: 'Is one who is devoutly obedient during periods of the night, prostrating and standing, fearing the Hereafter and hoping for the mercy of his Lord, [like one who does not]?', ur: 'بھلا جو شخص رات کی گھڑیوں میں سجدے اور قیام میں فرمانبردار ہے آخرت سے ڈرتا ہے اور اپنے رب کی رحمت کی امید رکھتا ہے' }, words: [{ id: '13:33:1', position: 1, arabic: 'أَمْ', transliteration: 'am', pos: ['CONJ'], posLabel: 'CONJ', root: null, meaning: { en: 'Or', ur: 'بھلا' }, grammarRole: 'atf' }, { id: '13:33:2', position: 2, arabic: 'مَن', transliteration: 'man', pos: ['REL'], posLabel: 'REL', root: null, meaning: { en: 'one who', ur: 'جو شخص' }, grammarRole: 'mubtada' }, { id: '13:33:3', position: 3, arabic: 'هُوَ', transliteration: 'huwa', pos: ['PRON'], posLabel: 'PRON', root: null, meaning: { en: 'he is', ur: 'وہ' }, grammarRole: 'mubtada' }, { id: '13:33:4', position: 4, arabic: 'قَانِتٌ', transliteration: 'qanitun', pos: ['N'], posLabel: 'N', root: 'ق ن ت', meaning: { en: 'devoutly obedient', ur: 'فرمانبردار' }, grammarRole: 'pred', case: 'marfoo' }], structure: { relationships: [{ from: 3, to: 4, label: 'مبتدأ + خبر' }] } },
+
+  34: { text: 'قُلْ هَلْ يَسْتَوِي الَّذِينَ يَعْلَمُونَ وَالَّذِينَ لَا يَعْلَمُونَ إِنَّمَا يَتَذَكَّرُ أُولُو الْأَلْبَابِ', translation: { en: 'Say, "Are those who know equal to those who do not know?" Only they will remember who are people of understanding.', ur: 'کہو کیا جاننے والے اور نہ جاننے والے برابر ہو سکتے ہیں؟ نصیحت صرف عقل والے قبول کرتے ہیں' }, words: [{ id: '13:34:1', position: 1, arabic: 'قُلْ', transliteration: 'qul', pos: ['V'], posLabel: 'V', root: 'ق و ل', meaning: { en: 'Say', ur: 'کہو' }, grammarRole: 'fi\'l' }, { id: '13:34:2', position: 2, arabic: 'هَلْ', transliteration: 'hal', pos: ['Q'], posLabel: 'Q', root: null, meaning: { en: 'Are', ur: 'کیا' }, grammarRole: 'istifham' }, { id: '13:34:3', position: 3, arabic: 'يَسْتَوِي', transliteration: 'yastawi', pos: ['V'], posLabel: 'V', root: 'س و ي', meaning: { en: 'equal', ur: 'برابر ہیں' }, grammarRole: 'fi\'l' }, { id: '13:34:4', position: 4, arabic: 'الَّذِينَ', transliteration: 'alladhina', pos: ['REL'], posLabel: 'REL', root: null, meaning: { en: 'those who', ur: 'جو' }, grammarRole: 'faa\'il' }, { id: '13:34:5', position: 5, arabic: 'يَعْلَمُونَ', transliteration: 'ya\'lamuna', pos: ['V'], posLabel: 'V', root: 'ع ل م', meaning: { en: 'know', ur: 'جانتے ہیں' }, grammarRole: 'silah' }], structure: { relationships: [{ from: 3, to: 4, label: 'فعل + فاعل' }] } },
+
+  35: { text: 'قُلْ إِنَّمَا أَنَا مُنذِرٌ وَمَا مِنْ إِلَٰهٍ إِلَّا اللَّهُ الْوَاحِدُ الْقَهَّارُ', translation: { en: 'Say, "I am only a warner, and there is not any deity except Allah, the One, the Prevailing."', ur: 'کہو میں تو صرف ڈرانے والا ہوں اور اللہ کے سوا کوئی معبود نہیں جو ایک ہے زبردست ہے' }, words: [{ id: '13:35:1', position: 1, arabic: 'قُلْ', transliteration: 'qul', pos: ['V'], posLabel: 'V', root: 'ق و ل', meaning: { en: 'Say', ur: 'کہو' }, grammarRole: 'fi\'l' }, { id: '13:35:2', position: 2, arabic: 'إِنَّمَا', transliteration: 'innama', pos: ['PART'], posLabel: 'PART', root: null, meaning: { en: 'Only', ur: 'صرف' }, grammarRole: 'hasr' }, { id: '13:35:3', position: 3, arabic: 'أَنَا', transliteration: 'ana', pos: ['PRON'], posLabel: 'PRON', root: null, meaning: { en: 'I am', ur: 'میں' }, grammarRole: 'mubtada' }, { id: '13:35:4', position: 4, arabic: 'مُنذِرٌ', transliteration: 'mundhirun', pos: ['N'], posLabel: 'N', root: 'ن ذ ر', meaning: { en: 'a warner', ur: 'ڈرانے والا' }, grammarRole: 'pred', case: 'marfoo' }, { id: '13:35:5', position: 5, arabic: 'اللَّهُ', transliteration: 'Allahu', pos: ['N'], posLabel: 'N', root: null, meaning: { en: 'Allah', ur: 'اللہ' }, grammarRole: 'badal' }, { id: '13:35:6', position: 6, arabic: 'الْوَاحِدُ', transliteration: 'al-wahidu', pos: ['ADJ'], posLabel: 'ADJ', root: 'و ح د', meaning: { en: 'the One', ur: 'ایک' }, grammarRole: 'sifah' }, { id: '13:35:7', position: 7, arabic: 'الْقَهَّارُ', transliteration: 'al-qahharu', pos: ['ADJ'], posLabel: 'ADJ', root: 'ق ه ر', meaning: { en: 'the Prevailing', ur: 'زبردست' }, grammarRole: 'sifah' }], structure: { relationships: [{ from: 3, to: 4, label: 'مبتدأ + خبر' }, { from: 6, to: 7, label: 'موصوف + صفت' }] } },
+
+  36: { text: 'رَبُّ السَّمَاوَاتِ وَالْأَرْضِ وَمَا بَيْنَهُمَا الْعَزِيزُ الْغَفَّارُ', translation: { en: 'Lord of the heavens and the earth and what is between them, the Exalted in Might, the Perpetual Forgiver.', ur: 'آسمانوں اور زمین اور جو کچھ ان کے درمیان ہے ان کا رب غالب بہت بخشنے والا ہے' }, words: [{ id: '13:36:1', position: 1, arabic: 'رَبُّ', transliteration: 'rabbu', pos: ['N'], posLabel: 'N', root: 'ر ب ب', meaning: { en: 'Lord of', ur: 'رب' }, grammarRole: 'badal' }, { id: '13:36:2', position: 2, arabic: 'السَّمَاوَاتِ', transliteration: 'al-samawati', pos: ['N'], posLabel: 'N', root: null, meaning: { en: 'the heavens', ur: 'آسمانوں' }, grammarRole: 'mudhafIlayh' }, { id: '13:36:3', position: 3, arabic: 'الْعَزِيزُ', transliteration: 'al-\'azizu', pos: ['ADJ'], posLabel: 'ADJ', root: 'ع ز ز', meaning: { en: 'the Exalted in Might', ur: 'غالب' }, grammarRole: 'sifah' }, { id: '13:36:4', position: 4, arabic: 'الْغَفَّارُ', transliteration: 'al-ghaffaru', pos: ['ADJ'], posLabel: 'ADJ', root: 'غ ف ر', meaning: { en: 'the Perpetual Forgiver', ur: 'بہت بخشنے والا' }, grammarRole: 'sifah' }], structure: { relationships: [{ from: 1, to: 2, label: 'مضاف + مضاف إليه' }, { from: 3, to: 4, label: 'موصوف + صفت' }] } },
+
+  37: { text: 'وَكَذَٰلِكَ أَنزَلْنَاهُ حُكْمًا عَرَبِيًّا', translation: { en: 'And thus We have revealed it as an Arabic legislation.', ur: 'اسی طرح ہم نے اسے عربی فیصلہ بنا کر نازل کیا' }, words: [{ id: '13:37:1', position: 1, arabic: 'وَكَذَٰلِكَ', transliteration: 'wakadhalika', pos: ['CONJ', 'DEM'], posLabel: 'CONJ+DEM', root: null, meaning: { en: 'And thus', ur: 'اور اسی طرح' }, grammarRole: 'hal' }, { id: '13:37:2', position: 2, arabic: 'أَنزَلْنَاهُ', transliteration: 'anzalnahu', pos: ['V'], posLabel: 'V', root: 'ن ز ل', meaning: { en: 'We revealed it', ur: 'ہم نے نازل کیا' }, grammarRole: 'fi\'l' }, { id: '13:37:3', position: 3, arabic: 'حُكْمًا', transliteration: 'hukman', pos: ['N'], posLabel: 'N', root: 'ح ك م', meaning: { en: 'as a legislation', ur: 'فیصلہ' }, grammarRole: 'hal', case: 'mansoob' }, { id: '13:37:4', position: 4, arabic: 'عَرَبِيًّا', transliteration: '\'arabiyyan', pos: ['ADJ'], posLabel: 'ADJ', root: null, meaning: { en: 'Arabic', ur: 'عربی' }, grammarRole: 'sifah', case: 'mansoob' }], structure: { relationships: [{ from: 3, to: 4, label: 'موصوف + صفت' }] } },
+
+  38: { text: 'وَلَقَدْ أَرْسَلْنَا رُسُلًا مِّن قَبْلِكَ وَجَعَلْنَا لَهُمْ أَزْوَاجًا وَذُرِّيَّةً', translation: { en: 'And We have already sent messengers before you and assigned to them wives and descendants.', ur: 'اور ہم نے تم سے پہلے بھی رسول بھیجے اور ان کو بیویاں اور اولاد دی' }, words: [{ id: '13:38:1', position: 1, arabic: 'وَلَقَدْ', transliteration: 'walaqad', pos: ['CONJ', 'PART'], posLabel: 'CONJ+PART', root: null, meaning: { en: 'And We have already', ur: 'اور یقیناً' }, grammarRole: 'taukeed' }, { id: '13:38:2', position: 2, arabic: 'أَرْسَلْنَا', transliteration: 'arsalna', pos: ['V'], posLabel: 'V', root: 'ر س ل', meaning: { en: 'sent', ur: 'ہم نے بھیجے' }, grammarRole: 'fi\'l' }, { id: '13:38:3', position: 3, arabic: 'رُسُلًا', transliteration: 'rusulan', pos: ['N'], posLabel: 'N', root: 'ر س ل', meaning: { en: 'messengers', ur: 'رسول' }, grammarRole: 'mafool', case: 'mansoob' }], structure: { relationships: [{ from: 2, to: 3, label: 'فعل + مفعول به' }] } },
+
+  39: { text: 'يَمْحُو اللَّهُ مَا يَشَاءُ وَيُثْبِتُ وَعِندَهُ أُمُّ الْكِتَابِ', translation: { en: 'Allah eliminates what He wills or confirms, and with Him is the Mother of the Book.', ur: 'اللہ جو چاہتا ہے مٹا دیتا ہے اور ثبت رکھتا ہے اور اس کے پاس اصل کتاب ہے' }, words: [{ id: '13:39:1', position: 1, arabic: 'يَمْحُو', transliteration: 'yamhu', pos: ['V'], posLabel: 'V', root: 'م ح و', meaning: { en: 'eliminates', ur: 'مٹا دیتا ہے' }, grammarRole: 'fi\'l' }, { id: '13:39:2', position: 2, arabic: 'اللَّهُ', transliteration: 'Allahu', pos: ['N'], posLabel: 'N', root: null, meaning: { en: 'Allah', ur: 'اللہ' }, grammarRole: 'faa\'il' }, { id: '13:39:3', position: 3, arabic: 'مَا', transliteration: 'ma', pos: ['REL'], posLabel: 'REL', root: null, meaning: { en: 'what', ur: 'جو' }, grammarRole: 'mafool' }, { id: '13:39:4', position: 4, arabic: 'يَشَاءُ', transliteration: 'yasha\'u', pos: ['V'], posLabel: 'V', root: 'ش ي أ', meaning: { en: 'He wills', ur: 'چاہتا ہے' }, grammarRole: 'silah' }, { id: '13:39:5', position: 5, arabic: 'وَيُثْبِتُ', transliteration: 'wayuthbitu', pos: ['CONJ', 'V'], posLabel: 'CONJ+V', root: 'ث ب ت', meaning: { en: 'or confirms', ur: 'اور ثبت رکھتا ہے' }, grammarRole: 'atf' }, { id: '13:39:6', position: 6, arabic: 'وَعِندَهُ', transliteration: 'wa\'indahu', pos: ['CONJ', 'N', 'PRON'], posLabel: 'CONJ+N+PRON', root: null, meaning: { en: 'and with Him is', ur: 'اور اس کے پاس ہے' }, grammarRole: 'pred' }, { id: '13:39:7', position: 7, arabic: 'أُمُّ', transliteration: 'ummu', pos: ['N'], posLabel: 'N', root: 'أ م م', meaning: { en: 'the Mother of', ur: 'اصل' }, grammarRole: 'mubtada' }, { id: '13:39:8', position: 8, arabic: 'الْكِتَابِ', transliteration: 'al-kitabi', pos: ['N'], posLabel: 'N', root: 'ك ت ب', meaning: { en: 'the Book', ur: 'کتاب' }, grammarRole: 'mudhafIlayh', case: 'majroor' }], structure: { relationships: [{ from: 1, to: 2, label: 'فعل + فاعل' }, { from: 7, to: 8, label: 'مضاف + مضاف إليه' }] } },
+
+  40: { text: 'وَإِن مَّا نُرِيَنَّكَ بَعْضَ الَّذِي نَعِدُهُمْ أَوْ نَتَوَفَّيَنَّكَ فَإِنَّمَا عَلَيْكَ الْبَلَاغُ وَعَلَيْنَا الْحِسَابُ', translation: { en: 'And whether We show you part of what We promise them or take you in death, upon you is only the duty of notification, and upon Us is the account.', ur: 'اور ہم تمہیں ان وعدوں کا کچھ حصہ دکھا دیں یا تمہیں وفات دے دیں تمہارے ذمے صرف پیغام پہنچانا ہے اور حساب لینا ہمارے ذمے ہے' }, words: [{ id: '13:40:1', position: 1, arabic: 'فَإِنَّمَا', transliteration: 'fa-innama', pos: ['CONJ', 'PART'], posLabel: 'CONJ+PART', root: null, meaning: { en: 'then only', ur: 'تو صرف' }, grammarRole: 'hasr' }, { id: '13:40:2', position: 2, arabic: 'عَلَيْكَ', transliteration: '\'alayka', pos: ['P', 'PRON'], posLabel: 'P+PRON', root: null, meaning: { en: 'upon you is', ur: 'تمہارے ذمے ہے' }, grammarRole: 'pred' }, { id: '13:40:3', position: 3, arabic: 'الْبَلَاغُ', transliteration: 'al-balaghu', pos: ['N'], posLabel: 'N', root: 'ب ل غ', meaning: { en: 'the notification', ur: 'پیغام پہنچانا' }, grammarRole: 'mubtada', case: 'marfoo' }, { id: '13:40:4', position: 4, arabic: 'وَعَلَيْنَا', transliteration: 'wa\'alayna', pos: ['CONJ', 'P', 'PRON'], posLabel: 'CONJ+P+PRON', root: null, meaning: { en: 'and upon Us is', ur: 'اور ہمارے ذمے ہے' }, grammarRole: 'pred' }, { id: '13:40:5', position: 5, arabic: 'الْحِسَابُ', transliteration: 'al-hisabu', pos: ['N'], posLabel: 'N', root: 'ح س ب', meaning: { en: 'the account', ur: 'حساب' }, grammarRole: 'mubtada', case: 'marfoo' }], structure: { relationships: [
+        { from: 3, to: 4, label: 'مبتدأ + خبر' }
+      ] } },
+
+  41: { text: 'أَوَلَمْ يَرَوْا أَنَّا نَأْتِي الْأَرْضَ نَنقُصُهَا مِنْ أَطْرَافِهَا وَاللَّهُ يَحْكُمُ لَا مُعَقِّبَ لِحُكْمِهِ وَهُوَ سَرِيعُ الْحِسَابِ', translation: { en: 'Have they not seen that We set upon the land, reducing it from its borders? And Allah decides; there is no adjuster of His decision. And He is swift in account.', ur: 'کیا وہ نہیں دیکھتے کہ ہم زمین کو اس کے کناروں سے گھٹاتے چلے آ رہے ہیں اور اللہ فیصلہ کرتا ہے اس کے فیصلے کو کوئی ٹالنے والا نہیں اور وہ جلد حساب لینے والا ہے' }, words: [{ id: '13:41:1', position: 1, arabic: 'أَوَلَمْ', transliteration: 'awalam', pos: ['Q', 'CONJ', 'NEG'], posLabel: 'Q+CONJ+NEG', root: null, meaning: { en: 'Have they not', ur: 'کیا نہیں' }, grammarRole: 'istifham' }, { id: '13:41:2', position: 2, arabic: 'يَرَوْا', transliteration: 'yaraw', pos: ['V'], posLabel: 'V', root: 'ر أ ي', meaning: { en: 'seen', ur: 'دیکھتے' }, grammarRole: 'fi\'l' }, { id: '13:41:3', position: 3, arabic: 'وَاللَّهُ', transliteration: 'wallahu', pos: ['CONJ', 'N'], posLabel: 'CONJ+N', root: null, meaning: { en: 'And Allah', ur: 'اور اللہ' }, grammarRole: 'mubtada' }, { id: '13:41:4', position: 4, arabic: 'يَحْكُمُ', transliteration: 'yahkumu', pos: ['V'], posLabel: 'V', root: 'ح ك م', meaning: { en: 'decides', ur: 'فیصلہ کرتا ہے' }, grammarRole: 'pred' }, { id: '13:41:5', position: 5, arabic: 'سَرِيعُ', transliteration: 'sari\'u', pos: ['ADJ'], posLabel: 'ADJ', root: 'س ر ع', meaning: { en: 'swift in', ur: 'جلد' }, grammarRole: 'pred' }, { id: '13:41:6', position: 6, arabic: 'الْحِسَابِ', transliteration: 'al-hisabi', pos: ['N'], posLabel: 'N', root: 'ح س ب', meaning: { en: 'account', ur: 'حساب لینے والا' }, grammarRole: 'mudhafIlayh', case: 'majroor' }], structure: { relationships: [{ from: 5, to: 6, label: 'مضاف + مضاف إليه' }] } },
+
+  42: { text: 'وَقَدْ مَكَرَ الَّذِينَ مِن قَبْلِهِمْ فَلِلَّهِ الْمَكْرُ جَمِيعًا يَعْلَمُ مَا تَكْسِبُ كُلُّ نَفْسٍ', translation: { en: 'And those before them had plotted, but to Allah belongs the plan entirely. He knows what every soul earns.', ur: 'ان سے پہلے لوگوں نے بھی مکر کیا تھا لیکن سارا مکر اللہ ہی کے ہاتھ میں ہے وہ جانتا ہے ہر نفس کیا کماتا ہے' }, words: [{ id: '13:42:1', position: 1, arabic: 'وَقَدْ', transliteration: 'waqad', pos: ['CONJ', 'PART'], posLabel: 'CONJ+PART', root: null, meaning: { en: 'And indeed', ur: 'اور بیشک' }, grammarRole: 'taukeed' }, { id: '13:42:2', position: 2, arabic: 'مَكَرَ', transliteration: 'makara', pos: ['V'], posLabel: 'V', root: 'م ك ر', meaning: { en: 'had plotted', ur: 'مکر کیا' }, grammarRole: 'fi\'l' }, { id: '13:42:3', position: 3, arabic: 'الَّذِينَ', transliteration: 'alladhina', pos: ['REL'], posLabel: 'REL', root: null, meaning: { en: 'those who', ur: 'ان لوگوں نے جو' }, grammarRole: 'faa\'il' }, { id: '13:42:4', position: 4, arabic: 'فَلِلَّهِ', transliteration: 'falillahi', pos: ['CONJ', 'P', 'N'], posLabel: 'CONJ+P+N', root: null, meaning: { en: 'but to Allah belongs', ur: 'لیکن اللہ ہی کا ہے' }, grammarRole: 'pred' }, { id: '13:42:5', position: 5, arabic: 'الْمَكْرُ', transliteration: 'al-makru', pos: ['N'], posLabel: 'N', root: 'م ك ر', meaning: { en: 'the plan', ur: 'مکر' }, grammarRole: 'mubtada', case: 'marfoo' }, { id: '13:42:6', position: 6, arabic: 'جَمِيعًا', transliteration: 'jami\'an', pos: ['N'], posLabel: 'N', root: 'ج م ع', meaning: { en: 'entirely', ur: 'سارا' }, grammarRole: 'hal' }], structure: { relationships: [{ from: 2, to: 3, label: 'فعل + فاعل' }] } },
+
+  43: { text: 'وَيَقُولُ الَّذِينَ كَفَرُوا لَسْتَ مُرْسَلًا قُلْ كَفَىٰ بِاللَّهِ شَهِيدًا بَيْنِي وَبَيْنَكُمْ وَمَنْ عِندَهُ عِلْمُ الْكِتَابِ', translation: { en: 'And those who have disbelieved say, "You are not a messenger." Say, "Sufficient is Allah as Witness between me and you, and whoever has knowledge of the Scripture."', ur: 'اور کافر کہتے ہیں تم رسول نہیں ہو کہو اللہ میرے اور تمہارے درمیان گواہ کافی ہے اور وہ بھی جس کے پاس کتاب کا علم ہے' }, words: [{ id: '13:43:1', position: 1, arabic: 'وَيَقُولُ', transliteration: 'wayaqulu', pos: ['CONJ', 'V'], posLabel: 'CONJ+V', root: 'ق و ل', meaning: { en: 'And say', ur: 'اور کہتے ہیں' }, grammarRole: 'fi\'l' }, { id: '13:43:2', position: 2, arabic: 'الَّذِينَ', transliteration: 'alladhina', pos: ['REL'], posLabel: 'REL', root: null, meaning: { en: 'those who', ur: 'وہ جنہوں نے' }, grammarRole: 'faa\'il' }, { id: '13:43:3', position: 3, arabic: 'كَفَرُوا', transliteration: 'kafaru', pos: ['V'], posLabel: 'V', root: 'ك ف ر', meaning: { en: 'disbelieved', ur: 'کفر کیا' }, grammarRole: 'silah' }, { id: '13:43:4', position: 4, arabic: 'قُلْ', transliteration: 'qul', pos: ['V'], posLabel: 'V', root: 'ق و ل', meaning: { en: 'Say', ur: 'کہو' }, grammarRole: 'fi\'l' }, { id: '13:43:5', position: 5, arabic: 'كَفَىٰ', transliteration: 'kafa', pos: ['V'], posLabel: 'V', root: 'ك ف ي', meaning: { en: 'Sufficient is', ur: 'کافی ہے' }, grammarRole: 'fi\'l' }, { id: '13:43:6', position: 6, arabic: 'بِاللَّهِ', transliteration: 'billahi', pos: ['P', 'N'], posLabel: 'P+N', root: null, meaning: { en: 'Allah', ur: 'اللہ' }, grammarRole: 'faa\'il' }, { id: '13:43:7', position: 7, arabic: 'شَهِيدًا', transliteration: 'shahidan', pos: ['N'], posLabel: 'N', root: 'ش ه د', meaning: { en: 'as Witness', ur: 'گواہ' }, grammarRole: 'tamyiz', case: 'mansoob' }, { id: '13:43:8', position: 8, arabic: 'بَيْنِي', transliteration: 'bayni', pos: ['N', 'PRON'], posLabel: 'N+PRON', root: null, meaning: { en: 'between me', ur: 'میرے درمیان' }, grammarRole: 'zarf' }, { id: '13:43:9', position: 9, arabic: 'وَبَيْنَكُمْ', transliteration: 'wabaynakum', pos: ['CONJ', 'N', 'PRON'], posLabel: 'CONJ+N+PRON', root: null, meaning: { en: 'and you', ur: 'اور تمہارے' }, grammarRole: 'atf' }, { id: '13:43:10', position: 10, arabic: 'وَمَنْ', transliteration: 'waman', pos: ['CONJ', 'REL'], posLabel: 'CONJ+REL', root: null, meaning: { en: 'and whoever', ur: 'اور وہ جس' }, grammarRole: 'atf' }, { id: '13:43:11', position: 11, arabic: 'عِندَهُ', transliteration: '\'indahu', pos: ['N', 'PRON'], posLabel: 'N+PRON', root: null, meaning: { en: 'has', ur: 'کے پاس ہے' }, grammarRole: 'pred' }, { id: '13:43:12', position: 12, arabic: 'عِلْمُ', transliteration: '\'ilmu', pos: ['N'], posLabel: 'N', root: 'ع ل م', meaning: { en: 'knowledge of', ur: 'علم' }, grammarRole: 'mubtada' }, { id: '13:43:13', position: 13, arabic: 'الْكِتَابِ', transliteration: 'al-kitabi', pos: ['N'], posLabel: 'N', root: 'ك ت ب', meaning: { en: 'the Scripture', ur: 'کتاب کا' }, grammarRole: 'mudhafIlayh', case: 'majroor' }], structure: { relationships: [{ from: 1, to: 2, label: 'فعل + فاعل' }, { from: 2, to: 3, label: 'موصول + صلة' }, { from: 12, to: 13, label: 'مضاف + مضاف إليه' }] } },
 };
 
 // Export the data

@@ -11,7 +11,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { useLocale } from '../../contexts/LocaleContext';
 import { LoginButton, UserMenu } from '../auth';
 
-const Header = memo(function Header({ filters, setFilters, showAnalytics, setShowAnalytics, onSettingsClick }) {
+const Header = memo(function Header({ filters, setFilters, showAnalytics, setShowAnalytics, onSettingsClick, onAdminClick }) {
   const [open, setOpen] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [showTopics, setShowTopics] = useState(false);
@@ -272,7 +272,7 @@ const Header = memo(function Header({ filters, setFilters, showAnalytics, setSho
             {authLoading ? (
               <div className="w-8 h-8 rounded-full bg-white/20 animate-pulse" />
             ) : user ? (
-              <UserMenu onSettingsClick={onSettingsClick} />
+              <UserMenu onSettingsClick={onSettingsClick} onAdminClick={onAdminClick} />
             ) : (
               <LoginButton compact />
             )}

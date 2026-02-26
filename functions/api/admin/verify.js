@@ -1,6 +1,7 @@
 /**
  * Admin Verify API
- * Checks if a user email is in the admin list
+ * Checks if the authenticated user is an admin
+ * Requires valid session cookie - no unauthenticated access
  */
 
 const getAdminEmails = (env) => {
@@ -12,25 +13,52 @@ const getAdminEmails = (env) => {
 export async function onRequestPost(context) {
   const { request, env } = context;
 
-  try {
-    const { email } = await request.json();
+  const corsHeaders = {
+    'Content-Type': 'application/json',
+  };
 
-    if (!email) {
-      return new Response(JSON.stringify({ isAdmin: false }), {
-        headers: { 'Content-Type': 'application/json' }
+  if (!env.DB) {
+    return new Response(JSON.stringify({ error: 'Service unavailable', isAdmin: false }), { status: 503, headers: corsHeaders });
+  }
+
+  try {
+    // Require session authentication
+    const cookies = request.headers.get('Cookie') || '';
+    const sessionMatch = cookies.match(/w3quran_session=([^;]+)/);
+    const sessionToken = sessionMatch?.[1];
+
+    if (!sessionToken) {
+      return new Response(JSON.stringify({ error: 'Authentication required', isAdmin: false }), {
+        status: 401,
+        headers: corsHeaders,
       });
     }
 
+    const user = await env.DB.prepare(`
+      SELECT u.id, u.email
+      FROM sessions s
+      JOIN users u ON s.user_id = u.id
+      WHERE s.token = ? AND s.expires_at > datetime('now')
+    `).bind(sessionToken).first();
+
+    if (!user) {
+      return new Response(JSON.stringify({ error: 'Invalid session', isAdmin: false }), {
+        status: 401,
+        headers: corsHeaders,
+      });
+    }
+
+    // Check admin status using the authenticated user's email (not request body)
     const adminEmails = getAdminEmails(env);
-    const isAdmin = adminEmails.includes(email.toLowerCase());
+    const isAdmin = adminEmails.includes(user.email.toLowerCase());
 
     return new Response(JSON.stringify({ isAdmin }), {
-      headers: { 'Content-Type': 'application/json' }
+      headers: corsHeaders,
     });
   } catch (error) {
     console.error('Admin verify error:', error);
     return new Response(JSON.stringify({ isAdmin: false }), {
-      headers: { 'Content-Type': 'application/json' }
+      headers: corsHeaders,
     });
   }
 }

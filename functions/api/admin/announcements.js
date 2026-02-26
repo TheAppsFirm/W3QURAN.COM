@@ -24,6 +24,10 @@ export async function onRequest(context) {
     });
   }
 
+  if (!env.DB) {
+    return new Response(JSON.stringify({ error: 'Service unavailable' }), { status: 503, headers: { 'Content-Type': 'application/json' }});
+  }
+
   try {
     // Get current user and verify admin status
     const currentUser = await env.DB.prepare(`
@@ -208,11 +212,11 @@ export async function onRequest(context) {
       });
     }
 
-    return new Response('Method not allowed', { status: 405 });
+    return new Response(JSON.stringify({ error: 'Method not allowed' }), { status: 405, headers: { 'Content-Type': 'application/json' } });
 
   } catch (error) {
     console.error('[Admin] Announcements error:', error);
-    return new Response(JSON.stringify({ error: 'Server error: ' + error.message }), {
+    return new Response(JSON.stringify({ error: 'Server error' }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });

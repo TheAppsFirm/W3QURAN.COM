@@ -11,9 +11,9 @@
 
 import React, { Suspense, lazy, useState, useEffect, useMemo, useCallback, useRef } from 'react';
 // Core components (needed immediately for first paint)
-import { ErrorBoundary, LoadingSpinner, BubbleModal } from './components/common';
+import { ErrorBoundary, LoadingSpinner, BubbleModal, Icons } from './components/common';
 import { Header, FloatingMenu, StatsBar } from './components/layout';
-import { SurahBubble } from './components/bubbles';
+import { SurahBubble, LayoutSelector } from './components/bubbles';
 import { SURAHS, MAX_AYAHS } from './data';
 import { useLocalStorage, isMobileDevice, BREAKPOINTS } from './hooks';
 import { updateSEO, getSEOForView } from './hooks/useSEO';
@@ -36,7 +36,7 @@ const lazyWithRetry = (importFn) => lazy(() =>
 // Clear reload flag on successful page load
 if (sessionStorage.getItem('chunk_reload')) sessionStorage.removeItem('chunk_reload');
 
-// Lazy-loaded bubble layouts (only loaded when user switches from default spiral)
+// Lazy-load all layout components (80KB BubbleLayouts — only 1 layout shown at a time)
 const LayoutRenderer = lazyWithRetry(() => import('./components/bubbles/LayoutRenderer'));
 
 // Lazy-loaded views (only loaded when user navigates to them)
@@ -64,6 +64,7 @@ const EmotionalTracker = lazyWithRetry(() => import('./components/common/Emotion
 const AnnouncementBanner = lazyWithRetry(() => import('./components/common/AnnouncementBanner'));
 const ScholarVideoSync = lazyWithRetry(() => import('./components/common/ScholarVideoSync'));
 const PropheticMap = lazyWithRetry(() => import('./components/common/PropheticMap'));
+const TimeMachine = lazyWithRetry(() => import('./components/common/TimeMachine'));
 const QuranCompanionAI = lazyWithRetry(() => import('./components/common/QuranCompanionAI'));
 const QuranFAQ = lazyWithRetry(() => import('./components/common/QuranFAQ'));
 const GlobalUmmahPulse = lazyWithRetry(() => import('./components/common/GlobalUmmahPulse'));
@@ -170,6 +171,7 @@ const ROUTE_CONFIG = {
   '/mood': { modal: 'mood' },
   '/video-sync': { modal: 'videoSync' },
   '/prophetic-map': { modal: 'propheticMap' },
+  '/time-machine': { modal: 'timeMachine' },
   '/ai-guide': { modal: 'companionAI' },
   '/ummah-pulse': { modal: 'globalPulse' },
   '/weather-verse': { modal: 'weatherSync' },
@@ -208,6 +210,7 @@ const MODAL_TO_ROUTE = {
   mood: '/mood',
   videoSync: '/video-sync',
   propheticMap: '/prophetic-map',
+  timeMachine: '/time-machine',
   companionAI: '/ai-guide',
   globalPulse: '/ummah-pulse',
   weatherSync: '/weather-verse',
@@ -251,7 +254,7 @@ const BlockedUserScreen = ({ reason, onDismiss }) => (
 
 function QuranBubbleApp() {
   // Auth state
-  const { isAuthenticated, isPremium, blocked, blockedReason, clearBlocked } = useAuth();
+  const { isAuthenticated, isPremium, isAdmin, blocked, blockedReason, clearBlocked } = useAuth();
 
   // State management using custom hooks for persistence
   const [view, setView] = useState('surahs');
@@ -270,6 +273,7 @@ function QuranBubbleApp() {
   const [showAnalytics, setShowAnalytics] = useState(false);
   const [darkMode, setDarkMode] = useLocalStorage('darkMode', false);
   const [bookmarks, setBookmarks] = useLocalStorage('bookmarks', {});
+  const [savedBookmarks, setSavedBookmarks] = useState([]);
   const [readingProgress, setReadingProgress] = useLocalStorage('readingProgress', {});
   const [overlayReaderSurah, setOverlayReaderSurah] = useState(null);
   const [initialVerse, setInitialVerse] = useState(1); // For navigating to specific verse
@@ -280,12 +284,17 @@ function QuranBubbleApp() {
     // Check if user already has a saved preference
     const stored = localStorage.getItem('surahLayout');
     if (stored) {
-      try { return JSON.parse(stored); } catch { return stored; }
+      try {
+        const parsed = JSON.parse(stored);
+        return typeof parsed === 'string' ? parsed : 'grid';
+      } catch { return typeof stored === 'string' ? stored : 'grid'; }
     }
     // Default: grid for all devices (bubble layouts have UI issues on mobile)
     return 'grid';
   };
   const [surahLayout, setSurahLayout] = useLocalStorage('surahLayout', getDefaultLayout());
+  // Ensure surahLayout is always a string (localStorage could return non-string via JSON.parse)
+  const safeLayout = typeof surahLayout === 'string' ? surahLayout : 'grid';
   const [showProgressDashboard, setShowProgressDashboard] = useState(false);
   const [showOfflineManager, setShowOfflineManager] = useState(false);
   const [showHifzMode, setShowHifzMode] = useState(false);
@@ -295,13 +304,26 @@ function QuranBubbleApp() {
   const [showMoodTracker, setShowMoodTracker] = useState(false);
   const [showVideoSync, setShowVideoSync] = useState(false);
   const [showPropheticMap, setShowPropheticMap] = useState(false);
+  const [showTimeMachine, setShowTimeMachine] = useState(false);
   const [showCompanionAI, setShowCompanionAI] = useState(false);
   const [showFAQ, setShowFAQ] = useState(false);
   const [showHajjUmrah, setShowHajjUmrah] = useState(false);
+  const [showBookmarksPanel, setShowBookmarksPanel] = useState(false);
+
+  // Re-read bookmarks from localStorage whenever panel opens (stays fresh after reader adds bookmarks)
+  useEffect(() => {
+    if (showBookmarksPanel) {
+      try {
+        const raw = localStorage.getItem('quran_app_quran_bookmarks');
+        setSavedBookmarks(raw ? JSON.parse(raw) : []);
+      } catch { setSavedBookmarks([]); }
+    }
+  }, [showBookmarksPanel]);
 
   // Next prayer time for sidebar badge
   const [nextPrayerInfo, setNextPrayerInfo] = useState(null);
   useEffect(() => {
+    let cancelled = false;
     const fetchNextPrayer = async () => {
       try {
         const saved = localStorage.getItem('quran_app_prayer_location');
@@ -313,9 +335,9 @@ function QuranBubbleApp() {
         const d = new Date();
         const dateStr = `${d.getDate()}-${d.getMonth() + 1}-${d.getFullYear()}`;
         const res = await fetch(`https://api.aladhan.com/v1/timings/${dateStr}?latitude=${loc.latitude}&longitude=${loc.longitude}&method=${method}`);
-        if (!res.ok) return;
+        if (!res.ok || cancelled) return;
         const data = await res.json();
-        if (data.code !== 200) return;
+        if (data.code !== 200 || cancelled) return;
         const t = data.data.timings;
         const nowMins = d.getHours() * 60 + d.getMinutes();
         for (const p of ['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha']) {
@@ -323,18 +345,18 @@ function QuranBubbleApp() {
           if (h * 60 + m > nowMins) {
             const h12 = h % 12 || 12;
             const ampm = h >= 12 ? 'PM' : 'AM';
-            setNextPrayerInfo({ name: p, time: `${h12}:${String(m).padStart(2,'0')} ${ampm}` });
+            if (!cancelled) setNextPrayerInfo({ name: p, time: `${h12}:${String(m).padStart(2,'0')} ${ampm}` });
             return;
           }
         }
         const [fh, fm] = t.Fajr.split(':').map(Number);
         const fh12 = fh % 12 || 12;
-        setNextPrayerInfo({ name: 'Fajr', time: `${fh12}:${String(fm).padStart(2,'0')} AM` });
+        if (!cancelled) setNextPrayerInfo({ name: 'Fajr', time: `${fh12}:${String(fm).padStart(2,'0')} AM` });
       } catch { /* silent */ }
     };
     fetchNextPrayer();
     const iv = setInterval(fetchNextPrayer, 60000);
-    return () => clearInterval(iv);
+    return () => { cancelled = true; clearInterval(iv); };
   }, []);
   const [showGlobalPulse, setShowGlobalPulse] = useState(false);
   const [showWeatherSync, setShowWeatherSync] = useState(false);
@@ -370,19 +392,47 @@ function QuranBubbleApp() {
     setShowMoodTracker(false);
     setShowVideoSync(false);
     setShowPropheticMap(false);
+    setShowTimeMachine(false);
     setShowCompanionAI(false);
+    setShowFAQ(false);
     setShowGlobalPulse(false);
     setShowWeatherSync(false);
     setShowSoundHealing(false);
     setShowBabyNames(false);
     setShowHajjUmrah(false);
     setShowTalkToQuran(false);
+    setShowKidsMode(false);
     setShowFAQ(false);
     setShowGamificationHub(false);
+    setShowAnalytics(false);
+    setShowBookmarksPanel(false);
     setOverlayReaderSurah(null);
     setInitialVerse(1);
     setInitialPanel(null);
   }, []);
+
+  // Kill all global audio sources - prevents double-playing across features
+  const stopAllGlobalAudio = useCallback(() => {
+    window.speechSynthesis?.cancel();
+    // Stop any HTML5 audio elements that might be playing
+    document.querySelectorAll('audio').forEach(a => { a.pause(); a.currentTime = 0; });
+  }, []);
+
+  // Smart donation popup trigger for free users
+  // Uses a global 3-day cooldown so users aren't spammed across features
+  const maybeShowDonation = useCallback((source) => {
+    if (isPremium || isAdmin) return;
+    const COOLDOWN_MS = 3 * 86400000; // 3 days global cooldown
+    const lastShown = localStorage.getItem('w3quran_donate_last_shown');
+    const elapsed = lastShown ? Date.now() - parseInt(lastShown, 10) : Infinity;
+    if (elapsed < COOLDOWN_MS) return;
+    // Show after a short delay for smooth UX
+    setTimeout(() => {
+      setShowDonateModal(true);
+      localStorage.setItem('w3quran_donate_last_shown', String(Date.now()));
+      logger.action('donate_popup_shown', { source });
+    }, 800);
+  }, [isPremium, isAdmin]);
 
   // Check for pending upgrade after login
   useEffect(() => {
@@ -451,10 +501,11 @@ function QuranBubbleApp() {
             case 'mood': setShowMoodTracker(true); break;
             case 'videoSync': setShowVideoSync(true); break;
             case 'propheticMap': setShowPropheticMap(true); break;
+            case 'timeMachine': stopAllGlobalAudio(); setShowTimeMachine(true); break;
             case 'companionAI': setShowCompanionAI(true); break;
             case 'globalPulse': setShowGlobalPulse(true); break;
             case 'weatherSync': setShowWeatherSync(true); break;
-            case 'soundHealing': setShowSoundHealing(true); break;
+            case 'soundHealing': stopAllGlobalAudio(); setShowSoundHealing(true); break;
             case 'babyNames': setShowBabyNames(true); break;
             case 'hajjUmrah': setShowHajjUmrah(true); break;
             case 'talkToQuran': setShowTalkToQuran(true); break;
@@ -535,6 +586,10 @@ function QuranBubbleApp() {
   useEffect(() => {
     if (showPropheticMap) updateURL(MODAL_TO_ROUTE.propheticMap);
   }, [showPropheticMap, updateURL]);
+
+  useEffect(() => {
+    if (showTimeMachine) updateURL(MODAL_TO_ROUTE.timeMachine);
+  }, [showTimeMachine, updateURL]);
 
   useEffect(() => {
     if (showCompanionAI) updateURL(MODAL_TO_ROUTE.companionAI);
@@ -625,7 +680,7 @@ function QuranBubbleApp() {
   const navigateBack = useCallback(() => {
     const anyModalOpen = showSearchPanel || showProgressDashboard || showOfflineManager ||
       showHifzMode || showMindMap || showMoodTracker || showVideoSync ||
-      showPropheticMap || showCompanionAI || showGlobalPulse || showWeatherSync ||
+      showPropheticMap || showTimeMachine || showCompanionAI || showGlobalPulse || showWeatherSync ||
       showSoundHealing || showBabyNames || overlayReaderSurah;
 
     if (anyModalOpen) {
@@ -634,7 +689,7 @@ function QuranBubbleApp() {
     }
   }, [
     showSearchPanel, showProgressDashboard, showOfflineManager, showHifzMode,
-    showMindMap, showMoodTracker, showVideoSync, showPropheticMap, showCompanionAI,
+    showMindMap, showMoodTracker, showVideoSync, showPropheticMap, showTimeMachine, showCompanionAI,
     showGlobalPulse, showWeatherSync, showSoundHealing, showBabyNames, overlayReaderSurah,
     closeAllModals, updateURL
   ]);
@@ -663,12 +718,14 @@ function QuranBubbleApp() {
   const handleCloseMindMap = useCallback(() => {
     setShowMindMap(false);
     updateURL('/');
-  }, [updateURL]);
+    maybeShowDonation('mind_map');
+  }, [updateURL, maybeShowDonation]);
 
   const handleCloseMood = useCallback(() => {
     setShowMoodTracker(false);
     updateURL('/');
-  }, [updateURL]);
+    maybeShowDonation('mood_tracker');
+  }, [updateURL, maybeShowDonation]);
 
   const handleCloseVideoSync = useCallback(() => {
     setShowVideoSync(false);
@@ -678,12 +735,22 @@ function QuranBubbleApp() {
   const handleClosePropheticMap = useCallback(() => {
     setShowPropheticMap(false);
     updateURL('/');
-  }, [updateURL]);
+    maybeShowDonation('prophetic_map');
+  }, [updateURL, maybeShowDonation]);
+
+  const handleCloseTimeMachine = useCallback(() => {
+    // Force-kill any lingering audio/TTS from TimeMachine
+    window.speechSynthesis?.cancel();
+    setShowTimeMachine(false);
+    updateURL('/');
+    maybeShowDonation('time_machine');
+  }, [updateURL, maybeShowDonation]);
 
   const handleCloseCompanionAI = useCallback(() => {
     setShowCompanionAI(false);
     updateURL('/');
-  }, [updateURL]);
+    maybeShowDonation('ai_guide');
+  }, [updateURL, maybeShowDonation]);
 
   const handleCloseGlobalPulse = useCallback(() => {
     setShowGlobalPulse(false);
@@ -696,14 +763,17 @@ function QuranBubbleApp() {
   }, [updateURL]);
 
   const handleCloseSoundHealing = useCallback(() => {
+    window.speechSynthesis?.cancel();
     setShowSoundHealing(false);
     updateURL('/');
-  }, [updateURL]);
+    maybeShowDonation('sound_healing');
+  }, [updateURL, maybeShowDonation]);
 
   const handleCloseBabyNames = useCallback(() => {
     setShowBabyNames(false);
     updateURL('/');
-  }, [updateURL]);
+    maybeShowDonation('baby_names');
+  }, [updateURL, maybeShowDonation]);
 
   const handleCloseDonate = useCallback(() => {
     setShowDonateModal(false);
@@ -924,9 +994,10 @@ function QuranBubbleApp() {
 
   return (
     <div
-      className={`h-screen flex flex-col overflow-hidden transition-colors duration-500 ${
+      className={`flex flex-col overflow-hidden transition-colors duration-500 ${
         darkMode ? 'animated-bg-dark' : 'animated-bg'
       }`}
+      style={{ height: '100dvh' }}
     >
       {/* Blocked User Screen */}
       {blocked && (
@@ -950,6 +1021,7 @@ function QuranBubbleApp() {
           showAnalytics={showAnalytics}
           setShowAnalytics={setShowAnalytics}
           onSettingsClick={() => setView('settings')}
+          onAdminClick={() => { setView('admin'); updateURL('/admin'); }}
         />
       )}
 
@@ -967,26 +1039,32 @@ function QuranBubbleApp() {
           setZoom={setZoom}
           contentZoom={contentZoom}
           setContentZoom={setContentZoom}
-          surahLayout={surahLayout}
+          surahLayout={safeLayout}
           setSurahLayout={setSurahLayout}
           showControls={true}
           onDonate={handleOpenDonate}
           onShowAchievements={() => setShowGamificationHub(true)}
           onWorldMap={() => setShowPropheticMap(true)}
+          onTimeMachine={() => { stopAllGlobalAudio(); setShowTimeMachine(true); }}
           onGlobalPulse={() => setShowGlobalPulse(true)}
           onWeatherSync={() => setShowWeatherSync(true)}
           onHajjUmrah={() => setShowHajjUmrah(true)}
+          onShowBookmarks={() => setShowBookmarksPanel(true)}
         />
       )}
 
       {/* Main Content */}
-      <main className="flex-1 relative overflow-hidden">
+      <main className="flex-1 relative overflow-hidden"
+        style={view !== 'surahs' ? { paddingTop: 'env(safe-area-inset-top, 0px)' } : undefined}
+      >
         {/* Surahs View */}
         {view === 'surahs' && (
           <>
-            <div className="absolute inset-0 overflow-auto bubble-container pt-4 pr-10 sm:pr-12 pb-28 sm:pb-32">
+            <div className="absolute inset-0 overflow-auto bubble-container pt-4 pr-10 sm:pr-12"
+              style={{ paddingBottom: 'max(7rem, calc(env(safe-area-inset-bottom, 0px) + 7rem))' }}
+            >
               {/* Spiral Layout (Default) */}
-              {surahLayout === 'spiral' && (
+              {safeLayout === 'spiral' && (
                 <div
                   className="relative"
                   style={{
@@ -1124,11 +1202,11 @@ function QuranBubbleApp() {
                 </div>
               )}
 
-              {/* All other layouts (lazy-loaded) */}
-              {surahLayout !== 'spiral' && (
+              {/* All non-spiral layouts — lazy-loaded (80KB deferred) */}
+              {safeLayout !== 'spiral' && (
                 <Suspense fallback={<div className="flex items-center justify-center py-20"><LoadingSpinner /></div>}>
                   <LayoutRenderer
-                    layoutId={surahLayout}
+                    layout={safeLayout}
                     surahs={filtered}
                     onSurahClick={handleSelectSurah}
                     zoom={zoom}
@@ -1195,26 +1273,28 @@ function QuranBubbleApp() {
         </Suspense>
       </main>
 
-      {/* Floating Menu */}
-      <FloatingMenu
-        view={view}
-        setView={setView}
-        darkMode={darkMode}
-        onDonate={handleOpenDonate}
-        onMindMap={() => setShowMindMap(true)}
-        onMood={() => setShowMoodTracker(true)}
-        onVideoSync={() => setShowVideoSync(true)}
-        onBabyNames={() => setShowBabyNames(true)}
-        onTalkToQuran={() => setShowTalkToQuran(true)}
-        onProgress={() => setShowProgressDashboard(true)}
-        onOpenKidsMode={() => setShowKidsMode(true)}
-        onAIGuide={() => setShowCompanionAI(true)}
-        onSoundHealing={() => setShowSoundHealing(true)}
-        onSearch={() => setShowSearchPanel(true)}
-        onHifz={() => setShowHifzMode(true)}
-        onOffline={() => setShowOfflineManager(true)}
-        onFAQ={() => setShowFAQ(true)}
-      />
+      {/* Floating Menu - hidden when Talk to Quran or Admin panel is open */}
+      {!showTalkToQuran && view !== 'admin' && (
+        <FloatingMenu
+          view={view}
+          setView={setView}
+          darkMode={darkMode}
+          onDonate={handleOpenDonate}
+          onMindMap={() => setShowMindMap(true)}
+          onMood={() => setShowMoodTracker(true)}
+          onVideoSync={() => setShowVideoSync(true)}
+          onBabyNames={() => setShowBabyNames(true)}
+          onTalkToQuran={() => setShowTalkToQuran(true)}
+          onProgress={() => setShowProgressDashboard(true)}
+          onOpenKidsMode={() => setShowKidsMode(true)}
+          onAIGuide={() => setShowCompanionAI(true)}
+          onSoundHealing={() => { stopAllGlobalAudio(); setShowSoundHealing(true); }}
+          onSearch={() => setShowSearchPanel(true)}
+          onHifz={() => setShowHifzMode(true)}
+          onOffline={() => setShowOfflineManager(true)}
+          onFAQ={() => setShowFAQ(true)}
+        />
+      )}
 
       {/* Bubble Modal */}
       {selected && (
@@ -1233,7 +1313,7 @@ function QuranBubbleApp() {
           }}
           darkMode={darkMode}
           originPosition={clickPosition}
-          layoutStyle={surahLayout}
+          layoutStyle={safeLayout}
         />
       )}
 
@@ -1250,8 +1330,8 @@ function QuranBubbleApp() {
           darkMode={darkMode}
           initialVerse={initialVerse}
           initialPanel={initialPanel}
-          readerStyle={surahLayout}
-          layoutStyle={surahLayout}
+          readerStyle={safeLayout}
+          layoutStyle={safeLayout}
           onPanelChange={(panel) => {
             // Update URL when panel changes
             const basePath = `/surah/${overlayReaderSurah.id}${initialVerse > 1 ? `/${initialVerse}` : ''}`;
@@ -1457,6 +1537,90 @@ function QuranBubbleApp() {
         </Suspense>
       )}
 
+      {/* Time Machine - Revelation Timeline */}
+      {showTimeMachine && (
+        <Suspense fallback={<LoadingSpinner message="Loading Time Machine..." />}>
+          <TimeMachine
+            isVisible={showTimeMachine}
+            onClose={handleCloseTimeMachine}
+            darkMode={darkMode}
+            onNavigateToVerse={(surahId, ayahNumber) => {
+              const surah = SURAHS.find(s => s.id === surahId);
+              if (surah) {
+                setShowTimeMachine(false);
+                setOverlayReaderSurah(surah);
+                setInitialVerse(ayahNumber || 1);
+              }
+            }}
+          />
+        </Suspense>
+      )}
+
+      {/* Bookmarks Panel */}
+      {showBookmarksPanel && (
+        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4" onClick={() => setShowBookmarksPanel(false)}>
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+          <div className="relative w-full max-w-lg max-h-[80vh] bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl shadow-2xl border border-white/10 overflow-hidden flex flex-col" onClick={e => e.stopPropagation()}>
+            {/* Header */}
+            <div className="flex items-center justify-between p-4 border-b border-white/10">
+              <div className="flex items-center gap-2">
+                <Icons.Bookmark className="w-5 h-5 text-pink-400" />
+                <h2 className="text-lg font-bold text-white">Bookmarks</h2>
+                <span className="text-xs text-white/40 bg-white/10 px-2 py-0.5 rounded-full">{savedBookmarks.length}</span>
+              </div>
+              <button onClick={() => setShowBookmarksPanel(false)} className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white/60 hover:text-white transition-colors">
+                <Icons.X className="w-4 h-4" />
+              </button>
+            </div>
+            {/* Bookmark List */}
+            <div className="flex-1 overflow-y-auto p-3 space-y-2">
+              {savedBookmarks.length === 0 ? (
+                <div className="text-center py-12 text-white/40">
+                  <Icons.Bookmark className="w-12 h-12 mx-auto mb-3 opacity-30" />
+                  <p className="text-sm">No bookmarks yet</p>
+                  <p className="text-xs mt-1">Open a surah and tap the bookmark button to save ayahs</p>
+                </div>
+              ) : (
+                savedBookmarks.map((bm) => (
+                  <button
+                    key={bm.id}
+                    onClick={() => {
+                      const surah = SURAHS.find(s => s.id === bm.surahId);
+                      if (surah) {
+                        setShowBookmarksPanel(false);
+                        setOverlayReaderSurah(surah);
+                        setInitialVerse(bm.ayahNumber || 1);
+                      }
+                    }}
+                    className="w-full text-left p-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 hover:border-pink-500/30 transition-all group"
+                  >
+                    <div className="flex items-start gap-3">
+                      <div className="flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-br from-pink-500/30 to-purple-500/30 flex items-center justify-center text-pink-300 text-sm font-bold">
+                        {bm.surahId}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2">
+                          <span className="text-white font-semibold text-sm">{bm.surahName}</span>
+                          <span className="text-white/40 text-xs">Ayah {bm.ayahNumber}</span>
+                        </div>
+                        {bm.versePreview && (
+                          <p className="text-white/50 text-xs mt-1 truncate font-arabic" dir="rtl">{bm.versePreview}</p>
+                        )}
+                        {bm.note && (
+                          <p className="text-pink-300/60 text-xs mt-1 truncate">{bm.note}</p>
+                        )}
+                        <span className="text-white/20 text-[10px] mt-1 block">{new Date(bm.timestamp).toLocaleDateString()}</span>
+                      </div>
+                      <Icons.ChevronRight className="w-4 h-4 text-white/20 group-hover:text-pink-400 transition-colors flex-shrink-0 mt-1" />
+                    </div>
+                  </button>
+                ))
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* AI Companion Guide */}
       {showCompanionAI && (
         <Suspense fallback={<LoadingSpinner message="Loading AI Guide..." />}>
@@ -1555,7 +1719,7 @@ function QuranBubbleApp() {
         <Suspense fallback={<LoadingSpinner message="Loading Talk to Quran..." />}>
           <TalkToQuran
             isVisible={showTalkToQuran}
-            onClose={() => setShowTalkToQuran(false)}
+            onClose={() => { setShowTalkToQuran(false); maybeShowDonation('talk_to_quran'); }}
             darkMode={darkMode}
           />
         </Suspense>

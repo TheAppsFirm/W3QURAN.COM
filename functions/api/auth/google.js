@@ -8,7 +8,7 @@ export async function onRequest(context) {
 
   const clientId = env.GOOGLE_CLIENT_ID;
   if (!clientId) {
-    return new Response('Google OAuth not configured', { status: 500 });
+    return new Response(JSON.stringify({ error: 'Google OAuth not configured' }), { status: 500, headers: { 'Content-Type': 'application/json' } });
   }
 
   // Determine redirect URI based on environment
@@ -32,5 +32,13 @@ export async function onRequest(context) {
 
   const googleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?${params}`;
 
-  return Response.redirect(googleAuthUrl, 302);
+  // Store state in cookie for CSRF validation in callback
+  const state = params.get('state');
+  return new Response(null, {
+    status: 302,
+    headers: {
+      'Location': googleAuthUrl,
+      'Set-Cookie': `w3quran_oauth_state=${state}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=600`,
+    },
+  });
 }

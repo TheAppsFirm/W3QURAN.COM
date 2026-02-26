@@ -15,6 +15,7 @@ export {
   getFeatureKey,
   parseWordLetters,
   detectHaraka,
+  LANGUAGE_NAMES,
 } from './shared/constants';
 
 // Cache for loaded surah data
@@ -128,6 +129,130 @@ export const hasOntologyData = (surahId) => {
 };
 
 /**
+ * Auto-generate dependency diagram connections from word grammar data.
+ * Analyzes POS tags and grammar roles to create word-to-word relationships.
+ */
+const ROLE_LABELS = {
+  'verb-subject': 'فعل + فاعل',
+  'verb-object': 'فعل + مفعول',
+  'mudaf': 'مضاف + مضاف إليه',
+  'adjective': 'موصوف + صفت',
+  'preposition': 'جار + مجرور',
+  'conjunction': 'عطف',
+  'negation': 'نفی + فعل',
+  'relative': 'موصول + صلة',
+  'predicate': 'مبتدأ + خبر',
+  'emphasis': 'توکید',
+  'hal': 'حال',
+  'tamyiz': 'تمییز',
+  'badal': 'بدل',
+  'atf': 'عطف',
+};
+
+const generateDiagramFromWords = (words, surahId, ayahNum) => {
+  const connections = [];
+  const getId = (idx) => words[idx]?.id || `${surahId}:${ayahNum}:${words[idx]?.position || idx + 1}`;
+
+  // Extract POS and role for each word
+  const wordInfo = words.map((w, i) => {
+    const posRaw = w.pos;
+    // Get primary POS (first tag from array or compound string)
+    const pos = Array.isArray(posRaw) ? posRaw[0] : (typeof posRaw === 'string' ? posRaw.split('+')[0] : 'N');
+    // Get full POS string for compound detection (e.g. "CONJ+N", "V+PRON")
+    const fullPos = Array.isArray(posRaw) ? posRaw.join('+') : (posRaw || 'N');
+    const role = w.grammarRole || w.grammar?.role || '';
+    const caseVal = w.grammar?.case || w.features?.case || '';
+    return { pos, fullPos, role, caseVal, index: i };
+  });
+
+  // Find verb indices and noun/adj indices
+  const verbs = wordInfo.filter(w => w.pos === 'V');
+  const lastVerb = { index: -1 }; // track last verb for object/subject linking
+
+  for (let i = 0; i < wordInfo.length; i++) {
+    const curr = wordInfo[i];
+    const prev = i > 0 ? wordInfo[i - 1] : null;
+    const next = i < wordInfo.length - 1 ? wordInfo[i + 1] : null;
+
+    // Conjunction links to next word
+    if (curr.pos === 'CONJ' && next) {
+      // Find previous non-conjunction word to link
+      let prevNonConj = i - 1;
+      while (prevNonConj >= 0 && wordInfo[prevNonConj].pos === 'CONJ') prevNonConj--;
+      if (prevNonConj >= 0) {
+        connections.push({ from: getId(prevNonConj), to: getId(i + 1), label: ROLE_LABELS.conjunction });
+      }
+      continue;
+    }
+
+    // Verb → next noun (object)
+    if (curr.pos === 'V' && next && (next.pos === 'N' || next.pos === 'NUM' || next.pos === 'PRON')) {
+      const label = (next.role === 'subject' || next.role === 'mubtada' || next.caseVal === 'nominative')
+        ? ROLE_LABELS['verb-subject']
+        : ROLE_LABELS['verb-object'];
+      connections.push({ from: getId(i), to: getId(i + 1), label });
+      continue;
+    }
+
+    // Preposition → next noun
+    if ((curr.pos === 'PREP' || curr.pos === 'P') && next) {
+      connections.push({ from: getId(i), to: getId(i + 1), label: ROLE_LABELS.preposition });
+      continue;
+    }
+
+    // Negation → next verb
+    if (curr.pos === 'NEG' && next && next.pos === 'V') {
+      connections.push({ from: getId(i), to: getId(i + 1), label: ROLE_LABELS.negation });
+      continue;
+    }
+
+    // Relative pronoun → next word
+    if (curr.pos === 'REL' && next) {
+      connections.push({ from: getId(i), to: getId(i + 1), label: ROLE_LABELS.relative });
+      continue;
+    }
+
+    // Noun followed by adjective
+    if ((curr.pos === 'N' || curr.pos === 'PRON') && next && next.pos === 'ADJ') {
+      connections.push({ from: getId(i), to: getId(i + 1), label: ROLE_LABELS.adjective });
+      continue;
+    }
+
+    // Mudaf + Mudaf ilayh: noun followed by genitive noun
+    if (curr.pos === 'N' && next && next.pos === 'N' && (next.caseVal === 'genitive' || next.role === 'mudaf_ilayh')) {
+      connections.push({ from: getId(i), to: getId(i + 1), label: ROLE_LABELS.mudaf });
+      continue;
+    }
+
+    // Subject + predicate pattern
+    if ((curr.role === 'subject' || curr.role === 'mubtada') && next && (next.role === 'predicate' || next.role === 'khabar')) {
+      connections.push({ from: getId(i), to: getId(i + 1), label: ROLE_LABELS.predicate });
+      continue;
+    }
+
+    // Hal / Tamyiz / Badal roles → link to previous word
+    if ((curr.role === 'hal' || curr.role === 'tamyiz' || curr.role === 'badal') && prev) {
+      const label = ROLE_LABELS[curr.role] || curr.role;
+      connections.push({ from: getId(i - 1), to: getId(i), label });
+      continue;
+    }
+  }
+
+  // If no connections found but multiple words, create simple sequential links
+  if (connections.length === 0 && words.length >= 2) {
+    for (let i = 0; i < words.length - 1; i++) {
+      connections.push({
+        from: getId(i),
+        to: getId(i + 1),
+        label: '',
+      });
+    }
+  }
+
+  return connections;
+};
+
+/**
  * Get treebank data for a specific ayah (synchronous - requires pre-loading)
  * @param {number} surahId - Surah number
  * @param {number} ayahNum - Ayah number
@@ -167,9 +292,34 @@ export const getAyahTreebank = (surahId, ayahNum, lang = 'en') => {
     return field;
   };
 
+  // Build or convert structure.diagram for DependencyTree
+  let structure = ayahData.structure;
+  if (structure?.relationships && !structure?.diagram) {
+    // Old format: convert position-based relationships to word-ID-based diagram
+    structure = {
+      ...structure,
+      diagram: structure.relationships.map(rel => ({
+        from: `${surahId}:${ayahNum}:${rel.from}`,
+        to: `${surahId}:${ayahNum}:${rel.to}`,
+        label: rel.label,
+      })),
+    };
+  } else if (!structure?.diagram || (Array.isArray(structure?.diagram) && typeof structure.diagram[0] === 'string')) {
+    // No relationships data or string-only diagram — auto-generate from word grammar
+    const words = ayahData.words;
+    if (words && words.length > 1) {
+      const generated = generateDiagramFromWords(words, surahId, ayahNum);
+      if (generated.length > 0) {
+        structure = { ...(structure || {}), diagram: generated };
+      }
+    }
+  }
+
   // Transform words to include language-specific labels and flatten advanced features
   return {
     ...ayahData,
+    // Normalized structure with diagram connections
+    structure,
     // Normalize text property (some use 'arabic' instead of 'text')
     text: ayahData.text || ayahData.arabic,
     // Also provide translations key for backward compatibility

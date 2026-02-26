@@ -31,7 +31,12 @@ export const TREEBANK_DATA = {
       hi: "क़सम है हांफती हुई दौड़ने वालियों की",
       bn: "শপথ হাঁপাতে হাঁপাতে দৌড়ানো ঘোড়াগুলির",
       tr: "Soluyarak koşanlara yemin olsun",
-      id: "Demi kuda perang yang berlari kencang dengan terengah-engah"
+      id: "Demi kuda perang yang berlari kencang dengan terengah-engah",
+    structure: {
+      relationships: [
+        { from: 1, to: 2, label: 'قسم' }
+      ],
+    },
     },
     words: [
       {
@@ -117,7 +122,12 @@ export const TREEBANK_DATA = {
       hi: "और चिंगारियां निकालने वालियों की",
       bn: "এবং অগ্নিস্ফুলিঙ্গ সৃষ্টিকারীদের",
       tr: "Ateş saçanlara",
-      id: "Dan yang mencetuskan api dengan pukulan kukunya"
+      id: "Dan yang mencetuskan api dengan pukulan kukunya",
+    structure: {
+      relationships: [
+        { from: 1, to: 2, label: 'قسم' }
+      ],
+    },
     },
     words: [
       {
@@ -198,7 +208,10 @@ export const TREEBANK_DATA = {
       hi: "और सुबह को हमला करने वालियों की",
       bn: "এবং প্রভাতে আক্রমণকারীদের",
       tr: "Sabahları baskın yapanlara",
-      id: "Dan yang menyerang dengan tiba-tiba di waktu pagi"
+      id: "Dan yang menyerang dengan tiba-tiba di waktu pagi",
+    structure: {
+      relationships: [{ from: 2, to: 3, label: 'فعل + فاعل' }],
+    },
     },
     words: [
       {
@@ -361,7 +374,12 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(فَأَثَرْنَ)[verb] → (بِهِۦ)[prep-phrase] → (نَقْعًا)[object]"
+    dependencyStructure: "(فَأَثَرْنَ)[verb] → (بِهِۦ)[prep-phrase] → (نَقْعًا)[object]",
+    structure: {
+      relationships: [
+      { from: 1, to: 3, label: 'فعل + مفعول به' }
+      ],
+    },
   },
 
   5: {
@@ -459,7 +477,12 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(فَوَسَطْنَ)[verb] → (بِهِۦ)[prep-phrase] → (جَمْعًا)[object]"
+    dependencyStructure: "(فَوَسَطْنَ)[verb] → (بِهِۦ)[prep-phrase] → (جَمْعًا)[object]",
+    structure: {
+      relationships: [
+      { from: 1, to: 3, label: 'فعل + مفعول به' }
+      ],
+    },
   },
 
   6: {
@@ -580,7 +603,12 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(إِنَّ)[emphasis] → (ٱلْإِنسَٰنَ)[subject] → (لِرَبِّهِۦ)[prep-phrase] → (لَكَنُودٌ)[predicate]"
+    dependencyStructure: "(إِنَّ)[emphasis] → (ٱلْإِنسَٰنَ)[subject] → (لِرَبِّهِۦ)[prep-phrase] → (لَكَنُودٌ)[predicate]",
+    structure: {
+      relationships: [
+      { from: 3, to: 4, label: 'موصوف + صفت' }
+      ],
+    },
   },
 
   7: {
@@ -690,7 +718,12 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(وَإِنَّهُۥ)[subject] → (عَلَىٰ ذَٰلِكَ)[prep-phrase] → (لَشَهِيدٌ)[predicate]"
+    dependencyStructure: "(وَإِنَّهُۥ)[subject] → (عَلَىٰ ذَٰلِكَ)[prep-phrase] → (لَشَهِيدٌ)[predicate]",
+    structure: {
+      relationships: [
+      { from: 2, to: 3, label: 'جار + مجرور' }
+      ],
+    },
   },
 
   8: {
@@ -813,7 +846,12 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(وَإِنَّهُۥ)[subject] → (لِحُبِّ ٱلْخَيْرِ)[prep-phrase] → (لَشَدِيدٌ)[predicate]"
+    dependencyStructure: "(وَإِنَّهُۥ)[subject] → (لِحُبِّ ٱلْخَيْرِ)[prep-phrase] → (لَشَدِيدٌ)[predicate]",
+    structure: {
+      relationships: [
+      { from: 3, to: 4, label: 'موصوف + صفت' }
+      ],
+    },
   },
 
   9: {
@@ -995,7 +1033,14 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(أَفَلَا)[rhetorical] → (يَعْلَمُ)[verb] → (إِذَا)[conditional] → (بُعْثِرَ)[passive-verb] → (مَا فِى ٱلْقُبُورِ)[subject]"
+    dependencyStructure: "(أَفَلَا)[rhetorical] → (يَعْلَمُ)[verb] → (إِذَا)[conditional] → (بُعْثِرَ)[passive-verb] → (مَا فِى ٱلْقُبُورِ)[subject]",
+    structure: {
+      relationships: [
+      { from: 1, to: 2, label: 'نفی + فعل' },
+      { from: 3, to: 4, label: 'شرط + فعل' },
+      { from: 6, to: 7, label: 'جار + مجرور' }
+      ],
+    },
   },
 
   10: {
@@ -1120,7 +1165,12 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(وَحُصِّلَ)[passive-verb] → (مَا فِى ٱلصُّدُورِ)[subject]"
+    dependencyStructure: "(وَحُصِّلَ)[passive-verb] → (مَا فِى ٱلصُّدُورِ)[subject]",
+    structure: {
+      relationships: [
+      { from: 3, to: 4, label: 'جار + مجرور' }
+      ],
+    },
   },
 
   11: {
@@ -1255,7 +1305,12 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(إِنَّ)[emphasis] → (رَبَّهُم)[subject] → (بِهِمْ)[prep-phrase] → (يَوْمَئِذٍ)[time] → (لَّخَبِيرٌۢ)[predicate]"
+    dependencyStructure: "(إِنَّ)[emphasis] → (رَبَّهُم)[subject] → (بِهِمْ)[prep-phrase] → (يَوْمَئِذٍ)[time] → (لَّخَبِيرٌۢ)[predicate]",
+    structure: {
+      relationships: [
+      { from: 4, to: 5, label: 'موصوف + صفت' }
+      ],
+    },
   }
 };
 

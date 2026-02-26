@@ -14,121 +14,130 @@ export const ONTOLOGY = {
   categories: {
     divinePraise: {
       name: "Divine Praise and Gratitude",
+      nameUr: "الٰہی حمد و شکر",
       nameAr: "الحمد والثناء",
       color: '#F59E0B',
       icon: 'Star',
       concepts: [
-        { term: "Al-Hamd", arabic: "الحمد", meaning: "All praise belongs to Allah - comprehensive gratitude", ayahs: [2] },
-        { term: "Rabb al-Alamin", arabic: "رب العالمين", meaning: "Lord of all worlds - universal sovereignty", ayahs: [2] },
-        { term: "Universal Lordship", arabic: "الربوبية العامة", meaning: "Allah's nurturing and sustaining all creation", ayahs: [2] }
+        { term: "Al-Hamd", arabic: "الحمد", meaning: { en: "All praise belongs to Allah - comprehensive gratitude", ur: "تمام تعریفیں اللہ کے لیے ہیں - جامع شکر و حمد" }, ayahs: [2] },
+        { term: "Rabb al-Alamin", arabic: "رب العالمين", meaning: { en: "Lord of all worlds - universal sovereignty", ur: "تمام جہانوں کا پالنے والا - آفاقی حاکمیت" }, ayahs: [2] },
+        { term: "Universal Lordship", arabic: "الربوبية العامة", meaning: { en: "Allah's nurturing and sustaining all creation", ur: "اللہ کا تمام مخلوقات کی پرورش اور نگہداشت کرنا" }, ayahs: [2] }
       ]
     },
     divineAttributes: {
       name: "Divine Attributes",
+      nameUr: "اللہ کی صفات",
       nameAr: "صفات الله",
       color: '#8B5CF6',
       icon: 'Crown',
       concepts: [
-        { term: "Ar-Rahman", arabic: "الرحمن", meaning: "The Most Gracious - infinite mercy for all creation", ayahs: [1, 3] },
-        { term: "Ar-Raheem", arabic: "الرحيم", meaning: "The Most Merciful - special mercy for believers", ayahs: [1, 3] },
-        { term: "Malik Yawm ad-Din", arabic: "مالك يوم الدين", meaning: "Master of the Day of Judgment", ayahs: [4] },
-        { term: "Yawm ad-Din", arabic: "يوم الدين", meaning: "Day of Recompense - when all accounts are settled", ayahs: [4] }
+        { term: "Ar-Rahman", arabic: "الرحمن", meaning: { en: "The Most Gracious - infinite mercy for all creation", ur: "بے حد مہربان - تمام مخلوقات کے لیے لامحدود رحمت" }, ayahs: [1, 3] },
+        { term: "Ar-Raheem", arabic: "الرحيم", meaning: { en: "The Most Merciful - special mercy for believers", ur: "نہایت رحم والا - مومنوں کے لیے خاص رحمت" }, ayahs: [1, 3] },
+        { term: "Malik Yawm ad-Din", arabic: "مالك يوم الدين", meaning: { en: "Master of the Day of Judgment", ur: "یومِ جزا کا مالک" }, ayahs: [4] },
+        { term: "Yawm ad-Din", arabic: "يوم الدين", meaning: { en: "Day of Recompense - when all accounts are settled", ur: "بدلے کا دن - جب سب حساب چکائے جائیں گے" }, ayahs: [4] }
       ]
     },
     worshipAndSeeking: {
       name: "Worship and Seeking Help",
+      nameUr: "عبادت اور مدد مانگنا",
       nameAr: "العبادة والاستعانة",
       color: '#10B981',
       icon: 'Heart',
       concepts: [
-        { term: "Ibadah", arabic: "العبادة", meaning: "Exclusive worship devoted to Allah alone", ayahs: [5] },
-        { term: "Istianah", arabic: "الاستعانة", meaning: "Seeking help only from Allah", ayahs: [5] },
-        { term: "Iyyaka", arabic: "إياك", meaning: "You alone - exclusive dedication (grammatical emphasis)", ayahs: [5] },
-        { term: "Direct Address", arabic: "المخاطبة", meaning: "Shift from third to second person - intimate connection", ayahs: [5] }
+        { term: "Ibadah", arabic: "العبادة", meaning: { en: "Exclusive worship devoted to Allah alone", ur: "صرف اللہ کی عبادت - خالص بندگی" }, ayahs: [5] },
+        { term: "Istianah", arabic: "الاستعانة", meaning: { en: "Seeking help only from Allah", ur: "صرف اللہ سے مدد مانگنا" }, ayahs: [5] },
+        { term: "Iyyaka", arabic: "إياك", meaning: { en: "You alone - exclusive dedication (grammatical emphasis)", ur: "صرف تیری ہی - خالص وقف (نحوی تاکید)" }, ayahs: [5] },
+        { term: "Direct Address", arabic: "المخاطبة", meaning: { en: "Shift from third to second person - intimate connection", ur: "غائب سے حاضر کی طرف تبدیلی - قربت کا اظہار" }, ayahs: [5] }
       ]
     },
     guidanceAndPath: {
       name: "Guidance and the Straight Path",
+      nameUr: "ہدایت اور صراطِ مستقیم",
       nameAr: "الهداية والصراط المستقيم",
       color: '#3B82F6',
       icon: 'Compass',
       concepts: [
-        { term: "Hidayah", arabic: "الهداية", meaning: "Divine guidance to truth", ayahs: [6] },
-        { term: "Sirat al-Mustaqim", arabic: "الصراط المستقيم", meaning: "The Straight Path - direct route to Allah", ayahs: [6] },
-        { term: "Ihdina", arabic: "اهدنا", meaning: "Guide us - continuous supplication for guidance", ayahs: [6] }
+        { term: "Hidayah", arabic: "الهداية", meaning: { en: "Divine guidance to truth", ur: "سچائی کی طرف الٰہی ہدایت" }, ayahs: [6] },
+        { term: "Sirat al-Mustaqim", arabic: "الصراط المستقيم", meaning: { en: "The Straight Path - direct route to Allah", ur: "سیدھا راستہ - اللہ تک پہنچنے کا سیدھا رستہ" }, ayahs: [6] },
+        { term: "Ihdina", arabic: "اهدنا", meaning: { en: "Guide us - continuous supplication for guidance", ur: "ہمیں ہدایت دے - مسلسل دعائے ہدایت" }, ayahs: [6] }
       ]
     },
     threeGroupsOfPeople: {
       name: "Three Groups of People",
+      nameUr: "لوگوں کے تین گروہ",
       nameAr: "الفئات الثلاث من الناس",
       color: '#06B6D4',
       icon: 'Users',
       concepts: [
-        { term: "Al-Mun'am Alayhim", arabic: "المنعم عليهم", meaning: "Those blessed - prophets, truthful, martyrs, righteous", ayahs: [7] },
-        { term: "Al-Maghdub Alayhim", arabic: "المغضوب عليهم", meaning: "Those who earned wrath - knew truth but rejected it", ayahs: [7] },
-        { term: "Ad-Dallin", arabic: "الضالين", meaning: "Those astray - deviated from truth through ignorance", ayahs: [7] },
-        { term: "Knowledge vs Action", arabic: "العلم والعمل", meaning: "Wrath for rejecting known truth; straying for ignorance", ayahs: [7] }
+        { term: "Al-Mun'am Alayhim", arabic: "المنعم عليهم", meaning: { en: "Those blessed - prophets, truthful, martyrs, righteous", ur: "انعام والے - انبیاء، صدیقین، شہداء، صالحین" }, ayahs: [7] },
+        { term: "Al-Maghdub Alayhim", arabic: "المغضوب عليهم", meaning: { en: "Those who earned wrath - knew truth but rejected it", ur: "غضب والے - سچائی جان کر بھی رد کرنے والے" }, ayahs: [7] },
+        { term: "Ad-Dallin", arabic: "الضالين", meaning: { en: "Those astray - deviated from truth through ignorance", ur: "گمراہ لوگ - جہالت کی وجہ سے سچائی سے بھٹکنے والے" }, ayahs: [7] },
+        { term: "Knowledge vs Action", arabic: "العلم والعمل", meaning: { en: "Wrath for rejecting known truth; straying for ignorance", ur: "جانتے ہوئے انکار پر غضب؛ نادانی میں بھٹکنا گمراہی" }, ayahs: [7] }
       ]
     },
     prayerStructure: {
       name: "Structure of Perfect Prayer",
+      nameUr: "کامل دعا کی ساخت",
       nameAr: "بنية الدعاء الكامل",
       color: '#EC4899',
       icon: 'Book',
       concepts: [
-        { term: "Praise First", arabic: "التقديم بالحمد", meaning: "Beginning supplication with praise of Allah", ayahs: [2, 3, 4] },
-        { term: "Covenant of Worship", arabic: "عهد العبودية", meaning: "Declaration of exclusive worship before asking", ayahs: [5] },
-        { term: "Supplication", arabic: "الدعاء", meaning: "Requesting guidance after establishing relationship", ayahs: [6, 7] },
-        { term: "Collective Prayer", arabic: "صيغة الجمع", meaning: "We - praying as community, not just individual", ayahs: [5, 6, 7] }
+        { term: "Praise First", arabic: "التقديم بالحمد", meaning: { en: "Beginning supplication with praise of Allah", ur: "دعا کا آغاز اللہ کی حمد سے" }, ayahs: [2, 3, 4] },
+        { term: "Covenant of Worship", arabic: "عهد العبودية", meaning: { en: "Declaration of exclusive worship before asking", ur: "مانگنے سے پہلے خالص عبادت کا عہد" }, ayahs: [5] },
+        { term: "Supplication", arabic: "الدعاء", meaning: { en: "Requesting guidance after establishing relationship", ur: "تعلق قائم کرنے کے بعد ہدایت کی درخواست" }, ayahs: [6, 7] },
+        { term: "Collective Prayer", arabic: "صيغة الجمع", meaning: { en: "We - praying as community, not just individual", ur: "ہم - اجتماعی دعا، صرف انفرادی نہیں" }, ayahs: [5, 6, 7] }
       ]
     }
   },
 
   relationships: [
-    { from: "Ar-Rahman", to: "Ar-Raheem", type: "complementary", description: "Rahman is vast mercy, Raheem is deep mercy; together they encompass all" },
-    { from: "Al-Hamd", to: "Rabb al-Alamin", type: "causation", description: "Praise is due because He is Lord of all worlds" },
-    { from: "Malik Yawm ad-Din", to: "Ibadah", type: "motivation", description: "Awareness of Judgment Day motivates sincere worship" },
-    { from: "Ibadah", to: "Istianah", type: "prerequisite", description: "True worship requires seeking help only from Allah" },
-    { from: "Istianah", to: "Hidayah", type: "consequence", description: "Seeking Allah's help leads to receiving guidance" },
-    { from: "Sirat al-Mustaqim", to: "Mun'am Alayhim", type: "definition", description: "The Straight Path is the way of those blessed by Allah" },
-    { from: "Maghdub Alayhim", to: "Dallin", type: "contrast", description: "Two types of deviation: willful rejection vs ignorant straying" },
-    { from: "Praise", to: "Supplication", type: "order", description: "Proper prayer begins with praise before making requests" }
+    { from: "Ar-Rahman", to: "Ar-Raheem", type: "complementary", description: { en: "Rahman is vast mercy, Raheem is deep mercy; together they encompass all", ur: "رحمٰن وسیع رحمت ہے، رحیم گہری رحمت ہے؛ دونوں مل کر سب کو گھیر لیتے ہیں" } },
+    { from: "Al-Hamd", to: "Rabb al-Alamin", type: "causation", description: { en: "Praise is due because He is Lord of all worlds", ur: "حمد اس لیے واجب ہے کہ وہ تمام جہانوں کا رب ہے" } },
+    { from: "Malik Yawm ad-Din", to: "Ibadah", type: "motivation", description: { en: "Awareness of Judgment Day motivates sincere worship", ur: "یومِ جزا کا شعور خالص عبادت کی ترغیب دیتا ہے" } },
+    { from: "Ibadah", to: "Istianah", type: "prerequisite", description: { en: "True worship requires seeking help only from Allah", ur: "سچی عبادت کے لیے صرف اللہ سے مدد مانگنا ضروری ہے" } },
+    { from: "Istianah", to: "Hidayah", type: "consequence", description: { en: "Seeking Allah's help leads to receiving guidance", ur: "اللہ سے مدد مانگنا ہدایت ملنے کا سبب بنتا ہے" } },
+    { from: "Sirat al-Mustaqim", to: "Mun'am Alayhim", type: "definition", description: { en: "The Straight Path is the way of those blessed by Allah", ur: "سیدھا راستہ ان لوگوں کا راستہ ہے جن پر اللہ نے انعام کیا" } },
+    { from: "Maghdub Alayhim", to: "Dallin", type: "contrast", description: { en: "Two types of deviation: willful rejection vs ignorant straying", ur: "دو قسم کے انحراف: جان بوجھ کر انکار بمقابلہ جہالت میں بھٹکنا" } },
+    { from: "Praise", to: "Supplication", type: "order", description: { en: "Proper prayer begins with praise before making requests", ur: "صحیح دعا مانگنے سے پہلے حمد سے شروع ہوتی ہے" } }
   ],
 
   thematicFlow: {
-    title: "From Divine Praise to Human Supplication",
+    title: { en: "From Divine Praise to Human Supplication", ur: "الٰہی حمد سے انسانی دعا تک" },
     stages: [
-      { name: "Basmala", ayahs: [1], description: "Beginning with Allah's name and mercy attributes" },
-      { name: "Universal Praise", ayahs: [2], description: "All praise to the Lord of all worlds" },
-      { name: "Mercy Attributes", ayahs: [3], description: "Emphasizing Allah's infinite mercy" },
-      { name: "Judgment Day", ayahs: [4], description: "Master of the Day of Recompense - accountability" },
-      { name: "Declaration of Servitude", ayahs: [5], description: "You alone we worship and seek help from" },
-      { name: "Request for Guidance", ayahs: [6], description: "Guide us to the Straight Path" },
-      { name: "Clarification of Path", ayahs: [7], description: "Path of blessed, not those in error" }
+      { name: "Basmala", ayahs: [1], description: { en: "Beginning with Allah's name and mercy attributes", ur: "اللہ کے نام اور رحمت کی صفات سے آغاز" } },
+      { name: "Universal Praise", ayahs: [2], description: { en: "All praise to the Lord of all worlds", ur: "تمام جہانوں کے رب کی حمد" } },
+      { name: "Mercy Attributes", ayahs: [3], description: { en: "Emphasizing Allah's infinite mercy", ur: "اللہ کی لامحدود رحمت پر زور" } },
+      { name: "Judgment Day", ayahs: [4], description: { en: "Master of the Day of Recompense - accountability", ur: "یومِ جزا کا مالک - احتساب" } },
+      { name: "Declaration of Servitude", ayahs: [5], description: { en: "You alone we worship and seek help from", ur: "صرف تیری ہی عبادت کرتے ہیں اور تجھ سے ہی مدد مانگتے ہیں" } },
+      { name: "Request for Guidance", ayahs: [6], description: { en: "Guide us to the Straight Path", ur: "ہمیں سیدھے راستے کی ہدایت دے" } },
+      { name: "Clarification of Path", ayahs: [7], description: { en: "Path of blessed, not those in error", ur: "انعام والوں کا راستہ، نہ کہ غلطی والوں کا" } }
     ]
   },
 
   uniqueInsight: {
-    title: "Umm al-Quran (Mother of the Quran)",
-    insight: "Al-Fatiha is called 'Umm al-Quran' (Mother of the Quran) and 'Al-Sab' al-Mathani' (The Seven Oft-Repeated) because it contains the essence of the entire Quran in just seven verses. It encapsulates three core pillars: Tawhid (Divine Unity - verses 1-4), Ibadah (Worship - verse 5), and guidance through following the righteous and avoiding error (verses 6-7). Every concept in the Quran is either elaboration of praise (Hamd), explanation of mercy (Rahmah), description of the Day of Judgment, clarification of worship, or guidance to the Straight Path. Muslims recite this surah at least 17 times daily in the five obligatory prayers - making it the most recited passage in human history. The Prophet (peace be upon him) said: 'No prayer is valid without the Fatiha.' A hadith qudsi states Allah divided Al-Fatiha into two halves - one for Him (verses 1-4) and one for His servant (verses 5-7) - with the promise: 'My servant will have what he asks for.' This divine conversation makes every prayer an intimate dialogue between the servant and the Lord.",
+    title: { en: "Umm al-Quran (Mother of the Quran)", ur: "اُمّ القرآن (قرآن کی ماں)" },
+    insight: {
+      en: "Al-Fatiha is called 'Umm al-Quran' (Mother of the Quran) and 'Al-Sab' al-Mathani' (The Seven Oft-Repeated) because it contains the essence of the entire Quran in just seven verses. It encapsulates three core pillars: Tawhid (Divine Unity - verses 1-4), Ibadah (Worship - verse 5), and guidance through following the righteous and avoiding error (verses 6-7). Every concept in the Quran is either elaboration of praise (Hamd), explanation of mercy (Rahmah), description of the Day of Judgment, clarification of worship, or guidance to the Straight Path. Muslims recite this surah at least 17 times daily in the five obligatory prayers - making it the most recited passage in human history. The Prophet (peace be upon him) said: 'No prayer is valid without the Fatiha.' A hadith qudsi states Allah divided Al-Fatiha into two halves - one for Him (verses 1-4) and one for His servant (verses 5-7) - with the promise: 'My servant will have what he asks for.' This divine conversation makes every prayer an intimate dialogue between the servant and the Lord.",
+      ur: "الفاتحہ کو 'اُمّ القرآن' اور 'السبع المثانی' (سات بار بار دہرائی جانے والی) کہا جاتا ہے کیونکہ صرف سات آیات میں پورے قرآن کا خلاصہ موجود ہے۔ اس میں تین بنیادی ستون ہیں: توحید (آیات 1-4)، عبادت (آیت 5)، اور صالحین کی پیروی اور گمراہی سے بچنا (آیات 6-7)۔ مسلمان پانچ فرض نمازوں میں روزانہ کم از کم 17 بار یہ سورت پڑھتے ہیں - یہ انسانی تاریخ میں سب سے زیادہ پڑھا جانے والا کلام ہے۔ نبی ﷺ نے فرمایا: 'بغیر فاتحہ کے نماز نہیں۔' ایک حدیثِ قدسی میں اللہ نے فرمایا کہ فاتحہ کو دو حصوں میں تقسیم کیا - ایک اپنے لیے (آیات 1-4) اور ایک بندے کے لیے (آیات 5-7) - اور وعدہ کیا: 'میرے بندے کو وہ ملے گا جو وہ مانگے۔'"
+    },
     arabicTerm: "أم القرآن والسبع المثاني",
-    rootMeaning: "ف-ت-ح (to open) - The Opening that unlocks the treasures of the Quran",
+    rootMeaning: { en: "ف-ت-ح (to open) - The Opening that unlocks the treasures of the Quran", ur: "ف-ت-ح (کھولنا) - وہ آغاز جو قرآن کے خزانے کھولتا ہے" },
     keyAyah: 5
   },
 
   historicalContext: {
-    revelationPeriod: "Early Makkan period, one of the first complete surahs revealed",
-    occasion: "Revealed as the perfect form of prayer and supplication, teaching the early Muslims how to approach and communicate with Allah. Some scholars consider it the first complete surah revealed, though individual verses like Iqra (96:1-5) came earlier.",
-    note: "Al-Fatiha is the only surah whose recitation is obligatory in every unit (rakat) of prayer. Its revelation marks the establishment of the formal prayer structure in Islam. The surah is also used for ruqyah (spiritual healing) and is recited at the opening of significant events."
+    revelationPeriod: { en: "Early Makkan period, one of the first complete surahs revealed", ur: "ابتدائی مکی دور، پہلی مکمل نازل ہونے والی سورتوں میں سے ایک" },
+    occasion: { en: "Revealed as the perfect form of prayer and supplication, teaching the early Muslims how to approach and communicate with Allah. Some scholars consider it the first complete surah revealed, though individual verses like Iqra (96:1-5) came earlier.", ur: "نماز اور دعا کی کامل صورت کے طور پر نازل ہوئی، ابتدائی مسلمانوں کو اللہ سے رابطے کا طریقہ سکھاتی ہے۔ بعض علماء اسے پہلی مکمل نازل شدہ سورت مانتے ہیں۔" },
+    note: { en: "Al-Fatiha is the only surah whose recitation is obligatory in every unit (rakat) of prayer. Its revelation marks the establishment of the formal prayer structure in Islam. The surah is also used for ruqyah (spiritual healing) and is recited at the opening of significant events.", ur: "الفاتحہ واحد سورت ہے جس کا نماز کی ہر رکعت میں پڑھنا فرض ہے۔ یہ رقیہ (روحانی علاج) کے لیے بھی استعمال ہوتی ہے اور اہم مواقع کے آغاز پر پڑھی جاتی ہے۔" }
   },
 
   linguisticFeatures: {
     features: [
-      { name: "Basmala Integration", description: "بِسْمِ اللَّهِ - Beginning formula", example: "Establishes mercy as the frame for all action", ayah: 1 },
-      { name: "Definite Article Al", description: "الحمد - THE praise (not just praise)", example: "All praise of all kinds at all times", ayah: 2 },
-      { name: "Object Fronting (Taqdeem)", description: "إِيَّاكَ نَعْبُدُ - You alone we worship", example: "Fronting the object for exclusivity emphasis", ayah: 5 },
-      { name: "Person Shift (Iltifat)", description: "Third person to second person", example: "From 'Rabb' (He) to 'Iyyaka' (You) - intimacy", ayah: 5 },
-      { name: "Plural of Inclusion", description: "نَعْبُدُ، نَسْتَعِينُ، اهْدِنَا", example: "We - communal worship, not individualistic", ayah: 5 }
+      { name: "Basmala Integration", description: "بِسْمِ اللَّهِ - Beginning formula", example: { en: "Establishes mercy as the frame for all action", ur: "رحمت کو ہر عمل کا دائرہ قرار دیتا ہے" }, ayah: 1 },
+      { name: "Definite Article Al", description: "الحمد - THE praise (not just praise)", example: { en: "All praise of all kinds at all times", ur: "ہر قسم کی، ہر وقت کی تمام تعریف" }, ayah: 2 },
+      { name: "Object Fronting (Taqdeem)", description: "إِيَّاكَ نَعْبُدُ - You alone we worship", example: { en: "Fronting the object for exclusivity emphasis", ur: "تاکید کے لیے مفعول کو مقدم کرنا" }, ayah: 5 },
+      { name: "Person Shift (Iltifat)", description: "Third person to second person", example: { en: "From 'Rabb' (He) to 'Iyyaka' (You) - intimacy", ur: "'رب' (وہ) سے 'ایاک' (تو) کی طرف - قربت کا اظہار" }, ayah: 5 },
+      { name: "Plural of Inclusion", description: "نَعْبُدُ، نَسْتَعِينُ، اهْدِنَا", example: { en: "We - communal worship, not individualistic", ur: "ہم - اجتماعی عبادت، انفرادی نہیں" }, ayah: 5 }
     ]
   },
 

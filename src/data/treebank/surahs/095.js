@@ -33,7 +33,13 @@ export const TREEBANK_DATA = {
       hi: "अंजीर और जैतून की कसम",
       bn: "শপথ ডুমুর ও জলপাইয়ের",
       tr: "İncir ve zeytine andolsun",
-      id: "Demi (buah) tin dan (buah) zaitun"
+      id: "Demi (buah) tin dan (buah) zaitun",
+    structure: {
+      relationships: [
+        { from: 1, to: 2, label: 'قسم' },
+        { from: 1, to: 2, label: 'مضاف + مضاف إليه' }
+      ],
+    },
     },
     words: [
       {
@@ -174,7 +180,12 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(وَ)[oath] → (طُورِ)[noun] ← (سِينِينَ)[proper noun/mudaf ilayhi]"
+    dependencyStructure: "(وَ)[oath] → (طُورِ)[noun] ← (سِينِينَ)[proper noun/mudaf ilayhi]",
+    structure: {
+      relationships: [
+      { from: 1, to: 2, label: 'مضاف + مضاف إليه' }
+      ],
+    },
   },
 
   3: {
@@ -277,7 +288,13 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(وَ)[oath] → (هٰذَا)[dem] ← (البَلَدِ)[noun] ← (الأَمِينِ)[adj]"
+    dependencyStructure: "(وَ)[oath] → (هٰذَا)[dem] ← (البَلَدِ)[noun] ← (الأَمِينِ)[adj]",
+    structure: {
+      relationships: [
+      { from: 2, to: 3, label: 'موصوف + صفت' },
+      { from: 1, to: 2, label: 'بدل' }
+      ],
+    },
   },
 
   4: {
@@ -467,7 +484,14 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(لَقَدْ)[emphasis] → (خَلَقْنَا)[verb] → (الإِنسَانَ)[object] → (فِي)[prep] → (أَحْسَنِ)[noun] ← (تَقْوِيمٍ)[genitive]"
+    dependencyStructure: "(لَقَدْ)[emphasis] → (خَلَقْنَا)[verb] → (الإِنسَانَ)[object] → (فِي)[prep] → (أَحْسَنِ)[noun] ← (تَقْوِيمٍ)[genitive]",
+    structure: {
+      relationships: [
+      { from: 2, to: 3, label: 'فعل + مفعول به' },
+      { from: 4, to: 5, label: 'جار + مجرور' },
+      { from: 5, to: 6, label: 'مضاف + مضاف إليه' }
+      ],
+    },
   },
 
   5: {
@@ -602,7 +626,12 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(ثُمَّ)[conj] → (رَدَدْنَاهُ)[verb+obj] → (أَسْفَلَ)[noun] ← (سَافِلِينَ)[genitive]"
+    dependencyStructure: "(ثُمَّ)[conj] → (رَدَدْنَاهُ)[verb+obj] → (أَسْفَلَ)[noun] ← (سَافِلِينَ)[genitive]",
+    structure: {
+      relationships: [
+      { from: 3, to: 4, label: 'مضاف + مضاف إليه' }
+      ],
+    },
   },
 
   6: {
@@ -867,7 +896,16 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(إِلَّا)[except] → (الَّذِينَ)[relative] → (آمَنُوا)[verb] + (عَمِلُوا)[verb] → (الصَّالِحَاتِ)[object] | (فَ)[result] → (لَهُم)[prep phrase] ← (أَجْرٌ)[subject] ← (غَيْرُ)[adj] ← (مَمْنُونٍ)[genitive]"
+    dependencyStructure: "(إِلَّا)[except] → (الَّذِينَ)[relative] → (آمَنُوا)[verb] + (عَمِلُوا)[verb] → (الصَّالِحَاتِ)[object] | (فَ)[result] → (لَهُم)[prep phrase] ← (أَجْرٌ)[subject] ← (غَيْرُ)[adj] ← (مَمْنُونٍ)[genitive]",
+    structure: {
+      relationships: [
+      { from: 2, to: 3, label: 'موصول + صلة' },
+      { from: 3, to: 5, label: 'فعل + مفعول به' },
+      { from: 3, to: 4, label: 'عطف' },
+      { from: 4, to: 5, label: 'فعل + مفعول به' },
+      { from: 8, to: 9, label: 'مضاف + مضاف إليه' }
+      ],
+    },
   },
 
   7: {
@@ -879,7 +917,14 @@ export const TREEBANK_DATA = {
       hi: "फिर क्या चीज़ तुझे जज़ा को झुठलाने पर उकसाती है",
       bn: "তাহলে কিসে তোমাকে প্রতিদানকে মিথ্যা বলতে প্ররোচিত করে",
       tr: "Artık sana dini ne yalanlatıyor",
-      id: "Maka apakah yang menyebabkan kamu mendustakan hari pembalasan"
+      id: "Maka apakah yang menyebabkan kamu mendustakan hari pembalasan",
+    structure: {
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' }
+      ],
+    },
     },
     words: [
       {
@@ -1136,7 +1181,13 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(أَ)[interrogative] → (لَيْسَ)[verb] → (اللَّهُ)[subject] → (بِأَحْكَمِ)[predicate] ← (الحَاكِمِينَ)[genitive]"
+    dependencyStructure: "(أَ)[interrogative] → (لَيْسَ)[verb] → (اللَّهُ)[subject] → (بِأَحْكَمِ)[predicate] ← (الحَاكِمِينَ)[genitive]",
+    structure: {
+      relationships: [
+      { from: 1, to: 2, label: 'فعل + فاعل' },
+      { from: 3, to: 4, label: 'مضاف + مضاف إليه' }
+      ],
+    },
   }
 };
 

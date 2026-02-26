@@ -107,7 +107,12 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(أَلْهَىٰكُمُ)[verb+object] ← (ٱلتَّكَاثُرُ)[subject]"
+    dependencyStructure: "(أَلْهَىٰكُمُ)[verb+object] ← (ٱلتَّكَاثُرُ)[subject]",
+    structure: {
+      relationships: [
+      { from: 1, to: 2, label: 'فعل + فاعل' }
+      ],
+    },
   },
 
   2: {
@@ -208,7 +213,12 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(حَتَّىٰ)[conj] → (زُرْتُمُ)[verb] → (ٱلْمَقَابِرَ)[object]"
+    dependencyStructure: "(حَتَّىٰ)[conj] → (زُرْتُمُ)[verb] → (ٱلْمَقَابِرَ)[object]",
+    structure: {
+      relationships: [
+      { from: 2, to: 3, label: 'فعل + مفعول به' }
+      ],
+    },
   },
 
   3: {
@@ -220,7 +230,13 @@ export const TREEBANK_DATA = {
       hi: "हरगिज़ नहीं! जल्द ही तुम जान लोगे",
       bn: "কখনো না! শীঘ্রই তোমরা জানতে পারবে",
       tr: "Hayır! Yakında bileceksiniz",
-      id: "Janganlah begitu! Kelak kamu akan mengetahui"
+      id: "Janganlah begitu! Kelak kamu akan mengetahui",
+    structure: {
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' }
+      ],
+    },
     },
     words: [
       {
@@ -314,7 +330,14 @@ export const TREEBANK_DATA = {
       hi: "फिर हरगिज़ नहीं! जल्द ही तुम जान लोगे",
       bn: "আবার কখনো না! শীঘ্রই তোমরা জানতে পারবে",
       tr: "Yine hayır! Yakında bileceksiniz",
-      id: "Dan janganlah begitu! Kelak kamu akan mengetahui"
+      id: "Dan janganlah begitu! Kelak kamu akan mengetahui",
+    structure: {
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' }
+      ],
+    },
     },
     words: [
       {
@@ -553,7 +576,12 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(كَلَّا)[rejection] → (لَوْ)[conditional] → (تَعْلَمُونَ)[verb] → (عِلْمَ ٱلْيَقِينِ)[cognate-accusative]"
+    dependencyStructure: "(كَلَّا)[rejection] → (لَوْ)[conditional] → (تَعْلَمُونَ)[verb] → (عِلْمَ ٱلْيَقِينِ)[cognate-accusative]",
+    structure: {
+      relationships: [
+      { from: 2, to: 3, label: 'شرط + فعل' }
+      ],
+    },
   },
 
   6: {
@@ -634,7 +662,12 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(لَتَرَوُنَّ)[emphatic-verb] → (ٱلْجَحِيمَ)[object]"
+    dependencyStructure: "(لَتَرَوُنَّ)[emphatic-verb] → (ٱلْجَحِيمَ)[object]",
+    structure: {
+      relationships: [
+      { from: 1, to: 2, label: 'فعل + مفعول به' }
+      ],
+    },
   },
 
   7: {
@@ -758,6 +791,11 @@ export const TREEBANK_DATA = {
         }
       }
     ],
+    structure: {
+      relationships: [
+      { from: 3, to: 4, label: 'مضاف + مضاف إليه' }
+      ],
+    },
     dependencyStructure: "(ثُمَّ)[sequence] → (لَتَرَوُنَّهَا)[emphatic-verb] → (عَيْنَ ٱلْيَقِينِ)[cognate-accusative]"
   },
 
@@ -905,7 +943,12 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(ثُمَّ)[sequence] → (لَتُسْـَٔلُنَّ)[emphatic-passive-verb] → (يَوْمَئِذٍ)[time] → (عَنِ ٱلنَّعِيمِ)[prep-phrase]"
+    dependencyStructure: "(ثُمَّ)[sequence] → (لَتُسْـَٔلُنَّ)[emphatic-passive-verb] → (يَوْمَئِذٍ)[time] → (عَنِ ٱلنَّعِيمِ)[prep-phrase]",
+    structure: {
+      relationships: [
+      { from: 4, to: 5, label: 'جار + مجرور' }
+      ],
+    },
   }
 };
 

@@ -14,30 +14,31 @@ export const ONTOLOGY = {
   categories: {
     cosmicOaths: {
       name: "The Cosmic Oaths",
+      nameUr: "کائناتی قسمیں",
       nameArabic: "القسم الكوني",
       color: '#8B5CF6',
       icon: 'Moon',
-      description: "Divine oaths by natural phenomena representing human spiritual states",
+      description: { en: "Divine oaths by natural phenomena representing human spiritual states", ur: "قدرتی مظاہر کی الٰہی قسمیں جو انسانی روحانی حالتوں کی نمائندگی کرتی ہیں" },
       concepts: [
         {
           term: "اللَّيْلِ إِذَا يَغْشَىٰ",
           transliteration: "Al-Layli idhaa yaghshaa",
-          meaning: "The night when it covers",
-          explanation: "Night covering represents the state of those who cover/reject truth. The darkness of spiritual blindness, miserliness, and denial.",
+          meaning: { en: "The night when it covers", ur: "رات جب ڈھانپ لے" },
+          explanation: { en: "Night covering represents the state of those who cover/reject truth. The darkness of spiritual blindness, miserliness, and denial.", ur: "رات کا ڈھانپنا ان لوگوں کی حالت کی نمائندگی کرتا ہے جو حق کو ڈھانپتے/رد کرتے ہیں۔ روحانی اندھے پن، بخل اور انکار کی تاریکی۔" },
           verseRef: "92:1"
         },
         {
           term: "النَّهَارِ إِذَا تَجَلَّىٰ",
           transliteration: "An-Nahaari idhaa tajallaa",
-          meaning: "The day when it appears/manifests",
-          explanation: "Day manifesting represents clarity, truth, and those who live in spiritual light. Tajallaa (manifestation) - truth unveiled.",
+          meaning: { en: "The day when it appears/manifests", ur: "دن جب ظاہر ہو/نمودار ہو" },
+          explanation: { en: "Day manifesting represents clarity, truth, and those who live in spiritual light. Tajallaa (manifestation) - truth unveiled.", ur: "دن کا ظاہر ہونا وضاحت، حق اور روحانی روشنی میں رہنے والوں کی نمائندگی۔ تجلّیٰ (ظہور) - حق کا بے نقاب ہونا۔" },
           verseRef: "92:2"
         },
         {
           term: "مَا خَلَقَ الذَّكَرَ وَالْأُنثَىٰ",
           transliteration: "Maa khalaqa adh-dhakara wal-unthaa",
-          meaning: "He who created male and female",
-          explanation: "The Creator of complementary pairs: night/day, male/female, and similarly, two spiritual paths. Divine design includes diversity and choice.",
+          meaning: { en: "He who created male and female", ur: "اس ذات کی جس نے نر اور مادہ بنایا" },
+          explanation: { en: "The Creator of complementary pairs: night/day, male/female, and similarly, two spiritual paths. Divine design includes diversity and choice.", ur: "تکمیلی جوڑوں کا خالق: رات/دن، نر/مادہ، اور اسی طرح دو روحانی راستے۔ الٰہی ڈیزائن میں تنوع اور انتخاب شامل ہے۔" },
           verseRef: "92:3"
         }
       ]
@@ -45,16 +46,17 @@ export const ONTOLOGY = {
 
     diverseEfforts: {
       name: "The Diverse Human Efforts",
+      nameUr: "انسانی کوششوں کا تنوع",
       nameArabic: "السعي المختلف",
       color: '#06B6D4',
       icon: 'Users',
-      description: "The central thesis - human striving leads in different directions",
+      description: { en: "The central thesis - human striving leads in different directions", ur: "مرکزی مقالہ - انسانی کوشش مختلف سمتوں کی طرف لے جاتی ہے" },
       concepts: [
         {
           term: "إِنَّ سَعْيَكُمْ لَشَتَّىٰ",
           transliteration: "Inna sa'yakum la-shattaa",
-          meaning: "Indeed, your efforts are diverse",
-          explanation: "The key thesis after oaths: human efforts diverge fundamentally. Sa'y (striving) goes in opposite directions based on choices. Not all paths lead to the same destination.",
+          meaning: { en: "Indeed, your efforts are diverse", ur: "بیشک تمہاری کوششیں مختلف ہیں" },
+          explanation: { en: "The key thesis after oaths: human efforts diverge fundamentally. Sa'y (striving) goes in opposite directions based on choices. Not all paths lead to the same destination.", ur: "قسموں کے بعد مرکزی نکتہ: انسانی کوششیں بنیادی طور پر مختلف ہیں۔ سعی (کوشش) انتخاب کی بنیاد پر مخالف سمتوں میں جاتی ہے۔ تمام راستے ایک ہی منزل تک نہیں لے جاتے۔" },
           verseRef: "92:4"
         }
       ]
@@ -62,37 +64,38 @@ export const ONTOLOGY = {
 
     pathOfGenerosity: {
       name: "The Path of Generosity",
+      nameUr: "سخاوت کا راستہ",
       nameArabic: "طريق العطاء",
       color: '#10B981',
       icon: 'Heart',
-      description: "Three qualities that lead to ease",
+      description: { en: "Three qualities that lead to ease", ur: "تین خوبیاں جو آسانی کی طرف لے جاتی ہیں" },
       concepts: [
         {
           term: "أَعْطَىٰ",
           transliteration: "A'taa",
-          meaning: "He who gives",
-          explanation: "First quality: generosity without limits. The verb is absolute (no object specified) - giving of wealth, time, self, knowledge, everything. Opposite of holding back.",
+          meaning: { en: "He who gives", ur: "جو دیتا ہے" },
+          explanation: { en: "First quality: generosity without limits. The verb is absolute (no object specified) - giving of wealth, time, self, knowledge, everything. Opposite of holding back.", ur: "پہلی خوبی: بے حد سخاوت۔ فعل مطلق ہے (کوئی مفعول نہیں) - مال، وقت، جان، علم، سب کچھ دینا۔ روکنے کی ضد۔" },
           verseRef: "92:5"
         },
         {
           term: "اتَّقَىٰ",
           transliteration: "Ittaqaa",
-          meaning: "And fears Allah / is God-conscious",
-          explanation: "Second quality: taqwa - protecting oneself through consciousness of Allah. Internal compass that guides external behavior.",
+          meaning: { en: "And fears Allah / is God-conscious", ur: "اور اللہ سے ڈرتا ہے / خدا ترس ہے" },
+          explanation: { en: "Second quality: taqwa - protecting oneself through consciousness of Allah. Internal compass that guides external behavior.", ur: "دوسری خوبی: تقویٰ - اللہ کی آگاہی سے خود کو بچانا۔ باطنی رہنما جو ظاہری عمل کی رہنمائی کرتا ہے۔" },
           verseRef: "92:5"
         },
         {
           term: "صَدَّقَ بِالْحُسْنَىٰ",
           transliteration: "Saddaqa bil-Husnaa",
-          meaning: "And believes in the best",
-          explanation: "Third quality: believing in al-Husnaa - the best reward, La ilaha illa Allah, Paradise, or all good from Allah. Faith driving action.",
+          meaning: { en: "And believes in the best", ur: "اور سب سے اچھی بات کی تصدیق کی" },
+          explanation: { en: "Third quality: believing in al-Husnaa - the best reward, La ilaha illa Allah, Paradise, or all good from Allah. Faith driving action.", ur: "تیسری خوبی: الحسنیٰ پر یقین - بہترین اجر، لا الٰہ الا اللہ، جنت، یا اللہ کی طرف سے تمام بھلائی۔ ایمان عمل کی قوت محرکہ۔" },
           verseRef: "92:6"
         },
         {
           term: "فَسَنُيَسِّرُهُ لِلْيُسْرَىٰ",
           transliteration: "Fa-sa-nuyassiruhu lil-Yusraa",
-          meaning: "We will ease him toward ease",
-          explanation: "Divine promise: those who give find giving easier. Ease compounds - good deeds become habitual, leading to eternal ease. Root يسر used twice for emphasis.",
+          meaning: { en: "We will ease him toward ease", ur: "ہم اسے آسانی کی طرف آسان کر دیں گے" },
+          explanation: { en: "Divine promise: those who give find giving easier. Ease compounds - good deeds become habitual, leading to eternal ease. Root يسر used twice for emphasis.", ur: "الٰہی وعدہ: جو دیتے ہیں ان کے لیے دینا آسان ہوتا جاتا ہے۔ آسانی بڑھتی ہے - نیک اعمال عادت بن جاتے ہیں، ابدی آسانی کی طرف لے جاتے ہیں۔ جڑ یسر دو بار تاکید کے لیے۔" },
           verseRef: "92:7"
         }
       ]
@@ -100,37 +103,38 @@ export const ONTOLOGY = {
 
     pathOfMiserliness: {
       name: "The Path of Miserliness",
+      nameUr: "بخل کا راستہ",
       nameArabic: "طريق البخل",
       color: '#EF4444',
       icon: 'AlertTriangle',
-      description: "Three qualities that lead to difficulty",
+      description: { en: "Three qualities that lead to difficulty", ur: "تین خصلتیں جو مشکل کی طرف لے جاتی ہیں" },
       concepts: [
         {
           term: "بَخِلَ",
           transliteration: "Bakhila",
-          meaning: "He who withholds/is stingy",
-          explanation: "First negative quality: withholding what should be given. Opposite of a'taa. Bukhl (miserliness) is not just with money but with kindness, help, and compassion.",
+          meaning: { en: "He who withholds/is stingy", ur: "جو روکے / بخیل ہو" },
+          explanation: { en: "First negative quality: withholding what should be given. Opposite of a'taa. Bukhl (miserliness) is not just with money but with kindness, help, and compassion.", ur: "پہلی بری خصلت: جو دینا چاہیے اسے روکنا۔ اعطاء کی ضد۔ بخل صرف مال میں نہیں بلکہ مہربانی، مدد اور شفقت میں بھی ہوتا ہے۔" },
           verseRef: "92:8"
         },
         {
           term: "اسْتَغْنَىٰ",
           transliteration: "Istaghnaa",
-          meaning: "And considers himself self-sufficient",
-          explanation: "Second negative quality: feeling independent of Allah and others. Form X indicates self-perception - considering oneself needless of guidance. The height of arrogance.",
+          meaning: { en: "And considers himself self-sufficient", ur: "اور خود کو بے نیاز سمجھے" },
+          explanation: { en: "Second negative quality: feeling independent of Allah and others. Form X indicates self-perception - considering oneself needless of guidance. The height of arrogance.", ur: "دوسری بری خصلت: اللہ اور دوسروں سے بے نیازی محسوس کرنا۔ باب استفعال خود کی سوچ ظاہر کرتا ہے - خود کو ہدایت سے بے نیاز سمجھنا۔ تکبر کی انتہا۔" },
           verseRef: "92:8"
         },
         {
           term: "كَذَّبَ بِالْحُسْنَىٰ",
           transliteration: "Kadhdhaba bil-Husnaa",
-          meaning: "And denies the best",
-          explanation: "Third negative quality: actively calling truth a lie. Not passive disbelief but active rejection. Form II intensifies - deliberately choosing to deny.",
+          meaning: { en: "And denies the best", ur: "اور سب سے اچھی بات کو جھٹلائے" },
+          explanation: { en: "Third negative quality: actively calling truth a lie. Not passive disbelief but active rejection. Form II intensifies - deliberately choosing to deny.", ur: "تیسری بری خصلت: حق کو جان بوجھ کر جھوٹ قرار دینا۔ غیر فعال بے ایمانی نہیں بلکہ فعال انکار۔ باب تفعیل شدت ظاہر کرتا ہے - جان بوجھ کر انکار۔" },
           verseRef: "92:9"
         },
         {
           term: "فَسَنُيَسِّرُهُ لِلْعُسْرَىٰ",
           transliteration: "Fa-sa-nuyassiruhu lil-'Usraa",
-          meaning: "We will ease him toward difficulty",
-          explanation: "Devastating irony: 'eased' toward hardship. Sin becomes easy, leading to permanent difficulty. The path of miserliness seems easy initially but leads to eternal hardship.",
+          meaning: { en: "We will ease him toward difficulty", ur: "ہم اسے مشکل کی طرف آسان کر دیں گے" },
+          explanation: { en: "Devastating irony: 'eased' toward hardship. Sin becomes easy, leading to permanent difficulty. The path of miserliness seems easy initially but leads to eternal hardship.", ur: "تباہ کن ستم ظریفی: مشکل کی طرف 'آسان' کر دیا۔ گناہ آسان ہو جاتا ہے، مستقل مشکل کی طرف لے جاتا ہے۔ بخل کا راستہ ابتداء میں آسان لگتا ہے لیکن ابدی مشکل تک لے جاتا ہے۔" },
           verseRef: "92:10"
         }
       ]
@@ -138,30 +142,31 @@ export const ONTOLOGY = {
 
     consequencesOfChoice: {
       name: "Consequences of Spiritual Choices",
+      nameUr: "روحانی انتخاب کے نتائج",
       nameArabic: "عواقب الاختيار الروحي",
       color: '#F59E0B',
       icon: 'Scale',
-      description: "What happens to accumulated wealth and the divine response",
+      description: { en: "What happens to accumulated wealth and the divine response", ur: "جمع شدہ دولت کا کیا ہوتا ہے اور الٰہی جواب" },
       concepts: [
         {
           term: "وَمَا يُغْنِي عَنْهُ مَالُهُ إِذَا تَرَدَّىٰ",
           transliteration: "Wa maa yughnee 'anhu maaluhu idhaa taraddaa",
-          meaning: "His wealth will not avail him when he falls",
-          explanation: "Poetic justice: He claimed to be ghaniy (rich/independent), but his maal (wealth) won't bring any ghinaa (benefit) when he taraddaa (falls into destruction). Wordplay emphasizes the futility.",
+          meaning: { en: "His wealth will not avail him when he falls", ur: "اس کا مال اسے کچھ فائدہ نہیں دے گا جب وہ گرے گا" },
+          explanation: { en: "Poetic justice: He claimed to be ghaniy (rich/independent), but his maal (wealth) won't bring any ghinaa (benefit) when he taraddaa (falls into destruction). Wordplay emphasizes the futility.", ur: "شعری انصاف: اس نے غنی (امیر/بے نیاز) ہونے کا دعویٰ کیا، لیکن اس کا مال کوئی غنا (فائدہ) نہیں دے گا جب وہ تردّیٰ (ہلاکت میں گرے گا)۔ فعلی صنعت بے فائدگی پر زور دیتی ہے۔" },
           verseRef: "92:11"
         },
         {
           term: "إِنَّ عَلَيْنَا لَلْهُدَىٰ",
           transliteration: "Inna 'alaynaa lal-Hudaa",
-          meaning: "Indeed, upon Us is guidance",
-          explanation: "Allah's responsibility is to show the path clearly. Both paths have been explained. Human responsibility is to choose. Guidance has been given; excuse has been removed.",
+          meaning: { en: "Indeed, upon Us is guidance", ur: "بیشک ہدایت دینا ہمارے ذمے ہے" },
+          explanation: { en: "Allah's responsibility is to show the path clearly. Both paths have been explained. Human responsibility is to choose. Guidance has been given; excuse has been removed.", ur: "اللہ کی ذمہ داری راستہ واضح طور پر دکھانا ہے۔ دونوں راستے بیان کر دیے گئے ہیں۔ انسان کی ذمہ داری انتخاب کرنا ہے۔ ہدایت دے دی گئی، عذر ختم ہو گیا۔" },
           verseRef: "92:12"
         },
         {
           term: "وَإِنَّ لَنَا لَلْآخِرَةَ وَالْأُولَىٰ",
           transliteration: "Wa inna lanaa lal-Aakhirata wal-Oolaa",
-          meaning: "And to Us belongs the Hereafter and the first",
-          explanation: "Allah owns both worlds completely. The miser's wealth is actually Allah's, temporarily loaned. Both worlds belong to Allah, so seeking His pleasure is the wisest investment.",
+          meaning: { en: "And to Us belongs the Hereafter and the first", ur: "اور آخرت اور دنیا ہماری ہے" },
+          explanation: { en: "Allah owns both worlds completely. The miser's wealth is actually Allah's, temporarily loaned. Both worlds belong to Allah, so seeking His pleasure is the wisest investment.", ur: "اللہ دونوں جہان کا مکمل مالک ہے۔ بخیل کا مال اصل میں اللہ کا ہے، عارضی طور پر قرض دیا گیا۔ دونوں جہان اللہ کے ہیں، اس لیے اس کی رضا حاصل کرنا سب سے عقلمندانہ سرمایہ کاری ہے۔" },
           verseRef: "92:13"
         }
       ]
@@ -169,30 +174,31 @@ export const ONTOLOGY = {
 
     fireAndWarning: {
       name: "The Blazing Fire",
+      nameUr: "بھڑکتی آگ",
       nameArabic: "النار المتلظية",
       color: '#EF4444',
       icon: 'Zap',
-      description: "Warning about the fire and who enters it",
+      description: { en: "Warning about the fire and who enters it", ur: "آگ کے بارے میں تنبیہ اور اس میں داخل ہونے والے" },
       concepts: [
         {
           term: "نَارًا تَلَظَّىٰ",
           transliteration: "Naaran taladhdhaa",
-          meaning: "A fire blazing intensely",
-          explanation: "The Fire described with onomatopoeia - taladhdhaa sounds like crackling flames. Indefinite 'naaran' emphasizes its indescribability. Continuous present tense = always burning.",
+          meaning: { en: "A fire blazing intensely", ur: "شدید بھڑکتی آگ" },
+          explanation: { en: "The Fire described with onomatopoeia - taladhdhaa sounds like crackling flames. Indefinite 'naaran' emphasizes its indescribability. Continuous present tense = always burning.", ur: "آگ آواز کی نقل سے بیان کی گئی - تلظّیٰ بھڑکتی آگ کی آواز جیسا۔ نکرہ 'ناراً' ناقابل بیان ہونے پر زور۔ مضارع مستمر = ہمیشہ جلتی رہنے والی۔" },
           verseRef: "92:14"
         },
         {
           term: "الْأَشْقَى",
           transliteration: "Al-Ashqaa",
-          meaning: "The most wretched",
-          explanation: "Superlative form - the worst possible outcome. The ashqaa is defined by two actions: kadhdhaba (denied) and tawalla (turned away). Ultimate spiritual failure.",
+          meaning: { en: "The most wretched", ur: "سب سے بدبخت" },
+          explanation: { en: "Superlative form - the worst possible outcome. The ashqaa is defined by two actions: kadhdhaba (denied) and tawalla (turned away). Ultimate spiritual failure.", ur: "افعل التفضیل - بدترین ممکنہ انجام۔ اشقیٰ دو اعمال سے بیان ہوتا ہے: کذّب (جھٹلایا) اور تولّیٰ (منہ پھیر لیا)۔ حتمی روحانی ناکامی۔" },
           verseRef: "92:15"
         },
         {
           term: "كَذَّبَ وَتَوَلَّىٰ",
           transliteration: "Kadhdhaba wa Tawallaa",
-          meaning: "Denied and turned away",
-          explanation: "Double rejection: verbal (kadhdhaba - calling truth a lie) and physical (tawalla - turning one's back). Complete rejection in word and deed.",
+          meaning: { en: "Denied and turned away", ur: "جھٹلایا اور منہ پھیر لیا" },
+          explanation: { en: "Double rejection: verbal (kadhdhaba - calling truth a lie) and physical (tawalla - turning one's back). Complete rejection in word and deed.", ur: "دوہرا انکار: زبانی (کذّب - حق کو جھوٹ کہنا) اور جسمانی (تولّیٰ - پیٹھ پھیرنا)۔ قول اور عمل میں مکمل انکار۔" },
           verseRef: "92:16"
         }
       ]
@@ -200,44 +206,45 @@ export const ONTOLOGY = {
 
     theRighteous: {
       name: "The Most Righteous",
+      nameUr: "سب سے متقی",
       nameArabic: "الأتقى",
       color: '#10B981',
       icon: 'Sparkles',
-      description: "Description of the one saved from the Fire",
+      description: { en: "Description of the one saved from the Fire", ur: "آگ سے بچائے جانے والے کا بیان" },
       concepts: [
         {
           term: "الْأَتْقَى",
           transliteration: "Al-Atqaa",
-          meaning: "The most righteous/God-conscious",
-          explanation: "Perfect antithesis to al-ashqaa. Superlative of muttaqi. Will be 'janaba' (kept to the side) from the Fire - actively protected by Allah.",
+          meaning: { en: "The most righteous/God-conscious", ur: "سب سے زیادہ متقی/خدا ترس" },
+          explanation: { en: "Perfect antithesis to al-ashqaa. Superlative of muttaqi. Will be 'janaba' (kept to the side) from the Fire - actively protected by Allah.", ur: "اشقیٰ کی کامل ضد۔ متقی کا افعل التفضیل۔ آگ سے 'جنّب' (ایک طرف رکھا) جائے گا - اللہ کی فعال حفاظت میں۔" },
           verseRef: "92:17"
         },
         {
           term: "يُؤْتِي مَالَهُ يَتَزَكَّىٰ",
           transliteration: "Yu'tee maalahu yatazakkaa",
-          meaning: "Gives his wealth to purify himself",
-          explanation: "Continuous giving (present tense) for purification (tazakkaa). Same root as zakah - giving purifies AND grows. Not transaction but transformation.",
+          meaning: { en: "Gives his wealth to purify himself", ur: "اپنا مال پاکیزگی کے لیے دیتا ہے" },
+          explanation: { en: "Continuous giving (present tense) for purification (tazakkaa). Same root as zakah - giving purifies AND grows. Not transaction but transformation.", ur: "مسلسل دینا (مضارع) پاکیزگی (تزکّیٰ) کے لیے۔ زکوٰۃ کا ہم اصل - دینا پاک بھی کرتا ہے اور بڑھاتا بھی ہے۔ لین دین نہیں بلکہ تبدیلی۔" },
           verseRef: "92:18"
         },
         {
           term: "وَمَا لِأَحَدٍ عِندَهُ مِن نِّعْمَةٍ تُجْزَىٰ",
           transliteration: "Wa maa li-ahadin 'indahu min ni'matin tujzaa",
-          meaning: "No one has any favor upon him to be repaid",
-          explanation: "Pure intention: he gives not to repay debts or earn favors. No worldly motive. His giving is unconditional, purely for Allah.",
+          meaning: { en: "No one has any favor upon him to be repaid", ur: "کسی کا اس پر کوئی احسان نہیں جو چکایا جائے" },
+          explanation: { en: "Pure intention: he gives not to repay debts or earn favors. No worldly motive. His giving is unconditional, purely for Allah.", ur: "خالص نیت: نہ قرض اتارنے کے لیے دیتا ہے نہ احسان کمانے کے لیے۔ کوئی دنیاوی مقصد نہیں۔ اس کا دینا بلا شرط ہے، خالص اللہ کے لیے۔" },
           verseRef: "92:19"
         },
         {
           term: "إِلَّا ابْتِغَاءَ وَجْهِ رَبِّهِ الْأَعْلَىٰ",
           transliteration: "Illa ibtighaa'a wajhi Rabbihi al-A'laa",
-          meaning: "Only seeking the face of his Lord, Most High",
-          explanation: "The highest motive: seeking Allah's wajh (pleasure/countenance). Not Paradise, not reward, but Allah Himself. Ibtighaa' (Form VIII) indicates earnest, devoted pursuit.",
+          meaning: { en: "Only seeking the face of his Lord, Most High", ur: "صرف اپنے رب بلند و برتر کی رضا چاہتے ہوئے" },
+          explanation: { en: "The highest motive: seeking Allah's wajh (pleasure/countenance). Not Paradise, not reward, but Allah Himself. Ibtighaa' (Form VIII) indicates earnest, devoted pursuit.", ur: "بلند ترین مقصد: اللہ کی رضا (وجہ) حاصل کرنا۔ جنت نہیں، اجر نہیں، بلکہ خود اللہ۔ ابتغاء (باب افتعال) مخلصانہ، وقف شدہ جستجو ظاہر کرتا ہے۔" },
           verseRef: "92:20"
         },
         {
           term: "وَلَسَوْفَ يَرْضَىٰ",
           transliteration: "Wa la-sawfa yardaa",
-          meaning: "And he will surely be satisfied",
-          explanation: "Triple-emphatic future promise. He sought Allah's pleasure (wajh), he will receive satisfaction (ridaa). Perfect circle: sought wajh, receives ridaa. Complete fulfillment.",
+          meaning: { en: "And he will surely be satisfied", ur: "اور وہ ضرور راضی ہو جائے گا" },
+          explanation: { en: "Triple-emphatic future promise. He sought Allah's pleasure (wajh), he will receive satisfaction (ridaa). Perfect circle: sought wajh, receives ridaa. Complete fulfillment.", ur: "تین تاکیدوں والا مستقبل کا وعدہ۔ اس نے اللہ کی رضا (وجہ) چاہی، اسے اطمینان (رضا) ملے گا۔ کامل دائرہ: وجہ چاہا، رضا ملی۔ مکمل تکمیل۔" },
           verseRef: "92:21"
         }
       ]
@@ -249,57 +256,57 @@ export const ONTOLOGY = {
       from: "الليل يغشى",
       to: "النهار تجلى",
       type: "contrast",
-      description: "Night covering vs Day manifesting",
-      explanation: "Cosmic opposites representing spiritual states: darkness of denial vs light of faith"
+      description: { en: "Night covering vs Day manifesting", ur: "رات ڈھانپنا بمقابلہ دن ظاہر ہونا" },
+      explanation: { en: "Cosmic opposites representing spiritual states: darkness of denial vs light of faith", ur: "کائناتی اضداد جو روحانی حالتوں کی نمائندگی: انکار کی تاریکی بمقابلہ ایمان کی روشنی" }
     },
     {
       from: "أعطى",
       to: "بخل",
       type: "antithesis",
-      description: "Giving vs Withholding",
-      explanation: "First quality of each path - fundamental choice between generosity and miserliness"
+      description: { en: "Giving vs Withholding", ur: "دینا بمقابلہ روکنا" },
+      explanation: { en: "First quality of each path - fundamental choice between generosity and miserliness", ur: "ہر راستے کی پہلی خصوصیت - سخاوت اور بخل کے درمیان بنیادی انتخاب" }
     },
     {
       from: "اتقى",
       to: "استغنى",
       type: "antithesis",
-      description: "God-consciousness vs Self-sufficiency",
-      explanation: "Second quality: humility before Allah vs arrogance of independence"
+      description: { en: "God-consciousness vs Self-sufficiency", ur: "خدا ترسی بمقابلہ خود بے نیازی" },
+      explanation: { en: "Second quality: humility before Allah vs arrogance of independence", ur: "دوسری خصوصیت: اللہ کے سامنے عاجزی بمقابلہ آزادی کا غرور" }
     },
     {
       from: "صدق بالحسنى",
       to: "كذب بالحسنى",
       type: "antithesis",
-      description: "Believed in the best vs Denied the best",
-      explanation: "Third quality: faith vs rejection of truth"
+      description: { en: "Believed in the best vs Denied the best", ur: "بہترین کی تصدیق بمقابلہ بہترین کی تکذیب" },
+      explanation: { en: "Third quality: faith vs rejection of truth", ur: "تیسری خصوصیت: ایمان بمقابلہ حق کی تکذیب" }
     },
     {
       from: "اليسرى",
       to: "العسرى",
       type: "antithesis",
-      description: "Path of ease vs Path of difficulty",
-      explanation: "Outcomes: ease leading to more ease vs hardship leading to more hardship"
+      description: { en: "Path of ease vs Path of difficulty", ur: "آسانی کا راستہ بمقابلہ مشکل کا راستہ" },
+      explanation: { en: "Outcomes: ease leading to more ease vs hardship leading to more hardship", ur: "نتائج: آسانی مزید آسانی کی طرف بمقابلہ مشکل مزید مشکل کی طرف" }
     },
     {
       from: "الأشقى",
       to: "الأتقى",
       type: "antithesis",
-      description: "Most wretched vs Most righteous",
-      explanation: "Ultimate spiritual outcomes: worst of creation vs best of creation"
+      description: { en: "Most wretched vs Most righteous", ur: "سب سے بدبخت بمقابلہ سب سے متقی" },
+      explanation: { en: "Ultimate spiritual outcomes: worst of creation vs best of creation", ur: "حتمی روحانی نتائج: بدترین مخلوق بمقابلہ بہترین مخلوق" }
     },
     {
       from: "يتزكى",
       to: "يرضى",
       type: "causation",
-      description: "Purification leads to satisfaction",
-      explanation: "Giving for purification leads to eternal satisfaction from Allah"
+      description: { en: "Purification leads to satisfaction", ur: "تزکیہ اطمینان کی طرف لے جاتا ہے" },
+      explanation: { en: "Giving for purification leads to eternal satisfaction from Allah", ur: "تزکیہ کے لیے دینا اللہ کی طرف سے ابدی اطمینان کی طرف لے جاتا ہے" }
     },
     {
       from: "وجه ربه",
       to: "يرضى",
       type: "reciprocity",
-      description: "Seeking Allah's pleasure brings satisfaction",
-      explanation: "Seeking Allah's wajh results in receiving ridaa - divine reciprocity"
+      description: { en: "Seeking Allah's pleasure brings satisfaction", ur: "اللہ کی رضا چاہنا اطمینان لاتا ہے" },
+      explanation: { en: "Seeking Allah's wajh results in receiving ridaa - divine reciprocity", ur: "اللہ کی رضا چاہنا رضا ملنے کا سبب - الٰہی باہمی تعلق" }
     }
   ],
 
@@ -311,37 +318,37 @@ export const ONTOLOGY = {
         stage: 1,
         theme: "The Cosmic Oaths",
         verses: "92:1-3",
-        description: "Night and day represent two states; male and female represent divine design of pairs"
+        description: { en: "Night and day represent two states; male and female represent divine design of pairs", ur: "رات اور دن دو حالتوں کی نمائندگی؛ نر اور مادہ جوڑوں کے الٰہی ڈیزائن کی" }
       },
       {
         stage: 2,
         theme: "The Central Thesis",
         verses: "92:4",
-        description: "Human efforts diverge - not all paths lead to the same destination"
+        description: { en: "Human efforts diverge - not all paths lead to the same destination", ur: "انسانی کوششیں مختلف ہیں - تمام راستے ایک ہی منزل تک نہیں لے جاتے" }
       },
       {
         stage: 3,
         theme: "The Path of Generosity",
         verses: "92:5-7",
-        description: "Giving + Taqwa + Belief = Ease upon ease"
+        description: { en: "Giving + Taqwa + Belief = Ease upon ease", ur: "دینا + تقویٰ + ایمان = آسانی پر آسانی" }
       },
       {
         stage: 4,
         theme: "The Path of Miserliness",
         verses: "92:8-11",
-        description: "Withholding + Arrogance + Denial = Hardship, wealth useless at the fall"
+        description: { en: "Withholding + Arrogance + Denial = Hardship, wealth useless at the fall", ur: "روکنا + تکبر + انکار = مشکل، گرنے پر مال بے فائدہ" }
       },
       {
         stage: 5,
         theme: "Divine Ownership and Warning",
         verses: "92:12-16",
-        description: "Allah owns both worlds, warns of Fire for the most wretched"
+        description: { en: "Allah owns both worlds, warns of Fire for the most wretched", ur: "اللہ دونوں جہان کا مالک ہے، سب سے بدبخت کو آگ سے ڈراتا ہے" }
       },
       {
         stage: 6,
         theme: "Portrait of the Righteous",
         verses: "92:17-21",
-        description: "The atqaa gives purely for Allah's pleasure and will be satisfied"
+        description: { en: "The atqaa gives purely for Allah's pleasure and will be satisfied", ur: "اتقیٰ خالصتاً اللہ کی رضا کے لیے دیتا ہے اور راضی ہو جائے گا" }
       }
     ]
   },
@@ -440,8 +447,8 @@ export const ONTOLOGY = {
   },
 
   uniqueInsight: {
-    title: "The Economics of Spiritual Investment",
-    insight: "Surah Al-Layl presents a profound economic principle: spending leads to increase, while hoarding leads to loss. The word 'yusra' (ease) is used twice in verse 7 - 'We will ease him toward ease' - creating a compounding effect. Conversely, the ironic 'We will ease him toward difficulty' shows how the path of miserliness, while seeming easier initially, leads to ever-increasing hardship. The surah ends with the ultimate transaction: the atqaa gives his wealth seeking only Allah's wajh (pleasure), and receives radaa (satisfaction). He traded temporary wealth for eternal satisfaction - the best possible investment. Notice the contrast with the miser: he kept his wealth but lost everything when he 'fell' (taraddaa). The one who gave everything will be completely satisfied; the one who kept everything will find his wealth useless.",
+    title: { en: "The Economics of Spiritual Investment", ur: "روحانی سرمایہ کاری کی معاشیات" },
+    insight: { en: "Surah Al-Layl presents a profound economic principle: spending leads to increase, while hoarding leads to loss. The word 'yusra' (ease) is used twice in verse 7 - 'We will ease him toward ease' - creating a compounding effect. Conversely, the ironic 'We will ease him toward difficulty' shows how the path of miserliness, while seeming easier initially, leads to ever-increasing hardship. The surah ends with the ultimate transaction: the atqaa gives his wealth seeking only Allah's wajh (pleasure), and receives radaa (satisfaction). He traded temporary wealth for eternal satisfaction - the best possible investment. Notice the contrast with the miser: he kept his wealth but lost everything when he 'fell' (taraddaa). The one who gave everything will be completely satisfied; the one who kept everything will find his wealth useless.", ur: "سورۃ اللیل ایک گہرا معاشی اصول پیش کرتی ہے: خرچ کرنا بڑھوتری کی طرف لے جاتا ہے، جبکہ ذخیرہ اندوزی نقصان کی طرف۔ لفظ 'یسریٰ' (آسانی) آیت 7 میں دو بار استعمال ہوا - 'ہم اسے آسانی کی طرف آسان کر دیں گے' - مرکب اثر پیدا کرتے ہوئے۔ اس کے برعکس، ستم ظریفانہ 'ہم اسے مشکل کی طرف آسان کر دیں گے' دکھاتا ہے کہ بخل کا راستہ ابتداء میں آسان لگتا ہے لیکن بڑھتی مشکل کی طرف لے جاتا ہے۔ سورت کا اختتام حتمی سودے پر ہوتا ہے: اتقیٰ اپنا مال صرف اللہ کی رضا کے لیے دیتا ہے، اور رضا (اطمینان) حاصل کرتا ہے۔ عارضی مال کو ابدی اطمینان سے بدلا - بہترین ممکنہ سرمایہ کاری۔" },
     modernRelevance: "In an age of accumulation and FOMO, this surah teaches that true security comes not from hoarding but from giving. The ease that comes from generosity is both spiritual (peace of heart) and practical (relationships, barakah). The miser may appear successful temporarily, but his path leads to 'usraa - difficulty in this life (anxiety about losing wealth) and the next."
   },
 

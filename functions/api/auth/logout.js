@@ -17,7 +17,7 @@ export async function onRequest(context) {
   const sessionToken = cookies['w3quran_session'];
 
   // Delete session from database if it exists
-  if (sessionToken) {
+  if (sessionToken && env.DB) {
     try {
       await env.DB.prepare('DELETE FROM sessions WHERE token = ?')
         .bind(sessionToken)

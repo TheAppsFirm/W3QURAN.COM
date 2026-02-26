@@ -25,6 +25,10 @@ export async function onRequest(context) {
     });
   }
 
+  if (!env.DB) {
+    return new Response(JSON.stringify({ error: 'Service unavailable' }), { status: 503, headers: { 'Content-Type': 'application/json' }});
+  }
+
   try {
     // Get current user and verify admin status
     const currentUser = await env.DB.prepare(`
@@ -112,7 +116,7 @@ export async function onRequest(context) {
       });
     }
 
-    return new Response('Method not allowed', { status: 405 });
+    return new Response(JSON.stringify({ error: 'Method not allowed' }), { status: 405, headers: { 'Content-Type': 'application/json' } });
 
   } catch (error) {
     console.error('[Admin] Settings error:', error);

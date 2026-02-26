@@ -20,7 +20,12 @@ export const TREEBANK_DATA = {
       { position: 1, arabic: "وَالسَّمَاءِ", transliteration: "wal-samā'i", root: "س م و", meaning: { en: "By the sky", ur: "قسم ہے آسمان کی", ar: "قَسَماً بالسماء" }, pos: "CONJ+N", posLabel: "CONJ+N", grammarRole: "oath" },
       { position: 2, arabic: "ذَاتِ", transliteration: "dhāti", meaning: { en: "possessor of", ur: "والے", ar: "صاحِبَة" }, pos: "N", posLabel: "N", grammarRole: "possessive" },
       { position: 3, arabic: "الْبُرُوجِ", transliteration: "al-burūji", root: "ب ر ج", meaning: { en: "the constellations", ur: "برجوں کی", ar: "الأَبراج" }, pos: "N", posLabel: "N", grammarRole: "possessive", advanced: { rootFamily: ["بُرج", "تَبَرُّج", "بارِج"], linguisticMiracle: "Buruj = towers/mansions - stars as celestial mansions" } }
-    ]
+    ],
+    structure: {
+      relationships: [
+      { from: 1, to: 2, label: 'مضاف + مضاف إليه' }
+      ],
+    },
   },
 
   2: {
@@ -29,7 +34,12 @@ export const TREEBANK_DATA = {
     words: [
       { position: 1, arabic: "وَالْيَوْمِ", transliteration: "wal-yawmi", meaning: { en: "And the Promised Day", ur: "اور وعدے کے دن کی", ar: "واليَومِ" }, pos: "CONJ+N", posLabel: "CONJ+N", grammarRole: "oath" },
       { position: 2, arabic: "الْمَوْعُودِ", transliteration: "al-mawʿūdi", root: "و ع د", meaning: { en: "the Promised", ur: "وعدے والے", ar: "المُنتَظَر" }, pos: "ADJ", posLabel: "ADJ", grammarRole: "attribute", features: { pattern: "مَفْعُول", voice: "passive participle" } }
-    ]
+    ],
+    structure: {
+      relationships: [
+      { from: 1, to: 2, label: 'موصوف + صفت' }
+      ],
+    },
   },
 
   3: {
@@ -38,7 +48,12 @@ export const TREEBANK_DATA = {
     words: [
       { position: 1, arabic: "وَشَاهِدٍ", transliteration: "wa-shāhidin", root: "ش ه د", meaning: { en: "And witness", ur: "اور گواہ کی", ar: "وَمُشاهِد" }, pos: "N", posLabel: "N", grammarRole: "oath", features: { pattern: "فَاعِل" } },
       { position: 2, arabic: "وَمَشْهُودٍ", transliteration: "wa-mashhūdin", root: "ش ه د", meaning: { en: "and witnessed", ur: "اور مشہود کی", ar: "وَمُشاهَد" }, pos: "N", posLabel: "N", grammarRole: "oath", features: { pattern: "مَفْعُول" }, advanced: { linguisticMiracle: "Active + Passive from same root - Friday/Day of Arafah/Judgment" } }
-    ]
+    ],
+    structure: {
+      relationships: [
+        { from: 1, to: 2, label: 'قسم' }
+      ],
+    },
   },
 
   4: {
@@ -48,7 +63,13 @@ export const TREEBANK_DATA = {
       { position: 1, arabic: "قُتِلَ", transliteration: "qutila", root: "ق ت ل", meaning: { en: "Destroyed were", ur: "مارے گئے", ar: "هَلَكَ" }, pos: "V", posLabel: "V", grammarRole: "verb", features: { voice: "passive" }, advanced: { linguisticMiracle: "Curse formula - 'killed' = destroyed by Allah's wrath" } },
       { position: 2, arabic: "أَصْحَابُ", transliteration: "aṣḥābu", root: "ص ح ب", meaning: { en: "the companions", ur: "والے", ar: "أَهلُ" }, pos: "N", posLabel: "N", grammarRole: "subject" },
       { position: 3, arabic: "الْأُخْدُودِ", transliteration: "al-ukhdūdi", root: "خ د د", meaning: { en: "of the trench", ur: "خندق کے", ar: "الحُفرَة" }, pos: "N", posLabel: "N", grammarRole: "possessive", advanced: { rootFamily: ["خَدّ", "أُخدود"], linguisticMiracle: "Deep trench dug to burn believers alive" } }
-    ]
+    ],
+    structure: {
+      relationships: [
+      { from: 1, to: 2, label: 'فعل + فاعل' },
+      { from: 2, to: 3, label: 'مضاف + مضاف إليه' }
+      ],
+    },
   },
 
   5: {
@@ -58,7 +79,12 @@ export const TREEBANK_DATA = {
       { position: 1, arabic: "النَّارِ", transliteration: "al-nāri", root: "ن و ر", meaning: { en: "The fire", ur: "آگ کی", ar: "اللَّهَب" }, pos: "N", posLabel: "N", grammarRole: "apposition" },
       { position: 2, arabic: "ذَاتِ", transliteration: "dhāti", meaning: { en: "full of", ur: "والی", ar: "صاحِبَة" }, pos: "N", posLabel: "N", grammarRole: "possessive" },
       { position: 3, arabic: "الْوَقُودِ", transliteration: "al-waqūdi", root: "و ق د", meaning: { en: "fuel", ur: "ایندھن", ar: "الحَطَب" }, pos: "N", posLabel: "N", grammarRole: "possessive" }
-    ]
+    ],
+    structure: {
+      relationships: [
+      { from: 1, to: 2, label: 'مضاف + مضاف إليه' }
+      ],
+    },
   },
 
   6: {
@@ -69,7 +95,13 @@ export const TREEBANK_DATA = {
       { position: 2, arabic: "هُمْ", transliteration: "hum", meaning: { en: "they", ur: "وہ", ar: "هُم" }, pos: "PRON", posLabel: "PRON", grammarRole: "subject" },
       { position: 3, arabic: "عَلَيْهَا", transliteration: "ʿalayhā", meaning: { en: "over it", ur: "اس کے پاس", ar: "عليها" }, pos: "PREP+PRON", posLabel: "PREP+PRON", grammarRole: "prepositional phrase" },
       { position: 4, arabic: "قُعُودٌ", transliteration: "quʿūdun", root: "ق ع د", meaning: { en: "sitting", ur: "بیٹھے ہوئے", ar: "جالِسونَ" }, pos: "N", posLabel: "N", grammarRole: "predicate", features: { pattern: "فُعُول" }, advanced: { linguisticMiracle: "Tyrants sat watching believers burn - their crime scene" } }
-    ]
+    ],
+    structure: {
+      relationships: [
+      { from: 2, to: 4, label: 'مبتدأ + خبر' },
+      { from: 3, to: 4, label: 'جار + مجرور' }
+      ],
+    },
   },
 
   7: {
@@ -82,7 +114,14 @@ export const TREEBANK_DATA = {
       { position: 4, arabic: "يَفْعَلُونَ", transliteration: "yafʿalūna", root: "ف ع ل", meaning: { en: "they were doing", ur: "کر رہے تھے", ar: "يَصنَعونَ" }, pos: "V", posLabel: "V", grammarRole: "verb" },
       { position: 5, arabic: "بِالْمُؤْمِنِينَ", transliteration: "bil-mu'minīna", root: "أ م ن", meaning: { en: "to the believers", ur: "ایمان والوں کے ساتھ", ar: "بالمُصَدِّقينَ" }, pos: "N", posLabel: "N", grammarRole: "prepositional phrase" },
       { position: 6, arabic: "شُهُودٌ", transliteration: "shuhūdun", root: "ش ه د", meaning: { en: "witnesses", ur: "گواہ تھے", ar: "شاهِدونَ" }, pos: "N", posLabel: "N", grammarRole: "predicate", advanced: { linguisticMiracle: "They witnessed their own crime - will testify against themselves" } }
-    ]
+    ],
+    structure: {
+      relationships: [
+      { from: 1, to: 6, label: 'مبتدأ + خبر' },
+      { from: 2, to: 3, label: 'جار + مجرور' },
+      { from: 3, to: 4, label: 'موصول + صلة' }
+      ],
+    },
   },
 
   8: {
@@ -98,7 +137,14 @@ export const TREEBANK_DATA = {
       { position: 7, arabic: "بِاللَّهِ", transliteration: "bil-lāhi", meaning: { en: "in Allah", ur: "اللہ پر", ar: "بالله" }, pos: "PREP+PN", posLabel: "PREP+PN", grammarRole: "prepositional phrase" },
       { position: 8, arabic: "الْعَزِيزِ", transliteration: "al-ʿazīzi", root: "ع ز ز", meaning: { en: "the Exalted", ur: "غالب", ar: "القَوِيّ" }, pos: "ADJ", posLabel: "ADJ", grammarRole: "attribute" },
       { position: 9, arabic: "الْحَمِيدِ", transliteration: "al-ḥamīdi", root: "ح م د", meaning: { en: "the Praiseworthy", ur: "قابل حمد", ar: "المَحمود" }, pos: "ADJ", posLabel: "ADJ", grammarRole: "attribute", advanced: { linguisticMiracle: "Their only 'crime' was iman - ultimate injustice" } }
-    ]
+    ],
+    structure: {
+      relationships: [
+      { from: 1, to: 2, label: 'نفی + فعل' },
+      { from: 3, to: 4, label: 'جار + مجرور' },
+      { from: 7, to: 8, label: 'موصوف + صفت' }
+      ],
+    },
   },
 
   9: {
@@ -115,7 +161,17 @@ export const TREEBANK_DATA = {
       { position: 8, arabic: "كُلِّ", transliteration: "kulli", meaning: { en: "all", ur: "ہر", ar: "كُلّ" }, pos: "N", posLabel: "N", grammarRole: "prepositional phrase" },
       { position: 9, arabic: "شَيْءٍ", transliteration: "shay'in", meaning: { en: "things", ur: "چیز", ar: "شَيء" }, pos: "N", posLabel: "N", grammarRole: "possessive" },
       { position: 10, arabic: "شَهِيدٌ", transliteration: "shahīdun", root: "ش ه د", meaning: { en: "Witness", ur: "گواہ ہے", ar: "شاهِدٌ" }, pos: "ADJ", posLabel: "ADJ", grammarRole: "predicate" }
-    ]
+    ],
+    structure: {
+      relationships: [
+      { from: 3, to: 10, label: 'مبتدأ + خبر' },
+      { from: 3, to: 4, label: 'مضاف + مضاف إليه' },
+      { from: 6, to: 10, label: 'مبتدأ + خبر' },
+      { from: 7, to: 8, label: 'جار + مجرور' },
+      { from: 8, to: 9, label: 'جار + مجرور' },
+      { from: 9, to: 10, label: 'موصوف + صفت' }
+      ],
+    },
   },
 
   10: {
@@ -136,7 +192,20 @@ export const TREEBANK_DATA = {
       { position: 12, arabic: "وَلَهُمْ", transliteration: "walahum", meaning: { en: "and for them", ur: "اور ان کے لیے", ar: "ولَهُم" }, pos: "CONJ+PREP+PRON", posLabel: "CONJ+PREP+PRON", grammarRole: "predicate" },
       { position: 13, arabic: "عَذَابُ", transliteration: "ʿadhābu", meaning: { en: "punishment", ur: "عذاب ہے", ar: "عِقاب" }, pos: "N", posLabel: "N", grammarRole: "subject" },
       { position: 14, arabic: "الْحَرِيقِ", transliteration: "al-ḥarīqi", root: "ح ر ق", meaning: { en: "of burning", ur: "جلانے کا", ar: "النار" }, pos: "N", posLabel: "N", grammarRole: "possessive", advanced: { linguisticMiracle: "They burned believers; they will burn - poetic justice" } }
-    ]
+    ],
+    structure: {
+      relationships: [
+      { from: 2, to: 3, label: 'موصول + صلة' },
+      { from: 3, to: 4, label: 'فعل + مفعول به' },
+      { from: 3, to: 5, label: 'فعل + مفعول به' },
+      { from: 5, to: 7, label: 'عطف' },
+      { from: 7, to: 8, label: 'نفی + فعل' },
+      { from: 8, to: 10, label: 'فعل + فاعل' },
+      { from: 10, to: 12, label: 'مبتدأ + خبر' },
+      { from: 10, to: 11, label: 'مضاف + مضاف إليه' },
+      { from: 13, to: 14, label: 'مضاف + مضاف إليه' }
+      ],
+    },
   },
 
   11: {
@@ -157,7 +226,21 @@ export const TREEBANK_DATA = {
       { position: 12, arabic: "ذَٰلِكَ", transliteration: "dhālika", meaning: { en: "That", ur: "یہی", ar: "ذلِكَ" }, pos: "DEM", posLabel: "DEM", grammarRole: "subject" },
       { position: 13, arabic: "الْفَوْزُ", transliteration: "al-fawzu", root: "ف و ز", meaning: { en: "the success", ur: "کامیابی ہے", ar: "النَّجاح" }, pos: "N", posLabel: "N", grammarRole: "predicate" },
       { position: 14, arabic: "الْكَبِيرُ", transliteration: "al-kabīru", root: "ك ب ر", meaning: { en: "the great", ur: "بڑی", ar: "العَظيم" }, pos: "ADJ", posLabel: "ADJ", grammarRole: "attribute" }
-    ]
+    ],
+    structure: {
+      relationships: [
+      { from: 2, to: 3, label: 'موصول + صلة' },
+      { from: 3, to: 5, label: 'فعل + مفعول به' },
+      { from: 4, to: 5, label: 'فعل + مفعول به' },
+      { from: 4, to: 7, label: 'فعل + فاعل' },
+      { from: 7, to: 13, label: 'مبتدأ + خبر' },
+      { from: 8, to: 11, label: 'فعل + فاعل' },
+      { from: 9, to: 10, label: 'جار + مجرور' },
+      { from: 11, to: 13, label: 'مبتدأ + خبر' },
+      { from: 12, to: 13, label: 'مبتدأ + خبر' },
+      { from: 13, to: 14, label: 'موصوف + صفت' }
+      ],
+    },
   },
 
   12: {
@@ -168,7 +251,15 @@ export const TREEBANK_DATA = {
       { position: 2, arabic: "بَطْشَ", transliteration: "baṭsha", root: "ب ط ش", meaning: { en: "grip", ur: "پکڑ", ar: "أَخذَة" }, pos: "N", posLabel: "N", grammarRole: "subject", advanced: { rootFamily: ["بَطش", "باطِش"], linguisticMiracle: "Allah's seizing grip - sudden, powerful, inescapable" } },
       { position: 3, arabic: "رَبِّكَ", transliteration: "rabbika", meaning: { en: "of your Lord", ur: "تیرے رب کی", ar: "مالِكِكَ" }, pos: "N", posLabel: "N", grammarRole: "possessive" },
       { position: 4, arabic: "لَشَدِيدٌ", transliteration: "lashadīdun", root: "ش د د", meaning: { en: "surely severe", ur: "یقیناً سخت ہے", ar: "لَقَوِيٌّ" }, pos: "ADJ", posLabel: "ADJ", grammarRole: "predicate" }
-    ]
+    ],
+    structure: {
+      relationships: [
+      { from: 1, to: 2, label: 'توکید' },
+      { from: 2, to: 4, label: 'مبتدأ + خبر' },
+      { from: 2, to: 3, label: 'مضاف + مضاف إليه' },
+      { from: 3, to: 4, label: 'موصوف + صفت' }
+      ],
+    },
   },
 
   13: {
@@ -179,7 +270,14 @@ export const TREEBANK_DATA = {
       { position: 2, arabic: "هُوَ", transliteration: "huwa", meaning: { en: "He", ur: "وہی", ar: "هُوَ" }, pos: "PRON", posLabel: "PRON", grammarRole: "emphasis" },
       { position: 3, arabic: "يُبْدِئُ", transliteration: "yubdi'u", root: "ب د أ", meaning: { en: "originates", ur: "پہلی بار پیدا کرتا ہے", ar: "يَخلُقُ" }, pos: "V", posLabel: "V", grammarRole: "verb", features: { form: "IV" } },
       { position: 4, arabic: "وَيُعِيدُ", transliteration: "wa-yuʿīdu", root: "ع و د", meaning: { en: "and repeats", ur: "اور دوبارہ پیدا کرتا ہے", ar: "وَيُعيدُ" }, pos: "V", posLabel: "V", grammarRole: "verb", features: { form: "IV" }, advanced: { linguisticMiracle: "Creates initially AND resurrects - complete power over existence" } }
-    ]
+    ],
+    structure: {
+      relationships: [
+        { from: 1, to: 2, label: 'تعلق' },
+        { from: 2, to: 3, label: 'تعلق' },
+        { from: 3, to: 4, label: 'تعلق' }
+      ],
+    },
   },
 
   14: {
@@ -189,7 +287,12 @@ export const TREEBANK_DATA = {
       { position: 1, arabic: "وَهُوَ", transliteration: "wa-huwa", meaning: { en: "And He", ur: "اور وہ", ar: "وَهُوَ" }, pos: "CONJ+PRON", posLabel: "CONJ+PRON", grammarRole: "subject" },
       { position: 2, arabic: "الْغَفُورُ", transliteration: "al-ghafūru", root: "غ ف ر", meaning: { en: "the Forgiving", ur: "بخشنے والا ہے", ar: "الساتِر" }, pos: "ADJ", posLabel: "ADJ", grammarRole: "predicate", features: { pattern: "فَعُول" } },
       { position: 3, arabic: "الْوَدُودُ", transliteration: "al-wadūdu", root: "و د د", meaning: { en: "the Loving", ur: "محبت کرنے والا", ar: "المُحِبّ" }, pos: "ADJ", posLabel: "ADJ", grammarRole: "predicate", features: { pattern: "فَعُول" }, advanced: { linguisticMiracle: "Wadud = Actively loving (not just merciful). Door open for oppressors too" } }
-    ]
+    ],
+    structure: {
+      relationships: [
+      { from: 1, to: 2, label: 'مبتدأ + خبر' }
+      ],
+    },
   },
 
   15: {
@@ -199,7 +302,13 @@ export const TREEBANK_DATA = {
       { position: 1, arabic: "ذُو", transliteration: "dhū", meaning: { en: "Owner of", ur: "والا", ar: "صاحِبُ" }, pos: "N", posLabel: "N", grammarRole: "attribute" },
       { position: 2, arabic: "الْعَرْشِ", transliteration: "al-ʿarshi", root: "ع ر ش", meaning: { en: "the Throne", ur: "عرش کا", ar: "الكُرسِيّ" }, pos: "N", posLabel: "N", grammarRole: "possessive" },
       { position: 3, arabic: "الْمَجِيدُ", transliteration: "al-majīdu", root: "م ج د", meaning: { en: "the Glorious", ur: "بزرگی والا", ar: "العَظيم" }, pos: "ADJ", posLabel: "ADJ", grammarRole: "attribute", advanced: { rootFamily: ["مَجد", "ماجِد", "مَجيد"], linguisticMiracle: "Al-Majid = combination of honor, power, generosity" } }
-    ]
+    ],
+    structure: {
+      relationships: [
+      { from: 1, to: 2, label: 'مضاف + مضاف إليه' },
+      { from: 2, to: 3, label: 'موصوف + صفت' }
+      ],
+    },
   },
 
   16: {
@@ -209,7 +318,12 @@ export const TREEBANK_DATA = {
       { position: 1, arabic: "فَعَّالٌ", transliteration: "faʿʿālun", root: "ف ع ل", meaning: { en: "Doer", ur: "کرنے والا", ar: "فاعِلٌ" }, pos: "ADJ", posLabel: "ADJ", grammarRole: "predicate", features: { pattern: "فَعّال" }, advanced: { linguisticMiracle: "فَعّال = intensive form: always doing, continuously acting" } },
       { position: 2, arabic: "لِّمَا", transliteration: "limā", meaning: { en: "of whatever", ur: "جو کچھ", ar: "لِما" }, pos: "PREP+REL", posLabel: "PREP+REL", grammarRole: "prepositional phrase" },
       { position: 3, arabic: "يُرِيدُ", transliteration: "yurīdu", root: "ر و د", meaning: { en: "He intends", ur: "چاہے", ar: "يَشاءُ" }, pos: "V", posLabel: "V", grammarRole: "verb", features: { form: "IV" } }
-    ]
+    ],
+    structure: {
+      relationships: [
+      { from: 2, to: 3, label: 'جار + مجرور' }
+      ],
+    },
   },
 
   17: {
@@ -220,7 +334,13 @@ export const TREEBANK_DATA = {
       { position: 2, arabic: "أَتَاكَ", transliteration: "atāka", root: "أ ت ي", meaning: { en: "come to you", ur: "تجھے پہنچی", ar: "بَلَغَكَ" }, pos: "V", posLabel: "V", grammarRole: "verb" },
       { position: 3, arabic: "حَدِيثُ", transliteration: "ḥadīthu", root: "ح د ث", meaning: { en: "story", ur: "خبر", ar: "قِصَّة" }, pos: "N", posLabel: "N", grammarRole: "subject" },
       { position: 4, arabic: "الْجُنُودِ", transliteration: "al-junūdi", root: "ج ن د", meaning: { en: "of the forces", ur: "لشکروں کی", ar: "الجُيوش" }, pos: "N", posLabel: "N", grammarRole: "possessive" }
-    ]
+    ],
+    structure: {
+      relationships: [
+      { from: 2, to: 3, label: 'فعل + فاعل' },
+      { from: 3, to: 4, label: 'مضاف + مضاف إليه' }
+      ],
+    },
   },
 
   18: {
@@ -229,7 +349,12 @@ export const TREEBANK_DATA = {
     words: [
       { position: 1, arabic: "فِرْعَوْنَ", transliteration: "firʿawna", meaning: { en: "Pharaoh", ur: "فرعون کی", ar: "فِرعَون" }, pos: "PN", posLabel: "PN", grammarRole: "apposition" },
       { position: 2, arabic: "وَثَمُودَ", transliteration: "wa-thamūda", meaning: { en: "and Thamud", ur: "اور ثمود کی", ar: "وثَمود" }, pos: "PN", posLabel: "PN", grammarRole: "apposition", advanced: { linguisticMiracle: "Two mighty civilizations destroyed - warning to Quraysh" } }
-    ]
+    ],
+    structure: {
+      relationships: [
+      { from: 1, to: 2, label: 'بدل' }
+      ],
+    },
   },
 
   19: {
@@ -241,7 +366,13 @@ export const TREEBANK_DATA = {
       { position: 3, arabic: "كَفَرُوا", transliteration: "kafarū", root: "ك ف ر", meaning: { en: "disbelieve", ur: "کفر کیا", ar: "جَحَدوا" }, pos: "V", posLabel: "V", grammarRole: "verb" },
       { position: 4, arabic: "فِي", transliteration: "fī", meaning: { en: "in", ur: "میں", ar: "في" }, pos: "PREP", posLabel: "PREP", grammarRole: "preposition" },
       { position: 5, arabic: "تَكْذِيبٍ", transliteration: "takdhībin", root: "ك ذ ب", meaning: { en: "denial", ur: "تکذیب میں ہیں", ar: "إنكار" }, pos: "N", posLabel: "N", grammarRole: "prepositional phrase", features: { form: "II" } }
-    ]
+    ],
+    structure: {
+      relationships: [
+      { from: 2, to: 3, label: 'موصول + صلة' },
+      { from: 4, to: 5, label: 'جار + مجرور' }
+      ],
+    },
   },
 
   20: {
@@ -252,7 +383,13 @@ export const TREEBANK_DATA = {
       { position: 2, arabic: "مِن", transliteration: "min", meaning: { en: "from", ur: "سے", ar: "مِن" }, pos: "PREP", posLabel: "PREP", grammarRole: "preposition" },
       { position: 3, arabic: "وَرَائِهِم", transliteration: "warā'ihim", root: "و ر ي", meaning: { en: "behind them", ur: "ان کے پیچھے", ar: "خَلفِهِم" }, pos: "N+PRON", posLabel: "N+PRON", grammarRole: "prepositional phrase" },
       { position: 4, arabic: "مُّحِيطٌ", transliteration: "muḥīṭun", root: "ح و ط", meaning: { en: "encompassing", ur: "گھیرے ہوئے ہے", ar: "مُحدِقٌ" }, pos: "ADJ", posLabel: "ADJ", grammarRole: "predicate", features: { pattern: "مُفِيل" }, advanced: { linguisticMiracle: "No escape - Allah surrounds from all directions" } }
-    ]
+    ],
+    structure: {
+      relationships: [
+      { from: 1, to: 4, label: 'مبتدأ + خبر' },
+      { from: 2, to: 3, label: 'جار + مجرور' }
+      ],
+    },
   },
 
   21: {
@@ -263,7 +400,13 @@ export const TREEBANK_DATA = {
       { position: 2, arabic: "هُوَ", transliteration: "huwa", meaning: { en: "it is", ur: "یہ ہے", ar: "هُوَ" }, pos: "PRON", posLabel: "PRON", grammarRole: "subject" },
       { position: 3, arabic: "قُرْآنٌ", transliteration: "qur'ānun", root: "ق ر أ", meaning: { en: "Quran", ur: "قرآن", ar: "كِتاب" }, pos: "N", posLabel: "N", grammarRole: "predicate" },
       { position: 4, arabic: "مَّجِيدٌ", transliteration: "majīdun", root: "م ج د", meaning: { en: "glorious", ur: "مجید ہے", ar: "عَظيم" }, pos: "ADJ", posLabel: "ADJ", grammarRole: "attribute" }
-    ]
+    ],
+    structure: {
+      relationships: [
+      { from: 2, to: 3, label: 'مبتدأ + خبر' },
+      { from: 3, to: 4, label: 'موصوف + صفت' }
+      ],
+    },
   },
 
   22: {
@@ -273,7 +416,13 @@ export const TREEBANK_DATA = {
       { position: 1, arabic: "فِي", transliteration: "fī", meaning: { en: "In", ur: "میں", ar: "في" }, pos: "PREP", posLabel: "PREP", grammarRole: "preposition" },
       { position: 2, arabic: "لَوْحٍ", transliteration: "lawḥin", root: "ل و ح", meaning: { en: "Tablet", ur: "لوح", ar: "صَحيفَة" }, pos: "N", posLabel: "N", grammarRole: "prepositional phrase" },
       { position: 3, arabic: "مَّحْفُوظٍ", transliteration: "maḥfūẓin", root: "ح ف ظ", meaning: { en: "Preserved", ur: "محفوظ میں", ar: "مَصون" }, pos: "ADJ", posLabel: "ADJ", grammarRole: "attribute", features: { pattern: "مَفْعُول" }, advanced: { linguisticMiracle: "Al-Lawh al-Mahfuz: eternal record where Quran is preserved forever" } }
-    ]
+    ],
+    structure: {
+      relationships: [
+      { from: 1, to: 2, label: 'جار + مجرور' },
+      { from: 2, to: 3, label: 'موصوف + صفت' }
+      ],
+    },
   }
 };
 

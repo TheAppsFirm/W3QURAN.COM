@@ -319,19 +319,21 @@ class BinauralBeatGenerator {
       this.gainNode.gain.value = volume;
       this.gainNode.connect(audioContext.destination);
 
-      // Create stereo panner for left channel
-      const leftPanner = audioContext.createStereoPanner();
-      if (leftPanner && leftPanner.pan) {
+      // Create stereo panner for left channel (Safari fallback)
+      let leftPanner, rightPanner;
+      try {
+        leftPanner = audioContext.createStereoPanner();
         leftPanner.pan.value = -1;
-      }
-      leftPanner.connect(this.gainNode);
+        leftPanner.connect(this.gainNode);
 
-      // Create stereo panner for right channel
-      const rightPanner = audioContext.createStereoPanner();
-      if (rightPanner && rightPanner.pan) {
+        rightPanner = audioContext.createStereoPanner();
         rightPanner.pan.value = 1;
+        rightPanner.connect(this.gainNode);
+      } catch {
+        // Safari doesn't support createStereoPanner - connect directly to gain node
+        leftPanner = this.gainNode;
+        rightPanner = this.gainNode;
       }
-      rightPanner.connect(this.gainNode);
 
       // Create left oscillator with error handling
       this.leftOscillator = audioContext.createOscillator();
@@ -369,13 +371,23 @@ class BinauralBeatGenerator {
   }
 
   stop() {
-    if (this.leftOscillator) {
-      this.leftOscillator.stop();
-      this.leftOscillator = null;
-    }
-    if (this.rightOscillator) {
-      this.rightOscillator.stop();
-      this.rightOscillator = null;
+    try {
+      if (this.leftOscillator) {
+        this.leftOscillator.stop();
+        this.leftOscillator.disconnect();
+        this.leftOscillator = null;
+      }
+      if (this.rightOscillator) {
+        this.rightOscillator.stop();
+        this.rightOscillator.disconnect();
+        this.rightOscillator = null;
+      }
+      if (this.gainNode) {
+        this.gainNode.disconnect();
+        this.gainNode = null;
+      }
+    } catch {
+      // Nodes may already be disconnected
     }
     this.isPlaying = false;
   }
@@ -653,6 +665,7 @@ const SoundHealingRoom = memo(function SoundHealingRoom({ isVisible, onClose }) 
   const dhikrAudioRef = useRef(null);
   const timerRef = useRef(null);
   const dhikrIntervalRef = useRef(null);
+  const dhikrStartTimeoutRef = useRef(null);
 
   // Initialize binaural generator
   useEffect(() => {
@@ -664,9 +677,16 @@ const SoundHealingRoom = memo(function SoundHealingRoom({ isVisible, onClose }) 
       }
       if (ambientAudioRef.current) {
         ambientAudioRef.current.pause();
+        ambientAudioRef.current.removeAttribute('src');
+        ambientAudioRef.current.load();
       }
       if (dhikrAudioRef.current) {
         dhikrAudioRef.current.pause();
+        dhikrAudioRef.current.removeAttribute('src');
+        dhikrAudioRef.current.load();
+      }
+      if (dhikrStartTimeoutRef.current) {
+        clearTimeout(dhikrStartTimeoutRef.current);
       }
       if (timerRef.current) {
         clearInterval(timerRef.current);
@@ -729,9 +749,9 @@ const SoundHealingRoom = memo(function SoundHealingRoom({ isVisible, onClose }) 
       ambientAudioRef.current.play().catch(() => {});
     }
 
-    // Play first dhikr immediately
+    // Play first dhikr after short delay (tracked for cleanup)
     if (dhikrEnabled) {
-      setTimeout(() => playDhikr(mode, 0), 2000);
+      dhikrStartTimeoutRef.current = setTimeout(() => playDhikr(mode, 0), 2000);
     }
 
     // Start dhikr interval (longer intervals for full audio tracks)
@@ -756,7 +776,7 @@ const SoundHealingRoom = memo(function SoundHealingRoom({ isVisible, onClose }) 
         return prev - 1;
       });
     }, 1000);
-  }, [binauralVolume, ambientVolume, dhikrEnabled, playDhikr]);
+  }, [binauralVolume, ambientVolume, dhikrEnabled, playDhikr, stopSession]);
 
   // Stop session
   const stopSession = useCallback(() => {
@@ -768,12 +788,21 @@ const SoundHealingRoom = memo(function SoundHealingRoom({ isVisible, onClose }) 
 
     if (ambientAudioRef.current) {
       ambientAudioRef.current.pause();
+      ambientAudioRef.current.removeAttribute('src');
+      ambientAudioRef.current.load();
       ambientAudioRef.current = null;
     }
 
     if (dhikrAudioRef.current) {
       dhikrAudioRef.current.pause();
+      dhikrAudioRef.current.removeAttribute('src');
+      dhikrAudioRef.current.load();
       dhikrAudioRef.current = null;
+    }
+
+    if (dhikrStartTimeoutRef.current) {
+      clearTimeout(dhikrStartTimeoutRef.current);
+      dhikrStartTimeoutRef.current = null;
     }
 
     if (timerRef.current) {
@@ -789,6 +818,7 @@ const SoundHealingRoom = memo(function SoundHealingRoom({ isVisible, onClose }) 
 
   // Toggle play/pause
   const togglePlay = useCallback(() => {
+    if (!selectedMode) return;
     if (isPlaying) {
       binauralRef.current?.stop();
       ambientAudioRef.current?.pause();

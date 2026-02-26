@@ -3,7 +3,7 @@
  * Beautiful glassmorphic bubbles with animations
  */
 
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback, memo } from 'react';
 import { Icons } from './Icons';
 import { useAuth } from '../../contexts/AuthContext';
 import { useLocale } from '../../contexts';
@@ -74,42 +74,56 @@ const FOLLOW_UP_TEMPLATES = {
   ],
 };
 
-// Animated background with floating bubbles
-const BubbleBackground = () => (
-  <div className="absolute inset-0 overflow-hidden pointer-events-none">
-    {/* Large ambient bubbles */}
-    {[...Array(8)].map((_, i) => (
-      <div
-        key={`big-${i}`}
-        className="absolute rounded-full"
-        style={{
-          width: `${100 + Math.random() * 150}px`,
-          height: `${100 + Math.random() * 150}px`,
-          left: `${Math.random() * 100}%`,
-          top: `${Math.random() * 100}%`,
-          background: `radial-gradient(circle at 30% 30%, ${
-            ['rgba(139,92,246,0.15)', 'rgba(16,185,129,0.12)', 'rgba(236,72,153,0.12)', 'rgba(59,130,246,0.12)'][i % 4]
-          }, transparent)`,
-          animation: `floatBubble ${15 + Math.random() * 10}s ease-in-out infinite`,
-          animationDelay: `${Math.random() * 5}s`,
-        }}
-      />
-    ))}
-    {/* Small sparkle particles */}
-    {[...Array(20)].map((_, i) => (
-      <div
-        key={`small-${i}`}
-        className="absolute w-1 h-1 bg-white/40 rounded-full"
-        style={{
-          left: `${Math.random() * 100}%`,
-          top: `${Math.random() * 100}%`,
-          animation: `twinkle ${2 + Math.random() * 3}s ease-in-out infinite`,
-          animationDelay: `${Math.random() * 2}s`,
-        }}
-      />
-    ))}
-  </div>
-);
+// Pre-computed stable positions for background bubbles (avoids jitter on re-render)
+const BIG_BUBBLES = [...Array(8)].map((_, i) => ({
+  size: 100 + ((i * 37 + 13) % 150),
+  left: ((i * 23 + 7) % 100),
+  top: ((i * 31 + 11) % 100),
+  duration: 15 + (i % 3) * 4,
+  delay: (i * 0.7) % 5,
+}));
+const SMALL_SPARKLES = [...Array(20)].map((_, i) => ({
+  left: ((i * 17 + 3) % 100),
+  top: ((i * 13 + 5) % 100),
+  duration: 2 + (i % 3) * 1.2,
+  delay: (i * 0.3) % 2,
+}));
+const BIG_COLORS = ['rgba(139,92,246,0.15)', 'rgba(16,185,129,0.12)', 'rgba(236,72,153,0.12)', 'rgba(59,130,246,0.12)'];
+
+// Animated background with floating bubbles (memo prevents re-render jitter)
+const BubbleBackground = memo(function BubbleBackground() {
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {BIG_BUBBLES.map((b, i) => (
+        <div
+          key={`big-${i}`}
+          className="absolute rounded-full"
+          style={{
+            width: `${b.size}px`,
+            height: `${b.size}px`,
+            left: `${b.left}%`,
+            top: `${b.top}%`,
+            background: `radial-gradient(circle at 30% 30%, ${BIG_COLORS[i % 4]}, transparent)`,
+            animation: `floatBubble ${b.duration}s ease-in-out infinite`,
+            animationDelay: `${b.delay}s`,
+          }}
+        />
+      ))}
+      {SMALL_SPARKLES.map((s, i) => (
+        <div
+          key={`small-${i}`}
+          className="absolute w-1 h-1 bg-white/40 rounded-full"
+          style={{
+            left: `${s.left}%`,
+            top: `${s.top}%`,
+            animation: `twinkle ${s.duration}s ease-in-out infinite`,
+            animationDelay: `${s.delay}s`,
+          }}
+        />
+      ))}
+    </div>
+  );
+});
 
 // Central Quran bubble orb
 const QuranBubble = ({ status, isPlaying, onClick, hasAccess, isAuthenticated, showTextInput }) => {
@@ -220,7 +234,7 @@ const MessageBubble = ({ text, isUser, isStreaming, verses, onVerseClick, onCopy
   const [copied, setCopied] = useState(false);
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(text);
+    navigator.clipboard.writeText(text).catch(() => {});
     setCopied(true);
     onCopy?.();
     setTimeout(() => setCopied(false), 2000);
@@ -386,6 +400,7 @@ export default function TalkToQuran({ isVisible, onClose, onNavigate }) {
   const mediaRecorderRef = useRef(null); // For Whisper fallback
   const audioChunksRef = useRef([]); // Store recorded audio chunks
   const recordingTimerRef = useRef(null); // Timer for recording duration
+  const abortControllerRef = useRef(null); // For canceling in-flight API requests
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -400,6 +415,10 @@ export default function TalkToQuran({ isVisible, onClose, onNavigate }) {
       recognitionRef.current?.stop();
       audioRef.current?.pause();
       if (silenceTimerRef.current) clearTimeout(silenceTimerRef.current);
+      if (streamingIntervalRef.current) clearInterval(streamingIntervalRef.current);
+      if (recordingTimerRef.current) clearInterval(recordingTimerRef.current);
+      if (window.speechSynthesis) window.speechSynthesis.cancel();
+      abortControllerRef.current?.abort();
     };
   }, []);
 
@@ -716,8 +735,8 @@ export default function TalkToQuran({ isVisible, onClose, onNavigate }) {
   const sendMessage = async (text) => {
     if (!text.trim() || !hasAccess) return;
 
-    // Keep isSendingRef true until we start processing (set by caller)
-    // Clear previous suggestions
+    // Clear previous error and suggestions
+    setError(null);
     setFollowUpQuestions([]);
 
     setMessages(prev => [...prev, { role: 'user', content: text }]);
@@ -728,11 +747,16 @@ export default function TalkToQuran({ isVisible, onClose, onNavigate }) {
     setStreamingText('');
     streamingRef.current = '';
 
+    // Create AbortController so user can cancel mid-request
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
+
     try {
       const res = await fetch('/api/quran-chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
+        signal: controller.signal,
         body: JSON.stringify({
           message: text,
           conversationHistory: messages.slice(-6).map(m => ({ role: m.role, content: m.content })),
@@ -770,9 +794,12 @@ export default function TalkToQuran({ isVisible, onClose, onNavigate }) {
       setStatus('speaking');
       setIsPlaying(true);
 
-      // Play OpenAI TTS audio if available
+      // Play OpenAI TTS audio if available, otherwise use browser TTS fallback
       if (data.audioUrl) {
         playAudio(data.audioUrl, words.length);
+      } else {
+        // Browser TTS fallback when server TTS is unavailable
+        speakWithBrowserTTS(fullText);
       }
 
       // Stream text display - faster when no audio
@@ -790,8 +817,8 @@ export default function TalkToQuran({ isVisible, onClose, onNavigate }) {
           setStreamingText('');
           // Generate follow-up suggestions
           setFollowUpQuestions(generateFollowUps(fullText, data.versesCited));
-          // If no audio, mark as done
-          if (!data.audioUrl) {
+          // If no OpenAI audio and browser TTS already finished, mark as done
+          if (!data.audioUrl && !window.speechSynthesis?.speaking) {
             setIsPlaying(false);
             setStatus('idle');
           }
@@ -800,9 +827,44 @@ export default function TalkToQuran({ isVisible, onClose, onNavigate }) {
 
       if (data.credits) setCredits({ balance: data.credits.balance, tier: data.credits.tier });
     } catch (e) {
+      if (e.name === 'AbortError') {
+        // User cancelled the request
+        return;
+      }
       setError('Network error');
       setStatus('idle');
     }
+  };
+
+  // Browser TTS fallback — speaks response text using Web Speech API
+  const speakWithBrowserTTS = (text) => {
+    if (!window.speechSynthesis) return;
+
+    // Cancel any ongoing browser speech
+    window.speechSynthesis.cancel();
+
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = language === 'ur' ? 'ur-PK' : language === 'ar' ? 'ar-SA' : 'en-US';
+    utterance.rate = 0.95;
+    utterance.pitch = 1.0;
+
+    // Try to pick a good voice for the language
+    const voices = window.speechSynthesis.getVoices();
+    const langPrefix = utterance.lang.split('-')[0];
+    const matchingVoice = voices.find(v => v.lang.startsWith(langPrefix));
+    if (matchingVoice) utterance.voice = matchingVoice;
+
+    utterance.onend = () => {
+      setIsPlaying(false);
+      setStatus('idle');
+    };
+
+    utterance.onerror = () => {
+      setIsPlaying(false);
+      setStatus('idle');
+    };
+
+    window.speechSynthesis.speak(utterance);
   };
 
   const playAudio = (audioUrl, wordCount) => {
@@ -857,10 +919,19 @@ export default function TalkToQuran({ isVisible, onClose, onNavigate }) {
   };
 
   const stopSpeaking = () => {
-    // Stop audio
+    // Abort in-flight API request if still processing
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+      abortControllerRef.current = null;
+    }
+    // Stop OpenAI TTS audio
     if (audioRef.current) {
       audioRef.current.pause();
       audioRef.current = null;
+    }
+    // Stop browser TTS
+    if (window.speechSynthesis) {
+      window.speechSynthesis.cancel();
     }
     // Stop text streaming
     if (streamingIntervalRef.current) {
@@ -944,8 +1015,8 @@ export default function TalkToQuran({ isVisible, onClose, onNavigate }) {
       handleUpgrade();
       return;
     }
-    if (status === 'idle') startListening();
-    else if (status === 'listening') stopAndSend();
+    if (status === 'idle') handleStartVoice();
+    else if (status === 'listening') handleStopVoice();
     else if (isPlaying) stopSpeaking();
   };
 
@@ -961,7 +1032,10 @@ export default function TalkToQuran({ isVisible, onClose, onNavigate }) {
     if (textInput.trim() && status === 'idle') {
       sendMessage(textInput.trim());
       setTextInput('');
-      setShowTextInput(false);
+      // Keep text input visible if voice won't work on this device
+      if (!useWhisperFallback && SpeechRecognition) {
+        setShowTextInput(false);
+      }
     }
   };
 
@@ -1426,7 +1500,7 @@ export default function TalkToQuran({ isVisible, onClose, onNavigate }) {
 
               {status === 'processing' && (
                 <button
-                  onClick={() => { setStatus('idle'); setError('Cancelled'); }}
+                  onClick={stopSpeaking}
                   className="relative flex items-center justify-center transition-all hover:scale-105 cursor-pointer"
                   style={{
                     width: '72px',
@@ -1435,16 +1509,17 @@ export default function TalkToQuran({ isVisible, onClose, onNavigate }) {
                     background: 'linear-gradient(145deg, #F59E0B 0%, #EF4444 100%)',
                     boxShadow: '0 10px 40px rgba(245,158,11,0.5), inset 0 2px 0 rgba(255,255,255,0.3)',
                   }}
+                  title="Stop"
                 >
                   <div className="absolute inset-1 rounded-full bg-gradient-to-b from-white/20 to-transparent" />
                   <div className="w-8 h-8 border-3 border-white/30 border-t-white rounded-full animate-spin relative z-10" />
                   <div className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity bg-black/30 rounded-full">
-                    <Icons.X className="w-6 h-6 text-white" />
+                    <Icons.Square className="w-6 h-6 text-white" />
                   </div>
                 </button>
               )}
 
-              {isPlaying && (
+              {isPlaying && status !== 'processing' && (
                 <button
                   onClick={stopSpeaking}
                   className="relative flex items-center justify-center transition-all hover:scale-105"

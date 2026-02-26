@@ -424,7 +424,13 @@ export const getGamificationData = () => {
   try {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored) {
-      return { ...DEFAULT_DATA, ...JSON.parse(stored) };
+      const parsed = JSON.parse(stored);
+      return {
+        ...DEFAULT_DATA,
+        ...parsed,
+        stats: { ...DEFAULT_DATA.stats, ...(parsed.stats || {}) },
+        streaks: { ...DEFAULT_DATA.streaks, ...(parsed.streaks || {}) },
+      };
     }
     // Initialize with default data
     const initial = { ...DEFAULT_DATA, createdAt: new Date().toISOString() };
@@ -604,10 +610,10 @@ export const checkAndUnlockAchievements = () => {
   if (data.stats.versesRead >= 1 && !data.achievements.includes('first_verse')) {
     newAchievements.push(unlockAchievement('first_verse'));
   }
-  if (data.stats.surahsCompleted.length >= 1 && !data.achievements.includes('surah_complete')) {
+  if ((data.stats.surahsCompleted?.length || 0) >= 1 && !data.achievements.includes('surah_complete')) {
     newAchievements.push(unlockAchievement('surah_complete'));
   }
-  if (data.stats.juzCompleted.length >= 1 && !data.achievements.includes('juz_complete')) {
+  if ((data.stats.juzCompleted?.length || 0) >= 1 && !data.achievements.includes('juz_complete')) {
     newAchievements.push(unlockAchievement('juz_complete'));
   }
 
@@ -615,7 +621,7 @@ export const checkAndUnlockAchievements = () => {
   if (data.stats.aiCompanionUses >= 10 && !data.achievements.includes('ai_seeker')) {
     newAchievements.push(unlockAchievement('ai_seeker'));
   }
-  if (data.stats.mapLocationsVisited.length >= 5 && !data.achievements.includes('explorer')) {
+  if ((data.stats.mapLocationsVisited?.length || 0) >= 5 && !data.achievements.includes('explorer')) {
     newAchievements.push(unlockAchievement('explorer'));
   }
   if (data.stats.meditationSessions >= 5 && !data.achievements.includes('meditator')) {

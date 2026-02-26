@@ -152,7 +152,13 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(إِذَا)[conditional] → (زُلْزِلَتِ)[passive-verb] → (ٱلْأَرْضُ)[subject] → (زِلْزَالَهَا)[cognate-accusative]"
+    dependencyStructure: "(إِذَا)[conditional] → (زُلْزِلَتِ)[passive-verb] → (ٱلْأَرْضُ)[subject] → (زِلْزَالَهَا)[cognate-accusative]",
+    structure: {
+      relationships: [
+      { from: 1, to: 2, label: 'شرط + فعل' },
+      { from: 2, to: 3, label: 'فعل + فاعل' }
+      ],
+    },
   },
 
   2: {
@@ -255,7 +261,13 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(وَأَخْرَجَتِ)[verb] → (ٱلْأَرْضُ)[subject] → (أَثْقَالَهَا)[object]"
+    dependencyStructure: "(وَأَخْرَجَتِ)[verb] → (ٱلْأَرْضُ)[subject] → (أَثْقَالَهَا)[object]",
+    structure: {
+      relationships: [
+      { from: 1, to: 2, label: 'فعل + فاعل' },
+      { from: 1, to: 3, label: 'فعل + مفعول به' }
+      ],
+    },
   },
 
   3: {
@@ -359,7 +371,12 @@ export const TREEBANK_DATA = {
         case: "genitive"
       }
     ],
-    dependencyStructure: "(وَقَالَ)[verb] → (ٱلْإِنسَٰنُ)[subject] → (مَا لَهَا)[quoted-question]"
+    dependencyStructure: "(وَقَالَ)[verb] → (ٱلْإِنسَٰنُ)[subject] → (مَا لَهَا)[quoted-question]",
+    structure: {
+      relationships: [
+      { from: 1, to: 2, label: 'فعل + فاعل' }
+      ],
+    },
   },
 
   4: {
@@ -466,7 +483,12 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(يَوْمَئِذٍ)[time] → (تُحَدِّثُ)[verb] → (أَخْبَارَهَا)[object]"
+    dependencyStructure: "(يَوْمَئِذٍ)[time] → (تُحَدِّثُ)[verb] → (أَخْبَارَهَا)[object]",
+    structure: {
+      relationships: [
+      { from: 2, to: 3, label: 'فعل + مفعول به' }
+      ],
+    },
   },
 
   5: {
@@ -478,7 +500,10 @@ export const TREEBANK_DATA = {
       hi: "क्योंकि तेरे रब ने उसे हुक्म दिया होगा",
       bn: "কারণ তোমার রব তাকে নির্দেশ দিয়েছেন",
       tr: "Çünkü Rabbin ona vahyetmiştir",
-      id: "Karena sesungguhnya Tuhanmu telah memerintahkannya"
+      id: "Karena sesungguhnya Tuhanmu telah memerintahkannya",
+    structure: {
+      relationships: [{ from: 3, to: 4, label: 'فعل + فاعل' }],
+    },
     },
     words: [
       {
@@ -756,7 +781,13 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(يَوْمَئِذٍ)[time] → (يَصْدُرُ)[verb] → (ٱلنَّاسُ)[subject] → (أَشْتَاتًا)[manner] → (لِّيُرَوْا۟)[purpose] → (أَعْمَٰلَهُمْ)[object]"
+    dependencyStructure: "(يَوْمَئِذٍ)[time] → (يَصْدُرُ)[verb] → (ٱلنَّاسُ)[subject] → (أَشْتَاتًا)[manner] → (لِّيُرَوْا۟)[purpose] → (أَعْمَٰلَهُمْ)[object]",
+    structure: {
+      relationships: [
+      { from: 2, to: 3, label: 'فعل + فاعل' },
+      { from: 5, to: 6, label: 'فعل + مفعول به' }
+      ],
+    },
   },
 
   7: {
@@ -942,7 +973,13 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(فَمَن)[conditional] → (يَعْمَلْ)[verb] → (مِثْقَالَ ذَرَّةٍ)[object] → (خَيْرًا)[specification] → (يَرَهُۥ)[result]"
+    dependencyStructure: "(فَمَن)[conditional] → (يَعْمَلْ)[verb] → (مِثْقَالَ ذَرَّةٍ)[object] → (خَيْرًا)[specification] → (يَرَهُۥ)[result]",
+    structure: {
+      relationships: [
+      { from: 1, to: 2, label: 'شرط + فعل' },
+      { from: 2, to: 3, label: 'فعل + مفعول به' }
+      ],
+    },
   },
 
   8: {
@@ -1107,7 +1144,13 @@ export const TREEBANK_DATA = {
         }
       }
     ],
-    dependencyStructure: "(وَمَن)[conditional] → (يَعْمَلْ)[verb] → (مِثْقَالَ ذَرَّةٍ)[object] → (شَرًّا)[specification] → (يَرَهُۥ)[result]"
+    dependencyStructure: "(وَمَن)[conditional] → (يَعْمَلْ)[verb] → (مِثْقَالَ ذَرَّةٍ)[object] → (شَرًّا)[specification] → (يَرَهُۥ)[result]",
+    structure: {
+      relationships: [
+      { from: 1, to: 2, label: 'شرط + فعل' },
+      { from: 2, to: 3, label: 'فعل + مفعول به' }
+      ],
+    },
   }
 };
 

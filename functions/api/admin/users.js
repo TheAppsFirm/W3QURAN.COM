@@ -24,6 +24,10 @@ export async function onRequest(context) {
     });
   }
 
+  if (!env.DB) {
+    return new Response(JSON.stringify({ error: 'Service unavailable' }), { status: 503, headers: { 'Content-Type': 'application/json' }});
+  }
+
   try {
     // Get current user and verify admin status
     const currentUser = await env.DB.prepare(`
@@ -257,16 +261,15 @@ export async function onRequest(context) {
         });
       }
 
-      // Prevent admin from blocking themselves
-      if (userId === currentUser.id) {
+      // Check if target user is also an admin (or the admin themselves)
+      const targetUser = await env.DB.prepare('SELECT email FROM users WHERE id = ?').bind(userId).first();
+      if (targetUser && targetUser.email?.toLowerCase() === currentUser.email?.toLowerCase()) {
         return new Response(JSON.stringify({ error: 'Cannot block yourself' }), {
           status: 400,
           headers: { 'Content-Type': 'application/json' },
         });
       }
 
-      // Check if target user is also an admin
-      const targetUser = await env.DB.prepare('SELECT email FROM users WHERE id = ?').bind(userId).first();
       if (targetUser) {
         const adminEmails = (env.ADMIN_EMAILS || '').split(',').map(e => e.trim().toLowerCase()).filter(Boolean);
         if (adminEmails.includes(targetUser.email?.toLowerCase())) {
@@ -321,7 +324,7 @@ export async function onRequest(context) {
           });
         }
         return new Response(JSON.stringify({
-          error: `Failed to ${action} user: ${errorMsg}`
+          error: `Failed to ${action} user`
         }), {
           status: 500,
           headers: { 'Content-Type': 'application/json' },
@@ -329,7 +332,7 @@ export async function onRequest(context) {
       }
     }
 
-    return new Response('Method not allowed', { status: 405 });
+    return new Response(JSON.stringify({ error: 'Method not allowed' }), { status: 405, headers: { 'Content-Type': 'application/json' } });
 
   } catch (error) {
     console.error('[Admin] Users error:', error);

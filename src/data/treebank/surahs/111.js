@@ -187,6 +187,10 @@ const SURAH_111_TREEBANK = {
         { word: 'أَبِي لَهَبٍ', role: 'mudaf-ilayh', dependsOn: 'يَدَا' },
         { word: 'وَتَبَّ', role: 'coordinated-verb', subject: 'هو (implied)' },
       ],
+      relationships: [
+        { from: 3, to: 4, label: 'مضاف + مضاف إليه' },
+        { from: 1, to: 5, label: 'عطف' }
+      ],
     },
   },
 
@@ -363,6 +367,9 @@ const SURAH_111_TREEBANK = {
         { word: 'مَالُهُ', role: 'subject' },
         { word: 'وَمَا كَسَبَ', role: 'coordinated-subject' },
       ],
+      relationships: [
+        { from: 1, to: 2, label: 'نفی + فعل' }
+      ],
     },
   },
 
@@ -498,6 +505,10 @@ const SURAH_111_TREEBANK = {
         { word: 'نَارًا', role: 'direct-object' },
         { word: 'ذَاتَ لَهَبٍ', role: 'adjective-phrase', describes: 'نَارًا' },
       ],
+      relationships: [
+        { from: 2, to: 3, label: 'موصوف + صفت' },
+        { from: 3, to: 4, label: 'مضاف + مضاف إليه' }
+      ],
     },
   },
 
@@ -618,6 +629,10 @@ const SURAH_111_TREEBANK = {
       structure: [
         { word: 'وَامْرَأَتُهُ', role: 'subject' },
         { word: 'حَمَّالَةَ الْحَطَبِ', role: 'badal/description', describes: 'امْرَأَتُهُ' },
+      ],
+      relationships: [
+        { from: 1, to: 2, label: 'بدل' },
+        { from: 2, to: 3, label: 'مضاف + مضاف إليه' }
       ],
     },
   },
@@ -779,6 +794,10 @@ const SURAH_111_TREEBANK = {
         { word: 'فِي جِيدِهَا', role: 'prep-phrase', location: true },
         { word: 'حَبْلٌ', role: 'subject (delayed)' },
         { word: 'مِّن مَّسَدٍ', role: 'adjective-phrase', material: true },
+      ],
+      relationships: [
+        { from: 1, to: 2, label: 'جار + مجرور' },
+        { from: 4, to: 5, label: 'جار + مجرور' }
       ],
     },
   },

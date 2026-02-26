@@ -24,6 +24,10 @@ export async function onRequest(context) {
     });
   }
 
+  if (!env.DB) {
+    return new Response(JSON.stringify({ error: 'Service unavailable' }), { status: 503, headers: { 'Content-Type': 'application/json' }});
+  }
+
   try {
     // Look up session and user
     // Note: blocked columns may not exist in older DB schemas, so we use a fallback
