@@ -347,8 +347,8 @@ const SAI_STATS = {
 const UMRAH_ID_MAP = { ihram: 1, tawaf: 2, maqam_ibrahim: 3, sai: 4, halq: 5 };
 const HAJJ_ID_MAP = {
   ihram: 1, mina1: 2, arafat: 3, muzdalifah: 4, jamarat1: 5,
-  sacrifice: 6, halq: 7, tawaf_ifadah: 8, maqam_ibrahim: 3, mina_days: 10, tawaf_wida: 12
-  // Note: sai not in data file (ID 9 = "Return to Mina"); sa'i and maqam_ibrahim use inline data only
+  sacrifice: 6, halq: 7, tawaf_ifadah: 8, mina_days: 10, tawaf_wida: 12
+  // sai + maqam_ibrahim use inline data only (no matching IDs in data file)
 };
 
 const enrichSteps = (inlineSteps, fullData, idMap) =>
@@ -528,14 +528,15 @@ const UMRAH_STEPS = [
     color: '#10B981',
     dua: {
       arabic: 'لَبَّيْكَ اللَّهُمَّ لَبَّيْكَ',
+      transliteration: 'Labbayk Allahumma labbayk',
       en: 'Here I am, O Allah, here I am (Talbiyah)',
       ur: 'حاضر ہوں اے اللہ حاضر ہوں (تلبیہ)',
       source: 'Sahih al-Bukhari 1549, Muslim 1184'
     },
     description: {
-      en: 'Enter Ihram at Miqat. Say: لَبَّيْكَ اللَّهُمَّ عُمْرَةً (intention), then recite Talbiyah continuously',
-      ur: 'میقات پر احرام باندھیں۔ نیت: لَبَّيْكَ اللَّهُمَّ عُمْرَةً، پھر مسلسل تلبیہ پڑھیں',
-      ar: 'الإحرام من الميقات. النية: لبيك اللهم عمرة، ثم التلبية'
+      en: 'Wear your 2 white cloths at Miqat. Make your intention: "O Allah, I am doing Umrah." Then keep saying the Talbiyah out loud until you reach the Kaaba.',
+      ur: 'میقات پر 2 سفید کپڑے پہنیں۔ نیت کریں: "اے اللہ میں عمرہ کر رہا ہوں۔" پھر کعبہ تک بلند آواز سے تلبیہ پڑھتے رہیں۔',
+      ar: 'البس ثوبَي الإحرام عند الميقات. انوِ: "اللهم إني أريد العمرة." ثم ردّد التلبية بصوت مرتفع حتى تصل الكعبة.'
     },
     miqatInfo: {
       en: '5 Miqat Points with distances from Makkah:\n1) ★ Dhul Hulayfah - 450km (from Madinah) — Prophet ﷺ started here\n2) Juhfah/Rabigh - 183km (from Syria/Egypt)\n3) Qarn al-Manazil - 75km (from Najd)\n4) Yalamlam - 92km (from Yemen)\n5) Dhat Irq - 94km (from Iraq)',
@@ -555,14 +556,15 @@ const UMRAH_STEPS = [
     color: '#F59E0B',
     dua: {
       arabic: 'بِسْمِ اللَّهِ وَاللَّهُ أَكْبَرُ',
+      transliteration: 'Bismillahi wallahu Akbar',
       en: 'In the name of Allah, Allah is the Greatest (said at Black Stone)',
       ur: 'اللہ کے نام سے، اللہ سب سے بڑا ہے (حجر اسود پر)',
       source: 'Sahih al-Bukhari 1613'
     },
     description: {
-      en: 'Stop Talbiyah. Circle the Kaaba 7 times counter-clockwise starting from the Black Stone.',
-      ur: 'تلبیہ بند کریں۔ حجر اسود سے شروع کرتے ہوئے کعبہ کے 7 چکر لگائیں۔',
-      ar: 'التوقف عن التلبية. الطواف حول الكعبة 7 أشواط بدءاً من الحجر الأسود.'
+      en: 'Stop saying Talbiyah now. Go to the Black Stone corner (it glows gold). Keep the Kaaba on your LEFT side. Walk around it 7 times. Make dua from your heart as you walk.',
+      ur: 'اب تلبیہ بند کریں۔ حجر اسود کے کونے پر جائیں (سنہری روشنی)۔ کعبہ کو اپنے بائیں طرف رکھیں۔ 7 چکر لگائیں۔ چلتے ہوئے دل سے دعا مانگیں۔',
+      ar: 'توقف عن التلبية. اذهب إلى ركن الحجر الأسود (يتوهج بالذهبي). اجعل الكعبة عن يسارك. طف حولها 7 مرات. ادعُ من قلبك أثناء المشي.'
     }
   },
   {
@@ -572,14 +574,15 @@ const UMRAH_STEPS = [
     color: '#F472B6',
     dua: {
       arabic: 'وَاتَّخِذُوا مِنْ مَقَامِ إِبْرَاهِيمَ مُصَلًّى',
+      transliteration: "Wattakhidhu min maqami Ibrahima musalla",
       en: 'And take the station of Ibrahim as a place of prayer (Quran 2:125)',
       ur: 'اور مقام ابراہیم کو نماز کی جگہ بناؤ (قرآن 2:125)',
       source: 'Quran 2:125, Sahih Muslim 1218'
     },
     description: {
-      en: 'Pray 2 rakaat behind Maqam Ibrahim after Tawaf. Recite Surah al-Kafirun in 1st rakaat and Surah al-Ikhlas in 2nd.',
-      ur: 'طواف کے بعد مقام ابراہیم کے پیچھے 2 رکعت نماز۔ پہلی رکعت میں سورۃ الکافرون اور دوسری میں سورۃ الاخلاص پڑھیں۔',
-      ar: 'صلاة ركعتين خلف مقام إبراهيم. يُقرأ في الأولى سورة الكافرون وفي الثانية سورة الإخلاص.'
+      en: 'Look for the small golden glass case near the Kaaba — that is Maqam Ibrahim. Stand behind it facing the Kaaba. Pray 2 short rakaat. Read Surah Kafirun in the 1st and Surah Ikhlas in the 2nd. Then drink Zamzam water.',
+      ur: 'کعبہ کے قریب چھوٹا سنہری شیشے کا ڈبہ دیکھیں — یہ مقام ابراہیم ہے۔ اس کے پیچھے کعبہ کی طرف منہ کر کے کھڑے ہوں۔ 2 مختصر رکعت پڑھیں۔ پہلی میں سورہ کافرون اور دوسری میں سورہ اخلاص۔ پھر زمزم پئیں۔',
+      ar: 'ابحث عن العلبة الزجاجية الذهبية الصغيرة قرب الكعبة — هذا مقام إبراهيم. قف خلفه مواجهاً الكعبة. صلِّ ركعتين خفيفتين. اقرأ سورة الكافرون في الأولى وسورة الإخلاص في الثانية. ثم اشرب ماء زمزم.'
     }
   },
   {
@@ -589,14 +592,15 @@ const UMRAH_STEPS = [
     color: '#3B82F6',
     dua: {
       arabic: 'إِنَّ الصَّفَا وَالْمَرْوَةَ مِنْ شَعَائِرِ اللَّهِ ۖ أَبْدَأُ بِمَا بَدَأَ اللَّهُ بِهِ',
+      transliteration: "Innas-Safa wal-Marwata min sha'a'irillah. Abda'u bima bada'Allahu bihi",
       en: 'Indeed, Safa and Marwah are among the symbols of Allah. I begin with what Allah began with.',
       ur: 'بے شک صفا اور مروہ اللہ کی نشانیوں میں سے ہیں۔ میں اس سے شروع کرتا ہوں جس سے اللہ نے شروع فرمایا۔',
       source: 'Quran 2:158, Sahih Muslim 1218'
     },
     description: {
-      en: 'Walk 7 times between Safa and Marwah',
-      ur: 'صفا اور مروہ کے درمیان 7 چکر',
-      ar: 'السعي بين الصفا والمروة 7 أشواط'
+      en: 'Go to Safa hill first. Walk to Marwah hill, then back to Safa — that is 2 laps. Do this 7 times total (end at Marwah). Men should jog in the green-lit section. Make any dua you want while walking.',
+      ur: 'پہلے صفا پہاڑی پر جائیں۔ مروہ تک چلیں، پھر واپس صفا — یہ 2 چکر ہیں۔ کل 7 بار کریں (مروہ پر ختم ہو)۔ سبز روشنی والے حصے میں مرد تیز چلیں۔ چلتے ہوئے جو چاہیں دعا مانگیں۔',
+      ar: 'اذهب إلى جبل الصفا أولاً. امشِ إلى المروة ثم عُد إلى الصفا — هذان شوطان. كرر ذلك 7 مرات (تنتهي عند المروة). يُسرع الرجال في المنطقة المضاءة بالأخضر. ادعُ بما شئت أثناء المشي.'
     }
   },
   {
@@ -606,13 +610,14 @@ const UMRAH_STEPS = [
     color: '#8B5CF6',
     dua: {
       arabic: 'اللَّهُمَّ اغْفِرْ لِي ذُنُوبِي',
+      transliteration: 'Allahumma-ghfir li dhunubi',
       en: 'O Allah, forgive my sins',
       ur: 'اے اللہ میرے گناہ معاف فرما'
     },
     description: {
-      en: 'Shave or trim hair to complete Umrah',
-      ur: 'عمرہ مکمل کرنے کے لیے بال کٹوائیں',
-      ar: 'الحلق أو التقصير لإتمام العمرة'
+      en: 'Go to a barber. Men: shave your whole head (best) or trim hair short. Women: cut a fingertip length from the end of your hair. Your Umrah is now complete! You can change back to normal clothes.',
+      ur: 'حجام کے پاس جائیں۔ مرد: پورا سر منڈوائیں (بہتر) یا بال چھوٹے کروائیں۔ عورتیں: بالوں کے سرے سے انگلی کے برابر کاٹیں۔ آپ کا عمرہ مکمل ہو گیا! اب عام کپڑے پہن سکتے ہیں۔',
+      ar: 'اذهب إلى الحلاق. الرجال: احلق رأسك كاملاً (الأفضل) أو قصّر شعرك. النساء: قصي بقدر أنملة من أطراف شعرك. اكتملت عمرتك! يمكنك العودة لملابسك العادية.'
     }
   }
 ];
@@ -625,14 +630,15 @@ const HAJJ_STEPS = [
     color: '#10B981',
     dua: {
       arabic: 'لَبَّيْكَ اللَّهُمَّ لَبَّيْكَ',
+      transliteration: 'Labbayk Allahumma labbayk',
       en: 'Here I am, O Allah, here I am (Talbiyah)',
       ur: 'حاضر ہوں اے اللہ حاضر ہوں (تلبیہ)',
       source: 'Sahih al-Bukhari 1549, Muslim 1184'
     },
     description: {
-      en: 'Re-enter Ihram for Hajj on 8th Dhul Hijjah (Yawm al-Tarwiyah). Say: لَبَّيْكَ اللَّهُمَّ حَجًّا, then recite Talbiyah continuously until stoning on the 10th.',
-      ur: '8 ذوالحجہ (یوم الترویہ) - حج کے لیے دوبارہ احرام باندھیں۔ نیت: لَبَّيْكَ اللَّهُمَّ حَجًّا، پھر 10 تاریخ کو رمی تک تلبیہ جاری رکھیں۔',
-      ar: 'الإحرام للحج يوم التروية (8 ذو الحجة). النية: لبيك اللهم حجاً، ثم التلبية حتى رمي جمرة العقبة.'
+      en: '8th Dhul Hijjah. Put on your Ihram clothes again. Say: "O Allah, I am doing Hajj." Keep saying Talbiyah loudly from now until you throw stones on the 10th.',
+      ur: '8 ذوالحجہ۔ دوبارہ احرام کے کپڑے پہنیں۔ کہیں: "اے اللہ میں حج کر رہا ہوں۔" اب سے لے کر 10 تاریخ کو کنکریاں مارنے تک بلند آواز سے تلبیہ پڑھتے رہیں۔',
+      ar: '8 ذو الحجة. البس ملابس الإحرام مرة أخرى. انوِ: "اللهم إني أريد الحج." ردّد التلبية بصوت عالٍ من الآن حتى رمي الجمرات يوم 10.'
     },
     miqatInfo: {
       en: '5 Miqat Points with distances from Makkah:\n1) ★ Dhul Hulayfah - 450km (from Madinah) — Prophet ﷺ started here\n2) Juhfah/Rabigh - 183km (from Syria/Egypt)\n3) Qarn al-Manazil - 75km (from Najd)\n4) Yalamlam - 92km (from Yemen)\n5) Dhat Irq - 94km (from Iraq)',
@@ -653,14 +659,15 @@ const HAJJ_STEPS = [
     color: '#EC4899',
     dua: {
       arabic: 'لَبَّيْكَ اللَّهُمَّ لَبَّيْكَ',
+      transliteration: 'Labbayk Allahumma labbayk',
       en: 'Here I am, O Allah, here I am (continue Talbiyah)',
       ur: 'حاضر ہوں اے اللہ حاضر ہوں (تلبیہ جاری رکھیں)',
       source: 'Sahih al-Bukhari 1549 — Talbiyah continues until stoning on 10th'
     },
     description: {
-      en: 'Stay overnight in Mina, pray 5 shortened prayers. Continue reciting Talbiyah.',
-      ur: 'منیٰ میں رات گزاریں، 5 نمازیں قصر کریں۔ تلبیہ جاری رکھیں۔',
-      ar: 'المبيت في منى وقصر الصلوات الخمس. استمرار التلبية.'
+      en: 'Go to Mina and stay the night in your tent. Pray all 5 prayers but make them short (2 rakaat instead of 4). Keep saying Talbiyah. Rest well — tomorrow is the big day at Arafat.',
+      ur: 'منیٰ جائیں اور اپنے خیمے میں رات گزاریں۔ پانچوں نمازیں پڑھیں مگر مختصر (4 کی جگہ 2 رکعت)۔ تلبیہ جاری رکھیں۔ آرام کریں — کل عرفات کا بڑا دن ہے۔',
+      ar: 'اذهب إلى منى وبِت في خيمتك. صلِّ الصلوات الخمس مقصورة (ركعتين بدل أربع). واصل التلبية. استرح — غداً يوم عرفة العظيم.'
     },
     day: 8
   },
@@ -671,14 +678,15 @@ const HAJJ_STEPS = [
     color: '#8B5CF6',
     dua: {
       arabic: 'لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ',
+      transliteration: "La ilaha illallahu wahdahu la sharika lah, lahul-mulku wa lahul-hamdu wa huwa 'ala kulli shay'in qadir",
       en: 'There is no god but Allah alone, with no partner. His is the dominion, His is the praise, and He has power over all things.',
       ur: 'اللہ کے سوا کوئی معبود نہیں، وہ اکیلا ہے، اس کا کوئی شریک نہیں۔ بادشاہی اسی کی ہے، حمد اسی کی ہے، وہ ہر چیز پر قادر ہے۔',
       source: 'Tirmidhi 3585 — "The best dua is on the Day of Arafat"'
     },
     description: {
-      en: 'Stand at Arafat from noon to sunset (9th Dhul Hijjah)',
-      ur: '9 ذوالحجہ - عرفات میں دوپہر سے مغرب تک',
-      ar: 'الوقوف بعرفة من الظهر إلى الغروب (9 ذو الحجة)'
+      en: '9th Dhul Hijjah — the MOST important day of Hajj. Stand anywhere in Arafat from after Dhuhr until sunset. Raise your hands and make dua from your heart. Cry, beg Allah, ask for everything. This is when sins are forgiven.',
+      ur: '9 ذوالحجہ — حج کا سب سے اہم دن۔ ظہر کے بعد سے مغرب تک عرفات میں کہیں بھی کھڑے ہوں۔ ہاتھ اٹھائیں اور دل سے دعا مانگیں۔ روئیں، اللہ سے مانگیں، سب کچھ مانگیں۔ یہ وہ وقت ہے جب گناہ معاف ہوتے ہیں۔',
+      ar: '9 ذو الحجة — أهم يوم في الحج. قف في أي مكان بعرفة من بعد الظهر حتى الغروب. ارفع يديك وادعُ من قلبك. ابكِ وتضرع واسأل الله كل شيء. هذا وقت مغفرة الذنوب.'
     },
     day: 9
   },
@@ -689,14 +697,15 @@ const HAJJ_STEPS = [
     color: '#06B6D4',
     dua: {
       arabic: 'فَاذْكُرُوا اللَّهَ عِنْدَ الْمَشْعَرِ الْحَرَامِ وَاذْكُرُوهُ كَمَا هَدَاكُمْ',
+      transliteration: "Fadhkurullaha 'indal-Mash'aril-Haram wadhkuruhu kama hadakum",
       en: 'Remember Allah at al-Mash\'ar al-Haram, and remember Him as He has guided you (Quran 2:198)',
       ur: 'مشعر الحرام کے پاس اللہ کو یاد کرو اور اسے ایسے یاد کرو جیسے اس نے تمہیں ہدایت دی (قرآن 2:198)',
       source: 'Quran 2:198, Sahih Muslim 1218 — Pray Maghrib+Isha combined, then make dhikr until Fajr'
     },
     description: {
-      en: 'Pray Maghrib & Isha combined. Spend night under stars, collect 49 pebbles, make dhikr.',
-      ur: 'مغرب و عشاء جمع کریں۔ ستاروں تلے رات، 49 کنکریاں جمع کریں، ذکر کریں۔',
-      ar: 'جمع المغرب والعشاء. المبيت تحت النجوم، جمع 49 حصاة، والذكر.'
+      en: 'After sunset, leave Arafat for Muzdalifah. Pray Maghrib and Isha together (combine them). Sleep under the open sky. Before Fajr, pick up 49 small pebbles (chickpea size) from the ground — you will need them for stoning.',
+      ur: 'مغرب کے بعد عرفات سے مزدلفہ جائیں۔ مغرب اور عشاء ایک ساتھ پڑھیں۔ کھلے آسمان تلے سوئیں۔ فجر سے پہلے زمین سے 49 چھوٹی کنکریاں (چنے کے سائز) اٹھائیں — رمی کے لیے چاہیے ہوں گی۔',
+      ar: 'بعد الغروب، انطلق من عرفة إلى مزدلفة. صلِّ المغرب والعشاء جمعاً. نَم تحت السماء المفتوحة. قبل الفجر، التقط 49 حصاة صغيرة (بحجم الحمص) من الأرض — ستحتاجها للرمي.'
     },
     day: 9
   },
@@ -707,13 +716,14 @@ const HAJJ_STEPS = [
     color: '#EF4444',
     dua: {
       arabic: 'بِسْمِ اللَّهِ، اللَّهُ أَكْبَرُ',
+      transliteration: 'Bismillahi, Allahu Akbar',
       en: 'In the name of Allah, Allah is the Greatest',
       ur: 'اللہ کے نام سے، اللہ سب سے بڑا ہے'
     },
     description: {
-      en: 'Stone the large pillar 7 times (10th Dhul Hijjah)',
-      ur: '10 ذوالحجہ - بڑے جمرے پر 7 کنکریاں',
-      ar: 'رمي جمرة العقبة الكبرى (10 ذو الحجة)'
+      en: '10th Dhul Hijjah — Eid day! Go to the Jamarat bridge. Find the LARGE pillar (the last one). Throw 7 pebbles one by one. Say "Allahu Akbar" with each throw. Stop saying Talbiyah after this.',
+      ur: '10 ذوالحجہ — عید کا دن! جمرات پل پر جائیں۔ بڑا ستون (آخری) تلاش کریں۔ ایک ایک کر کے 7 کنکریاں ماریں۔ ہر پھینکنے پر "اللہ اکبر" کہیں۔ اس کے بعد تلبیہ بند کر دیں۔',
+      ar: '10 ذو الحجة — يوم العيد! اذهب إلى جسر الجمرات. ابحث عن العمود الكبير (الأخير). ارمِ 7 حصيات واحدة تلو الأخرى. كبّر مع كل رمية. توقف عن التلبية بعد هذا.'
     },
     day: 10
   },
@@ -724,14 +734,15 @@ const HAJJ_STEPS = [
     color: '#F97316',
     dua: {
       arabic: 'بِسْمِ اللَّهِ وَاللَّهُ أَكْبَرُ، اللَّهُمَّ هَذَا مِنْكَ وَلَكَ',
+      transliteration: 'Bismillahi wallahu Akbar, Allahumma hadha minka wa lak',
       en: 'In the name of Allah, Allah is the Greatest. O Allah, this is from You and for You',
       ur: 'اللہ کے نام سے، اللہ سب سے بڑا ہے۔ یہ تیری طرف سے ہے اور تیرے لیے ہے',
       source: 'Sahih Muslim 1966'
     },
     description: {
-      en: 'Offer sacrifice (Qurbani)',
-      ur: 'قربانی کریں',
-      ar: 'ذبح الأضحية'
+      en: 'Offer an animal sacrifice (sheep, goat, cow, or camel). You can pay someone to do it for you. Say Bismillah before the sacrifice. The meat is shared with the poor.',
+      ur: 'جانور کی قربانی دیں (بھیڑ، بکری، گائے، یا اونٹ)۔ آپ کسی سے بھی کروا سکتے ہیں۔ قربانی سے پہلے بسم اللہ کہیں۔ گوشت غریبوں میں بانٹا جاتا ہے۔',
+      ar: 'اذبح أضحية (خروف أو بقرة أو ناقة). يمكنك توكيل غيرك. قل بسم الله قبل الذبح. يُوزع اللحم على الفقراء.'
     },
     day: 10
   },
@@ -742,13 +753,14 @@ const HAJJ_STEPS = [
     color: '#6366F1',
     dua: {
       arabic: 'الْحَمْدُ لِلَّهِ الَّذِي قَضَى عَنَّا نُسُكَنَا',
+      transliteration: "Alhamdu lillahil-ladhi qada 'anna nusukana",
       en: 'Praise be to Allah who has completed our rites for us',
       ur: 'تمام تعریفیں اللہ کے لیے جس نے ہمارے مناسک پورے کر دیے'
     },
     description: {
-      en: 'Shave or trim hair',
-      ur: 'سر منڈوائیں یا بال کٹوائیں',
-      ar: 'الحلق أو التقصير'
+      en: 'Go to a barber and shave your head (best for men) or trim hair short. Women cut a fingertip length. After this you can wear normal clothes, use perfume — most Ihram rules are lifted now.',
+      ur: 'حجام کے پاس جائیں اور سر منڈوائیں (مردوں کے لیے بہتر) یا بال چھوٹے کروائیں۔ عورتیں انگلی کے برابر کاٹیں۔ اس کے بعد عام کپڑے پہن سکتے ہیں، خوشبو لگا سکتے ہیں — احرام کے اکثر پابندیاں ختم ہو جاتی ہیں۔',
+      ar: 'اذهب إلى الحلاق واحلق رأسك (الأفضل للرجال) أو قصّر شعرك. النساء تقصّ بقدر أنملة. بعد هذا يمكنك لبس الملابس العادية والتطيب — رُفعت أغلب محظورات الإحرام.'
     },
     day: 10
   },
@@ -759,14 +771,15 @@ const HAJJ_STEPS = [
     color: '#F59E0B',
     dua: {
       arabic: 'رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ',
+      transliteration: "Rabbana atina fid-dunya hasanatan wa fil-akhirati hasanatan wa qina 'adhaban-nar",
       en: 'Our Lord, give us good in this world and good in the Hereafter, and save us from the torment of the Fire',
       ur: 'اے ہمارے رب! ہمیں دنیا میں بھی بھلائی دے اور آخرت میں بھی بھلائی دے اور ہمیں آگ کے عذاب سے بچا',
       source: 'Quran 2:201'
     },
     description: {
-      en: 'Circle the Kaaba 7 times (obligatory)',
-      ur: 'کعبہ کے 7 چکر (فرض)',
-      ar: 'الطواف حول الكعبة 7 أشواط (ركن)'
+      en: 'Go back to the Kaaba. This Tawaf is FARD (obligatory) — your Hajj is not valid without it. Walk 7 times around the Kaaba starting from the Black Stone. Keep Kaaba on your LEFT.',
+      ur: 'کعبہ واپس جائیں۔ یہ طواف فرض ہے — اس کے بغیر حج مکمل نہیں۔ حجر اسود سے شروع کر کے کعبہ کے 7 چکر لگائیں۔ کعبہ کو بائیں طرف رکھیں۔',
+      ar: 'عُد إلى الكعبة. هذا الطواف فرض — لا يصح حجك بدونه. طف 7 أشواط حول الكعبة بدءاً من الحجر الأسود. اجعل الكعبة عن يسارك.'
     },
     day: 10
   },
@@ -777,14 +790,15 @@ const HAJJ_STEPS = [
     color: '#F472B6',
     dua: {
       arabic: 'وَاتَّخِذُوا مِنْ مَقَامِ إِبْرَاهِيمَ مُصَلًّى',
+      transliteration: "Wattakhidhu min maqami Ibrahima musalla",
       en: 'And take the station of Ibrahim as a place of prayer (Quran 2:125)',
       ur: 'اور مقام ابراہیم کو نماز کی جگہ بناؤ (قرآن 2:125)',
       source: 'Quran 2:125, Sahih Muslim 1218'
     },
     description: {
-      en: 'Pray 2 rakaat behind Maqam Ibrahim after Tawaf al-Ifadah',
-      ur: 'طواف افاضہ کے بعد مقام ابراہیم کے پیچھے 2 رکعت نماز',
-      ar: 'صلاة ركعتين خلف مقام إبراهيم بعد طواف الإفاضة'
+      en: 'Same as before — find the golden glass case (Maqam Ibrahim) near the Kaaba. Stand behind it, face the Kaaba, pray 2 quick rakaat. Then drink Zamzam water.',
+      ur: 'پہلے کی طرح — کعبہ کے قریب سنہری شیشے کا ڈبہ (مقام ابراہیم) تلاش کریں۔ اس کے پیچھے کعبہ کی طرف منہ کر کے 2 مختصر رکعت پڑھیں۔ پھر زمزم پئیں۔',
+      ar: 'كما فعلت سابقاً — ابحث عن العلبة الزجاجية الذهبية (مقام إبراهيم) قرب الكعبة. قف خلفه مواجهاً الكعبة وصلِّ ركعتين خفيفتين. ثم اشرب ماء زمزم.'
     },
     day: 10
   },
@@ -795,14 +809,15 @@ const HAJJ_STEPS = [
     color: '#3B82F6',
     dua: {
       arabic: 'إِنَّ الصَّفَا وَالْمَرْوَةَ مِنْ شَعَائِرِ اللَّهِ ۖ أَبْدَأُ بِمَا بَدَأَ اللَّهُ بِهِ',
+      transliteration: "Innas-Safa wal-Marwata min sha'a'irillah. Abda'u bima bada'Allahu bihi",
       en: 'Indeed, Safa and Marwah are among the symbols of Allah. I begin with what Allah began with.',
       ur: 'بے شک صفا اور مروہ اللہ کی نشانیوں میں سے ہیں۔ میں اس سے شروع کرتا ہوں جس سے اللہ نے شروع فرمایا۔',
       source: 'Quran 2:158, Sahih Muslim 1218'
     },
     description: {
-      en: 'Walk between Safa and Marwah 7 times',
-      ur: 'صفا اور مروہ کے درمیان 7 چکر',
-      ar: 'السعي بين الصفا والمروة'
+      en: 'Same as Umrah Sa\'i. Start at Safa, walk to Marwah and back — 7 times total. Men jog in the green-lit section. End at Marwah. Make any dua while walking.',
+      ur: 'عمرہ کی سعی کی طرح۔ صفا سے شروع کریں، مروہ تک چلیں اور واپس — کل 7 بار۔ سبز روشنی والے حصے میں مرد تیز چلیں۔ مروہ پر ختم ہو۔ چلتے ہوئے دعا مانگیں۔',
+      ar: 'مثل سعي العمرة. ابدأ من الصفا، امشِ إلى المروة وعُد — 7 أشواط. يُسرع الرجال في المنطقة الخضراء. انتهِ عند المروة. ادعُ أثناء المشي.'
     },
     day: 10
   },
@@ -813,13 +828,14 @@ const HAJJ_STEPS = [
     color: '#EC4899',
     dua: {
       arabic: 'اللَّهُ أَكْبَرُ اللَّهُ أَكْبَرُ لَا إِلَهَ إِلَّا اللَّهُ وَاللَّهُ أَكْبَرُ اللَّهُ أَكْبَرُ وَلِلَّهِ الْحَمْدُ',
+      transliteration: "Allahu Akbar Allahu Akbar, la ilaha illallah, wallahu Akbar Allahu Akbar, wa lillahil-hamd",
       en: 'Allah is the Greatest, Allah is the Greatest, there is no god but Allah. Allah is the Greatest, Allah is the Greatest, and to Allah belongs all praise',
       ur: 'اللہ سب سے بڑا ہے، اللہ کے سوا کوئی معبود نہیں، اللہ سب سے بڑا ہے، تمام تعریفیں اللہ کے لیے ہیں'
     },
     description: {
-      en: 'Stay in Mina, stone all 3 pillars daily (11-13 Dhul Hijjah)',
-      ur: '11-13 ذوالحجہ - منیٰ میں قیام، روزانہ تینوں جمرات',
-      ar: 'المبيت في منى ورمي الجمرات الثلاث (11-13 ذو الحجة)'
+      en: '11th-13th Dhul Hijjah. Stay in Mina. Every day after Dhuhr, go to Jamarat bridge and throw 7 pebbles at EACH of the 3 pillars (small, medium, large = 21 pebbles/day). Say Takbir with each throw. You can leave on the 12th if you want (before sunset).',
+      ur: '11-13 ذوالحجہ۔ منیٰ میں رہیں۔ ہر دن ظہر کے بعد جمرات پل پر جائیں اور تینوں ستونوں (چھوٹا، درمیانہ، بڑا) پر 7-7 کنکریاں ماریں (21 روزانہ)۔ ہر پھینکنے پر تکبیر کہیں۔ 12 تاریخ کو مغرب سے پہلے جا سکتے ہیں۔',
+      ar: '11-13 ذو الحجة. أقم في منى. كل يوم بعد الظهر، اذهب لجسر الجمرات وارمِ 7 حصيات على كل من الجمرات الثلاث (الصغرى والوسطى والكبرى = 21 حصاة/يوم). كبّر مع كل رمية. يجوز المغادرة يوم 12 قبل الغروب.'
     },
     day: 11
   },
@@ -830,14 +846,15 @@ const HAJJ_STEPS = [
     color: '#10B981',
     dua: {
       arabic: 'رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ',
+      transliteration: "Rabbana atina fid-dunya hasanatan wa fil-akhirati hasanatan wa qina 'adhaban-nar",
       en: 'Our Lord, give us good in this world and the Hereafter, and protect us from the Fire (same as all Tawaf)',
       ur: 'اے ہمارے رب! دنیا اور آخرت میں بھلائی دے اور آگ کے عذاب سے بچا (ہر طواف کی طرح)',
       source: 'Abu Dawud 1892, Quran 2:201'
     },
     description: {
-      en: 'Farewell Tawaf before leaving Makkah',
-      ur: 'مکہ سے جانے سے پہلے الوداعی طواف',
-      ar: 'طواف الوداع قبل مغادرة مكة'
+      en: 'Your last act in Makkah. Walk 7 times around the Kaaba one final time to say goodbye. After this, leave Makkah directly — do not stay for shopping or rest. Your Hajj is complete! May Allah accept it.',
+      ur: 'مکہ میں آپ کا آخری عمل۔ الوداع کہنے کے لیے آخری بار کعبہ کے 7 چکر لگائیں۔ اس کے بعد مکہ سے فوراً نکلیں — خریداری یا آرام کے لیے نہ رکیں۔ آپ کا حج مکمل ہوا! اللہ قبول فرمائے۔',
+      ar: 'آخر عمل في مكة. طف حول الكعبة 7 أشواط أخيرة للوداع. بعدها غادر مكة مباشرة — لا تبقَ للتسوق أو الراحة. اكتمل حجك! تقبل الله منك.'
     },
     day: 13
   }
@@ -979,12 +996,12 @@ const LandmarkLabel = ({ from, to, color, emoji, name, nameUr, nameAr, locationI
         <cylinderGeometry args={[lineWidth, lineWidth, len, 4]} />
         <meshStandardMaterial color={color} emissive={color} emissiveIntensity={0.4} />
       </mesh>
-      <Html position={to} center distanceFactor={50} zIndexRange={[50, 0]}>
+      {_showLabels && <Html position={to} center distanceFactor={50} zIndexRange={[50, 0]}>
         <div style={{ background: 'rgba(0,0,0,0.82)', padding: '3px 8px', borderRadius: 5, whiteSpace: 'nowrap', cursor: 'pointer', borderLeft: `2px solid ${color}`, backdropFilter: 'blur(4px)', boxShadow: '0 2px 8px rgba(0,0,0,0.4)',
           direction: isRTLLabel ? 'rtl' : 'ltr', fontFamily: isRTLLabel ? "'Noto Nastaliq Urdu', serif" : 'inherit' }} onClick={() => triggerLocationClick(locationId)}>
           <div style={{ color, fontSize: 9, fontWeight: 600 }}>{emoji} {displayName}</div>
         </div>
-      </Html>
+      </Html>}
     </group>
   );
 };
@@ -1568,12 +1585,12 @@ const ClockTower = ({ position = [0, 0, -50] }) => {
       <pointLight position={[0, 70, 0]} intensity={3} color={GOLD} distance={30} />
 
       {/* Label */}
-      <Html position={[0, 75, 0]} center distanceFactor={80}>
+      {_showLabels && <Html position={[0, 75, 0]} center distanceFactor={80}>
         <div style={{ background: 'rgba(0,0,0,0.7)', padding: '2px 8px', borderRadius: 5, textAlign: 'center', whiteSpace: 'nowrap', cursor: 'pointer' }} onClick={() => triggerLocationClick('clock_tower')}>
           <div style={{ color: '#FFD700', fontSize: 10, fontWeight: 700 }}>{L3D('Abraj Al-Bait', 'ابراج البیت', 'أبراج البيت')}</div>
           <div style={{ color: 'rgba(255,255,255,0.5)', fontSize: 8 }}>{L3D('Clock Tower', 'کلاک ٹاور', 'ساعة مكة')}</div>
         </div>
-      </Html>
+      </Html>}
     </group>
   );
 };
@@ -1628,8 +1645,9 @@ let _locationClickHandler = null;
 const registerLocationClick = (handler) => { _locationClickHandler = handler; };
 const triggerLocationClick = (id) => { _locationClickHandler?.(id); };
 
-// Module-level language for 3D label components (set from PilgrimageScene)
+// Module-level language + label visibility for 3D label components (set from PilgrimageScene)
 let _sceneLanguage = 'en';
+let _showLabels = true;
 const L3D = (en, ur, ar) => _sceneLanguage === 'ar' ? ar : _sceneLanguage === 'ur' ? ur : en;
 
 const LOCATION_DETAILS = {
@@ -1935,14 +1953,14 @@ const MiqatMarker = ({ pos, name, nameAr, dir, id }) => {
         <meshStandardMaterial color="#10B981" emissive="#10B981" emissiveIntensity={0.4} />
       </mesh>
       {/* Floating text label - clickable, localized */}
-      <Html position={[0, 10.5, 0]} center distanceFactor={60}>
+      {_showLabels && <Html position={[0, 10.5, 0]} center distanceFactor={60}>
         <div style={{ background: 'rgba(16,185,129,0.85)', padding: '3px 8px', borderRadius: 6, textAlign: 'center', whiteSpace: 'nowrap', border: '1px solid rgba(255,255,255,0.3)', cursor: 'pointer',
           direction: _sceneLanguage === 'ar' || _sceneLanguage === 'ur' ? 'rtl' : 'ltr',
           fontFamily: _sceneLanguage === 'ar' || _sceneLanguage === 'ur' ? "'Noto Nastaliq Urdu', serif" : 'inherit' }} onClick={() => triggerLocationClick(id)}>
           <div style={{ color: '#fff', fontSize: 11, fontWeight: 700 }}>🕋 {_sceneLanguage === 'ar' ? nameAr : _sceneLanguage === 'ur' ? (nameAr || name) : name}</div>
           <div style={{ color: 'rgba(255,255,255,0.6)', fontSize: 9 }}>➝ {typeof dir === 'object' ? (dir[_sceneLanguage] || dir.en) : dir}</div>
         </div>
-      </Html>
+      </Html>}
       <pointLight position={[0, 6, 0]} intensity={1} color="#10B981" distance={15} />
     </group>
   );
@@ -1996,11 +2014,11 @@ const MiqatDistanceLines = ({ visible }) => {
               </mesh>
             ))}
             {/* Distance label at midpoint */}
-            <Html position={[midX, 4, midZ]} center distanceFactor={50} style={{ pointerEvents: 'none' }}>
+            {_showLabels && <Html position={[midX, 4, midZ]} center distanceFactor={50} style={{ pointerEvents: 'none' }}>
               <div style={{ background: 'rgba(16,185,129,0.9)', padding: '1px 6px', borderRadius: 10, whiteSpace: 'nowrap' }}>
                 <span style={{ color: '#fff', fontSize: 9, fontWeight: 700 }}>{distances[i]}</span>
               </div>
-            </Html>
+            </Html>}
           </group>
         );
       })}
@@ -2020,8 +2038,8 @@ const SafaMarwah = ({ showPath = false }) => {
 
   return (
     <group position={[25, 0, 0]}>
-      {/* SAFA HILL - Rocky mountain */}
-      <group position={[-8, 0, 0]}>
+      {/* SAFA HILL - Rocky mountain — pushed back (z=-6) so pilgrim on corridor (z=0) doesn't clip */}
+      <group position={[-8, 0, -6]}>
         {/* Main hill body */}
         <mesh position={[0, 2, 0]} castShadow>
           <coneGeometry args={[4, 4, 8]} />
@@ -2035,26 +2053,26 @@ const SafaMarwah = ({ showPath = false }) => {
           <coneGeometry args={[1.5, 2, 5]} />
           <meshStandardMaterial color="#7A6350" roughness={0.95} flatShading />
         </mesh>
-        {/* Green marker sign */}
-        <mesh position={[0, 5, 0]}>
+        {/* Green marker sign — positioned toward corridor so it's visible */}
+        <mesh position={[0, 5, 3]}>
           <boxGeometry args={[2, 1, 0.3]} />
           <meshStandardMaterial color="#10B981" emissive="#10B981" emissiveIntensity={0.6} />
         </mesh>
-        <pointLight position={[0, 5, 0]} intensity={1} color="#10B981" distance={8} />
-        <mesh position={[0, 0.1, 3]} rotation={[-Math.PI / 2, 0, 0]}>
+        <pointLight position={[0, 5, 3]} intensity={1} color="#10B981" distance={8} />
+        <mesh position={[0, 0.1, 6]} rotation={[-Math.PI / 2, 0, 0]}>
           <circleGeometry args={[2, 16]} />
           <meshStandardMaterial color="#10B981" transparent opacity={0.3} />
         </mesh>
-        {/* Safa label */}
-        <Html position={[0, 7, 0]} center distanceFactor={50}>
+        {/* Safa label — over the hill */}
+        {_showLabels && <Html position={[0, 7, 0]} center distanceFactor={50}>
           <div style={{ background: 'rgba(16,185,129,0.85)', padding: '2px 8px', borderRadius: 5, textAlign: 'center', whiteSpace: 'nowrap', cursor: 'pointer' }} onClick={() => triggerLocationClick('safa')}>
             <div style={{ color: '#fff', fontSize: 11, fontWeight: 700 }}>⛰️ {L3D('Safa (الصفا)', 'صفا (الصفا)', 'الصفا')}</div>
           </div>
-        </Html>
+        </Html>}
       </group>
 
-      {/* MARWAH HILL - Larger rocky mountain */}
-      <group position={[8, 0, 0]}>
+      {/* MARWAH HILL - Larger rocky mountain — pushed back (z=-6) to clear corridor */}
+      <group position={[8, 0, -6]}>
         {/* Main hill body */}
         <mesh position={[0, 2.5, 0]} castShadow>
           <coneGeometry args={[5, 5, 8]} />
@@ -2068,22 +2086,22 @@ const SafaMarwah = ({ showPath = false }) => {
           <coneGeometry args={[2, 3, 5]} />
           <meshStandardMaterial color="#6B5344" roughness={0.95} flatShading />
         </mesh>
-        {/* Green marker sign */}
-        <mesh position={[0, 6, 0]}>
+        {/* Green marker sign — positioned toward corridor */}
+        <mesh position={[0, 6, 3]}>
           <boxGeometry args={[2, 1, 0.3]} />
           <meshStandardMaterial color="#10B981" emissive="#10B981" emissiveIntensity={0.6} />
         </mesh>
-        <pointLight position={[0, 6, 0]} intensity={1} color="#10B981" distance={8} />
-        <mesh position={[0, 0.1, 3]} rotation={[-Math.PI / 2, 0, 0]}>
+        <pointLight position={[0, 6, 3]} intensity={1} color="#10B981" distance={8} />
+        <mesh position={[0, 0.1, 6]} rotation={[-Math.PI / 2, 0, 0]}>
           <circleGeometry args={[2, 16]} />
           <meshStandardMaterial color="#10B981" transparent opacity={0.3} />
         </mesh>
-        {/* Marwah label */}
-        <Html position={[0, 8, 0]} center distanceFactor={50}>
+        {/* Marwah label — over the hill */}
+        {_showLabels && <Html position={[0, 8, 0]} center distanceFactor={50}>
           <div style={{ background: 'rgba(16,185,129,0.85)', padding: '2px 8px', borderRadius: 5, textAlign: 'center', whiteSpace: 'nowrap', cursor: 'pointer' }} onClick={() => triggerLocationClick('marwah')}>
             <div style={{ color: '#fff', fontSize: 11, fontWeight: 700 }}>⛰️ {L3D('Marwah (المروة)', 'مروہ (المروة)', 'المروة')}</div>
           </div>
-        </Html>
+        </Html>}
       </group>
 
       {/* Sa'i Corridor - Marble walkway */}
@@ -2141,12 +2159,12 @@ const MountArafat = () => (
       </mesh>
       <Sparkles count={30} scale={4} size={3} color="#FFD700" position={[0, 1.5, 0]} />
     </group>
-    <Html position={[0, 12, 0]} center distanceFactor={60}>
+    {_showLabels && <Html position={[0, 12, 0]} center distanceFactor={60}>
       <div style={{ background: 'rgba(139,115,85,0.85)', padding: '2px 8px', borderRadius: 5, textAlign: 'center', whiteSpace: 'nowrap', cursor: 'pointer' }} onClick={() => triggerLocationClick('arafat')}>
         <div style={{ color: '#fff', fontSize: 11, fontWeight: 700 }}>🏔️ {L3D('Mount Arafat', 'کوہ عرفات', 'جبل عرفات')}</div>
         <div style={{ color: 'rgba(255,255,255,0.6)', fontSize: 9 }}>{L3D('Jabal ar-Rahmah', 'جبل الرحمہ', 'جبل الرحمة')}</div>
       </div>
-    </Html>
+    </Html>}
   </group>
 );
 
@@ -2173,12 +2191,12 @@ const Muzdalifah = () => {
         </mesh>
       ))}
       <Stars radius={25} depth={15} count={400} factor={3} />
-      <Html position={[0, 5, 0]} center distanceFactor={60}>
+      {_showLabels && <Html position={[0, 5, 0]} center distanceFactor={60}>
         <div style={{ background: 'rgba(45,45,61,0.85)', padding: '2px 8px', borderRadius: 5, textAlign: 'center', whiteSpace: 'nowrap', cursor: 'pointer' }} onClick={() => triggerLocationClick('muzdalifah')}>
           <div style={{ color: '#fff', fontSize: 11, fontWeight: 700 }}>🌙 {L3D('Muzdalifah', 'مزدلفہ', 'مزدلفة')}</div>
           <div style={{ color: 'rgba(255,255,255,0.5)', fontSize: 9 }}>{L3D('Collect pebbles here', 'یہاں کنکریاں جمع کریں', 'اجمع الحصى هنا')}</div>
         </div>
-      </Html>
+      </Html>}
     </group>
   );
 };
@@ -2205,12 +2223,12 @@ const MinaTents = () => {
           </mesh>
         </group>
       ))}
-      <Html position={[0, 5, 0]} center distanceFactor={60}>
+      {_showLabels && <Html position={[0, 5, 0]} center distanceFactor={60}>
         <div style={{ background: 'rgba(255,255,255,0.85)', padding: '2px 8px', borderRadius: 5, textAlign: 'center', whiteSpace: 'nowrap', cursor: 'pointer' }} onClick={() => triggerLocationClick('mina')}>
           <div style={{ color: '#333', fontSize: 11, fontWeight: 700 }}>⛺ {L3D('Mina', 'منیٰ', 'منى')}</div>
           <div style={{ color: '#666', fontSize: 9 }}>{L3D('Tent City', 'خیموں کا شہر', 'مدينة الخيام')}</div>
         </div>
-      </Html>
+      </Html>}
     </group>
   );
 };
@@ -2266,12 +2284,12 @@ const Jamarat = () => (
       </group>
     ))}
     {/* Label */}
-    <Html position={[0, 12, 0]} center distanceFactor={60}>
+    {_showLabels && <Html position={[0, 12, 0]} center distanceFactor={60}>
       <div style={{ background: 'rgba(74,74,74,0.85)', padding: '2px 8px', borderRadius: 5, textAlign: 'center', whiteSpace: 'nowrap', cursor: 'pointer' }} onClick={() => triggerLocationClick('jamarat')}>
         <div style={{ color: '#fff', fontSize: 11, fontWeight: 700 }}>🪨 {L3D('Jamarat', 'جمرات', 'الجمرات')}</div>
         <div style={{ color: 'rgba(255,255,255,0.5)', fontSize: 9 }}>{L3D('Stoning Pillars', 'کنکریاں مارنے کی جگہ', 'رمي الجمرات')}</div>
       </div>
-    </Html>
+    </Html>}
   </group>
 );
 
@@ -2286,12 +2304,12 @@ const BarberArea = () => (
       <circleGeometry args={[4, 24]} />
       <meshStandardMaterial color="#2E7D32" roughness={0.8} />
     </mesh>
-    <Html position={[0, 5, 0]} center distanceFactor={50}>
+    {_showLabels && <Html position={[0, 5, 0]} center distanceFactor={50}>
       <div style={{ background: 'rgba(46,125,50,0.85)', padding: '2px 8px', borderRadius: 5, textAlign: 'center', whiteSpace: 'nowrap', cursor: 'pointer' }} onClick={() => triggerLocationClick('halq_area')}>
         <div style={{ color: '#fff', fontSize: 10, fontWeight: 700 }}>✂️ {L3D('Halq/Taqsir', 'حلق/تقصیر', 'الحلق/التقصير')}</div>
         <div style={{ color: 'rgba(255,255,255,0.5)', fontSize: 9 }}>{L3D('Hair Cutting Area', 'بال کٹوانے کی جگہ', 'منطقة الحلاقة')}</div>
       </div>
-    </Html>
+    </Html>}
   </group>
 );
 
@@ -2306,12 +2324,29 @@ const SacrificeArea = () => (
       <boxGeometry args={[2, 1, 1]} />
       <meshStandardMaterial color="#8B7355" roughness={0.8} />
     </mesh>
-    <Html position={[0, 4, 0]} center distanceFactor={50}>
+    {/* Simple sheep */}
+    <group position={[2, 0, -1]}>
+      <mesh position={[0, 0.6, 0]} castShadow>
+        <sphereGeometry args={[0.6, 8, 8]} />
+        <meshStandardMaterial color="#F5F0E0" roughness={0.9} />
+      </mesh>
+      <mesh position={[0.5, 0.7, 0]} castShadow>
+        <sphereGeometry args={[0.25, 8, 8]} />
+        <meshStandardMaterial color="#D4C4A0" roughness={0.8} />
+      </mesh>
+      {[[-0.3, 0.2, -0.2], [0.3, 0.2, -0.2], [-0.3, 0.2, 0.2], [0.3, 0.2, 0.2]].map(([x, y, z], i) => (
+        <mesh key={i} position={[x, y, z]} castShadow>
+          <cylinderGeometry args={[0.06, 0.06, 0.4, 6]} />
+          <meshStandardMaterial color="#8B7355" roughness={0.8} />
+        </mesh>
+      ))}
+    </group>
+    {_showLabels && <Html position={[0, 4, 0]} center distanceFactor={50}>
       <div style={{ background: 'rgba(139,115,85,0.85)', padding: '2px 8px', borderRadius: 5, textAlign: 'center', whiteSpace: 'nowrap', cursor: 'pointer' }} onClick={() => triggerLocationClick('sacrifice_area')}>
         <div style={{ color: '#fff', fontSize: 10, fontWeight: 700 }}>🐑 {L3D('Sacrifice', 'قربانی', 'الذبح')}</div>
         <div style={{ color: 'rgba(255,255,255,0.5)', fontSize: 9 }}>{L3D('Nahr Area', 'نحر کی جگہ', 'منطقة النحر')}</div>
       </div>
-    </Html>
+    </Html>}
   </group>
 );
 
@@ -2425,7 +2460,7 @@ const Ground = () => (
 );
 
 // Walking Pilgrim with Tawaf and Sa'i Animation
-const WalkingPilgrim = ({ currentStep, steps, isWalking, language = 'en', onTawafCircuit, onSaiLap, onReachDestination, pilgrimPositionRef }) => {
+const WalkingPilgrim = ({ currentStep, steps, isWalking, language = 'en', onTawafCircuit, onSaiLap, onReachDestination, onStoneThrow, onPebbleCollected, onAnimationDone, pilgrimPositionRef }) => {
   const groupRef = useRef();
   const lookDirectionRef = useRef(0); // Use ref to avoid 60 re-renders/sec in useFrame
   const tawafAngleRef = useRef(Math.PI); // Start from back of Kaaba
@@ -2437,11 +2472,52 @@ const WalkingPilgrim = ({ currentStep, steps, isWalking, language = 'en', onTawa
   const [reachedDestination, setReachedDestination] = useState(false);
   const positionInitializedRef = useRef(false);
 
-  // Sa'i positions (Safa Marwah is at [25, 0, 0])
-  const SAFA_POS = [17, 0, 0];   // Safa at 25-8 = 17
-  const MARWAH_POS = [33, 0, 0]; // Marwah at 25+8 = 33
+  // --- Jamarat stoning state ---
+  const jamaratPhaseRef = useRef('walking'); // 'walking' | 'throwing' | 'done'
+  const currentPillarRef = useRef(0);        // 0, 1, 2 (which pillar to stone next)
+  const stonesThrown = useRef(0);            // 0-7 per pillar
+  const stoneTimerRef = useRef(0);           // accumulator for stone throw timing
+  const [stoneCount, setStoneCount] = useState(0); // total stones for UI display
+  const stoneFlightRef = useRef({ active: false, progress: 0, startX: 0, startY: 0, startZ: 0, endX: 0, endY: 0, endZ: 0 });
+  const stoneMeshRef = useRef();             // ref for the flying stone mesh
+  const impactRef = useRef({ active: false, timer: 0, x: 0, y: 0, z: 0 }); // impact flash at pillar
+  const throwArmRef = useRef(0);             // arm swing animation progress (0-1)
+
+  // --- Arafat standing state ---
+  const arafatTimerRef = useRef(0);
+  const arafatPhaseRef = useRef('walking');   // ref for useFrame (avoids stale closure)
+  const [arafatPhase, setArafatPhase] = useState('walking'); // state for JSX conditionals
+  const setArafatPhaseBoth = (v) => { arafatPhaseRef.current = v; setArafatPhase(v); };
+
+  // --- Muzdalifah pebble collection state ---
+  const muzTimerRef = useRef(0);
+  const muzPebbleRef = useRef(0);            // 0-49 (sync ref for useFrame)
+  const [muzPebbles, setMuzPebbles] = useState(0);
+  const muzCollectingRef = useRef(false);
+
+  // --- Sacrifice state ---
+  const sacrificeTimerRef = useRef(0);
+  const sacrificePhaseRef = useRef('walking'); // ref for useFrame
+  const [sacrificePhase, setSacrificePhase] = useState('walking');
+  const setSacrificePhaseBoth = (v) => { sacrificePhaseRef.current = v; setSacrificePhase(v); };
+
+  // --- Halq state ---
+  const halqTimerRef = useRef(0);
+  const halqPhaseRef = useRef('walking');     // ref for useFrame
+  const [halqPhase, setHalqPhase] = useState('walking');
+  const setHalqPhaseBoth = (v) => { halqPhaseRef.current = v; setHalqPhase(v); };
+
+  // Sa'i positions — z=0 (on the marble corridor). Hills pushed back to z=-6 so pilgrim doesn't clip.
+  const SAFA_POS = [17, 0, 0];
+  const MARWAH_POS = [33, 0, 0];
   const TAWAF_RADIUS = 12; // Slightly larger radius for visibility
   const TAWAF_START = [0, 0, TAWAF_RADIUS]; // Start position on circle (front of Kaaba)
+
+  // Jamarat pillar world positions (Jamarat group at [12, 0, -38])
+  const JAMARAT_GROUP = [12, 0, -38];
+  const PILLAR_OFFSETS = [[-5, 0, 0], [0, 0, 0], [5, 0, 0]]; // Al-Ula, Al-Wusta, Al-Aqabah
+  const PILLAR_WORLD = PILLAR_OFFSETS.map(([ox, , oz]) => [JAMARAT_GROUP[0] + ox, 3.5, JAMARAT_GROUP[2] + oz]);
+  const THROW_STAND_OFFSET_Z = 4; // Stand 4 units south of pillar
 
   // Check if current step is a Tawaf step
   const isTawafStep = currentStep < steps.length &&
@@ -2451,6 +2527,15 @@ const WalkingPilgrim = ({ currentStep, steps, isWalking, language = 'en', onTawa
 
   // Check if current step is Sa'i
   const isSaiStep = currentStep < steps.length && steps[currentStep].id === 'sai';
+
+  // Hajj step-specific animation detection
+  const isJamarat1Step = currentStep < steps.length && steps[currentStep].id === 'jamarat1';
+  const isMinaDaysStep = currentStep < steps.length && steps[currentStep].id === 'mina_days';
+  const isJamaratStep = isJamarat1Step || isMinaDaysStep;
+  const isArafatStep = currentStep < steps.length && steps[currentStep].id === 'arafat';
+  const isMuzdalifahStep = currentStep < steps.length && steps[currentStep].id === 'muzdalifah';
+  const isSacrificeStep = currentStep < steps.length && steps[currentStep].id === 'sacrifice';
+  const isHalqStep = currentStep < steps.length && steps[currentStep].id === 'halq';
 
   // Reset when step changes
   useEffect(() => {
@@ -2466,7 +2551,44 @@ const WalkingPilgrim = ({ currentStep, steps, isWalking, language = 'en', onTawa
       lastSaiLapRef.current = 0;
       setSaiLap(0);
     }
+    // Reset Jamarat
+    if (isJamaratStep) {
+      jamaratPhaseRef.current = 'walking';
+      currentPillarRef.current = 0;
+      stonesThrown.current = 0;
+      stoneTimerRef.current = 0;
+      stoneFlightRef.current.active = false;
+      setStoneCount(0);
+    }
+    // Reset Arafat
+    if (isArafatStep) {
+      arafatTimerRef.current = 0;
+      setArafatPhaseBoth('walking');
+    }
+    // Reset Muzdalifah
+    if (isMuzdalifahStep) {
+      muzTimerRef.current = 0;
+      muzPebbleRef.current = 0;
+      muzCollectingRef.current = false;
+      setMuzPebbles(0);
+    }
+    // Reset Sacrifice
+    if (isSacrificeStep) {
+      sacrificeTimerRef.current = 0;
+      setSacrificePhaseBoth('walking');
+    }
+    // Reset Halq
+    if (isHalqStep) {
+      halqTimerRef.current = 0;
+      setHalqPhaseBoth('walking');
+    }
   }, [currentStep]);
+
+  // Fire onAnimationDone when step-specific animations complete
+  useEffect(() => { if (arafatPhase === 'done') onAnimationDone?.('arafat'); }, [arafatPhase]);
+  useEffect(() => { if (muzPebbles >= 49 && isMuzdalifahStep) onAnimationDone?.('muzdalifah'); }, [muzPebbles]);
+  useEffect(() => { if (sacrificePhase === 'done') onAnimationDone?.('sacrifice'); }, [sacrificePhase]);
+  useEffect(() => { if (halqPhase === 'done') onAnimationDone?.('halq'); }, [halqPhase]);
 
   useFrame((state, rawDelta) => {
     if (currentStep >= steps.length || !groupRef.current) return;
@@ -2483,7 +2605,9 @@ const WalkingPilgrim = ({ currentStep, steps, isWalking, language = 'en', onTawa
     if (!positionInitializedRef.current) {
       if (currentStep === 0) {
         const base = steps[0]?.position || [-35, 0, 25];
-        pos.set(base[0] + 10, 0, base[2] + 5); // Offset from Miqat building
+        pos.set(base[0] + 5, 0, base[2] + 3); // On the green ground circle, close to Miqat building
+        // Face toward Kaaba (origin) from Miqat position
+        lookDirectionRef.current = Math.atan2(0 - pos.x, 0 - pos.z);
       } else if (pos.x === 0 && pos.z === 0) {
         // Fresh mount with resumed step - place at previous step's position
         const prevPos = steps[currentStep - 1]?.position || steps[currentStep].position;
@@ -2536,12 +2660,12 @@ const WalkingPilgrim = ({ currentStep, steps, isWalking, language = 'en', onTawa
           const MAX_ANGLE = Math.PI * 2 * 7;
           if (tawafAngleRef.current > MAX_ANGLE) tawafAngleRef.current = MAX_ANGLE;
 
-          // Position on circle (counter-clockwise)
-          pos.x = Math.sin(tawafAngleRef.current) * TAWAF_RADIUS;
+          // Position on circle (counter-clockwise: Kaaba on pilgrim's left)
+          pos.x = -Math.sin(tawafAngleRef.current) * TAWAF_RADIUS;
           pos.z = Math.cos(tawafAngleRef.current) * TAWAF_RADIUS;
 
           // Face tangent direction (counter-clockwise movement)
-          lookDirectionRef.current = tawafAngleRef.current + Math.PI / 2;
+          lookDirectionRef.current = -tawafAngleRef.current - Math.PI / 2;
 
           // Track circuits - count after completing each full circle (2π radians)
           const fullCircles = Math.floor(tawafAngleRef.current / (Math.PI * 2));
@@ -2612,7 +2736,7 @@ const WalkingPilgrim = ({ currentStep, steps, isWalking, language = 'en', onTawa
           } else {
             pos.x = THREE.MathUtils.lerp(MARWAH_POS[0], SAFA_POS[0], lapProgress);
           }
-          pos.z = 0;
+          pos.z = 0; // Stay on marble corridor
 
           lookDirectionRef.current = goingToMarwah ? Math.PI / 2 : -Math.PI / 2;
 
@@ -2624,6 +2748,231 @@ const WalkingPilgrim = ({ currentStep, steps, isWalking, language = 'en', onTawa
             onSaiLap?.(completedLaps);
           }
         }
+      }
+    } else if (isJamaratStep) {
+      // ===== JAMARAT STONING ANIMATION =====
+      const pillarsToStone = isJamarat1Step ? [2] : [0, 1, 2]; // Eid: only large; Tashreeq: all 3
+      const pillarIdx = pillarsToStone[currentPillarRef.current];
+
+      if (pillarIdx === undefined) {
+        // All pillars done
+        if (jamaratPhaseRef.current !== 'done') {
+          jamaratPhaseRef.current = 'done';
+          if (!reachedDestination) {
+            setReachedDestination(true);
+            onReachDestination?.('jamarat');
+          }
+        }
+      } else {
+        const pillarWorld = PILLAR_WORLD[pillarIdx];
+        const throwPosX = pillarWorld[0];
+        const throwPosZ = pillarWorld[2] + THROW_STAND_OFFSET_Z;
+
+        if (jamaratPhaseRef.current === 'walking') {
+          const dist = Math.sqrt(Math.pow(pos.x - throwPosX, 2) + Math.pow(pos.z - throwPosZ, 2));
+          if (isWalking && dist > 1.0) {
+            const lerpSpeed = dist > 15 ? 0.06 : 0.05;
+            pos.x = THREE.MathUtils.lerp(pos.x, throwPosX, lerpSpeed);
+            pos.z = THREE.MathUtils.lerp(pos.z, throwPosZ, lerpSpeed);
+            // Climb to bridge height
+            pos.y = THREE.MathUtils.lerp(pos.y, 3.5, 0.05);
+            lookDirectionRef.current = Math.atan2(throwPosX - pos.x, throwPosZ - pos.z);
+          } else if (isWalking) {
+            pos.set(throwPosX, 3.5, throwPosZ);
+            jamaratPhaseRef.current = 'throwing';
+            stoneTimerRef.current = 0;
+            stonesThrown.current = 0;
+            stoneFlightRef.current.active = false;
+            // Face the pillar
+            lookDirectionRef.current = Math.atan2(pillarWorld[0] - pos.x, pillarWorld[2] - pos.z);
+            // First pillar reached — notify parent (only first time)
+            if (!reachedDestination) {
+              setReachedDestination(true);
+              onReachDestination?.('jamarat');
+            }
+          }
+        } else if (jamaratPhaseRef.current === 'throwing') {
+          if (!isWalking) return; // paused
+          stoneTimerRef.current += delta;
+
+          // Animate throwing arm swing (quick forward snap on throw, slow reset)
+          if (throwArmRef.current > 0) {
+            throwArmRef.current = Math.max(0, throwArmRef.current - delta * 3);
+          }
+
+          // Animate in-flight stone — move the mesh directly via ref
+          if (stoneFlightRef.current.active) {
+            stoneFlightRef.current.progress += delta * 1.8; // ~0.55s flight (fast arc)
+            const sf = stoneFlightRef.current;
+            const t = Math.min(sf.progress, 1);
+            if (stoneMeshRef.current) {
+              // World-space position (stone is sibling of pilgrim group, not child)
+              stoneMeshRef.current.position.x = THREE.MathUtils.lerp(sf.startX, sf.endX, t);
+              stoneMeshRef.current.position.z = THREE.MathUtils.lerp(sf.startZ, sf.endZ, t);
+              // Parabolic arc: rises then falls, peak at t=0.4 for a natural throw feel
+              const arcHeight = Math.sin(t * Math.PI) * 2;
+              stoneMeshRef.current.position.y = THREE.MathUtils.lerp(sf.startY, sf.endY, t) + arcHeight;
+              // Scale: starts small, grows to full, then shrinks on impact
+              const s = t < 0.1 ? t * 10 : t > 0.85 ? (1 - t) * 6.67 : 1;
+              stoneMeshRef.current.scale.setScalar(s);
+              stoneMeshRef.current.visible = true;
+              // Spin the stone
+              stoneMeshRef.current.rotation.x += delta * 12;
+              stoneMeshRef.current.rotation.z += delta * 8;
+            }
+            if (sf.progress >= 1) {
+              stoneFlightRef.current.active = false;
+              if (stoneMeshRef.current) stoneMeshRef.current.visible = false;
+              // Trigger impact flash at pillar
+              impactRef.current = { active: true, timer: 0.6, x: sf.endX, y: sf.endY, z: sf.endZ };
+            }
+          }
+
+          // Impact flash timer
+          if (impactRef.current.active) {
+            impactRef.current.timer -= delta;
+            if (impactRef.current.timer <= 0) impactRef.current.active = false;
+          }
+
+          // Throw a new stone every 2.2s — enough for takbir audio (2.1s) to finish
+          const THROW_INTERVAL = 2.2;
+          if (stoneTimerRef.current >= THROW_INTERVAL && stonesThrown.current < 7) {
+            stonesThrown.current += 1;
+            stoneTimerRef.current = 0;
+            throwArmRef.current = 1; // Trigger arm swing
+            const totalStones = currentPillarRef.current * 7 + stonesThrown.current;
+            setStoneCount(totalStones);
+            onStoneThrow?.(currentPillarRef.current, stonesThrown.current);
+            // Launch stone flight (world-space coordinates)
+            stoneFlightRef.current = {
+              active: true, progress: 0,
+              startX: pos.x, startY: pos.y + 1.5, startZ: pos.z,
+              endX: pillarWorld[0], endY: pillarWorld[1] + 0.5, endZ: pillarWorld[2]
+            };
+          }
+
+          if (stonesThrown.current >= 7 && !stoneFlightRef.current.active) {
+            // Done with this pillar — move to next
+            currentPillarRef.current += 1;
+            jamaratPhaseRef.current = 'walking';
+            stonesThrown.current = 0;
+            stoneTimerRef.current = 0;
+          }
+        }
+      }
+    } else if (isArafatStep) {
+      // ===== ARAFAT STANDING ANIMATION =====
+      const target = step.position;
+      const dist = Math.sqrt(Math.pow(pos.x - target[0], 2) + Math.pow(pos.z - target[2], 2));
+
+      if (arafatPhaseRef.current === 'walking') {
+        if (isWalking && dist > 1.0) {
+          const lerpSpeed = dist > 30 ? 0.06 : 0.05;
+          pos.x = THREE.MathUtils.lerp(pos.x, target[0], lerpSpeed);
+          pos.z = THREE.MathUtils.lerp(pos.z, target[2], lerpSpeed);
+          lookDirectionRef.current = Math.atan2(target[0] - pos.x, target[2] - pos.z);
+        } else if (isWalking) {
+          pos.set(target[0], 0, target[2]);
+          setArafatPhaseBoth('standing');
+          arafatTimerRef.current = 0;
+          // Face mountain (mountain is at [45, 0, -35], summit is north — face -z)
+          lookDirectionRef.current = Math.PI; // Face north toward mountain peak
+          if (!reachedDestination) {
+            setReachedDestination(true);
+            onReachDestination?.('arafat');
+          }
+        }
+      } else if (arafatPhaseRef.current === 'standing') {
+        if (!isWalking) return; // paused by user (Stop button)
+        arafatTimerRef.current += delta;
+        if (arafatTimerRef.current >= 8) {
+          setArafatPhaseBoth('done');
+        }
+      }
+    } else if (isMuzdalifahStep) {
+      // ===== MUZDALIFAH PEBBLE COLLECTION ANIMATION =====
+      const target = step.position;
+      const dist = Math.sqrt(Math.pow(pos.x - target[0], 2) + Math.pow(pos.z - target[2], 2));
+
+      if (!reachedDestination && dist > 1.0) {
+        if (isWalking) {
+          const lerpSpeed = dist > 30 ? 0.06 : 0.05;
+          pos.x = THREE.MathUtils.lerp(pos.x, target[0], lerpSpeed);
+          pos.z = THREE.MathUtils.lerp(pos.z, target[2], lerpSpeed);
+          lookDirectionRef.current = Math.atan2(target[0] - pos.x, target[2] - pos.z);
+        }
+      } else {
+        if (!reachedDestination) {
+          pos.set(target[0], 0, target[2]);
+          setReachedDestination(true);
+          muzCollectingRef.current = true;
+          onReachDestination?.('muzdalifah');
+        }
+        if (muzCollectingRef.current && isWalking && muzPebbleRef.current < 49) {
+          muzTimerRef.current += delta;
+          const COLLECT_INTERVAL = 0.12;
+          if (muzTimerRef.current >= COLLECT_INTERVAL) {
+            muzPebbleRef.current += 1;
+            muzTimerRef.current = 0;
+            setMuzPebbles(muzPebbleRef.current);
+            onPebbleCollected?.(muzPebbleRef.current);
+          }
+          // Bob up and down (simulate bending to pick up pebbles — always at or below ground)
+          pos.y = (Math.cos(muzPebbleRef.current * 0.5) - 1) * 0.15;
+        } else if (muzPebbleRef.current >= 49) {
+          pos.y = 0; // Return to ground level
+          muzCollectingRef.current = false;
+        }
+      }
+    } else if (isSacrificeStep) {
+      // ===== SACRIFICE CEREMONY ANIMATION =====
+      const target = step.position;
+      const dist = Math.sqrt(Math.pow(pos.x - target[0], 2) + Math.pow(pos.z - target[2], 2));
+
+      if (sacrificePhaseRef.current === 'walking') {
+        if (isWalking && dist > 1.0) {
+          const lerpSpeed = dist > 15 ? 0.06 : 0.05;
+          pos.x = THREE.MathUtils.lerp(pos.x, target[0], lerpSpeed);
+          pos.z = THREE.MathUtils.lerp(pos.z, target[2], lerpSpeed);
+          lookDirectionRef.current = Math.atan2(target[0] - pos.x, target[2] - pos.z);
+        } else if (isWalking) {
+          pos.set(target[0], 0, target[2]);
+          setSacrificePhaseBoth('ceremony');
+          sacrificeTimerRef.current = 0;
+          if (!reachedDestination) {
+            setReachedDestination(true);
+            onReachDestination?.('sacrifice');
+          }
+        }
+      } else if (sacrificePhaseRef.current === 'ceremony') {
+        if (!isWalking) return; // paused by user
+        sacrificeTimerRef.current += delta;
+        if (sacrificeTimerRef.current >= 6) setSacrificePhaseBoth('done');
+      }
+    } else if (isHalqStep) {
+      // ===== HALQ HAIR CUTTING ANIMATION =====
+      const target = step.position;
+      const dist = Math.sqrt(Math.pow(pos.x - target[0], 2) + Math.pow(pos.z - target[2], 2));
+
+      if (halqPhaseRef.current === 'walking') {
+        if (isWalking && dist > 1.0) {
+          const lerpSpeed = dist > 15 ? 0.06 : 0.05;
+          pos.x = THREE.MathUtils.lerp(pos.x, target[0], lerpSpeed);
+          pos.z = THREE.MathUtils.lerp(pos.z, target[2], lerpSpeed);
+          lookDirectionRef.current = Math.atan2(target[0] - pos.x, target[2] - pos.z);
+        } else if (isWalking) {
+          pos.set(target[0], 0, target[2]);
+          setHalqPhaseBoth('cutting');
+          halqTimerRef.current = 0;
+          if (!reachedDestination) {
+            setReachedDestination(true);
+            onReachDestination?.('halq');
+          }
+        }
+      } else if (halqPhaseRef.current === 'cutting') {
+        if (!isWalking) return; // paused by user
+        halqTimerRef.current += delta;
+        if (halqTimerRef.current >= 5) setHalqPhaseBoth('done');
       }
     } else {
       // Normal walking to step position
@@ -2638,6 +2987,8 @@ const WalkingPilgrim = ({ currentStep, steps, isWalking, language = 'en', onTawa
         const lerpSpeed = dist > 30 ? 0.06 : 0.05;
         pos.x = THREE.MathUtils.lerp(pos.x, target[0], lerpSpeed);
         pos.z = THREE.MathUtils.lerp(pos.z, target[2], lerpSpeed);
+        // Transition y back to ground after Jamarat (bridge height y=3.5)
+        if (pos.y > 0.1) pos.y = THREE.MathUtils.lerp(pos.y, 0, 0.05);
 
         const dx = target[0] - pos.x;
         const dz = target[2] - pos.z;
@@ -2649,6 +3000,7 @@ const WalkingPilgrim = ({ currentStep, steps, isWalking, language = 'en', onTawa
         setReachedDestination(true);
         pos.x = target[0];
         pos.z = target[2];
+        if (pos.y > 0.1) pos.y = 0; // Ensure ground level
         onReachDestination?.('step');
       }
     }
@@ -2656,6 +3008,7 @@ const WalkingPilgrim = ({ currentStep, steps, isWalking, language = 'en', onTawa
     // Share position with CameraController (for follow mode)
     if (pilgrimPositionRef) {
       pilgrimPositionRef.current.x = pos.x;
+      pilgrimPositionRef.current.y = pos.y; // Include Y for Jamarat bridge height
       pilgrimPositionRef.current.z = pos.z;
     }
 
@@ -2668,21 +3021,21 @@ const WalkingPilgrim = ({ currentStep, steps, isWalking, language = 'en', onTawa
     if (currentStep > 0 && steps[currentStep - 1]) {
       return steps[currentStep - 1].position;
     }
-    // For Ihram (step 0), offset avatar in front of the Miqat building so it's clearly visible
+    // For Ihram (step 0), place avatar on the green ground circle, close to Miqat building
     const base = steps[0]?.position || [-35, 0, 25];
-    return [base[0] + 10, base[1], base[2] + 5];
+    return [base[0] + 5, base[1], base[2] + 3];
   };
 
   const initialPos = getInitialPosition();
 
   // Compute walking path for visual trail from start to destination
   const walkStart = getInitialPosition();
-  const walkEnd = isTawafStep ? TAWAF_START : isSaiStep ? SAFA_POS : (currentStep < steps.length ? steps[currentStep].position : [0, 0, 0]);
+  const walkEnd = isTawafStep ? TAWAF_START : isSaiStep ? SAFA_POS : isJamaratStep ? [PILLAR_WORLD[isJamarat1Step ? 2 : 0][0], 0, PILLAR_WORLD[isJamarat1Step ? 2 : 0][2] + THROW_STAND_OFFSET_Z] : (currentStep < steps.length ? steps[currentStep].position : [0, 0, 0]);
   const wpDx = walkEnd[0] - walkStart[0];
   const wpDz = walkEnd[2] - walkStart[2];
   const wpLen = Math.sqrt(wpDx * wpDx + wpDz * wpDz);
   const wpColor = currentStep < steps.length ? steps[currentStep].color : '#10B981';
-  const showWalkPath = isWalking && wpLen > 2 && !((isTawafStep || isSaiStep) && reachedDestination);
+  const showWalkPath = isWalking && wpLen > 2 && !((isTawafStep || isSaiStep || isJamaratStep) && reachedDestination);
 
   return (
     <>
@@ -2718,7 +3071,7 @@ const WalkingPilgrim = ({ currentStep, steps, isWalking, language = 'en', onTawa
       />
 
       {/* "Pilgrim in Ihram" label - visible at start to help user locate avatar */}
-      {currentStep < steps.length && steps[currentStep].id === 'ihram' && !isWalking && (
+      {_showLabels && currentStep < steps.length && steps[currentStep].id === 'ihram' && !isWalking && (
         <Html position={[0, 8, 0]} center distanceFactor={40}>
           <div style={{ background: 'rgba(16,185,129,0.9)', padding: '4px 12px', borderRadius: 8, textAlign: 'center', whiteSpace: 'nowrap', border: '2px solid rgba(255,255,255,0.4)', boxShadow: '0 0 20px rgba(16,185,129,0.5)',
             direction: language === 'ar' || language === 'ur' ? 'rtl' : 'ltr',
@@ -2771,6 +3124,90 @@ const WalkingPilgrim = ({ currentStep, steps, isWalking, language = 'en', onTawa
         <Sparkles count={10} scale={3} size={2} speed={1} color="#10B981" opacity={0.5} />
       )}
 
+      {/* ===== HAJJ STEP-SPECIFIC VISUAL EFFECTS ===== */}
+
+      {/* Jamarat stone + impact flash rendered outside pilgrim group (world-space) */}
+
+      {/* Jamarat: stone counter label */}
+      {isJamaratStep && jamaratPhaseRef.current === 'throwing' && (
+        <Html position={[0, 8, 0]} center distanceFactor={40}>
+          <div style={{ background: 'rgba(74,74,74,0.9)', padding: '4px 12px', borderRadius: 8, textAlign: 'center', whiteSpace: 'nowrap', border: '2px solid rgba(255,255,255,0.3)' }}>
+            <div style={{ color: '#fff', fontSize: 14, fontWeight: 700 }}>
+              🪨 {stonesThrown.current}/7
+            </div>
+          </div>
+        </Html>
+      )}
+
+      {/* Arafat: golden light beams + raised hands when standing */}
+      {isArafatStep && arafatPhase === 'standing' && (
+        <group>
+          <mesh position={[0, 12, 0]}>
+            <cylinderGeometry args={[0.3, 2, 24, 8]} />
+            <meshStandardMaterial color="#FFD700" emissive="#FFD700" emissiveIntensity={0.6} transparent opacity={0.2} />
+          </mesh>
+          <Sparkles count={40} scale={6} size={5} speed={1.5} color="#FFD700" opacity={0.9} />
+          {/* Raised hands indicator */}
+          <mesh position={[-0.4, 6, 0.3]}>
+            <sphereGeometry args={[0.15, 8, 8]} />
+            <meshStandardMaterial color="#C4926A" emissive="#FFD700" emissiveIntensity={0.3} />
+          </mesh>
+          <mesh position={[0.4, 6, 0.3]}>
+            <sphereGeometry args={[0.15, 8, 8]} />
+            <meshStandardMaterial color="#C4926A" emissive="#FFD700" emissiveIntensity={0.3} />
+          </mesh>
+          <pointLight position={[0, 8, 0]} intensity={3} color="#FFD700" distance={15} />
+        </group>
+      )}
+
+      {/* Muzdalifah: pebble counter */}
+      {isMuzdalifahStep && muzCollectingRef.current && muzPebbles < 49 && (
+        <Html position={[0, 8, 0]} center distanceFactor={40}>
+          <div style={{ background: 'rgba(45,45,61,0.9)', padding: '4px 12px', borderRadius: 8, textAlign: 'center', whiteSpace: 'nowrap', border: '2px solid rgba(255,255,255,0.3)' }}>
+            <div style={{ color: '#fff', fontSize: 14, fontWeight: 700 }}>🪨 {muzPebbles}/49</div>
+            <div style={{ color: 'rgba(255,255,255,0.6)', fontSize: 10 }}>
+              {language === 'ar' ? 'جمع الحصى' : language === 'ur' ? 'کنکریاں جمع ہو رہی ہیں' : 'Collecting pebbles'}
+            </div>
+          </div>
+        </Html>
+      )}
+      {isMuzdalifahStep && muzCollectingRef.current && (
+        <Sparkles count={20} scale={4} size={3} speed={2} color="#E8E0FF" opacity={0.7} position={[0, 0.5, 0]} />
+      )}
+
+      {/* Sacrifice: golden ceremony sparkles */}
+      {isSacrificeStep && sacrificePhase === 'ceremony' && (
+        <group>
+          <Sparkles count={30} scale={5} size={4} speed={2} color="#FFD700" opacity={0.8} />
+          <pointLight position={[0, 3, 0]} intensity={3} color="#FFD700" distance={10} />
+        </group>
+      )}
+
+      {/* Halq: floating scissors + sparkles */}
+      {isHalqStep && halqPhase === 'cutting' && (
+        <group>
+          <Float speed={3} floatIntensity={0.3}>
+            <group position={[0.5, 5.5, 0]}>
+              {/* Scissors: two crossing blades */}
+              <mesh rotation={[0, 0, Math.PI / 6]}>
+                <boxGeometry args={[0.08, 1.2, 0.02]} />
+                <meshStandardMaterial color="#C0C0C0" metalness={0.8} roughness={0.2} />
+              </mesh>
+              <mesh rotation={[0, 0, -Math.PI / 6]}>
+                <boxGeometry args={[0.08, 1.2, 0.02]} />
+                <meshStandardMaterial color="#C0C0C0" metalness={0.8} roughness={0.2} />
+              </mesh>
+              <mesh>
+                <sphereGeometry args={[0.06, 8, 8]} />
+                <meshStandardMaterial color="#999" metalness={0.9} />
+              </mesh>
+            </group>
+          </Float>
+          <Sparkles count={20} scale={4} size={3} speed={2} color="#C0C0C0" opacity={0.7} />
+          <Sparkles count={10} scale={3} size={2} speed={1.5} color="#FFD700" opacity={0.5} />
+        </group>
+      )}
+
       {/* Tawaf circuit counter removed — progress shown in UI dots instead */}
 
       {/* Circuit completion rings */}
@@ -2787,16 +3224,36 @@ const WalkingPilgrim = ({ currentStep, steps, isWalking, language = 'en', onTawa
         </mesh>
       ))}
     </group>
+
+    {/* ===== WORLD-SPACE JAMARAT STONE (driven by stoneMeshRef in useFrame) ===== */}
+    {isJamaratStep && (
+      <mesh ref={stoneMeshRef} visible={false}>
+        <dodecahedronGeometry args={[0.3, 0]} />
+        <meshStandardMaterial color="#8B7355" roughness={0.95} metalness={0} />
+      </mesh>
+    )}
+
+    {/* ===== IMPACT FLASH at pillar basin ===== */}
+    {isJamaratStep && impactRef.current.active && (
+      <group position={[impactRef.current.x, impactRef.current.y, impactRef.current.z]}>
+        <pointLight intensity={8} color="#FFD700" distance={6} decay={2} />
+        <mesh>
+          <sphereGeometry args={[0.5 * Math.max(0, impactRef.current.timer), 8, 8]} />
+          <meshStandardMaterial color="#FFD700" emissive="#FFD700" emissiveIntensity={2} transparent opacity={impactRef.current.timer} />
+        </mesh>
+        <Sparkles count={8} scale={2} size={6} speed={4} color="#FFD700" opacity={0.9} />
+      </group>
+    )}
     </>
   );
 };
 
 // Step-specific camera positions for best view of each location
 const STEP_CAMERAS = {
-  ihram:        { pos: [8, 10, 10], look: [0, 1, 0], offsetFromStep: true },     // Face avatar + Miqat building
+  ihram:        { pos: [12, 16, 18], look: [0, 1, 0], offsetFromStep: true },    // Zoomed out to show full Miqat scene
   tawaf:        { pos: [5, 18, 22], look: [0, 1, 0] },                           // Above-front view of Kaaba circle
   maqam_ibrahim:{ pos: [12, 8, 6], look: [5, 1, 0] },                            // Close view of Maqam Ibrahim
-  sai:          { pos: [22, 10, 16], look: [38, 1, 0] },                          // View along Safa-Marwah corridor showing full path
+  sai:          { pos: [22, 10, 16], look: [28, 1, 0] },                          // View along Sa'i corridor — hills behind, pilgrim on walkway
   halq:         { pos: [10, 12, 12], look: [0, 1, 0], offsetFromStep: true },     // Relative to step position (works for both Umrah & Hajj)
   mina1:        { pos: [18, 14, -20], look: [10, 1, -30] },                      // Mina tents
   arafat:       { pos: [52, 16, -22], look: [45, 3, -35] },                      // Mount Arafat closer
@@ -2810,8 +3267,9 @@ const STEP_CAMERAS = {
 
 // Camera Controller - Focuses on current step with per-step angles
 // viewMode: 'step' (curated per-step), 'birdseye' (high overhead), 'follow' (close behind pilgrim)
+// Uses controls.target (from makeDefault OrbitControls) to keep orbit center in sync with lookAt
 const CameraController = ({ currentStep, steps, viewMode, pilgrimPositionRef }) => {
-  const { camera } = useThree();
+  const { camera, controls } = useThree();
   const targetRef = useRef(new THREE.Vector3(0, 0, 0));
   const prevStepRef = useRef(-1);
   const prevViewModeRef = useRef(viewMode);
@@ -2819,6 +3277,14 @@ const CameraController = ({ currentStep, steps, viewMode, pilgrimPositionRef }) 
   const frameCountRef = useRef(0);
   const camPosTemp = useRef(new THREE.Vector3());
   const camLookTemp = useRef(new THREE.Vector3());
+
+  // Helper: sync OrbitControls target with our lookAt target
+  const syncOrbitTarget = () => {
+    if (controls) {
+      controls.target.copy(targetRef.current);
+      controls.update();
+    }
+  };
 
   useFrame(() => {
     if (currentStep >= steps.length) return;
@@ -2839,11 +3305,13 @@ const CameraController = ({ currentStep, steps, viewMode, pilgrimPositionRef }) 
     }
 
     // Follow mode: always track pilgrim (OrbitControls disabled via viewMode prop)
+    // Close 3rd-person camera so avatar fills the frame
     if (viewMode === 'follow') {
       const px = pilgrimPositionRef?.current?.x ?? 0;
+      const py = pilgrimPositionRef?.current?.y ?? 0;
       const pz = pilgrimPositionRef?.current?.z ?? 0;
-      camPosTemp.current.set(px - 3, 4, pz + 5);
-      camLookTemp.current.set(px, 1, pz);
+      camPosTemp.current.set(px - 1.5, py + 2.8, pz + 3.5);
+      camLookTemp.current.set(px, py + 1.2, pz);
       const lerpSpeed = frameCountRef.current < 5 ? 1 : 0.08;
       camera.position.lerp(camPosTemp.current, lerpSpeed);
       targetRef.current.lerp(camLookTemp.current, lerpSpeed);
@@ -2858,10 +3326,10 @@ const CameraController = ({ currentStep, steps, viewMode, pilgrimPositionRef }) 
     const step = steps[currentStep];
 
     if (viewMode === 'birdseye') {
-      // High overhead view centered on step position
+      // Elevated overhead view — close enough to still see the pilgrim
       const sx = step.position[0];
       const sz = step.position[2];
-      camPosTemp.current.set(sx, 50, sz + 30);
+      camPosTemp.current.set(sx + 5, 30, sz + 20);
       camLookTemp.current.set(sx, 0, sz);
     } else {
       // 'step' mode: use curated STEP_CAMERAS
@@ -2885,12 +3353,15 @@ const CameraController = ({ currentStep, steps, viewMode, pilgrimPositionRef }) 
     if (frameCountRef.current === 1) {
       camera.position.copy(camPosTemp.current);
       targetRef.current.copy(camLookTemp.current);
+      syncOrbitTarget(); // Snap OrbitControls target too — prevents fight on frame 1
     } else {
       const lerpSpeed = frameCountRef.current < 20 ? 0.03 : 0.05;
       camera.position.lerp(camPosTemp.current, lerpSpeed);
       targetRef.current.lerp(camLookTemp.current, lerpSpeed);
     }
     camera.lookAt(targetRef.current);
+    // Keep OrbitControls target in sync during animation so it doesn't fight the camera
+    syncOrbitTarget();
 
     // Stop animating after camera has settled (~80 frames ≈ 1.3 seconds)
     if (frameCountRef.current > 80) {
@@ -2946,10 +3417,11 @@ const getTimeOfDay = (stepId) => {
 };
 
 // Main Scene
-const PilgrimageScene = ({ journeyType, currentStep, isWalking, viewMode, language = 'en', onTawafCircuit, onSaiLap, onReachDestination, showLabels = true }) => {
+const PilgrimageScene = ({ journeyType, currentStep, isWalking, viewMode, language = 'en', onTawafCircuit, onSaiLap, onReachDestination, onStoneThrow, onPebbleCollected, onAnimationDone, showLabels = true }) => {
   _sceneLanguage = language; // sync module-level language for 3D label components
+  _showLabels = showLabels; // sync module-level label visibility for all 3D components
   const steps = journeyType === 'umrah' ? UMRAH_STEPS : HAJJ_STEPS;
-  const pilgrimPositionRef = useRef({ x: 0, z: 0 }); // shared: WalkingPilgrim writes, CameraController reads
+  const pilgrimPositionRef = useRef({ x: 0, y: 0, z: 0 }); // shared: WalkingPilgrim writes, CameraController reads
 
   const isTawafStep = currentStep < steps.length &&
     (steps[currentStep].id === 'tawaf' ||
@@ -3078,6 +3550,9 @@ const PilgrimageScene = ({ journeyType, currentStep, isWalking, viewMode, langua
         onTawafCircuit={onTawafCircuit}
         onSaiLap={onSaiLap}
         onReachDestination={onReachDestination}
+        onStoneThrow={onStoneThrow}
+        onPebbleCollected={onPebbleCollected}
+        onAnimationDone={onAnimationDone}
         pilgrimPositionRef={pilgrimPositionRef}
       />
       <CameraController currentStep={currentStep} steps={steps} viewMode={viewMode} pilgrimPositionRef={pilgrimPositionRef} />
@@ -3086,6 +3561,7 @@ const PilgrimageScene = ({ journeyType, currentStep, isWalking, viewMode, langua
       {/* Disabled in 'follow' mode where CameraController runs every frame */}
       {/* In step/birdseye: CameraController animates ~80 frames then stops, OrbitControls takes over */}
       <OrbitControls
+        makeDefault
         enabled={viewMode !== 'follow'}
         enablePan={viewMode !== 'follow'}
         enableZoom={true}
@@ -3240,23 +3716,22 @@ const RoundNotification = ({ show, type, roundNumber, language, onClose }) => {
         type === 'tawaf' ? 'bg-gradient-to-r from-amber-600/95 to-amber-500/95' : 'bg-gradient-to-r from-blue-600/95 to-cyan-500/95'
       }`}>
         {/* Header row */}
-        <div className="flex items-center justify-between px-3 py-1.5 bg-black/20">
-          <div className="flex items-center gap-2">
-            <span className="text-lg">{type === 'tawaf' ? '🕋' : '🏃'}</span>
-            <span className="text-white font-bold text-sm">
+        <div className="flex items-center justify-between px-3 py-1.5 bg-black/20 gap-1">
+          <div className="flex items-center gap-1.5 min-w-0 flex-1 flex-wrap">
+            <span className="text-lg shrink-0">{type === 'tawaf' ? '🕋' : '🏃'}</span>
+            <span className="text-white font-bold text-sm shrink-0">
               {type === 'tawaf'
                 ? (language === 'ar' ? `الشوط ${displayNum}/٧` : language === 'ur' ? `چکر ${displayNum}/7` : `Circuit ${displayNum}/7`)
                 : (language === 'ar' ? `الشوط ${displayNum}/٧` : language === 'ur' ? `چکر ${displayNum}/7` : `Lap ${displayNum}/7`)}
             </span>
-            <span className="text-white/40 text-[9px]">
+            <span className="text-white/40 text-[9px] shrink-0">
               {language === 'ar' ? '(سنة)' : language === 'ur' ? '(سنت)' : '(Sunnah)'}
             </span>
-            {/* Distance per circuit/lap */}
-            <span className="text-white/30 text-[8px] ml-1">
+            <span className="text-white/30 text-[8px] shrink-0">
               📏 ~{type === 'tawaf' ? TAWAF_STATS.perCircuit : SAI_STATS.perLap}m
             </span>
           </div>
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-1 shrink-0">
             <button onClick={handleCollapse}
               className="w-7 h-7 rounded-full bg-white/20 text-white text-xs font-bold flex items-center justify-center hover:bg-white/30 active:scale-90 transition-all">
               {collapsed ? '▼' : '▲'}
@@ -3522,12 +3997,12 @@ const StepDetailSheet = ({ step, language, isExpanded, onToggle }) => {
         {/* Header + close */}
         <div className="flex items-center justify-between px-3 py-2 bg-black/20 border-b border-white/10">
           <div className="flex items-center gap-2 min-w-0 flex-1">
-            <span className="text-lg">{rich?.emoji || '📖'}</span>
+            <span className="text-lg shrink-0">{rich?.emoji || '📖'}</span>
             <div className="min-w-0 flex-1">
-              <h2 className="text-xs font-bold text-white truncate" style={{ fontFamily: isRTL ? "'Noto Nastaliq Urdu', serif" : 'inherit' }}>
+              <h2 className="text-xs font-bold text-white leading-snug" style={{ fontFamily: isRTL ? "'Noto Nastaliq Urdu', serif" : 'inherit', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
                 {step.name[language]}
               </h2>
-              {getLoc() && <p className="text-white/50 text-[9px] truncate">📍 {getLoc()}</p>}
+              {getLoc() && <p className="text-white/50 text-[9px] leading-snug" style={{ display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>📍 {getLoc()}</p>}
             </div>
           </div>
           <button onClick={onToggle} className="text-white/70 text-[10px] w-6 h-6 flex items-center justify-center bg-white/10 rounded-full shrink-0">✕</button>
@@ -3820,9 +4295,9 @@ const OnboardingIntro = ({ journeyType, language, onDismiss }) => {
       ar: isHajj ? 'دليل الحج' : 'دليل العمرة'
     },
     subtitle: {
-      en: isHajj ? 'Learn all 11 steps of Hajj with 3D animation' : 'Learn all 5 steps of Umrah with 3D animation',
-      ur: isHajj ? '3D اینیمیشن کے ساتھ حج کے 11 مراحل سیکھیں' : '3D اینیمیشن کے ساتھ عمرہ کے 5 مراحل سیکھیں',
-      ar: isHajj ? 'تعلم خطوات الحج الـ11 بالرسوم ثلاثية الأبعاد' : 'تعلم خطوات العمرة الـ5 بالرسوم ثلاثية الأبعاد'
+      en: isHajj ? 'Learn all 12 steps of Hajj with 3D animation' : 'Learn all 5 steps of Umrah with 3D animation',
+      ur: isHajj ? '3D اینیمیشن کے ساتھ حج کے 12 مراحل سیکھیں' : '3D اینیمیشن کے ساتھ عمرہ کے 5 مراحل سیکھیں',
+      ar: isHajj ? 'تعلم خطوات الحج الـ12 بالرسوم ثلاثية الأبعاد' : 'تعلم خطوات العمرة الـ5 بالرسوم ثلاثية الأبعاد'
     },
     features: [
       {
@@ -3846,10 +4321,13 @@ const OnboardingIntro = ({ journeyType, language, onDismiss }) => {
         desc: { en: 'Tap 3D labels to learn about Kaaba, Black Stone, Zamzam & more', ur: 'کعبہ، حجر اسود، زمزم وغیرہ کے بارے میں جانیں', ar: 'اضغط على التسميات لتعرف عن الكعبة والحجر الأسود وزمزم' }
       },
     ],
-    button: {
-      en: 'Start Journey →',
-      ur: 'سفر شروع کریں →',
-      ar: '← ابدأ الرحلة'
+    autoBtn: {
+      label: { en: 'Auto Play', ur: 'خودکار', ar: 'تشغيل تلقائي' },
+      desc: { en: 'Watch the full journey', ur: 'پورا سفر خودکار دیکھیں', ar: 'شاهد الرحلة كاملة' }
+    },
+    manualBtn: {
+      label: { en: 'Manual Play', ur: 'دستی', ar: 'يدوي' },
+      desc: { en: 'Control at your pace', ur: 'اپنی رفتار سے چلائیں', ar: 'تحكم بالسرعة' }
     }
   };
 
@@ -3901,12 +4379,19 @@ const OnboardingIntro = ({ journeyType, language, onDismiss }) => {
             </div>
           </div>
 
-          {/* Start button */}
-          <div className="px-5 pb-5">
-            <button onClick={onDismiss}
-              className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-emerald-500 to-emerald-600 text-white font-bold text-base hover:from-emerald-600 hover:to-emerald-700 transition-all shadow-lg shadow-emerald-500/25 active:scale-[0.98]"
+          {/* Mode selection buttons */}
+          <div className="px-5 pb-5 flex gap-3">
+            <button onClick={() => onDismiss('auto')}
+              className="flex-1 py-3.5 rounded-2xl bg-gradient-to-r from-emerald-500 to-emerald-600 text-white font-bold hover:from-emerald-600 hover:to-emerald-700 transition-all shadow-lg shadow-emerald-500/25 active:scale-[0.98] flex flex-col items-center gap-1"
               style={{ fontFamily: isRTL ? "'Noto Nastaliq Urdu', serif" : 'inherit' }}>
-              {content.button[language]}
+              <span className="flex items-center gap-1.5 text-base">⏩ {content.autoBtn.label[language]}</span>
+              <span className="text-[10px] text-white/60 font-normal">{content.autoBtn.desc[language]}</span>
+            </button>
+            <button onClick={() => onDismiss('manual')}
+              className="flex-1 py-3.5 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 text-white font-bold hover:from-amber-600 hover:to-amber-700 transition-all shadow-lg shadow-amber-500/25 active:scale-[0.98] flex flex-col items-center gap-1"
+              style={{ fontFamily: isRTL ? "'Noto Nastaliq Urdu', serif" : 'inherit' }}>
+              <span className="flex items-center gap-1.5 text-base">▶ {content.manualBtn.label[language]}</span>
+              <span className="text-[10px] text-white/60 font-normal">{content.manualBtn.desc[language]}</span>
             </button>
           </div>
         </div>
@@ -3944,6 +4429,8 @@ const PilgrimageJourneyUnified = ({ journeyType = 'umrah', language = 'en', onCo
   const [currentStep, setCurrentStep] = useState(getSavedStep);
   const [isWalking, setIsWalking] = useState(false);
   const [viewMode, setViewMode] = useState('step');
+  const viewModeBeforeFollowRef = useRef('step'); // remembers user's chosen mode before auto-follow
+  const isAutoFollowActiveRef = useRef(false); // true only when WE auto-switched to follow
   const [autoPlay, setAutoPlay] = useState(false);
   const [showDua, setShowDua] = useState(false);
 
@@ -3955,6 +4442,15 @@ const PilgrimageJourneyUnified = ({ journeyType = 'umrah', language = 'en', onCo
   const tawafDoneRef = useRef(false); // prevents Tawaf restart on same step
   const saiDoneRef = useRef(false);   // prevents Sa'i restart on same step
 
+  // Jamarat tracking
+  const [jamaratStoneDisplay, setJamaratStoneDisplay] = useState(0);
+  const [showJamaratNotification, setShowJamaratNotification] = useState(false);
+  const jamaratDoneRef = useRef(false);
+  const arafatDoneRef = useRef(false);
+  const muzDoneRef = useRef(false);
+  const sacrificeDoneRef = useRef(false);
+  const halqDoneRef = useRef(false);
+
   // New UI state
   const [isMuted, setIsMuted] = useState(() => {
     try { return localStorage.getItem('hajj_umrah_muted') === 'true'; } catch { return false; }
@@ -3962,6 +4458,7 @@ const PilgrimageJourneyUnified = ({ journeyType = 'umrah', language = 'en', onCo
   const tawafInitialDuaPlayedRef = useRef(false); // prevent initial dua replay on pause/resume
   const saiInitialDuaPlayedRef = useRef(false);
   const bannerShownForStepRef = useRef(-1); // track which step already showed the banner
+  const bannerTimerRef = useRef(null); // dedicated timer — not in uiTimersRef so handlers don't kill it
   const [showLabels, setShowLabels] = useState(false);
   const [audioState, setAudioState] = useState({ playing: false, text: '' });
   const [isDetailExpanded, setIsDetailExpanded] = useState(false);
@@ -3989,6 +4486,13 @@ const PilgrimageJourneyUnified = ({ journeyType = 'umrah', language = 'en', onCo
   const isTawafStep = currentStepData &&
     (currentStepData.id === 'tawaf' || currentStepData.id === 'tawaf_ifadah' || currentStepData.id === 'tawaf_wida');
   const isSaiStep = currentStepData && currentStepData.id === 'sai';
+  const isJamarat1Step = currentStepData && currentStepData.id === 'jamarat1';
+  const isMinaDaysStep = currentStepData && currentStepData.id === 'mina_days';
+  const isJamaratStep = isJamarat1Step || isMinaDaysStep;
+  const isArafatStep = currentStepData && currentStepData.id === 'arafat';
+  const isMuzdalifahStep = currentStepData && currentStepData.id === 'muzdalifah';
+  const isSacrificeStep = currentStepData && currentStepData.id === 'sacrifice';
+  const isHalqStep = currentStepData && currentStepData.id === 'halq';
 
   // Get Hajj day info
   const currentDay = useMemo(() => {
@@ -4058,6 +4562,26 @@ const PilgrimageJourneyUnified = ({ journeyType = 'umrah', language = 'en', onCo
     }
   }, []);
 
+  // Handle Jamarat stone throw — play takbir with each stone
+  const handleStoneThrow = useCallback((pillarIndex, stoneNumber) => {
+    const totalStones = pillarIndex * 7 + stoneNumber;
+    setJamaratStoneDisplay(totalStones);
+    haptics.tap();
+    if (stoneNumber === 1 && pillarIndex === 0) {
+      setShowJamaratNotification(true);
+      setIsDetailExpanded(false);
+    }
+    // Play "Allahu Akbar" takbir with each throw
+    const t = setTimeout(() => guardedPlay(playDuaAudio, 'بِسْمِ اللَّهِ، اللَّهُ أَكْبَرُ'), 300);
+    uiTimersRef.current.push(t);
+  }, []);
+
+  // Handle Muzdalifah pebble collection
+  const handlePebbleCollected = useCallback((count) => {
+    // Play sound every 7th pebble
+    if (count % 7 === 0) haptics.tap();
+  }, []);
+
   // Cleanup on unmount - prevent memory leaks
   useEffect(() => {
     return () => {
@@ -4065,6 +4589,7 @@ const PilgrimageJourneyUnified = ({ journeyType = 'umrah', language = 'en', onCo
       stopAmbientSound();
       autoPlayTimersRef.current.forEach(t => clearTimeout(t));
       uiTimersRef.current.forEach(t => clearTimeout(t));
+      if (bannerTimerRef.current) clearTimeout(bannerTimerRef.current);
       autoPlayTimersRef.current = [];
       uiTimersRef.current = [];
     };
@@ -4095,24 +4620,66 @@ const PilgrimageJourneyUnified = ({ journeyType = 'umrah', language = 'en', onCo
     uiTimersRef.current = [];
     tawafDoneRef.current = false;
     saiDoneRef.current = false;
+    jamaratDoneRef.current = false;
+    arafatDoneRef.current = false;
+    muzDoneRef.current = false;
+    sacrificeDoneRef.current = false;
+    halqDoneRef.current = false;
     tawafInitialDuaPlayedRef.current = false;
     saiInitialDuaPlayedRef.current = false;
-    manualNextPendingRef.current = false;
+    setJamaratStoneDisplay(0);
+    setShowJamaratNotification(false);
+    // NOTE: manualNextPendingRef is NOT reset here — it's set in event handlers
+    // and consumed by the manual arrival handler. Resetting here would kill it
+    // before the pilgrim arrives. It's reset in toggleAutoPlay, handleStop, etc.
     manuallyPausedRef.current = false;
     pilgrimArrivedForStepRef.current = false; // sync: prevent stale arrival from previous step
     setPilgrimArrived(false);
-    // Show big step banner for 3 seconds then auto-hide
+    // Show banner immediately for all step changes.
+    // For walking steps (auto-play/manual play), it will be hidden when walking starts (startWalking),
+    // then re-shown on arrival via handleReachDestination.
+    // For non-walking nav (→/←/dots), banner shows here and auto-hides.
+    if (bannerTimerRef.current) clearTimeout(bannerTimerRef.current);
     bannerShownForStepRef.current = currentStep;
     setShowStepBanner(true);
-    const bannerTimer = setTimeout(() => setShowStepBanner(false), 3000);
-    uiTimersRef.current.push(bannerTimer);
+    const isIhramStep = steps[currentStep]?.id === 'ihram';
+    bannerTimerRef.current = setTimeout(() => setShowStepBanner(false), isIhramStep ? 6000 : 3000);
   }, [currentStep]);
 
   // Handle pilgrim arrival at destination (called from WalkingPilgrim via 3D scene)
+  // Show the step banner NOW (after walk completes) instead of on step change
   const handleReachDestination = useCallback((type) => {
-    pilgrimArrivedForStepRef.current = true; // sync: pilgrim genuinely walked to this step
+    pilgrimArrivedForStepRef.current = true;
     setPilgrimArrived(true);
-  }, []);
+    // Show step banner after arrival (not for Ihram — that shows immediately)
+    const stepData = steps[currentStep];
+    if (stepData && stepData.id !== 'ihram') {
+      bannerShownForStepRef.current = currentStep;
+      setShowStepBanner(true);
+      if (bannerTimerRef.current) clearTimeout(bannerTimerRef.current);
+      bannerTimerRef.current = setTimeout(() => setShowStepBanner(false), 3000);
+    }
+  }, [currentStep, steps]);
+
+  // Auto-follow camera: switch to 'follow' while pilgrim walks to destination,
+  // then restore previous view mode once arrived.
+  // Uses isAutoFollowActiveRef so we only restore if WE auto-switched (not if user manually chose 'follow')
+  useEffect(() => {
+    if (isWalking && !pilgrimArrived) {
+      if (viewMode !== 'follow') {
+        viewModeBeforeFollowRef.current = viewMode;
+        isAutoFollowActiveRef.current = true;
+        setViewMode('follow');
+      }
+    }
+  }, [isWalking, pilgrimArrived]);
+
+  useEffect(() => {
+    if (pilgrimArrived && isAutoFollowActiveRef.current) {
+      setViewMode(viewModeBeforeFollowRef.current);
+      isAutoFollowActiveRef.current = false;
+    }
+  }, [pilgrimArrived]);
 
   // Show first Tawaf/Sa'i recitation ONLY after pilgrim reaches the starting position
   // Guard refs prevent replay on pause/resume (effect re-fires when isWalking toggles)
@@ -4167,18 +4734,23 @@ const PilgrimageJourneyUnified = ({ journeyType = 'umrah', language = 'en', onCo
   // Tawaf/Sa'i: walking starts after delay, completion handled by circuit/lap effects
   // Normal steps: walking starts after delay, advancement handled by arrival effect below
   useEffect(() => {
-    // Clear any previous timers first
+    // Clear any previous auto-play timers first
     autoPlayTimersRef.current.forEach(t => clearTimeout(t));
     autoPlayTimersRef.current = [];
 
     if (!autoPlay) return;
     if (currentStep >= steps.length) return;
+    // NOTE: Don't clear uiTimersRef here — it would kill the banner hide timer.
+    // Manual→auto-play cleanup is handled in toggleAutoPlay() instead.
 
-    // If resuming mid-Tawaf/Sa'i (pause→unpause, pilgrim already circling), skip delay
+    // If resuming mid-animation (pause→unpause, pilgrim already at destination), skip delay
     const isResuming = (isTawafStep && pilgrimArrived && tawafCircuitDisplay > 0) ||
-                       (isSaiStep && pilgrimArrived && saiLapDisplay > 0);
+                       (isSaiStep && pilgrimArrived && saiLapDisplay > 0) ||
+                       (isJamaratStep && pilgrimArrived && jamaratStoneDisplay > 0) ||
+                       ((isArafatStep || isMuzdalifahStep || isSacrificeStep || isHalqStep) && pilgrimArrived);
 
     const startWalking = () => {
+      setShowStepBanner(false); // Hide banner when walking begins
       if (isTawafStep || isSaiStep) {
         if (isTawafStep && tawafDoneRef.current) return;
         if (isSaiStep && saiDoneRef.current) return;
@@ -4210,21 +4782,43 @@ const PilgrimageJourneyUnified = ({ journeyType = 'umrah', language = 'en', onCo
       }
     };
 
+    // Special handling for Ihram step: stay at Miqat, play Talbiyah, then advance
+    // This gives the user time to read the niyyah instructions and hear the Talbiyah
+    // before the pilgrim starts walking toward the Kaaba
+    const isIhramStep = currentStep < steps.length && steps[currentStep].id === 'ihram';
+
     if (isResuming) {
-      // Resuming mid-circuit: start immediately (no banner needed)
-      startWalking();
-    } else if (bannerShownForStepRef.current === currentStep) {
-      // Banner already shown for this step (step-change effect handled it)
-      // Just start walking after a short delay — no re-show
-      const walkDelay = setTimeout(startWalking, 500);
-      autoPlayTimersRef.current.push(walkDelay);
+      // If animation already done (e.g. user toggled auto off during completion dua then back on),
+      // just advance to next step — startWalking() would be redundant
+      if ((isTawafStep && tawafDoneRef.current) || (isSaiStep && saiDoneRef.current)
+        || (isJamaratStep && jamaratDoneRef.current) || (isArafatStep && arafatDoneRef.current)
+        || (isMuzdalifahStep && muzDoneRef.current) || (isSacrificeStep && sacrificeDoneRef.current)
+        || (isHalqStep && halqDoneRef.current)) {
+        const advDelay = setTimeout(() => advanceStep(), 500);
+        autoPlayTimersRef.current.push(advDelay);
+      } else {
+        // Resuming mid-circuit: start immediately (no banner needed)
+        startWalking();
+      }
+    } else if (isIhramStep) {
+      // Ihram: banner shows for 6s (handled by step-change effect), then play Talbiyah at Miqat
+      const talbiyahStart = setTimeout(() => {
+        setShowStepBanner(false); // Hide banner before showing Talbiyah dua
+        setShowDua(true);
+        haptics.duaMoment();
+        const stepData = steps[currentStep];
+        if (stepData?.dua?.arabic) guardedPlay(playDuaAudio, stepData.dua.arabic);
+        const duaDuration = getDuaDisplayMs(stepData?.dua?.arabic, 2000);
+        const advTimer = setTimeout(() => {
+          setShowDua(false);
+          advanceStep();
+        }, duaDuration);
+        autoPlayTimersRef.current.push(advTimer);
+      }, 7000); // 6s banner + 1s pause to absorb the scene
+      autoPlayTimersRef.current.push(talbiyahStart);
     } else {
-      // Fresh step via auto-play: show banner then walk
-      bannerShownForStepRef.current = currentStep;
-      setShowStepBanner(true);
-      const bannerHide = setTimeout(() => setShowStepBanner(false), 3000);
-      autoPlayTimersRef.current.push(bannerHide);
-      const walkDelay = setTimeout(startWalking, 3500);
+      // Non-Ihram step: start walking immediately — banner shows on arrival via handleReachDestination
+      const walkDelay = setTimeout(startWalking, 500);
       autoPlayTimersRef.current.push(walkDelay);
     }
 
@@ -4241,22 +4835,29 @@ const PilgrimageJourneyUnified = ({ journeyType = 'umrah', language = 'en', onCo
   useEffect(() => {
     if (!autoPlay || !pilgrimArrived) return;
     if (!pilgrimArrivedForStepRef.current) return; // Stale arrival from previous step — wait for real walk
-    if (isTawafStep || isSaiStep) return; // Tawaf/Sa'i handled by circuit/lap completion
+    // Steps with their own animations — handled by dedicated completion effects below
+    if (isTawafStep || isSaiStep || isJamaratStep || isArafatStep || isMuzdalifahStep || isSacrificeStep || isHalqStep) return;
     if (manualNextPendingRef.current) return; // Manual mode takes priority (user clicked →)
 
-    // Pilgrim arrived at step position - stop walking, show dua, then advance
+    // Pilgrim arrived at step position - stop walking
+    // Wait for step banner (3s) to finish, THEN show dua, then advance
     setIsWalking(false);
-    setShowDua(true);
-    haptics.duaMoment();
-    if (currentStepData?.dua?.arabic) guardedPlay(playDuaAudio, currentStepData.dua.arabic);
 
-    const duaDuration = getDuaDisplayMs(currentStepData?.dua?.arabic, 1000);
-    const duaTimer = setTimeout(() => {
-      setShowDua(false);
-      advanceStep();
-    }, duaDuration);
-    uiTimersRef.current.push(duaTimer);
-  }, [pilgrimArrived, autoPlay, isTawafStep, isSaiStep]);
+    const bannerWait = 3200; // slightly longer than 3s banner
+    const duaStartTimer = setTimeout(() => {
+      setShowDua(true);
+      haptics.duaMoment();
+      if (currentStepData?.dua?.arabic) guardedPlay(playDuaAudio, currentStepData.dua.arabic);
+
+      const duaDuration = getDuaDisplayMs(currentStepData?.dua?.arabic, 1000);
+      const advTimer = setTimeout(() => {
+        setShowDua(false);
+        advanceStep();
+      }, duaDuration);
+      uiTimersRef.current.push(advTimer);
+    }, bannerWait);
+    uiTimersRef.current.push(duaStartTimer);
+  }, [pilgrimArrived, autoPlay, isTawafStep, isSaiStep, isJamaratStep, isArafatStep, isMuzdalifahStep, isSacrificeStep, isHalqStep]);
 
   // Tawaf 7-circuit completion (works for both auto-play and manual)
   useEffect(() => {
@@ -4322,12 +4923,73 @@ const PilgrimageJourneyUnified = ({ journeyType = 'umrah', language = 'en', onCo
     return () => { localTimers.forEach(t => clearTimeout(t)); };
   }, [saiLapDisplay]);
 
+  // Jamarat stoning completion (works for both auto-play and manual)
+  useEffect(() => {
+    const totalNeeded = isJamarat1Step ? 7 : 21;
+    if (jamaratStoneDisplay < totalNeeded || !isJamaratStep || jamaratDoneRef.current) return;
+    jamaratDoneRef.current = true;
+    setIsWalking(false);
+    haptics.stepComplete();
+    guardedPlay(playCompletionSound);
+    setShowJamaratNotification(false);
+
+    const stepData = currentStepDataRef.current;
+    const localTimers = [];
+
+    const duaDelay = setTimeout(() => {
+      setShowDua(true);
+      if (stepData?.dua?.arabic) guardedPlay(playDuaAudio, stepData.dua.arabic);
+      const duaDuration = getDuaDisplayMs(stepData?.dua?.arabic, 2000);
+      const advTimer = setTimeout(() => {
+        setShowDua(false);
+        if (autoPlayRef.current) advanceStep();
+      }, duaDuration);
+      localTimers.push(advTimer);
+      uiTimersRef.current.push(advTimer);
+    }, 1200);
+    localTimers.push(duaDelay);
+    uiTimersRef.current.push(duaDelay);
+
+    return () => { localTimers.forEach(t => clearTimeout(t)); };
+  }, [jamaratStoneDisplay]);
+
+  // Handle animation completion for Arafat, Muzdalifah, Sacrifice, Halq
+  // Called by WalkingPilgrim via onAnimationDone callback when phase becomes 'done'
+  const handleAnimationDone = useCallback((type) => {
+    const doneRefMap = { arafat: arafatDoneRef, muzdalifah: muzDoneRef, sacrifice: sacrificeDoneRef, halq: halqDoneRef };
+    const doneRef = doneRefMap[type];
+    if (!doneRef || doneRef.current) return; // Already handled or unknown type
+    doneRef.current = true;
+    setIsWalking(false);
+    haptics.stepComplete();
+    if (type === 'muzdalifah') guardedPlay(playCompletionSound);
+
+    const stepData = currentStepDataRef.current;
+
+    const duaDelay = setTimeout(() => {
+      setShowDua(true);
+      if (stepData?.dua?.arabic) guardedPlay(playDuaAudio, stepData.dua.arabic);
+      const duaDuration = getDuaDisplayMs(stepData?.dua?.arabic, 2000);
+      const advTimer = setTimeout(() => {
+        setShowDua(false);
+        if (autoPlayRef.current) advanceStep();
+      }, duaDuration);
+      uiTimersRef.current.push(advTimer);
+    }, 1200);
+    uiTimersRef.current.push(duaDelay);
+  }, []);
+
   // Manual next: when pilgrim arrives in manual mode, show dua then advance
   const manualNextPendingRef = useRef(false);
   const manuallyPausedRef = useRef(false); // true when user tapped Stop mid-walk
 
   useEffect(() => {
     if (!pilgrimArrived || !manualNextPendingRef.current) return;
+    // Steps with own animations have their own completion logic — don't interfere
+    if (isTawafStep || isSaiStep || isJamaratStep || isArafatStep || isMuzdalifahStep || isSacrificeStep || isHalqStep) {
+      manualNextPendingRef.current = false;
+      return;
+    }
     manualNextPendingRef.current = false;
 
     // Clear any pending dua timers from initial arrival effect (e.g. Tawaf Black Stone → Rabbana)
@@ -4335,37 +4997,42 @@ const PilgrimageJourneyUnified = ({ journeyType = 'umrah', language = 'en', onCo
     uiTimersRef.current.forEach(t => clearTimeout(t));
     uiTimersRef.current = [];
 
-    // Pilgrim arrived at current step destination - now advance
+    // Pilgrim arrived at current step destination - stop walking
+    // Wait for step banner (3s) to finish, THEN show quiz/dua
     setIsWalking(false);
     haptics.stepComplete();
 
     const isLastStep = currentStep >= steps.length - 1;
+    const bannerWait = 3200; // slightly longer than 3s banner
 
-    if (QUIZ_QUESTIONS[currentStepData?.id]) {
-      setShowQuiz(true);
-    } else {
-      setShowDua(true);
-      haptics.duaMoment();
-      if (currentStepData?.dua?.arabic) guardedPlay(playDuaAudio, currentStepData.dua.arabic);
-      const duaDuration = getDuaDisplayMs(currentStepData?.dua?.arabic, 1000);
-      const t = setTimeout(() => {
-        setShowDua(false);
-        // On last step (e.g. Umrah halq), trigger completion after dua finishes
-        if (isLastStep) {
-          guardedPlay(playCompletionSound);
-          haptics.celebration();
-          setShowCompletion(true);
-        }
-      }, duaDuration);
-      uiTimersRef.current.push(t);
-    }
+    const afterBanner = setTimeout(() => {
+      if (QUIZ_QUESTIONS[currentStepData?.id]) {
+        setShowQuiz(true);
+      } else {
+        setShowDua(true);
+        haptics.duaMoment();
+        if (currentStepData?.dua?.arabic) guardedPlay(playDuaAudio, currentStepData.dua.arabic);
+        const duaDuration = getDuaDisplayMs(currentStepData?.dua?.arabic, 1000);
+        const t = setTimeout(() => {
+          setShowDua(false);
+          if (isLastStep) {
+            guardedPlay(playCompletionSound);
+            haptics.celebration();
+            setShowCompletion(true);
+          }
+        }, duaDuration);
+        uiTimersRef.current.push(t);
+      }
+    }, bannerWait);
+    uiTimersRef.current.push(afterBanner);
   }, [pilgrimArrived]);
 
   // Navigate to next step WITHOUT starting animation — just view the step info
   const handleNextStep = () => {
-    if (isWalking || autoPlay) return;
+    if (isWalking || autoPlay || showDua) return;
     haptics.tap();
     if (currentStep < steps.length - 1) {
+      manualNextPendingRef.current = false; // Cancel any pending arrival handling
       stopAudio();
       setCurrentStep(prev => prev + 1);
     }
@@ -4373,19 +5040,24 @@ const PilgrimageJourneyUnified = ({ journeyType = 'umrah', language = 'en', onCo
 
   // Navigate to previous step WITHOUT starting animation
   const handlePrevStep = () => {
-    if (isWalking || autoPlay) return;
+    if (isWalking || autoPlay || showDua) return;
     if (currentStep > 0) {
       haptics.tap();
+      manualNextPendingRef.current = false; // Cancel any pending arrival handling
       stopAudio();
       setCurrentStep(prev => prev - 1);
     }
   };
 
   // Stop: freeze pilgrim at current position, stop audio & timers
+  // Also works during Ihram Talbiyah (showDua=true but isWalking=false)
   const handleStop = () => {
-    if (!isWalking || autoPlay) return;
+    if (autoPlay) return; // Use toggle for auto-play
+    if (!isWalking && !showDua) return; // Nothing to stop
     haptics.tap();
-    manuallyPausedRef.current = true;
+    setShowStepBanner(false); // Banner no longer needed once user acts
+    manuallyPausedRef.current = isWalking; // Only mark as paused if was walking (can resume)
+    manualNextPendingRef.current = false; // Cancel pending arrival handling
     setIsWalking(false);
     setShowDua(false);
     stopAudio();
@@ -4401,6 +5073,8 @@ const PilgrimageJourneyUnified = ({ journeyType = 'umrah', language = 'en', onCo
     // Resume from manual pause — pilgrim stays at same position, just restart walking
     if (manuallyPausedRef.current && !isWalking) {
       manuallyPausedRef.current = false;
+      manualNextPendingRef.current = !pilgrimArrivedForStepRef.current; // Re-arm arrival handler
+      setShowStepBanner(false); // Banner no longer needed
       setIsWalking(true);
       guardedPlay(playStepSound);
       return;
@@ -4408,9 +5082,13 @@ const PilgrimageJourneyUnified = ({ journeyType = 'umrah', language = 'en', onCo
 
     if (isWalking) return; // safety guard
     haptics.tap();
+    setShowStepBanner(false); // Banner no longer needed once user starts an action
 
-    // If Tawaf/Sa'i step: start the circuits/laps
-    if ((isTawafStep && !tawafDoneRef.current) || (isSaiStep && !saiDoneRef.current)) {
+    // If step has its own animation: start walking (animation plays on arrival)
+    if ((isTawafStep && !tawafDoneRef.current) || (isSaiStep && !saiDoneRef.current)
+      || (isJamaratStep && !jamaratDoneRef.current) || (isArafatStep && !arafatDoneRef.current)
+      || (isMuzdalifahStep && !muzDoneRef.current) || (isSacrificeStep && !sacrificeDoneRef.current)
+      || (isHalqStep && !halqDoneRef.current)) {
       setIsWalking(true);
       guardedPlay(playStepSound);
       return;
@@ -4421,6 +5099,34 @@ const PilgrimageJourneyUnified = ({ journeyType = 'umrah', language = 'en', onCo
       guardedPlay(playCompletionSound);
       haptics.celebration();
       setShowCompletion(true);
+      return;
+    }
+
+    // Ihram step: play Talbiyah at Miqat first, THEN advance and walk to Kaaba
+    // This gives users time to hear the niyyah and Talbiyah before the pilgrim starts moving
+    if (currentStepData?.id === 'ihram') {
+      if (showDua) return; // Already playing Talbiyah — prevent double-click
+      // Clear any stale timers from a previously dismissed Talbiyah (user clicked ✕ then Play again)
+      uiTimersRef.current.forEach(t => clearTimeout(t));
+      uiTimersRef.current = [];
+      stopAudio();
+      setShowDua(true);
+      haptics.duaMoment();
+      if (currentStepData.dua?.arabic) guardedPlay(playDuaAudio, currentStepData.dua.arabic);
+      const duaDuration = getDuaDisplayMs(currentStepData.dua?.arabic, 2000);
+      const t = setTimeout(() => {
+        setShowDua(false);
+        setCurrentStep(prev => prev + 1);
+        setIsWalking(true);
+        manualNextPendingRef.current = true;
+        guardedPlay(playStepSound);
+        // Play Talbiyah again during walk to Kaaba (continuous recitation)
+        if (currentStepData.dua?.arabic) {
+          const t2 = setTimeout(() => guardedPlay(playDuaAudio, currentStepData.dua.arabic), 900);
+          uiTimersRef.current.push(t2);
+        }
+      }, duaDuration);
+      uiTimersRef.current.push(t);
       return;
     }
 
@@ -4440,11 +5146,14 @@ const PilgrimageJourneyUnified = ({ journeyType = 'umrah', language = 'en', onCo
 
   const toggleAutoPlay = () => {
     haptics.tap();
+    setShowStepBanner(false); // Banner no longer needed once user toggles mode
+    // Clean break: always reset manual-mode refs to prevent cross-mode race conditions
+    manualNextPendingRef.current = false;
+    manuallyPausedRef.current = false;
     if (autoPlay) {
-      // Clear all pending auto-play timers
+      // Turning OFF auto-play: clear everything
       autoPlayTimersRef.current.forEach(t => clearTimeout(t));
       autoPlayTimersRef.current = [];
-      // Clear all UI timers (delayed dua playback, notification timers, etc.)
       uiTimersRef.current.forEach(t => clearTimeout(t));
       uiTimersRef.current = [];
       setAutoPlay(false);
@@ -4452,6 +5161,13 @@ const PilgrimageJourneyUnified = ({ journeyType = 'umrah', language = 'en', onCo
       setShowDua(false);
       stopAudio();
     } else {
+      // Turning ON auto-play: cancel any pending manual-mode timers/audio first
+      // This prevents race conditions (e.g. manual Talbiyah timer + auto-play Talbiyah timer both firing)
+      uiTimersRef.current.forEach(t => clearTimeout(t));
+      uiTimersRef.current = [];
+      setShowDua(false);
+      setIsWalking(false);
+      stopAudio();
       setAutoPlay(true);
     }
   };
@@ -4493,15 +5209,15 @@ const PilgrimageJourneyUnified = ({ journeyType = 'umrah', language = 'en', onCo
 
   // Keyboard shortcuts - use ref to avoid re-subscribing event listener every render
   const keyHandlersRef = useRef({});
-  keyHandlersRef.current = { handleNextStep, handlePrevStep, toggleAutoPlay, toggleMute, showQuiz, showCompletion, showControls, isWalking };
+  keyHandlersRef.current = { handleNextStep, handlePrevStep, toggleAutoPlay, toggleMute, showQuiz, showCompletion, showControls, isWalking, showDua };
 
   useEffect(() => {
     const handleKeyDown = (e) => {
       const h = keyHandlersRef.current;
       if (h.showQuiz || h.showCompletion) return;
       switch (e.key) {
-        case 'ArrowRight': if (!h.isWalking) h.handleNextStep(); break;
-        case 'ArrowLeft': if (!h.isWalking) h.handlePrevStep(); break;
+        case 'ArrowRight': if (!h.isWalking && !h.showDua) h.handleNextStep(); break;
+        case 'ArrowLeft': if (!h.isWalking && !h.showDua) h.handlePrevStep(); break;
         case ' ': e.preventDefault(); h.toggleAutoPlay(); break;
         case 'm': case 'M': h.toggleMute(); break;
         case '?': case 'h': case 'H': setShowControls(p => !p); break;
@@ -4540,11 +5256,12 @@ const PilgrimageJourneyUnified = ({ journeyType = 'umrah', language = 'en', onCo
       <Canvas shadows camera={{ position: [-62, 10, 60], fov: 60 }} dpr={[1, 1.5]}
         style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', touchAction: 'none' }}
         gl={{ antialias: true, powerPreference: 'high-performance' }}
-        onCreated={() => { const t = setTimeout(() => setSceneLoaded(true), 500); uiTimersRef.current.push(t); }}>
+        onCreated={() => { setTimeout(() => setSceneLoaded(true), 500); }}>
         <Suspense fallback={null}>
           <PilgrimageScene journeyType={journeyType} currentStep={currentStep} isWalking={isWalking}
             viewMode={viewMode} language={language} onTawafCircuit={handleTawafCircuit} onSaiLap={handleSaiLap}
-            onReachDestination={handleReachDestination} showLabels={showLabels && !showStepBanner} />
+            onReachDestination={handleReachDestination} onStoneThrow={handleStoneThrow} onPebbleCollected={handlePebbleCollected}
+            onAnimationDone={handleAnimationDone} showLabels={showLabels && !showStepBanner} />
         </Suspense>
       </Canvas>
 
@@ -4567,8 +5284,52 @@ const PilgrimageJourneyUnified = ({ journeyType = 'umrah', language = 'en', onCo
       <RoundNotification show={showSaiNotification && !showDua && !isDetailExpanded} type="sai" roundNumber={saiLapDisplay}
         language={language} onClose={() => setShowSaiNotification(false)} />
 
+      {/* Jamarat Stone Throwing Notification */}
+      {showJamaratNotification && !showDua && !isDetailExpanded && (
+        <div className="absolute top-14 left-2 right-2 z-50 transition-all duration-500">
+          <div className="rounded-xl shadow-2xl backdrop-blur-md border border-white/20 overflow-hidden bg-gradient-to-r from-red-600/95 to-orange-500/95">
+            <div className="flex items-center justify-between px-3 py-1.5 bg-black/20">
+              <div className="flex items-center gap-2 min-w-0 flex-1">
+                <span className="text-lg shrink-0">🪨</span>
+                <span className="text-white font-bold text-sm shrink-0">
+                  {isMinaDaysStep
+                    ? (language === 'ar' ? `حصاة ${jamaratStoneDisplay}/٢١` : language === 'ur' ? `کنکری ${jamaratStoneDisplay}/21` : `Stone ${jamaratStoneDisplay}/21`)
+                    : (language === 'ar' ? `حصاة ${jamaratStoneDisplay}/٧` : language === 'ur' ? `کنکری ${jamaratStoneDisplay}/7` : `Stone ${jamaratStoneDisplay}/7`)}
+                </span>
+                <span className="text-white/40 text-[9px] truncate min-w-0">
+                  {isMinaDaysStep
+                    ? (language === 'ar' ? 'ثلاث جمرات' : language === 'ur' ? 'تینوں جمرات' : 'All 3 Pillars')
+                    : (language === 'ar' ? 'جمرة العقبة' : language === 'ur' ? 'جمرہ عقبہ' : 'Al-Aqabah')}
+                </span>
+              </div>
+              <button onClick={() => setShowJamaratNotification(false)}
+                className="w-7 h-7 rounded-full bg-white/20 text-white text-xs font-bold flex items-center justify-center hover:bg-white/30 shrink-0">✕</button>
+            </div>
+            <div className="px-3 py-2">
+              <p className="text-white text-base leading-relaxed text-center" dir="rtl"
+                style={{ fontFamily: "'Scheherazade New', serif" }}>
+                بِسْمِ اللَّهِ، اللَّهُ أَكْبَرُ
+              </p>
+              <p className="text-white/60 text-[10px] text-center mt-1">
+                {language === 'ar' ? 'في اسم الله، الله أكبر' : language === 'ur' ? 'اللہ کے نام سے، اللہ سب سے بڑا ہے' : 'In the name of Allah, Allah is the Greatest'}
+              </p>
+              <div className="flex justify-center gap-1 mt-2">
+                {Array.from({ length: 7 }).map((_, i) => {
+                  const currentPillarStones = jamaratStoneDisplay % 7 || (jamaratStoneDisplay > 0 ? 7 : 0);
+                  return (
+                    <div key={i} className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                      i < currentPillarStones ? 'bg-red-300 scale-110' : 'bg-white/20'
+                    }`} />
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Audio Playing Indicator - compact, non-overlapping */}
-      {audioState.playing && !showTawafNotification && !showSaiNotification && (
+      {audioState.playing && !showTawafNotification && !showSaiNotification && !showJamaratNotification && (
         <div className="absolute top-14 right-2 z-40">
           <div className="rounded-lg shadow-lg backdrop-blur-md bg-emerald-700/80 border border-white/20 px-2 py-1 flex items-center gap-1.5">
             <span className="text-sm">🗣️</span>
@@ -4644,7 +5405,7 @@ const PilgrimageJourneyUnified = ({ journeyType = 'umrah', language = 'en', onCo
       {/* Compact Header - single thin bar — z-[60] keeps it above notifications */}
       <div className="absolute top-0 left-0 right-0 px-2 py-1.5 bg-gradient-to-b from-black/60 to-transparent z-[60]">
         <div className="flex items-center gap-2">
-          <button onClick={() => { stopAudio(); stopAmbientSound(); autoPlayTimersRef.current.forEach(t => clearTimeout(t)); autoPlayTimersRef.current = []; uiTimersRef.current.forEach(t => clearTimeout(t)); uiTimersRef.current = []; setSelectedLocation(null); onBack?.(); }}
+          <button onClick={() => { stopAudio(); stopAmbientSound(); autoPlayTimersRef.current.forEach(t => clearTimeout(t)); autoPlayTimersRef.current = []; uiTimersRef.current.forEach(t => clearTimeout(t)); uiTimersRef.current = []; if (bannerTimerRef.current) clearTimeout(bannerTimerRef.current); setSelectedLocation(null); onBack?.(); }}
             className="w-8 h-8 rounded-full bg-white/20 backdrop-blur-sm text-white hover:bg-white/30 text-xs flex items-center justify-center">
             ←
           </button>
@@ -4713,21 +5474,22 @@ const PilgrimageJourneyUnified = ({ journeyType = 'umrah', language = 'en', onCo
 
       {/* Step Info Pill - tap to expand full detail sheet */}
       {/* Hidden when dua/quiz/completion/controls active to prevent opening behind modals */}
-      {currentStepData && !isDetailExpanded && !showDua && !showQuiz && !showCompletion && !showControls && !showStepBanner && (
-        <div className="absolute bottom-28 right-2 z-20">
-          <button onClick={() => setIsDetailExpanded(true)}
-            className="flex items-center gap-2 pl-2 pr-3 py-2 rounded-2xl backdrop-blur-md border shadow-xl transition-all hover:scale-105 active:scale-95"
+      {/* Visible even when step banner is showing so user can tap for details */}
+      {currentStepData && !isDetailExpanded && !showDua && !showQuiz && !showCompletion && !showControls && (
+        <div className="absolute bottom-32 right-2 z-20">
+          <button onClick={() => { setShowStepBanner(false); setIsDetailExpanded(true); }}
+            className="flex items-center gap-2 pl-2 pr-3 py-2 rounded-2xl backdrop-blur-md border shadow-xl transition-all hover:scale-105 active:scale-95 max-w-[220px]"
             style={{ backgroundColor: `${currentStepData.color}dd`, borderColor: `${currentStepData.color}80` }}>
-            <span className="w-6 h-6 rounded-lg bg-white/20 text-white text-xs font-bold flex items-center justify-center">{currentStep + 1}</span>
-            <div className={isRTL ? 'text-right' : 'text-left'}>
-              <span className="text-white text-xs font-semibold truncate max-w-[120px] block leading-tight" style={{ fontFamily: isRTL ? "'Noto Nastaliq Urdu', serif" : 'inherit' }}>
+            <span className="w-6 h-6 rounded-lg bg-white/20 text-white text-xs font-bold flex items-center justify-center shrink-0">{currentStep + 1}</span>
+            <div className={`min-w-0 flex-1 ${isRTL ? 'text-right' : 'text-left'}`}>
+              <span className="text-white text-xs font-semibold block leading-snug" style={{ fontFamily: isRTL ? "'Noto Nastaliq Urdu', serif" : 'inherit', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
                 {currentStepData.name[language]}
               </span>
-              <span className="text-white/50 text-[9px] leading-tight">
+              <span className="text-white/50 text-[9px] leading-tight block">
                 {language === 'ar' ? 'اضغط للتفاصيل' : language === 'ur' ? 'تفصیل دیکھیں' : 'Tap for details'}
               </span>
             </div>
-            <span className="text-white/40 text-xs">📖</span>
+            <span className="text-white/40 text-xs shrink-0">📖</span>
           </button>
         </div>
       )}
@@ -4737,26 +5499,29 @@ const PilgrimageJourneyUnified = ({ journeyType = 'umrah', language = 'en', onCo
         <div className="absolute top-14 left-2 right-2 z-[51] animate-fade-in">
           <div className="rounded-xl shadow-2xl backdrop-blur-md bg-gradient-to-r from-emerald-700/95 to-teal-600/95 border border-white/20 overflow-hidden">
             <div className="flex items-center justify-between px-3 py-1.5 bg-black/20">
-              <div className="flex items-center gap-2">
-                <span className="text-lg">🤲</span>
-                <span className="text-white font-bold text-sm">
+              <div className="flex items-center gap-2 min-w-0 flex-1">
+                <span className="text-lg shrink-0">🤲</span>
+                <span className="text-white font-bold text-sm truncate" style={{ fontFamily: isRTL ? "'Noto Nastaliq Urdu', serif" : 'inherit' }}>
                   {language === 'ar' ? 'الدعاء' : language === 'ur' ? 'دعا' : 'Dua'}
                   {' — '}
                   {currentStepData.name[language]}
                 </span>
               </div>
               <button onClick={() => setShowDua(false)}
-                className="w-5 h-5 rounded-full bg-white/15 text-white/70 text-[10px] flex items-center justify-center hover:bg-white/25"
+                className="w-7 h-7 rounded-full bg-white/20 text-white text-xs font-bold flex items-center justify-center hover:bg-white/30 shrink-0"
                 title="Hide popup (audio continues)">
                 ✕
               </button>
             </div>
-            <div className="px-3 py-2">
+            <div className="px-3 py-2 max-h-[40vh] overflow-y-auto">
               <p className="text-white text-base leading-relaxed text-center mb-1" dir="rtl"
                 style={{ fontFamily: "'Scheherazade New', serif" }}>
                 {currentStepData.dua.arabic}
               </p>
-              <p className="text-white/70 text-xs text-center" style={{ fontFamily: isRTL ? "'Noto Nastaliq Urdu', serif" : 'inherit' }}>
+              {currentStepData.dua.transliteration && (
+                <p className="text-white/50 text-[10px] text-center italic mb-1">{currentStepData.dua.transliteration}</p>
+              )}
+              <p className="text-white/70 text-xs text-center leading-relaxed" style={{ fontFamily: isRTL ? "'Noto Nastaliq Urdu', serif" : 'inherit' }}>
                 {currentStepData.dua[language] || currentStepData.dua.en}
               </p>
             </div>
@@ -4779,7 +5544,7 @@ const PilgrimageJourneyUnified = ({ journeyType = 'umrah', language = 'en', onCo
               {isTawafStep && pilgrimArrived ? '🕋' : isSaiStep && pilgrimArrived ? '🏃' : '🚶'}
             </span>
             <div className="flex-1 min-w-0">
-              <p className="text-white text-xs font-semibold truncate" style={{ fontFamily: isRTL ? "'Noto Nastaliq Urdu', serif" : 'inherit' }}>
+              <p className="text-white text-xs font-semibold leading-snug" style={{ fontFamily: isRTL ? "'Noto Nastaliq Urdu', serif" : 'inherit', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
                 {isTawafStep && pilgrimArrived
                   ? `${language === 'ur' ? 'طواف — چکر' : language === 'ar' ? 'الطواف — الشوط' : 'Tawaf — Circuit'} ${Math.min(tawafCircuitDisplay + 1, 7)}/7`
                   : isSaiStep && pilgrimArrived
@@ -4790,7 +5555,7 @@ const PilgrimageJourneyUnified = ({ journeyType = 'umrah', language = 'en', onCo
                       }`
                     : `${isRTL ? '←' : '→'} ${currentStepData.name[language]}`}
               </p>
-              <p className="text-white/50 text-[10px] truncate" style={{ fontFamily: isRTL ? "'Noto Nastaliq Urdu', serif" : 'inherit' }}>
+              <p className="text-white/50 text-[10px] leading-snug" style={{ fontFamily: isRTL ? "'Noto Nastaliq Urdu', serif" : 'inherit', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
                 {currentStepData.description?.[language] || ''}
               </p>
             </div>
@@ -4823,8 +5588,8 @@ const PilgrimageJourneyUnified = ({ journeyType = 'umrah', language = 'en', onCo
         <div className="flex justify-center gap-1 mb-2.5">
           {steps.map((step, i) => (
             <button key={step.id}
-              onClick={() => { if (!isWalking && !autoPlay) { haptics.tap(); setCurrentStep(i); } }}
-              disabled={isWalking || autoPlay}
+              onClick={() => { if (!isWalking && !autoPlay && !showDua) { haptics.tap(); manualNextPendingRef.current = false; stopAudio(); setCurrentStep(i); } }}
+              disabled={isWalking || autoPlay || showDua}
               className={`rounded-full text-[9px] font-bold transition-all duration-300 ${
                 i === currentStep
                   ? 'w-7 h-7 text-white scale-110 ring-2 ring-white/40 shadow-lg'
@@ -4842,35 +5607,37 @@ const PilgrimageJourneyUnified = ({ journeyType = 'umrah', language = 'en', onCo
         <div className="flex items-center justify-center gap-1">
           {/* Restart — small icon-only */}
           <button onClick={() => {
-              if (isWalking || autoPlay) return;
+              if (isWalking || autoPlay || showDua) return;
               haptics.tap(); stopAudio();
+              manualNextPendingRef.current = false;
               autoPlayTimersRef.current.forEach(t => clearTimeout(t)); autoPlayTimersRef.current = [];
               uiTimersRef.current.forEach(t => clearTimeout(t)); uiTimersRef.current = [];
               setCurrentStep(0);
               try { localStorage.removeItem(storageKey); } catch {}
             }}
-            disabled={isWalking || autoPlay || currentStep === 0}
+            disabled={isWalking || autoPlay || showDua || currentStep === 0}
             className={`w-8 h-8 rounded-lg flex items-center justify-center text-sm transition-all active:scale-90 ${
-              isWalking || autoPlay || currentStep === 0
+              isWalking || autoPlay || showDua || currentStep === 0
                 ? 'bg-white/5 text-white/20'
                 : 'bg-orange-500/20 text-orange-300 hover:bg-orange-500/30'
             }`} title={language === 'ar' ? 'إعادة' : language === 'ur' ? 'دوبارہ' : 'Restart'}>
             ↺
           </button>
           {/* Back — small icon-only */}
-          <button onClick={handlePrevStep} disabled={currentStep === 0 || isWalking || autoPlay}
+          <button onClick={handlePrevStep} disabled={currentStep === 0 || isWalking || autoPlay || showDua}
             className={`w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold transition-all active:scale-90 ${
-              currentStep === 0 || isWalking || autoPlay
+              currentStep === 0 || isWalking || autoPlay || showDua
                 ? 'bg-white/5 text-white/20'
                 : 'bg-white/10 text-white hover:bg-white/20'
             }`} title={language === 'ar' ? 'سابق' : language === 'ur' ? 'پچھلا' : 'Back'}>
             ←
           </button>
           {/* Manual Play / Stop toggle — main action, wider */}
-          <button onClick={isWalking ? handleStop : handleManualPlay}
-            disabled={autoPlay}
+          {/* showDua counts as "active" too (e.g. Ihram Talbiyah) so user can stop it */}
+          <button onClick={(isWalking || showDua) ? (autoPlay ? toggleAutoPlay : handleStop) : handleManualPlay}
+            disabled={autoPlay && !(isWalking || showDua)}
             className={`h-9 px-4 rounded-lg font-bold flex items-center gap-1.5 transition-all active:scale-95 ${
-              isWalking
+              (isWalking || showDua)
                 ? 'bg-red-500/90 text-white shadow-lg shadow-red-500/20'
                 : autoPlay
                   ? 'bg-white/10 text-white/30'
@@ -4878,9 +5645,9 @@ const PilgrimageJourneyUnified = ({ journeyType = 'umrah', language = 'en', onCo
                     ? 'bg-amber-500/90 text-white shadow-lg shadow-amber-500/20'
                     : 'bg-white/90 text-gray-800 hover:bg-white shadow-lg'
             }`}>
-            <span className="text-sm">{isWalking ? '⏹' : manuallyPausedRef.current ? '▶' : '▶'}</span>
+            <span className="text-sm">{(isWalking || showDua) ? '⏹' : manuallyPausedRef.current ? '▶' : '▶'}</span>
             <span className="text-xs">{
-              isWalking
+              (isWalking || showDua)
                 ? (language === 'ar' ? 'إيقاف' : language === 'ur' ? 'روکیں' : 'Stop')
                 : manuallyPausedRef.current
                   ? (language === 'ar' ? 'استئناف' : language === 'ur' ? 'جاری رکھیں' : 'Resume')
@@ -4888,9 +5655,9 @@ const PilgrimageJourneyUnified = ({ journeyType = 'umrah', language = 'en', onCo
             }</span>
           </button>
           {/* Next — small icon-only */}
-          <button onClick={handleNextStep} disabled={currentStep >= steps.length - 1 || isWalking || autoPlay}
+          <button onClick={handleNextStep} disabled={currentStep >= steps.length - 1 || isWalking || autoPlay || showDua}
             className={`w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold transition-all active:scale-90 ${
-              currentStep >= steps.length - 1 || isWalking || autoPlay
+              currentStep >= steps.length - 1 || isWalking || autoPlay || showDua
                 ? 'bg-white/5 text-white/20'
                 : 'bg-white/10 text-white hover:bg-white/20'
             }`} title={language === 'ar' ? 'التالي' : language === 'ur' ? 'اگلا' : 'Next'}>
@@ -4924,9 +5691,12 @@ const PilgrimageJourneyUnified = ({ journeyType = 'umrah', language = 'en', onCo
 
       {/* One-time onboarding intro */}
       {showIntro && sceneLoaded && (
-        <OnboardingIntro journeyType={journeyType} language={language} onDismiss={() => {
+        <OnboardingIntro journeyType={journeyType} language={language} onDismiss={(mode) => {
           setShowIntro(false);
           try { localStorage.setItem(INTRO_STORAGE_KEY + journeyType, '1'); } catch {}
+          if (mode === 'auto') {
+            setAutoPlay(true);
+          }
         }} />
       )}
 

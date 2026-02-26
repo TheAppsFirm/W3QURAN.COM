@@ -23,7 +23,7 @@ const JourneySelector = ({ language, onSelectJourney, onBack, onChangeLanguage }
     umrah: {
       title: { en: 'Umrah', ur: 'عمرہ', ar: 'العمرة' },
       subtitle: { en: 'The Lesser Pilgrimage', ur: 'چھوٹا حج', ar: 'الحج الأصغر' },
-      steps: { en: '4 Steps', ur: '4 مراحل', ar: '4 خطوات' },
+      steps: { en: '5 Steps', ur: '5 مراحل', ar: '5 خطوات' },
       features: { en: 'Bird\'s Eye • Auto Play • Duas', ur: 'فضائی منظر • آٹو پلے • دعائیں', ar: 'منظر علوي • تشغيل تلقائي • أدعية' },
     },
     hajj: {

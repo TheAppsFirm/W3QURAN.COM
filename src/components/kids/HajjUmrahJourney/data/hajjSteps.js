@@ -933,7 +933,7 @@ export const HAJJ_STEPS = [
         'Perform 7 circuits around Kaaba',
         'Pray 2 rakaat behind Maqam Ibrahim',
         'Make heartfelt dua - you are saying goodbye',
-        'Leave Masjid walking backwards (recommended)',
+        'Leave Masjid with humility and reverence',
         'Depart from Makkah directly',
         'Do not stay for shopping/other activities',
       ],
