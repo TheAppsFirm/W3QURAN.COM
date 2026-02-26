@@ -306,34 +306,18 @@ const SharePanel = memo(function SharePanel({
 
   return (
     <div className="h-full flex flex-col">
-      {/* Header */}
-      <div className="flex-shrink-0 flex items-center justify-between pb-3">
-        <div className="flex items-center gap-2">
-          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center">
-            <Icons.Share className="w-5 h-5 text-white" />
-          </div>
-          <div>
-            <h3 className="text-white font-bold">
-              {isMultiple ? `${t('share.shareVerse')} (${versesToShare.length})` : t('share.shareVerse')}
-            </h3>
-            <p className="text-white/60 text-xs">
-              {surahName} : {ayahRangeStr}
-            </p>
-          </div>
-        </div>
-        <button
-          onClick={onClose}
-          className="p-2 rounded-full hover:bg-white/10 transition-all"
-        >
-          <Icons.X className="w-4 h-4 text-white/70" />
-        </button>
+      {/* Subtitle */}
+      <div className="flex-shrink-0 pb-2">
+        <p className="text-white/70 text-xs">
+          {isMultiple ? `${t('share.shareVerse')} (${versesToShare.length}) — ` : ''}{surahName} : {ayahRangeStr}
+        </p>
       </div>
 
-      <div className="flex-1 overflow-y-auto py-3 space-y-4">
+      <div className="flex-1 overflow-y-auto py-2 space-y-4">
         {/* Preview Card */}
         <div
           ref={cardRef}
-          className="p-4 rounded-2xl max-h-48 overflow-y-auto"
+          className="p-4 rounded-2xl max-h-60 overflow-y-auto"
           style={{ background: currentStyle?.bg }}
         >
           {isMultiple ? (
@@ -368,12 +352,10 @@ const SharePanel = memo(function SharePanel({
                 style={{ fontFamily: "'Scheherazade New', serif" }}
                 dir="rtl"
               >
-                {verseArabic?.substring(0, 100)}
-                {verseArabic?.length > 100 ? '...' : ''}
+                {verseArabic}
               </p>
               <p className="text-white/80 text-sm italic text-center mb-2">
-                "{verseTranslation?.substring(0, 120)}
-                {verseTranslation?.length > 120 ? '...' : ''}"
+                "{verseTranslation}"
               </p>
             </>
           )}
@@ -387,15 +369,15 @@ const SharePanel = memo(function SharePanel({
           <label className="text-white/80 text-xs font-medium mb-2 block">
             {t('verseArt.style')}
           </label>
-          <div className="grid grid-cols-6 gap-2">
+          <div className="flex gap-2 justify-center">
             {SHARE_STYLES.map((style) => (
               <button
                 key={style.id}
                 onClick={() => setSelectedStyle(style.id)}
-                className={`aspect-square rounded-xl transition-all ${
+                className={`w-7 h-7 flex-shrink-0 rounded-md transition-all ${
                   selectedStyle === style.id
-                    ? 'ring-2 ring-white scale-105'
-                    : 'opacity-70 hover:opacity-100'
+                    ? 'ring-2 ring-white scale-110'
+                    : 'opacity-60 hover:opacity-100'
                 }`}
                 style={{ background: style.bg }}
                 title={style.name}

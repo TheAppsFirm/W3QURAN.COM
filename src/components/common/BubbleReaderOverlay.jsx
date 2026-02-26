@@ -34,7 +34,7 @@ import { useLocalStorage, useIsMobile } from '../../hooks';
 import { logReadingSession, trackSurahCompletion, trackFeatureUsage } from '../../utils/trackingUtils';
 import { shareVerse } from '../../utils/shareUtils';
 import { useAuth } from '../../contexts/AuthContext';
-import { useTranslation } from '../../contexts/LocaleContext';
+import { useTranslation, useLocale } from '../../contexts/LocaleContext';
 import logger from '../../utils/logger';
 import { trackSurahRead, trackFeatureUse, trackAudioPlay, trackTafseerView } from '../../utils/analyticsTracker';
 import { getCachedSurah, getDownloadedAudio } from '../../data/offlineStorage';
@@ -245,44 +245,23 @@ const FloatingFeatureBubble = memo(function FloatingFeatureBubble({
 
   return (
     <div
-      className="fixed transition-all duration-500"
+      className="fixed"
       style={{
         zIndex: 99999999,
         ...(isMobile ? mobilePosition : { ...positionWithoutTransform, transform: transform || 'none' }),
         ...sizeStyles[size],
-        animation: 'bubblePopIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
+        animation: 'bubblePopIn 0.3s ease-out',
       }}
       onClick={(e) => e.stopPropagation()}
     >
-      {/* Outer glow */}
-      <div
-        className="absolute rounded-full pointer-events-none"
-        style={{
-          inset: '-20px',
-          background: `radial-gradient(circle, ${gradient[0]}40 0%, transparent 70%)`,
-          filter: 'blur(15px)',
-          animation: 'breathe 3s ease-in-out infinite',
-        }}
-      />
-
       {/* Main bubble */}
       <div
         className="relative w-full h-full rounded-[40px] overflow-hidden"
         style={{
           background: `linear-gradient(145deg, ${gradient[0]}ee, ${gradient[1]}dd, ${gradient[2] || gradient[1]}cc)`,
-          boxShadow: `0 0 60px ${gradient[0]}50, 0 20px 60px rgba(0,0,0,0.4), inset 0 -30px 60px rgba(0,0,0,0.3), inset 0 30px 60px rgba(255,255,255,0.15)`,
+          boxShadow: `0 0 40px ${gradient[0]}40, 0 10px 40px rgba(0,0,0,0.3)`,
         }}
       >
-        {/* Glass highlight */}
-        <div
-          className="absolute pointer-events-none"
-          style={{
-            top: '2%', left: '10%', width: '60%', height: '15%',
-            background: 'linear-gradient(180deg, rgba(255,255,255,0.4) 0%, transparent 100%)',
-            borderRadius: '50%', filter: 'blur(2px)', transform: 'scaleY(0.3)',
-          }}
-        />
-
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-white/20">
           <div className="flex items-center gap-3">
@@ -316,6 +295,7 @@ const TafseerFloatingBubble = memo(function TafseerFloatingBubble({
   isVisible, onClose, surahId, ayahNumber, verseArabic, translationId, totalAyahs = 7, onAyahChange
 }) {
   const { t } = useTranslation();
+  const { language } = useLocale();
   const [tafseer, setTafseer] = useState(null);
   const [loading, setLoading] = useState(false);
   const [selectedTafseer, setSelectedTafseer] = useState(null);
@@ -323,7 +303,8 @@ const TafseerFloatingBubble = memo(function TafseerFloatingBubble({
   const [selectedAyah, setSelectedAyah] = useState(ayahNumber);
   const [retryCount, setRetryCount] = useState(0);
 
-  const tafseerLang = TRANSLATION_TO_TAFSEER_LANG[translationId] || 'en';
+  // Use translation-based language first, then app locale, then fallback to English
+  const tafseerLang = TRANSLATION_TO_TAFSEER_LANG[translationId] || language || 'en';
   const availableTafseers = getTafseersByLanguage(tafseerLang);
 
   // Update selected ayah when prop changes
@@ -755,7 +736,7 @@ const ShareFloatingBubble = memo(function ShareFloatingBubble({
       icon={Icons.Share}
       gradient={['#10B981', '#059669', '#047857']}
       position={{ top: '50%', left: '10px', transform: 'translateY(-50%)' }}
-      size="medium"
+      size="large"
     >
       <SharePanel
         surahId={surahId}
@@ -792,7 +773,7 @@ const FeatureToggleButtons = memo(function FeatureToggleButtons({ activeFeature,
           <button
             key={btn.id}
             onClick={() => onToggle(isActive ? null : btn.id)}
-            className={`relative px-2.5 py-1.5 rounded-full text-[10px] font-medium transition-all flex items-center gap-1.5 ${
+            className={`relative px-2.5 py-1.5 rounded-full text-[10px] font-medium transition-all flex items-center gap-1 whitespace-nowrap ${
               isActive ? 'text-white scale-105' : 'text-white/70 hover:text-white hover:scale-105'
             }`}
             style={{
@@ -800,7 +781,7 @@ const FeatureToggleButtons = memo(function FeatureToggleButtons({ activeFeature,
               boxShadow: isActive ? `0 4px 15px ${btn.color}50` : 'none',
             }}
           >
-            <Icon className="w-3.5 h-3.5" />
+            <Icon className="w-3.5 h-3.5 flex-shrink-0" />
             <span className="hidden sm:inline">{btn.label}</span>
           </button>
         );
@@ -1404,100 +1385,74 @@ const SharePanel = memo(function SharePanel({ surahId, surahName, ayahNumber, ve
 
   return (
     <div className="h-full flex flex-col">
-      <div className="flex-shrink-0 flex items-center justify-between pb-3">
-        <div className="flex items-center gap-2">
-          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center">
-            <Icons.Share className="w-5 h-5 text-white" />
-          </div>
-          <div>
-            <h3 className="text-white font-bold">{isMultiple ? tInterpolate('reader.shareVerses', { count: versesToShare.length }) : t('reader.shareVerse')}</h3>
-            <p className="text-white/60 text-xs">{surahName} : {ayahRangeStr}</p>
-          </div>
-        </div>
-        <button onClick={onClose} className="p-2 rounded-full hover:bg-white/10 transition-all">
-          <Icons.X className="w-4 h-4 text-white/70" />
-        </button>
-      </div>
-
-      <div className="flex-1 overflow-y-auto py-3 space-y-4">
+      <div className="flex-1 overflow-y-auto space-y-3">
         {/* Preview Card */}
-        <div ref={cardRef} className="p-4 rounded-2xl max-h-48 overflow-y-auto" style={{ background: STYLES.find(s => s.id === selectedStyle)?.bg }}>
+        <div ref={cardRef} className="p-4 rounded-2xl" style={{ background: STYLES.find(s => s.id === selectedStyle)?.bg }}>
           {isMultiple ? (
             <div className="space-y-3">
-              {versesToShare.slice(0, 3).map((v, i) => (
+              {versesToShare.slice(0, 3).map((v) => (
                 <div key={v.ayahNumber} className="text-center">
-                  <p className="text-white text-base leading-relaxed" style={{ fontFamily: "'Scheherazade New', serif" }} dir="rtl">
-                    {v.arabic?.substring(0, 60)}{v.arabic?.length > 60 ? '...' : ''} <span className="text-white/50 text-xs">({v.ayahNumber})</span>
+                  <p className="text-white text-lg leading-[2]" style={{ fontFamily: "'Scheherazade New', serif" }} dir="rtl">
+                    {v.arabic} <span className="text-white/50 text-xs">({v.ayahNumber})</span>
                   </p>
-                  <p className="text-white/70 text-xs italic">"{v.translation?.substring(0, 60)}{v.translation?.length > 60 ? '...' : ''}"</p>
+                  <p className="text-white/70 text-xs italic">"{v.translation?.substring(0, 80)}{v.translation?.length > 80 ? '...' : ''}"</p>
                 </div>
               ))}
               {versesToShare.length > 3 && (
-                <p className="text-white/50 text-xs text-center">...and {versesToShare.length - 3} more verse(s)</p>
+                <p className="text-white/50 text-xs text-center">...and {versesToShare.length - 3} more</p>
               )}
             </div>
           ) : (
             <>
-              <p className="text-white text-lg mb-3 leading-relaxed text-center" style={{ fontFamily: "'Scheherazade New', serif" }} dir="rtl">
-                {verseArabic?.substring(0, 100)}{verseArabic?.length > 100 ? '...' : ''}
+              <p className="text-white text-xl mb-3 leading-[2] text-center" style={{ fontFamily: "'Scheherazade New', serif" }} dir="rtl">
+                {verseArabic}
               </p>
-              <p className="text-white/80 text-sm italic text-center mb-2">"{verseTranslation?.substring(0, 120)}{verseTranslation?.length > 120 ? '...' : ''}"</p>
+              <p className="text-white/80 text-sm italic text-center mb-2">"{verseTranslation}"</p>
             </>
           )}
-          <p className="text-white/60 text-xs text-center mt-2">— {surahName} ({surahId}:{ayahRangeStr})</p>
+          <p className="text-white/50 text-xs text-center mt-2">— {surahName} ({surahId}:{ayahRangeStr})</p>
         </div>
 
-        {/* Style Selector */}
-        <div>
-          <label className="text-white/80 text-xs font-medium mb-2 block">{t('reader.cardStyle')}</label>
-          <div className="grid grid-cols-6 gap-2">
-            {STYLES.map(style => (
-              <button key={style.id} onClick={() => setSelectedStyle(style.id)}
-                className={`aspect-square rounded-xl transition-all ${selectedStyle === style.id ? 'ring-2 ring-white scale-105' : 'opacity-70 hover:opacity-100'}`}
-                style={{ background: style.bg }}
-                title={style.name}
-              />
-            ))}
-          </div>
+        {/* Style swatches — centered */}
+        <div className="flex gap-2.5 justify-center items-center">
+          {STYLES.map(style => (
+            <button key={style.id} onClick={() => setSelectedStyle(style.id)}
+              className={`w-7 h-7 flex-shrink-0 rounded-lg transition-all ${selectedStyle === style.id ? 'ring-2 ring-white scale-110' : 'opacity-50 hover:opacity-90'}`}
+              style={{ background: style.bg }}
+              title={style.name}
+            />
+          ))}
         </div>
 
-        {/* Action Buttons */}
+        {/* Actions */}
         <div className="space-y-2">
-          {/* Art Generator Button - NEW */}
           <button onClick={onOpenArtGenerator}
-            className="w-full py-3 bg-gradient-to-r from-amber-500/60 to-orange-500/60 hover:from-amber-500/80 hover:to-orange-500/80 rounded-xl text-white font-medium transition-all flex items-center justify-center gap-2">
-            <Icons.Palette className="w-5 h-5" /> {t('share.shareArt')}
+            className="w-full py-2.5 bg-gradient-to-r from-amber-500/60 to-orange-500/60 hover:from-amber-500/80 hover:to-orange-500/80 rounded-xl text-white font-medium transition-all flex items-center justify-center gap-2 text-sm">
+            <Icons.Palette className="w-4 h-4" /> {t('share.shareArt')}
           </button>
 
-          {/* Download Image Button */}
-          <button onClick={downloadImage} disabled={downloadStatus === 'generating'}
-            className="w-full py-3 bg-gradient-to-r from-purple-500/60 to-pink-500/60 hover:from-purple-500/80 hover:to-pink-500/80 rounded-xl text-white font-medium transition-all flex items-center justify-center gap-2 disabled:opacity-50">
-            {downloadStatus === 'generating' ? (
-              <><Icons.Loader className="w-5 h-5 animate-spin" /> {t('reader.generating')}</>
-            ) : downloadStatus === 'done' ? (
-              <><Icons.Check className="w-5 h-5" /> {t('reader.downloaded')}</>
-            ) : (
-              <><Icons.Download className="w-5 h-5" /> {t('reader.quickDownload')}</>
-            )}
-          </button>
+          <div className="flex gap-2">
+            <button onClick={downloadImage} disabled={downloadStatus === 'generating'}
+              className="flex-1 py-2 bg-white/15 hover:bg-white/25 rounded-xl text-white/90 font-medium transition-all flex items-center justify-center gap-1.5 text-xs disabled:opacity-50">
+              {downloadStatus === 'generating' ? <Icons.Loader className="w-3.5 h-3.5 animate-spin" /> : downloadStatus === 'done' ? <Icons.Check className="w-3.5 h-3.5" /> : <Icons.Download className="w-3.5 h-3.5" />}
+              {downloadStatus === 'done' ? t('common.done') : t('common.download')}
+            </button>
+            <button onClick={copyText}
+              className="flex-1 py-2 bg-white/15 hover:bg-white/25 rounded-xl text-white/90 font-medium transition-all flex items-center justify-center gap-1.5 text-xs">
+              <Icons.Copy className="w-3.5 h-3.5" /> {t('share.copyText')}
+            </button>
+          </div>
 
-          {/* Share Button */}
           <button onClick={handleShare} disabled={shareStatus === 'generating'}
-            className="w-full py-3 bg-gradient-to-r from-emerald-500/60 to-teal-500/60 hover:from-emerald-500/80 hover:to-teal-500/80 rounded-xl text-white font-medium transition-all flex items-center justify-center gap-2 disabled:opacity-50">
-            {shareStatus === 'generating' ? <Icons.Loader className="w-5 h-5 animate-spin" /> : shareStatus === 'copied' ? <><Icons.Check className="w-5 h-5" /> {t('common.copied')}</> : <><Icons.Share className="w-5 h-5" /> {t('common.share')}</>}
+            className="w-full py-2.5 bg-gradient-to-r from-emerald-500/60 to-teal-500/60 hover:from-emerald-500/80 hover:to-teal-500/80 rounded-xl text-white font-medium transition-all flex items-center justify-center gap-2 text-sm disabled:opacity-50">
+            {shareStatus === 'generating' ? <Icons.Loader className="w-4 h-4 animate-spin" /> : shareStatus === 'copied' ? <><Icons.Check className="w-4 h-4" /> {t('common.copied')}</> : <><Icons.Share className="w-4 h-4" /> {t('common.share')}</>}
           </button>
 
-          {/* Copy Text */}
-          <button onClick={copyText} className="w-full py-2.5 bg-white/10 hover:bg-white/20 rounded-xl text-white/80 font-medium transition-all flex items-center justify-center gap-2">
-            <Icons.Copy className="w-4 h-4" /> {t('share.copyText')}
-          </button>
-
-          {/* Social Buttons */}
           <div className="flex gap-2">
             <button onClick={() => window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(`"${verseTranslation?.substring(0, 200)}..." — ${surahName} (${surahId}:${ayahNumber})`)}`, '_blank')}
-              className="flex-1 py-2.5 bg-[#1DA1F2]/30 hover:bg-[#1DA1F2]/50 rounded-xl text-white font-medium transition-all text-sm">Twitter</button>
+              className="flex-1 py-2 bg-[#1DA1F2]/30 hover:bg-[#1DA1F2]/50 rounded-xl text-white font-medium transition-all text-xs">Twitter</button>
             <button onClick={() => window.open(`https://wa.me/?text=${encodeURIComponent(`${verseArabic}\n\n"${verseTranslation}"\n\n— ${surahName} (${surahId}:${ayahNumber})`)}`, '_blank')}
-              className="flex-1 py-2.5 bg-[#25D366]/30 hover:bg-[#25D366]/50 rounded-xl text-white font-medium transition-all text-sm">WhatsApp</button>
+              className="flex-1 py-2 bg-[#25D366]/30 hover:bg-[#25D366]/50 rounded-xl text-white font-medium transition-all text-xs">WhatsApp</button>
           </div>
         </div>
       </div>
@@ -3773,7 +3728,7 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
         verseArabic={shareVerseData?.multiple ? shareVerseData.verses[0]?.arabic : currentVerse?.arabic}
         verseTranslation={shareVerseData?.multiple ? shareVerseData.verses[0]?.translation : currentVerse?.translation}
         multipleVerses={shareVerseData?.multiple ? shareVerseData.verses : null}
-        onOpenArtGenerator={() => setShowArtGenerator(true)}
+        onOpenArtGenerator={() => { closeShareFeature(); setShowArtGenerator(true); }}
         onShareSuccess={() => { if (gamification.isActive) gamification.recordAction('share'); }}
       />
 
@@ -3926,7 +3881,7 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
         style={{ top: 'max(1rem, env(safe-area-inset-top, 1rem))' }}
         onClick={stopPropagation}
       >
-        <div className="flex items-center gap-1.5 sm:gap-2 px-3 py-2 rounded-full bg-black/30 backdrop-blur-xl border border-white/20 max-w-[95vw] overflow-x-auto scrollbar-hide">
+        <div className="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-2 rounded-full bg-black/30 backdrop-blur-xl border border-white/20 max-w-[98vw]">
           {[
             // Core reading features only
             { id: 'tafseer', icon: Icons.BookOpen, color: '#8B5CF6', label: t('reader.tafseer') },
@@ -3946,7 +3901,7 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
               <button
                 key={btn.id}
                 onClick={() => handleFeatureSelect(btn.id)}
-                className={`flex flex-col items-center gap-0.5 px-3 py-2 rounded-2xl transition-all hover:scale-105 flex-shrink-0 ${isActive ? 'scale-105' : ''}`}
+                className={`flex flex-col items-center gap-0.5 px-2 sm:px-3 py-1.5 sm:py-2 rounded-2xl transition-all hover:scale-105 min-w-0 ${isActive ? 'scale-105' : ''}`}
                 style={{
                   background: isActive ? `linear-gradient(135deg, ${btn.color}, ${btn.color}cc)` : `rgba(255,255,255,0.1)`,
                   boxShadow: isActive ? `0 0 20px ${btn.color}60` : 'none',
@@ -3954,7 +3909,7 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
                 title={btn.label}
               >
                 <Icon className="w-5 h-5 text-white" />
-                <span className="text-white text-[10px] font-medium">{btn.label}</span>
+                <span className="text-white text-[10px] font-medium whitespace-nowrap">{btn.label}</span>
               </button>
             );
           })}
@@ -4072,8 +4027,8 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
 
       {prevSurah && onChangeSurah && (
         <button onClick={handleGoPrevSurah}
-          className={`absolute left-2 sm:left-4 md:left-24 top-1/2 -translate-y-1/2 z-40 transition-all duration-300 ${isAnimating ? 'opacity-0' : 'opacity-100'}`}>
-          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center text-white transition-all hover:scale-110"
+          className={`absolute left-0 sm:left-4 md:left-24 top-1/2 -translate-y-1/2 z-40 transition-all duration-300 ${isAnimating ? 'opacity-0' : 'opacity-100'}`}>
+          <div className="w-8 h-8 sm:w-12 sm:h-12 rounded-full flex items-center justify-center text-white transition-all hover:scale-110"
             style={{ background: `linear-gradient(135deg, ${PALETTES[(prevSurah.id - 1) % 10].colors[0]}90, ${PALETTES[(prevSurah.id - 1) % 10].colors[1]}90)`, boxShadow: `0 4px 20px ${PALETTES[(prevSurah.id - 1) % 10].colors[0]}50` }}>
             <Icons.ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
           </div>
@@ -4082,8 +4037,8 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
 
       {nextSurah && onChangeSurah && (
         <button onClick={handleGoNextSurah}
-          className={`absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-40 transition-all duration-300 ${isAnimating ? 'opacity-0' : 'opacity-100'}`}>
-          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center text-white transition-all hover:scale-110"
+          className={`absolute right-0 sm:right-4 top-1/2 -translate-y-1/2 z-40 transition-all duration-300 ${isAnimating ? 'opacity-0' : 'opacity-100'}`}>
+          <div className="w-8 h-8 sm:w-12 sm:h-12 rounded-full flex items-center justify-center text-white transition-all hover:scale-110"
             style={{ background: `linear-gradient(135deg, ${PALETTES[(nextSurah.id - 1) % 10].colors[0]}90, ${PALETTES[(nextSurah.id - 1) % 10].colors[1]}90)`, boxShadow: `0 4px 20px ${PALETTES[(nextSurah.id - 1) % 10].colors[0]}50` }}>
             <Icons.ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
           </div>
@@ -4483,7 +4438,7 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
                 )}
               </div>
 
-              <div ref={versesContainerRef} className="flex-1 overflow-y-auto overflow-x-hidden px-3"
+              <div ref={versesContainerRef} className="flex-1 overflow-y-auto px-5 sm:px-6"
                 style={{ maskImage: 'linear-gradient(to bottom, transparent 0%, black 1.5%, black 98.5%, transparent 100%)', WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 1.5%, black 98.5%, transparent 100%)' }}>
                 {loading ? (
                   <div className="flex flex-col items-center justify-center h-32 gap-2">
@@ -4496,7 +4451,7 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
                     <p className="text-sm">{error}</p>
                   </div>
                 ) : (
-                  <div className={`py-2 overflow-x-hidden ${readerStyleConfig.container}`}>
+                  <div className={`py-2 ${readerStyleConfig.container}`}>
                     {/* Book Page Navigator - only for book layout */}
                     {readerStyle === 'book' && totalPages > 1 && (
                       <div className="sticky top-0 z-20 bg-black/50 backdrop-blur-xl rounded-xl p-2 sm:p-3 mb-3 border border-amber-700/30">
@@ -4591,7 +4546,7 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
                         borderColor: isCurrentAyah ? verseColors.activeBorder : verseColors.verseBorder,
                         borderWidth: '1px',
                         borderStyle: 'solid',
-                        transform: isCurrentAyah ? 'scale(1.01)' : 'scale(1)',
+                        transform: 'scale(1)',
                         boxShadow: isCurrentAyah ? '0 0 20px rgba(255,255,255,0.15)' : isSelected ? '0 0 15px rgba(16,185,129,0.3)' : isSajdah ? '0 0 12px rgba(239,68,68,0.1)' : 'none',
                         ...(isSajdah ? { borderLeft: '3px solid rgba(239,68,68,0.5)' } : {}),
                       };
@@ -5242,7 +5197,7 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
         @keyframes slideInBubbles { from { opacity: 0; transform: translateY(-50%) translateX(-30px); } to { opacity: 1; transform: translateY(-50%) translateX(0); } }
         @keyframes floatBubble { 0%, 100% { transform: translateY(0); } 25% { transform: translateY(-4px); } 75% { transform: translateY(4px); } }
         @keyframes pulseRing { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(2); opacity: 0; } }
-        @keyframes bubblePopIn { 0% { opacity: 0; transform: scale(0.5); } 100% { opacity: 1; transform: scale(1); } }
+        @keyframes bubblePopIn { 0% { opacity: 0; } 100% { opacity: 1; } }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes surahPickerIn { from { opacity: 0; transform: scale(0.9) translateY(20px); } to { opacity: 1; transform: scale(1) translateY(0); } }
         @keyframes surahItemIn { from { opacity: 0; transform: translateX(-8px); } to { opacity: 1; transform: translateX(0); } }
