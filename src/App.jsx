@@ -172,6 +172,10 @@ const ROUTE_CONFIG = {
   '/weather-verse': { modal: 'weatherSync' },
   '/sound-healing': { modal: 'soundHealing' },
   '/baby-names': { modal: 'babyNames' },
+  '/hajj-umrah': { modal: 'hajjUmrah' },
+  '/talk': { modal: 'talkToQuran' },
+  '/faq': { modal: 'faq' },
+  '/achievements': { modal: 'achievements' },
 };
 
 // Reverse mapping for state to URL
@@ -206,6 +210,10 @@ const MODAL_TO_ROUTE = {
   weatherSync: '/weather-verse',
   soundHealing: '/sound-healing',
   babyNames: '/baby-names',
+  hajjUmrah: '/hajj-umrah',
+  talkToQuran: '/talk',
+  faq: '/faq',
+  achievements: '/achievements',
 };
 
 /**
@@ -364,6 +372,10 @@ function QuranBubbleApp() {
     setShowWeatherSync(false);
     setShowSoundHealing(false);
     setShowBabyNames(false);
+    setShowHajjUmrah(false);
+    setShowTalkToQuran(false);
+    setShowFAQ(false);
+    setShowGamificationHub(false);
     setOverlayReaderSurah(null);
     setInitialVerse(1);
     setInitialPanel(null);
@@ -441,6 +453,10 @@ function QuranBubbleApp() {
             case 'weatherSync': setShowWeatherSync(true); break;
             case 'soundHealing': setShowSoundHealing(true); break;
             case 'babyNames': setShowBabyNames(true); break;
+            case 'hajjUmrah': setShowHajjUmrah(true); break;
+            case 'talkToQuran': setShowTalkToQuran(true); break;
+            case 'faq': setShowFAQ(true); break;
+            case 'achievements': setShowGamificationHub(true); break;
           }
         }
       } else {
@@ -536,6 +552,22 @@ function QuranBubbleApp() {
   useEffect(() => {
     if (showBabyNames) updateURL(MODAL_TO_ROUTE.babyNames);
   }, [showBabyNames, updateURL]);
+
+  useEffect(() => {
+    if (showHajjUmrah) updateURL(MODAL_TO_ROUTE.hajjUmrah);
+  }, [showHajjUmrah, updateURL]);
+
+  useEffect(() => {
+    if (showTalkToQuran) updateURL(MODAL_TO_ROUTE.talkToQuran);
+  }, [showTalkToQuran, updateURL]);
+
+  useEffect(() => {
+    if (showFAQ) updateURL(MODAL_TO_ROUTE.faq);
+  }, [showFAQ, updateURL]);
+
+  useEffect(() => {
+    if (showGamificationHub) updateURL(MODAL_TO_ROUTE.achievements);
+  }, [showGamificationHub, updateURL]);
 
   // Update page title + meta tags (OG, description, canonical) based on current state
   useEffect(() => {
