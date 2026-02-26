@@ -2463,7 +2463,7 @@ const Ground = () => (
 const WalkingPilgrim = ({ currentStep, steps, isWalking, language = 'en', onTawafCircuit, onSaiLap, onReachDestination, onStoneThrow, onPebbleCollected, onAnimationDone, pilgrimPositionRef }) => {
   const groupRef = useRef();
   const lookDirectionRef = useRef(0); // Use ref to avoid 60 re-renders/sec in useFrame
-  const tawafAngleRef = useRef(Math.PI); // Start from back of Kaaba
+  const tawafAngleRef = useRef(Math.PI / 4); // Start from Black Stone (SE corner)
   const [tawafCircuit, setTawafCircuit] = useState(0);
   const lastCircuitRef = useRef(0);
   const saiProgressRef = useRef(0); // 0-7 for Sa'i laps
@@ -2511,7 +2511,10 @@ const WalkingPilgrim = ({ currentStep, steps, isWalking, language = 'en', onTawa
   const SAFA_POS = [17, 0, 0];
   const MARWAH_POS = [33, 0, 0];
   const TAWAF_RADIUS = 12; // Slightly larger radius for visibility
-  const TAWAF_START = [0, 0, TAWAF_RADIUS]; // Start position on circle (front of Kaaba)
+  // Tawaf starts at the Black Stone (SE corner of Kaaba at [2.55, _, 2.55]).
+  // On the circle of radius 12, direction toward Black Stone = π/4 radians.
+  const TAWAF_START_ANGLE = Math.PI / 4; // π/4 = Black Stone corner direction
+  const TAWAF_START = [Math.sin(TAWAF_START_ANGLE) * TAWAF_RADIUS, 0, Math.cos(TAWAF_START_ANGLE) * TAWAF_RADIUS];
 
   // Jamarat pillar world positions (Jamarat group at [12, 0, -38])
   const JAMARAT_GROUP = [12, 0, -38];
@@ -2542,7 +2545,7 @@ const WalkingPilgrim = ({ currentStep, steps, isWalking, language = 'en', onTawa
     setReachedDestination(false);
     positionInitializedRef.current = false;
     if (isTawafStep) {
-      tawafAngleRef.current = 0; // Start from front
+      tawafAngleRef.current = TAWAF_START_ANGLE; // Start from Black Stone (SE corner)
       lastCircuitRef.current = 0;
       setTawafCircuit(0);
     }
@@ -2637,10 +2640,10 @@ const WalkingPilgrim = ({ currentStep, steps, isWalking, language = 'en', onTawa
           lookDirectionRef.current = Math.atan2(dx, dz);
         }
       } else {
-        // Reached the circle - start Tawaf
+        // Reached the circle - start Tawaf at Black Stone
         if (!reachedDestination) {
           setReachedDestination(true);
-          tawafAngleRef.current = 0;
+          tawafAngleRef.current = TAWAF_START_ANGLE; // Start at Black Stone (SE corner)
           onReachDestination?.('tawaf');
         }
 
@@ -2657,18 +2660,19 @@ const WalkingPilgrim = ({ currentStep, steps, isWalking, language = 'en', onTawa
           tawafAngleRef.current += tawafSpeed * delta;
 
           // Clamp to exactly 7 circuits (prevent overshoot)
-          const MAX_ANGLE = Math.PI * 2 * 7;
+          const MAX_ANGLE = TAWAF_START_ANGLE + Math.PI * 2 * 7;
           if (tawafAngleRef.current > MAX_ANGLE) tawafAngleRef.current = MAX_ANGLE;
 
-          // Position on circle (counter-clockwise: Kaaba on pilgrim's left)
-          pos.x = -Math.sin(tawafAngleRef.current) * TAWAF_RADIUS;
+          // Counter-clockwise Tawaf (Sunnah): Kaaba on pilgrim's LEFT
+          // sin(θ) for x, cos(θ) for z → path goes SE → NE → NW → SW → SE
+          pos.x = Math.sin(tawafAngleRef.current) * TAWAF_RADIUS;
           pos.z = Math.cos(tawafAngleRef.current) * TAWAF_RADIUS;
 
-          // Face tangent direction (counter-clockwise movement)
-          lookDirectionRef.current = -tawafAngleRef.current - Math.PI / 2;
+          // Face tangent: perpendicular to radius, counter-clockwise direction
+          lookDirectionRef.current = tawafAngleRef.current + Math.PI / 2;
 
-          // Track circuits - count after completing each full circle (2π radians)
-          const fullCircles = Math.floor(tawafAngleRef.current / (Math.PI * 2));
+          // Track circuits - count after completing each full circle (2π radians) from start
+          const fullCircles = Math.floor((tawafAngleRef.current - TAWAF_START_ANGLE) / (Math.PI * 2));
           if (fullCircles > 0 && fullCircles > lastCircuitRef.current && fullCircles <= 7) {
             lastCircuitRef.current = fullCircles;
             setTawafCircuit(fullCircles);
