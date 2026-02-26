@@ -1067,11 +1067,12 @@ const CategorySection = memo(function CategorySection({ category, categoryKey, c
   // Use category color or assign based on index
   const color = category.color || CATEGORY_COLORS[categoryIndex % CATEGORY_COLORS.length];
   // Get category label - handle both old ({label: {en, ur}}) and new ({name, nameAr, nameUr}) structures
-  const categoryLabel = category.label
+  const rawLabel = category.label
     ? getOntologyText(category.label, lang)
-    : (lang === 'ur' ? (category.nameUr || category.nameArabic || category.nameAr || category.name)
-      : (lang === 'ar' ? (category.nameArabic || category.nameAr || category.name)
-      : category.name)) || categoryKey;
+    : (lang === 'ur' ? (category.nameUr || category.nameArabic || category.nameAr || getOntologyText(category.name, lang))
+      : (lang === 'ar' ? (category.nameArabic || category.nameAr || getOntologyText(category.name, lang))
+      : getOntologyText(category.name, lang))) || categoryKey;
+  const categoryLabel = typeof rawLabel === 'object' ? getOntologyText(rawLabel, lang) : rawLabel;
 
   return (
     <div className="mb-4">
@@ -1255,7 +1256,7 @@ const CrossReferenceCard = memo(function CrossReferenceCard({ reference, lang, l
           <span className="text-xs bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded">
             {lang === 'ur' ? 'سورت' : lang === 'ar' ? 'سورة' : 'Surah'} {reference.surah}
           </span>
-          <span className="text-sm text-white font-medium">{reference.name}</span>
+          <span className="text-sm text-white font-medium">{getOntologyText(reference.name, lang)}</span>
           <span
             className="text-xs px-2 py-0.5 rounded-full"
             style={{ backgroundColor: `${color}30`, color }}
@@ -1264,7 +1265,7 @@ const CrossReferenceCard = memo(function CrossReferenceCard({ reference, lang, l
           </span>
         </div>
         <p className={`text-sm text-white/70 ${lang === 'ur' || lang === 'ar' ? 'text-right' : ''}`} dir={lang === 'ur' || lang === 'ar' ? 'rtl' : 'ltr'}>
-          {reference.relationship}
+          {getOntologyText(reference.relationship, lang)}
         </p>
       </div>
     );
@@ -1277,11 +1278,11 @@ const CrossReferenceCard = memo(function CrossReferenceCard({ reference, lang, l
         <span className="text-xs bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded">
           {reference.reference?.surah}:{reference.reference?.ayah}
         </span>
-        <span className="text-sm text-white/50">{reference.concept}</span>
+        <span className="text-sm text-white/50">{getOntologyText(reference.concept, lang)}</span>
       </div>
       {reference.text && (
         <p className="text-lg font-arabic text-white/90 mb-2" dir="rtl">
-          {reference.text}
+          {getOntologyText(reference.text, lang)}
         </p>
       )}
       <p className={`text-sm text-white/60 ${lang === 'ur' || lang === 'ar' ? 'text-right' : ''}`} dir={lang === 'ur' || lang === 'ar' ? 'rtl' : 'ltr'}>
@@ -1583,7 +1584,7 @@ export const OntologyView = memo(function OntologyView({ surahId, lang = 'en', i
                           )}
                         </div>
                         {feature.description && (
-                          <p className="text-white/60 text-xs font-arabic mb-1" dir="rtl">{feature.description}</p>
+                          <p className="text-white/60 text-xs font-arabic mb-1" dir="rtl">{getOntologyText(feature.description, lang)}</p>
                         )}
                         {feature.example && (
                           <p className={`text-white/70 text-sm ${lang === 'ur' || lang === 'ar' ? 'text-right' : ''}`} dir={lang === 'ur' || lang === 'ar' ? 'rtl' : 'ltr'}>{getOntologyText(feature.example, lang)}</p>
