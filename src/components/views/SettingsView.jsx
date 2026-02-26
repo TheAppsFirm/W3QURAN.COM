@@ -46,6 +46,10 @@ function SettingsView({ darkMode, setDarkMode, onNavigate }) {
   const [credits, setCredits] = useState(null);
   const [creditsLoading, setCreditsLoading] = useState(false);
   const [paymentStatus, setPaymentStatus] = useState(null); // 'success' | 'canceled'
+  const [feedbackOpen, setFeedbackOpen] = useState(false);
+  const [feedbackType, setFeedbackType] = useState('general');
+  const [feedbackMsg, setFeedbackMsg] = useState('');
+  const [feedbackStatus, setFeedbackStatus] = useState(null); // 'sending' | 'sent' | 'error'
 
   // Check for payment redirect
   useEffect(() => {
@@ -889,6 +893,148 @@ function SettingsView({ darkMode, setDarkMode, onNavigate }) {
             </button>
           </div>
         </div>
+
+        {/* Feedback Section */}
+        {user && (
+          <div className="mb-6">
+            <h3 className={`text-sm font-semibold uppercase tracking-wider mb-3 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+              Feedback
+            </h3>
+
+            <div className={`rounded-2xl shadow-lg border overflow-hidden ${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}>
+              {/* Toggle Button */}
+              <button
+                onClick={() => { setFeedbackOpen(!feedbackOpen); setFeedbackStatus(null); }}
+                className={`w-full p-4 text-left transition-all hover:scale-[1.01] ${feedbackOpen ? 'pb-2' : ''}`}
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center">
+                      <Icons.MessageCircle className="w-5 h-5 text-blue-500" />
+                    </div>
+                    <div>
+                      <span className={`font-bold block ${darkMode ? 'text-white' : 'text-gray-800'}`}>
+                        Send Feedback
+                      </span>
+                      <span className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                        Report bugs, request features, or share your thoughts
+                      </span>
+                    </div>
+                  </div>
+                  <Icons.ChevronRight className={`w-5 h-5 transition-transform ${feedbackOpen ? 'rotate-90' : ''} ${darkMode ? 'text-gray-500' : 'text-gray-400'}`} />
+                </div>
+              </button>
+
+              {/* Feedback Form */}
+              {feedbackOpen && (
+                <div className="px-4 pb-4 space-y-3">
+                  {/* Type Selector */}
+                  <div className="flex gap-2">
+                    {[
+                      { id: 'general', label: 'General', color: 'gray' },
+                      { id: 'bug', label: 'Bug Report', color: 'red' },
+                      { id: 'feature', label: 'Feature Request', color: 'purple' },
+                    ].map(t => (
+                      <button
+                        key={t.id}
+                        onClick={() => setFeedbackType(t.id)}
+                        className={`flex-1 py-2 rounded-xl text-xs font-medium transition-all border ${
+                          feedbackType === t.id
+                            ? t.color === 'red' ? 'bg-red-500/20 border-red-500/40 text-red-400'
+                              : t.color === 'purple' ? 'bg-purple-500/20 border-purple-500/40 text-purple-400'
+                              : darkMode ? 'bg-blue-500/20 border-blue-500/40 text-blue-400' : 'bg-blue-50 border-blue-200 text-blue-600'
+                            : darkMode ? 'bg-gray-700 border-gray-600 text-gray-400' : 'bg-gray-50 border-gray-200 text-gray-500'
+                        }`}
+                      >
+                        {t.label}
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* Message */}
+                  <textarea
+                    value={feedbackMsg}
+                    onChange={(e) => setFeedbackMsg(e.target.value)}
+                    placeholder={
+                      feedbackType === 'bug' ? 'Describe the bug — what happened and what you expected...'
+                        : feedbackType === 'feature' ? 'Describe the feature you would like...'
+                        : 'Share your feedback or suggestions...'
+                    }
+                    rows={4}
+                    maxLength={5000}
+                    className={`w-full rounded-xl p-3 text-sm border resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                      darkMode ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-500' : 'bg-gray-50 border-gray-200 text-gray-800 placeholder-gray-400'
+                    }`}
+                  />
+
+                  {/* Character count */}
+                  <div className="flex items-center justify-between">
+                    <span className={`text-[10px] ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>
+                      {feedbackMsg.length}/5000
+                    </span>
+
+                    {/* Status Messages */}
+                    {feedbackStatus === 'sent' && (
+                      <span className="text-green-500 text-xs font-medium flex items-center gap-1">
+                        <Icons.Check className="w-3.5 h-3.5" /> Feedback sent! Thank you.
+                      </span>
+                    )}
+                    {feedbackStatus === 'error' && (
+                      <span className="text-red-500 text-xs">Failed to send. Please try again.</span>
+                    )}
+                  </div>
+
+                  {/* Submit Button */}
+                  <button
+                    onClick={async () => {
+                      if (!feedbackMsg.trim() || feedbackMsg.trim().length < 5) return;
+                      setFeedbackStatus('sending');
+                      try {
+                        const res = await fetch('/api/feedback', {
+                          method: 'POST',
+                          credentials: 'include',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({
+                            type: feedbackType,
+                            message: feedbackMsg.trim(),
+                            metadata: {
+                              url: window.location.href,
+                              userAgent: navigator.userAgent,
+                              screen: `${window.screen.width}x${window.screen.height}`,
+                              viewport: `${window.innerWidth}x${window.innerHeight}`,
+                              deviceType: window.innerWidth < 768 ? 'mobile' : window.innerWidth < 1024 ? 'tablet' : 'desktop',
+                              os: navigator.platform,
+                              language: navigator.language,
+                              darkMode,
+                              translation: localStorage.getItem('reader_translation') || 'ur.jalandhry',
+                              online: navigator.onLine,
+                              appVersion: '1.0.0',
+                              timestamp: new Date().toISOString(),
+                            },
+                          }),
+                        });
+                        if (!res.ok) throw new Error('Failed');
+                        setFeedbackStatus('sent');
+                        setFeedbackMsg('');
+                        setTimeout(() => setFeedbackStatus(null), 4000);
+                      } catch {
+                        setFeedbackStatus('error');
+                      }
+                    }}
+                    disabled={feedbackStatus === 'sending' || feedbackMsg.trim().length < 5}
+                    className={`w-full py-3 rounded-xl font-medium text-sm transition-all ${
+                      feedbackStatus === 'sending' || feedbackMsg.trim().length < 5
+                        ? 'bg-gray-500/30 text-gray-400 cursor-not-allowed'
+                        : 'bg-blue-500 hover:bg-blue-600 text-white active:scale-[0.98]'
+                    }`}
+                  >
+                    {feedbackStatus === 'sending' ? 'Sending...' : 'Send Feedback'}
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
 
         {/* App Info */}
         <div

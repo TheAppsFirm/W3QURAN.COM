@@ -335,3 +335,22 @@ CREATE TABLE IF NOT EXISTS announcements (
 
 CREATE INDEX IF NOT EXISTS idx_announcements_active ON announcements(starts_at, expires_at);
 CREATE INDEX IF NOT EXISTS idx_announcements_priority ON announcements(priority DESC);
+
+-- USER FEEDBACK TABLE (Bug reports, feature requests, general feedback)
+
+CREATE TABLE IF NOT EXISTS user_feedback (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER NOT NULL,                -- Must be logged in (no guest feedback)
+  type TEXT NOT NULL DEFAULT 'general',    -- bug, feature, general
+  message TEXT NOT NULL,
+  metadata TEXT,                           -- JSON for extra context (browser, page, etc.)
+  status TEXT NOT NULL DEFAULT 'new',      -- new, reviewed, resolved
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_feedback_status ON user_feedback(status);
+CREATE INDEX IF NOT EXISTS idx_feedback_type ON user_feedback(type);
+CREATE INDEX IF NOT EXISTS idx_feedback_user ON user_feedback(user_id);
+CREATE INDEX IF NOT EXISTS idx_feedback_created ON user_feedback(created_at);

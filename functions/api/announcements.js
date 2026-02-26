@@ -7,7 +7,11 @@ export async function onRequest(context) {
   const { env, request } = context;
 
   if (request.method !== 'GET') {
-    return new Response('Method not allowed', { status: 405 });
+    return new Response(JSON.stringify({ error: 'Method not allowed' }), { status: 405, headers: { 'Content-Type': 'application/json' } });
+  }
+
+  if (!env.DB) {
+    return new Response(JSON.stringify({ announcements: [] }), { status: 200, headers: { 'Content-Type': 'application/json' }});
   }
 
   try {

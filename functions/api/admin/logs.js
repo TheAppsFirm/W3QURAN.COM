@@ -18,6 +18,10 @@ export async function onRequest(context) {
     return new Response(null, { headers: corsHeaders });
   }
 
+  if (!env.DB) {
+    return new Response(JSON.stringify({ error: 'Service unavailable' }), { status: 503, headers: corsHeaders });
+  }
+
   // Verify admin session
   const cookies = request.headers.get('Cookie') || '';
   const sessionMatch = cookies.match(/w3quran_session=([^;]+)/);
@@ -88,9 +92,9 @@ export async function onRequest(context) {
           browser, os, device, memory_used_mb, memory_percent,
           page_url, surah_id, ayah_num, extra_data, created_at
         FROM app_logs
-        WHERE created_at > datetime('now', '-${hours} hours')
+        WHERE created_at > datetime('now', '-' || ? || ' hours')
       `;
-      const params = [];
+      const params = [hours];
 
       if (level) {
         query += ` AND log_level = ?`;
@@ -149,16 +153,14 @@ export async function onRequest(context) {
       }));
 
       // Get total count for pagination
-      let countQuery = `
-        SELECT COUNT(*) as total FROM app_logs
-        WHERE created_at > datetime('now', '-${hours} hours')
-      `;
-      if (level) countQuery += ` AND log_level = '${level}'`;
-      if (type) countQuery += ` AND log_type = '${type}'`;
+      let countQuery = `SELECT COUNT(*) as total FROM app_logs WHERE created_at > datetime('now', '-' || ? || ' hours')`;
+      const countBinds = [hours];
+      if (level) { countQuery += ` AND log_level = ?`; countBinds.push(level); }
+      if (type) { countQuery += ` AND log_type = ?`; countBinds.push(type); }
       if (view === 'errors') countQuery += ` AND (log_level = 'error' OR log_level = 'critical')`;
       if (view === 'performance') countQuery += ` AND (log_type = 'performance' OR log_type = 'memory')`;
 
-      const countResult = await env.DB.prepare(countQuery).first();
+      const countResult = await env.DB.prepare(countQuery).bind(...countBinds).first();
 
       return new Response(JSON.stringify({
         logs: parsedLogs,
@@ -193,8 +195,8 @@ export async function onRequest(context) {
         const days = parseInt(url.searchParams.get('days') || '7', 10);
         result = await env.DB.prepare(`
           DELETE FROM app_logs
-          WHERE created_at < datetime('now', '-${days} days')
-        `).run();
+          WHERE created_at < datetime('now', '-' || ? || ' days')
+        `).bind(days).run();
       }
 
       return new Response(JSON.stringify({
@@ -220,108 +222,113 @@ export async function onRequest(context) {
 }
 
 /**
+ * Safe query wrapper — returns empty result if query fails (missing column, etc.)
+ */
+async function safeQuery(env, sql, binds = [], mode = 'all') {
+  try {
+    const stmt = env.DB.prepare(sql).bind(...binds);
+    if (mode === 'first') return await stmt.first();
+    const result = await stmt.all();
+    return result.results || [];
+  } catch (err) {
+    console.error('[Admin Logs] Query failed:', err.message, '— SQL:', sql.substring(0, 80));
+    return mode === 'first' ? null : [];
+  }
+}
+
+/**
  * Get summary statistics
  */
 async function getSummaryStats(env, hours) {
-  const timeFilter = `created_at > datetime('now', '-${hours} hours')`;
+  const h = String(hours);
 
-  // Error counts by type
-  const errorsByType = await env.DB.prepare(`
-    SELECT log_type, COUNT(*) as count
-    FROM app_logs
-    WHERE ${timeFilter} AND (log_level = 'error' OR log_level = 'critical')
-    GROUP BY log_type
-    ORDER BY count DESC
-  `).all();
+  // Run all queries in parallel with safe wrappers
+  const [
+    errorsByType,
+    errorsByBrowser,
+    errorsByOS,
+    errorsBySurah,
+    topErrors,
+    memoryWarnings,
+    featureUsage,
+    errorTrend,
+    totals,
+  ] = await Promise.all([
+    // Error counts by type
+    safeQuery(env, `
+      SELECT log_type, COUNT(*) as count FROM app_logs
+      WHERE created_at > datetime('now', '-' || ? || ' hours') AND (log_level = 'error' OR log_level = 'critical')
+      GROUP BY log_type ORDER BY count DESC
+    `, [h]),
 
-  // Errors by browser
-  const errorsByBrowser = await env.DB.prepare(`
-    SELECT browser, COUNT(*) as count
-    FROM app_logs
-    WHERE ${timeFilter} AND (log_level = 'error' OR log_level = 'critical')
-    GROUP BY browser
-    ORDER BY count DESC
-  `).all();
+    // Errors by browser
+    safeQuery(env, `
+      SELECT browser, COUNT(*) as count FROM app_logs
+      WHERE created_at > datetime('now', '-' || ? || ' hours') AND (log_level = 'error' OR log_level = 'critical')
+      GROUP BY browser ORDER BY count DESC
+    `, [h]),
 
-  // Errors by OS
-  const errorsByOS = await env.DB.prepare(`
-    SELECT os, COUNT(*) as count
-    FROM app_logs
-    WHERE ${timeFilter} AND (log_level = 'error' OR log_level = 'critical')
-    GROUP BY os
-    ORDER BY count DESC
-  `).all();
+    // Errors by OS
+    safeQuery(env, `
+      SELECT os, COUNT(*) as count FROM app_logs
+      WHERE created_at > datetime('now', '-' || ? || ' hours') AND (log_level = 'error' OR log_level = 'critical')
+      GROUP BY os ORDER BY count DESC
+    `, [h]),
 
-  // Errors by Surah (crashes during reading)
-  const errorsBySurah = await env.DB.prepare(`
-    SELECT surah_id, COUNT(*) as count
-    FROM app_logs
-    WHERE ${timeFilter} AND (log_level = 'error' OR log_level = 'critical') AND surah_id IS NOT NULL
-    GROUP BY surah_id
-    ORDER BY count DESC
-    LIMIT 10
-  `).all();
+    // Errors by Surah
+    safeQuery(env, `
+      SELECT surah_id, COUNT(*) as count FROM app_logs
+      WHERE created_at > datetime('now', '-' || ? || ' hours') AND (log_level = 'error' OR log_level = 'critical') AND surah_id IS NOT NULL
+      GROUP BY surah_id ORDER BY count DESC LIMIT 10
+    `, [h]),
 
-  // Top error messages
-  const topErrors = await env.DB.prepare(`
-    SELECT message, COUNT(*) as count, MAX(created_at) as last_seen
-    FROM app_logs
-    WHERE ${timeFilter} AND (log_level = 'error' OR log_level = 'critical')
-    GROUP BY message
-    ORDER BY count DESC
-    LIMIT 20
-  `).all();
+    // Top error messages
+    safeQuery(env, `
+      SELECT message, COUNT(*) as count, MAX(created_at) as last_seen FROM app_logs
+      WHERE created_at > datetime('now', '-' || ? || ' hours') AND (log_level = 'error' OR log_level = 'critical')
+      GROUP BY message ORDER BY count DESC LIMIT 20
+    `, [h]),
 
-  // Memory warnings
-  const memoryWarnings = await env.DB.prepare(`
-    SELECT COUNT(*) as count, AVG(memory_percent) as avg_percent, MAX(memory_percent) as max_percent
-    FROM app_logs
-    WHERE ${timeFilter} AND log_type = 'memory'
-  `).first();
+    // Memory warnings
+    safeQuery(env, `
+      SELECT COUNT(*) as count, AVG(memory_percent) as avg_percent, MAX(memory_percent) as max_percent
+      FROM app_logs WHERE created_at > datetime('now', '-' || ? || ' hours') AND log_type = 'memory'
+    `, [h], 'first'),
 
-  // Feature usage
-  const featureUsage = await env.DB.prepare(`
-    SELECT message, COUNT(*) as count
-    FROM app_logs
-    WHERE ${timeFilter} AND log_type = 'feature'
-    GROUP BY message
-    ORDER BY count DESC
-    LIMIT 20
-  `).all();
+    // Feature usage
+    safeQuery(env, `
+      SELECT message, COUNT(*) as count FROM app_logs
+      WHERE created_at > datetime('now', '-' || ? || ' hours') AND log_type = 'feature'
+      GROUP BY message ORDER BY count DESC LIMIT 20
+    `, [h]),
 
-  // Hourly error trend
-  const errorTrend = await env.DB.prepare(`
-    SELECT
-      strftime('%Y-%m-%d %H:00', created_at) as hour,
-      COUNT(*) as count
-    FROM app_logs
-    WHERE ${timeFilter} AND (log_level = 'error' OR log_level = 'critical')
-    GROUP BY hour
-    ORDER BY hour DESC
-    LIMIT 24
-  `).all();
+    // Hourly error trend
+    safeQuery(env, `
+      SELECT strftime('%Y-%m-%d %H:00', created_at) as hour, COUNT(*) as count FROM app_logs
+      WHERE created_at > datetime('now', '-' || ? || ' hours') AND (log_level = 'error' OR log_level = 'critical')
+      GROUP BY hour ORDER BY hour DESC LIMIT 24
+    `, [h]),
 
-  // Total counts
-  const totals = await env.DB.prepare(`
-    SELECT
-      COUNT(*) as total_logs,
-      SUM(CASE WHEN log_level = 'error' OR log_level = 'critical' THEN 1 ELSE 0 END) as total_errors,
-      SUM(CASE WHEN log_type = 'action' THEN 1 ELSE 0 END) as total_actions,
-      COUNT(DISTINCT session_id) as unique_sessions
-    FROM app_logs
-    WHERE ${timeFilter}
-  `).first();
+    // Total counts
+    safeQuery(env, `
+      SELECT COUNT(*) as total_logs,
+        SUM(CASE WHEN log_level = 'error' OR log_level = 'critical' THEN 1 ELSE 0 END) as total_errors,
+        SUM(CASE WHEN log_type = 'action' THEN 1 ELSE 0 END) as total_actions,
+        COUNT(DISTINCT session_id) as unique_sessions
+      FROM app_logs WHERE created_at > datetime('now', '-' || ? || ' hours')
+    `, [h], 'first'),
+  ]);
 
   return {
     timeRange: `Last ${hours} hours`,
-    totals,
-    errorsByType: errorsByType.results,
-    errorsByBrowser: errorsByBrowser.results,
-    errorsByOS: errorsByOS.results,
-    errorsBySurah: errorsBySurah.results,
-    topErrors: topErrors.results,
-    memoryWarnings,
-    featureUsage: featureUsage.results,
-    errorTrend: errorTrend.results,
+    totals: totals || { total_logs: 0, total_errors: 0, total_actions: 0, unique_sessions: 0 },
+    errorsByType,
+    errorsByBrowser,
+    errorsByOS,
+    errorsBySurah,
+    topErrors,
+    memoryWarnings: memoryWarnings || { count: 0 },
+    featureUsage,
+    errorTrend,
   };
 }

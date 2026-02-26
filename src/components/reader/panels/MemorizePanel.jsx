@@ -10,7 +10,7 @@
  * Follows Single Responsibility Principle - handles only memorization settings
  */
 
-import { memo, useState, useEffect } from 'react';
+import { memo, useState, useEffect, useRef } from 'react';
 import { Icons } from '../../common/Icons';
 
 // Word visibility levels for progressive memorization
@@ -32,9 +32,12 @@ const MemorizePanel = memo(function MemorizePanel({
 }) {
   const [hideLevel, setHideLevel] = useState(currentSettings?.hideLevel || 0);
   const [repeatCount, setRepeatCount] = useState(currentSettings?.repeatCount || 3);
+  const prevSettingsRef = useRef({ hideLevel, repeatCount });
 
-  // Notify parent of settings changes
+  // Notify parent of settings changes — only when values actually change
   useEffect(() => {
+    if (prevSettingsRef.current.hideLevel === hideLevel && prevSettingsRef.current.repeatCount === repeatCount) return;
+    prevSettingsRef.current = { hideLevel, repeatCount };
     onSettingsChange({ hideLevel, repeatCount });
   }, [hideLevel, repeatCount, onSettingsChange]);
 

@@ -51,7 +51,7 @@ export async function onRequest(context) {
   }
 
   if (request.method !== 'GET') {
-    return new Response('Method not allowed', { status: 405, headers: corsHeaders });
+    return new Response(JSON.stringify({ error: 'Method not allowed' }), { status: 405, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
   }
 
   const url = new URL(request.url);
@@ -60,6 +60,10 @@ export async function onRequest(context) {
 
   // Validate sort param — only allow known keys
   const queries = QUERIES[sort] || QUERIES.xp;
+
+  if (!env.DB) {
+    return new Response(JSON.stringify({ error: 'Service unavailable', leaderboard: [], myRank: null, sort, total: 0 }), { status: 503, headers: { ...corsHeaders, 'Content-Type': 'application/json' }});
+  }
 
   try {
     // Get top users using pre-built query (no template interpolation)

@@ -59,6 +59,10 @@ export async function onRequest(context) {
     });
   }
 
+  if (!env.DB) {
+    return new Response(JSON.stringify({ error: 'Service unavailable' }), { status: 503, headers: corsHeaders });
+  }
+
   // Verify admin access
   const auth = await verifyAdminSession(request, env);
   if (auth.error) {

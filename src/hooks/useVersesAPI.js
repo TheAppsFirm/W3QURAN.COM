@@ -210,16 +210,16 @@ export function useVersesAPI(surahId, options = {}) {
           const verse = {
             number: ayah.numberInSurah,
             arabic: arabicText,
-            translation: translationData?.ayahs[index]?.text || '',
+            translation: translationData?.ayahs?.[index]?.text || '',
           };
 
           if (includeTajweed && tajweedData) {
-            verse.tajweed = tajweedData.ayahs[index]?.text || '';
+            verse.tajweed = tajweedData?.ayahs?.[index]?.text || '';
             verse.tajweedSegments = parseTajweedText(verse.tajweed);
           }
 
           if (includeWordByWord && wordByWordData) {
-            verse.wordByWord = wordByWordData.ayahs[index]?.text || '';
+            verse.wordByWord = wordByWordData?.ayahs?.[index]?.text || '';
           }
 
           return verse;

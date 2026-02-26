@@ -25,7 +25,7 @@ export async function onRequest(context) {
   const { env, request } = context;
 
   if (request.method !== 'POST') {
-    return new Response('Method not allowed', { status: 405 });
+    return new Response(JSON.stringify({ error: 'Method not allowed' }), { status: 405, headers: { 'Content-Type': 'application/json' } });
   }
 
   // Get session token from cookie
@@ -44,6 +44,10 @@ export async function onRequest(context) {
       status: 401,
       headers: { 'Content-Type': 'application/json' },
     });
+  }
+
+  if (!env.DB) {
+    return new Response(JSON.stringify({ error: 'Service unavailable' }), { status: 503, headers: { 'Content-Type': 'application/json' }});
   }
 
   try {
@@ -102,7 +106,6 @@ export async function onRequest(context) {
 
       return new Response(JSON.stringify({
         error: 'Failed to create portal session',
-        details: errorData.error?.message
       }), {
         status: 500,
         headers: { 'Content-Type': 'application/json' },

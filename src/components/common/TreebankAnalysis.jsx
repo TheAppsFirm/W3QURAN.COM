@@ -471,7 +471,7 @@ const WordDetailPanel = memo(function WordDetailPanel({ word, onClose, lang = 'e
 
   // Handle both pos array format and posTag string format
   const posArray = Array.isArray(word.pos) ? word.pos : (word.posTag ? [word.posTag] : ['N']);
-  const primaryTag = POS_TAGS[posArray[0]];
+  const primaryTag = POS_TAGS[posArray[0]] || { label: posArray[0], color: '#666', bgColor: '#66666620' };
   const caseInfo = word.case ? CASES[word.case] : null;
   const roleInfo = word.grammarRole ? GRAMMAR_ROLES[word.grammarRole] : null;
   const labels = UI_LABELS[lang] || UI_LABELS.en;
@@ -849,7 +849,7 @@ const POSLegend = memo(function POSLegend({ lang = 'en' }) {
   return (
     <div className="flex flex-wrap gap-2 p-3 bg-white/5 rounded-xl">
       {commonTags.map(tag => {
-        const info = POS_TAGS[tag];
+        const info = POS_TAGS[tag] || { label: tag, color: '#666', bgColor: '#66666620' };
         return (
           <div key={tag} className="flex items-center gap-1">
             <span
@@ -1183,6 +1183,7 @@ const RelationshipCard = memo(function RelationshipCard({ relationship, lang }) 
  * Updated to handle both old and new ontology data structures
  */
 const ThematicFlow = memo(function ThematicFlow({ flow, lang }) {
+  if (!flow?.stages) return null;
   return (
     <div className="space-y-3">
       {flow.stages.map((stage, index) => {

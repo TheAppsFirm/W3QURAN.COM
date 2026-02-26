@@ -7,20 +7,7 @@ export { default as SurahBubble } from './SurahBubble';
 export { default as JuzzBubble } from './JuzzBubble';
 export { default as BubbleConnections } from './BubbleConnections';
 
-// New Bubble Layouts
-export {
-  LayoutSelector,
-  ClockLayout,
-  GridLayout,
-  JuzzGroupLayout,
-  AlphabetLayout,
-  RevelationLayout,
-  BookLayout,
-  ListLayout,
-  CompactLayout,
-  HoneycombLayout,
-  WaveLayout,
-  LengthLayout,
-  KidsLayout,
-  ArtLayout,
-} from './BubbleLayouts';
+// LayoutSelector is small — keep in initial bundle
+export { default as LayoutSelector } from './LayoutSelector';
+
+// Layout components are lazy-loaded via LayoutRenderer — no barrel export needed

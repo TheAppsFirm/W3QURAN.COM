@@ -60,18 +60,19 @@ export const useLocalStorage = (key, initialValue) => {
   // Update localStorage when value changes
   const setValue = useCallback(
     (value) => {
-      try {
-        // Use functional update to always get latest prev value (avoids stale closures)
-        setStoredValue(prev => {
-          const valueToStore = value instanceof Function ? value(prev) : value;
-          if (isLocalStorageAvailable()) {
+      // Use functional update to always get latest prev value (avoids stale closures)
+      setStoredValue(prev => {
+        const valueToStore = value instanceof Function ? value(prev) : value;
+        if (isLocalStorageAvailable()) {
+          try {
             localStorage.setItem(prefixedKey, JSON.stringify(valueToStore));
+          } catch (error) {
+            // QuotaExceededError or other storage errors - still update React state
+            console.warn(`Error writing to localStorage key "${prefixedKey}" (QuotaExceeded?):`, error);
           }
-          return valueToStore;
-        });
-      } catch (error) {
-        console.warn(`Error setting localStorage key "${prefixedKey}":`, error);
-      }
+        }
+        return valueToStore;
+      });
     },
     [prefixedKey]
   );
@@ -96,18 +97,19 @@ export const useLocalStorage = (key, initialValue) => {
         setStoredValue(initialValue);
         return;
       }
-      if (event.newValue !== null) {
-        try {
-          setStoredValue(JSON.parse(event.newValue));
-        } catch {
-          setStoredValue(event.newValue);
-        }
+      try {
+        setStoredValue(JSON.parse(event.newValue));
+      } catch {
+        // If JSON.parse fails, the value is corrupted or a raw string;
+        // fall back to initialValue to avoid setting unexpected types
+        console.warn(`Failed to parse storage event for key "${prefixedKey}", using initial value`);
+        setStoredValue(initialValue);
       }
     };
 
     window.addEventListener('storage', handleStorageChange);
     return () => window.removeEventListener('storage', handleStorageChange);
-  }, [prefixedKey]);
+  }, [prefixedKey, initialValue]);
 
   return [storedValue, setValue, removeValue];
 };

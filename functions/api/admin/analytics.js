@@ -29,6 +29,10 @@ export async function onRequest(context) {
     });
   }
 
+  if (!env.DB) {
+    return new Response(JSON.stringify({ error: 'Service unavailable' }), { status: 503, headers: { ...corsHeaders, 'Content-Type': 'application/json' }});
+  }
+
   // Verify admin authentication
   const cookies = request.headers.get('Cookie') || '';
   const sessionMatch = cookies.match(/w3quran_session=([^;]+)/);
@@ -105,6 +109,10 @@ export async function onRequest(context) {
 
     if (requestedMetrics.includes('funnel')) {
       promises.push(getFunnelMetrics(env, dateRange).then(data => response.funnel = data));
+    }
+
+    if (requestedMetrics.includes('engagement')) {
+      promises.push(getEngagementMetrics(env, dateRange).then(data => response.engagement = data));
     }
 
     await Promise.all(promises);
@@ -810,4 +818,54 @@ function generateFunnelInsights(visitors, signups, activeUsers, trialUsers, hitL
   }
 
   return insights;
+}
+
+/**
+ * Get engagement metrics — most active users, top surahs, DAU trend
+ */
+async function getEngagementMetrics(env, dateRange) {
+  const { start, end } = dateRange;
+
+  // Most active users by session count
+  let mostActiveUsers = [];
+  try {
+    const result = await env.DB.prepare(`
+      SELECT ae.user_id, u.name, u.email, COUNT(DISTINCT ae.session_id) as sessions, COUNT(*) as events
+      FROM analytics_events ae JOIN users u ON ae.user_id = u.id
+      WHERE ae.user_id IS NOT NULL AND DATE(ae.created_at) BETWEEN ? AND ?
+      GROUP BY ae.user_id ORDER BY sessions DESC LIMIT 20
+    `).bind(start, end).all();
+    mostActiveUsers = result?.results || [];
+  } catch (e) {
+    console.warn('[Analytics] Most active users query failed:', e.message);
+  }
+
+  // Top surahs by reads
+  let topSurahs = [];
+  try {
+    const result = await env.DB.prepare(`
+      SELECT surah_id, COUNT(*) as reads, COUNT(DISTINCT COALESCE(user_id, session_id)) as unique_readers
+      FROM app_logs WHERE log_type IN ('navigation','action') AND surah_id IS NOT NULL
+      AND DATE(created_at) BETWEEN ? AND ?
+      GROUP BY surah_id ORDER BY reads DESC LIMIT 20
+    `).bind(start, end).all();
+    topSurahs = result?.results || [];
+  } catch (e) {
+    console.warn('[Analytics] Top surahs query failed:', e.message);
+  }
+
+  // Daily active user trend
+  let dauTrend = [];
+  try {
+    const result = await env.DB.prepare(`
+      SELECT DATE(created_at) as date, COUNT(DISTINCT COALESCE(user_id, session_id)) as active_users
+      FROM analytics_events WHERE DATE(created_at) BETWEEN ? AND ?
+      GROUP BY DATE(created_at) ORDER BY date
+    `).bind(start, end).all();
+    dauTrend = result?.results || [];
+  } catch (e) {
+    console.warn('[Analytics] DAU trend query failed:', e.message);
+  }
+
+  return { mostActiveUsers, topSurahs, dauTrend };
 }

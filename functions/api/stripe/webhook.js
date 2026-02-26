@@ -110,7 +110,11 @@ async function verifyStripeSignature(payload, signature, secret) {
     .map(b => b.toString(16).padStart(2, '0'))
     .join('');
 
-  return computedSig === expectedSig;
+  // Timing-safe comparison to prevent timing attacks
+  if (computedSig.length !== expectedSig.length) return false;
+  const a = new TextEncoder().encode(computedSig);
+  const b = new TextEncoder().encode(expectedSig);
+  return crypto.subtle.timingSafeEqual(a, b);
 }
 
 // Get or create user credits record
@@ -140,25 +144,34 @@ export async function onRequest(context) {
   const { env, request } = context;
 
   if (request.method !== 'POST') {
-    return new Response('Method not allowed', { status: 405 });
+    return new Response(JSON.stringify({ error: 'Method not allowed' }), { status: 405, headers: { 'Content-Type': 'application/json' } });
   }
 
   const signature = request.headers.get('stripe-signature');
   if (!signature) {
-    return new Response('No signature', { status: 400 });
+    return new Response(JSON.stringify({ error: 'No signature' }), { status: 400, headers: { 'Content-Type': 'application/json' } });
   }
 
   const payload = await request.text();
+
+  if (!env.DB) {
+    return new Response(JSON.stringify({ error: 'Service unavailable' }), { status: 503, headers: { 'Content-Type': 'application/json' }});
+  }
 
   // Get Stripe config (respects admin setting)
   const stripeConfig = await getStripeConfig(env);
   const { secretKey, webhookSecret, isTestMode, stripeMode } = stripeConfig;
 
+  if (!webhookSecret) {
+    console.error('[Stripe Webhook] Webhook secret not configured');
+    return new Response(JSON.stringify({ error: 'Webhook not configured' }), { status: 500, headers: { 'Content-Type': 'application/json' } });
+  }
+
   // Verify webhook signature
   const isValid = await verifyStripeSignature(payload, signature, webhookSecret);
   if (!isValid) {
     console.error('[Stripe Webhook] Invalid signature');
-    return new Response('Invalid signature', { status: 400 });
+    return new Response(JSON.stringify({ error: 'Invalid signature' }), { status: 400, headers: { 'Content-Type': 'application/json' } });
   }
 
   try {

@@ -23,6 +23,10 @@ export async function onRequest(context) {
     });
   }
 
+  if (!env.DB) {
+    return new Response(JSON.stringify({ error: 'Service unavailable' }), { status: 503, headers: { 'Content-Type': 'application/json' }});
+  }
+
   try {
     // Get subscription info
     const result = await env.DB.prepare(`

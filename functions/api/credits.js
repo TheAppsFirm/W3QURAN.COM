@@ -146,6 +146,10 @@ export async function onRequest(context) {
     return new Response(null, { headers: corsHeaders });
   }
 
+  if (!env.DB) {
+    return new Response(JSON.stringify({ error: 'Service unavailable' }), { status: 503, headers: corsHeaders });
+  }
+
   try {
     // Verify user is logged in
     const user = await verifySession(request, env);
@@ -243,14 +247,24 @@ export async function onRequest(context) {
           });
         }
 
-        // Claim free credits
-        await env.DB.prepare(`
+        // Claim free credits atomically - WHERE clause prevents race condition
+        const claimResult = await env.DB.prepare(`
           UPDATE user_credits
           SET credits_balance = credits_balance + 3,
               free_credits_claimed = TRUE,
               updated_at = datetime('now')
-          WHERE user_id = ?
+          WHERE user_id = ? AND free_credits_claimed = FALSE
         `).bind(user.user_id).run();
+
+        if (claimResult.changes === 0) {
+          return new Response(JSON.stringify({
+            error: 'Free credits already claimed',
+            code: 'ALREADY_CLAIMED'
+          }), {
+            status: 400,
+            headers: corsHeaders,
+          });
+        }
 
         // Log transaction
         const txId = `tx_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
@@ -289,7 +303,6 @@ export async function onRequest(context) {
     console.error('[Credits API] Error:', error);
     return new Response(JSON.stringify({
       error: 'Failed to process request',
-      details: error.message
     }), {
       status: 500,
       headers: corsHeaders,

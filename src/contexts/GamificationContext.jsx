@@ -294,15 +294,15 @@ export function GamificationProvider({ children }) {
     processResults(beforeXP);
   }, [isActive, processResults]);
 
-  // --- Derived values ---
+  // --- Derived values (memoized to preserve referential identity) ---
 
   const xp = data.xp || 0;
   const level = data.level || 1;
-  const levelInfo = getLevelInfo(xp);
-  const streak = data.streaks || { current: 0, best: 0 };
-  const achievements = data.achievements || [];
-  const dailyChallenges = data.dailyChallenges || [];
-  const stats = data.stats || {};
+  const levelInfo = useMemo(() => getLevelInfo(xp), [xp]);
+  const streak = useMemo(() => data.streaks || { current: 0, best: 0 }, [data.streaks]);
+  const achievements = useMemo(() => data.achievements || [], [data.achievements]);
+  const dailyChallenges = useMemo(() => data.dailyChallenges || [], [data.dailyChallenges]);
+  const stats = useMemo(() => data.stats || {}, [data.stats]);
 
   const value = useMemo(() => ({
     xp, level, levelInfo, streak, achievements, dailyChallenges, stats,

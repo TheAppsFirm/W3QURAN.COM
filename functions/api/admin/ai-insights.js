@@ -23,6 +23,10 @@ export async function onRequest(context) {
     return new Response(null, { headers: corsHeaders });
   }
 
+  if (!env.DB) {
+    return new Response(JSON.stringify({ error: 'Service unavailable' }), { status: 503, headers: { ...corsHeaders, 'Content-Type': 'application/json' }});
+  }
+
   // Verify admin authentication
   const cookies = request.headers.get('Cookie') || '';
   const sessionMatch = cookies.match(/w3quran_session=([^;]+)/);

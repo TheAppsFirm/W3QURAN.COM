@@ -3,10 +3,20 @@
  * Only accessible by admin users (configured via ADMIN_EMAILS env var)
  */
 
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, lazy, Suspense } from 'react';
 import { Icons } from '../common/Icons';
 import { useAuth } from '../../contexts/AuthContext';
 import { SURAHS } from '../../data/surahs';
+
+// Lazy-load all admin panels — only loaded when their tab is clicked
+const ContentCoveragePanel = lazy(() => import('../admin/ContentCoveragePanel'));
+const EngagementPanel = lazy(() => import('../admin/EngagementPanel'));
+const FeatureUsagePanel = lazy(() => import('../admin/FeatureUsagePanel'));
+const SearchAnalyticsPanel = lazy(() => import('../admin/SearchAnalyticsPanel'));
+const ErrorDashboardPanel = lazy(() => import('../admin/ErrorDashboardPanel'));
+const ReciterPreferencesPanel = lazy(() => import('../admin/ReciterPreferencesPanel'));
+const ApiHealthPanel = lazy(() => import('../admin/ApiHealthPanel'));
+const UserFeedbackPanel = lazy(() => import('../admin/UserFeedbackPanel'));
 
 // Stat Card Component
 const StatCard = ({ title, value, subtitle, icon: Icon, color, trend }) => (
@@ -685,6 +695,12 @@ const LogsPanel = () => {
 
   return (
     <div className="space-y-6">
+      {/* Header */}
+      <div>
+        <h2 className="text-white text-lg font-bold">Application Logs</h2>
+        <p className="text-white/40 text-sm mt-1">Browse raw app logs — filter by level, type, browser, OS, or surah. Useful for debugging crashes and tracking user actions.</p>
+      </div>
+
       {/* Toast Notification */}
       {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
 
@@ -1319,9 +1335,12 @@ const AnalyticsPanel = () => {
 
   return (
     <div className="space-y-6">
-      {/* Period Selector */}
-      <div className="flex items-center justify-between">
-        <h2 className="text-xl font-bold text-white">Analytics Dashboard</h2>
+      {/* Header */}
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <h2 className="text-xl font-bold text-white">Analytics Dashboard</h2>
+          <p className="text-white/40 text-sm mt-1">Real-time and historical analytics — page views, sessions, device breakdowns, and geographic distribution of your users.</p>
+        </div>
         <div className="flex items-center gap-2">
           {['today', '7d', '30d', '90d'].map(p => (
             <button
@@ -1867,7 +1886,7 @@ const PaymentsPanel = () => {
 
   if (!data) return <p className="text-white/50 text-center py-12">No payment data available</p>;
 
-  const { summary, bySource, byProduct, list, pagination } = data;
+  const { summary = {}, bySource, byProduct, list = [], pagination } = data;
 
   // Aggregate source breakdown
   const sourceAgg = {};
@@ -1900,6 +1919,12 @@ const PaymentsPanel = () => {
 
   return (
     <div className="space-y-6">
+      {/* Header */}
+      <div>
+        <h2 className="text-white text-lg font-bold">Payments & Donations</h2>
+        <p className="text-white/40 text-sm mt-1">Track payment initiations, completions, and conversion rates across all donation sources — Kids Mode, Talk to Quran, and general donations.</p>
+      </div>
+
       {/* Stat Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <StatCard
@@ -2526,6 +2551,14 @@ export default function AdminDashboard({ onClose, initialTab = 'overview', onTab
             { id: 'overview', label: 'Overview', icon: Icons.PieChart },
             { id: 'analytics', label: 'Analytics', icon: Icons.Activity },
             { id: 'users', label: 'Users', icon: Icons.Users },
+            { id: 'content', label: 'Content', icon: Icons.Grid },
+            { id: 'engagement', label: 'Engage', icon: Icons.TrendingUp },
+            { id: 'features', label: 'Features', icon: Icons.Zap },
+            { id: 'search', label: 'Search', icon: Icons.Search },
+            { id: 'errors', label: 'Errors', icon: Icons.AlertCircle },
+            { id: 'preferences', label: 'Prefs', icon: Icons.Headphones },
+            { id: 'feedback', label: 'Feedback', icon: Icons.MessageCircle },
+            { id: 'health', label: 'Health', icon: Icons.Shield },
             { id: 'announcements', label: 'Announce', icon: Icons.Bell },
             { id: 'logs', label: 'Logs', icon: Icons.FileText },
             { id: 'transactions', label: 'Trans', icon: Icons.CreditCard },
@@ -2563,33 +2596,38 @@ export default function AdminDashboard({ onClose, initialTab = 'overview', onTab
             {/* Overview Tab */}
             {activeTab === 'overview' && stats && (
               <div className="space-y-6">
+                {/* Header */}
+                <div>
+                  <h2 className="text-white text-lg font-bold">Overview</h2>
+                  <p className="text-white/40 text-sm mt-1">Platform snapshot — total users, revenue, AI conversations, subscriptions, and credit usage at a glance.</p>
+                </div>
                 {/* Quick Stats */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   <StatCard
                     title="Total Users"
-                    value={stats.overview.totalUsers}
-                    subtitle={`+${stats.overview.usersThisMonth} this month`}
+                    value={stats?.overview?.totalUsers || 0}
+                    subtitle={`+${stats?.overview?.usersThisMonth || 0} this month`}
                     icon={Icons.Users}
                     color="#A855F7"
                   />
                   <StatCard
                     title="Monthly Revenue"
-                    value={`$${stats.subscriptions.estimatedMonthlyRevenue?.toFixed(2) || '0'}`}
+                    value={`$${stats?.subscriptions?.estimatedMonthlyRevenue?.toFixed(2) || '0'}`}
                     subtitle="Estimated from active subs"
                     icon={Icons.DollarSign}
                     color="#10B981"
                   />
                   <StatCard
                     title="Conversations"
-                    value={stats.conversations.total}
-                    subtitle={`${stats.conversations.today} today`}
+                    value={stats?.conversations?.total || 0}
+                    subtitle={`${stats?.conversations?.today || 0} today`}
                     icon={Icons.MessageCircle}
                     color="#EC4899"
                   />
                   <StatCard
                     title="Lifetime Sales"
-                    value={stats.overview.lifetimePurchases}
-                    subtitle={`$${(stats.overview.lifetimePurchases * 299).toLocaleString()} total`}
+                    value={stats?.overview?.lifetimePurchases || 0}
+                    subtitle={`$${((stats?.overview?.lifetimePurchases || 0) * 299).toLocaleString()} total`}
                     icon={Icons.Award}
                     color="#F59E0B"
                   />
@@ -2614,15 +2652,15 @@ export default function AdminDashboard({ onClose, initialTab = 'overview', onTab
                   <div className="grid grid-cols-3 gap-2 sm:gap-4">
                     <div className="text-center">
                       <p className="text-white/60 text-sm">Total Available</p>
-                      <p className="text-2xl font-bold text-white">{stats.credits.totalAvailable}</p>
+                      <p className="text-2xl font-bold text-white">{stats?.credits?.totalAvailable || 0}</p>
                     </div>
                     <div className="text-center">
                       <p className="text-white/60 text-sm">Total Used</p>
-                      <p className="text-2xl font-bold text-purple-400">{stats.credits.totalUsedThisMonth}</p>
+                      <p className="text-2xl font-bold text-purple-400">{stats?.credits?.totalUsedThisMonth || 0}</p>
                     </div>
                     <div className="text-center">
                       <p className="text-white/60 text-sm">Avg per User</p>
-                      <p className="text-2xl font-bold text-white">{stats.credits.avgUsagePerUser}</p>
+                      <p className="text-2xl font-bold text-white">{stats?.credits?.avgUsagePerUser || 0}</p>
                     </div>
                   </div>
                 </div>
@@ -2663,6 +2701,11 @@ export default function AdminDashboard({ onClose, initialTab = 'overview', onTab
             {/* Users Tab */}
             {activeTab === 'users' && (
               <div className="space-y-4">
+                {/* Header */}
+                <div>
+                  <h2 className="text-white text-lg font-bold">User Management</h2>
+                  <p className="text-white/40 text-sm mt-1">Search, filter, and manage all registered users — view subscription tiers, credit usage, edit profiles, or block accounts.</p>
+                </div>
                 {/* Search & Filters */}
                 <div className="flex gap-2 sm:gap-4 flex-wrap">
                   <div className="relative flex-1 min-w-[150px]">
@@ -2755,6 +2798,11 @@ export default function AdminDashboard({ onClose, initialTab = 'overview', onTab
 
             {/* Transactions Tab */}
             {activeTab === 'transactions' && stats && (
+              <div className="space-y-6">
+              <div>
+                <h2 className="text-white text-lg font-bold">Transactions</h2>
+                <p className="text-white/40 text-sm mt-1">Credit purchases, usage, and subscription changes — every transaction logged across the platform.</p>
+              </div>
               <div className="bg-white/5 rounded-2xl border border-white/10 overflow-hidden">
                 <div className="p-4 border-b border-white/10">
                   <h3 className="text-lg font-bold text-white">Recent Transactions</h3>
@@ -2801,6 +2849,7 @@ export default function AdminDashboard({ onClose, initialTab = 'overview', onTab
                     </tbody>
                   </table>
                 </div>
+              </div>
               </div>
             )}
 
@@ -2999,9 +3048,29 @@ export default function AdminDashboard({ onClose, initialTab = 'overview', onTab
               </div>
             )}
 
+            {/* Lazy-loaded panel tabs — each panel loads on demand */}
+            {['content', 'engagement', 'features', 'search', 'errors', 'preferences', 'feedback', 'health'].includes(activeTab) && (
+              <Suspense fallback={<div className="flex items-center justify-center py-20"><div className="w-8 h-8 border-2 border-purple-500 border-t-transparent rounded-full animate-spin" /></div>}>
+                {activeTab === 'content' && <ContentCoveragePanel />}
+                {activeTab === 'engagement' && <EngagementPanel />}
+                {activeTab === 'features' && <FeatureUsagePanel />}
+                {activeTab === 'search' && <SearchAnalyticsPanel />}
+                {activeTab === 'errors' && <ErrorDashboardPanel />}
+                {activeTab === 'preferences' && <ReciterPreferencesPanel />}
+                {activeTab === 'feedback' && <UserFeedbackPanel />}
+                {activeTab === 'health' && <ApiHealthPanel />}
+              </Suspense>
+            )}
+
             {/* Settings Tab */}
             {activeTab === 'settings' && (
               <div className="space-y-6 max-w-2xl">
+                {/* Header */}
+                <div>
+                  <h2 className="text-white text-lg font-bold">Admin Settings</h2>
+                  <p className="text-white/40 text-sm mt-1">Configure payment modes, environment keys, and other admin-level settings for the app.</p>
+                </div>
+
                 {/* Stripe Mode Toggle */}
                 <div className="bg-white/5 rounded-2xl border border-white/10 overflow-hidden">
                   <div className="p-4 border-b border-white/10">

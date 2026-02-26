@@ -33,7 +33,6 @@ const TIMELINE_START = 610;
 const TIMELINE_END = 652;
 const SAT_TILE = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}';
 const LABEL_TILE = 'https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png';
-const IS_DEV = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
 
 const ICON_MAP = {
   BookOpen: Icons.BookOpen, Users: Icons.Users, Megaphone: Icons.Mic,
@@ -286,7 +285,7 @@ const SceneMiniMap = memo(function SceneMiniMap({ event, onExpand }) {
     >
       <div ref={mapRef} className="w-full h-full" />
       <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent px-2 py-1 z-[1000]">
-        <p className="text-[9px] text-gray-200 truncate">{event.landmark || event.location}</p>
+        <p className="text-[9px] text-gray-200 truncate">{event.landmark || event.location || ''}</p>
       </div>
       {/* Expand hint */}
       <div className="absolute top-1.5 right-1.5 z-[1000] bg-black/50 rounded p-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -362,7 +361,7 @@ const ExpandedMap = memo(function ExpandedMap({ event, events, activeIndex, onCl
   }, []); // Init ONCE only
 
   const displayName = event.name;
-  const displayLocation = event.landmark || event.location.charAt(0).toUpperCase() + event.location.slice(1);
+  const displayLocation = event.landmark || (event.location ? event.location.charAt(0).toUpperCase() + event.location.slice(1) : '');
 
   return (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 backdrop-blur-sm" onClick={onClose}>
@@ -431,7 +430,7 @@ const SceneContent = memo(function SceneContent({ event, lang, period, onNavigat
         <p className="text-sm text-gray-400 mb-6 md:mb-8 flex items-center justify-center gap-2 flex-wrap" style={lang === 'ur' ? { fontFamily: 'system-ui, sans-serif' } : {}}>
           <span>{event.year} CE</span>
           <span className="text-gray-600">·</span>
-          <span>{event.landmark || event.location}</span>
+          <span>{event.landmark || event.location || ''}</span>
           {event.hijriYear !== undefined && (
             <><span className="text-gray-600">·</span>
               <span>{event.hijriYear > 0 ? `${event.hijriYear} AH` : `${Math.abs(event.hijriYear)} BH`}</span></>
@@ -521,10 +520,14 @@ const CompletionScreen = memo(function CompletionScreen({ lang, onReplay, onClos
 // HD TTS NARRATION (Google Cloud TTS → browser fallback)
 // ============================================================================
 
-function useHDNarration({ enabled, lang, text, isPlaying, phase, sceneId }) {
+function useHDNarration({ enabled, lang, text, isPlaying, phase, sceneId, recitationDone }) {
   const audioRef = useRef(null);
   const blobUrlRef = useRef(null);
   const activeSceneRef = useRef(null);
+  const [isDone, setIsDone] = useState(false);
+  const [narrationProgress, setNarrationProgress] = useState(0);
+  const [isNarrating, setIsNarrating] = useState(false);
+  const progressRAF = useRef(null);
 
   // Hard stop everything
   const stopAll = useCallback(() => {
@@ -538,20 +541,33 @@ function useHDNarration({ enabled, lang, text, isPlaying, phase, sceneId }) {
       audioRef.current = null;
     }
     if (blobUrlRef.current) { URL.revokeObjectURL(blobUrlRef.current); blobUrlRef.current = null; }
+    cancelAnimationFrame(progressRAF.current);
+    setIsNarrating(false);
+    setNarrationProgress(0);
   }, []);
 
   // Browser TTS fallback (handles Safari delayed voice loading)
-  const speakBrowser = useCallback((txt, langCode) => {
-    window.speechSynthesis?.cancel();
+  const speakBrowser = useCallback((txt, langCode, onDone) => {
+    if (!window.speechSynthesis) { onDone?.(); return; }
+    window.speechSynthesis.cancel();
     const utt = new SpeechSynthesisUtterance(txt);
     utt.lang = TTS_LANG_MAP[langCode] || 'en-US';
     utt.rate = 0.85; utt.pitch = 1; utt.volume = 1;
-    const voices = window.speechSynthesis?.getVoices() || [];
+    utt.onend = () => onDone?.();
+    utt.onerror = () => onDone?.();
+    const voices = window.speechSynthesis.getVoices() || [];
     const prefix = utt.lang.split('-')[0];
     const match = voices.find(v => v.lang === utt.lang) || voices.find(v => v.lang.startsWith(prefix));
-    if (match) utt.voice = match;
+    if (match) {
+      utt.voice = match;
+    } else if (langCode !== 'en' && voices.length > 0) {
+      // No voice for requested language — fall back to English voice
+      const enMatch = voices.find(v => v.lang === 'en-US') || voices.find(v => v.lang.startsWith('en'));
+      if (enMatch) utt.voice = enMatch;
+      utt.lang = 'en-US';
+    }
     // Safari: voices may load async; retry once after voiceschanged
-    if (voices.length === 0 && window.speechSynthesis) {
+    if (voices.length === 0) {
       let spoken = false;
       const doSpeak = () => {
         if (spoken) return;
@@ -562,68 +578,119 @@ function useHDNarration({ enabled, lang, text, isPlaying, phase, sceneId }) {
         window.speechSynthesis.speak(utt);
       };
       window.speechSynthesis.addEventListener('voiceschanged', doSpeak, { once: true });
-      // Fallback: speak after 300ms if voiceschanged never fires
       setTimeout(doSpeak, 300);
       return;
     }
-    window.speechSynthesis?.speak(utt);
+    window.speechSynthesis.speak(utt);
   }, []);
 
-  // Main effect: speak on scene change
-  useEffect(() => {
-    // Always stop previous audio first
-    stopAll();
+  // Start tracking audio progress via RAF
+  const startProgressTracking = useCallback((audio) => {
+    setIsNarrating(true);
+    setNarrationProgress(0);
+    const tick = () => {
+      if (audio && !audio.paused && audio.duration && isFinite(audio.duration)) {
+        setNarrationProgress(Math.min(audio.currentTime / audio.duration, 1));
+      }
+      if (audio && !audio.paused) progressRAF.current = requestAnimationFrame(tick);
+    };
+    progressRAF.current = requestAnimationFrame(tick);
+  }, []);
 
-    if (!enabled || phase !== 'playing' || !text || !isPlaying) return;
+  // Estimate-based progress for browser TTS (no currentTime/duration available)
+  const startBrowserTTSProgress = useCallback((textLen) => {
+    setIsNarrating(true);
+    setNarrationProgress(0);
+    // Rough estimate: ~12 chars/sec for English, ~8 for Urdu/Arabic
+    const estimatedDuration = (textLen / 10) * 1000;
+    const startTime = Date.now();
+    const tick = () => {
+      const p = Math.min((Date.now() - startTime) / estimatedDuration, 0.95); // Cap at 95% — onDone sets 100%
+      setNarrationProgress(p);
+      if (p < 0.95) progressRAF.current = requestAnimationFrame(tick);
+    };
+    progressRAF.current = requestAnimationFrame(tick);
+  }, []);
+
+  // Main effect: speak AFTER recitation finishes (or immediately if no recitation)
+  // isPlaying is included in deps — pause stops narration, resume restarts it.
+  // This is consistent with the scene timer which also restarts on resume.
+  useEffect(() => {
+    stopAll();
+    setIsDone(false);
+
+    // Don't start if disabled, not playing, paused, no text, or recitation still going
+    if (!enabled || phase !== 'playing' || !isPlaying || !text || !recitationDone) return;
 
     activeSceneRef.current = sceneId;
     let cancelled = false;
 
+    const markDone = () => {
+      if (!cancelled && activeSceneRef.current === sceneId) {
+        cancelAnimationFrame(progressRAF.current);
+        setNarrationProgress(1);
+        setIsNarrating(false);
+        // Null out audioRef so stale refs can't replay
+        if (audioRef.current) {
+          audioRef.current.onended = null;
+          audioRef.current.onerror = null;
+          audioRef.current = null;
+        }
+        setIsDone(true);
+      }
+    };
+
     const timer = setTimeout(async () => {
       if (cancelled || activeSceneRef.current !== sceneId) return;
 
-      if (IS_DEV) { speakBrowser(text, lang); return; }
-
+      // Always try the TTS API first (works in both dev and prod via /api/tts)
+      // Falls back to browser SpeechSynthesis if API fails
       try {
         const res = await fetch(`/api/tts?text=${encodeURIComponent(text)}&lang=${lang}&surah=1`);
         if (cancelled || activeSceneRef.current !== sceneId) return;
         if (res.ok) {
           const blob = await res.blob();
           if (cancelled || activeSceneRef.current !== sceneId || blob.size < 100) {
-            if (!cancelled && activeSceneRef.current === sceneId) speakBrowser(text, lang);
+            if (!cancelled && activeSceneRef.current === sceneId) {
+              startBrowserTTSProgress(text.length);
+              speakBrowser(text, lang, markDone);
+            }
             return;
           }
           const url = URL.createObjectURL(blob);
           blobUrlRef.current = url;
           const audio = new Audio(url);
           audioRef.current = audio;
-          audio.onerror = () => { if (!cancelled && activeSceneRef.current === sceneId) speakBrowser(text, lang); };
+          audio.onended = () => { if (!cancelled && activeSceneRef.current === sceneId) markDone(); };
+          audio.onerror = () => {
+            if (!cancelled && activeSceneRef.current === sceneId) {
+              startBrowserTTSProgress(text.length);
+              speakBrowser(text, lang, markDone);
+            }
+          };
           await audio.play();
+          if (!cancelled) startProgressTracking(audio);
         } else {
-          if (!cancelled && activeSceneRef.current === sceneId) speakBrowser(text, lang);
+          if (!cancelled && activeSceneRef.current === sceneId) {
+            startBrowserTTSProgress(text.length);
+            speakBrowser(text, lang, markDone);
+          }
         }
       } catch {
-        if (!cancelled && activeSceneRef.current === sceneId) speakBrowser(text, lang);
+        if (!cancelled && activeSceneRef.current === sceneId) {
+          startBrowserTTSProgress(text.length);
+          speakBrowser(text, lang, markDone);
+        }
       }
     }, 400);
 
     return () => { cancelled = true; clearTimeout(timer); stopAll(); };
-  }, [enabled, lang, sceneId, phase, isPlaying, stopAll, speakBrowser, text]);
-
-  // Pause/resume sync
-  useEffect(() => {
-    if (!enabled || phase !== 'playing') return;
-    if (!isPlaying) {
-      if (audioRef.current && !audioRef.current.paused) audioRef.current.pause();
-      if (window.speechSynthesis?.speaking) window.speechSynthesis.pause();
-    }
-    // Resume is handled by the main effect re-triggering
-  }, [isPlaying, enabled, phase]);
+  }, [enabled, lang, sceneId, phase, isPlaying, stopAll, speakBrowser, text, recitationDone, startProgressTracking, startBrowserTTSProgress]);
 
   // Hard cleanup on unmount / visibility change
   useEffect(() => stopAll, [stopAll]);
 
-  return { stopAll };
+  return { stopAll, isDone, narrationProgress, isNarrating };
 }
 
 // ============================================================================
@@ -633,6 +700,7 @@ function useHDNarration({ enabled, lang, text, isPlaying, phase, sceneId }) {
 function useVerseRecitation({ enabled, verseRef, isPlaying, phase, sceneId }) {
   const audioRef = useRef(null);
   const [isReciting, setIsReciting] = useState(false);
+  const [isDone, setIsDone] = useState(false);
   const activeSceneRef = useRef(null);
 
   const stopAudio = useCallback(() => {
@@ -648,15 +716,19 @@ function useVerseRecitation({ enabled, verseRef, isPlaying, phase, sceneId }) {
     setIsReciting(false);
   }, []);
 
-  // Main effect: play on scene change
+  // Main effect: play on scene change (NOT on isPlaying — that's pause/resume)
   useEffect(() => {
     stopAudio();
-
-    if (!enabled || phase !== 'playing' || !verseRef || !isPlaying) return;
+    // If recitation is disabled or no verse, mark immediately done so narration can start
+    if (!enabled || phase !== 'playing' || !verseRef) {
+      setIsDone(true);
+      return;
+    }
 
     const parsed = parseVerseRef(verseRef);
-    if (!parsed) return;
+    if (!parsed) { setIsDone(true); return; }
 
+    setIsDone(false);
     activeSceneRef.current = sceneId;
     let cancelled = false;
 
@@ -666,15 +738,15 @@ function useVerseRecitation({ enabled, verseRef, isPlaying, phase, sceneId }) {
       audioRef.current = audio;
       audio.volume = 0.5;
       audio.onplay = () => { if (!cancelled && activeSceneRef.current === sceneId) setIsReciting(true); };
-      audio.onended = () => { if (!cancelled) setIsReciting(false); };
-      audio.onerror = () => { if (!cancelled) setIsReciting(false); };
-      audio.play().catch(() => { if (!cancelled) setIsReciting(false); });
+      audio.onended = () => { if (!cancelled) { setIsReciting(false); audioRef.current = null; setIsDone(true); } };
+      audio.onerror = () => { if (!cancelled) { setIsReciting(false); audioRef.current = null; setIsDone(true); } };
+      audio.play().catch(() => { if (!cancelled) { setIsReciting(false); audioRef.current = null; setIsDone(true); } });
     }, 2000);
 
     return () => { cancelled = true; clearTimeout(timer); stopAudio(); };
-  }, [enabled, sceneId, phase, isPlaying, verseRef, stopAudio]);
+  }, [enabled, sceneId, phase, verseRef, stopAudio]);
 
-  // Pause/resume
+  // Pause/resume (separate from scene change)
   useEffect(() => {
     if (!audioRef.current || phase !== 'playing') return;
     if (!isPlaying) {
@@ -687,7 +759,7 @@ function useVerseRecitation({ enabled, verseRef, isPlaying, phase, sceneId }) {
   // Hard cleanup
   useEffect(() => stopAudio, [stopAudio]);
 
-  return { isReciting, stopAudio };
+  return { isReciting, isDone, stopAudio };
 }
 
 // ============================================================================
@@ -721,12 +793,14 @@ function TimeMachine({ isVisible, onClose, onNavigateToVerse }) {
   const period = currentEvent && currentEvent.category !== 'compilation' ? getPeriodForChronOrder(currentEvent.chronOrderApprox) : null;
   const narrativeText = currentEvent?.narrative?.[lang] || currentEvent?.narrative?.en || '';
 
-  // HD TTS narration
-  const { stopAll: stopNarration } = useHDNarration({ enabled: narrationOn, lang, text: narrativeText, isPlaying, phase, sceneId: currentEvent?.id });
-
-  // Verse recitation audio
-  const { isReciting, stopAudio: stopRecitation } = useVerseRecitation({
+  // Verse recitation audio (plays first)
+  const { isReciting, isDone: recitationDone, stopAudio: stopRecitation } = useVerseRecitation({
     enabled: verseAudioOn, verseRef: currentEvent?.verse?.ref, isPlaying, phase, sceneId: currentEvent?.id,
+  });
+
+  // HD TTS narration (waits for recitation to finish before starting)
+  const { stopAll: stopNarration, isDone: narrationDone, narrationProgress, isNarrating } = useHDNarration({
+    enabled: narrationOn, lang, text: narrativeText, isPlaying, phase, sceneId: currentEvent?.id, recitationDone,
   });
 
   const handleLangChange = useCallback((l) => {
@@ -766,8 +840,12 @@ function TimeMachine({ isVisible, onClose, onNavigateToVerse }) {
     }
   }, [phase, showHint]);
 
-  // Auto-play timer
+  // Track whether timer has elapsed (for narration-aware auto-advance)
+  const [timerElapsed, setTimerElapsed] = useState(false);
+
+  // Auto-play timer — sets timerElapsed when the scene's time is up
   useEffect(() => {
+    setTimerElapsed(false);
     if (phase !== 'playing' || !isPlaying) {
       clearTimeout(timerRef.current); cancelAnimationFrame(progressRAF.current); return;
     }
@@ -779,9 +857,17 @@ function TimeMachine({ isVisible, onClose, onNavigateToVerse }) {
       if (p < 1) progressRAF.current = requestAnimationFrame(tick);
     };
     progressRAF.current = requestAnimationFrame(tick);
-    timerRef.current = setTimeout(nextScene, effectiveDuration);
+    timerRef.current = setTimeout(() => setTimerElapsed(true), effectiveDuration);
     return () => { clearTimeout(timerRef.current); cancelAnimationFrame(progressRAF.current); };
-  }, [phase, isPlaying, currentScene, speed, nextScene]);
+  }, [phase, isPlaying, currentScene, speed]);
+
+  // Auto-advance: wait for BOTH timer AND narration (if narration is on)
+  useEffect(() => {
+    if (!timerElapsed || !isPlaying || phase !== 'playing') return;
+    // If narration is on, wait for it to finish
+    if (narrationOn && !narrationDone) return;
+    nextScene();
+  }, [timerElapsed, isPlaying, phase, narrationOn, narrationDone, nextScene]);
 
   // Keyboard
   useEffect(() => {
@@ -1006,8 +1092,14 @@ function TimeMachine({ isVisible, onClose, onNavigateToVerse }) {
 
           {/* Bottom controls */}
           <div className="absolute bottom-0 left-0 right-0 z-30 pb-2 md:pb-5 px-3 md:px-6 bg-gradient-to-t from-black via-black/95 to-transparent pt-10 md:pt-12">
+            {/* Single seekbar — shows scene timer OR narration progress */}
             <div className="w-full h-0.5 bg-white/10 rounded-full mb-1.5 md:mb-2 overflow-hidden">
-              <div className="h-full bg-amber-400/60 rounded-full transition-none" style={{ width: `${progress * 100}%` }} />
+              {narrationOn && isNarrating ? (
+                <div className="h-full bg-amber-400 rounded-full transition-none shadow-[0_0_6px_rgba(245,158,11,0.4)]"
+                  style={{ width: `${narrationProgress * 100}%` }} />
+              ) : (
+                <div className="h-full bg-amber-400/60 rounded-full transition-none" style={{ width: `${progress * 100}%` }} />
+              )}
             </div>
 
             <div className="mb-1.5 md:mb-2 hidden sm:block">

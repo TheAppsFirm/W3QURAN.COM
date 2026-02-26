@@ -57,13 +57,28 @@ export const loadProgress = () => {
     const stored = localStorage.getItem(STORAGE_KEYS.PROGRESS);
     if (stored) {
       const parsed = JSON.parse(stored);
-      // Convert completedAyahs arrays back to Sets
-      if (parsed.surahs) {
+      // Convert completedAyahs arrays back to Sets with validation
+      if (parsed.surahs && typeof parsed.surahs === 'object') {
         Object.keys(parsed.surahs).forEach(surahId => {
-          if (Array.isArray(parsed.surahs[surahId].completedAyahs)) {
-            parsed.surahs[surahId].completedAyahs = new Set(parsed.surahs[surahId].completedAyahs);
+          const surah = parsed.surahs[surahId];
+          if (!surah || typeof surah !== 'object') {
+            parsed.surahs[surahId] = { completedAyahs: new Set(), lastRead: null, completed: false };
+            return;
+          }
+          if (Array.isArray(surah.completedAyahs)) {
+            // Filter out invalid entries (non-numbers, NaN, negatives)
+            const validAyahs = surah.completedAyahs.filter(a => typeof a === 'number' && a > 0 && Number.isFinite(a));
+            surah.completedAyahs = new Set(validAyahs);
+          } else {
+            surah.completedAyahs = new Set();
           }
         });
+      } else {
+        parsed.surahs = {};
+      }
+      // Validate totalAyahsRead
+      if (typeof parsed.totalAyahsRead !== 'number' || !Number.isFinite(parsed.totalAyahsRead)) {
+        parsed.totalAyahsRead = 0;
       }
       return { ...createDefaultProgress(), ...parsed };
     }

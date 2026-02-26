@@ -446,9 +446,9 @@ const ActiveSession = memo(function ActiveSession({
   }, []);
 
   const currentPhase = session.phases[currentPhaseIndex];
-  const totalDuration = getSessionDuration(session);
-  const elapsedDuration = session.phases.slice(0, currentPhaseIndex).reduce((t, p) => t + p.duration, 0) + (phaseProgress * currentPhase.duration);
-  const overallProgress = elapsedDuration / totalDuration;
+  const totalDuration = currentPhase ? getSessionDuration(session) : 0;
+  const elapsedDuration = currentPhase ? session.phases.slice(0, currentPhaseIndex).reduce((t, p) => t + p.duration, 0) + (phaseProgress * currentPhase.duration) : 0;
+  const overallProgress = totalDuration ? elapsedDuration / totalDuration : 0;
 
   // Phase timer
   useEffect(() => {
@@ -502,7 +502,7 @@ const ActiveSession = memo(function ActiveSession({
   }, [currentPhaseIndex, isPaused, session, currentPhase, onComplete]);
 
   const handleDhikrCount = useCallback(() => {
-    if (currentPhase.type !== 'dhikr') return;
+    if (!currentPhase || currentPhase.type !== 'dhikr') return;
     playDhikrSound(); // Play sound on each count
     setDhikrCount(prev => Math.min(prev + 1, currentPhase.count));
   }, [currentPhase, playDhikrSound]);

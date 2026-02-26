@@ -37,6 +37,11 @@ export const initDB = () => {
       return;
     }
 
+    if (typeof indexedDB === 'undefined') {
+      reject(new Error('IndexedDB not available'));
+      return;
+    }
+
     const request = indexedDB.open(DB_NAME, DB_VERSION);
 
     request.onerror = () => {
@@ -105,10 +110,15 @@ export const initDB = () => {
  * Get database instance
  */
 const getDB = async () => {
-  if (!db) {
-    await initDB();
+  try {
+    if (!db) {
+      await initDB();
+    }
+    return db;
+  } catch (e) {
+    console.warn('IndexedDB unavailable:', e.message);
+    return null;
   }
-  return db;
 };
 
 /**
@@ -116,6 +126,7 @@ const getDB = async () => {
  */
 export const saveSurahOffline = async (surahId, translationId, data) => {
   const database = await getDB();
+  if (!database) return null;
   return new Promise((resolve, reject) => {
     const transaction = database.transaction([STORES.SURAHS, STORES.METADATA], 'readwrite');
     const store = transaction.objectStore(STORES.SURAHS);
@@ -157,6 +168,7 @@ export const saveSurahOffline = async (surahId, translationId, data) => {
  */
 export const getCachedSurah = async (surahId, translationId) => {
   const database = await getDB();
+  if (!database) return null;
   return new Promise((resolve, reject) => {
     const transaction = database.transaction(STORES.SURAHS, 'readonly');
     const store = transaction.objectStore(STORES.SURAHS);
@@ -187,6 +199,7 @@ export const isSurahCached = async (surahId, translationId) => {
  */
 export const saveTafseerOffline = async (surahId, ayahNumber, tafseerSource, data) => {
   const database = await getDB();
+  if (!database) return null;
   return new Promise((resolve, reject) => {
     const transaction = database.transaction(STORES.TAFSEER, 'readwrite');
     const store = transaction.objectStore(STORES.TAFSEER);
@@ -215,6 +228,7 @@ export const saveTafseerOffline = async (surahId, ayahNumber, tafseerSource, dat
  */
 export const getCachedTafseer = async (surahId, ayahNumber, tafseerSource) => {
   const database = await getDB();
+  if (!database) return null;
   return new Promise((resolve, reject) => {
     const transaction = database.transaction(STORES.TAFSEER, 'readonly');
     const store = transaction.objectStore(STORES.TAFSEER);
@@ -233,6 +247,7 @@ export const getCachedTafseer = async (surahId, ayahNumber, tafseerSource) => {
  */
 export const saveAudioOffline = async (surahId, reciterId, audioBlob) => {
   const database = await getDB();
+  if (!database) return null;
   return new Promise((resolve, reject) => {
     const transaction = database.transaction([STORES.AUDIO, STORES.METADATA], 'readwrite');
     const store = transaction.objectStore(STORES.AUDIO);
@@ -264,6 +279,7 @@ export const saveAudioOffline = async (surahId, reciterId, audioBlob) => {
  */
 export const getCachedAudio = async (surahId, reciterId) => {
   const database = await getDB();
+  if (!database) return null;
   return new Promise((resolve, reject) => {
     const transaction = database.transaction(STORES.AUDIO, 'readonly');
     const store = transaction.objectStore(STORES.AUDIO);
@@ -282,6 +298,7 @@ export const getCachedAudio = async (surahId, reciterId) => {
  */
 export const getDownloadMetadata = async () => {
   const database = await getDB();
+  if (!database) return [];
   return new Promise((resolve, reject) => {
     const transaction = database.transaction(STORES.METADATA, 'readonly');
     const store = transaction.objectStore(STORES.METADATA);
@@ -320,6 +337,7 @@ export const getTotalStorageUsed = async () => {
  */
 export const deleteCachedSurah = async (surahId, translationId) => {
   const database = await getDB();
+  if (!database) return null;
   return new Promise((resolve, reject) => {
     const transaction = database.transaction([STORES.SURAHS, STORES.METADATA], 'readwrite');
     const store = transaction.objectStore(STORES.SURAHS);
@@ -338,6 +356,7 @@ export const deleteCachedSurah = async (surahId, translationId) => {
  */
 export const clearAllCache = async () => {
   const database = await getDB();
+  if (!database) return null;
   return new Promise((resolve, reject) => {
     const transaction = database.transaction(
       [STORES.SURAHS, STORES.TRANSLATIONS, STORES.TAFSEER, STORES.AUDIO, STORES.METADATA],
@@ -417,6 +436,7 @@ export const cacheAudioForSurah = async (surahId, reciterId = 'ar.alafasy', onAu
 
   // Save audio metadata to IndexedDB so size is tracked
   const database = await getDB();
+  if (!database) return totalBytes;
   await new Promise((resolve, reject) => {
     const tx = database.transaction(STORES.METADATA, 'readwrite');
     tx.objectStore(STORES.METADATA).put({
@@ -469,6 +489,7 @@ export const deleteAudioCacheForSurah = async (surahId, reciterId = 'ar.alafasy'
   }
   // Delete metadata from IndexedDB
   const database = await getDB();
+  if (!database) return null;
   await new Promise((resolve, reject) => {
     const tx = database.transaction(STORES.METADATA, 'readwrite');
     tx.objectStore(STORES.METADATA).delete(`audio_${surahId}_${reciterId}`);
@@ -493,6 +514,7 @@ export const migrateAudioMetadata = async (surahIds, reciterId = 'ar.alafasy') =
   }
 
   const database = await getDB();
+  if (!database) return;
   const baseUrl = `https://cdn.islamic.network/quran/audio/128/${reciterId}`;
 
   for (const surahId of surahIds) {

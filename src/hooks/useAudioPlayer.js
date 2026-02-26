@@ -540,16 +540,21 @@ export function useTranslationAudioPlayer(options = {}) {
   const isPlayingRef = useRef(false);
   const currentUrlRef = useRef('');
   const ttsUtteranceRef = useRef(null);
+  const getTranslationTextRef = useRef(getTranslationText);
 
   // Check if we have API audio for this translation
   const apiAudioSource = useMemo(() => {
     return getTranslationAudioSource(translationId);
   }, [translationId]);
 
-  // Keep ref in sync with state
+  // Keep refs in sync with state
   useEffect(() => {
     isPlayingRef.current = isPlaying;
   }, [isPlaying]);
+
+  useEffect(() => {
+    getTranslationTextRef.current = getTranslationText;
+  }, [getTranslationText]);
 
   // Initialize audio element
   useEffect(() => {
@@ -576,8 +581,8 @@ export function useTranslationAudioPlayer(options = {}) {
       setIsLoading(false);
 
       // If we were trying to play, use TTS instead
-      if (isPlayingRef.current && getTranslationText) {
-        const text = getTranslationText(currentAyah);
+      if (isPlayingRef.current && getTranslationTextRef.current) {
+        const text = getTranslationTextRef.current(currentAyah);
         if (text) {
           playWithTTS(text);
         } else {
@@ -617,7 +622,7 @@ export function useTranslationAudioPlayer(options = {}) {
         window.speechSynthesis.cancel();
       }
     };
-  }, [totalVerses, getTranslationText]);
+  }, [totalVerses]);
 
   // Reset when surah or translation changes
   useEffect(() => {
@@ -722,21 +727,37 @@ export function useTranslationAudioPlayer(options = {}) {
         audio.load();
       }
 
-      // Play
-      const playPromise = audio.play();
-      if (playPromise !== undefined) {
-        playPromise.catch((err) => {
-          if (err.name !== 'AbortError') {
-            console.error('API audio playback error:', err);
-            // Fall back to TTS
-            setIsTTSMode(true);
+      // Play - check readyState to avoid play-before-load errors
+      if (audio.readyState >= 2) {
+        const playPromise = audio.play();
+        if (playPromise !== undefined) {
+          playPromise.catch((err) => {
+            if (err && err.name !== 'AbortError') {
+              console.error('API audio playback error:', err);
+              // Fall back to TTS
+              setIsTTSMode(true);
+            }
+          });
+        }
+      } else {
+        // Wait for enough data before playing
+        const onCanPlay = () => {
+          audio.removeEventListener('canplaythrough', onCanPlay);
+          if (isPlayingRef.current) {
+            audio.play().catch((err) => {
+              if (err && err.name !== 'AbortError') {
+                setIsTTSMode(true);
+              }
+            });
           }
-        });
+        };
+        audio.addEventListener('canplaythrough', onCanPlay);
       }
     } else {
       // Use TTS
-      if (getTranslationText) {
-        const text = getTranslationText(currentAyah);
+      const getText = getTranslationTextRef.current;
+      if (getText) {
+        const text = getText(currentAyah);
         if (text) {
           setIsLoading(true);
           playWithTTS(text);
@@ -749,7 +770,7 @@ export function useTranslationAudioPlayer(options = {}) {
         setIsPlaying(false);
       }
     }
-  }, [surahId, currentAyah, isPlaying, apiAudioSource, isTTSMode, onVerseChange, getTranslationText, playWithTTS]);
+  }, [surahId, currentAyah, isPlaying, apiAudioSource, isTTSMode, onVerseChange, playWithTTS]);
 
   // Handle play state changes for API audio
   useEffect(() => {

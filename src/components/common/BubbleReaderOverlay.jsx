@@ -319,6 +319,7 @@ const TafseerFloatingBubble = memo(function TafseerFloatingBubble({
   const [selectedTafseer, setSelectedTafseer] = useState(null);
   const [textZoom, setTextZoom] = useState(1);
   const [selectedAyah, setSelectedAyah] = useState(ayahNumber);
+  const [retryCount, setRetryCount] = useState(0);
 
   const tafseerLang = TRANSLATION_TO_TAFSEER_LANG[translationId] || 'en';
   const availableTafseers = getTafseersByLanguage(tafseerLang);
@@ -362,7 +363,7 @@ const TafseerFloatingBubble = memo(function TafseerFloatingBubble({
     return () => {
       cancelled = true;
     };
-  }, [isVisible, selectedTafseer, surahId, selectedAyah]);
+  }, [isVisible, selectedTafseer, surahId, selectedAyah, retryCount]);
 
   // Handle ayah navigation
   const goToPrevAyah = () => {
@@ -516,7 +517,7 @@ const TafseerFloatingBubble = memo(function TafseerFloatingBubble({
             <Icons.AlertCircle className="w-10 h-10 text-white/40 mb-2" />
             <p className="text-white/50 text-sm mb-3">{tafseer.text}</p>
             <button
-              onClick={loadTafseer}
+              onClick={() => setRetryCount(c => c + 1)}
               className="px-4 py-2 bg-white/20 hover:bg-white/30 rounded-full text-white text-xs transition-all"
             >
               Try Again
@@ -1245,9 +1246,13 @@ const SharePanel = memo(function SharePanel({ surahId, surahName, ayahNumber, ve
     } else {
       text = `${verseArabic}\n\n"${verseTranslation}"\n\n— ${surahName} (${surahId}:${ayahNumber})`;
     }
-    navigator.clipboard.writeText(text);
-    setShareStatus('copied');
-    setTimeout(() => setShareStatus(null), 2000);
+    navigator.clipboard.writeText(text).then(() => {
+      setShareStatus('copied');
+      setTimeout(() => setShareStatus(null), 2000);
+    }).catch(() => {
+      setShareStatus('error');
+      setTimeout(() => setShareStatus(null), 2000);
+    });
   };
 
   // Download image function
@@ -1363,6 +1368,12 @@ const SharePanel = memo(function SharePanel({ surahId, surahName, ayahNumber, ve
 
       // Convert to blob and download
       canvas.toBlob((blob) => {
+        if (!blob) {
+          console.error('Canvas toBlob returned null');
+          setDownloadStatus('error');
+          setTimeout(() => setDownloadStatus(null), 2000);
+          return;
+        }
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;
@@ -1572,6 +1583,8 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
   const translationAudioRef = useRef(null);
   const isPlayingTranslationRef = useRef(false);
   const isPlayingCombinedRef = useRef(false);
+  const isLoadingTranslationRef = useRef(false); // Guard against translation audio effect double-fire
+  const isLoadingArabicRef = useRef(false); // Guard against Arabic audio effect double-fire
   const versesRef = useRef([]);
 
   // Audio prefetch cache for smooth playback
@@ -2159,17 +2172,21 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
     }
 
     if (result && typeof result === 'string') {
-      const audio = new Audio(result);
+      const blobUrl = result;
+      const audio = new Audio(blobUrl);
       ttsAudioRef.current = audio;
 
       audio.onended = () => {
+        URL.revokeObjectURL(blobUrl);
         setSpeakingAyah(null);
       };
       audio.onerror = () => {
+        URL.revokeObjectURL(blobUrl);
         setSpeakingAyah(null);
       };
 
       audio.play().catch(() => {
+        URL.revokeObjectURL(blobUrl);
         setSpeakingAyah(null);
       });
     } else {
@@ -2290,14 +2307,15 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
         return;
       }
 
-      const audio = new Audio(result);
+      const blobUrl = result;
+      const audio = new Audio(blobUrl);
       audio._playbackId = playbackId;
       audio._isTTS = true;
-      audio._audioUrl = result;
+      audio._audioUrl = blobUrl;
       translationAudioRef.current = audio;
 
       audio.onended = () => {
-        // Data URLs don't need revoking
+        URL.revokeObjectURL(blobUrl);
         if (translationAudioRef.current?._playbackId !== playbackId) return;
         if (!isLast && isPlayingTranslationRef.current) {
           setTranslationAyah(prev => prev + 1);
@@ -2320,7 +2338,7 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
       };
 
       audio.onerror = (e) => {
-        // Data URLs don't need revoking
+        URL.revokeObjectURL(blobUrl);
         if (translationAudioRef.current?._playbackId !== playbackId) return;
         console.error('[GoogleTTS] Audio playback error:', e);
         if (!isLast && isPlayingTranslationRef.current) {
@@ -2767,6 +2785,10 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
     if (isPlayingCombined) return;
     if (!isPlayingTranslation || !verses.length) return;
 
+    // Guard against double-fire from multiple state changes triggering simultaneously
+    if (isLoadingTranslationRef.current) return;
+    isLoadingTranslationRef.current = true;
+
     // IMPORTANT: Stop Arabic audio when translation starts
     // This prevents both audios playing simultaneously
     if (isPlaying) {
@@ -2781,6 +2803,7 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
       console.log('Verse not found:', translationAyah, 'available:', verses.map(v => v.number));
       setIsPlayingTranslation(false);
       isPlayingTranslationRef.current = false;
+      isLoadingTranslationRef.current = false;
       return;
     }
 
@@ -2790,16 +2813,31 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
     // Pass total verses count so playTranslationAudio can determine if last
     playTranslationAudio(translationAyah, verse.translation, verses.length);
 
+    // Release the guard after a microtask to allow the effect to run again for subsequent changes
+    Promise.resolve().then(() => { isLoadingTranslationRef.current = false; });
+
     // No cleanup here - playTranslationAudio handles stopping previous audio
     // Cleanup was causing race condition by pausing before new audio could start
   }, [isPlayingTranslation, translationAyah, verses, playTranslationAudio, isPlayingCombined, isPlaying]);
 
-  // Cleanup translation audio on unmount
+  // Cleanup all audio refs on unmount
   useEffect(() => {
     return () => {
       if (translationAudioRef.current) {
         translationAudioRef.current.pause();
         translationAudioRef.current = null;
+      }
+      if (ttsAudioRef.current) {
+        ttsAudioRef.current.pause();
+        ttsAudioRef.current = null;
+      }
+      if (narratorAyahAudioRef.current) {
+        narratorAyahAudioRef.current.pause();
+        narratorAyahAudioRef.current = null;
+      }
+      if (wordAudioRef.current) {
+        wordAudioRef.current.pause();
+        wordAudioRef.current = null;
       }
     };
   }, []);
@@ -2983,7 +3021,7 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
 
         if (!result || typeof result !== 'string') {
           console.error('[Combined-TTS] Google TTS failed to get audio URL');
-          if (isPlayingCombinedRef.current) {
+          if (isPlayingCombinedRef.current && ayahNum < total) {
             console.log('[Combined-TTS] Skipping to next ayah due to failure');
             setCombinedPhase('arabic');
             setTimeout(() => setCurrentAyah(ayahNum + 1), 300);
@@ -3012,7 +3050,7 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
         ttsAudio.onerror = (e) => {
           console.error('[Combined-TTS] Audio playback error for ayah:', ayahNum, e);
           // Data URLs don't need revoking
-          if (isPlayingCombinedRef.current) {
+          if (isPlayingCombinedRef.current && ayahNum < total) {
             console.log('[Combined-TTS] Skipping to next ayah due to error');
             setCombinedPhase('arabic');
             setTimeout(() => setCurrentAyah(ayahNum + 1), 300);
@@ -3024,7 +3062,7 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
         console.log('[Combined-TTS] Play started successfully for ayah:', ayahNum);
       } catch (error) {
         console.error('[Combined-TTS] Exception caught:', error);
-        if (isPlayingCombinedRef.current) {
+        if (isPlayingCombinedRef.current && ayahNum < total) {
           console.log('[Combined-TTS] Skipping to next ayah due to exception');
           setCombinedPhase('arabic');
           setTimeout(() => setCurrentAyah(ayahNum + 1), 300);
@@ -3297,6 +3335,10 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
     const audio = audioRef.current;
     if (!audio) return;
     if (isPlaying) {
+      // Guard against double-fire from multiple state changes triggering simultaneously
+      if (isLoadingArabicRef.current) return;
+      isLoadingArabicRef.current = true;
+
       // IMPORTANT: Stop any translation audio when Arabic starts playing
       // This prevents the race condition where both play simultaneously
       if (isPlayingTranslation || translationAudioRef.current) {
@@ -3308,12 +3350,12 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
           translationAudioRef.current = null;
         }
       }
-      const attemptPlay = () => { audio.play().catch(err => { if (err.name !== 'AbortError') { setAudioError('Playback failed'); setIsPlaying(false); } }); };
+      const attemptPlay = () => { isLoadingArabicRef.current = false; audio.play().catch(err => { if (err.name !== 'AbortError') { setAudioError('Playback failed'); setIsPlaying(false); } }); };
       if (audio.readyState >= 3) attemptPlay();
       else {
-        const handleCanPlay = () => { if (isPlayingRef.current) attemptPlay(); };
+        const handleCanPlay = () => { isLoadingArabicRef.current = false; if (isPlayingRef.current) attemptPlay(); };
         audio.addEventListener('canplaythrough', handleCanPlay, { once: true });
-        return () => audio.removeEventListener('canplaythrough', handleCanPlay);
+        return () => { isLoadingArabicRef.current = false; audio.removeEventListener('canplaythrough', handleCanPlay); };
       }
     } else { audio.pause(); }
   }, [isPlaying, currentAyah, selectedReciter, isPlayingTranslation]);
@@ -3442,21 +3484,31 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
   }, [handleClose]);
 
   const toggleAyahPlayback = useCallback((ayahNum) => {
-    if (currentAyah === ayahNum && isPlaying) {
+    if (currentAyah === ayahNum && (isPlaying || isPlayingCombined || isPlayingTranslation)) {
       stopAllAudio();
     } else {
       stopAllAudio();
       setCurrentAyah(ayahNum);
       setTranslationAyah(ayahNum);
-      setAudioMode('arabic');
-      setIsPlaying(true);
+      // Respect current audio mode instead of forcing 'arabic'
+      if (audioMode === 'combined') {
+        setIsPlayingCombined(true);
+        isPlayingCombinedRef.current = true;
+        setCombinedPhase('arabic');
+        setIsPlaying(true);
+      } else if (audioMode === 'translation') {
+        setIsPlayingTranslation(true);
+        isPlayingTranslationRef.current = true;
+      } else {
+        setIsPlaying(true);
+      }
     }
     // Track progress when user plays a verse
     if (surah?.id) {
       markAyahRead(surah.id, ayahNum);
       if (gamification.isActive) gamification.recordAction('verse_read', { surahId: surah.id, ayahNum });
     }
-  }, [currentAyah, isPlaying, surah?.id, stopAllAudio]);
+  }, [currentAyah, isPlaying, isPlayingCombined, isPlayingTranslation, audioMode, surah?.id, stopAllAudio]);
 
   // Safe function to start Arabic playback (stops translation first)
   const startArabicPlayback = useCallback(() => {
