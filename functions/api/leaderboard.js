@@ -127,19 +127,21 @@ export async function onRequest(context) {
       },
     });
   } catch (error) {
-    console.error('[Leaderboard] Error:', error.message, error.stack);
+    const errMsg = error?.message || String(error);
+    console.error('[Leaderboard] Error:', errMsg);
 
-    // Check if the error is a missing table
-    const isTableMissing = error.message?.includes('no such table') || error.message?.includes('does not exist');
+    // Detect table-missing errors (D1 may use different phrasing)
+    const isTableMissing = /no such table|does not exist|not found|SQLITE_ERROR/i.test(errMsg);
 
+    // Always return 200 with empty data — leaderboard is non-critical
     return new Response(JSON.stringify({
-      error: isTableMissing ? 'Leaderboard not available yet' : 'Server error',
+      error: isTableMissing ? 'Leaderboard not available yet' : 'Leaderboard temporarily unavailable',
       leaderboard: [],
       myRank: null,
       sort,
       total: 0,
     }), {
-      status: isTableMissing ? 200 : 500,
+      status: 200,
       headers: {
         ...corsHeaders,
         'Content-Type': 'application/json',

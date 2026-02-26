@@ -3,11 +3,16 @@
  * Beautiful glassmorphic bubbles with animations
  */
 
-import { useState, useEffect, useRef, useCallback, memo } from 'react';
+import { useState, useEffect, useRef, useCallback, memo, useMemo } from 'react';
 import { Icons } from './Icons';
 import { useAuth } from '../../contexts/AuthContext';
 import { useLocale } from '../../contexts';
+import { useTranslation } from '../../contexts/LocaleContext';
 import logger from '../../utils/logger';
+
+// Max messages to keep in state for performance
+const MAX_MESSAGES = 50;
+const STORAGE_KEY = 'w3quran_talk_history';
 
 // Speech APIs (SSR-safe)
 const SpeechRecognition = typeof window !== 'undefined'
@@ -126,7 +131,7 @@ const BubbleBackground = memo(function BubbleBackground() {
 });
 
 // Central Quran bubble orb
-const QuranBubble = ({ status, isPlaying, onClick, hasAccess, isAuthenticated, showTextInput }) => {
+const QuranBubble = ({ status, isPlaying, onClick, hasAccess, isAuthenticated, showTextInput, statusLabels }) => {
   const isActive = status !== 'idle';
 
   return (
@@ -148,9 +153,9 @@ const QuranBubble = ({ status, isPlaying, onClick, hasAccess, isAuthenticated, s
         />
       ))}
 
-      {/* Main bubble */}
+      {/* Main bubble - smaller on mobile for more message space */}
       <div
-        className="relative w-44 h-44 rounded-full cursor-pointer transition-all duration-300 hover:scale-105"
+        className="relative w-36 h-36 md:w-44 md:h-44 rounded-full cursor-pointer transition-all duration-300 hover:scale-105"
         style={{
           background: isPlaying
             ? 'linear-gradient(145deg, rgba(16,185,129,0.9), rgba(5,150,105,0.9))'
@@ -209,7 +214,7 @@ const QuranBubble = ({ status, isPlaying, onClick, hasAccess, isAuthenticated, s
             <div className="text-center">
               <div className="text-4xl mb-1">📖</div>
               <div className="text-white/80 text-xs font-medium">
-                {!isAuthenticated ? 'Tap to Sign In' : !hasAccess ? 'Tap to Upgrade' : showTextInput ? 'Type Below' : 'Tap to Talk'}
+                {!isAuthenticated ? (statusLabels?.signIn || 'Tap to Sign In') : !hasAccess ? (statusLabels?.upgrade || 'Tap to Upgrade') : showTextInput ? (statusLabels?.typeBelow || 'Type Below') : (statusLabels?.tapToTalk || 'Tap to Talk')}
               </div>
             </div>
           )}
@@ -230,7 +235,7 @@ const QuranBubble = ({ status, isPlaying, onClick, hasAccess, isAuthenticated, s
 };
 
 // Message bubble with glassmorphic design
-const MessageBubble = ({ text, isUser, isStreaming, verses, onVerseClick, onCopy, onShare }) => {
+const MessageBubble = ({ text, isUser, isStreaming, verses, onVerseClick, onCopy, onShare, isRTL, labels }) => {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = () => {
@@ -256,14 +261,20 @@ const MessageBubble = ({ text, isUser, isStreaming, verses, onVerseClick, onCopy
     onShare?.();
   };
 
+  // RTL: flip alignment - user messages go left, assistant go right
+  const userAlign = isRTL ? 'justify-start' : 'justify-end';
+  const assistantAlign = isRTL ? 'justify-end' : 'justify-start';
+  const userCorner = isRTL ? 'rounded-bl-lg' : 'rounded-br-lg';
+  const assistantCorner = isRTL ? 'rounded-br-lg' : 'rounded-bl-lg';
+
   return (
     <div
-      className={`mb-5 flex ${isUser ? 'justify-end' : 'justify-start'}`}
-      style={{ animation: 'bubbleIn 0.4s ease-out' }}
+      className={`mb-5 flex ${isUser ? userAlign : assistantAlign}`}
+      style={{ animation: 'messageSlideIn 0.4s ease-out both' }}
     >
       <div
         className={`relative max-w-[85%] rounded-3xl px-5 py-4 ${
-          isUser ? 'rounded-br-lg' : 'rounded-bl-lg'
+          isUser ? userCorner : assistantCorner
         }`}
         style={{
           background: isUser
@@ -283,9 +294,9 @@ const MessageBubble = ({ text, isUser, isStreaming, verses, onVerseClick, onCopy
         />
 
         {/* Avatar */}
-        <div className={`flex items-start gap-3 ${isUser ? 'flex-row-reverse' : ''}`}>
+        <div className={`flex items-start gap-3 ${isUser ? (isRTL ? '' : 'flex-row-reverse') : (isRTL ? 'flex-row-reverse' : '')}`}>
           <div
-            className={`w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 ${
+            className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
               isUser
                 ? 'bg-gradient-to-br from-purple-400 to-pink-500'
                 : 'bg-gradient-to-br from-emerald-400 to-teal-500'
@@ -293,18 +304,18 @@ const MessageBubble = ({ text, isUser, isStreaming, verses, onVerseClick, onCopy
             style={{ boxShadow: '0 4px 15px rgba(0,0,0,0.2)' }}
           >
             {isUser ? (
-              <Icons.Users className="w-4 h-4 text-white" />
+              <Icons.Users className="w-3.5 h-3.5 text-white" />
             ) : (
-              <span className="text-lg">📖</span>
+              <span className="text-base">📖</span>
             )}
           </div>
 
-          <div className="flex-1">
-            <p className="text-white/95 leading-relaxed whitespace-pre-wrap text-[15px]">
+          <div className="flex-1 min-w-0">
+            <p className="text-white/95 leading-relaxed whitespace-pre-wrap text-[15px]" dir="auto">
               {text}
               {isStreaming && (
                 <span
-                  className="inline-block w-2.5 h-5 ml-1 rounded-sm"
+                  className="inline-block w-2.5 h-5 ml-1 rtl:ml-0 rtl:mr-1 rounded-sm"
                   style={{
                     background: 'linear-gradient(to bottom, #10B981, #059669)',
                     animation: 'cursorBlink 0.8s ease-in-out infinite',
@@ -313,7 +324,7 @@ const MessageBubble = ({ text, isUser, isStreaming, verses, onVerseClick, onCopy
               )}
             </p>
 
-            {/* Verse tags - Clickable */}
+            {/* Verse tags - Tappable chips with surah name */}
             {verses && verses.length > 0 && !isStreaming && (
               <div className="flex flex-wrap gap-2 mt-3">
                 {verses.map((v, i) => (
@@ -322,8 +333,8 @@ const MessageBubble = ({ text, isUser, isStreaming, verses, onVerseClick, onCopy
                     onClick={() => onVerseClick?.(v.surah, v.ayah)}
                     className="text-xs px-3 py-1.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 hover:bg-emerald-500/30 hover:scale-105 active:scale-95 transition-all cursor-pointer flex items-center gap-1.5"
                   >
-                    <span>📖</span>
-                    <span>{v.surah}:{v.ayah}</span>
+                    <Icons.BookOpen className="w-3 h-3" />
+                    <span>{v.surahName || `${v.surah}:${v.ayah}`}</span>
                     <Icons.ExternalLink className="w-3 h-3 opacity-60" />
                   </button>
                 ))}
@@ -340,12 +351,12 @@ const MessageBubble = ({ text, isUser, isStreaming, verses, onVerseClick, onCopy
                   {copied ? (
                     <>
                       <Icons.Check className="w-3.5 h-3.5 text-emerald-400" />
-                      <span className="text-emerald-400">Copied!</span>
+                      <span className="text-emerald-400">{labels?.copied || 'Copied!'}</span>
                     </>
                   ) : (
                     <>
                       <Icons.Copy className="w-3.5 h-3.5" />
-                      <span>Copy</span>
+                      <span>{labels?.copy || 'Copy'}</span>
                     </>
                   )}
                 </button>
@@ -354,7 +365,7 @@ const MessageBubble = ({ text, isUser, isStreaming, verses, onVerseClick, onCopy
                   className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full bg-white/5 text-white/60 hover:bg-white/10 hover:text-white/80 transition-all"
                 >
                   <Icons.Share className="w-3.5 h-3.5" />
-                  <span>Share</span>
+                  <span>{labels?.share || 'Share'}</span>
                 </button>
               </div>
             )}
@@ -369,42 +380,83 @@ const MessageBubble = ({ text, isUser, isStreaming, verses, onVerseClick, onCopy
 export default function TalkToQuran({ isVisible, onClose, onNavigate }) {
   const { isAuthenticated, user, login, isAdmin, isPremium } = useAuth();
   const { language, setLanguage } = useLocale();
+  const { t, isRTL } = useTranslation();
 
   const hasAccess = isAdmin || isPremium;
   const speechLang = SPEECH_LANG_MAP[language] || 'en-US';
   const currentQuestions = SAMPLE_QUESTIONS[language] || SAMPLE_QUESTIONS.en;
 
+  // Load persisted messages from localStorage
+  const loadStoredMessages = () => {
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed)) return parsed.slice(-MAX_MESSAGES);
+      }
+    } catch {}
+    return [];
+  };
+
   const [status, setStatus] = useState('idle');
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState(loadStoredMessages);
   const [liveTranscript, setLiveTranscript] = useState('');
   const [streamingText, setStreamingText] = useState('');
   const [credits, setCredits] = useState({ balance: 0, tier: 'free' });
   const [error, setError] = useState(null);
+  const [lastFailedMessage, setLastFailedMessage] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [textInput, setTextInput] = useState('');
   const [showTextInput, setShowTextInput] = useState(speechMayNotWork || !SpeechRecognition);
   const [followUpQuestions, setFollowUpQuestions] = useState([]);
   const [upgradeLoading, setUpgradeLoading] = useState(false);
-  const [isRecording, setIsRecording] = useState(false); // For Whisper fallback recording
-  const [recordingTime, setRecordingTime] = useState(0); // Recording duration display
+  const [isRecording, setIsRecording] = useState(false);
+  const [recordingTime, setRecordingTime] = useState(0);
+  const [showScrollButton, setShowScrollButton] = useState(false);
 
   const recognitionRef = useRef(null);
   const messagesEndRef = useRef(null);
+  const messagesContainerRef = useRef(null);
   const streamingRef = useRef('');
   const silenceTimerRef = useRef(null);
   const audioRef = useRef(null);
   const lastTranscriptRef = useRef('');
   const streamingIntervalRef = useRef(null);
-  const currentTranscriptRef = useRef(''); // Track latest transcript for silence detection
-  const isSendingRef = useRef(false); // Prevent race conditions
-  const mediaRecorderRef = useRef(null); // For Whisper fallback
-  const audioChunksRef = useRef([]); // Store recorded audio chunks
-  const recordingTimerRef = useRef(null); // Timer for recording duration
-  const abortControllerRef = useRef(null); // For canceling in-flight API requests
+  const streamingRafRef = useRef(null);
+  const currentTranscriptRef = useRef('');
+  const isSendingRef = useRef(false);
+  const mediaRecorderRef = useRef(null);
+  const audioChunksRef = useRef([]);
+  const recordingTimerRef = useRef(null);
+  const abortControllerRef = useRef(null);
 
+  // Persist messages to localStorage
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages, streamingText, liveTranscript]);
+    if (messages.length > 0) {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(messages.slice(-MAX_MESSAGES)));
+      } catch {}
+    }
+  }, [messages]);
+
+  // Auto-scroll to bottom when new content
+  useEffect(() => {
+    if (!showScrollButton) {
+      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [messages, streamingText, liveTranscript, showScrollButton]);
+
+  // Scroll-to-bottom detection
+  useEffect(() => {
+    const container = messagesContainerRef.current;
+    if (!container) return;
+    const handleScroll = () => {
+      const distanceFromBottom = container.scrollHeight - container.scrollTop - container.clientHeight;
+      setShowScrollButton(distanceFromBottom > 100);
+    };
+    container.addEventListener('scroll', handleScroll, { passive: true });
+    return () => container.removeEventListener('scroll', handleScroll);
+  }, []);
 
   useEffect(() => {
     if (isAuthenticated && isVisible) fetchCredits();
@@ -416,6 +468,7 @@ export default function TalkToQuran({ isVisible, onClose, onNavigate }) {
       audioRef.current?.pause();
       if (silenceTimerRef.current) clearTimeout(silenceTimerRef.current);
       if (streamingIntervalRef.current) clearInterval(streamingIntervalRef.current);
+      if (streamingRafRef.current) cancelAnimationFrame(streamingRafRef.current);
       if (recordingTimerRef.current) clearInterval(recordingTimerRef.current);
       if (window.speechSynthesis) window.speechSynthesis.cancel();
       abortControllerRef.current?.abort();
@@ -733,13 +786,15 @@ export default function TalkToQuran({ isVisible, onClose, onNavigate }) {
   }, [isRecording, cancelRecording]);
 
   const sendMessage = async (text) => {
-    if (!text.trim() || !hasAccess) return;
+    if (!text.trim() || !hasAccess || isSendingRef.current) return;
 
     // Clear previous error and suggestions
     setError(null);
+    setLastFailedMessage(null);
     setFollowUpQuestions([]);
 
-    setMessages(prev => [...prev, { role: 'user', content: text }]);
+    // Cap messages at MAX_MESSAGES
+    setMessages(prev => [...prev.slice(-(MAX_MESSAGES - 1)), { role: 'user', content: text }]);
     setStatus('processing');
 
     // Now we're in processing state, safe to reset the sending flag
@@ -761,29 +816,29 @@ export default function TalkToQuran({ isVisible, onClose, onNavigate }) {
           message: text,
           conversationHistory: messages.slice(-6).map(m => ({ role: m.role, content: m.content })),
           language,
-          includeTTS: true, // Request high-quality OpenAI TTS
-          voiceLanguage: language, // Send language for voice selection
+          includeTTS: true,
+          voiceLanguage: language,
         }),
       });
 
-      // Handle non-JSON responses (like network errors)
       let data;
       try {
         data = await res.json();
       } catch (parseError) {
         console.error('[TalkToQuran] Response parse error:', parseError);
-        setError('Server error. Please try again.');
+        setError(t('talkToQuran.networkError'));
+        setLastFailedMessage(text);
         setStatus('idle');
         return;
       }
 
       if (!res.ok) {
-        // Show detailed error if available
         const errorMsg = data.details
           ? `${data.error} (${data.details})`
           : data.error || 'Request failed';
         console.error('[TalkToQuran] API error:', data);
         setError(errorMsg);
+        setLastFailedMessage(text);
         setStatus('idle');
         return;
       }
@@ -794,44 +849,44 @@ export default function TalkToQuran({ isVisible, onClose, onNavigate }) {
       setStatus('speaking');
       setIsPlaying(true);
 
-      // Play OpenAI TTS audio if available, otherwise use browser TTS fallback
       if (data.audioUrl) {
         playAudio(data.audioUrl, words.length);
       } else {
-        // Browser TTS fallback when server TTS is unavailable
         speakWithBrowserTTS(fullText);
       }
 
-      // Stream text display - faster when no audio
-      const wordDelay = data.audioUrl ? 80 : 40; // Optimized for speed
+      // Use requestAnimationFrame for smoother word-by-word streaming
+      const wordDelay = data.audioUrl ? 80 : 40;
       let i = 0;
-      streamingIntervalRef.current = setInterval(() => {
+      let lastTime = performance.now();
+
+      const animateWords = (now) => {
         if (i < words.length) {
-          streamingRef.current += (i > 0 ? ' ' : '') + words[i];
-          setStreamingText(streamingRef.current);
-          i++;
+          if (now - lastTime >= wordDelay) {
+            streamingRef.current += (i > 0 ? ' ' : '') + words[i];
+            setStreamingText(streamingRef.current);
+            i++;
+            lastTime = now;
+          }
+          streamingRafRef.current = requestAnimationFrame(animateWords);
         } else {
-          clearInterval(streamingIntervalRef.current);
-          streamingIntervalRef.current = null;
-          setMessages(prev => [...prev, { role: 'assistant', content: fullText, verses: data.versesCited }]);
+          streamingRafRef.current = null;
+          setMessages(prev => [...prev.slice(-(MAX_MESSAGES - 1)), { role: 'assistant', content: fullText, verses: data.versesCited }]);
           setStreamingText('');
-          // Generate follow-up suggestions
           setFollowUpQuestions(generateFollowUps(fullText, data.versesCited));
-          // If no OpenAI audio and browser TTS already finished, mark as done
           if (!data.audioUrl && !window.speechSynthesis?.speaking) {
             setIsPlaying(false);
             setStatus('idle');
           }
         }
-      }, wordDelay);
+      };
+      streamingRafRef.current = requestAnimationFrame(animateWords);
 
       if (data.credits) setCredits({ balance: data.credits.balance, tier: data.credits.tier });
     } catch (e) {
-      if (e.name === 'AbortError') {
-        // User cancelled the request
-        return;
-      }
-      setError('Network error');
+      if (e.name === 'AbortError') return;
+      setError(t('talkToQuran.networkError'));
+      setLastFailedMessage(text);
       setStatus('idle');
     }
   };
@@ -938,6 +993,10 @@ export default function TalkToQuran({ isVisible, onClose, onNavigate }) {
       clearInterval(streamingIntervalRef.current);
       streamingIntervalRef.current = null;
     }
+    if (streamingRafRef.current) {
+      cancelAnimationFrame(streamingRafRef.current);
+      streamingRafRef.current = null;
+    }
     // Finish current sentence if streaming
     if (streamingRef.current) {
       // Find the last sentence boundary
@@ -1006,6 +1065,31 @@ export default function TalkToQuran({ isVisible, onClose, onNavigate }) {
     setUpgradeLoading(false);
   };
 
+  // Clear conversation history
+  const handleClearHistory = () => {
+    setMessages([]);
+    setFollowUpQuestions([]);
+    setStreamingText('');
+    streamingRef.current = '';
+    try { localStorage.removeItem(STORAGE_KEY); } catch {}
+  };
+
+  // Retry last failed message
+  const handleRetry = () => {
+    if (lastFailedMessage) {
+      setError(null);
+      const msg = lastFailedMessage;
+      setLastFailedMessage(null);
+      sendMessage(msg);
+    }
+  };
+
+  // Scroll to bottom
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    setShowScrollButton(false);
+  };
+
   const handleBubbleClick = () => {
     if (!isAuthenticated) {
       login();
@@ -1032,10 +1116,6 @@ export default function TalkToQuran({ isVisible, onClose, onNavigate }) {
     if (textInput.trim() && status === 'idle') {
       sendMessage(textInput.trim());
       setTextInput('');
-      // Keep text input visible if voice won't work on this device
-      if (!useWhisperFallback && SpeechRecognition) {
-        setShowTextInput(false);
-      }
     }
   };
 
@@ -1075,88 +1155,73 @@ export default function TalkToQuran({ isVisible, onClose, onNavigate }) {
       <BubbleBackground />
 
       {/* Header */}
-      <div className="relative z-10 p-4 safe-area-top">
-        {/* Top row: close button, title, language */}
+      <div className="relative z-10 p-4" style={{ paddingTop: 'max(1rem, env(safe-area-inset-top))' }}>
+        {/* Top row: close button, title, credits badge, language */}
         <div className="flex items-center justify-between mb-2">
           <button
             onClick={onClose}
-            className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white hover:bg-white/30 transition-all shadow-lg"
+            className="flex items-center gap-2 px-3 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/20 transition-all"
           >
-            <Icons.ArrowLeft className="w-5 h-5" />
-            <span className="font-medium text-sm">Back</span>
+            <Icons.ArrowLeft className="w-5 h-5 rtl:rotate-180" />
+            <span className="font-medium text-sm">{t('talkToQuran.back') || 'Back'}</span>
           </button>
 
-          <div className="text-center">
-            <h1 className="text-lg font-bold text-white">Talk to Quran</h1>
-          </div>
-
-          {/* Language selector */}
-          <select
-            value={language}
-            onChange={(e) => setLanguage(e.target.value)}
-            className="px-3 py-2 rounded-full text-xs text-white bg-white/10 backdrop-blur-lg border border-white/20 cursor-pointer hover:bg-white/20 transition-all"
-          >
-            <option value="en" className="bg-slate-800 text-white">EN</option>
-            <option value="ur" className="bg-slate-800 text-white">اردو</option>
-            <option value="ar" className="bg-slate-800 text-white">عربي</option>
-          </select>
-        </div>
-
-        {/* Credits bar - shown for authenticated users */}
-        {isAuthenticated && (
-          <div
-            className="flex items-center justify-between px-4 py-2.5 rounded-2xl backdrop-blur-lg"
-            style={{
-              background: isAdmin
-                ? 'linear-gradient(135deg, rgba(16,185,129,0.15), rgba(20,184,166,0.1))'
-                : hasAccess
-                ? 'linear-gradient(135deg, rgba(139,92,246,0.15), rgba(236,72,153,0.1))'
-                : 'linear-gradient(135deg, rgba(245,158,11,0.15), rgba(239,68,68,0.1))',
-              border: `1px solid ${isAdmin ? 'rgba(16,185,129,0.3)' : hasAccess ? 'rgba(139,92,246,0.3)' : 'rgba(245,158,11,0.3)'}`,
-            }}
-          >
-            <div className="flex items-center gap-3">
-              <div
-                className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                  isAdmin
-                    ? 'bg-gradient-to-br from-emerald-400 to-teal-500'
-                    : hasAccess
-                    ? 'bg-gradient-to-br from-purple-400 to-pink-500'
-                    : 'bg-gradient-to-br from-amber-400 to-orange-500'
-                }`}
-              >
-                <Icons.Zap className="w-4 h-4 text-white" />
-              </div>
-              <div>
-                <div className="flex items-center gap-2">
-                  <span className="text-white font-bold text-lg">
-                    {isAdmin ? '∞' : credits.balance}
-                  </span>
-                  <span className="text-white/60 text-xs">credits</span>
-                </div>
-                <span className={`text-xs ${isAdmin ? 'text-emerald-400' : hasAccess ? 'text-purple-400' : 'text-amber-400'}`}>
-                  {isAdmin ? 'Admin' : credits.tier === 'premium' ? 'Premium' : credits.tier === 'scholar' ? 'Scholar' : credits.tier === 'starter' ? 'Starter' : 'Free'}
-                </span>
-              </div>
-            </div>
-
-            {/* Upgrade/Buy more button for non-admin */}
-            {!isAdmin && (
-              <button
-                onClick={handleUpgrade}
-                disabled={upgradeLoading}
-                className="px-4 py-1.5 rounded-full text-xs font-medium text-white transition-all hover:scale-105 active:scale-95 disabled:opacity-50"
+          <div className="text-center flex items-center gap-2">
+            <h1 className="text-lg font-bold text-white">{t('talkToQuran.title')}</h1>
+            {/* Credits inline badge */}
+            {isAuthenticated && hasAccess && (
+              <span
+                className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium"
                 style={{
-                  background: hasAccess
-                    ? 'linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05))'
-                    : 'linear-gradient(135deg, #F59E0B, #EF4444)',
-                  border: hasAccess ? '1px solid rgba(255,255,255,0.2)' : 'none',
+                  background: isAdmin ? 'rgba(16,185,129,0.2)' : 'rgba(139,92,246,0.2)',
+                  border: `1px solid ${isAdmin ? 'rgba(16,185,129,0.3)' : 'rgba(139,92,246,0.3)'}`,
+                  color: isAdmin ? '#6EE7B7' : '#C4B5FD',
                 }}
               >
-                {upgradeLoading ? '...' : hasAccess ? 'Buy More' : 'Upgrade'}
-              </button>
+                <Icons.Zap className="w-3 h-3" />
+                {isAdmin ? '∞' : credits.balance}
+              </span>
             )}
           </div>
+
+          <div className="flex items-center gap-2">
+            {/* Clear history button */}
+            {messages.length > 0 && (
+              <button
+                onClick={handleClearHistory}
+                className="p-2 rounded-full text-white/40 hover:text-white/70 hover:bg-white/10 transition-all"
+                title={t('talkToQuran.clearHistory') || 'Clear history'}
+              >
+                <Icons.Trash className="w-4 h-4" />
+              </button>
+            )}
+            {/* Language selector */}
+            <select
+              value={language}
+              onChange={(e) => setLanguage(e.target.value)}
+              className="px-3 py-2 rounded-full text-xs text-white bg-white/10 backdrop-blur-lg border border-white/20 cursor-pointer hover:bg-white/20 transition-all"
+            >
+              <option value="en" className="bg-slate-800 text-white">EN</option>
+              <option value="ur" className="bg-slate-800 text-white">اردو</option>
+              <option value="ar" className="bg-slate-800 text-white">عربي</option>
+            </select>
+          </div>
+        </div>
+
+        {/* Upgrade bar - only for non-premium users */}
+        {isAuthenticated && !hasAccess && (
+          <button
+            onClick={handleUpgrade}
+            disabled={upgradeLoading}
+            className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-2xl backdrop-blur-lg text-white transition-all hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50"
+            style={{
+              background: 'linear-gradient(135deg, rgba(245,158,11,0.2), rgba(239,68,68,0.15))',
+              border: '1px solid rgba(245,158,11,0.3)',
+            }}
+          >
+            <Icons.Zap className="w-4 h-4 text-amber-400" />
+            <span className="text-sm font-medium">{upgradeLoading ? '...' : t('talkToQuran.upgradeToPremium')}</span>
+          </button>
         )}
 
         {/* Not authenticated - show sign in prompt */}
@@ -1170,7 +1235,7 @@ export default function TalkToQuran({ isVisible, onClose, onNavigate }) {
             }}
           >
             <Icons.Users className="w-4 h-4" />
-            <span className="text-sm">Sign in to use Talk to Quran</span>
+            <span className="text-sm">{t('talkToQuran.signInPrompt') || 'Sign in to use Talk to Quran'}</span>
           </button>
         )}
       </div>
@@ -1178,12 +1243,25 @@ export default function TalkToQuran({ isVisible, onClose, onNavigate }) {
       {/* Content */}
       <div className="relative z-10 flex-1 flex flex-col overflow-hidden">
         {/* Messages */}
-        <div className="flex-1 overflow-y-auto px-4 py-4">
+        <div className="flex-1 overflow-y-auto px-4 py-4" ref={messagesContainerRef}>
           {messages.length === 0 && !streamingText && status === 'idle' && !liveTranscript && (
             <div className="h-full flex flex-col items-center justify-center px-4">
-              <QuranBubble status={status} isPlaying={isPlaying} onClick={handleBubbleClick} hasAccess={hasAccess} isAuthenticated={isAuthenticated} showTextInput={showTextInput} />
+              <QuranBubble
+                status={status}
+                isPlaying={isPlaying}
+                onClick={handleBubbleClick}
+                hasAccess={hasAccess}
+                isAuthenticated={isAuthenticated}
+                showTextInput={showTextInput}
+                statusLabels={{
+                  signIn: t('talkToQuran.tapToSignIn') || 'Tap to Sign In',
+                  upgrade: t('talkToQuran.tapToUpgrade') || 'Tap to Upgrade',
+                  typeBelow: t('talkToQuran.typeBelow') || 'Type Below',
+                  tapToTalk: t('talkToQuran.tapToTalk') || 'Tap to Talk',
+                }}
+              />
               <p className="mt-6 text-white/60 text-center max-w-xs text-sm">
-                Ask anything about the Quran and receive guidance from Allah's words
+                {t('talkToQuran.welcome')}
               </p>
 
               {/* iOS/Safari voice hint */}
@@ -1191,28 +1269,29 @@ export default function TalkToQuran({ isVisible, onClose, onNavigate }) {
                 <div className="mt-4 flex items-center gap-2 px-4 py-2 rounded-full bg-purple-500/15 border border-purple-400/30">
                   <Icons.Info className="w-4 h-4 text-purple-300 flex-shrink-0" />
                   <span className="text-xs text-purple-200/80">
-                    {isIOS ? 'Tap the bubble to start, tap Send when done' : 'Tap to start recording'}
+                    {isIOS ? (t('talkToQuran.iosTapHint') || 'Tap the bubble to start, tap Send when done') : (t('talkToQuran.tapToRecord') || 'Tap to start recording')}
                   </span>
                 </div>
               )}
 
-              {/* Sample Questions */}
+              {/* Sample Questions - more prominent with categories */}
               {hasAccess && (
-                <div className="mt-8 w-full max-w-md">
-                  <p className="text-white/40 text-xs text-center mb-3">Try asking:</p>
-                  <div className="grid grid-cols-2 gap-2">
+                <div className="mt-6 w-full max-w-md">
+                  <p className="text-white/50 text-xs text-center mb-4 font-medium tracking-wide uppercase">{t('talkToQuran.tryAsking')}</p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                     {currentQuestions.map((q, i) => (
                       <button
                         key={i}
                         onClick={() => sendMessage(q.text)}
-                        className="flex items-center gap-2 px-4 py-3 rounded-2xl text-left text-sm text-white/80 hover:text-white transition-all hover:scale-[1.02] active:scale-[0.98]"
+                        className="flex items-center gap-3 px-4 py-3.5 rounded-2xl text-sm text-white/80 hover:text-white transition-all hover:scale-[1.02] active:scale-[0.98]"
+                        dir="auto"
                         style={{
                           background: 'linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03))',
-                          border: '1px solid rgba(255,255,255,0.1)',
+                          border: '1px solid rgba(255,255,255,0.12)',
                         }}
                       >
-                        <span className="text-lg">{q.icon}</span>
-                        <span className="line-clamp-2 text-xs">{q.text}</span>
+                        <span className="text-xl flex-shrink-0">{q.icon}</span>
+                        <span className="text-xs leading-snug">{q.text}</span>
                       </button>
                     ))}
                   </div>
@@ -1229,11 +1308,13 @@ export default function TalkToQuran({ isVisible, onClose, onNavigate }) {
                 isUser={msg.role === 'user'}
                 verses={msg.verses}
                 onVerseClick={handleVerseClick}
+                isRTL={isRTL}
+                labels={{ copy: t('talkToQuran.copy') || 'Copy', share: t('talkToQuran.share') || 'Share', copied: t('talkToQuran.copied') || 'Copied!' }}
               />
             ))}
-            {streamingText && <MessageBubble text={streamingText} isUser={false} isStreaming />}
+            {streamingText && <MessageBubble text={streamingText} isUser={false} isStreaming isRTL={isRTL} />}
             {status === 'listening' && liveTranscript && (
-              <MessageBubble text={liveTranscript} isUser isStreaming />
+              <MessageBubble text={liveTranscript} isUser isStreaming isRTL={isRTL} />
             )}
 
             {/* Loading/Thinking Animation */}
@@ -1259,7 +1340,7 @@ export default function TalkToQuran({ isVisible, onClose, onNavigate }) {
                       <div className="w-2.5 h-2.5 bg-emerald-400 rounded-full" style={{ animation: 'typingDot 1.4s ease-in-out infinite' }} />
                       <div className="w-2.5 h-2.5 bg-emerald-400 rounded-full" style={{ animation: 'typingDot 1.4s ease-in-out infinite', animationDelay: '0.2s' }} />
                       <div className="w-2.5 h-2.5 bg-emerald-400 rounded-full" style={{ animation: 'typingDot 1.4s ease-in-out infinite', animationDelay: '0.4s' }} />
-                      <span className="ml-2 text-white/60 text-sm">Searching Quran...</span>
+                      <span className="ml-2 rtl:ml-0 rtl:mr-2 text-white/60 text-sm">{t('talkToQuran.searching') || 'Searching Quran...'}</span>
                     </div>
                   </div>
                 </div>
@@ -1269,7 +1350,7 @@ export default function TalkToQuran({ isVisible, onClose, onNavigate }) {
             {/* Follow-up Suggestions */}
             {followUpQuestions.length > 0 && status === 'idle' && !streamingText && messages.length > 0 && (
               <div className="mb-5" style={{ animation: 'bubbleIn 0.4s ease-out' }}>
-                <p className="text-white/40 text-xs mb-2 text-center">Continue the conversation:</p>
+                <p className="text-white/40 text-xs mb-2 text-center">{t('talkToQuran.continueConversation') || 'Continue the conversation:'}</p>
                 <div className="flex flex-wrap gap-2 justify-center">
                   {followUpQuestions.map((q, i) => (
                     <button
@@ -1294,9 +1375,26 @@ export default function TalkToQuran({ isVisible, onClose, onNavigate }) {
 
             <div ref={messagesEndRef} />
           </div>
+
+          {/* Scroll-to-bottom button */}
+          {showScrollButton && messages.length > 0 && (
+            <button
+              onClick={scrollToBottom}
+              className="absolute bottom-4 left-1/2 -translate-x-1/2 w-10 h-10 rounded-full flex items-center justify-center transition-all hover:scale-110 active:scale-95 z-20"
+              style={{
+                background: 'linear-gradient(135deg, rgba(139,92,246,0.6), rgba(236,72,153,0.5))',
+                backdropFilter: 'blur(10px)',
+                border: '1px solid rgba(255,255,255,0.2)',
+                boxShadow: '0 4px 20px rgba(0,0,0,0.3)',
+                animation: 'messageSlideIn 0.3s ease-out',
+              }}
+            >
+              <Icons.ChevronDown className="w-5 h-5 text-white" />
+            </button>
+          )}
         </div>
 
-        {/* Error */}
+        {/* Error with retry button */}
         {error && (
           <div
             className="mx-4 mb-3 px-4 py-3 rounded-2xl"
@@ -1308,236 +1406,214 @@ export default function TalkToQuran({ isVisible, onClose, onNavigate }) {
             <div className="flex items-center justify-between gap-3">
               <span className="text-red-300 text-sm flex-1">{error}</span>
               <button
-                onClick={() => setError(null)}
-                className="text-red-300/60 hover:text-red-300 transition-colors"
+                onClick={() => { setError(null); setLastFailedMessage(null); }}
+                className="text-red-300/60 hover:text-red-300 transition-colors flex-shrink-0"
               >
                 <Icons.X className="w-4 h-4" />
               </button>
             </div>
-            {error.includes('checkout') || error.includes('Checkout') || error.includes('upgrade') ? (
+            {/* Retry button for any error with a failed message */}
+            {lastFailedMessage && (
+              <button
+                onClick={handleRetry}
+                className="mt-2 w-full py-2 rounded-xl text-sm font-medium text-white bg-white/10 hover:bg-white/15 transition-colors flex items-center justify-center gap-2"
+              >
+                <Icons.RefreshCw className="w-4 h-4" />
+                <span>{t('talkToQuran.retry') || 'Try Again'}</span>
+              </button>
+            )}
+            {(error.includes('checkout') || error.includes('Checkout') || error.includes('upgrade')) && !lastFailedMessage ? (
               <button
                 onClick={handleUpgrade}
                 disabled={upgradeLoading}
                 className="mt-2 w-full py-2 rounded-xl text-sm font-medium text-white bg-red-500/30 hover:bg-red-500/40 transition-colors"
               >
-                {upgradeLoading ? 'Loading...' : 'Try Again'}
+                {upgradeLoading ? '...' : t('talkToQuran.upgradeToPremium')}
               </button>
             ) : null}
           </div>
         )}
 
-        {/* Controls */}
-        <div className="relative z-10 p-4 md:p-6 pb-6 md:pb-8 flex flex-col items-center safe-area-bottom">
-          {/* Text Input Mode */}
-          {showTextInput && hasAccess && status === 'idle' && (
-            <form onSubmit={handleTextSubmit} className="w-full max-w-md mb-4" style={{ animation: 'bubbleIn 0.3s ease-out' }}>
-              <div
-                className="flex items-center gap-2 rounded-2xl px-4 py-3"
-                style={{
-                  background: 'linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05))',
-                  backdropFilter: 'blur(20px)',
-                  border: '1px solid rgba(255,255,255,0.2)',
-                }}
-              >
-                <input
-                  type="text"
-                  value={textInput}
-                  onChange={(e) => setTextInput(e.target.value)}
-                  placeholder={language === 'ur' ? 'اپنا سوال لکھیں...' : language === 'ar' ? 'اكتب سؤالك...' : 'Type your question...'}
-                  className="flex-1 bg-transparent text-white placeholder-white/40 text-sm outline-none"
-                  dir={language === 'ur' || language === 'ar' ? 'rtl' : 'ltr'}
-                  autoFocus
-                />
-                <button
-                  type="submit"
-                  disabled={!textInput.trim()}
-                  className="w-10 h-10 rounded-full flex items-center justify-center transition-all disabled:opacity-40"
-                  style={{
-                    background: textInput.trim() ? 'linear-gradient(135deg, #10B981, #059669)' : 'rgba(255,255,255,0.1)',
-                  }}
-                >
-                  <Icons.Send className="w-5 h-5 text-white" />
-                </button>
-              </div>
-            </form>
-          )}
-
+        {/* Controls - sticky bottom bar */}
+        <div className="relative z-10 safe-area-bottom">
           {/* Status text */}
           {status !== 'idle' && (
-            <div className="mb-4 flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm">
-              <div
-                className={`w-2.5 h-2.5 rounded-full ${
-                  status === 'listening' ? 'bg-purple-400' :
-                  status === 'processing' ? 'bg-amber-400' : 'bg-emerald-400'
-                }`}
-                style={{ animation: 'pulse 1s ease-in-out infinite' }}
-              />
-              <span className="text-sm text-white/80">
-                {status === 'listening' ? (
-                  isRecording ? `Recording ${recordingTime}s...` : 'Listening...'
-                ) :
-                 status === 'processing' ? 'Thinking...' : 'Speaking...'}
-              </span>
+            <div className="flex justify-center mb-2 px-4">
+              <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm">
+                <div
+                  className={`w-2.5 h-2.5 rounded-full ${
+                    status === 'listening' ? 'bg-purple-400' :
+                    status === 'processing' ? 'bg-amber-400' : 'bg-emerald-400'
+                  }`}
+                  style={{ animation: 'pulse 1s ease-in-out infinite' }}
+                />
+                <span className="text-sm text-white/80">
+                  {status === 'listening' ? (
+                    isRecording ? `${t('talkToQuran.recording') || 'Recording'} ${recordingTime}s...` : t('talkToQuran.listening')
+                  ) :
+                   status === 'processing' ? (t('talkToQuran.thinking') || 'Thinking...') : (t('talkToQuran.speaking') || 'Speaking...')}
+                </span>
+              </div>
             </div>
           )}
 
-          {/* iOS/Mobile hint for hold-to-record */}
-          {useWhisperFallback && status === 'idle' && hasAccess && !showTextInput && (messages.length > 0 || streamingText || liveTranscript) && (
-            <div className="mb-3 flex items-center gap-2 px-4 py-2 rounded-full bg-purple-500/15 border border-purple-400/30">
-              <Icons.Info className="w-4 h-4 text-purple-300 flex-shrink-0" />
-              <span className="text-xs text-purple-200/80">
-                {isIOS ? 'Tap mic to start, tap again to send' : 'Tap mic to record your question'}
-              </span>
+          {/* Listening controls */}
+          {status === 'listening' && hasAccess && (
+            <div className="flex items-center justify-center gap-6 px-4 pb-4">
+              <button
+                onClick={handleCancelVoice}
+                className="w-14 h-14 rounded-full flex items-center justify-center transition-all hover:scale-105"
+                style={{
+                  background: 'linear-gradient(145deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05))',
+                  backdropFilter: 'blur(10px)',
+                  border: '1px solid rgba(255,255,255,0.2)',
+                  boxShadow: '0 8px 25px rgba(0,0,0,0.2)',
+                }}
+              >
+                <Icons.X className="w-6 h-6 text-white/80" />
+              </button>
+              <button
+                onClick={handleStopVoice}
+                className="relative flex items-center justify-center transition-all hover:scale-105"
+                style={{
+                  width: '72px',
+                  height: '72px',
+                  borderRadius: '50%',
+                  background: 'linear-gradient(145deg, #10B981 0%, #059669 100%)',
+                  boxShadow: '0 10px 40px rgba(16,185,129,0.5), inset 0 2px 0 rgba(255,255,255,0.3)',
+                  animation: 'bubblePulse 1.5s ease-in-out infinite',
+                }}
+              >
+                <div className="absolute inset-1 rounded-full bg-gradient-to-b from-white/20 to-transparent" />
+                <Icons.Send className="w-8 h-8 text-white relative z-10" />
+              </button>
             </div>
           )}
 
-          {!isAuthenticated ? (
-            <button
-              onClick={login}
-              className="relative w-full max-w-sm py-5 rounded-3xl font-bold text-white text-lg overflow-hidden group"
-              style={{
-                background: 'linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%)',
-                boxShadow: '0 15px 50px rgba(139,92,246,0.4), inset 0 1px 0 rgba(255,255,255,0.2)',
-              }}
-            >
-              <div className="absolute inset-0 bg-gradient-to-t from-transparent to-white/20 opacity-0 group-hover:opacity-100 transition-opacity" />
-              <span className="relative flex items-center justify-center gap-2">
-                <Icons.Users className="w-5 h-5" />
-                Sign in to Start
-              </span>
-            </button>
-          ) : !hasAccess ? (
-            <button
-              onClick={handleUpgrade}
-              disabled={upgradeLoading}
-              className="relative w-full max-w-sm py-5 rounded-3xl font-bold text-white text-lg overflow-hidden group disabled:opacity-70"
-              style={{
-                background: 'linear-gradient(135deg, #F59E0B 0%, #EF4444 100%)',
-                boxShadow: '0 15px 50px rgba(245,158,11,0.4), inset 0 1px 0 rgba(255,255,255,0.2)',
-              }}
-            >
-              <div className="absolute inset-0 bg-gradient-to-t from-transparent to-white/20 opacity-0 group-hover:opacity-100 transition-opacity" />
-              <span className="relative flex items-center justify-center gap-2">
+          {/* Processing/Speaking stop button */}
+          {(status === 'processing' || (isPlaying && status !== 'listening')) && hasAccess && (
+            <div className="flex justify-center px-4 pb-4">
+              <button
+                onClick={stopSpeaking}
+                className="relative flex items-center justify-center transition-all hover:scale-105"
+                style={{
+                  width: '64px',
+                  height: '64px',
+                  borderRadius: '50%',
+                  background: status === 'processing'
+                    ? 'linear-gradient(145deg, #F59E0B 0%, #EF4444 100%)'
+                    : 'linear-gradient(145deg, #10B981 0%, #059669 100%)',
+                  boxShadow: `0 10px 40px ${status === 'processing' ? 'rgba(245,158,11,0.5)' : 'rgba(16,185,129,0.5)'}, inset 0 2px 0 rgba(255,255,255,0.3)`,
+                }}
+              >
+                <div className="absolute inset-1 rounded-full bg-gradient-to-b from-white/20 to-transparent" />
+                {status === 'processing' ? (
+                  <div className="w-7 h-7 border-3 border-white/30 border-t-white rounded-full animate-spin relative z-10" />
+                ) : (
+                  <Icons.Square className="w-6 h-6 text-white relative z-10" />
+                )}
+              </button>
+            </div>
+          )}
+
+          {/* Not authenticated CTA */}
+          {!isAuthenticated && (
+            <div className="px-4 pb-4">
+              <button
+                onClick={login}
+                className="relative w-full max-w-sm mx-auto py-4 rounded-2xl font-bold text-white text-base overflow-hidden group flex items-center justify-center"
+                style={{
+                  background: 'linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%)',
+                  boxShadow: '0 10px 40px rgba(139,92,246,0.4)',
+                }}
+              >
+                <Icons.Users className="w-5 h-5 mr-2" />
+                {t('talkToQuran.loginButton') || 'Login to Start Talking'}
+              </button>
+            </div>
+          )}
+
+          {/* Not premium CTA */}
+          {isAuthenticated && !hasAccess && (
+            <div className="px-4 pb-4">
+              <button
+                onClick={handleUpgrade}
+                disabled={upgradeLoading}
+                className="relative w-full max-w-sm mx-auto py-4 rounded-2xl font-bold text-white text-base overflow-hidden group disabled:opacity-70 flex items-center justify-center"
+                style={{
+                  background: 'linear-gradient(135deg, #F59E0B 0%, #EF4444 100%)',
+                  boxShadow: '0 10px 40px rgba(245,158,11,0.4)',
+                }}
+              >
                 {upgradeLoading ? (
-                  <>
-                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                    <span>Loading...</span>
-                  </>
+                  <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                 ) : (
                   <>
-                    <Icons.Zap className="w-5 h-5" />
-                    <span>Upgrade to Premium - $7/mo</span>
+                    <Icons.Zap className="w-5 h-5 mr-2" />
+                    {t('talkToQuran.upgradeToPremium')} - $7/mo
                   </>
                 )}
-              </span>
-            </button>
-          ) : messages.length > 0 || streamingText || liveTranscript ? (
-            <div className="flex items-center justify-center gap-4">
-              {/* Keyboard toggle button */}
-              {status === 'idle' && (
-                <button
-                  onClick={() => setShowTextInput(!showTextInput)}
-                  className="w-12 h-12 rounded-full flex items-center justify-center transition-all hover:scale-105"
-                  style={{
-                    background: showTextInput
-                      ? 'linear-gradient(145deg, #10B981, #059669)'
-                      : 'linear-gradient(145deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05))',
-                    backdropFilter: 'blur(10px)',
-                    border: '1px solid rgba(255,255,255,0.2)',
-                    boxShadow: '0 8px 25px rgba(0,0,0,0.2)',
-                  }}
-                >
-                  <Icons.Type className="w-5 h-5 text-white" />
-                </button>
-              )}
-
-              {status === 'idle' && !showTextInput && (
-                <button
-                  onClick={handleStartVoice}
-                  className="relative w-18 h-18 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 group"
-                  style={{
-                    width: '72px',
-                    height: '72px',
-                    background: 'linear-gradient(145deg, #8B5CF6 0%, #EC4899 100%)',
-                    boxShadow: '0 10px 40px rgba(139,92,246,0.5), inset 0 2px 0 rgba(255,255,255,0.3), inset 0 -2px 0 rgba(0,0,0,0.1)',
-                  }}
-                >
-                  <div className="absolute inset-1 rounded-full bg-gradient-to-b from-white/20 to-transparent" />
-                  <Icons.Mic className="w-8 h-8 text-white relative z-10" />
-                </button>
-              )}
-
-              {status === 'listening' && (
-                <div className="flex items-center gap-6">
-                  <button
-                    onClick={handleCancelVoice}
-                    className="w-14 h-14 rounded-full flex items-center justify-center transition-all hover:scale-105"
-                    style={{
-                      background: 'linear-gradient(145deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05))',
-                      backdropFilter: 'blur(10px)',
-                      border: '1px solid rgba(255,255,255,0.2)',
-                      boxShadow: '0 8px 25px rgba(0,0,0,0.2)',
-                    }}
-                  >
-                    <Icons.X className="w-6 h-6 text-white/80" />
-                  </button>
-                  <button
-                    onClick={handleStopVoice}
-                    className="relative flex items-center justify-center transition-all hover:scale-105"
-                    style={{
-                      width: '80px',
-                      height: '80px',
-                      borderRadius: '50%',
-                      background: 'linear-gradient(145deg, #10B981 0%, #059669 100%)',
-                      boxShadow: '0 10px 40px rgba(16,185,129,0.5), inset 0 2px 0 rgba(255,255,255,0.3)',
-                      animation: 'bubblePulse 1.5s ease-in-out infinite',
-                    }}
-                  >
-                    <div className="absolute inset-1 rounded-full bg-gradient-to-b from-white/20 to-transparent" />
-                    <Icons.Send className="w-8 h-8 text-white relative z-10" />
-                  </button>
-                </div>
-              )}
-
-              {status === 'processing' && (
-                <button
-                  onClick={stopSpeaking}
-                  className="relative flex items-center justify-center transition-all hover:scale-105 cursor-pointer"
-                  style={{
-                    width: '72px',
-                    height: '72px',
-                    borderRadius: '50%',
-                    background: 'linear-gradient(145deg, #F59E0B 0%, #EF4444 100%)',
-                    boxShadow: '0 10px 40px rgba(245,158,11,0.5), inset 0 2px 0 rgba(255,255,255,0.3)',
-                  }}
-                  title="Stop"
-                >
-                  <div className="absolute inset-1 rounded-full bg-gradient-to-b from-white/20 to-transparent" />
-                  <div className="w-8 h-8 border-3 border-white/30 border-t-white rounded-full animate-spin relative z-10" />
-                  <div className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity bg-black/30 rounded-full">
-                    <Icons.Square className="w-6 h-6 text-white" />
-                  </div>
-                </button>
-              )}
-
-              {isPlaying && status !== 'processing' && (
-                <button
-                  onClick={stopSpeaking}
-                  className="relative flex items-center justify-center transition-all hover:scale-105"
-                  style={{
-                    width: '72px',
-                    height: '72px',
-                    borderRadius: '50%',
-                    background: 'linear-gradient(145deg, #10B981 0%, #059669 100%)',
-                    boxShadow: '0 10px 40px rgba(16,185,129,0.5), inset 0 2px 0 rgba(255,255,255,0.3)',
-                  }}
-                >
-                  <div className="absolute inset-1 rounded-full bg-gradient-to-b from-white/20 to-transparent" />
-                  <Icons.Square className="w-7 h-7 text-white relative z-10" />
-                </button>
-              )}
+              </button>
             </div>
-          ) : null}
+          )}
+
+          {/* WhatsApp-style input bar - always visible for premium users when idle */}
+          {hasAccess && status === 'idle' && (
+            <div
+              className="px-3 pb-3 pt-2"
+              style={{
+                background: 'linear-gradient(to top, rgba(2,6,23,0.95), rgba(2,6,23,0.7), transparent)',
+              }}
+            >
+              <form onSubmit={handleTextSubmit} className="w-full max-w-lg mx-auto">
+                <div
+                  className="flex items-center gap-2 rounded-2xl px-3 py-2"
+                  style={{
+                    background: 'rgba(255,255,255,0.08)',
+                    backdropFilter: 'blur(20px)',
+                    border: '1px solid rgba(255,255,255,0.15)',
+                  }}
+                >
+                  {/* Mic button */}
+                  <button
+                    type="button"
+                    onClick={handleStartVoice}
+                    className="w-10 h-10 rounded-full flex items-center justify-center transition-all hover:scale-110 active:scale-95 flex-shrink-0"
+                    style={{
+                      background: 'linear-gradient(145deg, rgba(139,92,246,0.4), rgba(236,72,153,0.3))',
+                      boxShadow: '0 0 15px rgba(139,92,246,0.2)',
+                    }}
+                  >
+                    <Icons.Mic className="w-5 h-5 text-white" />
+                  </button>
+
+                  <input
+                    type="text"
+                    value={textInput}
+                    onChange={(e) => setTextInput(e.target.value)}
+                    placeholder={t('talkToQuran.placeholder')}
+                    className="flex-1 bg-transparent text-white placeholder-white/40 text-sm outline-none min-w-0"
+                    dir="auto"
+                  />
+
+                  {/* Send button - only show when there's text */}
+                  {textInput.trim() && (
+                    <button
+                      type="submit"
+                      className="w-10 h-10 rounded-full flex items-center justify-center transition-all hover:scale-105 active:scale-95 flex-shrink-0"
+                      style={{
+                        background: 'linear-gradient(135deg, #10B981, #059669)',
+                        boxShadow: '0 4px 15px rgba(16,185,129,0.3)',
+                        animation: 'messageSlideIn 0.2s ease-out',
+                      }}
+                    >
+                      <Icons.Send className="w-5 h-5 text-white" />
+                    </button>
+                  )}
+                </div>
+              </form>
+            </div>
+          )}
         </div>
       </div>
 
@@ -1577,6 +1653,10 @@ export default function TalkToQuran({ isVisible, onClose, onNavigate }) {
           from { opacity: 0; transform: translateY(20px) scale(0.9); }
           to { opacity: 1; transform: translateY(0) scale(1); }
         }
+        @keyframes messageSlideIn {
+          from { opacity: 0; transform: translateY(12px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
         @keyframes cursorBlink {
           0%, 100% { opacity: 1; }
           50% { opacity: 0; }
@@ -1589,7 +1669,6 @@ export default function TalkToQuran({ isVisible, onClose, onNavigate }) {
           0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
           30% { transform: translateY(-8px); opacity: 1; }
         }
-        .safe-area-top { padding-top: env(safe-area-inset-top); }
         .safe-area-bottom { padding-bottom: env(safe-area-inset-bottom); }
       `}</style>
     </div>

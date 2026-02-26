@@ -353,11 +353,11 @@ function PrayerTimesView({ darkMode }) {
           {/* Back button - vertically centered, proper touch target */}
           <button
             onClick={handleBack}
-            className={`absolute left-3 p-2.5 rounded-full transition-all ${darkMode ? 'hover:bg-white/10 active:bg-white/20' : 'hover:bg-gray-100 active:bg-gray-200'}`}
+            className={`absolute left-3 rtl:left-auto rtl:right-3 p-2.5 rounded-full transition-all ${darkMode ? 'hover:bg-white/10 active:bg-white/20' : 'hover:bg-gray-100 active:bg-gray-200'}`}
             style={{ minWidth: '44px', minHeight: '44px' }}
             title="Go back"
           >
-            <Icons.ChevronLeft className={`w-6 h-6 ${darkMode ? 'text-white' : 'text-gray-600'}`} />
+            <Icons.ChevronLeft className={`w-6 h-6 rtl:rotate-180 ${darkMode ? 'text-white' : 'text-gray-600'}`} />
           </button>
 
           <h2 className={`text-2xl font-bold text-center ${darkMode ? 'text-white' : 'text-gray-800'}`}>

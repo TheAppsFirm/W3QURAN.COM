@@ -737,7 +737,7 @@ function TasbihView({ darkMode, onBack }) {
             minHeight: '44px',
           }}
         >
-          <Icons.ArrowLeft className="w-5 h-5 text-white/80" />
+          <Icons.ArrowLeft className="w-5 h-5 text-white/80 rtl:rotate-180" />
         </button>
 
         <h1 className="text-lg font-bold text-white/90">📿 Tasbih</h1>

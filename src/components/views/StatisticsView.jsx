@@ -77,7 +77,7 @@ function StatisticsView({ darkMode, readingProgress, streak: propStreak, points 
             title="Go back"
             style={{ minWidth: 44, minHeight: 44 }}
           >
-            <Icons.ChevronLeft className={`w-6 h-6 ${darkMode ? 'text-white' : 'text-gray-600'}`} />
+            <Icons.ChevronLeft className={`w-6 h-6 rtl:rotate-180 ${darkMode ? 'text-white' : 'text-gray-600'}`} />
           </button>
           <h2 className={`text-xl font-bold ${darkMode ? 'text-white' : 'text-gray-800'}`}>
             {t('stats.title')}

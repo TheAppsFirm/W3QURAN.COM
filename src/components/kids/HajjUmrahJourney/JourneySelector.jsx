@@ -63,7 +63,7 @@ const JourneySelector = ({ language, onSelectJourney, onBack, onChangeLanguage, 
           onClick={onBack}
           className="p-3 rounded-full bg-white/20 backdrop-blur-sm text-white hover:bg-white/30 transition-all"
         >
-          <Icons.ArrowLeft className="w-6 h-6" />
+          <Icons.ArrowLeft className="w-6 h-6 rtl:rotate-180" />
         </button>
 
         <button

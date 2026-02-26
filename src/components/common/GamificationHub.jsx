@@ -452,12 +452,13 @@ const GamificationHub = memo(function GamificationHub({
     setLeaderboardError(null);
 
     fetch(`/api/leaderboard?sort=${leaderboardSort}&limit=50`, { credentials: 'include' })
-      .then(res => {
-        if (!res.ok) throw new Error('Failed to load');
-        return res.json();
-      })
+      .then(res => res.json())
       .then(result => {
-        setLeaderboardData(result);
+        if (result.error && (!result.leaderboard || result.leaderboard.length === 0)) {
+          setLeaderboardError(result.error);
+        } else {
+          setLeaderboardData(result);
+        }
         setLeaderboardLoading(false);
       })
       .catch(() => {

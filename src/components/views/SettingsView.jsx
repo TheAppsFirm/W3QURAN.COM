@@ -171,7 +171,7 @@ function SettingsView({ darkMode, setDarkMode, onNavigate }) {
           }`}
           style={{ minHeight: 44 }}
         >
-          <Icons.ChevronLeft className="w-5 h-5" />
+          <Icons.ChevronLeft className="w-5 h-5 rtl:rotate-180" />
           <span className="font-medium">Back to Home</span>
         </button>
 
