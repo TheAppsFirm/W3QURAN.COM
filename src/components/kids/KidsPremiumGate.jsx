@@ -14,6 +14,7 @@ const PREMIUM_FEATURES = [
   { emoji: '🐪', text: 'Desert Camel Caravan' },
   { emoji: '📖', text: 'All Surah Stations (6+)' },
   { emoji: '🏍️', text: "Prophet's Life Journey" },
+  { emoji: '🕋', text: '3D Hajj Pilgrimage Journey' },
   { emoji: '🎵', text: 'All Audio Features' },
   { emoji: '⭐', text: 'Ad-free Experience' },
 ];
@@ -113,7 +114,7 @@ const PaymentResultPopup = ({ success, canceled, onClose, onRetry }) => {
   );
 };
 
-const KidsPremiumGate = ({ onClose, feature = 'premium', lockedTheme = null, returnPath = '/', source = 'kids' }) => {
+const KidsPremiumGate = ({ onClose, feature = 'premium', lockedTheme = null, returnPath = '/', source = 'kids', language = 'en' }) => {
   const { isAuthenticated, login, refreshUser } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [loadingPlan, setLoadingPlan] = useState(null);
@@ -195,6 +196,21 @@ const KidsPremiumGate = ({ onClose, feature = 'premium', lockedTheme = null, ret
         description: 'Unlock the peaceful camel desert journey!',
       };
     }
+    if (lockedTheme === 'hajj-umrah') {
+      return {
+        title: {
+          en: 'Hajj Journey is Premium',
+          ur: 'حج کا سفر پریمیم ہے',
+          ar: 'رحلة الحج مدفوعة',
+        }[language] || 'Hajj Journey is Premium',
+        emoji: '🕋',
+        description: {
+          en: 'Unlock the interactive 3D Hajj pilgrimage experience!',
+          ur: 'تھری ڈی حج کا انٹرایکٹو تجربہ حاصل کریں!',
+          ar: 'افتح تجربة الحج التفاعلية ثلاثية الأبعاد!',
+        }[language] || 'Unlock the interactive 3D Hajj pilgrimage experience!',
+      };
+    }
     if (feature === 'station_limit') {
       return {
         title: 'More Stations Available!',
@@ -210,6 +226,19 @@ const KidsPremiumGate = ({ onClose, feature = 'premium', lockedTheme = null, ret
   };
 
   const featureInfo = getFeatureMessage();
+
+  // Localized UI strings (used when language is passed, e.g. from Hajj flow)
+  const t = {
+    premium: { en: 'PREMIUM', ur: 'پریمیم', ar: 'مدفوع' }[language] || 'PREMIUM',
+    whatYouGet: { en: 'What you get with Premium:', ur: 'پریمیم میں آپ کو کیا ملتا ہے:', ar: 'ما تحصل عليه مع المدفوع:' }[language] || 'What you get with Premium:',
+    signIn: { en: 'Sign in to upgrade to Premium', ur: 'پریمیم میں اپ گریڈ کے لیے سائن ان کریں', ar: 'سجّل الدخول للترقية إلى المدفوع' }[language] || 'Sign in to upgrade to Premium',
+    signInGoogle: { en: 'Sign in with Google', ur: 'گوگل سے سائن ان کریں', ar: 'تسجيل الدخول بحساب جوجل' }[language] || 'Sign in with Google',
+    continueFree: { en: 'Continue with free features', ur: 'مفت خصوصیات جاری رکھیں', ar: 'متابعة بالميزات المجانية' }[language] || 'Continue with free features',
+    freeReminder: { en: 'Umrah 3D journey is free for everyone', ur: 'عمرہ تھری ڈی سفر سب کے لیے مفت ہے', ar: 'رحلة العمرة ثلاثية الأبعاد مجانية للجميع' }[language] || 'Umrah 3D journey is free for everyone',
+    processing: { en: 'Processing...', ur: 'جاری ہے...', ar: 'جارٍ المعالجة...' }[language] || 'Processing...',
+    mostPopular: { en: 'Most Popular', ur: 'سب سے مقبول', ar: 'الأكثر شيوعاً' }[language] || 'Most Popular',
+  };
+  const isRTL = language === 'ar' || language === 'ur';
 
   // Show payment result popup if needed
   if (paymentResult) {
@@ -235,7 +264,10 @@ const KidsPremiumGate = ({ onClose, feature = 'premium', lockedTheme = null, ret
       </button>
 
       {/* Premium card */}
-      <div className="relative bg-gradient-to-br from-purple-900 via-indigo-900 to-blue-900 rounded-3xl p-6 max-w-lg mx-4 border border-white/20 shadow-2xl">
+      <div
+        className="relative bg-gradient-to-br from-purple-900 via-indigo-900 to-blue-900 rounded-3xl p-6 max-w-lg mx-4 border border-white/20 shadow-2xl"
+        style={{ direction: isRTL ? 'rtl' : 'ltr' }}
+      >
         {/* Top decoration */}
         <div className="absolute -top-8 left-1/2 transform -translate-x-1/2">
           <div className="relative">
@@ -247,21 +279,30 @@ const KidsPremiumGate = ({ onClose, feature = 'premium', lockedTheme = null, ret
         {/* Premium badge */}
         <div className="flex justify-center mb-2 pt-6">
           <div className="px-4 py-1 bg-gradient-to-r from-amber-400 to-orange-500 rounded-full">
-            <span className="text-white font-bold text-sm">PREMIUM</span>
+            <span className="text-white font-bold text-sm">{t.premium}</span>
           </div>
         </div>
 
         {/* Title */}
-        <h2 className="text-2xl font-bold text-white text-center mb-2">
+        <h2
+          className="text-2xl font-bold text-white text-center mb-2"
+          style={{ fontFamily: isRTL ? "'Noto Nastaliq Urdu', 'Scheherazade New', serif" : 'inherit' }}
+        >
           {featureInfo.title}
         </h2>
-        <p className="text-white/80 text-center mb-4">
+        <p
+          className="text-white/80 text-center mb-4"
+          style={{ fontFamily: isRTL ? "'Noto Nastaliq Urdu', serif" : 'inherit' }}
+        >
           {featureInfo.description}
         </p>
 
         {/* Features list */}
         <div className="bg-white/10 rounded-2xl p-4 mb-4">
-          <h3 className="text-white/90 font-semibold mb-3 text-sm">What you get with Premium:</h3>
+          <h3
+            className="text-white/90 font-semibold mb-3 text-sm"
+            style={{ fontFamily: isRTL ? "'Noto Nastaliq Urdu', serif" : 'inherit' }}
+          >{t.whatYouGet}</h3>
           <div className="grid grid-cols-2 gap-2">
             {PREMIUM_FEATURES.map((feat, i) => (
               <div key={i} className="flex items-center gap-2 text-white/80 text-sm">
@@ -292,7 +333,7 @@ const KidsPremiumGate = ({ onClose, feature = 'premium', lockedTheme = null, ret
                 {loadingPlan === option.id ? (
                   <div className="flex items-center justify-center gap-2">
                     <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                    <span>Processing...</span>
+                    <span>{t.processing}</span>
                   </div>
                 ) : (
                   <div className="flex items-center justify-between">
@@ -300,7 +341,7 @@ const KidsPremiumGate = ({ onClose, feature = 'premium', lockedTheme = null, ret
                       <span className="font-bold">{option.name}</span>
                       {option.popular && (
                         <span className="px-2 py-0.5 bg-white/20 rounded-full text-xs">
-                          Most Popular
+                          {t.mostPopular}
                         </span>
                       )}
                     </div>
@@ -318,8 +359,11 @@ const KidsPremiumGate = ({ onClose, feature = 'premium', lockedTheme = null, ret
           </div>
         ) : (
           <div className="mb-4">
-            <p className="text-white/70 text-center text-sm mb-3">
-              Sign in to upgrade to Premium
+            <p
+              className="text-white/70 text-center text-sm mb-3"
+              style={{ fontFamily: isRTL ? "'Noto Nastaliq Urdu', serif" : 'inherit' }}
+            >
+              {t.signIn}
             </p>
             <button
               onClick={login}
@@ -343,7 +387,7 @@ const KidsPremiumGate = ({ onClose, feature = 'premium', lockedTheme = null, ret
                   d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
                 />
               </svg>
-              <span>Sign in with Google</span>
+              <span>{t.signInGoogle}</span>
             </button>
           </div>
         )}
@@ -354,11 +398,15 @@ const KidsPremiumGate = ({ onClose, feature = 'premium', lockedTheme = null, ret
             onClick={onClose}
             disabled={isLoading}
             className="text-white/60 text-sm hover:text-white/80 transition-colors disabled:opacity-50"
+            style={{ fontFamily: isRTL ? "'Noto Nastaliq Urdu', serif" : 'inherit' }}
           >
-            Continue with free features
+            {t.continueFree}
           </button>
-          <p className="text-white/40 text-xs mt-1">
-            Train theme + Food & Drink duas free
+          <p
+            className="text-white/40 text-xs mt-1"
+            style={{ fontFamily: isRTL ? "'Noto Nastaliq Urdu', serif" : 'inherit' }}
+          >
+            {lockedTheme === 'hajj-umrah' ? t.freeReminder : 'Train theme + Food & Drink duas free'}
           </p>
         </div>
 

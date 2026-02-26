@@ -929,7 +929,7 @@ const KidsModeMenu = ({ onSelectTheme, onSelectAlphabet, onSelectSpecialJourney,
   const [lockedTheme, setLockedTheme] = useState(null);
 
   // Get auth state
-  const { isPremium } = useAuth();
+  const { isPremium, isAdmin } = useAuth();
 
   // Play background music
   useBackgroundMusic(isMuted);
@@ -942,9 +942,9 @@ const KidsModeMenu = ({ onSelectTheme, onSelectAlphabet, onSelectSpecialJourney,
 
   // Check if a theme is locked (premium themes for non-premium users)
   const isThemeLocked = useCallback((theme) => {
-    if (isPremium) return false;
+    if (isPremium || isAdmin) return false;
     return theme.premium === true || theme.theme === 'garden' || theme.theme === 'seert';
-  }, [isPremium]);
+  }, [isPremium, isAdmin]);
 
   // Generate random sparkles on mount
   useEffect(() => {
@@ -1099,7 +1099,7 @@ const KidsModeMenu = ({ onSelectTheme, onSelectAlphabet, onSelectSpecialJourney,
                   journey={journey}
                   onSelect={onSelectSpecialJourney || onSelectTheme}
                   index={6 + i}
-                  isLocked={!isPremium && journey.premium}
+                  isLocked={!(isPremium || isAdmin) && journey.premium}
                   onLockedClick={handleLockedClick}
                 />
               ))}
@@ -1170,7 +1170,7 @@ const KidsModeMenu = ({ onSelectTheme, onSelectAlphabet, onSelectSpecialJourney,
                   journey={journey}
                   onSelect={onSelectSpecialJourney || onSelectTheme}
                   index={i}
-                  isLocked={!isPremium && journey.premium}
+                  isLocked={!(isPremium || isAdmin) && journey.premium}
                   onLockedClick={handleLockedClick}
                 />
               ))}

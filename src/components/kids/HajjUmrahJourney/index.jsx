@@ -10,6 +10,8 @@
  */
 
 import React, { useState, useEffect, useCallback, lazy, Suspense } from 'react';
+import { useAuth } from '../../../contexts/AuthContext';
+import KidsPremiumGate from '../KidsPremiumGate';
 import JourneySelector from './JourneySelector';
 import LanguageSelect from './LanguageSelect';
 
@@ -55,9 +57,11 @@ const saveLanguage = (lang) => {
 // MAIN COMPONENT
 // ============================================================
 const HajjUmrahJourney = ({ onBack }) => {
+  const { isPremium, isAdmin } = useAuth();
   const [screen, setScreen] = useState('language');
   const [language, setLanguage] = useState(getSavedLanguage() || 'en');
   const [journeyType, setJourneyType] = useState(null);
+  const [showPremiumGate, setShowPremiumGate] = useState(false);
 
   // Check for saved language on mount
   useEffect(() => {
@@ -77,9 +81,14 @@ const HajjUmrahJourney = ({ onBack }) => {
 
   // Handle journey selection
   const handleJourneySelect = useCallback((journey) => {
+    // Hajj is premium-only — free users can only access Umrah
+    if (journey === 'hajj' && !isPremium && !isAdmin) {
+      setShowPremiumGate(true);
+      return;
+    }
     setJourneyType(journey);
     setScreen('journey');
-  }, []);
+  }, [isPremium, isAdmin]);
 
   // Handle back navigation
   const handleBack = useCallback(() => {
@@ -99,6 +108,17 @@ const HajjUmrahJourney = ({ onBack }) => {
     setJourneyType(null);
   }, []);
 
+  // Show premium gate for Hajj
+  if (showPremiumGate) {
+    return (
+      <KidsPremiumGate
+        onClose={() => setShowPremiumGate(false)}
+        lockedTheme="hajj-umrah"
+        language={language}
+      />
+    );
+  }
+
   // Render based on current screen
   switch (screen) {
     case 'language':
@@ -116,6 +136,7 @@ const HajjUmrahJourney = ({ onBack }) => {
           onSelectJourney={handleJourneySelect}
           onBack={handleBack}
           onChangeLanguage={() => setScreen('language')}
+          hajjLocked={!isPremium && !isAdmin}
         />
       );
 
