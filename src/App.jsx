@@ -261,7 +261,7 @@ function QuranBubbleApp() {
   const [showAnalytics, setShowAnalytics] = useState(false);
   const [darkMode, setDarkMode] = useLocalStorage('darkMode', false);
   const [bookmarks, setBookmarks] = useLocalStorage('bookmarks', {});
-  const [savedBookmarks] = useLocalStorage('quran_bookmarks', []);
+  const [savedBookmarks, setSavedBookmarks] = useState([]);
   const [readingProgress, setReadingProgress] = useLocalStorage('readingProgress', {});
   const [overlayReaderSurah, setOverlayReaderSurah] = useState(null);
   const [initialVerse, setInitialVerse] = useState(1); // For navigating to specific verse
@@ -291,6 +291,16 @@ function QuranBubbleApp() {
   const [showCompanionAI, setShowCompanionAI] = useState(false);
   const [showFAQ, setShowFAQ] = useState(false);
   const [showBookmarksPanel, setShowBookmarksPanel] = useState(false);
+
+  // Re-read bookmarks from localStorage whenever panel opens (stays fresh after reader adds bookmarks)
+  useEffect(() => {
+    if (showBookmarksPanel) {
+      try {
+        const raw = localStorage.getItem('quran_app_quran_bookmarks');
+        setSavedBookmarks(raw ? JSON.parse(raw) : []);
+      } catch { setSavedBookmarks([]); }
+    }
+  }, [showBookmarksPanel]);
 
   // Next prayer time for sidebar badge
   const [nextPrayerInfo, setNextPrayerInfo] = useState(null);
