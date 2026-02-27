@@ -219,7 +219,7 @@ const StatsBar = memo(function StatsBar({
 
   return (
     <>
-      <div className="bg-white/95 backdrop-blur-xl px-2 sm:px-4 py-3 sm:py-4 shadow-lg border-b border-gray-100 relative" style={{ zIndex: 100, paddingTop: 'max(env(safe-area-inset-top, 0px), 12px)' }}>
+      <div className="bg-white/95 backdrop-blur-xl px-2 sm:px-4 py-2 sm:py-3 shadow-lg border-b border-gray-100 relative" style={{ zIndex: 100 }}>
         {/* Single unified horizontal scroll for all controls */}
         <div className="max-w-6xl mx-auto relative">
           {/* Left fade indicator */}

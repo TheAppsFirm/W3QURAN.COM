@@ -142,9 +142,9 @@ const DonateModal = memo(function DonateModal({ isOpen, onClose }) {
       {/* Backdrop */}
       <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
 
-      {/* Modal — scrollable on small screens */}
+      {/* Modal — compact, no scroll on mobile */}
       <div
-        className="relative w-full max-w-sm rounded-2xl shadow-2xl overflow-hidden max-h-[92vh] flex flex-col"
+        className="relative w-full max-w-sm rounded-2xl shadow-2xl overflow-hidden"
         onClick={(e) => e.stopPropagation()}
         style={{
           background: 'linear-gradient(165deg, #064E3B 0%, #065F46 30%, #047857 60%, #059669 100%)',
@@ -157,68 +157,34 @@ const DonateModal = memo(function DonateModal({ isOpen, onClose }) {
         {/* Close button */}
         <button
           onClick={(e) => { e.stopPropagation(); onClose(); }}
-          className="absolute top-3 right-3 w-7 h-7 rounded-full bg-white/15 hover:bg-white/25 flex items-center justify-center text-white transition-all z-20"
+          className="absolute top-2.5 right-2.5 w-7 h-7 rounded-full bg-white/15 hover:bg-white/25 flex items-center justify-center text-white transition-all z-20"
         >
           <Icons.X className="w-4 h-4" />
         </button>
 
-        {/* Scrollable content */}
-        <div className="overflow-y-auto flex-1 p-4 space-y-3">
+        {/* Content — tight spacing, no scroll */}
+        <div className="p-3.5 space-y-2.5">
 
           {/* ── Header: Bismillah + Sadaqah Jariyah ── */}
-          <div className="text-center relative z-10 pt-1">
-            {/* Bismillah — gold calligraphy */}
+          <div className="text-center relative z-10">
             <p
-              className="text-amber-300/90 mb-1"
-              style={{ fontFamily: "'Scheherazade New', 'Amiri', serif", fontSize: '1.2rem' }}
+              className="text-amber-300/90"
+              style={{ fontFamily: "'Scheherazade New', 'Amiri', serif", fontSize: '1.1rem' }}
               dir="rtl"
               lang="ar"
             >
               بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ
             </p>
 
-            {/* Main headline — large, bold */}
             <h2
-              className="text-2xl font-bold text-white mb-1.5"
+              className="text-xl font-bold text-white mt-0.5"
               style={isRTL ? { fontFamily: "'Noto Nastaliq Urdu', serif" } : undefined}
             >
               {t('donate.sadaqahJariyah')}
             </h2>
 
-            {/* Core emotional message */}
             <p
-              className="text-emerald-100/90 text-sm leading-relaxed"
-              style={isRTL ? { fontFamily: "'Noto Nastaliq Urdu', serif" } : undefined}
-              dir={isRTL ? 'rtl' : 'ltr'}
-            >
-              {t('donate.rewardNeverEnds')}
-            </p>
-          </div>
-
-          {/* ── Hadith — the strongest emotional anchor ── */}
-          <div
-            className="rounded-xl px-3 py-3"
-            style={{ background: 'rgba(251, 191, 36, 0.08)', border: '1px solid rgba(251, 191, 36, 0.15)' }}
-          >
-            <p
-              className="text-amber-200/80 text-[11px] leading-relaxed text-center italic"
-              style={isRTL ? { fontFamily: "'Noto Nastaliq Urdu', serif", fontStyle: 'normal' } : undefined}
-              dir={isRTL ? 'rtl' : 'ltr'}
-            >
-              "{t('donate.afterDeathReward')}"
-            </p>
-            <p className="text-amber-300/50 text-[9px] text-center mt-1.5">
-              — {t('donate.hadithRef')}
-            </p>
-          </div>
-
-          {/* ── Impact number — concrete ── */}
-          <div
-            className="text-center px-3 py-2 rounded-xl"
-            style={{ background: 'rgba(255,255,255,0.06)' }}
-          >
-            <p
-              className="text-white/80 text-xs leading-relaxed"
+              className="text-emerald-100/80 text-xs leading-relaxed mt-1"
               style={isRTL ? { fontFamily: "'Noto Nastaliq Urdu', serif" } : undefined}
               dir={isRTL ? 'rtl' : 'ltr'}
             >
@@ -228,12 +194,12 @@ const DonateModal = memo(function DonateModal({ isOpen, onClose }) {
 
           {/* ── PKR Amount Chips ── */}
           <div>
-            <div className="flex gap-2 justify-center">
+            <div className="flex gap-1.5 justify-center">
               {PKR_AMOUNTS.map((item) => (
                 <button
                   key={item.amount}
                   onClick={() => setSelectedAmount(item.amount)}
-                  className={`relative flex-1 py-2.5 px-2 rounded-xl text-center transition-all ${
+                  className={`relative flex-1 py-2 px-1.5 rounded-xl text-center transition-all ${
                     selectedAmount === item.amount
                       ? 'bg-white/20 border-white/30 scale-[1.03]'
                       : 'bg-white/5 border-white/10 hover:bg-white/10'
@@ -251,7 +217,7 @@ const DonateModal = memo(function DonateModal({ isOpen, onClose }) {
                 </button>
               ))}
             </div>
-            <p className="text-center text-emerald-200/40 text-[10px] mt-1.5">
+            <p className="text-center text-emerald-200/40 text-[10px] mt-1">
               {t('donate.teaComparison')}
             </p>
           </div>
@@ -266,16 +232,16 @@ const DonateModal = memo(function DonateModal({ isOpen, onClose }) {
           </div>
 
           {/* ── Payment Methods ── */}
-          <div className="space-y-2 relative z-10">
+          <div className="space-y-1.5 relative z-10">
 
             {/* QR Payment Section — JazzCash / Botim / RedotPay */}
             {(DONATION_CONFIG.jazzcash.enabled || DONATION_CONFIG.botim.enabled || DONATION_CONFIG.redotpay.enabled) && (
-              <div className="p-2.5 bg-white/8 rounded-xl">
+              <div className="p-2 bg-white/8 rounded-xl">
                 {/* Tabs */}
-                <div className="grid grid-cols-3 gap-1 mb-2">
+                <div className="grid grid-cols-3 gap-1 mb-1.5">
                   <button
                     onClick={() => setMobilePayTab('jazzcash')}
-                    className={`py-1.5 px-1 rounded-lg font-medium text-[10px] transition-all flex flex-col items-center gap-0.5 ${
+                    className={`py-1 px-1 rounded-lg font-medium text-[10px] transition-all flex items-center justify-center gap-1 ${
                       mobilePayTab === 'jazzcash'
                         ? 'bg-[#ED1C24] text-white shadow'
                         : 'bg-white/10 text-white/70 hover:bg-white/20'
@@ -286,7 +252,7 @@ const DonateModal = memo(function DonateModal({ isOpen, onClose }) {
                   </button>
                   <button
                     onClick={() => setMobilePayTab('botim')}
-                    className={`py-1.5 px-1 rounded-lg font-medium text-[10px] transition-all flex flex-col items-center gap-0.5 ${
+                    className={`py-1 px-1 rounded-lg font-medium text-[10px] transition-all flex items-center justify-center gap-1 ${
                       mobilePayTab === 'botim'
                         ? 'bg-black text-white shadow'
                         : 'bg-white/10 text-white/70 hover:bg-white/20'
@@ -297,7 +263,7 @@ const DonateModal = memo(function DonateModal({ isOpen, onClose }) {
                   </button>
                   <button
                     onClick={() => setMobilePayTab('redotpay')}
-                    className={`py-1.5 px-1 rounded-lg font-medium text-[10px] transition-all flex flex-col items-center gap-0.5 ${
+                    className={`py-1 px-1 rounded-lg font-medium text-[10px] transition-all flex items-center justify-center gap-1 ${
                       mobilePayTab === 'redotpay'
                         ? 'bg-gradient-to-r from-orange-500 to-red-500 text-white shadow'
                         : 'bg-white/10 text-white/70 hover:bg-white/20'
@@ -308,36 +274,28 @@ const DonateModal = memo(function DonateModal({ isOpen, onClose }) {
                   </button>
                 </div>
 
-                {/* QR Code Display */}
+                {/* QR Code Display — compact */}
                 <div
-                  className="bg-white rounded-lg p-3 text-center cursor-pointer hover:shadow-lg transition-all group"
+                  className="bg-white rounded-lg p-2 text-center cursor-pointer hover:shadow-lg transition-all group"
                   onClick={() => setShowEnlargedQR(true)}
                 >
-                  <p className="text-gray-600 font-medium text-xs mb-2">
+                  <p className="text-gray-600 font-medium text-[11px] mb-1">
                     {currentConfig.accountName}
                   </p>
 
-                  <div className="relative inline-block">
-                    <img
-                      src={currentConfig.qrImage}
-                      alt={`${mobilePayTab} QR Code`}
-                      className="w-36 h-36 mx-auto object-contain rounded group-hover:scale-105 transition-transform"
-                    />
-                    <div className="absolute inset-0 flex items-center justify-center bg-black/0 group-hover:bg-black/20 transition-all rounded">
-                      <div className="opacity-0 group-hover:opacity-100 transition-opacity bg-white/90 px-2 py-1 rounded-full flex items-center gap-1 text-xs text-gray-700">
-                        <Icons.ZoomIn className="w-3 h-3" />
-                        <span>Tap to enlarge</span>
-                      </div>
-                    </div>
-                  </div>
+                  <img
+                    src={currentConfig.qrImage}
+                    alt={`${mobilePayTab} QR Code`}
+                    className="w-28 h-28 mx-auto object-contain rounded"
+                  />
 
-                  <p className="text-gray-400 text-[10px] mt-2">
-                    Scan with {currentConfig.appName}
+                  <p className="text-gray-400 text-[9px] mt-1">
+                    Tap to enlarge
                   </p>
 
                   {/* JazzCash number */}
                   {mobilePayTab === 'jazzcash' && (
-                    <div className="mt-2 pt-2 border-t border-gray-100 flex items-center justify-center gap-1.5">
+                    <div className="mt-1 pt-1 border-t border-gray-100 flex items-center justify-center gap-1.5">
                       <span className="text-gray-500 text-xs font-mono">{DONATION_CONFIG.jazzcash.number}</span>
                       <button
                         onClick={(e) => { e.stopPropagation(); copyNumber(); }}
@@ -362,10 +320,10 @@ const DonateModal = memo(function DonateModal({ isOpen, onClose }) {
                 href={DONATION_CONFIG.paypal.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`flex items-center gap-3 p-2.5 bg-white/5 hover:bg-white/12 rounded-xl transition-all group ${isRTL ? 'flex-row-reverse' : ''}`}
+                className={`flex items-center gap-3 p-2 bg-white/5 hover:bg-white/12 rounded-xl transition-all group ${isRTL ? 'flex-row-reverse' : ''}`}
               >
-                <div className="w-8 h-8 rounded-lg bg-[#003087] flex items-center justify-center shadow">
-                  <svg viewBox="0 0 24 24" className="w-4 h-4 text-white" fill="currentColor">
+                <div className="w-7 h-7 rounded-lg bg-[#003087] flex items-center justify-center shadow">
+                  <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 text-white" fill="currentColor">
                     <path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944 3.384a.77.77 0 0 1 .757-.645h6.692c2.215 0 3.81.656 4.598 1.894.357.561.542 1.183.594 1.927.026.384.007.807-.059 1.277l-.016.097v.355l.278.158a3.22 3.22 0 0 1 .88.712c.43.51.68 1.16.764 1.927.087.79.011 1.724-.226 2.778-.272 1.21-.716 2.252-1.313 3.09a5.46 5.46 0 0 1-2.116 1.77c-.858.424-1.856.64-2.969.64H11.58a.943.943 0 0 0-.929.795l-.012.077-.353 2.233-.009.054a.943.943 0 0 1-.929.795H7.076z"/>
                   </svg>
                 </div>
@@ -379,16 +337,14 @@ const DonateModal = memo(function DonateModal({ isOpen, onClose }) {
           </div>
 
           {/* ── Footer ── */}
-          <div className="pt-1">
-            <p
-              className="text-center text-amber-200/50 text-xs pt-1"
-              style={{ fontFamily: "'Scheherazade New', 'Amiri', serif" }}
-              dir="rtl"
-              lang="ar"
-            >
-              {t('donate.jazakAllah')}
-            </p>
-          </div>
+          <p
+            className="text-center text-amber-200/50 text-xs"
+            style={{ fontFamily: "'Scheherazade New', 'Amiri', serif" }}
+            dir="rtl"
+            lang="ar"
+          >
+            {t('donate.jazakAllah')}
+          </p>
 
         </div>
       </div>
