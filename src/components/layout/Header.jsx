@@ -113,7 +113,7 @@ const Header = memo(function Header({ filters, setFilters, showAnalytics, setSho
       />
 
       {/* Content - with safe area padding for notched devices */}
-      <div className="relative px-3 sm:px-6 py-1.5 sm:py-3" style={{ paddingTop: 'max(env(safe-area-inset-top, 0px), 8px)' }}>
+      <div className="relative px-3 sm:px-6 py-1.5 sm:py-3 w3q-header-safe">
         {/* Main Row */}
         <div className="flex items-center justify-center gap-2 sm:gap-3 flex-wrap">
 
@@ -362,6 +362,16 @@ const Header = memo(function Header({ filters, setFilters, showAnalytics, setSho
 
       {/* CSS Animations */}
       <style>{`
+        .w3q-header-safe {
+          padding-top: max(constant(safe-area-inset-top), 54px) !important;
+          padding-top: max(env(safe-area-inset-top), 54px) !important;
+        }
+        @media (min-width: 768px) {
+          .w3q-header-safe {
+            padding-top: max(constant(safe-area-inset-top), 12px) !important;
+            padding-top: max(env(safe-area-inset-top), 12px) !important;
+          }
+        }
         @keyframes gradientShift {
           0%, 100% { background-position: 0% 50%; }
           50% { background-position: 100% 50%; }
