@@ -104,10 +104,17 @@ html, body, #root {
   overflow: hidden;
 }
 
+html {
+  /* Prevent blue body background from showing on iOS edges */
+  background: #f0fdfa;
+}
+
 body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* Match the lightest animated-bg color so no blue bleed on edges */
+  background: #f0fdfa;
 }
 
 /* Arabic Font */

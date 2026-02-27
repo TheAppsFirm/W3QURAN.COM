@@ -1169,13 +1169,11 @@ export default function TalkToQuran({ isVisible, onClose, onNavigate }) {
   const showEmptyState = messages.length === 0 && !streamingText && status === 'idle' && !liveTranscript;
 
   return (
-    <div className="fixed inset-0 z-[10000] flex flex-col" style={{ background: '#0F172A' }}>
-      {/* ── Safe area spacer for notch/dynamic island ── */}
-      <div className="flex-shrink-0" style={{ paddingTop: 'env(safe-area-inset-top, 0px)', background: '#0F172A' }} />
+    <div className="fixed inset-0 z-[10000] flex flex-col" style={{ background: '#0F172A', paddingTop: 'env(safe-area-inset-top, 0px)' }}>
 
       {/* ── Header ── */}
       <div
-        className="relative z-10 flex items-center gap-3 px-3 py-2.5"
+        className="relative z-10 flex items-center gap-3 px-3 py-2.5 flex-shrink-0"
         style={{
           borderBottom: '1px solid rgba(255,255,255,0.06)',
         }}

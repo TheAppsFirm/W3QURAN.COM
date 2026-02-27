@@ -113,7 +113,7 @@ const Header = memo(function Header({ filters, setFilters, showAnalytics, setSho
       />
 
       {/* Content - with safe area padding for notched devices */}
-      <div className="relative px-3 sm:px-6 py-3 sm:py-4" style={{ paddingTop: 'max(env(safe-area-inset-top, 0px), 12px)' }}>
+      <div className="relative px-3 sm:px-6 py-1.5 sm:py-3" style={{ paddingTop: 'max(env(safe-area-inset-top, 0px), 8px)' }}>
         {/* Main Row */}
         <div className="flex items-center justify-center gap-2 sm:gap-3 flex-wrap">
 

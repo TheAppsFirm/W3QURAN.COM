@@ -157,9 +157,9 @@ const DonateModal = memo(function DonateModal({ isOpen, onClose }) {
         {/* Close button */}
         <button
           onClick={(e) => { e.stopPropagation(); onClose(); }}
-          className="absolute top-2.5 right-2.5 w-7 h-7 rounded-full bg-white/15 hover:bg-white/25 flex items-center justify-center text-white transition-all z-20"
+          className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center text-white transition-all z-20"
         >
-          <Icons.X className="w-4 h-4" />
+          <Icons.X className="w-4.5 h-4.5" />
         </button>
 
         {/* Content — tight spacing, no scroll */}
