@@ -1172,8 +1172,8 @@ export default function TalkToQuran({ isVisible, onClose, onNavigate }) {
     <div className="fixed inset-0 z-[10000] flex flex-col ttq-root" style={{ background: '#0F172A' }}>
       <style>{`
         .ttq-root {
-          padding-top: constant(safe-area-inset-top) !important;
-          padding-top: env(safe-area-inset-top) !important;
+          padding-top: max(constant(safe-area-inset-top), 54px) !important;
+          padding-top: max(env(safe-area-inset-top), 54px) !important;
         }
       `}</style>
 
