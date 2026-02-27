@@ -117,6 +117,12 @@ body {
   text-align: right;
 }
 
+/* Global Urdu font — applies to all UI when language is Urdu */
+html[lang="ur"] body {
+  font-family: 'Noto Nastaliq Urdu', 'Jameel Noori Nastaleeq', system-ui, -apple-system, sans-serif;
+  line-height: 1.8;
+}
+
 /* Jameel Noori Nastaleeq — loaded locally */
 @font-face {
   font-family: 'Jameel Noori Nastaleeq';

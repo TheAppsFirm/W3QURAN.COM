@@ -8,23 +8,25 @@ import { Icons } from '../common/Icons';
 import { useLocalStorage } from '../../hooks';
 import { useTranslation } from '../../contexts/LocaleContext';
 
-// Calculation method options
+// Calculation method options - keys for i18n
 const CALCULATION_METHODS = [
-  { id: '2', name: 'ISNA (North America)', region: 'North America' },
-  { id: '1', name: 'University of Karachi', region: 'Pakistan' },
-  { id: '3', name: 'Muslim World League', region: 'Global' },
-  { id: '4', name: 'Umm Al-Qura (Makkah)', region: 'Saudi Arabia' },
-  { id: '5', name: 'Egyptian Authority', region: 'Egypt' },
-  { id: '8', name: 'Gulf Region', region: 'UAE, Qatar, Kuwait' },
-  { id: '13', name: 'Diyanet (Turkey)', region: 'Turkey' },
-  { id: '0', name: 'Shia Ithna-Ansari', region: 'Shia' },
+  { id: '2', nameKey: 'method.isna', regionKey: 'method.regionNorthAmerica' },
+  { id: '1', nameKey: 'method.karachi', regionKey: 'method.regionPakistan' },
+  { id: '3', nameKey: 'method.mwl', regionKey: 'method.regionGlobal' },
+  { id: '4', nameKey: 'method.makkah', regionKey: 'method.regionSaudiArabia' },
+  { id: '5', nameKey: 'method.egypt', regionKey: 'method.regionEgypt' },
+  { id: '8', nameKey: 'method.gulf', regionKey: 'method.regionGulf' },
+  { id: '13', nameKey: 'method.diyanet', regionKey: 'method.regionTurkey' },
+  { id: '0', nameKey: 'method.shia', regionKey: 'method.regionShia' },
 ];
 
-// Helper to convert 24h to 12h format
-const formatTime = (time24, use12Hour) => {
+// Helper to convert 24h to 12h format (accepts optional t for localized AM/PM)
+const formatTime = (time24, use12Hour, tFn) => {
   if (!time24 || !use12Hour) return time24;
   const [hours, minutes] = time24.split(':').map(Number);
-  const period = hours >= 12 ? 'PM' : 'AM';
+  const amLabel = tFn ? tFn('prayerExtended.am') : 'AM';
+  const pmLabel = tFn ? tFn('prayerExtended.pm') : 'PM';
+  const period = hours >= 12 ? pmLabel : amLabel;
   const hours12 = hours % 12 || 12;
   return `${hours12}:${minutes.toString().padStart(2, '0')} ${period}`;
 };
@@ -57,7 +59,7 @@ function PrayerTimesView({ darkMode }) {
     setLocationError(null);
 
     if (!navigator.geolocation) {
-      setLocationError('Geolocation is not supported by your browser');
+      setLocationError(t('prayerExtended.geolocationNotSupported'));
       setIsLoadingLocation(false);
       return;
     }
@@ -88,7 +90,7 @@ function PrayerTimesView({ darkMode }) {
       },
       { enableHighAccuracy: true, timeout: 10000, maximumAge: 300000 }
     );
-  }, [setLocation, setLocationName]);
+  }, [setLocation, setLocationName, t]);
 
   // Fetch prayer times from Aladhan API directly
   const fetchPrayerTimes = useCallback(async () => {
@@ -140,7 +142,7 @@ function PrayerTimesView({ darkMode }) {
             nextPrayer = {
               name: 'Fajr',
               time: timings.Fajr,
-              countdown: 'Tomorrow'
+              countdown: '__TOMORROW__'
             };
           }
 
@@ -161,7 +163,7 @@ function PrayerTimesView({ darkMode }) {
             } : { isRamadan: false },
             nextPrayer,
             location: {
-              method: CALCULATION_METHODS.find(m => m.id === calculationMethod)?.name || 'Unknown',
+              methodKey: CALCULATION_METHODS.find(m => m.id === calculationMethod)?.nameKey || null,
               timezone: data.data.meta.timezone
             }
           });
@@ -310,12 +312,12 @@ function PrayerTimesView({ darkMode }) {
     if (!prayerData?.timings) return [];
     const timings = prayerData.timings;
     return [
-      { name: 'Fajr', displayName: t('prayer.fajr'), arabic: 'الفجر', time: formatTime(timings.Fajr, use12HourFormat), icon: '🌅', color: '#818CF8' },
-      { name: 'Sunrise', displayName: t('prayer.sunrise'), arabic: 'الشروق', time: formatTime(timings.Sunrise, use12HourFormat), icon: '☀️', color: '#FBBF24' },
-      { name: 'Dhuhr', displayName: t('prayer.dhuhr'), arabic: 'الظهر', time: formatTime(timings.Dhuhr, use12HourFormat), icon: '🌞', color: '#F59E0B' },
-      { name: 'Asr', displayName: t('prayer.asr'), arabic: 'العصر', time: formatTime(timings.Asr, use12HourFormat), icon: '🌤️', color: '#FB923C' },
-      { name: 'Maghrib', displayName: t('prayer.maghrib'), arabic: 'المغرب', time: formatTime(timings.Maghrib, use12HourFormat), icon: '🌅', color: '#F472B6' },
-      { name: 'Isha', displayName: t('prayer.isha'), arabic: 'العشاء', time: formatTime(timings.Isha, use12HourFormat), icon: '🌙', color: '#8B5CF6' },
+      { name: 'Fajr', displayName: t('prayer.fajr'), arabic: 'الفجر', time: formatTime(timings.Fajr, use12HourFormat, t), icon: '🌅', color: '#818CF8' },
+      { name: 'Sunrise', displayName: t('prayer.sunrise'), arabic: 'الشروق', time: formatTime(timings.Sunrise, use12HourFormat, t), icon: '☀️', color: '#FBBF24' },
+      { name: 'Dhuhr', displayName: t('prayer.dhuhr'), arabic: 'الظهر', time: formatTime(timings.Dhuhr, use12HourFormat, t), icon: '🌞', color: '#F59E0B' },
+      { name: 'Asr', displayName: t('prayer.asr'), arabic: 'العصر', time: formatTime(timings.Asr, use12HourFormat, t), icon: '🌤️', color: '#FB923C' },
+      { name: 'Maghrib', displayName: t('prayer.maghrib'), arabic: 'المغرب', time: formatTime(timings.Maghrib, use12HourFormat, t), icon: '🌅', color: '#F472B6' },
+      { name: 'Isha', displayName: t('prayer.isha'), arabic: 'العشاء', time: formatTime(timings.Isha, use12HourFormat, t), icon: '🌙', color: '#8B5CF6' },
     ];
   }, [prayerData, use12HourFormat, t]);
 
@@ -332,9 +334,9 @@ function PrayerTimesView({ darkMode }) {
   const isRamadan = prayerData?.ramadan?.isRamadan;
   const hijriDate = prayerData?.date?.hijri;
   const nextPrayer = prayerData?.nextPrayer;
-  const suhoorTime = formatTime(prayerData?.ramadan?.suhoorTime, use12HourFormat);
-  const iftarTime = formatTime(prayerData?.ramadan?.iftarTime, use12HourFormat);
-  const nextPrayerTime = formatTime(nextPrayer?.time, use12HourFormat);
+  const suhoorTime = formatTime(prayerData?.ramadan?.suhoorTime, use12HourFormat, t);
+  const iftarTime = formatTime(prayerData?.ramadan?.iftarTime, use12HourFormat, t);
+  const nextPrayerTime = formatTime(nextPrayer?.time, use12HourFormat, t);
 
   // Handle back navigation
   const handleBack = () => {
@@ -355,7 +357,7 @@ function PrayerTimesView({ darkMode }) {
             onClick={handleBack}
             className={`absolute left-3 rtl:left-auto rtl:right-3 p-2.5 rounded-full transition-all ${darkMode ? 'hover:bg-white/10 active:bg-white/20' : 'hover:bg-gray-100 active:bg-gray-200'}`}
             style={{ minWidth: '44px', minHeight: '44px' }}
-            title="Go back"
+            title={t('common.back')}
           >
             <Icons.ChevronLeft className={`w-6 h-6 rtl:rotate-180 ${darkMode ? 'text-white' : 'text-gray-600'}`} />
           </button>
@@ -380,7 +382,7 @@ function PrayerTimesView({ darkMode }) {
         {/* Ramadan Banner */}
         {isRamadan && (
           <div className="mx-4 mb-3 p-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 text-white text-center">
-            <p className="font-bold text-lg">🌙 Ramadan Mubarak! 🌙</p>
+            <p className="font-bold text-lg">🌙 {t('prayerExtended.ramadanMubarak')} 🌙</p>
             <div className="flex justify-center gap-6 mt-2 text-sm">
               <div>
                 <span className="opacity-80">{t('prayerExtended.suhoor')}:</span>{' '}
@@ -405,14 +407,14 @@ function PrayerTimesView({ darkMode }) {
               <button
                 onClick={getLocation}
                 className={`p-1 rounded-full ${darkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-100'}`}
-                title="Update location"
+                title={t('prayerExtended.updateLocation')}
               >
                 <Icons.Refresh className="w-4 h-4 text-emerald-500" />
               </button>
               <button
                 onClick={() => setShowSettings(!showSettings)}
                 className={`p-1 rounded-full ${darkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-100'}`}
-                title="Settings"
+                title={t('common.settings')}
               >
                 <Icons.Settings className="w-4 h-4 text-gray-500" />
               </button>
@@ -442,7 +444,7 @@ function PrayerTimesView({ darkMode }) {
             {/* Time Format Toggle */}
             <div>
               <h3 className={`font-bold mb-2 ${darkMode ? 'text-white' : 'text-gray-800'}`}>
-                Time Format
+                {t('prayerExtended.timeFormat')}
               </h3>
               <div className="flex gap-2">
                 <button
@@ -453,7 +455,7 @@ function PrayerTimesView({ darkMode }) {
                       : darkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-100 text-gray-600'
                   }`}
                 >
-                  12 Hour (AM/PM)
+                  {t('prayerExtended.twelveHour')}
                 </button>
                 <button
                   onClick={() => setUse12HourFormat(false)}
@@ -463,7 +465,7 @@ function PrayerTimesView({ darkMode }) {
                       : darkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-100 text-gray-600'
                   }`}
                 >
-                  24 Hour
+                  {t('prayerExtended.twentyFourHour')}
                 </button>
               </div>
             </div>
@@ -480,7 +482,7 @@ function PrayerTimesView({ darkMode }) {
               >
                 {CALCULATION_METHODS.map((method) => (
                   <option key={method.id} value={method.id}>
-                    {method.name} - {method.region}
+                    {t(`prayerExtended.${method.nameKey}`)} - {t(`prayerExtended.${method.regionKey}`)}
                   </option>
                 ))}
               </select>
@@ -493,10 +495,10 @@ function PrayerTimesView({ darkMode }) {
           <div className={`p-4 rounded-2xl ${darkMode ? 'bg-gray-800' : 'bg-white'} shadow-lg text-center`}>
             <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>{t('prayer.nextPrayer')}</p>
             <p className={`text-2xl font-bold ${darkMode ? 'text-white' : 'text-gray-800'}`}>
-              {prayerNameMap[nextPrayer.name] || nextPrayer.name} at {nextPrayerTime}
+              {prayerNameMap[nextPrayer.name] || nextPrayer.name} {t('prayerExtended.at')} {nextPrayerTime}
             </p>
             <p className="text-emerald-500 font-semibold text-lg">
-              ⏱️ {nextPrayer.countdown}
+              ⏱️ {nextPrayer.countdown === '__TOMORROW__' ? t('prayerExtended.tomorrow') : nextPrayer.countdown}
             </p>
           </div>
         )}
@@ -550,12 +552,12 @@ function PrayerTimesView({ darkMode }) {
           ) : isLoading ? (
             <div className={`text-center py-8 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
               <Icons.Loader className="w-8 h-8 mx-auto mb-4 animate-spin" />
-              <p>Loading prayer times...</p>
+              <p>{t('prayerExtended.loadingPrayerTimes')}</p>
             </div>
           ) : (
             <div className={`text-center py-8 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
               <Icons.Clock className="w-12 h-12 mx-auto mb-4 opacity-50" />
-              <p>Enable location to see prayer times</p>
+              <p>{t('prayerExtended.enableLocationPrayer')}</p>
             </div>
           )}
         </div>
@@ -595,11 +597,11 @@ function PrayerTimesView({ darkMode }) {
 
                 {/* Cardinal direction markers N E S W */}
                 {[
-                  { d: 'N', top: '8px', left: '50%', tx: '-50%', ty: '0', color: '#ef4444' },
-                  { d: 'E', top: '50%', right: '8px', tx: '0', ty: '-50%' },
-                  { d: 'S', bottom: '8px', left: '50%', tx: '-50%', ty: '0' },
-                  { d: 'W', top: '50%', left: '8px', tx: '0', ty: '-50%' },
-                ].map(({ d, color, ...pos }) => (
+                  { d: 'N', label: t('prayerExtended.north'), top: '8px', left: '50%', tx: '-50%', ty: '0', color: '#ef4444' },
+                  { d: 'E', label: t('prayerExtended.east'), top: '50%', right: '8px', tx: '0', ty: '-50%' },
+                  { d: 'S', label: t('prayerExtended.south'), bottom: '8px', left: '50%', tx: '-50%', ty: '0' },
+                  { d: 'W', label: t('prayerExtended.west'), top: '50%', left: '8px', tx: '0', ty: '-50%' },
+                ].map(({ d, label, color, ...pos }) => (
                   <div key={d} className="absolute font-bold text-sm"
                     style={{
                       ...pos,
@@ -607,7 +609,7 @@ function PrayerTimesView({ darkMode }) {
                       color: color || (darkMode ? '#9ca3af' : '#6b7280'),
                     }}
                   >
-                    {d}
+                    {label}
                   </div>
                 ))}
 
@@ -674,17 +676,17 @@ function PrayerTimesView({ darkMode }) {
                   {qiblaData.qibla.compassAr}
                 </p>
                 <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-                  📍 Distance to Kaaba: {qiblaData.distance.km.toLocaleString()} km
+                  📍 {t('prayerExtended.distanceToKaaba')}: {qiblaData.distance.km.toLocaleString()} {t('prayerExtended.km')}
                 </p>
                 <p className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>
-                  {hasCompass ? 'Turn your device to align with the Qibla' : 'Face the direction the 🕋 points to'}
+                  {hasCompass ? t('prayerExtended.turnDevice') : t('prayerExtended.faceDirection')}
                 </p>
                 {!hasCompass && typeof DeviceOrientationEvent?.requestPermission === 'function' && (
                   <button
                     onClick={requestCompassPermission}
                     className="mt-2 px-4 py-2 bg-emerald-500 text-white rounded-xl text-sm"
                   >
-                    Enable Compass
+                    {t('prayerExtended.enableCompass')}
                   </button>
                 )}
               </div>
@@ -692,12 +694,12 @@ function PrayerTimesView({ darkMode }) {
           ) : location ? (
             <div className={`text-center py-8 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
               <Icons.Loader className="w-8 h-8 mx-auto mb-4 animate-spin" />
-              <p>Loading Qibla direction...</p>
+              <p>{t('prayerExtended.loadingQibla')}</p>
             </div>
           ) : (
             <div className={`text-center py-8 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
               <div className="text-4xl mb-4">🧭</div>
-              <p>Enable location to see Qibla direction</p>
+              <p>{t('prayerExtended.enableLocationQibla')}</p>
             </div>
           )}
         </div>
@@ -706,7 +708,7 @@ function PrayerTimesView({ darkMode }) {
         {prayerData?.location && (
           <div className={`p-4 rounded-2xl ${darkMode ? 'bg-gray-800' : 'bg-white'} shadow-md`}>
             <p className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'} text-center`}>
-              Method: {prayerData.location.method} • Timezone: {prayerData.location.timezone}
+              {t('prayerExtended.methodLabel')}: {prayerData.location.methodKey ? t(`prayerExtended.${prayerData.location.methodKey}`) : '—'} • {t('prayerExtended.timezoneLabel')}: {prayerData.location.timezone}
             </p>
           </div>
         )}

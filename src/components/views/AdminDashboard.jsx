@@ -1847,6 +1847,421 @@ const AnalyticsPanel = () => {
   );
 };
 
+// ============================================================================
+// Email Panel — Send emails, manage templates, view history
+// ============================================================================
+const EmailPanel = () => {
+  const [sendMode, setSendMode] = useState('single'); // single, template, bulk
+  const [to, setTo] = useState('');
+  const [subject, setSubject] = useState('');
+  const [body, setBody] = useState('');
+  const [template, setTemplate] = useState('notification');
+  const [templateData, setTemplateData] = useState({ name: '', subject: '', body: '', ctaText: '', ctaUrl: '' });
+  const [sending, setSending] = useState(false);
+  const [result, setResult] = useState(null);
+  const [error, setError] = useState(null);
+  const [stats, setStats] = useState(null);
+  const [statsLoading, setStatsLoading] = useState(true);
+
+  // Fetch email stats
+  const fetchStats = useCallback(async () => {
+    try {
+      const res = await fetch('/api/email-stats', { credentials: 'include' });
+      if (res.ok) {
+        const data = await res.json();
+        setStats(data);
+      }
+    } catch (e) {
+      console.error('Failed to fetch email stats:', e);
+    }
+    setStatsLoading(false);
+  }, []);
+
+  useEffect(() => { fetchStats(); }, [fetchStats]);
+
+  const templates = [
+    { id: 'welcome', label: 'Welcome', desc: 'New user welcome with Bismillah header' },
+    { id: 'birthday', label: 'Birthday', desc: 'Birthday dua with Quran verse (2:201)' },
+    { id: 'notification', label: 'Notification', desc: 'General notification with optional CTA button' },
+    { id: 'admin-alert', label: 'Admin Alert', desc: 'Admin notification with details block' },
+  ];
+
+  const handleSend = async () => {
+    if (!to.trim()) { setError('Recipient email is required'); return; }
+    setSending(true);
+    setError(null);
+    setResult(null);
+
+    try {
+      const payload = sendMode === 'template'
+        ? { to: to.trim(), template, data: templateData }
+        : { to: to.trim(), subject, html: `<div style="font-family:-apple-system,sans-serif;max-width:600px;margin:0 auto;background:#0F172A;color:#E2E8F0;border-radius:12px;overflow:hidden;"><div style="background:linear-gradient(135deg,#14B8A6,#0D9488);padding:24px;text-align:center;"><h1 style="margin:0;font-size:20px;color:white;">w3Quran</h1></div><div style="padding:24px;"><p style="color:#CBD5E1;line-height:1.7;">${body.replace(/\n/g, '<br/>')}</p></div><div style="padding:16px 24px;border-top:1px solid rgba(255,255,255,0.06);text-align:center;"><p style="color:#475569;font-size:11px;">w3Quran — <a href="https://w3quran.com" style="color:#14B8A6;">w3quran.com</a></p></div></div>` };
+
+      const res = await fetch('/api/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(payload),
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        setResult(`Email sent! ID: ${data.messageId}`);
+        if (sendMode !== 'template') { setSubject(''); setBody(''); }
+        fetchStats(); // refresh stats
+      } else {
+        setError(data.error || 'Failed to send');
+      }
+    } catch (e) {
+      setError(e.message || 'Network error');
+    }
+    setSending(false);
+  };
+
+  const handleTestEmail = async () => {
+    setSending(true);
+    setError(null);
+    setResult(null);
+    try {
+      const res = await fetch('/api/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({
+          to: 'ziadevtmc@gmail.com',
+          template: 'admin-alert',
+          data: { subject: 'Test Email', body: 'This is a test email from w3Quran admin panel. If you see this, email is working!', details: `Sent at: ${new Date().toISOString()}` },
+        }),
+      });
+      const data = await res.json();
+      if (data.success) { setResult('Test email sent to admin!'); fetchStats(); }
+      else setError(data.error || 'Failed');
+    } catch (e) { setError(e.message); }
+    setSending(false);
+  };
+
+  return (
+    <div className="space-y-6 max-w-2xl">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-white text-lg font-bold flex items-center gap-2">
+            <Icons.Mail className="w-5 h-5 text-teal-400" />
+            Email Center
+          </h2>
+          <p className="text-white/40 text-sm mt-1">Send emails from admin@w3quran.com via Resend</p>
+        </div>
+        <button
+          onClick={handleTestEmail}
+          disabled={sending}
+          className="px-4 py-2 rounded-lg text-sm font-medium bg-teal-500/15 border border-teal-500/20 text-teal-400 hover:bg-teal-500/25 transition-colors disabled:opacity-50"
+        >
+          {sending ? '...' : 'Send Test'}
+        </button>
+      </div>
+
+      {/* Usage Stats */}
+      {statsLoading ? (
+        <div className="grid grid-cols-3 gap-3">
+          {[1,2,3].map(i => (
+            <div key={i} className="bg-white/5 rounded-xl border border-white/10 p-4 animate-pulse">
+              <div className="h-3 w-16 bg-white/10 rounded mb-2" />
+              <div className="h-6 w-12 bg-white/10 rounded" />
+            </div>
+          ))}
+        </div>
+      ) : stats && (
+        <div className="grid grid-cols-3 gap-3">
+          {/* Today */}
+          <div className="bg-white/5 rounded-xl border border-white/10 p-4">
+            <p className="text-white/40 text-xs font-medium">Today</p>
+            <p className="text-xl font-bold text-white mt-1">{stats.today.sent}<span className="text-white/30 text-sm font-normal"> / {stats.today.limit}</span></p>
+            <div className="mt-2 h-1.5 bg-white/5 rounded-full overflow-hidden">
+              <div
+                className="h-full rounded-full transition-all"
+                style={{
+                  width: `${Math.min(100, (stats.today.sent / stats.today.limit) * 100)}%`,
+                  background: stats.today.sent > 80 ? '#EF4444' : stats.today.sent > 50 ? '#F59E0B' : '#14B8A6',
+                }}
+              />
+            </div>
+            <p className="text-white/30 text-[10px] mt-1">{stats.today.remaining} remaining</p>
+          </div>
+          {/* This Month */}
+          <div className="bg-white/5 rounded-xl border border-white/10 p-4">
+            <p className="text-white/40 text-xs font-medium">This Month</p>
+            <p className="text-xl font-bold text-white mt-1">{stats.month.sent}<span className="text-white/30 text-sm font-normal"> / {stats.month.limit.toLocaleString()}</span></p>
+            <div className="mt-2 h-1.5 bg-white/5 rounded-full overflow-hidden">
+              <div
+                className="h-full rounded-full transition-all"
+                style={{
+                  width: `${Math.min(100, (stats.month.sent / stats.month.limit) * 100)}%`,
+                  background: (stats.month.sent / stats.month.limit) > 0.8 ? '#EF4444' : (stats.month.sent / stats.month.limit) > 0.5 ? '#F59E0B' : '#14B8A6',
+                }}
+              />
+            </div>
+            <p className="text-white/30 text-[10px] mt-1">{stats.month.remaining.toLocaleString()} remaining</p>
+          </div>
+          {/* All Time */}
+          <div className="bg-white/5 rounded-xl border border-white/10 p-4">
+            <p className="text-white/40 text-xs font-medium">All Time</p>
+            <p className="text-xl font-bold text-emerald-400 mt-1">{stats.allTime.sent.toLocaleString()}</p>
+            {stats.allTime.failed > 0 && (
+              <p className="text-red-400/60 text-xs mt-1">{stats.allTime.failed} failed</p>
+            )}
+            <p className="text-white/30 text-[10px] mt-1">total emails sent</p>
+          </div>
+        </div>
+      )}
+
+      {/* Status messages */}
+      {result && (
+        <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-sm flex items-center gap-2">
+          <Icons.Check className="w-4 h-4 flex-shrink-0" />
+          {result}
+        </div>
+      )}
+      {error && (
+        <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm flex items-center gap-2">
+          <Icons.AlertCircle className="w-4 h-4 flex-shrink-0" />
+          {error}
+        </div>
+      )}
+
+      {/* Mode selector */}
+      <div className="flex gap-2">
+        {[
+          { id: 'single', label: 'Custom Email' },
+          { id: 'template', label: 'Use Template' },
+        ].map(m => (
+          <button
+            key={m.id}
+            onClick={() => { setSendMode(m.id); setResult(null); setError(null); }}
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+              sendMode === m.id
+                ? 'bg-purple-500/20 border border-purple-500/30 text-purple-300'
+                : 'bg-white/5 border border-white/10 text-white/50 hover:text-white/70'
+            }`}
+          >
+            {m.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Send form */}
+      <div className="bg-white/5 rounded-2xl border border-white/10 overflow-hidden">
+        <div className="p-4 space-y-4">
+          {/* To */}
+          <div>
+            <label className="text-white/60 text-xs font-medium block mb-1.5">To</label>
+            <input
+              type="email"
+              value={to}
+              onChange={e => setTo(e.target.value)}
+              placeholder="user@example.com"
+              className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2.5 text-sm text-white placeholder:text-white/25 outline-none focus:border-purple-500/40 transition-colors"
+            />
+          </div>
+
+          {sendMode === 'template' ? (
+            <>
+              {/* Template picker */}
+              <div>
+                <label className="text-white/60 text-xs font-medium block mb-1.5">Template</label>
+                <div className="grid grid-cols-2 gap-2">
+                  {templates.map(t => (
+                    <button
+                      key={t.id}
+                      onClick={() => setTemplate(t.id)}
+                      className={`text-left p-3 rounded-xl border transition-colors ${
+                        template === t.id
+                          ? 'bg-purple-500/15 border-purple-500/30'
+                          : 'bg-white/3 border-white/8 hover:border-white/15'
+                      }`}
+                    >
+                      <p className={`text-sm font-medium ${template === t.id ? 'text-purple-300' : 'text-white/70'}`}>{t.label}</p>
+                      <p className="text-xs text-white/35 mt-0.5">{t.desc}</p>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Template-specific fields */}
+              {(template === 'welcome' || template === 'birthday') && (
+                <div>
+                  <label className="text-white/60 text-xs font-medium block mb-1.5">Recipient Name</label>
+                  <input
+                    value={templateData.name}
+                    onChange={e => setTemplateData(d => ({ ...d, name: e.target.value }))}
+                    placeholder="Ahmad"
+                    className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2.5 text-sm text-white placeholder:text-white/25 outline-none focus:border-purple-500/40 transition-colors"
+                  />
+                </div>
+              )}
+
+              {(template === 'notification' || template === 'admin-alert') && (
+                <>
+                  <div>
+                    <label className="text-white/60 text-xs font-medium block mb-1.5">Subject</label>
+                    <input
+                      value={templateData.subject}
+                      onChange={e => setTemplateData(d => ({ ...d, subject: e.target.value }))}
+                      placeholder="Email subject"
+                      className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2.5 text-sm text-white placeholder:text-white/25 outline-none focus:border-purple-500/40 transition-colors"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-white/60 text-xs font-medium block mb-1.5">Body</label>
+                    <textarea
+                      value={templateData.body}
+                      onChange={e => setTemplateData(d => ({ ...d, body: e.target.value }))}
+                      placeholder="Email body text..."
+                      rows={4}
+                      className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2.5 text-sm text-white placeholder:text-white/25 outline-none focus:border-purple-500/40 transition-colors resize-none"
+                    />
+                  </div>
+                </>
+              )}
+
+              {template === 'notification' && (
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="text-white/60 text-xs font-medium block mb-1.5">Button Text (optional)</label>
+                    <input
+                      value={templateData.ctaText}
+                      onChange={e => setTemplateData(d => ({ ...d, ctaText: e.target.value }))}
+                      placeholder="Read Now"
+                      className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2.5 text-sm text-white placeholder:text-white/25 outline-none focus:border-purple-500/40 transition-colors"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-white/60 text-xs font-medium block mb-1.5">Button URL (optional)</label>
+                    <input
+                      value={templateData.ctaUrl}
+                      onChange={e => setTemplateData(d => ({ ...d, ctaUrl: e.target.value }))}
+                      placeholder="https://w3quran.com"
+                      className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2.5 text-sm text-white placeholder:text-white/25 outline-none focus:border-purple-500/40 transition-colors"
+                    />
+                  </div>
+                </div>
+              )}
+            </>
+          ) : (
+            <>
+              {/* Custom email */}
+              <div>
+                <label className="text-white/60 text-xs font-medium block mb-1.5">Subject</label>
+                <input
+                  value={subject}
+                  onChange={e => setSubject(e.target.value)}
+                  placeholder="Email subject"
+                  className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2.5 text-sm text-white placeholder:text-white/25 outline-none focus:border-purple-500/40 transition-colors"
+                />
+              </div>
+              <div>
+                <label className="text-white/60 text-xs font-medium block mb-1.5">Body</label>
+                <textarea
+                  value={body}
+                  onChange={e => setBody(e.target.value)}
+                  placeholder="Write your message here..."
+                  rows={6}
+                  className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2.5 text-sm text-white placeholder:text-white/25 outline-none focus:border-purple-500/40 transition-colors resize-none"
+                />
+              </div>
+            </>
+          )}
+
+          {/* Send button */}
+          <button
+            onClick={handleSend}
+            disabled={sending || !to.trim()}
+            className="w-full py-3 rounded-xl text-sm font-semibold transition-all disabled:opacity-40"
+            style={{
+              background: 'linear-gradient(135deg, #14B8A6, #0D9488)',
+              color: 'white',
+            }}
+          >
+            {sending ? 'Sending...' : 'Send Email'}
+          </button>
+        </div>
+      </div>
+
+      {/* Recent Email Logs */}
+      {stats?.recentLogs?.length > 0 && (
+        <div className="bg-white/5 rounded-2xl border border-white/10 overflow-hidden">
+          <div className="px-4 py-3 border-b border-white/5 flex items-center justify-between">
+            <h3 className="text-sm font-bold text-white flex items-center gap-2">
+              <Icons.Clock className="w-4 h-4 text-blue-400" />
+              Recent Emails
+            </h3>
+            <button onClick={fetchStats} className="text-[10px] text-white/30 hover:text-white/60 transition-colors">
+              Refresh
+            </button>
+          </div>
+          <div className="divide-y divide-white/5">
+            {stats.recentLogs.map((log, i) => (
+              <div key={i} className="px-4 py-2.5 flex items-center gap-3 hover:bg-white/3 transition-colors">
+                <div className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${log.status === 'sent' ? 'bg-emerald-400' : 'bg-red-400'}`} />
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2">
+                    <p className="text-white/70 text-xs truncate">{log.to_email}</p>
+                    {log.template && (
+                      <span className="px-1.5 py-0.5 rounded text-[9px] font-medium bg-purple-500/15 text-purple-400 flex-shrink-0">
+                        {log.template}
+                      </span>
+                    )}
+                    {log.triggered_by === 'system' && (
+                      <span className="px-1.5 py-0.5 rounded text-[9px] font-medium bg-blue-500/15 text-blue-400 flex-shrink-0">
+                        auto
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-white/35 text-[10px] truncate mt-0.5">{log.subject}</p>
+                </div>
+                <p className="text-white/25 text-[10px] flex-shrink-0 whitespace-nowrap">
+                  {new Date(log.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                  {' '}
+                  {new Date(log.created_at).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Info */}
+      <div className="bg-white/5 rounded-2xl border border-white/10 p-4">
+        <h3 className="text-sm font-bold text-white flex items-center gap-2 mb-3">
+          <Icons.Shield className="w-4 h-4 text-blue-400" />
+          Email Setup Info
+        </h3>
+        <ul className="space-y-2 text-white/50 text-xs">
+          <li className="flex items-start gap-2">
+            <span className="text-emerald-400 mt-0.5">•</span>
+            Sending from <span className="text-white/70 font-medium">admin@w3quran.com</span> via Resend
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="text-emerald-400 mt-0.5">•</span>
+            Free tier: 3,000 emails/month, 100/day
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="text-emerald-400 mt-0.5">•</span>
+            Welcome emails sent automatically on new user signup
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="text-emerald-400 mt-0.5">•</span>
+            Admin alerts sent for new signups to admin@w3quran.com
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="text-emerald-400 mt-0.5">•</span>
+            Receive emails: Set up <span className="text-white/70 font-medium">Cloudflare Email Routing</span> to forward to Gmail
+          </li>
+        </ul>
+      </div>
+    </div>
+  );
+};
+
 // Payment Analytics Panel
 const PaymentsPanel = () => {
   const [data, setData] = useState(null);
@@ -2563,6 +2978,7 @@ export default function AdminDashboard({ onClose, initialTab = 'overview', onTab
             { id: 'logs', label: 'Logs', icon: Icons.FileText },
             { id: 'transactions', label: 'Trans', icon: Icons.CreditCard },
             { id: 'payments', label: 'Payments', icon: Icons.DollarSign },
+            { id: 'email', label: 'Email', icon: Icons.Mail },
             { id: 'settings', label: 'Settings', icon: Icons.Settings },
           ].map(tab => (
             <button
@@ -3061,6 +3477,9 @@ export default function AdminDashboard({ onClose, initialTab = 'overview', onTab
                 {activeTab === 'health' && <ApiHealthPanel />}
               </Suspense>
             )}
+
+            {/* Email Tab */}
+            {activeTab === 'email' && <EmailPanel />}
 
             {/* Settings Tab */}
             {activeTab === 'settings' && (

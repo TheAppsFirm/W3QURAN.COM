@@ -6,6 +6,7 @@
 import { useState, useEffect, useCallback, memo, useMemo } from 'react';
 import { Icons } from './Icons';
 import { SURAHS } from '../../data';
+import { useTranslation } from '../../contexts/LocaleContext';
 import {
   AVATARS,
   ACHIEVEMENTS,
@@ -48,6 +49,7 @@ const MemberCard = memo(function MemberCard({
   onRemove,
   showProgress,
 }) {
+  const { t, isRTL } = useTranslation();
   const avatar = [...AVATARS.adults, ...AVATARS.kids].find(a => a.id === member.avatar);
   const points = useMemo(() => {
     let pts = member.progress.surahsRead.length * 5 + member.progress.streak * 2;
@@ -61,6 +63,7 @@ const MemberCard = memo(function MemberCard({
   return (
     <div
       onClick={() => onClick && onClick(member)}
+      dir={isRTL ? 'rtl' : 'ltr'}
       className={`p-4 rounded-xl transition-all cursor-pointer ${
         isSelected
           ? 'bg-white/20 ring-2 ring-cyan-500/50'
@@ -74,15 +77,15 @@ const MemberCard = memo(function MemberCard({
             <span className="text-white font-medium">{member.name}</span>
             {member.isKid && (
               <span className="px-2 py-0.5 rounded-full bg-pink-500/30 text-pink-400 text-xs">
-                Kid
+                {t('family.kid', 'Kid')}
               </span>
             )}
           </div>
           {showProgress && (
             <div className="flex items-center gap-3 mt-1 text-sm">
-              <span className="text-amber-400">{points} pts</span>
+              <span className="text-amber-400">{points} {t('family.pts', 'pts')}</span>
               <span className="text-white/40">|</span>
-              <span className="text-white/60">{member.progress.streak} day streak</span>
+              <span className="text-white/60">{member.progress.streak} {t('family.dayStreak', 'day streak')}</span>
             </div>
           )}
         </div>
@@ -125,6 +128,7 @@ const MemberCard = memo(function MemberCard({
 
 // Add Member Form
 const AddMemberForm = memo(function AddMemberForm({ onAdd, onCancel }) {
+  const { t, isRTL } = useTranslation();
   const [name, setName] = useState('');
   const [age, setAge] = useState('');
   const [isKid, setIsKid] = useState(false);
@@ -146,26 +150,26 @@ const AddMemberForm = memo(function AddMemberForm({ onAdd, onCancel }) {
   }, [isKid]);
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4" dir={isRTL ? 'rtl' : 'ltr'}>
       <div>
-        <label className="text-white/60 text-xs uppercase tracking-wide mb-2 block">Name</label>
+        <label className="text-white/60 text-xs uppercase tracking-wide mb-2 block">{t('family.name', 'Name')}</label>
         <input
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          placeholder="Family member name"
+          placeholder={t('family.namePlaceholder', 'Family member name')}
           className="w-full p-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 focus:outline-none focus:border-cyan-500/50"
         />
       </div>
 
       <div className="flex gap-4">
         <div className="flex-1">
-          <label className="text-white/60 text-xs uppercase tracking-wide mb-2 block">Age (optional)</label>
+          <label className="text-white/60 text-xs uppercase tracking-wide mb-2 block">{t('family.ageOptional', 'Age (optional)')}</label>
           <input
             type="number"
             value={age}
             onChange={(e) => setAge(e.target.value)}
-            placeholder="Age"
+            placeholder={t('family.age', 'Age')}
             min="1"
             max="120"
             className="w-full p-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 focus:outline-none focus:border-cyan-500/50"
@@ -173,7 +177,7 @@ const AddMemberForm = memo(function AddMemberForm({ onAdd, onCancel }) {
         </div>
 
         <div className="flex-1">
-          <label className="text-white/60 text-xs uppercase tracking-wide mb-2 block">Type</label>
+          <label className="text-white/60 text-xs uppercase tracking-wide mb-2 block">{t('family.type', 'Type')}</label>
           <div className="flex gap-2">
             <button
               onClick={() => setIsKid(false)}
@@ -181,7 +185,7 @@ const AddMemberForm = memo(function AddMemberForm({ onAdd, onCancel }) {
                 !isKid ? 'bg-cyan-500/30 text-white ring-2 ring-cyan-500/50' : 'bg-white/5 text-white/60'
               }`}
             >
-              Adult
+              {t('family.adult', 'Adult')}
             </button>
             <button
               onClick={() => setIsKid(true)}
@@ -189,14 +193,14 @@ const AddMemberForm = memo(function AddMemberForm({ onAdd, onCancel }) {
                 isKid ? 'bg-pink-500/30 text-white ring-2 ring-pink-500/50' : 'bg-white/5 text-white/60'
               }`}
             >
-              Kid
+              {t('family.kid', 'Kid')}
             </button>
           </div>
         </div>
       </div>
 
       <div>
-        <label className="text-white/60 text-xs uppercase tracking-wide mb-2 block">Avatar</label>
+        <label className="text-white/60 text-xs uppercase tracking-wide mb-2 block">{t('family.avatar', 'Avatar')}</label>
         <AvatarSelector isKid={isKid} selectedAvatar={avatar} onSelect={setAvatar} />
       </div>
 
@@ -205,14 +209,14 @@ const AddMemberForm = memo(function AddMemberForm({ onAdd, onCancel }) {
           onClick={onCancel}
           className="flex-1 py-3 rounded-xl bg-white/10 text-white/70 hover:bg-white/20"
         >
-          Cancel
+          {t('common.cancel', 'Cancel')}
         </button>
         <button
           onClick={handleSubmit}
           disabled={!name.trim()}
           className="flex-1 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-purple-500 text-white font-medium disabled:opacity-50"
         >
-          Add Member
+          {t('family.addMember', 'Add Member')}
         </button>
       </div>
     </div>
@@ -221,10 +225,11 @@ const AddMemberForm = memo(function AddMemberForm({ onAdd, onCancel }) {
 
 // Leaderboard Component
 const Leaderboard = memo(function Leaderboard({ members }) {
+  const { t, isRTL } = useTranslation();
   const leaderboard = useMemo(() => getFamilyLeaderboard(), [members]);
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-3" dir={isRTL ? 'rtl' : 'ltr'}>
       {leaderboard.map((member, index) => {
         const avatar = [...AVATARS.adults, ...AVATARS.kids].find(a => a.id === member.avatar);
         const medals = ['🥇', '🥈', '🥉'];
@@ -255,13 +260,13 @@ const Leaderboard = memo(function Leaderboard({ members }) {
                 )}
               </div>
               <div className="flex items-center gap-3 text-xs text-white/50">
-                <span>{member.surahsRead} surahs</span>
-                <span>{member.streak} day streak</span>
+                <span>{member.surahsRead} {t('family.surahs', 'surahs')}</span>
+                <span>{member.streak} {t('family.dayStreak', 'day streak')}</span>
               </div>
             </div>
-            <div className="text-right">
+            <div className={isRTL ? 'text-left' : 'text-right'}>
               <p className="text-amber-400 font-bold text-lg">{member.points}</p>
-              <p className="text-white/40 text-xs">points</p>
+              <p className="text-white/40 text-xs">{t('family.points', 'points')}</p>
             </div>
           </div>
         );
@@ -272,6 +277,7 @@ const Leaderboard = memo(function Leaderboard({ members }) {
 
 // Achievements Gallery
 const AchievementsGallery = memo(function AchievementsGallery({ earnedAchievements }) {
+  const { t } = useTranslation();
   return (
     <div className="grid grid-cols-2 gap-3">
       {Object.values(ACHIEVEMENTS).map((ach) => {
@@ -300,7 +306,7 @@ const AchievementsGallery = memo(function AchievementsGallery({ earnedAchievemen
                 <p className={`font-medium ${isEarned ? 'text-white' : 'text-white/40'}`}>
                   {ach.name}
                 </p>
-                <p className="text-white/40 text-xs">{ach.points} pts</p>
+                <p className="text-white/40 text-xs">{ach.points} {t('family.pts', 'pts')}</p>
               </div>
             </div>
             <p className="text-white/50 text-xs mt-2">{ach.description}</p>
@@ -317,6 +323,7 @@ const FamilyCircle = memo(function FamilyCircle({
   onClose,
   onNavigateToSurah,
 }) {
+  const { t, isRTL } = useTranslation();
   const [familyData, setFamilyData] = useState(null);
   const [view, setView] = useState('members'); // 'members' | 'leaderboard' | 'achievements' | 'add'
   const [selectedMember, setSelectedMember] = useState(null);
@@ -356,6 +363,7 @@ const FamilyCircle = memo(function FamilyCircle({
     <div
       className="fixed inset-0 z-[99999] flex items-center justify-center p-4"
       onClick={onClose}
+      dir={isRTL ? 'rtl' : 'ltr'}
     >
       <div className="absolute inset-0 bg-black/80 backdrop-blur-md" />
 
@@ -372,9 +380,9 @@ const FamilyCircle = memo(function FamilyCircle({
                 <Icons.Family className="w-6 h-6 text-white" />
               </div>
               <div>
-                <h2 className="text-xl font-bold text-white">Family Circle</h2>
+                <h2 className="text-xl font-bold text-white">{t('family.title', 'Family Circle')}</h2>
                 <p className="text-white/60 text-sm">
-                  {familyData?.members?.length || 0} members
+                  {familyData?.members?.length || 0} {t('family.members', 'members')}
                 </p>
               </div>
             </div>
@@ -389,9 +397,9 @@ const FamilyCircle = memo(function FamilyCircle({
           {/* View Tabs */}
           <div className="flex gap-2">
             {[
-              { id: 'members', icon: 'Users', label: 'Members' },
-              { id: 'leaderboard', icon: 'Trophy', label: 'Leaderboard' },
-              { id: 'achievements', icon: 'Award', label: 'Badges' },
+              { id: 'members', icon: 'Users', label: t('family.tabMembers', 'Members') },
+              { id: 'leaderboard', icon: 'Trophy', label: t('family.tabLeaderboard', 'Leaderboard') },
+              { id: 'achievements', icon: 'Award', label: t('family.tabBadges', 'Badges') },
             ].map((tab) => {
               const Icon = Icons[tab.icon];
               return (
@@ -427,7 +435,7 @@ const FamilyCircle = memo(function FamilyCircle({
                 className="w-full p-4 rounded-xl border-2 border-dashed border-white/20 hover:border-white/40 transition-colors flex items-center justify-center gap-2 text-white/60 hover:text-white"
               >
                 <Icons.Plus className="w-5 h-5" />
-                Add Family Member
+                {t('family.addFamilyMember', 'Add Family Member')}
               </button>
 
               {/* Members list */}
@@ -447,8 +455,8 @@ const FamilyCircle = memo(function FamilyCircle({
               ) : (
                 <div className="text-center py-8">
                   <Icons.Users className="w-12 h-12 text-white/20 mx-auto mb-4" />
-                  <p className="text-white/60">No family members yet</p>
-                  <p className="text-white/40 text-sm mt-1">Add members to start tracking together</p>
+                  <p className="text-white/60">{t('family.noMembers', 'No family members yet')}</p>
+                  <p className="text-white/40 text-sm mt-1">{t('family.noMembersHint', 'Add members to start tracking together')}</p>
                 </div>
               )}
             </div>
@@ -458,7 +466,7 @@ const FamilyCircle = memo(function FamilyCircle({
             ) : (
               <div className="text-center py-12">
                 <Icons.Trophy className="w-12 h-12 text-white/20 mx-auto mb-4" />
-                <p className="text-white/60">Add family members to see the leaderboard</p>
+                <p className="text-white/60">{t('family.emptyLeaderboard', 'Add family members to see the leaderboard')}</p>
               </div>
             )
           ) : view === 'achievements' ? (
@@ -476,9 +484,9 @@ const FamilyCircle = memo(function FamilyCircle({
           <div className="flex-shrink-0 p-4 border-t border-white/10 bg-white/5">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-white font-medium">{selectedMember.name}'s Progress</p>
+                <p className="text-white font-medium">{t('family.memberProgress', "{{name}}'s Progress").replace('{{name}}', selectedMember.name)}</p>
                 <p className="text-white/60 text-sm">
-                  {selectedMember.progress.surahsRead.length} surahs read
+                  {selectedMember.progress.surahsRead.length} {t('family.surahsRead', 'surahs read')}
                 </p>
               </div>
               <button
@@ -491,7 +499,7 @@ const FamilyCircle = memo(function FamilyCircle({
                 }}
                 className="px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-purple-500 text-white text-sm font-medium"
               >
-                Continue Reading
+                {t('family.continueReading', 'Continue Reading')}
               </button>
             </div>
           </div>

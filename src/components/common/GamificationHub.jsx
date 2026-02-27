@@ -10,6 +10,7 @@ import { useTranslation } from '../../contexts/LocaleContext';
 import {
   LEVELS,
   ACHIEVEMENTS,
+  CHALLENGE_TEMPLATES,
   getGamificationData,
   getLevelInfo,
   generateDailyChallenges,
@@ -18,6 +19,39 @@ import {
 
 // Safe icon resolver — prevents React Error #130 from undefined icons
 const getIcon = (name, fallback = Icons.Star) => Icons[name] || fallback;
+
+// Helper: pick localized field from data objects (e.g., name/nameAr/nameUr)
+const getLocalized = (obj, field, lang) => {
+  if (lang === 'ar') return obj[`${field}Ar`] || obj[field] || '';
+  if (lang === 'ur') return obj[`${field}Ur`] || obj[field] || '';
+  return obj[field] || '';
+};
+
+// Build a lookup map from challenge templateId → template (for cached challenges missing locale fields)
+const CHALLENGE_TEMPLATE_MAP = {};
+CHALLENGE_TEMPLATES.forEach(t => { CHALLENGE_TEMPLATE_MAP[t.id] = t; });
+
+// Get localized challenge field — checks challenge object first, falls back to template
+const getChallengeLocalized = (challenge, field, lang) => {
+  const suffix = lang === 'ar' ? 'Ar' : lang === 'ur' ? 'Ur' : '';
+  const localizedKey = suffix ? `${field}${suffix}` : field;
+
+  // If the challenge object has the localized field, use it
+  if (challenge[localizedKey]) return challenge[localizedKey];
+
+  // Fall back to the template (handles old cached challenges without locale fields)
+  const template = CHALLENGE_TEMPLATE_MAP[challenge.templateId];
+  if (template) {
+    const templateValue = template[localizedKey] || template[field] || '';
+    // For description, replace {target} with the challenge's actual target
+    if (field === 'description' && challenge.target) {
+      return templateValue.replace('{target}', challenge.target);
+    }
+    return templateValue;
+  }
+
+  return challenge[field] || '';
+};
 
 // Level Badge Component (used in MiniXPDisplay)
 const LevelBadge = memo(function LevelBadge({ level, size = 'md' }) {
@@ -93,11 +127,12 @@ const ProfileAvatar = memo(function ProfileAvatar({ user, level }) {
 
 // XP Progress Bar Component
 const XPProgressBar = memo(function XPProgressBar({ levelInfo, xp }) {
+  const { t } = useTranslation();
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between text-sm">
-        <span className="text-white/60">XP Progress</span>
-        <span className="text-white font-medium">{xp} XP</span>
+        <span className="text-white/60">{t('gamification.xpProgress', 'XP Progress')}</span>
+        <span className="text-white font-medium">{xp} {t('gamification.xpLabel', 'XP')}</span>
       </div>
       <div className="h-3 bg-white/10 rounded-full overflow-hidden">
         <div
@@ -114,7 +149,7 @@ const XPProgressBar = memo(function XPProgressBar({ levelInfo, xp }) {
       <div className="flex items-center justify-between text-xs text-white/40">
         <span>{levelInfo.current.name}</span>
         {levelInfo.next && (
-          <span>{levelInfo.xpNeeded - levelInfo.xpProgress} XP to {levelInfo.next.name}</span>
+          <span>{levelInfo.xpNeeded - levelInfo.xpProgress} {t('gamification.xpToNext', 'XP to')} {levelInfo.next.name}</span>
         )}
       </div>
     </div>
@@ -130,7 +165,7 @@ const StreakDisplay = memo(function StreakDisplay({ current, best }) {
       <div className="flex-1 p-4 rounded-xl bg-gradient-to-br from-orange-500/20 to-red-500/20 border border-orange-500/30">
         <div className="flex items-center gap-2 mb-2">
           <Icons.Fire className="w-5 h-5 text-orange-400" />
-          <span className="text-white/60 text-sm">{t('gamification.streak')}</span>
+          <span className="text-white/60 text-sm">{t('gamification.currentStreak', 'Current Streak')}</span>
         </div>
         <p className="text-3xl font-bold text-white">{current}</p>
         <p className="text-white/40 text-xs">{t('stats.days')}</p>
@@ -140,7 +175,7 @@ const StreakDisplay = memo(function StreakDisplay({ current, best }) {
       <div className="flex-1 p-4 rounded-xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-purple-500/30">
         <div className="flex items-center gap-2 mb-2">
           <Icons.Trophy className="w-5 h-5 text-purple-400" />
-          <span className="text-white/60 text-sm">{t('gamification.achievements')}</span>
+          <span className="text-white/60 text-sm">{t('gamification.bestStreak', 'Best Streak')}</span>
         </div>
         <p className="text-3xl font-bold text-white">{best}</p>
         <p className="text-white/40 text-xs">{t('stats.days')}</p>
@@ -151,6 +186,7 @@ const StreakDisplay = memo(function StreakDisplay({ current, best }) {
 
 // Daily Challenge Card Component
 const ChallengeCard = memo(function ChallengeCard({ challenge }) {
+  const { t, language } = useTranslation();
   const Icon = getIcon(challenge.icon);
   const progress = Math.min((challenge.progress / challenge.target) * 100, 100);
 
@@ -171,12 +207,12 @@ const ChallengeCard = memo(function ChallengeCard({ challenge }) {
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between mb-1">
-            <h4 className="text-white font-medium truncate">{challenge.name}</h4>
+            <h4 className="text-white font-medium truncate">{getChallengeLocalized(challenge, 'name', language)}</h4>
             {challenge.completed && (
               <Icons.Check className="w-5 h-5 text-green-400" />
             )}
           </div>
-          <p className="text-white/60 text-sm mb-2">{challenge.description}</p>
+          <p className="text-white/60 text-sm mb-2">{getChallengeLocalized(challenge, 'description', language)}</p>
 
           {/* Progress bar */}
           <div className="h-2 bg-white/10 rounded-full overflow-hidden">
@@ -190,7 +226,7 @@ const ChallengeCard = memo(function ChallengeCard({ challenge }) {
           </div>
           <div className="flex items-center justify-between mt-1 text-xs">
             <span className="text-white/40">{challenge.progress}/{challenge.target}</span>
-            <span className="text-white/60">+{challenge.xpReward} XP</span>
+            <span className="text-white/60">+{challenge.xpReward} {t('gamification.xpLabel', 'XP')}</span>
           </div>
         </div>
       </div>
@@ -200,7 +236,10 @@ const ChallengeCard = memo(function ChallengeCard({ challenge }) {
 
 // Achievement Badge Component
 const AchievementBadge = memo(function AchievementBadge({ achievement, unlocked }) {
+  const { language } = useTranslation();
   const Icon = getIcon(achievement.icon, Icons.Award);
+  const displayName = getLocalized(achievement, 'name', language);
+  const displayDesc = getLocalized(achievement, 'description', language);
 
   return (
     <div
@@ -209,7 +248,7 @@ const AchievementBadge = memo(function AchievementBadge({ achievement, unlocked 
           ? 'bg-white/5 border-white/20'
           : 'bg-white/5 border-white/5 opacity-40 grayscale'
       }`}
-      title={achievement.description}
+      title={displayDesc}
     >
       <div
         className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-2"
@@ -223,7 +262,7 @@ const AchievementBadge = memo(function AchievementBadge({ achievement, unlocked 
           style={{ color: unlocked ? achievement.color : 'rgba(255,255,255,0.3)' }}
         />
       </div>
-      <p className="text-white text-xs font-medium truncate">{achievement.name}</p>
+      <p className="text-white text-xs font-medium truncate">{displayName}</p>
       <p
         className="text-xs truncate"
         style={{ fontFamily: "'Scheherazade New', serif", color: unlocked ? achievement.color : 'rgba(255,255,255,0.3)' }}
@@ -237,13 +276,14 @@ const AchievementBadge = memo(function AchievementBadge({ achievement, unlocked 
 
 // Stats Grid Component
 const StatsGrid = memo(function StatsGrid({ stats }) {
+  const { t } = useTranslation();
   const statItems = [
-    { label: 'Verses Read', value: stats.versesRead, icon: 'BookOpen', color: '#10B981' },
-    { label: 'Surahs Completed', value: stats.surahsCompleted.length, icon: 'Book', color: '#3B82F6' },
-    { label: 'Meditations', value: stats.meditationSessions, icon: 'Breath', color: '#8B5CF6' },
-    { label: 'Time Capsules', value: stats.capsuleCreated, icon: 'Capsule', color: '#F472B6' },
-    { label: 'Locations Found', value: stats.mapLocationsVisited.length, icon: 'Globe3D', color: '#0EA5E9' },
-    { label: 'Shares', value: stats.sharesCount, icon: 'Share', color: '#10B981' },
+    { label: t('gamification.versesRead', 'Verses Read'), value: stats.versesRead, icon: 'BookOpen', color: '#10B981' },
+    { label: t('gamification.surahsCompleted', 'Surahs Completed'), value: stats.surahsCompleted.length, icon: 'Book', color: '#3B82F6' },
+    { label: t('gamification.meditations', 'Meditations'), value: stats.meditationSessions, icon: 'Breath', color: '#8B5CF6' },
+    { label: t('gamification.timeCapsules', 'Time Capsules'), value: stats.capsuleCreated, icon: 'Capsule', color: '#F472B6' },
+    { label: t('gamification.locationsFound', 'Locations Found'), value: stats.mapLocationsVisited.length, icon: 'Globe3D', color: '#0EA5E9' },
+    { label: t('gamification.shares', 'Shares'), value: stats.sharesCount, icon: 'Share', color: '#10B981' },
   ];
 
   return (
@@ -267,6 +307,7 @@ const StatsGrid = memo(function StatsGrid({ stats }) {
 
 // Leaderboard Row Component - Compact pill design on mobile
 const LeaderboardRow = memo(function LeaderboardRow({ entry, isCurrentUser }) {
+  const { t } = useTranslation();
   const levelColor = LEVELS.find(l => l.level === entry.level)?.color || '#6B7280';
 
   return (
@@ -309,9 +350,9 @@ const LeaderboardRow = memo(function LeaderboardRow({ entry, isCurrentUser }) {
       <div className="flex-1 min-w-0">
         <p className="text-white font-medium truncate text-xs sm:text-sm">
           {entry.displayName}
-          {isCurrentUser && <span className="text-amber-400 text-[10px] sm:text-xs ml-1">(You)</span>}
+          {isCurrentUser && <span className="text-amber-400 text-[10px] sm:text-xs ml-1">({t('gamification.you', 'You')})</span>}
         </p>
-        <p className="text-[10px] sm:text-xs hidden sm:block" style={{ color: levelColor }}>Lv. {entry.level}</p>
+        <p className="text-[10px] sm:text-xs hidden sm:block" style={{ color: levelColor }}>{t('gamification.levelAbbr', 'Lv.')} {entry.level}</p>
       </div>
 
       {/* XP + Streak - Compact on mobile */}
@@ -320,7 +361,7 @@ const LeaderboardRow = memo(function LeaderboardRow({ entry, isCurrentUser }) {
         {entry.currentStreak > 0 && (
           <div className="flex items-center gap-0.5 text-orange-400 text-[10px] sm:text-xs">
             <Icons.Fire className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
-            <span className="hidden sm:inline">{entry.currentStreak}d</span>
+            <span className="hidden sm:inline">{entry.currentStreak}{t('gamification.dayAbbr', 'd')}</span>
             <span className="sm:hidden">{entry.currentStreak}</span>
           </div>
         )}
@@ -360,7 +401,7 @@ const LeaderboardTab = memo(function LeaderboardTab({ data, loading, error, sort
     return (
       <div className="text-center py-12">
         <Icons.Trophy className="w-10 h-10 text-white/20 mx-auto mb-3" />
-        <p className="text-white/40 text-sm">No leaderboard data yet. Keep reading!</p>
+        <p className="text-white/40 text-sm">{t('gamification.noLeaderboardData', 'No leaderboard data yet. Keep reading!')}</p>
       </div>
     );
   }
@@ -370,9 +411,9 @@ const LeaderboardTab = memo(function LeaderboardTab({ data, loading, error, sort
       {/* Sort controls */}
       <div className="flex gap-2">
         {[
-          { id: 'xp', label: 'XP (Naikee)' },
-          { id: 'streak', label: 'Streak' },
-          { id: 'verses', label: 'Verses' },
+          { id: 'xp', label: t('gamification.sortXP', 'XP (Naikee)') },
+          { id: 'streak', label: t('gamification.sortStreak', 'Streak') },
+          { id: 'verses', label: t('gamification.sortVerses', 'Verses') },
         ].map(s => (
           <button
             key={s.id}
@@ -391,7 +432,7 @@ const LeaderboardTab = memo(function LeaderboardTab({ data, loading, error, sort
       {/* Current user's rank if not in top list */}
       {data.myRank && data.myRank.rank > data.leaderboard.length && (
         <div className="space-y-2">
-          <p className="text-white/40 text-xs uppercase">Your Rank</p>
+          <p className="text-white/40 text-xs uppercase">{t('gamification.yourRank', 'Your Rank')}</p>
           <LeaderboardRow entry={data.myRank} isCurrentUser />
           <div className="border-b border-white/10 my-2" />
         </div>
@@ -409,7 +450,7 @@ const LeaderboardTab = memo(function LeaderboardTab({ data, loading, error, sort
       </div>
 
       <p className="text-center text-white/30 text-xs mt-4">
-        Updated every minute
+        {t('gamification.updatedEveryMinute', 'Updated every minute')}
       </p>
     </div>
   );
@@ -462,7 +503,7 @@ const GamificationHub = memo(function GamificationHub({
         setLeaderboardLoading(false);
       })
       .catch(() => {
-        setLeaderboardError('Could not load leaderboard. Check your connection.');
+        setLeaderboardError(t('gamification.leaderboardError', 'Could not load leaderboard. Check your connection.'));
         setLeaderboardLoading(false);
       });
   }, [activeTab, leaderboardSort, isVisible]);
@@ -472,13 +513,13 @@ const GamificationHub = memo(function GamificationHub({
     if (!data) return [];
 
     return [
-      { id: 'reading', name: 'Reading', achievements: Object.values(ACHIEVEMENTS).filter(a => a.category === 'reading') },
-      { id: 'streak', name: 'Streaks', achievements: Object.values(ACHIEVEMENTS).filter(a => a.category === 'streak') },
-      { id: 'features', name: 'Features', achievements: Object.values(ACHIEVEMENTS).filter(a => a.category === 'features') },
-      { id: 'hifz', name: 'Memorization', achievements: Object.values(ACHIEVEMENTS).filter(a => a.category === 'hifz') },
-      { id: 'social', name: 'Social', achievements: Object.values(ACHIEVEMENTS).filter(a => a.category === 'social') },
+      { id: 'reading', name: t('gamification.catReading', 'Reading'), achievements: Object.values(ACHIEVEMENTS).filter(a => a.category === 'reading') },
+      { id: 'streak', name: t('gamification.catStreaks', 'Streaks'), achievements: Object.values(ACHIEVEMENTS).filter(a => a.category === 'streak') },
+      { id: 'features', name: t('gamification.catFeatures', 'Features'), achievements: Object.values(ACHIEVEMENTS).filter(a => a.category === 'features') },
+      { id: 'hifz', name: t('gamification.catMemorization', 'Memorization'), achievements: Object.values(ACHIEVEMENTS).filter(a => a.category === 'hifz') },
+      { id: 'social', name: t('gamification.catSocial', 'Social'), achievements: Object.values(ACHIEVEMENTS).filter(a => a.category === 'social') },
     ];
-  }, [data]);
+  }, [data, t]);
 
   if (!isVisible || !data || !levelInfo) return null;
 
@@ -523,13 +564,13 @@ const GamificationHub = memo(function GamificationHub({
           <div className="mt-4">
             <XPProgressBar levelInfo={levelInfo} xp={data.xp} />
           </div>
-          <p className="text-white/30 text-[10px] mt-1 text-center">XP = Naikee (نیکی) — every good deed earns you XP</p>
+          <p className="text-white/30 text-[10px] mt-1 text-center">{t('gamification.xpExplanation', 'XP = Naikee (نیکی) — every good deed earns you XP')}</p>
         </div>
 
         {/* Tabs */}
         <div className="flex-shrink-0 flex border-b border-white/10">
           {[
-            { id: 'overview', label: 'Overview', icon: 'Compass' },
+            { id: 'overview', label: t('gamification.overview', 'Overview'), icon: 'Compass' },
             { id: 'challenges', label: t('gamification.dailyGoal'), icon: 'Target' },
             { id: 'achievements', label: t('gamification.badges'), icon: 'Award' },
             { id: 'leaderboard', label: t('gamification.leaderboard'), icon: 'Trophy' },
@@ -598,7 +639,7 @@ const GamificationHub = memo(function GamificationHub({
               <div className="flex items-center justify-between mb-2">
                 <h3 className="text-white font-medium">{t('gamification.dailyGoal')}</h3>
                 <span className="text-white/40 text-sm">
-                  {challenges.filter(c => c.completed).length}/{challenges.length} completed
+                  {challenges.filter(c => c.completed).length}/{challenges.length} {t('gamification.completed', 'completed')}
                 </span>
               </div>
               {challenges.map((challenge) => (

@@ -283,10 +283,10 @@ const StatsBar = memo(function StatsBar({
             {showControls && onWorldMap && (<li className="flex-shrink-0"><BubbleButton icon={Icons.Globe3D} label={t('statsBar.map', 'Map')} color="#0EA5E9" color2="#0284C7" onClick={onWorldMap} /></li>)}
 
             {/* Time Machine */}
-            {showControls && onTimeMachine && (<li className="flex-shrink-0"><BubbleButton icon={Icons.Clock} label="Timeline" color="#F59E0B" color2="#D97706" onClick={onTimeMachine} /></li>)}
+            {showControls && onTimeMachine && (<li className="flex-shrink-0"><BubbleButton icon={Icons.Clock} label={t('statsBar.timeline', 'Timeline')} color="#F59E0B" color2="#D97706" onClick={onTimeMachine} /></li>)}
 
             {/* Bookmarks */}
-            {showControls && onShowBookmarks && (<li className="flex-shrink-0"><BubbleButton icon={Icons.Bookmark} label="Bookmarks" color="#EC4899" color2="#F472B6" onClick={onShowBookmarks} /></li>)}
+            {showControls && onShowBookmarks && (<li className="flex-shrink-0"><BubbleButton icon={Icons.Bookmark} label={t('statsBar.bookmarks', 'Bookmarks')} color="#EC4899" color2="#F472B6" onClick={onShowBookmarks} /></li>)}
 
             {/* Ummah */}
             {showControls && onGlobalPulse && (<li className="flex-shrink-0"><BubbleButton icon={Icons.GlobalPulse} label={t('statsBar.ummah', 'Ummah')} color="#10B981" color2="#059669" onClick={onGlobalPulse} /></li>)}
@@ -307,7 +307,7 @@ const StatsBar = memo(function StatsBar({
               </>
             ) : (
               <>
-                <li className="flex-shrink-0 opacity-50"><BubbleButton icon={Icons.Star} label="XP" color="#F59E0B" color2="#D97706" onClick={() => {}} /></li>
+                <li className="flex-shrink-0 opacity-50"><BubbleButton icon={Icons.Star} label={t('statsBar.xp', 'XP')} color="#F59E0B" color2="#D97706" onClick={() => {}} /></li>
                 <li className="flex-shrink-0 opacity-50"><BubbleButton icon={Icons.Fire} label={t('statsBar.streak', 'Streak')} color="#94A3B8" color2="#64748B" onClick={() => {}} /></li>
                 <li className="flex-shrink-0 opacity-50"><BubbleButton icon={Icons.Trophy} label={t('statsBar.awards', 'Awards')} color="#A855F7" color2="#9333EA" onClick={() => {}} /></li>
               </>
@@ -339,10 +339,10 @@ const StatsBar = memo(function StatsBar({
               </div>
             </div>
             <div className="flex justify-between mt-0.5">
-              <span className="text-[8px] sm:text-[9px] text-gray-400">Lv.{gamification.level} {gamification.levelInfo.current.name}</span>
+              <span className="text-[8px] sm:text-[9px] text-gray-400">{t('statsBar.level', 'Level')} {gamification.level} — {gamification.levelInfo.current.name}</span>
               {gamification.levelInfo.next && (
                 <span className="text-[8px] sm:text-[9px] text-gray-400">
-                  {gamification.levelInfo.xpProgress}/{gamification.levelInfo.xpNeeded} XP → Lv.{gamification.levelInfo.next.level}
+                  {gamification.levelInfo.xpProgress}/{gamification.levelInfo.xpNeeded} {t('statsBar.xp', 'XP')} → {t('statsBar.level', 'Level')} {gamification.levelInfo.next.level}
                 </span>
               )}
             </div>

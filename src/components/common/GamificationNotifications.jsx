@@ -7,6 +7,7 @@
 import { memo, useEffect, useState } from 'react';
 import { useGamification } from '../../hooks/useGamification';
 import { Icons } from './Icons';
+import { useTranslation } from '../../contexts/LocaleContext';
 
 // Auto-dismiss XP/streak toasts after this duration
 const AUTO_DISMISS_MS = 3000;
@@ -15,6 +16,7 @@ const AUTO_DISMISS_MS = 3000;
  * XP Toast — subtle floating pill at bottom-right
  */
 const XPToast = memo(function XPToast({ amount, onDismiss }) {
+  const { t, tInterpolate } = useTranslation();
   useEffect(() => {
     const timer = setTimeout(onDismiss, AUTO_DISMISS_MS);
     return () => clearTimeout(timer);
@@ -30,7 +32,7 @@ const XPToast = memo(function XPToast({ amount, onDismiss }) {
       }}
     >
       <Icons.Star className="w-3.5 h-3.5" />
-      +{amount} XP
+      {tInterpolate('gamification.xpGained', { amount })}
     </div>
   );
 });
@@ -39,6 +41,7 @@ const XPToast = memo(function XPToast({ amount, onDismiss }) {
  * Streak Toast — fire icon with milestone
  */
 const StreakToast = memo(function StreakToast({ days, onDismiss }) {
+  const { tInterpolate } = useTranslation();
   useEffect(() => {
     const timer = setTimeout(onDismiss, 4000);
     return () => clearTimeout(timer);
@@ -54,7 +57,7 @@ const StreakToast = memo(function StreakToast({ days, onDismiss }) {
       }}
     >
       <Icons.Fire className="w-4 h-4 animate-pulse" />
-      {days}-day streak!
+      {tInterpolate('gamification.streakNotification', { days })}
     </div>
   );
 });
@@ -63,6 +66,7 @@ const StreakToast = memo(function StreakToast({ days, onDismiss }) {
  * Achievement Unlocked — center modal
  */
 const AchievementModal = memo(function AchievementModal({ achievement, xpGained, onDismiss }) {
+  const { t, tInterpolate } = useTranslation();
   const AchIcon = Icons[achievement?.icon] || Icons.Award;
 
   return (
@@ -88,7 +92,7 @@ const AchievementModal = memo(function AchievementModal({ achievement, xpGained,
         </div>
 
         <div className="mt-10">
-          <p className="text-xs font-semibold uppercase tracking-wider text-amber-400 mb-1">Achievement Unlocked</p>
+          <p className="text-xs font-semibold uppercase tracking-wider text-amber-400 mb-1">{t('gamification.achievementUnlocked')}</p>
           <h3 className="text-xl font-bold text-white mb-0.5">{achievement?.name || 'Achievement'}</h3>
           {achievement?.nameAr && <p className="text-lg text-white/60 font-arabic mb-2">{achievement.nameAr}</p>}
           <p className="text-sm text-white/50 mb-4">{achievement?.description}</p>
@@ -96,7 +100,7 @@ const AchievementModal = memo(function AchievementModal({ achievement, xpGained,
           {xpGained > 0 && (
             <div className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold mb-4">
               <Icons.Star className="w-3.5 h-3.5" />
-              +{xpGained} XP
+              {tInterpolate('gamification.xpGained', { amount: xpGained })}
             </div>
           )}
         </div>
@@ -106,7 +110,7 @@ const AchievementModal = memo(function AchievementModal({ achievement, xpGained,
           className="w-full py-2.5 rounded-xl text-white font-semibold text-sm transition-all hover:opacity-90"
           style={{ background: `linear-gradient(135deg, ${achievement?.color || '#F59E0B'}, ${achievement?.color || '#F59E0B'}cc)` }}
         >
-          MashaAllah!
+          {t('gamification.mashaAllah')}
         </button>
       </div>
     </div>
@@ -117,6 +121,7 @@ const AchievementModal = memo(function AchievementModal({ achievement, xpGained,
  * Level Up — celebratory center modal
  */
 const LevelUpModal = memo(function LevelUpModal({ oldLevel, newLevel, onDismiss }) {
+  const { t } = useTranslation();
   return (
     <div className="fixed inset-0 flex items-center justify-center z-[99999] p-4" onClick={onDismiss}>
       <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" style={{ animation: 'fadeIn 0.3s ease-out' }} />
@@ -138,7 +143,7 @@ const LevelUpModal = memo(function LevelUpModal({ oldLevel, newLevel, onDismiss 
           <span className="text-4xl font-bold text-white drop-shadow-lg">{newLevel?.level || '?'}</span>
         </div>
 
-        <p className="text-xs font-semibold uppercase tracking-wider text-amber-400 mb-1">Level Up!</p>
+        <p className="text-xs font-semibold uppercase tracking-wider text-amber-400 mb-1">{t('gamification.levelUp')}</p>
         <div className="flex items-center justify-center gap-3 mb-2">
           <span className="text-sm text-white/40 line-through">{oldLevel?.name}</span>
           <Icons.ChevronRight className="w-4 h-4 text-white/30" />
@@ -151,7 +156,7 @@ const LevelUpModal = memo(function LevelUpModal({ oldLevel, newLevel, onDismiss 
           className="w-full py-2.5 rounded-xl text-white font-semibold text-sm transition-all hover:opacity-90"
           style={{ background: `linear-gradient(135deg, ${newLevel?.color || '#FFD700'}, ${newLevel?.color || '#FFD700'}cc)` }}
         >
-          Alhamdulillah!
+          {t('gamification.alhamdulillah')}
         </button>
       </div>
     </div>

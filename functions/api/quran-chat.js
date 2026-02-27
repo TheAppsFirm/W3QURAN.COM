@@ -218,79 +218,87 @@ async function incrementFreeDailyUsage(env, userId) {
   }
 }
 
-// Call OpenAI API - optimized for speed
+// Build OpenAI messages array
+function buildMessages(message, conversationHistory = []) {
+  return [
+    { role: 'system', content: SYSTEM_PROMPT },
+    ...conversationHistory.slice(-4),
+    { role: 'user', content: message }
+  ];
+}
+
+// Call OpenAI API - non-streaming (legacy fallback)
 async function callOpenAI(env, message, conversationHistory = []) {
-  // Validate API key exists
   if (!env.OPENAI_API_KEY) {
-    console.error('[OpenAI] Missing OPENAI_API_KEY');
     throw new Error('OpenAI API key not configured');
   }
 
-  const messages = [
-    { role: 'system', content: SYSTEM_PROMPT },
-    ...conversationHistory.slice(-4), // Reduced context for speed
-    { role: 'user', content: message }
-  ];
+  const messages = buildMessages(message, conversationHistory);
 
-  let response;
-  try {
-    response = await fetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${env.OPENAI_API_KEY}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: 'gpt-4o-mini', // Much faster than gpt-4o, still high quality
-        messages,
-        max_tokens: 600, // Reduced for faster response
-        temperature: 0.6, // Slightly lower for more focused responses
-      }),
-    });
-  } catch (fetchError) {
-    console.error('[OpenAI] Network error:', fetchError);
-    throw new Error(`Network error connecting to OpenAI: ${fetchError.message}`);
-  }
+  const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${env.OPENAI_API_KEY}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      model: 'gpt-4o-mini',
+      messages,
+      max_tokens: 600,
+      temperature: 0.6,
+    }),
+  });
 
   if (!response.ok) {
     const errorText = await response.text().catch(() => 'Unknown error');
-    console.error('[OpenAI] API Error:', response.status, errorText);
-
-    // Parse error for better messages
     let errorMessage = 'Failed to get AI response';
     try {
       const errorJson = JSON.parse(errorText);
-      if (errorJson.error?.message) {
-        errorMessage = errorJson.error.message;
-      }
+      if (errorJson.error?.message) errorMessage = errorJson.error.message;
     } catch {
-      // Use status code based messages
-      if (response.status === 401) {
-        errorMessage = 'Invalid OpenAI API key';
-      } else if (response.status === 429) {
-        errorMessage = 'Rate limit exceeded. Please try again in a moment.';
-      } else if (response.status === 500 || response.status === 503) {
-        errorMessage = 'OpenAI service temporarily unavailable';
-      }
+      if (response.status === 429) errorMessage = 'Rate limit exceeded. Please try again.';
     }
-
     throw new Error(errorMessage);
   }
 
-  let data;
-  try {
-    data = await response.json();
-  } catch (jsonError) {
-    console.error('[OpenAI] JSON parse error:', jsonError);
-    throw new Error('Invalid response from OpenAI');
+  const data = await response.json();
+  return data.choices?.[0]?.message?.content || '';
+}
+
+// Call OpenAI API - streaming (returns ReadableStream from OpenAI)
+async function callOpenAIStream(env, message, conversationHistory = []) {
+  if (!env.OPENAI_API_KEY) {
+    throw new Error('OpenAI API key not configured');
   }
 
-  if (!data.choices || !data.choices[0] || !data.choices[0].message) {
-    console.error('[OpenAI] Unexpected response format:', data);
-    throw new Error('Unexpected response format from OpenAI');
+  const messages = buildMessages(message, conversationHistory);
+
+  const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${env.OPENAI_API_KEY}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      model: 'gpt-4o-mini',
+      messages,
+      max_tokens: 600,
+      temperature: 0.6,
+      stream: true,
+    }),
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text().catch(() => 'Unknown error');
+    let errorMessage = 'AI service temporarily unavailable';
+    try {
+      const errorJson = JSON.parse(errorText);
+      if (errorJson.error?.message) errorMessage = errorJson.error.message;
+    } catch {}
+    throw new Error(errorMessage);
   }
 
-  return data.choices[0].message.content;
+  return response.body;
 }
 
 // Voice settings for different languages
@@ -503,79 +511,154 @@ export async function onRequest(context) {
       accessType = 'paid';
     }
 
-    // Call OpenAI
+    const { stream: useStream = false } = body;
+
+    // ─── STREAMING MODE ───
+    if (useStream) {
+      // Deduct credit upfront for streaming
+      if (accessType === 'paid') {
+        try { await useCredit(env, user.user_id); } catch {}
+      }
+
+      let openAIStream;
+      try {
+        openAIStream = await callOpenAIStream(env, message, conversationHistory);
+      } catch (e) {
+        return new Response(JSON.stringify({ error: e.message, code: 'OPENAI_ERROR' }), {
+          status: 503, headers: corsHeaders,
+        });
+      }
+
+      // Transform OpenAI SSE stream into our own SSE stream
+      const { readable, writable } = new TransformStream();
+      const writer = writable.getWriter();
+      const encoder = new TextEncoder();
+      let fullText = '';
+
+      // Process in background
+      (async () => {
+        const reader = openAIStream.getReader();
+        const decoder = new TextDecoder();
+        let buffer = '';
+
+        try {
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+
+            buffer += decoder.decode(value, { stream: true });
+            const lines = buffer.split('\n');
+            buffer = lines.pop() || '';
+
+            for (const line of lines) {
+              if (!line.startsWith('data: ')) continue;
+              const data = line.slice(6).trim();
+              if (data === '[DONE]') continue;
+
+              try {
+                const parsed = JSON.parse(data);
+                const delta = parsed.choices?.[0]?.delta?.content;
+                if (delta) {
+                  fullText += delta;
+                  await writer.write(encoder.encode(`data: ${JSON.stringify({ type: 'token', content: delta })}\n\n`));
+                }
+              } catch {}
+            }
+          }
+
+          // Stream complete — send verses, generate TTS, send final metadata
+          const versesCited = extractVerseReferences(fullText);
+
+          // Generate TTS from complete text
+          let audioUrl = null;
+          if (includeTTS) {
+            audioUrl = await generateTTS(env, fullText, ttsLanguage);
+          }
+
+          // Save conversation
+          const convId = `conv_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+          try {
+            await env.DB.prepare(`
+              INSERT INTO quran_conversations (id, user_id, message, response, verses_cited, language)
+              VALUES (?, ?, ?, ?, ?, ?)
+            `).bind(convId, user.user_id, message, fullText, JSON.stringify(versesCited), language).run();
+          } catch {}
+
+          // Get updated credits
+          let creditsResponse;
+          if (accessType === 'admin') {
+            creditsResponse = { balance: '∞', tier: 'admin', unlimited: true };
+          } else {
+            try {
+              const updated = await getUserCredits(env, user.user_id);
+              creditsResponse = { balance: updated.credits_balance, tier: updated.subscription_tier };
+            } catch {
+              creditsResponse = { balance: credits.credits_balance - 1, tier: credits.subscription_tier };
+            }
+          }
+
+          // Send final event with metadata
+          await writer.write(encoder.encode(`data: ${JSON.stringify({
+            type: 'done',
+            versesCited,
+            audioUrl,
+            credits: creditsResponse,
+            conversationId: convId,
+          })}\n\n`));
+
+        } catch (e) {
+          await writer.write(encoder.encode(`data: ${JSON.stringify({ type: 'error', error: e.message })}\n\n`));
+        } finally {
+          await writer.close();
+        }
+      })();
+
+      return new Response(readable, {
+        headers: {
+          ...corsHeaders,
+          'Content-Type': 'text/event-stream',
+          'Cache-Control': 'no-cache',
+          'Connection': 'keep-alive',
+        },
+      });
+    }
+
+    // ─── NON-STREAMING MODE (legacy) ───
     let aiResponse;
     try {
       aiResponse = await callOpenAI(env, message, conversationHistory);
     } catch (openAIError) {
-      console.error('[QuranChat] OpenAI API error:', openAIError);
-      return new Response(JSON.stringify({
-        error: 'AI service temporarily unavailable',
-        code: 'OPENAI_ERROR',
-      }), {
-        status: 503,
-        headers: corsHeaders,
+      return new Response(JSON.stringify({ error: 'AI service temporarily unavailable', code: 'OPENAI_ERROR' }), {
+        status: 503, headers: corsHeaders,
       });
     }
 
-    // Deduct credit for paid users (admin gets free access)
     if (accessType === 'paid') {
-      try {
-        await useCredit(env, user.user_id);
-      } catch (creditError) {
-        console.error('[QuranChat] Credit deduction error:', creditError);
-        // Non-fatal, already got response
-      }
+      try { await useCredit(env, user.user_id); } catch {}
     }
-    // Admin: no deduction
 
-    // Extract verse references
     const versesCited = extractVerseReferences(aiResponse);
 
-    // Generate TTS if requested (with language-specific voice)
     let audioUrl = null;
     if (includeTTS) {
       audioUrl = await generateTTS(env, aiResponse, ttsLanguage);
     }
 
-    // Save conversation
     const convId = `conv_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     try {
       await env.DB.prepare(`
         INSERT INTO quran_conversations (id, user_id, message, response, verses_cited, language)
         VALUES (?, ?, ?, ?, ?, ?)
-      `).bind(
-        convId,
-        user.user_id,
-        message,
-        aiResponse,
-        JSON.stringify(versesCited),
-        language
-      ).run();
-    } catch (saveError) {
-      console.error('[QuranChat] Conversation save error:', saveError);
-      // Non-fatal, continue with response
-    }
+      `).bind(convId, user.user_id, message, aiResponse, JSON.stringify(versesCited), language).run();
+    } catch {}
 
-    // Get updated credits/usage
     let updatedCredits;
-    try {
-      updatedCredits = await getUserCredits(env, user.user_id);
-    } catch (creditsUpdateError) {
-      console.error('[QuranChat] Failed to fetch updated credits:', creditsUpdateError);
-      updatedCredits = credits; // fallback to pre-deduction credits
-    }
+    try { updatedCredits = await getUserCredits(env, user.user_id); } catch { updatedCredits = credits; }
 
-    // Build response based on access type
     let creditsResponse;
     if (accessType === 'admin') {
-      creditsResponse = {
-        balance: '∞',
-        tier: 'admin',
-        unlimited: true,
-      };
+      creditsResponse = { balance: '∞', tier: 'admin', unlimited: true };
     } else {
-      // Paid user
       creditsResponse = {
         balance: updatedCredits.credits_balance,
         tier: updatedCredits.subscription_tier,
@@ -585,17 +668,9 @@ export async function onRequest(context) {
     }
 
     return new Response(JSON.stringify({
-      success: true,
-      response: aiResponse,
-      versesCited,
-      audioUrl,
-      credits: creditsResponse,
-      accessType,
-      conversationId: convId,
-    }), {
-      status: 200,
-      headers: corsHeaders,
-    });
+      success: true, response: aiResponse, versesCited, audioUrl,
+      credits: creditsResponse, accessType, conversationId: convId,
+    }), { status: 200, headers: corsHeaders });
 
   } catch (error) {
     console.error('[QuranChat] Unhandled error:', error);

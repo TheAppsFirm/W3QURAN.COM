@@ -117,13 +117,13 @@ const Header = memo(function Header({ filters, setFilters, showAnalytics, setSho
         {/* Main Row */}
         <div className="flex items-center justify-center gap-2 sm:gap-3 flex-wrap">
 
-          {/* App Logo - Mobile: Icon only, Desktop: Icon + Text */}
+          {/* App Logo - Click to reload — Mobile: Icon only, Desktop: Icon + Text */}
           {/* Mobile Logo (Icon only) */}
-          <div className="flex lg:hidden items-center mr-2">
+          <div className="flex lg:hidden items-center mr-2 cursor-pointer" onClick={() => { window.location.href = '/'; }}>
             <FusionLogo size={40} variant="gateway" animated={true} />
           </div>
           {/* Desktop Logo (Icon + Text) */}
-          <div className="hidden lg:flex items-center mr-4">
+          <div className="hidden lg:flex items-center mr-4 cursor-pointer" onClick={() => { window.location.href = '/'; }}>
             <FusionLogoWithText size={48} variant="gateway" textColor="white" />
           </div>
 

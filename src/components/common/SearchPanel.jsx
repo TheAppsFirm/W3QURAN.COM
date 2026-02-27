@@ -23,6 +23,7 @@ import { useTranslation } from '../../contexts/LocaleContext';
  * Search Result Item
  */
 const SearchResultItem = memo(function SearchResultItem({ result, onSelect }) {
+  const { t } = useTranslation();
   return (
     <button
       onClick={() => onSelect(result)}
@@ -37,7 +38,7 @@ const SearchResultItem = memo(function SearchResultItem({ result, onSelect }) {
         </div>
         <div className="flex-1">
           <div className="text-xs font-medium">{result.surahName}</div>
-          <div className="text-[10px] text-white/50">Ayah {result.ayahNumber}</div>
+          <div className="text-[10px] text-white/50">{t('reader.ayah')} {result.ayahNumber}</div>
         </div>
         {result.surahArabic && (
           <div className="text-sm" style={{ fontFamily: "'Scheherazade New', serif", color: 'rgba(255,255,255,0.6)' }}>
@@ -57,7 +58,7 @@ const SearchResultItem = memo(function SearchResultItem({ result, onSelect }) {
       />
 
       <div className="flex justify-end mt-2">
-        <span className="text-[10px] text-amber-400">View in Surah</span>
+        <span className="text-[10px] text-amber-400">{t('search.viewInSurah')}</span>
       </div>
     </button>
   );
@@ -100,7 +101,7 @@ const RecentSearchItem = memo(function RecentSearchItem({ query, onSelect, onRem
  * Main Search Panel Component - Bubble Style
  */
 const SearchPanel = memo(function SearchPanel({ onClose, onSelectResult }) {
-  const { t } = useTranslation();
+  const { t, tInterpolate } = useTranslation();
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -212,7 +213,7 @@ const SearchPanel = memo(function SearchPanel({ onClose, onSelectResult }) {
               color: loading || query.length < 2 ? 'rgba(255,255,255,0.3)' : '#fff',
             }}
           >
-            {loading ? '...' : 'Go'}
+            {loading ? '...' : t('search.go')}
           </button>
         </div>
       </form>
@@ -249,10 +250,10 @@ const SearchPanel = memo(function SearchPanel({ onClose, onSelectResult }) {
       {error && (
         <div className="p-4 rounded-xl mb-3 text-center" style={{ background: 'rgba(239,68,68,0.15)' }}>
           <div className="text-2xl mb-2">⚠️</div>
-          <p className="text-sm text-red-300 font-medium mb-1">{t('common.search')} Unavailable</p>
+          <p className="text-sm text-red-300 font-medium mb-1">{t('search.unavailable')}</p>
           <p className="text-xs text-red-300/70 mb-3">
             {error.includes('API') || error.includes('failed')
-              ? 'Unable to connect to search service. Please check your internet connection.'
+              ? t('search.connectionError')
               : error}
           </p>
           <button
@@ -268,7 +269,7 @@ const SearchPanel = memo(function SearchPanel({ onClose, onSelectResult }) {
       {/* Results */}
       {results.length > 0 ? (
         <div className="space-y-2">
-          <div className="text-[11px] text-white/50 mb-2">Found {results.length} results for "{query}"</div>
+          <div className="text-[11px] text-white/50 mb-2">{tInterpolate('search.foundResults', { count: results.length, query })}</div>
           <div className="max-h-64 overflow-y-auto">
             {results.map((result, index) => (
               <SearchResultItem
@@ -283,7 +284,7 @@ const SearchPanel = memo(function SearchPanel({ onClose, onSelectResult }) {
         <div className="text-center py-6">
           <div className="text-3xl mb-2">🔍</div>
           <div className="text-xs text-white/50">{t('errors.notFound')}</div>
-          <div className="text-[10px] text-white/40 mt-1">Try different keywords</div>
+          <div className="text-[10px] text-white/40 mt-1">{t('search.tryDifferent')}</div>
         </div>
       ) : (
         <>
@@ -291,7 +292,7 @@ const SearchPanel = memo(function SearchPanel({ onClose, onSelectResult }) {
           {recentSearches.length > 0 && (
             <div className="mb-4">
               <div className="flex justify-between items-center mb-2">
-                <h3 className="text-xs font-medium">Recent</h3>
+                <h3 className="text-xs font-medium">{t('search.recent')}</h3>
                 <button onClick={handleClearRecent} className="text-[10px] text-white/40 hover:text-white/60">
                   {t('header.clear')}
                 </button>
@@ -310,7 +311,7 @@ const SearchPanel = memo(function SearchPanel({ onClose, onSelectResult }) {
           {/* Suggestions */}
           <div>
             <h3 className="text-xs font-medium mb-2" style={{ direction: searchMode === 'urdu' || searchMode === 'arabic' ? 'rtl' : 'ltr' }}>
-              {searchMode === 'urdu' ? 'مقبول موضوعات' : searchMode === 'arabic' ? 'مواضيع شائعة' : 'Popular Topics'}
+              {t('search.popularTopics')}
             </h3>
             <div className="flex flex-wrap gap-2" style={{ direction: searchMode === 'urdu' || searchMode === 'arabic' ? 'rtl' : 'ltr' }}>
               {suggestions.map((suggestion) => (

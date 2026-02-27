@@ -7,6 +7,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { Icons } from './Icons';
+import { useTranslation } from '../../contexts/LocaleContext';
 
 const DISMISSED_KEY = 'w3quran_dismissed_announcements';
 // Dismissed announcements stay dismissed permanently (until announcement is deleted by admin)
@@ -42,6 +43,7 @@ const renderMessageWithLinks = (text, isRead) => {
 
 // Notification Bell Component - Shows all announcements in a centered modal
 export const NotificationBell = ({ userTier = 'free' }) => {
+  const { t } = useTranslation();
   const [announcements, setAnnouncements] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [dismissed, setDismissed] = useState({});
@@ -98,7 +100,7 @@ export const NotificationBell = ({ userTier = 'free' }) => {
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         className="relative flex flex-col items-center sm:gap-0.5 transition-all duration-300 flex-shrink-0"
-        title="Notifications"
+        title={t('notifications.title')}
       >
         {/* Bubble - w-10 h-10 (40px) on mobile, w-[54px] h-[54px] on desktop */}
         <div
@@ -183,7 +185,7 @@ export const NotificationBell = ({ userTier = 'free' }) => {
           className="text-[9px] font-semibold transition-colors duration-300 hidden sm:block whitespace-nowrap"
           style={{ color: isHovered ? '#8b5cf6' : '#64748b' }}
         >
-          Alerts
+          {t('notifications.alerts')}
         </span>
       </button>
 
@@ -218,11 +220,11 @@ export const NotificationBell = ({ userTier = 'free' }) => {
                   <Icons.Bell className="w-6 h-6 text-white" />
                 </div>
                 <div>
-                  <h2 className="text-xl font-bold text-white">Notifications</h2>
+                  <h2 className="text-xl font-bold text-white">{t('notifications.title')}</h2>
                   {unreadCount > 0 ? (
-                    <p className="text-purple-100 text-sm">{unreadCount} new update{unreadCount > 1 ? 's' : ''}</p>
+                    <p className="text-purple-100 text-sm">{unreadCount} {unreadCount > 1 ? t('notifications.newUpdates') : t('notifications.newUpdate')}</p>
                   ) : (
-                    <p className="text-purple-200 text-sm">All caught up!</p>
+                    <p className="text-purple-200 text-sm">{t('notifications.allCaughtUp')}</p>
                   )}
                 </div>
               </div>
@@ -235,18 +237,18 @@ export const NotificationBell = ({ userTier = 'free' }) => {
                   <div className="w-16 h-16 rounded-full bg-purple-50 flex items-center justify-center mx-auto mb-4">
                     <Icons.Bell className="w-8 h-8 text-purple-300" />
                   </div>
-                  <p className="text-gray-800 font-semibold text-lg">No notifications</p>
-                  <p className="text-gray-500 text-sm mt-1">You're all caught up!</p>
+                  <p className="text-gray-800 font-semibold text-lg">{t('notifications.noNotifications')}</p>
+                  <p className="text-gray-500 text-sm mt-1">{t('notifications.allCaughtUpMessage')}</p>
                 </div>
               ) : (
                 <div className="divide-y divide-gray-100">
                   {announcements.map((announcement, index) => {
                     const isRead = !!dismissed[announcement.id];
                     const typeConfig = {
-                      info: { label: 'Info', bg: 'bg-blue-500', dot: 'bg-blue-500' },
-                      warning: { label: 'Important', bg: 'bg-amber-500', dot: 'bg-amber-500' },
-                      success: { label: 'Success', bg: 'bg-emerald-500', dot: 'bg-emerald-500' },
-                      promo: { label: 'New', bg: 'bg-purple-500', dot: 'bg-purple-500' },
+                      info: { label: t('notifications.typeInfo'), bg: 'bg-blue-500', dot: 'bg-blue-500' },
+                      warning: { label: t('notifications.typeImportant'), bg: 'bg-amber-500', dot: 'bg-amber-500' },
+                      success: { label: t('notifications.typeSuccess'), bg: 'bg-emerald-500', dot: 'bg-emerald-500' },
+                      promo: { label: t('notifications.typeNew'), bg: 'bg-purple-500', dot: 'bg-purple-500' },
                     };
                     const typeStyle = typeConfig[announcement.type] || typeConfig.info;
 
@@ -272,7 +274,7 @@ export const NotificationBell = ({ userTier = 'free' }) => {
                             <button
                               onClick={() => handleDismiss(announcement.id)}
                               className="text-gray-400 hover:text-purple-600 p-1 rounded hover:bg-purple-100 transition-colors"
-                              title="Mark as read"
+                              title={t('notifications.markAsRead')}
                             >
                               <Icons.Check className="w-4 h-4" />
                             </button>
@@ -311,7 +313,7 @@ export const NotificationBell = ({ userTier = 'free' }) => {
             {/* Footer */}
             <div className="px-5 py-3 bg-gray-50 border-t border-gray-100 text-center">
               <p className="text-gray-400 text-xs">
-                w3Quran Notifications
+                {t('notifications.footer')}
               </p>
             </div>
           </div>
@@ -324,6 +326,7 @@ export const NotificationBell = ({ userTier = 'free' }) => {
 
 // Main Banner Component
 const AnnouncementBanner = ({ userTier = 'free' }) => {
+  const { t } = useTranslation();
   const [announcements, setAnnouncements] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -451,7 +454,7 @@ const AnnouncementBanner = ({ userTier = 'free' }) => {
             <button
               onClick={() => handleDismiss(current.id)}
               className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors flex-shrink-0"
-              title="Dismiss"
+              title={t('notifications.dismiss')}
             >
               <Icons.X className="w-3 h-3 sm:w-4 sm:h-4" />
             </button>

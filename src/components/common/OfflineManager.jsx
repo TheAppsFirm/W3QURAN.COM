@@ -6,6 +6,7 @@
 import { memo, useState, useEffect, useCallback } from 'react';
 import BubbleOverlay from './BubbleOverlay';
 import { Icons } from './Icons';
+import { useTranslation } from '../../contexts/LocaleContext';
 import {
   isOfflineModeAvailable,
   isOnline,
@@ -50,11 +51,12 @@ const getReciterLabel = (id) => {
  * Download Progress
  */
 const DownloadProgress = memo(function DownloadProgress({ progress, current, total, phase }) {
+  const { t } = useTranslation();
   return (
     <div className="p-3 rounded-xl mb-3" style={{ background: 'rgba(0,0,0,0.2)' }}>
       <div className="flex justify-between mb-2">
         <span className="text-xs text-white/70">
-          {phase === 'audio' ? 'Downloading audio...' : 'Downloading text...'}
+          {phase === 'audio' ? t('offline.downloadingAudio', 'Downloading audio...') : t('offline.downloadingText', 'Downloading text...')}
         </span>
         <span className="text-xs font-semibold text-blue-400">{progress}%</span>
       </div>
@@ -64,7 +66,7 @@ const DownloadProgress = memo(function DownloadProgress({ progress, current, tot
           background: 'linear-gradient(90deg, #60a5fa, #3b82f6)',
         }} />
       </div>
-      {current > 0 && total > 0 && <div className="text-[10px] text-white/40 mt-1">{current} of {total} surahs</div>}
+      {current > 0 && total > 0 && <div className="text-[10px] text-white/40 mt-1">{current} {t('offline.of', 'of')} {total} {t('offline.surahs', 'surahs')}</div>}
     </div>
   );
 });
@@ -73,6 +75,7 @@ const DownloadProgress = memo(function DownloadProgress({ progress, current, tot
  * Surah Download Item
  */
 const SurahItem = memo(function SurahItem({ surah, isCached, onDownload, isDownloading }) {
+  const { t } = useTranslation();
   return (
     <div className="flex items-center justify-between p-2 rounded-xl mb-1" style={{
       background: isCached ? 'rgba(34,197,94,0.1)' : 'rgba(255,255,255,0.03)',
@@ -86,7 +89,7 @@ const SurahItem = memo(function SurahItem({ surah, isCached, onDownload, isDownl
         </div>
         <div>
           <span className={`text-xs ${isCached ? 'text-green-400 font-medium' : 'text-white/70'}`}>{surah.name}</span>
-          <div className="text-[10px] text-white/30">{surah.ayahs} ayahs</div>
+          <div className="text-[10px] text-white/30">{surah.ayahs} {t('offline.ayahs', 'ayahs')}</div>
         </div>
       </div>
       {isCached ? (
@@ -97,7 +100,7 @@ const SurahItem = memo(function SurahItem({ surah, isCached, onDownload, isDownl
             background: isDownloading ? 'rgba(255,255,255,0.05)' : 'rgba(96,165,250,0.2)',
             color: isDownloading ? 'rgba(255,255,255,0.3)' : '#60a5fa',
           }}>
-          {isDownloading ? '...' : 'Get'}
+          {isDownloading ? '...' : t('offline.get', 'Get')}
         </button>
       )}
     </div>
@@ -108,6 +111,7 @@ const SurahItem = memo(function SurahItem({ surah, isCached, onDownload, isDownl
  * Downloaded Item - grouped by surah (combined Arabic + translation + audio)
  */
 const DownloadedItem = memo(function DownloadedItem({ surahId, entries, audioInfo, onDelete, onRedownload, isDownloading }) {
+  const { t } = useTranslation();
   const surah = SURAHS.find(s => s.id === surahId);
   const textSize = entries.reduce((sum, e) => sum + (e.size || 0), 0);
   const audioSize = audioInfo?.size || 0;
@@ -117,9 +121,9 @@ const DownloadedItem = memo(function DownloadedItem({ surahId, entries, audioInf
 
   // Build description: "Arabic + Urdu + Audio"
   const parts = [];
-  if (hasArabic) parts.push('Arabic');
+  if (hasArabic) parts.push(t('offline.arabic', 'Arabic'));
   translationIds.forEach(id => parts.push(getTranslationLabel(id)));
-  if (audioInfo) parts.push('Audio');
+  if (audioInfo) parts.push(t('offline.audio', 'Audio'));
 
   const missingAudio = !audioInfo;
 
@@ -131,10 +135,10 @@ const DownloadedItem = memo(function DownloadedItem({ surahId, entries, audioInf
           {surahId}
         </div>
         <div className="min-w-0">
-          <div className="text-xs font-medium text-white">{surah?.name || `Surah ${surahId}`}</div>
+          <div className="text-xs font-medium text-white">{surah?.name || `${t('offline.surah', 'Surah')} ${surahId}`}</div>
           <div className="text-[10px] text-white/40">{parts.join(' + ')} · {formatBytes(totalSize)}</div>
           {missingAudio && (
-            <div className="text-[9px] text-amber-400/70 mt-0.5">No audio — tap update to download</div>
+            <div className="text-[9px] text-amber-400/70 mt-0.5">{t('offline.noAudioTapUpdate', 'No audio — tap update to download')}</div>
           )}
         </div>
       </div>
@@ -142,7 +146,7 @@ const DownloadedItem = memo(function DownloadedItem({ surahId, entries, audioInf
         {missingAudio && (
           <button onClick={() => onRedownload(surahId)} disabled={isDownloading}
             className="px-1.5 py-1 rounded-lg text-[9px] text-blue-400 hover:bg-blue-500/20 transition-all disabled:opacity-30"
-            title="Download audio">
+            title={t('offline.downloadAudio', 'Download audio')}>
             <Icons.Download className="w-3 h-3" />
           </button>
         )}
@@ -159,6 +163,7 @@ const DownloadedItem = memo(function DownloadedItem({ surahId, entries, audioInf
  * Main Offline Manager - Bubble Style
  */
 const OfflineManager = memo(function OfflineManager({ onClose, translationId }) {
+  const { t, isRTL } = useTranslation();
   // Use the user's selected reader translation/reciter, fallback to defaults
   if (!translationId) {
     try { translationId = localStorage.getItem('reader_translation')?.replace(/^"|"$/g, '') || 'en.sahih'; } catch { translationId = 'en.sahih'; }
@@ -297,7 +302,7 @@ const OfflineManager = memo(function OfflineManager({ onClose, translationId }) 
   }, []);
 
   const cachedCount = Object.values(cachedStatus).filter(Boolean).length;
-  const tabs = [{ id: 'status', label: 'Status' }, { id: 'download', label: 'Download' }, { id: 'manage', label: 'Manage' }];
+  const tabs = [{ id: 'status', label: t('offline.tabStatus', 'Status') }, { id: 'download', label: t('offline.tabDownload', 'Download') }, { id: 'manage', label: t('offline.tabManage', 'Manage') }];
 
   // Group downloaded surahs by surahId for Manage tab
   const groupedDownloads = {};
@@ -309,24 +314,24 @@ const OfflineManager = memo(function OfflineManager({ onClose, translationId }) 
 
   if (!isOfflineModeAvailable()) {
     return (
-      <BubbleOverlay onClose={onClose} title="Offline Mode" icon={Icons.Download} gradient={['#ef4444', '#dc2626', '#b91c1c']} size="small">
+      <BubbleOverlay onClose={onClose} title={t('offline.title', 'Offline Mode')} icon={Icons.Download} gradient={['#ef4444', '#dc2626', '#b91c1c']} size="small">
         <div className="text-center py-8">
           <div className="text-4xl mb-3">:(</div>
-          <div className="text-sm text-white/70">Offline mode not supported</div>
+          <div className="text-sm text-white/70">{t('offline.notSupported', 'Offline mode not supported')}</div>
         </div>
       </BubbleOverlay>
     );
   }
 
   return (
-    <BubbleOverlay onClose={onClose} title="Offline Mode" subtitle={`${cachedCount}/114 Surahs`} icon={Icons.Download} gradient={['#3b82f6', '#2563eb', '#1d4ed8']} size="medium">
+    <BubbleOverlay onClose={onClose} title={t('offline.title', 'Offline Mode')} subtitle={`${cachedCount}/114 ${t('offline.surahs', 'Surahs')}`} icon={Icons.Download} gradient={['#3b82f6', '#2563eb', '#1d4ed8']} size="medium">
       {/* Network Status */}
       <div className="flex items-center gap-2 p-2 rounded-xl mb-3" style={{
         background: networkOnline ? 'rgba(34,197,94,0.15)' : 'rgba(239,68,68,0.15)',
       }}>
         <div className="w-2 h-2 rounded-full" style={{ background: networkOnline ? '#22c55e' : '#ef4444' }} />
         <span className={`text-xs ${networkOnline ? 'text-green-400' : 'text-red-400'}`}>
-          {networkOnline ? 'Online' : 'Offline'}
+          {networkOnline ? t('offline.online', 'Online') : t('offline.offline', 'Offline')}
         </span>
       </div>
 
@@ -362,11 +367,11 @@ const OfflineManager = memo(function OfflineManager({ onClose, translationId }) 
         <div className="space-y-4">
           <div className="p-4 rounded-2xl text-center" style={{ background: 'rgba(255,255,255,0.05)' }}>
             <div className="text-3xl font-bold text-blue-400">{cachedCount} / 114</div>
-            <div className="text-xs text-white/50 mt-1">Surahs available offline</div>
+            <div className="text-xs text-white/50 mt-1">{t('offline.surahsAvailableOffline', 'Surahs available offline')}</div>
             <div className="text-[10px] text-white/30 mt-2">
               {cachedCount > 0 ? (
-                <>Text{Object.keys(downloadedAudioMap).length > 0 ? ' + Audio' : ''} · {formatBytes(totalStorage)}</>
-              ) : 'No downloads yet'}
+                <>{t('offline.text', 'Text')}{Object.keys(downloadedAudioMap).length > 0 ? ` + ${t('offline.audio', 'Audio')}` : ''} · {formatBytes(totalStorage)}</>
+              ) : t('offline.noDownloadsYet', 'No downloads yet')}
             </div>
           </div>
           <div className="flex gap-2">
@@ -375,14 +380,14 @@ const OfflineManager = memo(function OfflineManager({ onClose, translationId }) 
                 background: isDownloading || !networkOnline ? 'rgba(255,255,255,0.1)' : 'linear-gradient(135deg, #3b82f6, #2563eb)',
                 color: isDownloading || !networkOnline ? 'rgba(255,255,255,0.3)' : '#fff',
               }}>
-              Download All
+              {t('offline.downloadAll', 'Download All')}
             </button>
             <button onClick={handleClearAll} disabled={totalStorage === 0}
               className="px-4 py-2.5 rounded-xl text-xs font-medium transition-all" style={{
                 background: totalStorage === 0 ? 'rgba(255,255,255,0.05)' : 'rgba(239,68,68,0.2)',
                 color: totalStorage === 0 ? 'rgba(255,255,255,0.3)' : '#ef4444',
               }}>
-              Clear
+              {t('offline.clear', 'Clear')}
             </button>
           </div>
         </div>
@@ -409,7 +414,7 @@ const OfflineManager = memo(function OfflineManager({ onClose, translationId }) 
           ) : (
             <div className="text-center py-8">
               <div className="text-3xl mb-2">📲</div>
-              <div className="text-xs text-white/50">No downloads yet</div>
+              <div className="text-xs text-white/50">{t('offline.noDownloadsYet', 'No downloads yet')}</div>
             </div>
           )}
         </div>

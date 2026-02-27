@@ -9,6 +9,7 @@ import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { Icons } from '../common/Icons';
 import { useLocalStorage } from '../../hooks';
 import { useAuth } from '../../contexts/AuthContext';
+import { useTranslation } from '../../contexts/LocaleContext';
 import { playClickSound } from '../../utils/soundUtils';
 import { ADHKAR_CATEGORIES, ADHKAR_LIST } from '../../data/adhkarData';
 import KidsPremiumGate from '../kids/KidsPremiumGate';
@@ -121,6 +122,7 @@ const DEFAULT_ADHKAR_PROGRESS = {
 // ─── Adhkar Reader Tab ───────────────────────────────────────────
 
 function AdhkarReader() {
+  const { t, tInterpolate, language, isRTL } = useTranslation();
   const [progress, setProgress] = useLocalStorage('adhkar_progress', DEFAULT_ADHKAR_PROGRESS);
   const [currentIndex, setCurrentIndex] = useState(0);
   const categoryScrollRef = useRef(null);
@@ -193,7 +195,7 @@ function AdhkarReader() {
   if (!currentDhikr) {
     return (
       <div className="flex-1 flex items-center justify-center px-4">
-        <p className="text-white/40 text-sm">No adhkar in this category.</p>
+        <p className="text-white/40 text-sm">{t('tasbih.noAdhkar')}</p>
       </div>
     );
   }
@@ -242,7 +244,7 @@ function AdhkarReader() {
             <span className="text-sm font-arabic text-white/50">{currentDhikr.titleAr}</span>
           </div>
           {isCompleted(currentDhikr.id) && (
-            <span className="text-xs px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 font-semibold">Done</span>
+            <span className="text-xs px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 font-semibold">{t('tasbih.done')}</span>
           )}
         </div>
 
@@ -269,7 +271,7 @@ function AdhkarReader() {
           {/* Urdu translation — collapsible */}
           {showUrdu && (
             <div className="mb-3 p-3 rounded-xl" style={{ background: 'rgba(59,130,246,0.08)', border: '1px solid rgba(59,130,246,0.15)' }}>
-              <p className="text-[10px] text-blue-400/60 font-semibold mb-1 uppercase tracking-wider">Urdu</p>
+              <p className="text-[10px] text-blue-400/60 font-semibold mb-1 uppercase tracking-wider">{t('tasbih.urdu')}</p>
               <p className="text-sm font-urdu text-blue-200/80" style={{ direction: 'rtl' }}>
                 {currentDhikr.urdu}
               </p>
@@ -279,7 +281,7 @@ function AdhkarReader() {
           {/* English translation — collapsible */}
           {showEnglish && (
             <div className="mb-3 p-3 rounded-xl" style={{ background: 'rgba(168,85,247,0.08)', border: '1px solid rgba(168,85,247,0.15)' }}>
-              <p className="text-[10px] text-purple-400/60 font-semibold mb-1 uppercase tracking-wider">English</p>
+              <p className="text-[10px] text-purple-400/60 font-semibold mb-1 uppercase tracking-wider">{t('tasbih.english')}</p>
               <p className="text-sm text-purple-200/80 leading-relaxed">
                 {currentDhikr.english}
               </p>
@@ -289,9 +291,9 @@ function AdhkarReader() {
           {/* Count + Reference */}
           <div className="flex items-center justify-between mt-3 pt-3" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
             <div className="flex items-center gap-2">
-              <span className="text-xs text-white/40">Recite:</span>
+              <span className="text-xs text-white/40">{t('tasbih.recite')}</span>
               <span className="text-sm font-bold" style={{ color: accentColor }}>
-                {currentDhikr.count === 1 ? '1 time' : `${currentDhikr.count} times`}
+                {currentDhikr.count === 1 ? t('tasbih.time') : tInterpolate('tasbih.times', { count: currentDhikr.count })}
               </span>
             </div>
             <span className="text-[10px] text-white/30">{currentDhikr.reference}</span>
@@ -308,7 +310,7 @@ function AdhkarReader() {
             color: isCompleted(currentDhikr.id) ? '#10b981' : accentColor,
           }}
         >
-          {isCompleted(currentDhikr.id) ? 'Completed ✓' : 'Mark Done ✓'}
+          {isCompleted(currentDhikr.id) ? `${t('tasbih.completed')} ✓` : `${t('tasbih.markDone')} ✓`}
         </button>
 
         {/* Navigation arrows */}
@@ -352,7 +354,7 @@ function AdhkarReader() {
         {/* Session progress bar */}
         <div className="mt-4 p-3 rounded-xl" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)' }}>
           <div className="flex items-center justify-between mb-2">
-            <span className="text-xs text-white/40">Today's progress</span>
+            <span className="text-xs text-white/40">{t('tasbih.todaysProgress')}</span>
             <span className="text-xs font-semibold" style={{ color: accentColor }}>{completedCount}/{filteredAdhkar.length}</span>
           </div>
           <div className="w-full h-1.5 rounded-full bg-white/10 overflow-hidden">
@@ -377,7 +379,7 @@ function AdhkarReader() {
               color: showUrdu ? '#93c5fd' : 'rgba(255,255,255,0.35)',
             }}
           >
-            {showUrdu ? 'Urdu ON' : 'Urdu OFF'}
+            {showUrdu ? t('tasbih.urduOn') : t('tasbih.urduOff')}
           </button>
           <button
             onClick={() => setProgress(prev => ({ ...prev, showEnglish: !prev.showEnglish }))}
@@ -388,7 +390,7 @@ function AdhkarReader() {
               color: showEnglish ? '#c4b5fd' : 'rgba(255,255,255,0.35)',
             }}
           >
-            {showEnglish ? 'English ON' : 'English OFF'}
+            {showEnglish ? t('tasbih.englishOn') : t('tasbih.englishOff')}
           </button>
         </div>
       </div>
@@ -400,6 +402,7 @@ function AdhkarReader() {
 // ─── Main TasbihView ─────────────────────────────────────────────
 
 function TasbihView({ darkMode, onBack }) {
+  const { t, language, isRTL } = useTranslation();
   const [activeTab, setActiveTab] = useState('counter');
   const [data, setData] = useLocalStorage('tasbih_data', DEFAULT_DATA);
   const [showTargetPicker, setShowTargetPicker] = useState(false);
@@ -561,6 +564,17 @@ function TasbihView({ darkMode, onBack }) {
   // Active preset info
   const preset = activePreset !== null ? FAMOUS_TASBIHAT[activePreset] : null;
   const totalPresetSteps = preset ? preset.steps.length : 0;
+
+  // Localized preset names
+  const PRESET_NAME_KEYS = [
+    'tasbih.presetAfterSalah',
+    'tasbih.presetMorning',
+    'tasbih.presetEvening',
+    'tasbih.presetIstighfar',
+    'tasbih.presetSalawat',
+    'tasbih.presetHeaviest',
+  ];
+  const getPresetName = (index) => t(PRESET_NAME_KEYS[index]) || FAMOUS_TASBIHAT[index].name;
 
   // SVG ring calculations
   const radius = 130;
@@ -740,7 +754,7 @@ function TasbihView({ darkMode, onBack }) {
           <Icons.ArrowLeft className="w-5 h-5 text-white/80 rtl:rotate-180" />
         </button>
 
-        <h1 className="text-lg font-bold text-white/90">📿 Tasbih</h1>
+        <h1 className="text-lg font-bold text-white/90">📿 {t('tasbih.title')}</h1>
 
         {activeTab === 'counter' ? (
           <div className="flex gap-2">
@@ -754,7 +768,7 @@ function TasbihView({ darkMode, onBack }) {
                 minWidth: '44px',
                 minHeight: '44px',
               }}
-              title="Reset count"
+              title={t('tasbih.resetCount')}
             >
               <Icons.RefreshCw className="w-4 h-4 text-white/80" />
             </button>
@@ -769,7 +783,7 @@ function TasbihView({ darkMode, onBack }) {
                 minWidth: '44px',
                 minHeight: '44px',
               }}
-              title="Reset all data & sync"
+              title={t('tasbih.resetAllData')}
             >
               <Icons.X className="w-4 h-4 text-red-400/80" />
             </button>
@@ -796,8 +810,8 @@ function TasbihView({ darkMode, onBack }) {
       <div className="w-full px-4 relative z-10 shrink-0 mb-1">
         <div className="flex mx-auto w-fit rounded-full p-1" style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.08)' }}>
           {[
-            { key: 'counter', label: 'Counter', icon: '📿' },
-            { key: 'adhkar', label: 'Adhkar', icon: '📖' },
+            { key: 'counter', label: t('tasbih.counter'), icon: '📿' },
+            { key: 'adhkar', label: t('tasbih.adhkar'), icon: '📖' },
           ].map(tab => (
             <button
               key={tab.key}
@@ -828,7 +842,7 @@ function TasbihView({ darkMode, onBack }) {
                 border: '1px solid rgba(255,255,255,0.15)',
                 boxShadow: '0 20px 60px rgba(0,0,0,0.5)',
               }}>
-              <p className="text-xs text-white/50 mb-2 font-medium">Set Target</p>
+              <p className="text-xs text-white/50 mb-2 font-medium">{t('tasbih.setTarget')}</p>
               <div className="flex flex-wrap gap-2 mb-2">
                 {TARGET_PRESETS.map(t => (
                   <button
@@ -848,7 +862,7 @@ function TasbihView({ darkMode, onBack }) {
                   type="number"
                   value={customTarget}
                   onChange={(e) => setCustomTarget(e.target.value)}
-                  placeholder="Custom"
+                  placeholder={t('tasbih.custom')}
                   className="flex-1 px-3 py-1.5 rounded-full text-sm bg-white/10 text-white border border-white/10 outline-none focus:border-emerald-500/50 w-24"
                   min="1"
                   max="99999"
@@ -858,7 +872,7 @@ function TasbihView({ darkMode, onBack }) {
                   className="px-3 py-1.5 rounded-full text-sm font-semibold text-white transition-colors"
                   style={{ background: accentColor }}
                 >
-                  Set
+                  {t('tasbih.set')}
                 </button>
               </div>
             </div>
@@ -872,7 +886,7 @@ function TasbihView({ darkMode, onBack }) {
                   background: `${preset.color}15`,
                   border: `1px solid ${preset.color}30`,
                 }}>
-                <span className="text-xs font-bold" style={{ color: preset.color }}>{preset.name}</span>
+                <span className="text-xs font-bold" style={{ color: preset.color }}>{getPresetName(activePreset)}</span>
                 <span className="text-white/30 text-xs">•</span>
                 <div className="flex gap-1">
                   {preset.steps.map((s, i) => (
@@ -888,7 +902,7 @@ function TasbihView({ darkMode, onBack }) {
                     />
                   ))}
                 </div>
-                <span className="text-xs text-white/40">Step {(presetStepIndex || 0) + 1}/{totalPresetSteps}</span>
+                <span className="text-xs text-white/40">{t('tasbih.step')} {(presetStepIndex || 0) + 1}/{totalPresetSteps}</span>
               </div>
             </div>
           )}
@@ -910,8 +924,11 @@ function TasbihView({ darkMode, onBack }) {
                   {dhikr.arabic}
                 </p>
                 <p className="text-xs font-medium mt-0.5" style={{ color: `${accentColor}cc` }}>{dhikr.transliteration}</p>
-                <p className="text-xs font-urdu text-white/60 mt-0.5" style={{ direction: 'rtl' }}>{dhikr.urdu}</p>
-                <p className="text-[10px] text-white/40">{dhikr.english}</p>
+                {language === 'ur' || language === 'ar' ? (
+                  <p className="text-xs font-urdu text-white/60 mt-0.5" style={{ direction: 'rtl' }}>{dhikr.urdu}</p>
+                ) : (
+                  <p className="text-[10px] text-white/40 mt-0.5">{dhikr.english}</p>
+                )}
               </div>
 
               <button
@@ -943,7 +960,7 @@ function TasbihView({ darkMode, onBack }) {
                 <span className="text-5xl sm:text-6xl font-bold text-white relative z-10" style={{ fontVariantNumeric: 'tabular-nums' }}>
                   {currentCount}
                 </span>
-                <span className="text-xs text-white/40 mt-1 relative z-10">of {target}</span>
+                <span className="text-xs text-white/40 mt-1 relative z-10">{t('tasbih.of')} {target}</span>
 
                 {ripple && (
                   <div className="absolute inset-0 rounded-full animate-ping opacity-20"
@@ -970,7 +987,7 @@ function TasbihView({ darkMode, onBack }) {
               {stepCompleted && (
                 <div className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none">
                   <div className="text-2xl animate-bounce bg-black/50 rounded-full px-3 py-1.5 text-white font-bold">
-                    Next
+                    {t('tasbih.next')}
                   </div>
                 </div>
               )}
@@ -984,18 +1001,18 @@ function TasbihView({ darkMode, onBack }) {
             </div>
 
             {/* Tap hint + Stats in one compact row */}
-            <p className="text-[10px] text-white/25 mb-2">Tap circle or press Space</p>
+            <p className="text-[10px] text-white/25 mb-2">{t('tasbih.tapHint')}</p>
 
             <div className="flex gap-3 mb-3">
               <div className="px-3 py-1.5 rounded-xl text-center"
                 style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)' }}>
                 <p className="text-base font-bold" style={{ color: accentColor }}>{sessionsCompleted || 0}</p>
-                <p className="text-[9px] text-white/40">Rounds</p>
+                <p className="text-[9px] text-white/40">{t('tasbih.rounds')}</p>
               </div>
               <div className="px-3 py-1.5 rounded-xl text-center"
                 style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)' }}>
                 <p className="text-base font-bold text-cyan-400">{(totalLifetimeCount || 0).toLocaleString()}</p>
-                <p className="text-[9px] text-white/40">Total</p>
+                <p className="text-[9px] text-white/40">{t('tasbih.total')}</p>
               </div>
             </div>
 
@@ -1011,7 +1028,7 @@ function TasbihView({ darkMode, onBack }) {
                 }}
               >
                 <span className="text-sm">⭐</span>
-                <span className="text-xs text-white/70">Famous Tasbihat</span>
+                <span className="text-xs text-white/70">{t('tasbih.famousTasbihat')}</span>
                 <Icons.ChevronDown className={`w-3 h-3 text-white/50 transition-transform ${showPresets ? 'rotate-180' : ''}`} />
               </button>
             </div>
@@ -1049,7 +1066,7 @@ function TasbihView({ darkMode, onBack }) {
                 border: '1px solid rgba(255,255,255,0.12)',
                 boxShadow: '0 -10px 40px rgba(0,0,0,0.4)',
               }}>
-              <p className="text-xs text-white/40 mb-2 text-center font-medium">Popular Dhikr Routines</p>
+              <p className="text-xs text-white/40 mb-2 text-center font-medium">{t('tasbih.popularRoutines')}</p>
               <div className="space-y-2">
                 {FAMOUS_TASBIHAT.map((p, i) => (
                   <button
@@ -1067,7 +1084,7 @@ function TasbihView({ darkMode, onBack }) {
                     </div>
                     <div className="flex-1 text-left">
                       <div className="flex items-center gap-2">
-                        <p className="text-sm font-semibold text-white">{p.name}</p>
+                        <p className="text-sm font-semibold text-white">{getPresetName(i)}</p>
                         <p className="text-sm font-arabic text-white/50">{p.nameAr}</p>
                       </div>
                       <p className="text-xs text-white/40">{p.description}</p>
@@ -1111,8 +1128,8 @@ function TasbihView({ darkMode, onBack }) {
             style={{ background: 'rgba(15,23,42,0.98)', border: '1px solid rgba(255,255,255,0.12)' }}
             onClick={(e) => e.stopPropagation()}
           >
-            <p className="text-white font-semibold text-base mb-1">Reset Tasbih Data</p>
-            <p className="text-white/50 text-xs mb-4">Choose what to reset. This cannot be undone.</p>
+            <p className="text-white font-semibold text-base mb-1">{t('tasbih.resetTitle')}</p>
+            <p className="text-white/50 text-xs mb-4">{t('tasbih.resetMessage')}</p>
 
             {/* Option 1: Reset Local — free */}
             <button
@@ -1122,10 +1139,10 @@ function TasbihView({ darkMode, onBack }) {
             >
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-semibold text-white">Reset Local Data</p>
-                  <p className="text-[11px] text-white/40 mt-0.5">Counter, stats & adhkar on this device</p>
+                  <p className="text-sm font-semibold text-white">{t('tasbih.resetLocal')}</p>
+                  <p className="text-[11px] text-white/40 mt-0.5">{t('tasbih.resetLocalDesc')}</p>
                 </div>
-                <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 font-semibold">Free</span>
+                <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 font-semibold">{t('tasbih.free')}</span>
               </div>
             </button>
 
@@ -1144,16 +1161,16 @@ function TasbihView({ darkMode, onBack }) {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-semibold" style={{ color: isPremium ? '#f87171' : 'rgba(255,255,255,0.35)' }}>
-                    Reset Cloud Sync
+                    {t('tasbih.resetCloud')}
                   </p>
                   <p className="text-[11px] mt-0.5" style={{ color: isPremium ? 'rgba(248,113,113,0.5)' : 'rgba(255,255,255,0.25)' }}>
-                    Erase server data + reset local
+                    {t('tasbih.resetCloudDesc')}
                   </p>
                 </div>
                 {isPremium ? (
-                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-red-500/15 text-red-400 font-semibold">Reset</span>
+                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-red-500/15 text-red-400 font-semibold">{t('tasbih.reset')}</span>
                 ) : (
-                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-400 font-semibold">Premium</span>
+                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-400 font-semibold">{t('tasbih.premium')}</span>
                 )}
               </div>
             </button>
@@ -1163,7 +1180,7 @@ function TasbihView({ darkMode, onBack }) {
               className="w-full py-2.5 rounded-xl text-sm font-medium text-white/50 transition-all"
               style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)' }}
             >
-              Cancel
+              {t('tasbih.cancel')}
             </button>
           </div>
         </div>
@@ -1189,32 +1206,32 @@ function TasbihView({ darkMode, onBack }) {
             {paymentResult === 'success' ? (
               <>
                 <div className="text-7xl mb-4 animate-bounce">🎉</div>
-                <h2 className="text-2xl font-bold text-green-600 mb-2">Payment Successful!</h2>
-                <p className="text-gray-600 mb-6">You now have premium access. Cloud sync reset is unlocked!</p>
+                <h2 className="text-2xl font-bold text-green-600 mb-2">{t('tasbih.paymentSuccess')}</h2>
+                <p className="text-gray-600 mb-6">{t('tasbih.paymentSuccessMsg')}</p>
                 <button
                   onClick={() => setPaymentResult(null)}
                   className="w-full py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white font-bold rounded-xl hover:shadow-lg transition-all"
                 >
-                  {isRefreshingUser ? 'Updating...' : 'Continue'}
+                  {isRefreshingUser ? t('tasbih.updating') : t('tasbih.continue')}
                 </button>
               </>
             ) : (
               <>
                 <div className="text-7xl mb-4">🤔</div>
-                <h2 className="text-2xl font-bold text-amber-600 mb-2">Payment Canceled</h2>
-                <p className="text-gray-600 mb-6">No worries! You can upgrade anytime.</p>
+                <h2 className="text-2xl font-bold text-amber-600 mb-2">{t('tasbih.paymentCanceled')}</h2>
+                <p className="text-gray-600 mb-6">{t('tasbih.paymentCanceledMsg')}</p>
                 <div className="space-y-2">
                   <button
                     onClick={() => { setPaymentResult(null); setShowPremiumGate(true); }}
                     className="w-full py-3 bg-gradient-to-r from-amber-400 to-orange-500 text-white font-bold rounded-xl hover:shadow-lg transition-all"
                   >
-                    Try Again
+                    {t('tasbih.tryAgain')}
                   </button>
                   <button
                     onClick={() => setPaymentResult(null)}
                     className="w-full py-2 text-gray-500 hover:text-gray-700 transition-colors"
                   >
-                    Continue with Free
+                    {t('tasbih.continueWithFree')}
                   </button>
                 </div>
               </>

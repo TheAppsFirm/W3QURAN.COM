@@ -10,6 +10,7 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { Icons } from './Icons';
 import { SURAHS } from '../../data';
+import { useTranslation } from '../../contexts/LocaleContext';
 
 // Fix Leaflet default marker icon issue
 delete L.Icon.Default.prototype._getIconUrl;
@@ -138,6 +139,7 @@ const MapSizeInvalidator = memo(function MapSizeInvalidator() {
 
 // Animated pulsing marker for city activity (grouped)
 const CityMarker = memo(function CityMarker({ position, city, onClick }) {
+  const { t } = useTranslation();
   const totalVisitors = (city.readers || 0) + (city.browsing || 0);
   const size = Math.min(30, 8 + totalVisitors * 3);
   // Green for readers, blue for browsers, mix if both
@@ -168,15 +170,15 @@ const CityMarker = memo(function CityMarker({ position, city, onClick }) {
           <p className="text-gray-500 text-xs mb-1">{city.country}</p>
           <div className="flex justify-center gap-3 text-xs">
             {city.readers > 0 && (
-              <span className="text-emerald-600">📖 {city.readers} reading</span>
+              <span className="text-emerald-600">{t('ummah.readingCount', '📖 {{count}} reading', { count: city.readers })}</span>
             )}
             {city.browsing > 0 && (
-              <span className="text-blue-600">👁 {city.browsing} browsing</span>
+              <span className="text-blue-600">{t('ummah.browsingCount', '👁 {{count}} browsing', { count: city.browsing })}</span>
             )}
           </div>
           {city.activities?.[0]?.surahName && (
             <p className="text-gray-400 text-xs mt-1">
-              Reading: {city.activities[0].surahName}
+              {t('ummah.readingLabel', 'Reading')}: {city.activities[0].surahName}
             </p>
           )}
         </div>
@@ -187,6 +189,7 @@ const CityMarker = memo(function CityMarker({ position, city, onClick }) {
 
 // Individual visitor marker
 const VisitorMarker = memo(function VisitorMarker({ visitor }) {
+  const { t } = useTranslation();
   const isReading = visitor.status === 'reading';
   const color = isReading ? '#10B981' : '#3B82F6';
   const size = isReading ? 8 : 6;
@@ -207,7 +210,7 @@ const VisitorMarker = memo(function VisitorMarker({ visitor }) {
         <div className="text-center p-1 min-w-[100px]">
           <p className="font-bold text-gray-700 text-sm">{visitor.city}</p>
           <p className={`text-xs ${isReading ? 'text-emerald-600' : 'text-blue-600'}`}>
-            {isReading ? `📖 Reading ${visitor.surahName || 'Quran'}` : '👁 Browsing'}
+            {isReading ? `📖 ${t('ummah.readingLabel', 'Reading')} ${visitor.surahName || t('ummah.quran', 'Quran')}` : `👁 ${t('ummah.browsingLabel', 'Browsing')}`}
           </p>
         </div>
       </Popup>
@@ -217,10 +220,11 @@ const VisitorMarker = memo(function VisitorMarker({ visitor }) {
 
 // Real World Map Component using Leaflet
 const RealWorldMap = memo(function RealWorldMap({ cities, liveVisitors, onCityClick, selectedCity }) {
+  const { t } = useTranslation();
   // Holy cities always shown
   const holyCities = [
-    { name: 'Makkah', lat: 21.4225, lng: 39.8262, icon: kaabaIcon, description: 'The Holiest City' },
-    { name: 'Madinah', lat: 24.5247, lng: 39.5692, icon: mosqueIcon, description: 'City of the Prophet ﷺ' },
+    { name: t('ummah.makkah', 'Makkah'), lat: 21.4225, lng: 39.8262, icon: kaabaIcon, description: t('ummah.holiestCity', 'The Holiest City') },
+    { name: t('ummah.madinah', 'Madinah'), lat: 24.5247, lng: 39.5692, icon: mosqueIcon, description: t('ummah.cityOfProphet', 'City of the Prophet') },
   ];
 
   return (
@@ -307,6 +311,7 @@ const StatsCard = memo(function StatsCard({ icon: Icon, label, value, color, sub
 
 // Live Activity Feed - shows cities and visitors
 const ActivityFeed = memo(function ActivityFeed({ cities, liveVisitors, onSelectCity }) {
+  const { t } = useTranslation();
   // Sort cities by total activity
   const sortedCities = [...cities]
     .sort((a, b) => (b.readers + b.browsing) - (a.readers + a.browsing))
@@ -317,15 +322,15 @@ const ActivityFeed = memo(function ActivityFeed({ cities, liveVisitors, onSelect
   return (
     <div className="space-y-2">
       <h4 className="text-white/60 text-xs uppercase tracking-wide mb-3">
-        Live Activity {totalLive > 0 && <span className="text-emerald-400">({totalLive} online)</span>}
+        {t('ummah.liveActivity', 'Live Activity')} {totalLive > 0 && <span className="text-emerald-400">({totalLive} {t('ummah.online', 'online')})</span>}
       </h4>
       {sortedCities.length === 0 ? (
         <div className="text-center py-6">
           <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center mx-auto mb-3">
             <Icons.Globe className="w-6 h-6 text-white/30" />
           </div>
-          <p className="text-white/40 text-sm">No visitors right now</p>
-          <p className="text-white/30 text-xs mt-1">You'll appear on the map!</p>
+          <p className="text-white/40 text-sm">{t('ummah.noVisitors', 'No visitors right now')}</p>
+          <p className="text-white/30 text-xs mt-1">{t('ummah.youWillAppear', "You'll appear on the map!")}</p>
         </div>
       ) : (
         sortedCities.map((city, index) => (
@@ -363,6 +368,7 @@ const ActivityFeed = memo(function ActivityFeed({ cities, liveVisitors, onSelect
 
 // Main Component
 const GlobalUmmahPulse = memo(function GlobalUmmahPulse({ isVisible, onClose }) {
+  const { t, language, isRTL } = useTranslation();
   const [cities, setCities] = useState([]);
   const [liveVisitors, setLiveVisitors] = useState([]);
   const [stats, setStats] = useState({
@@ -499,18 +505,18 @@ const GlobalUmmahPulse = memo(function GlobalUmmahPulse({ isVisible, onClose }) 
                 </div>
               </div>
               <div>
-                <h2 className="text-lg sm:text-2xl font-bold text-white">Global Ummah Pulse</h2>
+                <h2 className="text-lg sm:text-2xl font-bold text-white">{t('ummah.title', 'Global Ummah Pulse')}</h2>
                 <p className="text-emerald-400 text-xs sm:text-sm flex items-center gap-2">
                   <span className={`w-2 h-2 rounded-full ${
                     connectionStatus === 'live' ? 'bg-emerald-400 animate-pulse' :
                     connectionStatus === 'connecting' ? 'bg-amber-400 animate-pulse' :
                     'bg-red-400'
                   }`} />
-                  {!isLive ? 'Paused' :
-                    connectionStatus === 'live' ? 'Live' :
-                    connectionStatus === 'connecting' ? 'Connecting...' :
-                    'Offline'
-                  } • {stats.liveNow > 0 ? `${stats.liveNow} online now` : 'Waiting for visitors...'}
+                  {!isLive ? t('ummah.paused', 'Paused') :
+                    connectionStatus === 'live' ? t('ummah.live', 'Live') :
+                    connectionStatus === 'connecting' ? t('ummah.connecting', 'Connecting...') :
+                    t('ummah.offline', 'Offline')
+                  } • {stats.liveNow > 0 ? `${stats.liveNow} ${t('ummah.onlineNow', 'online now')}` : t('ummah.waitingForVisitors', 'Waiting for visitors...')}
                 </p>
               </div>
             </div>
@@ -523,7 +529,7 @@ const GlobalUmmahPulse = memo(function GlobalUmmahPulse({ isVisible, onClose }) 
                     : 'bg-white/10 text-white/60 border border-white/20'
                 }`}
               >
-                {isLive ? '● Live' : '○ Paused'}
+                {isLive ? `● ${t('ummah.live', 'Live')}` : `○ ${t('ummah.paused', 'Paused')}`}
               </button>
               <button
                 onClick={onClose}
@@ -547,19 +553,19 @@ const GlobalUmmahPulse = memo(function GlobalUmmahPulse({ isVisible, onClose }) 
             />
 
             {/* Legend */}
-            <div className="absolute bottom-4 left-4 bg-black/70 backdrop-blur-sm rounded-xl p-2 sm:p-3 border border-white/10 z-[1000]">
+            <div className={`absolute bottom-4 ${isRTL ? 'right-4' : 'left-4'} bg-black/70 backdrop-blur-sm rounded-xl p-2 sm:p-3 border border-white/10 z-[1000]`}>
               <div className="flex items-center gap-3 sm:gap-4 text-xs">
                 <div className="flex items-center gap-1 sm:gap-2">
                   <div className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-emerald-400" />
-                  <span className="text-white/60">Reading</span>
+                  <span className="text-white/60">{t('ummah.readingLabel', 'Reading')}</span>
                 </div>
                 <div className="flex items-center gap-1 sm:gap-2">
                   <div className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-blue-400" />
-                  <span className="text-white/60">Browsing</span>
+                  <span className="text-white/60">{t('ummah.browsingLabel', 'Browsing')}</span>
                 </div>
                 <div className="flex items-center gap-1 sm:gap-2">
                   <span>🕋</span>
-                  <span className="text-white/60">Makkah</span>
+                  <span className="text-white/60">{t('ummah.makkah', 'Makkah')}</span>
                 </div>
               </div>
             </div>
@@ -567,9 +573,9 @@ const GlobalUmmahPulse = memo(function GlobalUmmahPulse({ isVisible, onClose }) 
             {/* Floating stats */}
             <div className="absolute top-4 left-4 right-4 flex gap-2 sm:gap-3 flex-wrap z-[1000]">
               <div className="bg-black/70 backdrop-blur-sm rounded-xl px-3 py-2 sm:px-4 border border-white/10">
-                <p className="text-white/60 text-xs">Live Now</p>
+                <p className="text-white/60 text-xs">{t('ummah.liveNow', 'Live Now')}</p>
                 <p className="text-emerald-400 font-bold text-sm sm:text-base">
-                  📖 {stats.liveReading} reading • 👁 {stats.liveBrowsing} browsing
+                  📖 {stats.liveReading} {t('ummah.readingLabel', 'reading')} • 👁 {stats.liveBrowsing} {t('ummah.browsingLabel', 'browsing')}
                 </p>
               </div>
             </div>
@@ -578,46 +584,46 @@ const GlobalUmmahPulse = memo(function GlobalUmmahPulse({ isVisible, onClose }) 
           {/* Sidebar */}
           <div className="w-full sm:w-72 border-t sm:border-t-0 sm:border-l border-white/10 p-4 overflow-y-auto bg-black/20 max-h-[40vh] sm:max-h-none">
             {/* Live Stats Grid */}
-            <h4 className="text-white/60 text-xs uppercase tracking-wide mb-3">Live Now</h4>
+            <h4 className="text-white/60 text-xs uppercase tracking-wide mb-3">{t('ummah.liveNow', 'Live Now')}</h4>
             <div className="grid grid-cols-3 sm:grid-cols-1 gap-2 sm:gap-3 mb-4 sm:mb-6">
               <StatsCard
                 icon={Icons.Users}
-                label="Online"
+                label={t('ummah.online', 'Online')}
                 value={stats.liveNow || 0}
                 color="#8B5CF6"
-                subtext={`${stats.liveReading || 0} reading`}
+                subtext={`${stats.liveReading || 0} ${t('ummah.readingLabel', 'reading')}`}
               />
               <StatsCard
                 icon={Icons.MapPin}
-                label="Locations"
+                label={t('ummah.locations', 'Locations')}
                 value={stats.activeLocations || 0}
                 color="#3B82F6"
               />
               <StatsCard
                 icon={Icons.BookOpen}
-                label="Top Surah"
+                label={t('ummah.topSurah', 'Top Surah')}
                 value={topSurah?.name || 'Al-Fatiha'}
                 color="#F59E0B"
               />
             </div>
 
             {/* Today's Stats */}
-            <h4 className="text-white/60 text-xs uppercase tracking-wide mb-3">Today's Activity</h4>
+            <h4 className="text-white/60 text-xs uppercase tracking-wide mb-3">{t('ummah.todaysActivity', "Today's Activity")}</h4>
             <div className="grid grid-cols-4 sm:grid-cols-2 gap-2 mb-4 sm:mb-6">
               <div className="bg-white/5 rounded-lg p-2 sm:p-3 border border-white/10">
-                <p className="text-white/40 text-xs">Visitors</p>
+                <p className="text-white/40 text-xs">{t('ummah.visitors', 'Visitors')}</p>
                 <p className="text-white font-bold text-sm sm:text-lg">{(stats.todayVisitors || 0).toLocaleString()}</p>
               </div>
               <div className="bg-white/5 rounded-lg p-2 sm:p-3 border border-white/10">
-                <p className="text-white/40 text-xs">Unique</p>
+                <p className="text-white/40 text-xs">{t('ummah.unique', 'Unique')}</p>
                 <p className="text-cyan-400 font-bold text-sm sm:text-lg">{(stats.todayUniqueVisitors || 0).toLocaleString()}</p>
               </div>
               <div className="bg-white/5 rounded-lg p-2 sm:p-3 border border-white/10">
-                <p className="text-white/40 text-xs">Readings</p>
+                <p className="text-white/40 text-xs">{t('ummah.readings', 'Readings')}</p>
                 <p className="text-emerald-400 font-bold text-sm sm:text-lg">{(stats.todayReadings || 0).toLocaleString()}</p>
               </div>
               <div className="bg-white/5 rounded-lg p-2 sm:p-3 border border-white/10">
-                <p className="text-white/40 text-xs">All-Time</p>
+                <p className="text-white/40 text-xs">{t('ummah.allTime', 'All-Time')}</p>
                 <p className="text-amber-400 font-bold text-sm sm:text-lg">{(stats.allTimeVisits || 0).toLocaleString()}</p>
               </div>
             </div>
@@ -628,10 +634,10 @@ const GlobalUmmahPulse = memo(function GlobalUmmahPulse({ isVisible, onClose }) 
             {/* Message */}
             <div className="mt-4 sm:mt-6 p-3 sm:p-4 rounded-xl bg-gradient-to-br from-emerald-500/10 to-teal-500/10 border border-emerald-500/20">
               <p className="text-emerald-400 text-xs sm:text-sm text-center">
-                You are never alone in your journey with the Quran
+                {t('ummah.inspirationalMessage', 'You are never alone in your journey with the Quran')}
               </p>
               <p className="text-white/40 text-xs text-center mt-1 sm:mt-2">
-                Real-time data from w3Quran readers
+                {t('ummah.realTimeData', 'Real-time data from w3Quran readers')}
               </p>
             </div>
           </div>
@@ -655,15 +661,15 @@ const GlobalUmmahPulse = memo(function GlobalUmmahPulse({ isVisible, onClose }) 
                 <p className="text-white/60 text-xs">{selectedCity.country}</p>
                 <div className="flex gap-3 mt-1">
                   {selectedCity.readers > 0 && (
-                    <span className="text-emerald-400 text-sm">📖 {selectedCity.readers} reading</span>
+                    <span className="text-emerald-400 text-sm">📖 {selectedCity.readers} {t('ummah.readingLabel', 'reading')}</span>
                   )}
                   {selectedCity.browsing > 0 && (
-                    <span className="text-blue-400 text-sm">👁 {selectedCity.browsing} browsing</span>
+                    <span className="text-blue-400 text-sm">👁 {selectedCity.browsing} {t('ummah.browsingLabel', 'browsing')}</span>
                   )}
                 </div>
                 {selectedCity.activities?.[0]?.surahName && (
                   <p className="text-white/50 text-xs mt-1">
-                    Reading: {selectedCity.activities[0].surahName}
+                    {t('ummah.readingLabel', 'Reading')}: {selectedCity.activities[0].surahName}
                   </p>
                 )}
               </div>

@@ -1342,7 +1342,7 @@ function QuranBubbleApp() {
       )}
 
       {/* Floating Sidebar — 4 Quick Access Buttons */}
-      {view === 'surahs' && (
+      {view === 'surahs' && !showTalkToQuran && (
         <div
           style={{
             position: 'fixed',

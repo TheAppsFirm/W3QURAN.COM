@@ -7,6 +7,7 @@
 import { useState, useEffect, useCallback, memo } from 'react';
 import { Icons } from './Icons';
 import { SURAHS } from '../../data';
+import { useTranslation } from '../../contexts/LocaleContext';
 
 // Weather-based verse collections
 const WEATHER_VERSES = {
@@ -196,6 +197,7 @@ const mapWeatherCondition = (weatherCode, isDay, temp) => {
 
 // Verse Card Component
 const VerseCard = memo(function VerseCard({ verse, index, onNavigate }) {
+  const { t, language, isRTL } = useTranslation();
   const surah = SURAHS.find(s => s.id === verse.surah);
 
   return (
@@ -214,10 +216,10 @@ const VerseCard = memo(function VerseCard({ verse, index, onNavigate }) {
       <p className="text-white/70 text-sm italic mb-2">"{verse.translation}"</p>
       <div className="flex items-center justify-between">
         <span className="text-white/40 text-xs">
-          {surah?.name || `Surah ${verse.surah}`} : {verse.ayah}
+          {surah?.name || `${t('reader.surah', 'Surah')} ${verse.surah}`} : {verse.ayah}
         </span>
         <span className="text-white/40 text-xs opacity-0 group-hover:opacity-100 transition-opacity">
-          Click to read →
+          {t('weather.clickToRead', 'Click to read')} {isRTL ? '←' : '→'}
         </span>
       </div>
     </div>
@@ -225,7 +227,8 @@ const VerseCard = memo(function VerseCard({ verse, index, onNavigate }) {
 });
 
 // Weather Display Component
-const WeatherDisplay = memo(function WeatherDisplay({ weather, weatherData }) {
+const WeatherDisplay = memo(function WeatherDisplay({ weather, weatherData, weatherKey }) {
+  const { t, language, isRTL } = useTranslation();
   const Icon = Icons[weather.icon] || Icons.Cloud;
 
   return (
@@ -236,12 +239,12 @@ const WeatherDisplay = memo(function WeatherDisplay({ weather, weatherData }) {
         <div className="absolute bottom-0 left-0 w-48 h-48 bg-white rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
       </div>
 
-      <div className="relative flex items-center justify-between">
+      <div className={`relative flex items-center justify-between ${isRTL ? 'flex-row-reverse' : ''}`}>
         <div>
           <div className="flex items-center gap-3 mb-2">
             <Icon className="w-10 h-10 text-white" />
             <div>
-              <h3 className="text-2xl font-bold text-white">{weather.condition}</h3>
+              <h3 className="text-2xl font-bold text-white">{t(`weather.conditions.${weatherKey}`, weather.condition)}</h3>
               {weatherData?.temp && (
                 <p className="text-white/80 text-lg">{Math.round(weatherData.temp)}°C</p>
               )}
@@ -255,8 +258,8 @@ const WeatherDisplay = memo(function WeatherDisplay({ weather, weatherData }) {
           )}
         </div>
 
-        <div className="text-right">
-          <p className="text-white font-medium">{weather.theme}</p>
+        <div className={isRTL ? 'text-left' : 'text-right'}>
+          <p className="text-white font-medium">{t(`weather.themes.${weatherKey}`, weather.theme)}</p>
           <p className="text-white/70 text-sm" style={{ fontFamily: "'Scheherazade New', serif" }}>
             {weather.themeAr}
           </p>
@@ -267,12 +270,13 @@ const WeatherDisplay = memo(function WeatherDisplay({ weather, weatherData }) {
 });
 
 // Dua Card Component
-const DuaCard = memo(function DuaCard({ weather }) {
+const DuaCard = memo(function DuaCard({ weather, weatherKey }) {
+  const { t, language, isRTL } = useTranslation();
   return (
     <div className="p-4 rounded-xl bg-gradient-to-br from-amber-500/10 to-orange-500/10 border border-amber-500/20">
       <h4 className="text-amber-400 text-sm font-medium mb-2 flex items-center gap-2">
         <Icons.Star className="w-4 h-4" />
-        Recommended Dua
+        {t('weather.recommendedDua', 'Recommended Dua')}
       </h4>
       <p
         className="text-xl text-white text-center mb-2"
@@ -282,7 +286,7 @@ const DuaCard = memo(function DuaCard({ weather }) {
         {weather.dua}
       </p>
       <p className="text-white/60 text-sm text-center italic">
-        {weather.duaTranslation}
+        {t(`weather.duaTranslations.${weatherKey}`, weather.duaTranslation)}
       </p>
     </div>
   );
@@ -290,6 +294,7 @@ const DuaCard = memo(function DuaCard({ weather }) {
 
 // Main Component
 const VerseWeatherSync = memo(function VerseWeatherSync({ isVisible, onClose, onNavigateToVerse }) {
+  const { t, language, isRTL } = useTranslation();
   const [currentWeather, setCurrentWeather] = useState('clear');
   const [weatherData, setWeatherData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -327,14 +332,14 @@ const VerseWeatherSync = memo(function VerseWeatherSync({ isVisible, onClose, on
       const { current } = data;
 
       // Get location name via reverse geocoding
-      let locationName = 'Your Location';
+      let locationName = t('weather.yourLocation', 'Your Location');
       try {
         const geoResponse = await fetch(
           `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`
         );
         if (geoResponse.ok) {
           const geoData = await geoResponse.json();
-          locationName = geoData.address?.city || geoData.address?.town || geoData.address?.state || 'Your Location';
+          locationName = geoData.address?.city || geoData.address?.town || geoData.address?.state || t('weather.yourLocation', 'Your Location');
         }
       } catch (e) {
         console.log('Geocoding failed, using default location name');
@@ -406,14 +411,14 @@ const VerseWeatherSync = memo(function VerseWeatherSync({ isVisible, onClose, on
       >
         {/* Header */}
         <div className="flex-shrink-0 p-6 border-b border-white/10">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
+          <div className={`flex items-center justify-between ${isRTL ? 'flex-row-reverse' : ''}`}>
+            <div className={`flex items-center gap-3 ${isRTL ? 'flex-row-reverse' : ''}`}>
               <div className={`w-12 h-12 rounded-full bg-gradient-to-br ${weather.gradient} flex items-center justify-center`}>
                 <Icons.CloudSun className="w-6 h-6 text-white" />
               </div>
               <div>
-                <h2 className="text-xl font-bold text-white">Verse Weather Sync</h2>
-                <p className="text-white/60 text-sm">Verses matching your weather</p>
+                <h2 className="text-xl font-bold text-white">{t('weather.title', 'Verse Weather Sync')}</h2>
+                <p className="text-white/60 text-sm">{t('weather.subtitle', 'Verses matching your weather')}</p>
               </div>
             </div>
             <button
@@ -430,15 +435,15 @@ const VerseWeatherSync = memo(function VerseWeatherSync({ isVisible, onClose, on
           {loading ? (
             <div className="flex flex-col items-center justify-center py-12">
               <div className="w-12 h-12 border-4 border-white/20 border-t-white rounded-full animate-spin mb-4" />
-              <p className="text-white/60">Detecting your weather...</p>
+              <p className="text-white/60">{t('weather.detecting', 'Detecting your weather...')}</p>
             </div>
           ) : (
             <>
               {/* Weather Display */}
-              <WeatherDisplay weather={weather} weatherData={weatherData} />
+              <WeatherDisplay weather={weather} weatherData={weatherData} weatherKey={currentWeather} />
 
               {/* Manual Weather Selection */}
-              <div className="flex flex-wrap gap-2">
+              <div className={`flex flex-wrap gap-2 ${isRTL ? 'flex-row-reverse' : ''}`}>
                 {Object.entries(WEATHER_VERSES).map(([key, w]) => {
                   const Icon = Icons[w.icon] || Icons.Cloud;
                   return (
@@ -452,23 +457,23 @@ const VerseWeatherSync = memo(function VerseWeatherSync({ isVisible, onClose, on
                       }`}
                     >
                       <Icon className="w-3 h-3" />
-                      {w.condition}
+                      {t(`weather.conditions.${key}`, w.condition)}
                     </button>
                   );
                 })}
               </div>
 
               {/* Description */}
-              <p className="text-white/70 text-center">{weather.description}</p>
+              <p className="text-white/70 text-center">{t(`weather.descriptions.${currentWeather}`, weather.description)}</p>
 
               {/* Dua */}
-              <DuaCard weather={weather} />
+              <DuaCard weather={weather} weatherKey={currentWeather} />
 
               {/* Verses */}
               <div>
-                <h3 className="text-white font-medium mb-4 flex items-center gap-2">
+                <h3 className={`text-white font-medium mb-4 flex items-center gap-2 ${isRTL ? 'flex-row-reverse' : ''}`}>
                   <Icons.BookOpen className="w-5 h-5 text-white/60" />
-                  Related Verses
+                  {t('weather.relatedVerses', 'Related Verses')}
                 </h3>
                 <div className="space-y-3">
                   {weather.verses.map((verse, index) => (
@@ -487,13 +492,13 @@ const VerseWeatherSync = memo(function VerseWeatherSync({ isVisible, onClose, on
           {error && (
             <div className="text-center py-4">
               <p className="text-amber-400 text-sm mb-2">
-                Could not detect weather - showing based on time of day
+                {t('weather.errorFallback', 'Could not detect weather - showing based on time of day')}
               </p>
               <button
                 onClick={fetchWeather}
                 className="text-white/60 text-xs underline"
               >
-                Try again
+                {t('weather.tryAgain', 'Try again')}
               </button>
             </div>
           )}

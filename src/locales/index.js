@@ -19,7 +19,7 @@ export const SUPPORTED_LANGUAGES = [
   { code: 'ar', label: 'Arabic', nativeLabel: 'العربية', flag: '🇸🇦', dir: 'rtl' },
 ];
 
-export const DEFAULT_LANGUAGE = 'en';
+export const DEFAULT_LANGUAGE = 'ur';
 
 // Get browser language or default
 export const getBrowserLanguage = () => {

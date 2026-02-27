@@ -7,6 +7,7 @@
 
 import { useState, useEffect, useRef, useCallback, memo } from 'react';
 import { Icons } from './Icons';
+import { useTranslation } from '../../contexts/LocaleContext';
 
 // Islamic Dhikr audio tracks - Soft, peaceful nasheeds for meditation
 // Using calming, melodic recitations (NOT aggressive sound effects)
@@ -424,17 +425,18 @@ const FrequencyVisualizer = memo(function FrequencyVisualizer({ isPlaying, frequ
 });
 
 // Mode Card Component
-const ModeCard = memo(function ModeCard({ mode, isSelected, onClick }) {
+const ModeCard = memo(function ModeCard({ mode, isSelected, onClick, t, isRTL }) {
   const Icon = Icons[mode.icon] || Icons.Heart;
 
   return (
     <button
       onClick={onClick}
+      dir={isRTL ? 'rtl' : 'ltr'}
       className={`p-4 rounded-xl border transition-all text-left ${
         isSelected
           ? `bg-gradient-to-br ${mode.gradient} border-white/20 scale-105`
           : 'bg-white/5 border-white/10 hover:bg-white/10'
-      }`}
+      } ${isRTL ? 'text-right' : 'text-left'}`}
     >
       <div className="flex items-center gap-3 mb-2">
         <div
@@ -446,14 +448,14 @@ const ModeCard = memo(function ModeCard({ mode, isSelected, onClick }) {
           <Icon className="w-5 h-5" style={{ color: isSelected ? 'white' : mode.color }} />
         </div>
         <div>
-          <h4 className="text-white font-medium">{mode.name}</h4>
+          <h4 className="text-white font-medium">{t(`healing.modes.${mode.id}.name`, mode.name)}</h4>
           <p className="text-white/60 text-xs" style={{ fontFamily: "'Scheherazade New', serif" }}>
             {mode.nameAr}
           </p>
         </div>
       </div>
       <p className={`text-sm ${isSelected ? 'text-white/80' : 'text-white/50'}`}>
-        {mode.description}
+        {t(`healing.modes.${mode.id}.description`, mode.description)}
       </p>
     </button>
   );
@@ -475,6 +477,8 @@ const ActiveSession = memo(function ActiveSession({
   onAmbientVolumeChange,
   onDhikrVolumeChange,
   onDhikrToggle,
+  t,
+  isRTL,
 }) {
   const Icon = Icons[mode.icon] || Icons.Heart;
   const frequency = BINAURAL_FREQUENCIES[mode.frequency];
@@ -485,8 +489,13 @@ const ActiveSession = memo(function ActiveSession({
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
+  // Get localized tips for this mode
+  const localizedTips = mode.tips.map((tip, i) =>
+    t(`healing.modes.${mode.id}.tips.${i}`, tip)
+  );
+
   return (
-    <div className={`rounded-2xl bg-gradient-to-br ${mode.gradient} p-6 relative overflow-hidden`}>
+    <div dir={isRTL ? 'rtl' : 'ltr'} className={`rounded-2xl bg-gradient-to-br ${mode.gradient} p-6 relative overflow-hidden`}>
       {/* Background animation */}
       <div className="absolute inset-0 opacity-20">
         <div
@@ -509,13 +518,13 @@ const ActiveSession = memo(function ActiveSession({
               <Icon className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h3 className="text-xl font-bold text-white">{mode.name}</h3>
-              <p className="text-white/70 text-sm">{frequency.name} • {frequency.range}</p>
+              <h3 className="text-xl font-bold text-white">{t(`healing.modes.${mode.id}.name`, mode.name)}</h3>
+              <p className="text-white/70 text-sm">{t(`healing.frequencies.${mode.frequency}.name`, frequency.name)} • {frequency.range}</p>
             </div>
           </div>
-          <div className="text-right">
+          <div className={isRTL ? 'text-left' : 'text-right'}>
             <p className="text-3xl font-bold text-white">{formatTime(timeRemaining)}</p>
-            <p className="text-white/60 text-xs">remaining</p>
+            <p className="text-white/60 text-xs">{t('healing.remaining', 'remaining')}</p>
           </div>
         </div>
 
@@ -547,8 +556,8 @@ const ActiveSession = memo(function ActiveSession({
               <Icons.Volume2 className="w-4 h-4 text-amber-400" />
             </div>
             <div>
-              <p className="text-white text-sm font-medium">Islamic Dhikr</p>
-              <p className="text-white/50 text-xs">Allah's names mixed with ambient</p>
+              <p className="text-white text-sm font-medium">{t('healing.islamicDhikr', 'Islamic Dhikr')}</p>
+              <p className="text-white/50 text-xs">{t('healing.dhikrSubtitle', "Allah's names mixed with ambient")}</p>
             </div>
           </div>
           <button
@@ -559,14 +568,14 @@ const ActiveSession = memo(function ActiveSession({
                 : 'bg-white/10 text-white/60'
             }`}
           >
-            {dhikrEnabled ? 'On' : 'Off'}
+            {dhikrEnabled ? t('healing.on', 'On') : t('healing.off', 'Off')}
           </button>
         </div>
 
         {/* Volume Controls */}
         <div className="grid grid-cols-3 gap-3 mb-6">
           <div>
-            <label className="text-white/70 text-xs mb-2 block">Binaural</label>
+            <label className="text-white/70 text-xs mb-2 block">{t('healing.binaural', 'Binaural')}</label>
             <input
               type="range"
               min="0"
@@ -577,7 +586,7 @@ const ActiveSession = memo(function ActiveSession({
             />
           </div>
           <div>
-            <label className="text-white/70 text-xs mb-2 block">Ambient</label>
+            <label className="text-white/70 text-xs mb-2 block">{t('healing.ambient', 'Ambient')}</label>
             <input
               type="range"
               min="0"
@@ -589,8 +598,8 @@ const ActiveSession = memo(function ActiveSession({
           </div>
           <div>
             <label className="text-white/70 text-xs mb-2 block flex items-center gap-1">
-              Dhikr
-              {!dhikrEnabled && <span className="text-white/40">(off)</span>}
+              {t('healing.dhikr', 'Dhikr')}
+              {!dhikrEnabled && <span className="text-white/40">({t('healing.off', 'off')})</span>}
             </label>
             <input
               type="range"
@@ -611,7 +620,7 @@ const ActiveSession = memo(function ActiveSession({
             onClick={onStop}
             className="px-6 py-3 rounded-xl bg-white/20 text-white hover:bg-white/30 transition-all"
           >
-            Stop Session
+            {t('healing.stopSession', 'Stop Session')}
           </button>
           <button
             onClick={onTogglePlay}
@@ -620,12 +629,12 @@ const ActiveSession = memo(function ActiveSession({
             {isPlaying ? (
               <>
                 <Icons.Pause className="w-5 h-5" />
-                Pause
+                {t('healing.pause', 'Pause')}
               </>
             ) : (
               <>
                 <Icons.Play className="w-5 h-5" />
-                Resume
+                {t('healing.resume', 'Resume')}
               </>
             )}
           </button>
@@ -633,9 +642,9 @@ const ActiveSession = memo(function ActiveSession({
 
         {/* Tips */}
         <div className="mt-6 p-4 rounded-xl bg-black/20">
-          <h4 className="text-white/80 text-sm font-medium mb-2">Tips for this session:</h4>
+          <h4 className="text-white/80 text-sm font-medium mb-2">{t('healing.tipsForSession', 'Tips for this session:')}</h4>
           <ul className="space-y-1">
-            {mode.tips.map((tip, i) => (
+            {localizedTips.map((tip, i) => (
               <li key={i} className="text-white/60 text-xs flex items-start gap-2">
                 <span className="text-white/40">•</span>
                 {tip}
@@ -650,6 +659,7 @@ const ActiveSession = memo(function ActiveSession({
 
 // Main Component
 const SoundHealingRoom = memo(function SoundHealingRoom({ isVisible, onClose }) {
+  const { t, language, isRTL } = useTranslation();
   const [selectedMode, setSelectedMode] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState(0);
@@ -895,6 +905,7 @@ const SoundHealingRoom = memo(function SoundHealingRoom({ isVisible, onClose }) 
       <div className="absolute inset-0 bg-gradient-to-b from-gray-900 via-indigo-950 to-gray-900" />
 
       <div
+        dir={isRTL ? 'rtl' : 'ltr'}
         className="relative bg-black/40 backdrop-blur-lg rounded-3xl overflow-hidden max-w-2xl w-full max-h-[90vh] flex flex-col shadow-2xl border border-white/10"
         onClick={(e) => e.stopPropagation()}
         style={{ animation: 'bubblePopIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)' }}
@@ -907,8 +918,8 @@ const SoundHealingRoom = memo(function SoundHealingRoom({ isVisible, onClose }) 
                 <Icons.Music className="w-6 h-6 text-white" />
               </div>
               <div>
-                <h2 className="text-xl font-bold text-white">Sound Healing Room</h2>
-                <p className="text-white/60 text-sm">Binaural frequencies + Quran</p>
+                <h2 className="text-xl font-bold text-white">{t('healing.title', 'Sound Healing Room')}</h2>
+                <p className="text-white/60 text-sm">{t('healing.subtitle', 'Binaural frequencies + Quran')}</p>
               </div>
             </div>
             <button
@@ -938,12 +949,14 @@ const SoundHealingRoom = memo(function SoundHealingRoom({ isVisible, onClose }) 
               onAmbientVolumeChange={handleAmbientVolumeChange}
               onDhikrVolumeChange={handleDhikrVolumeChange}
               onDhikrToggle={() => setDhikrEnabled(!dhikrEnabled)}
+              t={t}
+              isRTL={isRTL}
             />
           ) : (
             <>
               {/* Mode Selection */}
               <div className="mb-6">
-                <h3 className="text-white font-medium mb-4">Choose Your Healing Mode</h3>
+                <h3 className="text-white font-medium mb-4">{t('healing.chooseMode', 'Choose Your Healing Mode')}</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {Object.values(HEALING_MODES).map((mode) => (
                     <ModeCard
@@ -951,6 +964,8 @@ const SoundHealingRoom = memo(function SoundHealingRoom({ isVisible, onClose }) 
                       mode={mode}
                       isSelected={false}
                       onClick={() => startSession(mode)}
+                      t={t}
+                      isRTL={isRTL}
                     />
                   ))}
                 </div>
@@ -961,43 +976,41 @@ const SoundHealingRoom = memo(function SoundHealingRoom({ isVisible, onClose }) 
                 <div className="p-4 rounded-xl bg-white/5 border border-white/10">
                   <h4 className="text-white font-medium mb-2 flex items-center gap-2">
                     <Icons.Info className="w-4 h-4 text-white/60" />
-                    About Binaural Beats
+                    {t('healing.aboutBinaural', 'About Binaural Beats')}
                   </h4>
                   <p className="text-white/60 text-sm">
-                    Binaural beats are created when two slightly different frequencies are played in each ear.
-                    Your brain perceives a third tone - the difference between the two frequencies - which can
-                    help induce specific mental states.
+                    {t('healing.binauralExplanation', 'Binaural beats are created when two slightly different frequencies are played in each ear. Your brain perceives a third tone - the difference between the two frequencies - which can help induce specific mental states.')}
                   </p>
                 </div>
 
                 <div className="p-4 rounded-xl bg-gradient-to-br from-amber-500/10 to-orange-500/10 border border-amber-500/20">
                   <h4 className="text-amber-400 font-medium mb-2 flex items-center gap-2">
                     <Icons.Headphones className="w-4 h-4" />
-                    Best Experience
+                    {t('healing.bestExperience', 'Best Experience')}
                   </h4>
                   <ul className="text-white/60 text-sm space-y-1">
-                    <li>• Use stereo headphones (required for binaural effect)</li>
-                    <li>• Find a quiet, comfortable space</li>
-                    <li>• Start with lower volumes and adjust</li>
-                    <li>• Maintain consistent practice for best results</li>
+                    <li>• {t('healing.bestTip1', 'Use stereo headphones (required for binaural effect)')}</li>
+                    <li>• {t('healing.bestTip2', 'Find a quiet, comfortable space')}</li>
+                    <li>• {t('healing.bestTip3', 'Start with lower volumes and adjust')}</li>
+                    <li>• {t('healing.bestTip4', 'Maintain consistent practice for best results')}</li>
                   </ul>
                 </div>
 
                 {/* Frequency Guide */}
                 <div className="p-4 rounded-xl bg-white/5 border border-white/10">
-                  <h4 className="text-white font-medium mb-3">Frequency Guide</h4>
+                  <h4 className="text-white font-medium mb-3">{t('healing.frequencyGuide', 'Frequency Guide')}</h4>
                   <div className="grid grid-cols-2 gap-2">
-                    {Object.values(BINAURAL_FREQUENCIES).map((freq) => (
+                    {Object.entries(BINAURAL_FREQUENCIES).map(([key, freq]) => (
                       <div key={freq.name} className="p-2 rounded-lg bg-white/5">
                         <div className="flex items-center gap-2 mb-1">
                           <div
                             className="w-3 h-3 rounded-full"
                             style={{ backgroundColor: freq.color }}
                           />
-                          <span className="text-white text-sm font-medium">{freq.name}</span>
+                          <span className="text-white text-sm font-medium">{t(`healing.frequencies.${key}.name`, freq.name)}</span>
                         </div>
                         <p className="text-white/40 text-xs">{freq.range}</p>
-                        <p className="text-white/60 text-xs">{freq.description}</p>
+                        <p className="text-white/60 text-xs">{t(`healing.frequencies.${key}.description`, freq.description)}</p>
                       </div>
                     ))}
                   </div>
@@ -1011,7 +1024,7 @@ const SoundHealingRoom = memo(function SoundHealingRoom({ isVisible, onClose }) 
         {!selectedMode && (
           <div className="flex-shrink-0 p-4 border-t border-white/10 bg-white/5">
             <p className="text-white/40 text-xs text-center">
-              🎧 Headphones required for binaural beats effect
+              {t('healing.headphonesRequired', 'Headphones required for binaural beats effect')}
             </p>
           </div>
         )}

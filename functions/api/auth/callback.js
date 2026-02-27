@@ -127,6 +127,30 @@ export async function onRequest(context) {
         INSERT INTO subscriptions (id, user_id, plan, status, created_at)
         VALUES (?, ?, 'free', 'active', datetime('now'))
       `).bind(`sub_${crypto.randomUUID().replace(/-/g, '').slice(0, 16)}`, finalUserId).run();
+
+      // Send welcome email + notify admin (non-blocking)
+      if (env.RESEND_API_KEY) {
+        const { sendEmail } = await import('../send-email.js');
+        // Welcome email to user
+        sendEmail(env, {
+          to: googleUser.email,
+          template: 'welcome',
+          data: { name: googleUser.name },
+          triggeredBy: 'system',
+        }).catch(e => console.error('[Auth] Welcome email failed:', e.message));
+        // Admin notification
+        const adminEmail = env.ADMIN_EMAIL || 'admin@w3quran.com';
+        sendEmail(env, {
+          to: adminEmail,
+          template: 'admin-alert',
+          data: {
+            subject: 'New User Signup',
+            body: `${googleUser.name || 'Someone'} just signed up.`,
+            details: `Email: ${googleUser.email}\nName: ${googleUser.name || 'N/A'}`,
+          },
+          triggeredBy: 'system',
+        }).catch(e => console.error('[Auth] Admin notify failed:', e.message));
+      }
     }
 
     // Create session
