@@ -1765,46 +1765,10 @@ export function TreebankOverlay({
     );
   }
 
-  // Premium gate
+  // Premium gate — skip to centralized upgrade popup directly
   if (!canAccess) {
-    return (
-      <div
-        className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 backdrop-blur-sm p-4"
-        onClick={handleClose}
-      >
-        <div
-          className="bg-gray-900/95 backdrop-blur-xl rounded-3xl border border-white/20 shadow-2xl p-6 max-w-sm text-center"
-          onClick={e => e.stopPropagation()}
-        >
-          <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-r from-amber-400 to-orange-500 flex items-center justify-center">
-            <Icons.BookOpen className="w-8 h-8 text-white" />
-          </div>
-          <h3 className="text-xl font-bold text-white mb-2">{labels.premium}</h3>
-          <p className="text-white/70 text-sm mb-4">
-            {labels.premiumDesc}
-          </p>
-          <div className="bg-emerald-500/20 border border-emerald-500/30 rounded-xl px-4 py-2 mb-4">
-            <p className="text-emerald-400 text-xs">
-              {labels.tryFree}
-            </p>
-          </div>
-          <div className="flex flex-col gap-2">
-            <button
-              onClick={onUpgrade}
-              className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-amber-400 to-orange-500 text-white font-bold hover:shadow-lg transition-all"
-            >
-              {labels.upgrade}
-            </button>
-            <button
-              onClick={handleClose}
-              className="text-white/60 text-sm hover:text-white transition-colors"
-            >
-              {labels.maybeLater}
-            </button>
-          </div>
-        </div>
-      </div>
-    );
+    onUpgrade?.();
+    return null;
   }
 
   // No treebank data - show ontology directly if available
