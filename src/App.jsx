@@ -976,6 +976,27 @@ function QuranBubbleApp() {
     setShowDonateModal(false);
   }, []);
 
+  const handleCloseFAQ = useCallback(() => {
+    setShowFAQ(false);
+    updateURL('/');
+  }, [updateURL]);
+
+  const handleCloseGamificationHub = useCallback(() => {
+    setShowGamificationHub(false);
+    updateURL('/');
+  }, [updateURL]);
+
+  const handleCloseTalkToQuran = useCallback(() => {
+    setShowTalkToQuran(false);
+    updateURL('/');
+    maybeShowDonation('talk_to_quran');
+  }, [updateURL, maybeShowDonation]);
+
+  const handleCloseHajjUmrah = useCallback(() => {
+    setShowHajjUmrah(false);
+    updateURL('/');
+  }, [updateURL]);
+
   const handleOpenDonate = useCallback(() => {
     logger.action('donate_click', { user_type: isAuthenticated ? 'logged_in' : 'guest' });
     logger.flush(); // Send immediately so admin sees it right away
@@ -1868,7 +1889,7 @@ function QuranBubbleApp() {
         <Suspense fallback={<LoadingSpinner message="Loading FAQ..." />}>
           <QuranFAQ
             isVisible={showFAQ}
-            onClose={() => setShowFAQ(false)}
+            onClose={handleCloseFAQ}
             onNavigateToVerse={(surahId, ayahNumber) => {
               const surah = SURAHS.find(s => s.id === surahId);
               if (surah) {
@@ -1913,7 +1934,7 @@ function QuranBubbleApp() {
       {showHajjUmrah && (
         <Suspense fallback={<LoadingSpinner message="Loading Hajj Journey..." />}>
           <HajjUmrahJourney
-            onBack={() => setShowHajjUmrah(false)}
+            onBack={handleCloseHajjUmrah}
           />
         </Suspense>
       )}
@@ -1943,7 +1964,7 @@ function QuranBubbleApp() {
         <Suspense fallback={<LoadingSpinner message="Loading Talk to Quran..." />}>
           <TalkToQuran
             isVisible={showTalkToQuran}
-            onClose={() => { setShowTalkToQuran(false); maybeShowDonation('talk_to_quran'); }}
+            onClose={handleCloseTalkToQuran}
             darkMode={darkMode}
           />
         </Suspense>
@@ -1970,7 +1991,7 @@ function QuranBubbleApp() {
         <Suspense fallback={null}>
           <GamificationHub
             isVisible={showGamificationHub}
-            onClose={() => setShowGamificationHub(false)}
+            onClose={handleCloseGamificationHub}
           />
         </Suspense>
       )}
