@@ -24,6 +24,7 @@ const TimeCapsule = lazy(() => import('./TimeCapsule'));
 const VoiceControl = lazy(() => import('./VoiceControl'));
 const HeartbeatMeditation = lazy(() => import('./HeartbeatMeditation'));
 const FamilyCircle = lazy(() => import('./FamilyCircle'));
+const ReaderDiscussPanel = lazy(() => import('../discussions/ReaderDiscussPanel'));
 const TreebankOverlay = lazy(() => import('./TreebankAnalysis').then(m => ({ default: m.TreebankOverlay })));
 import { hasTreebankData, canAccessTreebank, hasOntologyData } from '../../data/treebank/index';
 import { PALETTES, SURAHS, fetchTafseer, getTafseersByLanguage, getDefaultTafseer, TRANSLATION_TO_TAFSEER_LANG, getVideosForSurah, generateSearchQuery, SCHOLARS, SURAH_TOPICS, TAFSEER_SOURCES, markAyahRead } from '../../data';
@@ -753,6 +754,31 @@ const ShareFloatingBubble = memo(function ShareFloatingBubble({
   );
 });
 
+// Discuss Floating Bubble
+const DiscussFloatingBubble = memo(function DiscussFloatingBubble({
+  isVisible, onClose, surahId, surahName, onNavigateToDiscussions
+}) {
+  return (
+    <FloatingFeatureBubble
+      isVisible={isVisible}
+      onClose={onClose}
+      title="Discuss"
+      icon={Icons.MessageCircle}
+      gradient={['#06B6D4', '#0891B2', '#0E7490']}
+      position={{ top: '50%', left: '10px', transform: 'translateY(-50%)' }}
+      size="medium"
+    >
+      <Suspense fallback={<div className="flex items-center justify-center py-10"><div className="w-5 h-5 border-2 border-white/40 border-t-transparent rounded-full animate-spin" /></div>}>
+        <ReaderDiscussPanel
+          surahId={surahId}
+          surahName={surahName}
+          onNavigateToDiscussions={onNavigateToDiscussions}
+        />
+      </Suspense>
+    </FloatingFeatureBubble>
+  );
+});
+
 // Small Feature Toggle Buttons (shown inside main bubble)
 const FeatureToggleButtons = memo(function FeatureToggleButtons({ activeFeature, onToggle }) {
   const { t } = useTranslation();
@@ -1464,10 +1490,9 @@ const SharePanel = memo(function SharePanel({ surahId, surahName, ayahNumber, ve
 // MAIN COMPONENT
 // ============================================
 
-const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, darkMode, onChangeSurah, initialVerse = 1, initialPanel = null, onPanelChange, readerStyle = 'default', layoutStyle = 'spiral' }) {
+const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, darkMode, onChangeSurah, initialVerse = 1, initialPanel = null, onPanelChange, onNavigateToView, readerStyle = 'default', layoutStyle = 'spiral' }) {
   // i18n
   const { t, tInterpolate, isRTL } = useTranslation();
-
   // Auth state for premium features
   const { isPremium, isAuthenticated, login } = useAuth();
 
@@ -3405,6 +3430,7 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
       else if (leftFeature === 'memorize') panel = 'memorize';
       else if (leftFeature === 'bookmark') panel = 'bookmark';
       else if (leftFeature === 'share') panel = 'share';
+      else if (leftFeature === 'discuss') panel = 'discuss';
       else if (showSettings) panel = 'settings';
       else if (showEmotionalTracker) panel = 'mood';
       else if (showConnectionMap) panel = 'connections';
@@ -3732,6 +3758,17 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
         onShareSuccess={() => { if (gamification.isActive) gamification.recordAction('share'); }}
       />
 
+      <DiscussFloatingBubble
+        isVisible={leftFeature === 'discuss'}
+        onClose={closeLeftFeature}
+        surahId={surah.id}
+        surahName={surah.name}
+        onNavigateToDiscussions={() => {
+          onClose();
+          onNavigateToView?.('discussions');
+        }}
+      />
+
       {/* Lazy-loaded feature overlays */}
       <Suspense fallback={null}>
       {/* Verse Art Generator */}
@@ -3889,6 +3926,7 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
             { id: 'memorize', icon: Icons.Brain, color: '#F59E0B', label: t('reader.memorize') },
             { id: 'bookmark', icon: Icons.Bookmark, color: '#EC4899', label: t('reader.bookmark') },
             { id: 'share', icon: Icons.Share, color: '#10B981', label: t('common.share') },
+            { id: 'discuss', icon: Icons.MessageCircle, color: '#06B6D4', label: 'Discuss' },
           ].map((btn) => {
             const Icon = btn.icon;
             // Determine active state based on feature type

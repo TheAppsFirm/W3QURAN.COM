@@ -52,6 +52,9 @@ function SettingsView({ darkMode, setDarkMode, onNavigate }) {
   const [feedbackType, setFeedbackType] = useState('general');
   const [feedbackMsg, setFeedbackMsg] = useState('');
   const [feedbackStatus, setFeedbackStatus] = useState(null); // 'sending' | 'sent' | 'error'
+  const [blockedUsers, setBlockedUsers] = useState([]);
+  const [blockedLoading, setBlockedLoading] = useState(false);
+  const [unblockingId, setUnblockingId] = useState(null);
 
   // Check for payment redirect
   useEffect(() => {
@@ -90,6 +93,43 @@ function SettingsView({ darkMode, setDarkMode, onNavigate }) {
     setCreditsLoading(false);
   };
 
+  // Fetch blocked users list
+  useEffect(() => {
+    if (user) {
+      fetchBlockedUsers();
+    }
+  }, [user]);
+
+  const fetchBlockedUsers = async () => {
+    setBlockedLoading(true);
+    try {
+      const res = await fetch('/api/discussions/block', { credentials: 'include' });
+      if (res.ok) {
+        const data = await res.json();
+        setBlockedUsers(data.blocked || []);
+      }
+    } catch (e) {
+      console.error('Failed to fetch blocked users:', e);
+    }
+    setBlockedLoading(false);
+  };
+
+  const handleUnblock = async (userId) => {
+    setUnblockingId(userId);
+    try {
+      const res = await fetch(`/api/discussions/block/${userId}`, {
+        method: 'DELETE',
+        credentials: 'include',
+      });
+      if (res.ok) {
+        setBlockedUsers(prev => prev.filter(u => u.userId !== userId));
+      }
+    } catch (e) {
+      console.error('Failed to unblock user:', e);
+    }
+    setUnblockingId(null);
+  };
+
   const handleCheckout = async (product) => {
     setUpgradeLoading(product);
     setUpgradeError(null);
@@ -125,6 +165,34 @@ function SettingsView({ darkMode, setDarkMode, onNavigate }) {
   const [wordByWord, setWordByWord] = useLocalStorage('reader_wbw', false);
   const [fontSize, setFontSize] = useLocalStorage('reader_fontsize', 'medium');
   const [reciter, setReciter] = useLocalStorage('reader_reciter', 'ar.alafasy');
+  const [showEmail, setShowEmail] = useLocalStorage('privacy_show_email', false);
+  const [allowDMs, setAllowDMs] = useLocalStorage('privacy_allow_dms', true);
+  const [privacySynced, setPrivacySynced] = useState(false);
+
+  // Sync privacy settings to server whenever they change
+  useEffect(() => {
+    if (!user || !privacySynced) return; // Skip initial render
+    fetch('/api/user/preferences', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ show_email: showEmail, allow_dms: allowDMs }),
+    }).catch(() => {});
+  }, [showEmail, allowDMs, user, privacySynced]);
+
+  // Load privacy settings from server on mount
+  useEffect(() => {
+    if (!user) return;
+    fetch('/api/user/preferences', { credentials: 'include' })
+      .then(r => r.json())
+      .then(data => {
+        if (data.show_email !== undefined) setShowEmail(data.show_email);
+        if (data.allow_dms !== undefined) setAllowDMs(data.allow_dms);
+        // Mark as synced so future changes trigger server updates
+        setTimeout(() => setPrivacySynced(true), 100);
+      })
+      .catch(() => setPrivacySynced(true));
+  }, [user]);
 
   const settingsToggle = [
     { key: 'notify', label: t('settings.notifications'), icon: Icons.Bell, value: notifications, setter: setNotifications, desc: 'Daily verse and prayer reminders' },
@@ -1032,6 +1100,165 @@ function SettingsView({ darkMode, setDarkMode, onNavigate }) {
                   >
                     {feedbackStatus === 'sending' ? 'Sending...' : 'Send Feedback'}
                   </button>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Privacy Section */}
+        {user && (
+          <div className="mb-6">
+            <h3 className={`text-sm font-semibold uppercase tracking-wider mb-3 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+              Privacy
+            </h3>
+
+            <div className="space-y-3">
+              {/* Show Email Toggle */}
+              <div
+                className={`rounded-2xl p-4 shadow-lg border ${
+                  darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <Icons.Eye className={`w-5 h-5 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`} />
+                    <div>
+                      <span className={`font-bold block ${darkMode ? 'text-white' : 'text-gray-800'}`}>
+                        Show email to other users
+                      </span>
+                      <span className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                        Display your email on your profile
+                      </span>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => setShowEmail(!showEmail)}
+                    className={`w-14 h-8 rounded-full relative transition-all ${
+                      showEmail
+                        ? 'bg-gradient-to-r from-emerald-500 to-teal-500 shadow-lg shadow-emerald-500/30'
+                        : darkMode
+                          ? 'bg-gray-600'
+                          : 'bg-gray-200'
+                    }`}
+                  >
+                    <div
+                      className={`absolute top-1 w-6 h-6 bg-white rounded-full shadow-md transition-all ${
+                        showEmail ? 'left-7' : 'left-1'
+                      }`}
+                    />
+                  </button>
+                </div>
+              </div>
+
+              {/* Allow DMs Toggle */}
+              <div
+                className={`rounded-2xl p-4 shadow-lg border ${
+                  darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <Icons.MessageCircle className={`w-5 h-5 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`} />
+                    <div>
+                      <span className={`font-bold block ${darkMode ? 'text-white' : 'text-gray-800'}`}>
+                        Allow message requests
+                      </span>
+                      <span className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                        Let other users send you direct messages
+                      </span>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => setAllowDMs(!allowDMs)}
+                    className={`w-14 h-8 rounded-full relative transition-all ${
+                      allowDMs
+                        ? 'bg-gradient-to-r from-emerald-500 to-teal-500 shadow-lg shadow-emerald-500/30'
+                        : darkMode
+                          ? 'bg-gray-600'
+                          : 'bg-gray-200'
+                    }`}
+                  >
+                    <div
+                      className={`absolute top-1 w-6 h-6 bg-white rounded-full shadow-md transition-all ${
+                        allowDMs ? 'left-7' : 'left-1'
+                      }`}
+                    />
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Blocked Users Section */}
+        {user && (
+          <div className="mb-6">
+            <h3 className={`text-sm font-semibold uppercase tracking-wider mb-3 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+              Blocked Users
+            </h3>
+
+            <div className={`rounded-2xl p-4 shadow-lg border ${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}>
+              {blockedLoading ? (
+                <div className="flex items-center justify-center py-4">
+                  <div className="w-6 h-6 border-2 border-red-500 border-t-transparent rounded-full animate-spin" />
+                </div>
+              ) : blockedUsers.length === 0 ? (
+                <div className="text-center py-4">
+                  <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-gray-500/20 flex items-center justify-center">
+                    <Icons.Users className={`w-6 h-6 ${darkMode ? 'text-gray-500' : 'text-gray-400'}`} />
+                  </div>
+                  <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                    No blocked users
+                  </p>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {blockedUsers.map((blocked) => (
+                    <div
+                      key={blocked.userId}
+                      className={`flex items-center justify-between p-3 rounded-xl ${
+                        darkMode ? 'bg-gray-700/50' : 'bg-gray-50'
+                      }`}
+                    >
+                      <div className="flex items-center gap-3 min-w-0">
+                        {blocked.picture ? (
+                          <img
+                            src={blocked.picture}
+                            alt=""
+                            className="w-10 h-10 rounded-full object-cover flex-shrink-0"
+                          />
+                        ) : (
+                          <div className="w-10 h-10 rounded-full bg-gradient-to-r from-gray-400 to-gray-500 flex items-center justify-center flex-shrink-0">
+                            <span className="text-white font-bold text-sm">
+                              {(blocked.name || blocked.email || '?').charAt(0).toUpperCase()}
+                            </span>
+                          </div>
+                        )}
+                        <div className="min-w-0">
+                          <p className={`font-medium text-sm truncate ${darkMode ? 'text-white' : 'text-gray-800'}`}>
+                            {blocked.name || 'Unknown User'}
+                          </p>
+                          {blocked.email && (
+                            <p className={`text-xs truncate ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                              {blocked.email}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => handleUnblock(blocked.userId)}
+                        disabled={unblockingId === blocked.userId}
+                        className={`ml-3 px-3 py-1.5 rounded-lg text-xs font-medium transition-all flex-shrink-0 ${
+                          unblockingId === blocked.userId
+                            ? 'bg-gray-500/30 text-gray-400 cursor-not-allowed'
+                            : 'bg-red-500/20 text-red-400 hover:bg-red-500/30 active:scale-95'
+                        }`}
+                      >
+                        {unblockingId === blocked.userId ? 'Unblocking...' : 'Unblock'}
+                      </button>
+                    </div>
+                  ))}
                 </div>
               )}
             </div>

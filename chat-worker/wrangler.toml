@@ -1,0 +1,26 @@
+# Chat Worker — Durable Objects for real-time WebSocket chat
+# Deploy: cd chat-worker && npx wrangler deploy
+name = "w3quran-chat"
+main = "src/index.js"
+compatibility_date = "2024-01-01"
+
+# Durable Object bindings
+[durable_objects]
+bindings = [
+  { name = "CHAT_ROOM", class_name = "ChatRoom" }
+]
+
+# Durable Object migrations (new_sqlite_classes required for free plan)
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["ChatRoom"]
+
+# Same D1 database as the main app (for message persistence)
+[[d1_databases]]
+binding = "DB"
+database_name = "w3quran-db"
+database_id = "19192568-1ab3-4c78-bf4c-a08c2072622e"
+
+# Environment variables needed:
+# ADMIN_EMAILS — comma-separated admin emails (set via wrangler secret)
+# ALLOWED_ORIGIN — CORS origin (e.g. https://w3quran.com)

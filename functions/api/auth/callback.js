@@ -166,16 +166,17 @@ export async function onRequest(context) {
     ).run();
 
     // Return redirect with session cookie
+    const securePart = isLocal ? '' : ' Secure;';
     return new Response(null, {
       status: 302,
       headers: {
         'Location': baseUrl + '/?auth_success=1',
-        'Set-Cookie': `w3quran_session=${sessionToken}; Path=/; HttpOnly; Secure; SameSite=Lax; Expires=${expiresAt.toUTCString()}`,
+        'Set-Cookie': `w3quran_session=${sessionToken}; Path=/; HttpOnly;${securePart} SameSite=Lax; Expires=${expiresAt.toUTCString()}`,
       },
     });
 
   } catch (error) {
-    console.error('[Auth] Callback error:', error.name);
-    return redirectTo('/?auth_error=server_error');
+    console.error('[Auth] Callback error:', error.name, error.message, error.stack);
+    return redirectTo('/?auth_error=server_error&detail=' + encodeURIComponent(error.message || error.name));
   }
 }

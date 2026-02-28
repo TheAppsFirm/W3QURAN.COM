@@ -77,6 +77,7 @@ const VIEW_SEO = {
   settings: { title: 'Settings - w3Quran', desc: 'Customize your w3Quran reading experience.', path: '/settings' },
   donate:   { title: 'Donate - w3Quran', desc: 'Support the w3Quran project.', path: '/donate' },
   tasbih:   { title: 'Tasbih Counter - w3Quran', desc: 'Digital tasbih counter for dhikr and daily remembrance.', path: '/tasbih' },
+  discussions: { title: 'Community Discussions - w3Quran', desc: 'Join surah discussions, share reflections, and connect with the Quran community.', path: '/discussions' },
 };
 
 /**

@@ -12,6 +12,7 @@ export default {
     save: 'Save',
     close: 'Close',
     back: 'Back',
+    home: 'Home',
     next: 'Next',
     search: 'Search',
     settings: 'Settings',
@@ -1242,5 +1243,212 @@ export default {
     madinah: 'Madinah',
     holiestCity: 'The Holiest City',
     cityOfProphet: 'City of the Prophet',
+  },
+
+  // Discussions & Community
+  discussions: {
+    // Page
+    community: 'Community',
+    subtitle: 'Discuss, connect, and learn together',
+    surahRooms: 'Surah Rooms',
+    messages: 'Messages',
+    searchSurahs: 'Search surahs...',
+    noSurahsMatching: 'No surahs matching',
+    clearSearch: 'Clear search',
+    online: 'online',
+
+    // Tabs
+    discussionsTab: 'Discussions',
+    liveChat: 'Live Chat',
+
+    // Post actions
+    newPost: 'New Post',
+    createPost: 'Create Post',
+    editPost: 'Edit Post',
+    deletePost: 'Delete Post',
+    post: 'Post',
+
+    // Sort options
+    sort: 'Sort',
+    sortHot: 'Hot',
+    sortNew: 'New',
+    sortWeek: 'Week',
+    sortMonth: 'Month',
+    sortAllTime: 'All Time',
+
+    // Type filters
+    type: 'Type',
+    typeAll: 'All',
+    typeDiscussion: 'Discussion',
+    typeReflection: 'Reflection',
+    typeTafseer: 'Tafseer',
+    typeQuestion: 'Question',
+
+    // Post type descriptions
+    descDiscussion: 'General question or topic',
+    descReflection: 'Personal reflection on an ayah',
+    descTafseer: 'Share scholarly interpretation',
+    descQuestion: 'Seeking answers',
+    whatTypeOfPost: 'What type of post?',
+    changeType: 'Change type',
+
+    // Form labels
+    titleLabel: 'Title',
+    contentLabel: 'Content',
+    titlePlaceholder: "What's on your mind?",
+    contentPlaceholder: 'Share your thoughts, questions, or reflections...',
+    ayahRefsLabel: 'Ayah References (optional)',
+    ayahRefsPlaceholder: 'e.g. 2:255 or 18:1-10',
+    add: 'Add',
+    topicsLabel: 'Topics (max 3)',
+
+    // Quran quote
+    quoteQuran: 'Quote Quran Verse',
+    quoteQuranShort: 'Quote Quran',
+    translation: 'Translation',
+    ayah: 'Ayah',
+    previewVerse: 'Preview Verse',
+    insertVerseQuote: 'Insert Verse Quote',
+    insertQuote: 'Insert Quote',
+    yourComment: 'Your comment or question (optional)',
+    yourCommentPlaceholder: 'e.g. What does this verse mean in context?',
+
+    // Status
+    loading: 'Loading...',
+    loadingPosts: 'Loading posts...',
+    loadingPost: 'Loading post...',
+    loadingProfile: 'Loading profile...',
+    noDiscussionsYet: 'No discussions yet',
+    beFirstToStart: 'Be the first to start a conversation',
+    noPostsYet: 'No posts yet',
+    loadMore: 'Load more',
+    tryAgain: 'Try again',
+
+    // Post indicators
+    pinned: 'PINNED',
+    locked: 'LOCKED',
+    lockedLabel: 'Locked',
+    you: 'You',
+
+    // Post actions menu
+    edit: 'Edit',
+    delete: 'Delete',
+    pin: 'Pin',
+    unpin: 'Unpin',
+    lock: 'Lock',
+    unlock: 'Unlock',
+    report: 'Report',
+
+    // Delete confirmation
+    deletePostQuestion: 'Delete Post?',
+    deleteCommentQuestion: 'Delete Comment?',
+    deletePostMessage: 'This action cannot be undone. Your post will be permanently removed.',
+    deleteCommentMessage: 'This cannot be undone. The comment will be permanently removed.',
+    deleting: 'Deleting...',
+
+    // Clear chat
+    clearChat: 'Clear',
+    clearChatQuestion: 'Clear Chat?',
+    clearChatMessage: 'This will delete all messages in this chat room. This action cannot be undone.',
+    clearing: 'Clearing...',
+    clearAll: 'Clear All',
+
+    // Post detail
+    postNotFound: 'Post not found',
+    postNotFoundMessage: 'This post may have been deleted or moved.',
+    goBack: 'Go Back',
+    saveChanges: 'Save Changes',
+    saving: 'Saving...',
+    postTitlePlaceholder: 'Post title...',
+    postBodyPlaceholder: 'Post body...',
+
+    // Report
+    reportTitle: 'Why are you reporting this post?',
+    reportSpam: 'Spam',
+    reportOffensive: 'Offensive',
+    reportMisinformation: 'Misinformation',
+    reportHarassment: 'Harassment',
+    reportOther: 'Other',
+    submitReport: 'Submit Report',
+    reportSubmitted: 'Report submitted. Thank you.',
+
+    // Comments
+    comments: 'Comments',
+    addComment: 'Write a comment...',
+    shareYourThoughts: 'Share your thoughts...',
+    reply: 'Reply',
+    collapse: 'Collapse',
+    showReplies: 'Show {{count}} replies',
+    replies: 'replies',
+    noCommentsYet: 'No comments yet. Be the first to share your thoughts.',
+    beFirstToComment: 'Be the first to share your thoughts',
+    signInToDiscuss: 'to join the discussion',
+    postLocked: 'This post is locked. No new comments allowed.',
+    bestSort: 'Best',
+    newSort: 'New',
+
+    // Chat
+    connecting: 'Connecting...',
+    signInToChat: 'Sign in to join the chat',
+    signInWithGoogle: 'Sign in with Google',
+    signInToStart: 'Sign in with Google to start chatting',
+    pleaseLogIn: 'Please log in to use chat',
+    noMessagesYet: 'No messages yet',
+    startConversation: 'Start the conversation!',
+    isTyping: 'is typing...',
+    peopleTyping: 'people are typing...',
+    chatUnavailable: 'Chat server unavailable',
+    chatRequiresConnection: 'Live chat requires an active connection',
+    replyingTo: 'Replying to',
+    react: 'React',
+    typeMessage: 'Type a message...',
+    signIn: 'Sign in',
+
+    // Vote
+    upvote: 'Upvote',
+    downvote: 'Downvote',
+
+    // User popover
+    viewProfile: 'View Profile',
+    message: 'Message',
+    block: 'Block',
+    confirmBlock: 'Confirm Block?',
+
+    // DM / Messages
+    wantsToMessage: 'Wants to message you',
+    accept: 'Accept',
+    decline: 'Decline',
+    refresh: 'Refresh',
+    requests: 'Requests',
+    conversations: 'Conversations',
+    noMessagesInbox: 'No messages yet',
+    startDMHint: "Click on a user's name in discussions to start a conversation",
+    signInToMessage: 'Sign in to message others',
+    sayHelloTo: 'Say hello to',
+
+    // User Profile
+    anonymous: 'Anonymous',
+    joined: 'Joined',
+    settings: 'Settings',
+    requestSent: 'Request Sent',
+    posts: 'Posts',
+    karma: 'Karma',
+    quranJourney: 'Quran Journey',
+    level: 'Level',
+    xp: 'XP',
+    streak: 'Streak',
+    verses: 'Verses',
+    xpToNextLevel: 'XP to next level',
+    recentPosts: 'Recent Posts',
+    userNotFound: 'User not found',
+    myProfile: 'My Profile',
+    friends: 'Friends',
+    sentRequests: 'Sent Requests',
+    pending: 'Pending',
+    cancelRequest: 'Cancel',
+    unfriend: 'Remove',
+    unfriendConfirm: 'Remove friend?',
+    noFriendsYet: 'No friends yet',
+    requestCancelled: 'Request cancelled',
   },
 };

@@ -17,6 +17,7 @@ const ErrorDashboardPanel = lazy(() => import('../admin/ErrorDashboardPanel'));
 const ReciterPreferencesPanel = lazy(() => import('../admin/ReciterPreferencesPanel'));
 const ApiHealthPanel = lazy(() => import('../admin/ApiHealthPanel'));
 const UserFeedbackPanel = lazy(() => import('../admin/UserFeedbackPanel'));
+const DiscussionModerationPanel = lazy(() => import('../admin/DiscussionModerationPanel'));
 
 // Stat Card Component
 const StatCard = ({ title, value, subtitle, icon: Icon, color, trend }) => (
@@ -2974,6 +2975,7 @@ export default function AdminDashboard({ onClose, initialTab = 'overview', onTab
             { id: 'preferences', label: 'Prefs', icon: Icons.Headphones },
             { id: 'feedback', label: 'Feedback', icon: Icons.MessageCircle },
             { id: 'health', label: 'Health', icon: Icons.Shield },
+            { id: 'moderation', label: 'Moderate', icon: Icons.Scale },
             { id: 'announcements', label: 'Announce', icon: Icons.Bell },
             { id: 'logs', label: 'Logs', icon: Icons.FileText },
             { id: 'transactions', label: 'Trans', icon: Icons.CreditCard },
@@ -3465,7 +3467,7 @@ export default function AdminDashboard({ onClose, initialTab = 'overview', onTab
             )}
 
             {/* Lazy-loaded panel tabs — each panel loads on demand */}
-            {['content', 'engagement', 'features', 'search', 'errors', 'preferences', 'feedback', 'health'].includes(activeTab) && (
+            {['content', 'engagement', 'features', 'search', 'errors', 'preferences', 'feedback', 'health', 'moderation'].includes(activeTab) && (
               <Suspense fallback={<div className="flex items-center justify-center py-20"><div className="w-8 h-8 border-2 border-purple-500 border-t-transparent rounded-full animate-spin" /></div>}>
                 {activeTab === 'content' && <ContentCoveragePanel />}
                 {activeTab === 'engagement' && <EngagementPanel />}
@@ -3475,6 +3477,7 @@ export default function AdminDashboard({ onClose, initialTab = 'overview', onTab
                 {activeTab === 'preferences' && <ReciterPreferencesPanel />}
                 {activeTab === 'feedback' && <UserFeedbackPanel />}
                 {activeTab === 'health' && <ApiHealthPanel />}
+                {activeTab === 'moderation' && <DiscussionModerationPanel />}
               </Suspense>
             )}
 

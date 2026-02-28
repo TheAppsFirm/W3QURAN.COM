@@ -820,6 +820,20 @@ export const UsersIcon = (props) => (
   </Icon>
 );
 
+export const UserIcon = (props) => (
+  <Icon {...props}>
+    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+    <circle cx="12" cy="7" r="4" />
+  </Icon>
+);
+
+export const MailIcon = (props) => (
+  <Icon {...props}>
+    <rect x="2" y="4" width="20" height="16" rx="2" />
+    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+  </Icon>
+);
+
 // ============================================================================
 // Innovative Features Icons
 // ============================================================================
@@ -1118,13 +1132,6 @@ export const ShieldIcon = (props) => (
   </Icon>
 );
 
-export const MailIcon = (props) => (
-  <Icon {...props}>
-    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-    <polyline points="22,6 12,13 2,6" />
-  </Icon>
-);
-
 // ============================================================================
 // Export all icons as object for dynamic usage
 // ============================================================================
@@ -1228,6 +1235,8 @@ export const Icons = {
   Anchor: AnchorIcon,
   Leaf: LeafIcon,
   Users: UsersIcon,
+  User: UserIcon,
+  Mail: MailIcon,
   // Innovative Features Icons
   HeartHandshake: HeartHandshakeIcon,
   Wind: WindIcon,
@@ -1265,7 +1274,6 @@ export const Icons = {
   CreditCard: CreditCardIcon,
   Shield: ShieldIcon,
   Trash: TrashIcon,
-  Mail: MailIcon,
 };
 
 export const FileTextIcon = (props) => (
@@ -1350,11 +1358,50 @@ export const PuzzleIcon = (props) => (
   </Icon>
 );
 
+// MoreVertical icon (3-dot menu)
+export const MoreVerticalIcon = (props) => (
+  <Icon {...props}>
+    <circle cx="12" cy="12" r="1" />
+    <circle cx="12" cy="5" r="1" />
+    <circle cx="12" cy="19" r="1" />
+  </Icon>
+);
+
+// Flag icon for reporting
+export const FlagIcon = (props) => (
+  <Icon {...props}>
+    <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z" />
+    <line x1="4" y1="22" x2="4" y2="15" />
+  </Icon>
+);
+
+// Hash icon for tags/topics
+export const HashIcon = (props) => (
+  <Icon {...props}>
+    <line x1="4" y1="9" x2="20" y2="9" />
+    <line x1="4" y1="15" x2="20" y2="15" />
+    <line x1="10" y1="3" x2="8" y2="21" />
+    <line x1="16" y1="3" x2="14" y2="21" />
+  </Icon>
+);
+
+// Quote icon for quoting text
+export const QuoteIcon = (props) => (
+  <Icon {...props}>
+    <path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z" />
+    <path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z" />
+  </Icon>
+);
+
 // Add to Icons export
 Icons.Shield = ShieldIcon;
 Icons.FileText = FileTextIcon;
 Icons.Map = MapIcon;
 Icons.Gamepad = GamepadIcon;
 Icons.Puzzle = PuzzleIcon;
+Icons.MoreVertical = MoreVerticalIcon;
+Icons.Flag = FlagIcon;
+Icons.Hash = HashIcon;
+Icons.Quote = QuoteIcon;
 
 export default Icons;

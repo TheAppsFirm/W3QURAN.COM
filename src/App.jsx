@@ -52,6 +52,8 @@ const PrayerTimesView = lazyWithRetry(() => import('./components/views/PrayerTim
 const PrivacyPolicyView = lazyWithRetry(() => import('./components/views/PrivacyPolicyView'));
 const TermsOfServiceView = lazyWithRetry(() => import('./components/views/TermsOfServiceView'));
 const TasbihView = lazyWithRetry(() => import('./components/views/TasbihView'));
+const DiscussionsView = lazyWithRetry(() => import('./components/views/DiscussionsView'));
+const CommunityWidget = lazyWithRetry(() => import('./components/discussions/CommunityWidget'));
 
 // Lazy-loaded modal features (only loaded when user opens them)
 const ProgressDashboard = lazyWithRetry(() => import('./components/common/ProgressDashboard'));
@@ -154,6 +156,10 @@ const ROUTE_CONFIG = {
   '/tasbih': { view: 'tasbih' },
   '/privacy': { view: 'privacy' },
   '/terms': { view: 'terms' },
+  '/discussions': { view: 'discussions' },
+  '/discussions/messages': { view: 'discussions', tab: 'dms' },
+  '/discussions/profile': { view: 'discussions', tab: 'profile' },
+  // /discussions/surah/:id handled dynamically in parseURL
   // Admin routes with tabs
   '/admin': { view: 'admin', tab: 'overview' },
   '/admin/overview': { view: 'admin', tab: 'overview' },
@@ -199,6 +205,7 @@ const VIEW_TO_ROUTE = {
   tasbih: '/tasbih',
   privacy: '/privacy',
   terms: '/terms',
+  discussions: '/discussions',
 };
 
 const MODAL_TO_ROUTE = {
@@ -301,6 +308,7 @@ function QuranBubbleApp() {
   const [showSearchPanel, setShowSearchPanel] = useState(false);
   const [showDonateModal, setShowDonateModal] = useState(false);
   const [showMindMap, setShowMindMap] = useState(false);
+  const [pendingDMCount, setPendingDMCount] = useState(0);
   const [showMoodTracker, setShowMoodTracker] = useState(false);
   const [showVideoSync, setShowVideoSync] = useState(false);
   const [showPropheticMap, setShowPropheticMap] = useState(false);
@@ -365,6 +373,7 @@ function QuranBubbleApp() {
   const [showTalkToQuran, setShowTalkToQuran] = useState(false);
   const [showKidsMode, setShowKidsMode] = useState(false);
   const [adminTab, setAdminTab] = useState('overview');
+  const [discussionInitial, setDiscussionInitial] = useState(null); // { surahId?, tab? }
 
   // Track if we're handling a popstate event (browser back/forward)
   const isPopstateRef = useRef(false);
@@ -445,6 +454,20 @@ function QuranBubbleApp() {
     }
   }, [isAuthenticated]);
 
+  // Fetch pending DM count for notification badge
+  useEffect(() => {
+    if (!isAuthenticated) { setPendingDMCount(0); return; }
+    const fetchDMCount = () => {
+      fetch('/api/dm/conversations', { credentials: 'include' })
+        .then(r => r.json())
+        .then(data => setPendingDMCount(data.pending?.length || 0))
+        .catch(() => {});
+    };
+    fetchDMCount();
+    const interval = setInterval(fetchDMCount, 60000); // Poll every minute
+    return () => clearInterval(interval);
+  }, [isAuthenticated]);
+
   // Auto-open Kids Mode when returning from payment
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -481,14 +504,39 @@ function QuranBubbleApp() {
         }
       }
 
+      // Check for discussion profile route: /discussions/profile/:userId
+      const discProfileMatch = path.match(/^\/discussions\/profile\/([^/]+)$/);
+      if (discProfileMatch) {
+        setDiscussionInitial({ profileUserId: discProfileMatch[1] });
+        setView('discussions');
+        return;
+      }
+
+      // Check for discussion surah route: /discussions/surah/:id
+      const discSurahMatch = path.match(/^\/discussions\/surah\/(\d+)$/);
+      if (discSurahMatch) {
+        const surahId = parseInt(discSurahMatch[1], 10);
+        if (surahId >= 1 && surahId <= 114) {
+          setDiscussionInitial({ surahId });
+          setView('discussions');
+          return;
+        }
+      }
+
       // Check route config
       const config = ROUTE_CONFIG[path];
       if (config) {
         if (config.view) {
           setView(config.view);
           // Handle admin tab from route
-          if (config.tab) {
+          if (config.view === 'admin' && config.tab) {
             setAdminTab(config.tab);
+          }
+          // Handle discussion tab from route
+          if (config.view === 'discussions' && config.tab) {
+            setDiscussionInitial({ tab: config.tab });
+          } else if (config.view === 'discussions') {
+            setDiscussionInitial(null);
           }
         } else if (config.modal) {
           setView('surahs'); // Modals open over surahs view
@@ -538,6 +586,13 @@ function QuranBubbleApp() {
 
   // Update URL when view changes
   useEffect(() => {
+    // Skip for discussions — it manages its own sub-routes via onNavigate
+    if (view === 'discussions') {
+      // Only set base /discussions if no sub-route is already active
+      const p = window.location.pathname;
+      if (!p.startsWith('/discussions')) updateURL('/discussions');
+      return;
+    }
     const route = VIEW_TO_ROUTE[view];
     if (route && !overlayReaderSurah) {
       updateURL(route);
@@ -1050,6 +1105,8 @@ function QuranBubbleApp() {
           onWeatherSync={() => setShowWeatherSync(true)}
           onHajjUmrah={() => setShowHajjUmrah(true)}
           onShowBookmarks={() => setShowBookmarksPanel(true)}
+          onMessages={() => { setView('discussions'); updateURL('/discussions'); }}
+          pendingDMCount={pendingDMCount}
         />
       )}
 
@@ -1215,6 +1272,11 @@ function QuranBubbleApp() {
                   />
                 </Suspense>
               )}
+
+              {/* Community Discussions Widget */}
+              <Suspense fallback={null}>
+                <CommunityWidget onNavigate={setView} />
+              </Suspense>
             </div>
 
             {/* Filter info - positioned above the bottom floating menu */}
@@ -1268,13 +1330,32 @@ function QuranBubbleApp() {
               <TasbihView darkMode={darkMode} onBack={() => setView('surahs')} />
             </Suspense>
           )}
+          {view === 'discussions' && (
+            <DiscussionsView
+              darkMode={darkMode}
+              onBack={() => { setView('surahs'); updateURL('/'); }}
+              initialSurahId={discussionInitial?.surahId || null}
+              initialTab={discussionInitial?.tab || null}
+              initialProfileUserId={discussionInitial?.profileUserId || null}
+              onNavigate={(path) => { updateURL(path); setDiscussionInitial(null); }}
+              onNavigateSettings={() => { setView('settings'); updateURL('/settings'); }}
+              onOpenAyah={(surahId, ayahNum) => {
+                const surah = SURAHS.find(s => s.id === surahId);
+                if (surah) {
+                  setOverlayReaderSurah(surah);
+                  setInitialVerse(ayahNum || 1);
+                  updateURL(`/surah/${surah.id}${ayahNum > 1 ? `/${ayahNum}` : ''}`);
+                }
+              }}
+            />
+          )}
           {view === 'privacy' && <PrivacyPolicyView darkMode={darkMode} onBack={() => setView('surahs')} />}
           {view === 'terms' && <TermsOfServiceView darkMode={darkMode} onBack={() => setView('surahs')} />}
         </Suspense>
       </main>
 
       {/* Floating Menu - hidden when Talk to Quran or Admin panel is open */}
-      {!showTalkToQuran && view !== 'admin' && (
+      {!showTalkToQuran && view !== 'admin' && view !== 'discussions' && (
         <FloatingMenu
           view={view}
           setView={setView}
@@ -1337,6 +1418,10 @@ function QuranBubbleApp() {
             const basePath = `/surah/${overlayReaderSurah.id}${initialVerse > 1 ? `/${initialVerse}` : ''}`;
             const url = panel ? `${basePath}?panel=${panel}` : basePath;
             updateURL(url);
+          }}
+          onNavigateToView={(viewName) => {
+            setView(viewName);
+            updateURL(`/${viewName}`);
           }}
         />
       )}
