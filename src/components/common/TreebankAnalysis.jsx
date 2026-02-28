@@ -1608,8 +1608,8 @@ export const OntologyView = memo(function OntologyView({ surahId, lang = 'en', i
                   <div className="space-y-3">
                     {ontology.scientificReferences.notes.map((note, idx) => (
                       <div key={idx} className="p-3 bg-white/5 rounded-xl">
-                        <span className="text-emerald-300 font-medium text-sm block mb-1">{note.topic}</span>
-                        <p className="text-white/70 text-sm">{note.observation}</p>
+                        <span className="text-emerald-300 font-medium text-sm block mb-1">{getOntologyText(note.topic, lang)}</span>
+                        <p className="text-white/70 text-sm">{getOntologyText(note.observation, lang)}</p>
                         {note.ayah && (
                           <span className="text-xs bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded mt-2 inline-block">
                             {lang === 'ur' ? 'آیت' : lang === 'ar' ? 'آية' : 'Ayah'} {note.ayah}
