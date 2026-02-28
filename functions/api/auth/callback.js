@@ -89,24 +89,31 @@ export async function onRequest(context) {
     const sessionToken = crypto.randomUUID() + crypto.randomUUID();
     const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days
 
-    // Check if user exists
-    const existingUser = await env.DB.prepare(
+    // Check if user exists by google_id or email
+    let existingUser = await env.DB.prepare(
       'SELECT id FROM users WHERE google_id = ?'
     ).bind(googleUser.id).first();
+
+    if (!existingUser) {
+      existingUser = await env.DB.prepare(
+        'SELECT id FROM users WHERE email = ?'
+      ).bind(googleUser.email).first();
+    }
 
     let finalUserId;
 
     if (existingUser) {
-      // Update existing user
+      // Update existing user (including google_id in case it was matched by email)
       finalUserId = existingUser.id;
       await env.DB.prepare(`
-        UPDATE users SET email = ?, name = ?, picture = ?, updated_at = datetime('now')
-        WHERE google_id = ?
+        UPDATE users SET google_id = ?, email = ?, name = ?, picture = ?, updated_at = datetime('now')
+        WHERE id = ?
       `).bind(
+        googleUser.id,
         googleUser.email,
         googleUser.name || null,
         googleUser.picture || null,
-        googleUser.id
+        finalUserId
       ).run();
     } else {
       // Create new user
