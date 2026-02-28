@@ -297,57 +297,68 @@ const StatsBar = memo(function StatsBar({
             {/* Hajj & Umrah */}
             {onHajjUmrah && (<li className="flex-shrink-0"><BubbleButton icon={() => <span className="text-xl sm:text-2xl">🕋</span>} label={t('statsBar.hajj', 'Hajj')} color="#F59E0B" color2="#D97706" onClick={onHajjUmrah} /></li>)}
 
-            {/* Gamification Stats */}
-            {gamification.isActive ? (
-              <>
-                <li className="flex-shrink-0"><BubbleButton icon={() => <span className="text-white text-sm sm:text-lg font-black drop-shadow-lg">{gamification.level}</span>} label={t('statsBar.level', 'Level')} color={gamification.levelInfo.current.color} color2={`${gamification.levelInfo.current.color}cc`} onClick={onShowAchievements} /></li>
-                <li className="flex-shrink-0"><BubbleButton icon={Icons.Star} label={`${gamification.xp} XP`} color="#F59E0B" color2="#D97706" onClick={onShowAchievements} /></li>
-                <li className="flex-shrink-0"><BubbleButton icon={Icons.Fire} label={`${gamification.streak.current} ${t('statsBar.days', 'Days')}`} color={gamification.streak.current > 0 ? '#F97316' : '#94A3B8'} color2={gamification.streak.current > 0 ? '#EA580C' : '#64748B'} onClick={onShowAchievements} /></li>
-                <li className="flex-shrink-0"><BubbleButton icon={Icons.Trophy} label={`${gamification.achievements.length} ${t('statsBar.won', 'Won')}`} color="#A855F7" color2="#9333EA" onClick={onShowAchievements} /></li>
-              </>
-            ) : (
-              <>
-                <li className="flex-shrink-0 opacity-50"><BubbleButton icon={Icons.Star} label={t('statsBar.xp', 'XP')} color="#F59E0B" color2="#D97706" onClick={() => {}} /></li>
-                <li className="flex-shrink-0 opacity-50"><BubbleButton icon={Icons.Fire} label={t('statsBar.streak', 'Streak')} color="#94A3B8" color2="#64748B" onClick={() => {}} /></li>
-                <li className="flex-shrink-0 opacity-50"><BubbleButton icon={Icons.Trophy} label={t('statsBar.awards', 'Awards')} color="#A855F7" color2="#9333EA" onClick={() => {}} /></li>
-              </>
-            )}
-          </ul>
-        </div>
-
-        {/* XP Progress bar to next level */}
-        {gamification.isActive && (
-          <div className="max-w-6xl mx-auto mt-2 sm:mt-3">
-            <div className="h-1.5 sm:h-2 rounded-full overflow-hidden relative"
-              style={{
-                background: 'linear-gradient(135deg, rgba(0,0,0,0.04), rgba(0,0,0,0.06))',
-                boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.08), inset 0 -1px 2px rgba(255,255,255,0.5)',
-              }}>
-              <div
-                className="h-full rounded-full relative transition-all duration-500 overflow-hidden"
+            {/* Gamification Widget */}
+            <li className="flex-shrink-0">
+              <button
+                onClick={onShowAchievements}
+                className="flex items-center gap-2 sm:gap-2.5 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full transition-all hover:scale-105 active:scale-95"
                 style={{
-                  width: `${Math.min(gamification.levelInfo.progressPercent || 0, 100)}%`,
-                  background: `linear-gradient(to right, ${gamification.levelInfo.current.color}, ${gamification.levelInfo.next?.color || gamification.levelInfo.current.color})`,
-                  boxShadow: `0 0 8px ${gamification.levelInfo.current.color}40`,
+                  background: gamification.isActive
+                    ? `linear-gradient(135deg, ${gamification.levelInfo.current.color}18, ${gamification.levelInfo.current.color}08)`
+                    : 'rgba(148, 163, 184, 0.08)',
+                  border: `1px solid ${gamification.isActive ? `${gamification.levelInfo.current.color}30` : 'rgba(148,163,184,0.15)'}`,
+                  boxShadow: gamification.isActive ? `0 2px 8px ${gamification.levelInfo.current.color}10` : 'none',
                 }}
               >
-                <div className="absolute inset-0 bg-gradient-to-b from-white/40 to-transparent" />
-                <div className="absolute inset-0" style={{
-                  background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent)',
-                  animation: 'shimmerWave 2s ease-in-out infinite',
-                }} />
-              </div>
-            </div>
-            <div className="flex justify-between mt-0.5">
-              <span className="text-[8px] sm:text-[9px] text-gray-400">{t('statsBar.level', 'Level')} {gamification.level} — {gamification.levelInfo.current.name}</span>
-              {gamification.levelInfo.next && (
-                <span className="text-[8px] sm:text-[9px] text-gray-400">
-                  {gamification.levelInfo.xpProgress}/{gamification.levelInfo.xpNeeded} {t('statsBar.xp', 'XP')} → {t('statsBar.level', 'Level')} {gamification.levelInfo.next.level}
-                </span>
-              )}
-            </div>
-          </div>
-        )}
+                {/* Level circle */}
+                <div
+                  className="w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center shrink-0"
+                  style={{
+                    background: gamification.isActive
+                      ? `linear-gradient(135deg, ${gamification.levelInfo.current.color}, ${gamification.levelInfo.current.color}cc)`
+                      : 'linear-gradient(135deg, #94a3b8, #64748b)',
+                    boxShadow: gamification.isActive
+                      ? `0 2px 6px ${gamification.levelInfo.current.color}40, inset 0 1px 2px rgba(255,255,255,0.3)`
+                      : '0 2px 4px rgba(0,0,0,0.1)',
+                  }}
+                >
+                  <span className="text-white text-xs sm:text-sm font-black drop-shadow">{gamification.isActive ? gamification.level : '—'}</span>
+                </div>
+
+                {gamification.isActive ? (
+                  <div className="flex flex-col items-start min-w-0">
+                    {/* Stats row */}
+                    <div className="flex items-center gap-2 text-[10px] sm:text-xs">
+                      <span className="flex items-center gap-0.5 text-amber-500 font-semibold">
+                        <Icons.Star className="w-3 h-3" />{gamification.xp}
+                      </span>
+                      <span className={`flex items-center gap-0.5 font-semibold ${gamification.streak.current > 0 ? 'text-orange-500' : 'text-gray-400'}`}>
+                        <Icons.Fire className="w-3 h-3" />{gamification.streak.current}
+                      </span>
+                      <span className="flex items-center gap-0.5 text-purple-500 font-semibold">
+                        <Icons.Trophy className="w-3 h-3" />{gamification.achievements.length}
+                      </span>
+                    </div>
+                    {/* XP progress bar */}
+                    <div className="w-full mt-0.5" style={{ minWidth: 80 }}>
+                      <div className="h-1 rounded-full overflow-hidden" style={{ background: 'rgba(0,0,0,0.06)' }}>
+                        <div
+                          className="h-full rounded-full transition-all duration-500"
+                          style={{
+                            width: `${Math.min(gamification.levelInfo.progressPercent || 0, 100)}%`,
+                            background: `linear-gradient(to right, ${gamification.levelInfo.current.color}, ${gamification.levelInfo.next?.color || gamification.levelInfo.current.color})`,
+                          }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <span className="text-[10px] sm:text-xs text-gray-400 font-medium">{t('statsBar.xp', 'XP')}</span>
+                )}
+              </button>
+            </li>
+          </ul>
+        </div>
       </div>
 
       {/* Layout Dropdown - Using Portal for proper z-index */}
