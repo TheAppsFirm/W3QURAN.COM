@@ -60,6 +60,35 @@ export async function onRequest(context) {
       ).bind(userId).first(),
     ]);
 
+    // Connection status between viewer and this user (for DM button state)
+    let connectionStatus = null; // null = no connection, 'pending' = waiting, 'accepted' = friends
+    let connectionId = null;
+    let connectionDirection = null; // 'sent' or 'received' (for pending)
+    if (viewer && !isOwnProfile) {
+      try {
+        const conn = await env.DB.prepare(`
+          SELECT id, status, requester_id FROM dm_connections
+          WHERE ((requester_id = ? AND recipient_id = ?) OR (requester_id = ? AND recipient_id = ?))
+          AND status IN ('pending', 'accepted')
+        `).bind(viewer.id, userId, userId, viewer.id).first();
+        if (conn) {
+          connectionStatus = conn.status;
+          connectionId = conn.id;
+          if (conn.status === 'pending') {
+            connectionDirection = conn.requester_id === viewer.id ? 'sent' : 'received';
+          }
+        }
+      } catch { /* table may not exist */ }
+
+      // Also check if viewer has blocked this user
+      try {
+        const block = await env.DB.prepare(
+          'SELECT id FROM user_blocks WHERE blocker_id = ? AND blocked_id = ?'
+        ).bind(viewer.id, userId).first();
+        if (block) connectionStatus = 'blocked';
+      } catch { /* ignore */ }
+    }
+
     // Leaderboard data (optional — table may not exist)
     let leaderboard = null;
     try {
@@ -94,6 +123,9 @@ export async function onRequest(context) {
         joinedAt: user.created_at,
         isOwnProfile,
         allowDMs,
+        connectionStatus,
+        connectionId,
+        connectionDirection,
         stats: {
           postCount: postCount?.c || 0,
           commentCount: commentCount?.c || 0,

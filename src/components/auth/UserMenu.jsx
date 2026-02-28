@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useTranslation } from '../../contexts/LocaleContext';
 
-export function UserMenu({ onSettingsClick, onAdminClick }) {
+export function UserMenu({ onSettingsClick, onAdminClick, onUpgradeClick }) {
   const { user, logout, isPremium, isAdmin } = useAuth();
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
@@ -83,7 +83,7 @@ export function UserMenu({ onSettingsClick, onAdminClick }) {
               <button
                 onClick={() => {
                   setIsOpen(false);
-                  onSettingsClick?.();
+                  onUpgradeClick?.();
                 }}
                 className="w-full px-4 py-2 text-left text-amber-400 hover:bg-amber-400/10 flex items-center gap-3 transition-colors"
               >

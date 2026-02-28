@@ -2,7 +2,7 @@
  * ChatWindow — Real-time live chat for surah rooms.
  */
 
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, lazy, Suspense } from 'react';
 import { Icons } from '../common';
 import { SURAHS } from '../../data';
 import { useWebSocket } from '../../hooks/useWebSocket';
@@ -11,6 +11,8 @@ import { useIsMobile } from '../../hooks';
 import { QUOTE_TRANSLATIONS } from './quranQuoteUtils';
 import RichPostBody from './RichPostBody';
 import { useTranslation } from '../../contexts/LocaleContext';
+
+const PremiumGate = lazy(() => import('../kids/KidsPremiumGate'));
 
 const REACTIONS = ['❤️', '👍', '📖', '🤲', 'ماشاءالله'];
 
@@ -132,11 +134,13 @@ export default function ChatWindow({ surahId, surahName }) {
   const [showClearConfirm, setShowClearConfirm] = useState(false);
   const [clearing, setClearing] = useState(false);
   const {
-    messages, setMessages, connected, onlineUsers, onlineCount, typingUsers, error,
+    messages, setMessages, connected, onlineUsers, onlineCount, typingUsers, error, requiresPremium,
     sendMessage, sendTyping, sendStopTyping, sendReaction,
   } = useWebSocket('surah', String(surahId), isAuthenticated);
 
   const [inputText, setInputText] = useState('');
+  const [showPremiumGate, setShowPremiumGate] = useState(false);
+  const lastSentText = useRef(null);
   const [replyTo, setReplyTo] = useState(null);
   const [showQuote, setShowQuote] = useState(false);
   const [quoteSurah, setQuoteSurah] = useState(1);
@@ -155,6 +159,14 @@ export default function ChatWindow({ surahId, surahName }) {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
+  // Restore input text if rate-limited
+  useEffect(() => {
+    if (requiresPremium && lastSentText.current) {
+      setInputText(lastSentText.current);
+      lastSentText.current = null;
+    }
+  }, [requiresPremium]);
+
   const handleSend = (e) => {
     e.preventDefault();
     const text = inputText.trim();
@@ -162,6 +174,7 @@ export default function ChatWindow({ surahId, surahName }) {
 
     if (!isAuthenticated) { login(); return; }
 
+    lastSentText.current = text;
     const success = sendMessage(text, replyTo);
     if (success) {
       setInputText('');
@@ -331,8 +344,18 @@ export default function ChatWindow({ surahId, surahName }) {
         </div>
       )}
       {error && connected && (
-        <div className="px-4 py-1.5 bg-red-500/10 text-xs text-red-400/70">
-          {error}
+        <div className={`px-4 py-2 ${requiresPremium ? 'bg-amber-500/10' : 'bg-red-500/10'} text-xs flex items-center justify-between gap-2`}>
+          <span className={requiresPremium ? 'text-amber-400/80' : 'text-red-400/70'}>{error}</span>
+          {requiresPremium && (
+            <button
+              onClick={() => setShowPremiumGate(true)}
+              className="shrink-0 px-3 py-1.5 rounded-lg bg-gradient-to-r from-amber-600 to-orange-600
+                text-white text-xs font-medium hover:from-amber-500 hover:to-orange-500
+                shadow-lg shadow-amber-500/20 transition-all"
+            >
+              {t('premium.upgrade', 'Upgrade')}
+            </button>
+          )}
         </div>
       )}
 
@@ -461,6 +484,18 @@ export default function ChatWindow({ surahId, surahName }) {
             <Icons.Send className="w-4 h-4 text-white" />
           </button>
         </form>
+      )}
+
+      {/* Premium upgrade popup */}
+      {showPremiumGate && (
+        <Suspense fallback={null}>
+          <PremiumGate
+            feature="daily_limit"
+            onClose={() => setShowPremiumGate(false)}
+            source="surah_chat"
+            returnPath={`/discussions/surah/${surahId}`}
+          />
+        </Suspense>
       )}
     </div>
   );

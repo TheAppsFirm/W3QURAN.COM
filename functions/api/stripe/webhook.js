@@ -18,9 +18,17 @@ const LIVE_PRICES = {
   credits_100: 'price_1T2RhGCnbCeWpM4XatkkkMA3', // 100 credits
 };
 
-// Test mode price IDs (created via Stripe CLI)
+// Test mode price IDs — amounts match live/UI prices
 const TEST_PRICES = {
-  premium_test: 'price_1T2Zt9CnbCeWpM4XtLcuhjkP', // $4.99/month test
+  starter_monthly: 'price_1T5kgtCnbCeWpM4XnPWewGHA', // $3/month test
+  premium_monthly: 'price_1T5kguCnbCeWpM4XpxcHUMmI', // $7/month test
+  premium_yearly: 'price_1T5kgvCnbCeWpM4XiepVaR3j',  // $60/year test
+  scholar_monthly: 'price_1T5kgwCnbCeWpM4XXEPRuSsS',  // $20/month test
+  scholar_yearly: 'price_1T5kgxCnbCeWpM4X1xr4ICiS',   // $200/year test
+  lifetime: 'price_1T5kgxCnbCeWpM4XdCtxEKsc',         // $299 one-time test
+  credits_20: 'price_1T5kgyCnbCeWpM4XXbDVCxQm',       // $2 one-time test
+  credits_50: 'price_1T5kgzCnbCeWpM4XO22vn2bz',       // $4 one-time test
+  credits_100: 'price_1T5kh0CnbCeWpM4Xz7wb765f',      // $7 one-time test
 };
 
 // Map price IDs to subscription details
@@ -35,8 +43,16 @@ const PRICE_CONFIG = {
   [LIVE_PRICES.credits_20]: { creditPack: true, credits: 20 },
   [LIVE_PRICES.credits_50]: { creditPack: true, credits: 50 },
   [LIVE_PRICES.credits_100]: { creditPack: true, credits: 100 },
-  // Test prices (all map to same test price for simplicity)
-  [TEST_PRICES.premium_test]: { tier: 'premium', credits: 80, interval: 'month' },
+  // Test prices — same credit mapping as live
+  [TEST_PRICES.starter_monthly]: { tier: 'starter', credits: 30, interval: 'month' },
+  [TEST_PRICES.premium_monthly]: { tier: 'premium', credits: 80, interval: 'month' },
+  [TEST_PRICES.premium_yearly]: { tier: 'premium', credits: 80, interval: 'year' },
+  [TEST_PRICES.scholar_monthly]: { tier: 'scholar', credits: 300, interval: 'month' },
+  [TEST_PRICES.scholar_yearly]: { tier: 'scholar', credits: 300, interval: 'year' },
+  [TEST_PRICES.lifetime]: { tier: 'lifetime', credits: 100, lifetime: true },
+  [TEST_PRICES.credits_20]: { creditPack: true, credits: 20 },
+  [TEST_PRICES.credits_50]: { creditPack: true, credits: 50 },
+  [TEST_PRICES.credits_100]: { creditPack: true, credits: 100 },
 };
 
 // Helper to get Stripe config based on admin settings

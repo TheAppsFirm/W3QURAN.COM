@@ -3,7 +3,7 @@
  * Polished UI with clear visual hierarchy and beautiful interactions.
  */
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, lazy, Suspense } from 'react';
 import { Icons } from '../common';
 import { usePostDetail, useVote, useReport } from '../../hooks/useDiscussion';
 import { useAuth } from '../../contexts/AuthContext';
@@ -14,6 +14,9 @@ import CommentThread from './CommentThread';
 import CommentInput from './CommentInput';
 import UserPopover from './UserPopover';
 import { useTranslation } from '../../contexts/LocaleContext';
+import { getTextDir } from './quranQuoteUtils';
+
+const PremiumGate = lazy(() => import('../kids/KidsPremiumGate'));
 
 const POST_TYPE_CONFIG = {
   discussion: { label: 'Discussion', icon: '💬', color: 'text-cyan-400', bg: 'bg-cyan-500/15', border: 'border-cyan-500/30', glow: 'shadow-cyan-500/5' },
@@ -42,6 +45,7 @@ export default function PostDetail({ postId, onBack, onOpenAyah, onViewProfile }
   const { vote, voting } = useVote();
   const { report } = useReport();
   const [commentSort, setCommentSort] = useState('best');
+  const [showPremiumGate, setShowPremiumGate] = useState(false);
   const [showReport, setShowReport] = useState(false);
   const [reportReason, setReportReason] = useState('');
   const [reportSuccess, setReportSuccess] = useState(false);
@@ -335,7 +339,7 @@ export default function PostDetail({ postId, onBack, onOpenAyah, onViewProfile }
             </div>
           ) : (
             <div className="mb-4">
-              <h1 className="text-xl text-white font-bold leading-snug mb-3">{post.title}</h1>
+              <h1 className="text-xl text-white font-bold leading-snug mb-3" dir={getTextDir(post.title)}>{post.title}</h1>
 
               {/* Tags */}
               {post.tags?.length > 0 && (
@@ -457,7 +461,7 @@ export default function PostDetail({ postId, onBack, onOpenAyah, onViewProfile }
           {/* Comment Input */}
           {!post.isLocked && isAuthenticated && (
             <div className="mb-5">
-              <CommentInput onSubmit={(body) => handleAddComment(body)} placeholder={t('discussions.shareYourThoughts', 'Share your thoughts...')} />
+              <CommentInput onSubmit={(body) => handleAddComment(body)} placeholder={t('discussions.shareYourThoughts', 'Share your thoughts...')} onShowPremium={() => setShowPremiumGate(true)} />
             </div>
           )}
 
@@ -500,6 +504,7 @@ export default function PostDetail({ postId, onBack, onOpenAyah, onViewProfile }
               isAdmin={isAdmin}
               isLocked={post.isLocked}
               voting={voting}
+              onShowPremium={() => setShowPremiumGate(true)}
             />
           )}
         </div>
@@ -557,6 +562,18 @@ export default function PostDetail({ postId, onBack, onOpenAyah, onViewProfile }
             </div>
           </div>
         </div>
+      )}
+
+      {/* Premium upgrade gate */}
+      {showPremiumGate && (
+        <Suspense fallback={null}>
+          <PremiumGate
+            onClose={() => setShowPremiumGate(false)}
+            feature="daily_limit"
+            source="discussions"
+            returnPath="/discussions"
+          />
+        </Suspense>
       )}
     </div>
   );

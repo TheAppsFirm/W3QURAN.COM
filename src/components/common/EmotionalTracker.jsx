@@ -8,10 +8,12 @@
  * - Emotional journey visualization
  */
 
-import { useState, useEffect, useCallback, memo, useMemo } from 'react';
+import { useState, useEffect, useCallback, memo, useMemo, useRef } from 'react';
 import { Icons } from './Icons';
 import { SURAHS } from '../../data';
 import { useTranslation } from '../../contexts/LocaleContext';
+import { useCloudSync } from '../../hooks/useCloudSync';
+import { useAuth } from '../../contexts/AuthContext';
 
 // Mood definitions with colors and Arabic translations
 const MOODS = [
@@ -252,14 +254,55 @@ export const MoodEntryForm = memo(function MoodEntryForm({
 // Main Emotional Journey Dashboard
 const EmotionalTracker = memo(function EmotionalTracker({ isVisible, onClose, onNavigateToSurah }) {
   const { t } = useTranslation();
+  const { isAuthenticated, isPremium } = useAuth();
   const [data, setData] = useState({ entries: [], insights: {} });
   const [activeTab, setActiveTab] = useState('overview'); // overview, history, suggestions
   const [currentMoodState, setCurrentMoodState] = useState(null);
+  const [syncTrigger, setSyncTrigger] = useState(0);
 
-  // Load data on mount
+  // ─── Cloud Sync: Mood (premium) ─────────────────────────
+  const getMoodData = useCallback(() => {
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      return stored ? JSON.parse(stored) : null;
+    } catch { return null; }
+  }, []);
+
+  const applyMoodData = useCallback((serverData) => {
+    if (!serverData?.entries) return;
+    const local = getStoredData();
+    // Merge entries by deduplicating on id (union)
+    const localIds = new Set(local.entries.map(e => e.id));
+    const merged = [...local.entries];
+    serverData.entries.forEach(e => {
+      if (!localIds.has(e.id)) merged.push(e);
+    });
+    // Sort by date descending, keep max 365
+    merged.sort((a, b) => new Date(b.date) - new Date(a.date));
+    const trimmed = merged.slice(0, 365);
+    // Merge surahMoods insights additively
+    const insights = { surahMoods: { ...local.insights?.surahMoods } };
+    if (serverData.insights?.surahMoods) {
+      Object.entries(serverData.insights.surahMoods).forEach(([sid, moods]) => {
+        if (!insights.surahMoods[sid]) insights.surahMoods[sid] = {};
+        Object.entries(moods).forEach(([mood, count]) => {
+          insights.surahMoods[sid][mood] = Math.max(insights.surahMoods[sid][mood] || 0, count);
+        });
+      });
+    }
+    const result = { entries: trimmed, insights };
+    saveData(result);
+    setData(result);
+  }, []);
+
+  useCloudSync('mood', getMoodData, applyMoodData,
+    [syncTrigger], isAuthenticated && isPremium);
+
+  // Load data on mount (and trigger sync check)
   useEffect(() => {
     if (isVisible) {
       setData(getStoredData());
+      setSyncTrigger(prev => prev + 1); // trigger upload if data changed since last open
     }
   }, [isVisible]);
 

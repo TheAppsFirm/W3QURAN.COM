@@ -24,85 +24,6 @@ import { SURAHS } from '../../data';
 import { useAuth } from '../../contexts/AuthContext';
 
 // Payment Result Popup Component
-const PaymentResultPopup = ({ success, canceled, onClose, onRetry, isLoading = false }) => {
-  return (
-    <div
-      className="fixed inset-0 z-[10001] flex items-center justify-center bg-black/80 backdrop-blur-sm"
-      style={{ padding: 'max(1rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) max(1rem, env(safe-area-inset-bottom)) max(1rem, env(safe-area-inset-left))' }}
-    >
-      <div className="bg-white rounded-3xl p-8 max-w-sm w-full text-center shadow-2xl">
-        {success ? (
-          <>
-            <div className="text-7xl mb-4 animate-bounce">🎉</div>
-            <h2 className="text-2xl font-bold text-green-600 mb-2">Payment Successful!</h2>
-            <p className="text-gray-600 mb-6">
-              Welcome to Quran Kids Premium! All features are now unlocked.
-            </p>
-            <button
-              onClick={onClose}
-              disabled={isLoading}
-              className={`w-full py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white font-bold rounded-xl hover:shadow-lg transition-all flex items-center justify-center gap-2 ${isLoading ? 'opacity-70 cursor-wait' : ''}`}
-            >
-              {isLoading ? (
-                <>
-                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                  <span>Activating Premium...</span>
-                </>
-              ) : (
-                <span>Start Learning! 🚀</span>
-              )}
-            </button>
-          </>
-        ) : canceled ? (
-          <>
-            <div className="text-7xl mb-4">🤔</div>
-            <h2 className="text-2xl font-bold text-amber-600 mb-2">Payment Canceled</h2>
-            <p className="text-gray-600 mb-6">
-              No worries! You can upgrade anytime to unlock all features.
-            </p>
-            <div className="space-y-2">
-              <button
-                onClick={onRetry}
-                className="w-full py-3 bg-gradient-to-r from-amber-400 to-orange-500 text-white font-bold rounded-xl hover:shadow-lg transition-all"
-              >
-                Try Again
-              </button>
-              <button
-                onClick={onClose}
-                className="w-full py-2 text-gray-500 hover:text-gray-700 transition-colors"
-              >
-                Continue with Free
-              </button>
-            </div>
-          </>
-        ) : (
-          <>
-            <div className="text-7xl mb-4">😔</div>
-            <h2 className="text-2xl font-bold text-red-600 mb-2">Payment Failed</h2>
-            <p className="text-gray-600 mb-6">
-              Something went wrong with your payment. Please try again.
-            </p>
-            <div className="space-y-2">
-              <button
-                onClick={onRetry}
-                className="w-full py-3 bg-gradient-to-r from-amber-400 to-orange-500 text-white font-bold rounded-xl hover:shadow-lg transition-all"
-              >
-                Try Again
-              </button>
-              <button
-                onClick={onClose}
-                className="w-full py-2 text-gray-500 hover:text-gray-700 transition-colors"
-              >
-                Cancel
-              </button>
-            </div>
-          </>
-        )}
-      </div>
-    </div>
-  );
-};
-
 // Full Arabic Alphabet with pronunciations, forms, and example words
 // Forms: isolated, initial (start), medial (middle), final (end)
 const ARABIC_ALPHABET = [
@@ -679,9 +600,7 @@ const KidsMode = ({ isVisible, onClose }) => {
   const [isExiting, setIsExiting] = useState(false);
   const [selectedSurah, setSelectedSurah] = useState(null);
   const [completedSurahs, setCompletedSurahs] = useState([]);
-  const [paymentResult, setPaymentResult] = useState(null); // 'success' | 'canceled' | null
   const [showPremiumGate, setShowPremiumGate] = useState(false); // Show premium upgrade popup
-  const [isRefreshingUser, setIsRefreshingUser] = useState(false); // Loading state while refreshing user after payment
 
   // Load saved progress on mount
   useEffect(() => {
@@ -692,50 +611,7 @@ const KidsMode = ({ isVisible, onClose }) => {
     }
   }, []);
 
-  // Check for payment result in URL params or localStorage flag
-  useEffect(() => {
-    const handlePaymentReturn = async () => {
-      const params = new URLSearchParams(window.location.search);
-      const paymentPending = localStorage.getItem('kids_payment_pending');
-
-      if (params.get('payment_success') === '1') {
-        // Payment completed successfully
-        setPaymentResult('success');
-        // Clear payment pending flag
-        localStorage.removeItem('kids_payment_pending');
-        // Clean URL immediately
-        window.history.replaceState({}, '', window.location.pathname);
-
-        // Refresh user data to get updated premium status - WAIT for it to complete
-        if (refreshUser) {
-          setIsRefreshingUser(true);
-          try {
-            await refreshUser();
-          } catch (error) {
-            console.error('[KidsMode] Error refreshing user:', error);
-          } finally {
-            setIsRefreshingUser(false);
-          }
-        }
-      } else if (params.get('payment_canceled') === '1') {
-        // Payment was explicitly canceled
-        setPaymentResult('canceled');
-        // Clear payment pending flag
-        localStorage.removeItem('kids_payment_pending');
-        // Clean URL
-        window.history.replaceState({}, '', window.location.pathname);
-      } else if (paymentPending === 'true') {
-        // User navigated away from Stripe without completing or canceling
-        // This happens when user clicks browser back or closes tab
-        // Treat as a silent return - just clear the flag and let them continue
-        localStorage.removeItem('kids_payment_pending');
-        // Optionally show a "continue where you left off" message
-        // For now, we just silently clear and let user continue with free features
-      }
-    };
-
-    handlePaymentReturn();
-  }, [refreshUser]);
+  // Payment result handling is centralized in App.jsx
 
   // Memoize stars to prevent regeneration on every render
   const stars = useMemo(() => generateStars(50), []);
@@ -900,24 +776,7 @@ const KidsMode = ({ isVisible, onClose }) => {
     return <KidsLoginGate onClose={onClose} />;
   }
 
-  // Show payment result popup if payment was just completed/canceled
-  if (paymentResult) {
-    return (
-      <PaymentResultPopup
-        success={paymentResult === 'success'}
-        canceled={paymentResult === 'canceled'}
-        isLoading={isRefreshingUser}
-        onClose={() => {
-          setPaymentResult(null);
-          // If payment was successful, user is now premium and can continue
-        }}
-        onRetry={() => {
-          setPaymentResult(null);
-          setShowPremiumGate(true); // Show premium gate to try again
-        }}
-      />
-    );
-  }
+  // Payment result popup is handled centrally by App.jsx
 
   // Show premium gate if user wants to upgrade
   if (showPremiumGate) {

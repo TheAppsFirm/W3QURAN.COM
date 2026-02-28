@@ -7,6 +7,12 @@
 // Matches [quran:S:A] or [quran:S:A:TID]
 const QURAN_QUOTE_REGEX = /\[quran:(\d+):(\d+)(?::(\d+))?\]/g;
 
+// Detect if text contains RTL characters (Arabic, Urdu, Farsi, Hebrew, etc.)
+const RTL_CHAR_REGEX = /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]/;
+export function getTextDir(text) {
+  return RTL_CHAR_REGEX.test((text || '').slice(0, 100)) ? 'rtl' : 'ltr';
+}
+
 /**
  * Popular translations for the quote picker.
  * Maps Quran.com API resource IDs to display info.

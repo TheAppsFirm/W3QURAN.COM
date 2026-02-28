@@ -3,12 +3,14 @@
  * Clean dark theme with teal accents, content-first design
  */
 
-import { useState, useEffect, useRef, useCallback, memo, useMemo } from 'react';
+import { useState, useEffect, useRef, useCallback, memo, useMemo, lazy, Suspense } from 'react';
 import { Icons } from './Icons';
 import { useAuth } from '../../contexts/AuthContext';
 import { useLocale } from '../../contexts';
 import { useTranslation } from '../../contexts/LocaleContext';
 import logger from '../../utils/logger';
+
+const KidsPremiumGate = lazy(() => import('../kids/KidsPremiumGate'));
 
 // Max messages to keep in state for performance
 const MAX_MESSAGES = 50;
@@ -341,7 +343,7 @@ export default function TalkToQuran({ isVisible, onClose, onNavigate }) {
   const [textInput, setTextInput] = useState('');
   const [showTextInput, setShowTextInput] = useState(speechMayNotWork || !SpeechRecognition);
   const [followUpQuestions, setFollowUpQuestions] = useState([]);
-  const [upgradeLoading, setUpgradeLoading] = useState(false);
+  const [showPremiumGate, setShowPremiumGate] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const [recordingTime, setRecordingTime] = useState(0);
   const [showScrollButton, setShowScrollButton] = useState(false);
@@ -366,6 +368,8 @@ export default function TalkToQuran({ isVisible, onClose, onNavigate }) {
   const silenceStartRef = useRef(null);
   const vadRafRef = useRef(null);
   const hasSpokenRef = useRef(false);
+
+  // Payment result handling is centralized in App.jsx
 
   // Persist messages to localStorage
   useEffect(() => {
@@ -1045,54 +1049,12 @@ export default function TalkToQuran({ isVisible, onClose, onNavigate }) {
     setStatus('idle');
   };
 
-  const handleUpgrade = async () => {
+  const handleUpgrade = () => {
     if (!isAuthenticated) {
       login();
       return;
     }
-
-    setUpgradeLoading(true);
-    setError(null);
-
-    try {
-      console.log('[TalkToQuran] Starting Stripe checkout...');
-      const res = await fetch('/api/stripe/checkout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({ product: 'premium_monthly', source: 'talk_to_quran' }),
-      });
-
-      console.log('[TalkToQuran] Checkout response status:', res.status);
-
-      if (!res.ok) {
-        const errorData = await res.json().catch(() => ({}));
-        console.error('[TalkToQuran] Checkout error:', errorData);
-
-        if (res.status === 401) {
-          setError('Please sign in to upgrade');
-          login();
-          return;
-        }
-        setError(errorData.error || `Checkout failed (${res.status})`);
-        setUpgradeLoading(false);
-        return;
-      }
-
-      const data = await res.json();
-      console.log('[TalkToQuran] Checkout data:', data);
-
-      if (data.url) {
-        console.log('[TalkToQuran] Redirecting to:', data.url);
-        window.location.href = data.url;
-      } else {
-        setError('No checkout URL received');
-      }
-    } catch (e) {
-      console.error('[TalkToQuran] Checkout exception:', e);
-      setError('Network error. Please check your connection.');
-    }
-    setUpgradeLoading(false);
+    setShowPremiumGate(true);
   };
 
   const handleClearHistory = () => {
@@ -1288,12 +1250,11 @@ export default function TalkToQuran({ isVisible, onClose, onNavigate }) {
               {isAuthenticated && !hasAccess && (
                 <button
                   onClick={handleUpgrade}
-                  disabled={upgradeLoading}
-                  className="mt-6 flex items-center gap-2 px-6 py-3 rounded-xl bg-amber-500/15 border border-amber-500/20 text-white/80 hover:bg-amber-500/20 transition-colors disabled:opacity-50"
+                  className="mt-6 flex items-center gap-2 px-6 py-3 rounded-xl bg-amber-500/15 border border-amber-500/20 text-white/80 hover:bg-amber-500/20 transition-colors"
                 >
                   <Icons.Zap className="w-4 h-4 text-amber-400" />
                   <span className="text-sm font-medium">
-                    {upgradeLoading ? '...' : `${t('talkToQuran.upgradeToPremium')} - $7/mo`}
+                    {t('talkToQuran.upgradeToPremium')}
                   </span>
                 </button>
               )}
@@ -1418,10 +1379,9 @@ export default function TalkToQuran({ isVisible, onClose, onNavigate }) {
             {(error.includes('checkout') || error.includes('Checkout') || error.includes('upgrade')) && !lastFailedMessage ? (
               <button
                 onClick={handleUpgrade}
-                disabled={upgradeLoading}
-                className="mt-2 w-full py-2 rounded-lg text-sm font-medium text-white/80 bg-red-500/20 hover:bg-red-500/30 transition-colors"
+                className="mt-2 w-full py-2 rounded-lg text-sm font-medium text-white/80 bg-amber-500/20 hover:bg-amber-500/30 transition-colors"
               >
-                {upgradeLoading ? '...' : t('talkToQuran.upgradeToPremium')}
+                {t('talkToQuran.upgradeToPremium')}
               </button>
             ) : null}
           </div>
@@ -1575,19 +1535,32 @@ export default function TalkToQuran({ isVisible, onClose, onNavigate }) {
             <div className="px-4 py-3">
               <button
                 onClick={handleUpgrade}
-                disabled={upgradeLoading}
-                className="w-full max-w-lg mx-auto flex items-center justify-center gap-2 py-3 rounded-xl bg-amber-500/15 text-white/80 hover:bg-amber-500/20 transition-colors disabled:opacity-50"
+                className="w-full max-w-lg mx-auto flex items-center justify-center gap-2 py-3 rounded-xl bg-amber-500/15 text-white/80 hover:bg-amber-500/20 transition-colors"
                 style={{ border: '1px solid rgba(245,158,11,0.2)' }}
               >
                 <Icons.Zap className="w-4 h-4 text-amber-400" />
                 <span className="text-sm font-medium">
-                  {upgradeLoading ? '...' : `${t('talkToQuran.upgradeToPremium')} - $7/mo`}
+                  {t('talkToQuran.upgradeToPremium')}
                 </span>
               </button>
             </div>
           )}
         </div>
       </div>
+
+      {/* Premium upgrade popup */}
+      {showPremiumGate && (
+        <Suspense fallback={null}>
+          <KidsPremiumGate
+            feature="talk_to_quran"
+            onClose={() => setShowPremiumGate(false)}
+            returnPath="/talk"
+            source="talk_to_quran"
+          />
+        </Suspense>
+      )}
+
+      {/* Payment result popup is handled centrally by App.jsx */}
 
       {/* ── Animations ── */}
       <style>{`

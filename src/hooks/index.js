@@ -129,3 +129,6 @@ export { useAuth } from './useAuth';
 
 // Gamification hook
 export { useGamification } from './useGamification';
+
+// Cloud sync hook (premium feature)
+export { useCloudSync } from './useCloudSync';

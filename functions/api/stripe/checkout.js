@@ -17,17 +17,17 @@ const LIVE_PRICES = {
   credits_100: 'price_1T2RhGCnbCeWpM4XatkkkMA3', // 100 credits
 };
 
-// Test mode price IDs (created via Stripe CLI)
+// Test mode price IDs — amounts match live/UI prices
 const TEST_PRICES = {
-  starter_monthly: 'price_1T2Zt9CnbCeWpM4XtLcuhjkP', // $4.99/month test
-  premium_monthly: 'price_1T2Zt9CnbCeWpM4XtLcuhjkP', // $4.99/month test
-  premium_yearly: 'price_1T2Zt9CnbCeWpM4XtLcuhjkP', // Using same for testing
-  scholar_monthly: 'price_1T2Zt9CnbCeWpM4XtLcuhjkP', // Using same for testing
-  scholar_yearly: 'price_1T2Zt9CnbCeWpM4XtLcuhjkP', // Using same for testing
-  lifetime: 'price_1T2Zt9CnbCeWpM4XtLcuhjkP', // Using same for testing
-  credits_20: 'price_1T2Zt9CnbCeWpM4XtLcuhjkP',
-  credits_50: 'price_1T2Zt9CnbCeWpM4XtLcuhjkP',
-  credits_100: 'price_1T2Zt9CnbCeWpM4XtLcuhjkP',
+  starter_monthly: 'price_1T5kgtCnbCeWpM4XnPWewGHA', // $3/month test
+  premium_monthly: 'price_1T5kguCnbCeWpM4XpxcHUMmI', // $7/month test
+  premium_yearly: 'price_1T5kgvCnbCeWpM4XiepVaR3j',  // $60/year test
+  scholar_monthly: 'price_1T5kgwCnbCeWpM4XXEPRuSsS',  // $20/month test
+  scholar_yearly: 'price_1T5kgxCnbCeWpM4X1xr4ICiS',   // $200/year test
+  lifetime: 'price_1T5kgxCnbCeWpM4XdCtxEKsc',         // $299 one-time test
+  credits_20: 'price_1T5kgyCnbCeWpM4XXbDVCxQm',       // $2 one-time test
+  credits_50: 'price_1T5kgzCnbCeWpM4XO22vn2bz',       // $4 one-time test
+  credits_100: 'price_1T5kh0CnbCeWpM4Xz7wb765f',      // $7 one-time test
 };
 
 // One-time purchase products (not subscriptions)
@@ -123,7 +123,7 @@ export async function onRequest(context) {
     const { product, productType: productTypeField, priceId: legacyPriceId, successUrl: customSuccessUrl, cancelUrl: customCancelUrl, source: requestSource } = requestBody;
 
     // Sanitize source field
-    const ALLOWED_SOURCES = ['kids', 'talk_to_quran', 'tasbih', 'general'];
+    const ALLOWED_SOURCES = ['kids', 'talk_to_quran', 'tasbih', 'general', 'discussions', 'dm_chat', 'surah_chat'];
     const source = ALLOWED_SOURCES.includes(requestSource) ? requestSource : 'general';
 
     // SECURITY: Simple rate limiting using KV (1 checkout attempt per 10 seconds)
@@ -133,8 +133,9 @@ export async function onRequest(context) {
       if (lastAttempt) {
         const elapsed = Date.now() - parseInt(lastAttempt);
         if (elapsed < 10000) { // 10 seconds
+          const remaining = Math.ceil((10000 - elapsed) / 1000);
           console.log('[Stripe] SECURITY: Rate limit hit for user:', userResult.id);
-          return new Response(JSON.stringify({ error: 'Please wait before trying again' }), {
+          return new Response(JSON.stringify({ error: `Please wait ${remaining} seconds before trying again` }), {
             status: 429,
             headers: { 'Content-Type': 'application/json' },
           });

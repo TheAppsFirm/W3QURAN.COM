@@ -21,7 +21,7 @@ function timeAgo(dateStr) {
   return `${Math.floor(days / 30)}mo ago`;
 }
 
-function Comment({ comment, depth = 0, onVote, onReply, onDelete, currentUserId, isAdmin, isLocked, voting }) {
+function Comment({ comment, depth = 0, onVote, onReply, onDelete, currentUserId, isAdmin, isLocked, voting, onShowPremium }) {
   const { t } = useTranslation();
   const [showReply, setShowReply] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
@@ -101,6 +101,7 @@ function Comment({ comment, depth = 0, onVote, onReply, onDelete, currentUserId,
                   onSubmit={handleReply}
                   placeholder={`Reply to ${comment.userName}...`}
                   compact
+                  onShowPremium={onShowPremium}
                 />
               </div>
             )}
@@ -130,13 +131,14 @@ function Comment({ comment, depth = 0, onVote, onReply, onDelete, currentUserId,
           isAdmin={isAdmin}
           isLocked={isLocked}
           voting={voting}
+          onShowPremium={onShowPremium}
         />
       ))}
     </div>
   );
 }
 
-export default function CommentThread({ comments, onVote, onReply, onDelete, currentUserId, isAdmin, isLocked, voting }) {
+export default function CommentThread({ comments, onVote, onReply, onDelete, currentUserId, isAdmin, isLocked, voting, onShowPremium }) {
   const { t } = useTranslation();
   if (!comments || comments.length === 0) {
     return (
@@ -159,6 +161,7 @@ export default function CommentThread({ comments, onVote, onReply, onDelete, cur
           isAdmin={isAdmin}
           isLocked={isLocked}
           voting={voting}
+          onShowPremium={onShowPremium}
         />
       ))}
     </div>

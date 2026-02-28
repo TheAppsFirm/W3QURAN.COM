@@ -20,29 +20,53 @@ const PREMIUM_FEATURE_KEYS = [
   { emoji: '⭐', key: 'premium.adFreeExperience' },
 ];
 
-// Subscription tiers linking to main app premium
+// Subscription tiers — prices must match Stripe live price IDs
 const SUBSCRIPTION_OPTIONS = [
   {
-    id: 'premium_monthly',
-    nameKey: 'premium.monthly',
-    price: '$4.99',
+    id: 'starter_monthly',
+    nameKey: 'premium.starter',
+    price: '$3',
     periodKey: 'premium.perMonth',
-    popular: false,
+    credits: 30,
+  },
+  {
+    id: 'premium_monthly',
+    nameKey: 'premium.premium',
+    price: '$7',
+    periodKey: 'premium.perMonth',
+    credits: 80,
+    popular: true,
   },
   {
     id: 'premium_yearly',
-    nameKey: 'premium.yearly',
-    price: '$29.99',
+    nameKey: 'premium.premiumYearly',
+    price: '$60',
     periodKey: 'premium.perYear',
-    popular: true,
-    savingsKey: 'premium.save50',
+    credits: 80,
+    savingsKey: 'premium.save29',
+  },
+  {
+    id: 'scholar_monthly',
+    nameKey: 'premium.scholar',
+    price: '$20',
+    periodKey: 'premium.perMonth',
+    credits: 300,
+  },
+  {
+    id: 'scholar_yearly',
+    nameKey: 'premium.scholarYearly',
+    price: '$200',
+    periodKey: 'premium.perYear',
+    credits: 300,
+    savingsKey: 'premium.save17',
   },
   {
     id: 'lifetime',
     nameKey: 'premium.lifetime',
-    price: '$49.99',
+    price: '$299',
     periodKey: 'premium.oneTime',
-    popular: false,
+    credits: 100,
+    isLifetime: true,
   },
 ];
 
@@ -50,17 +74,17 @@ const SUBSCRIPTION_OPTIONS = [
 const PaymentResultPopup = ({ success, canceled, onClose, onRetry, t }) => {
   return (
     <div className="fixed inset-0 z-[10001] flex items-center justify-center bg-black/80 backdrop-blur-sm">
-      <div className="bg-white rounded-3xl p-8 max-w-sm mx-4 text-center shadow-2xl">
+      <div className="bg-gradient-to-br from-slate-800 to-slate-900 border border-white/10 rounded-3xl p-8 max-w-sm mx-4 text-center shadow-2xl">
         {success ? (
           <>
             <div className="text-7xl mb-4 animate-bounce">🎉</div>
-            <h2 className="text-2xl font-bold text-green-600 mb-2">{t('premium.paymentSuccessful')}</h2>
-            <p className="text-gray-600 mb-6">
+            <h2 className="text-2xl font-bold text-green-400 mb-2">{t('premium.paymentSuccessful')}</h2>
+            <p className="text-white/70 mb-6">
               {t('premium.welcomePremium')}
             </p>
             <button
               onClick={onClose}
-              className="w-full py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white font-bold rounded-xl hover:shadow-lg transition-all"
+              className="w-full py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white font-bold rounded-xl hover:shadow-lg hover:shadow-green-500/30 transition-all"
             >
               {t('premium.startLearning')} 🚀
             </button>
@@ -68,20 +92,20 @@ const PaymentResultPopup = ({ success, canceled, onClose, onRetry, t }) => {
         ) : canceled ? (
           <>
             <div className="text-7xl mb-4">🤔</div>
-            <h2 className="text-2xl font-bold text-amber-600 mb-2">{t('premium.paymentCanceled')}</h2>
-            <p className="text-gray-600 mb-6">
+            <h2 className="text-2xl font-bold text-amber-400 mb-2">{t('premium.paymentCanceled')}</h2>
+            <p className="text-white/70 mb-6">
               {t('premium.cancelMessage')}
             </p>
             <div className="space-y-2">
               <button
                 onClick={onRetry}
-                className="w-full py-3 bg-gradient-to-r from-amber-400 to-orange-500 text-white font-bold rounded-xl hover:shadow-lg transition-all"
+                className="w-full py-3 bg-gradient-to-r from-amber-400 to-orange-500 text-white font-bold rounded-xl hover:shadow-lg hover:shadow-amber-500/30 transition-all"
               >
                 {t('premium.tryAgain')}
               </button>
               <button
                 onClick={onClose}
-                className="w-full py-2 text-gray-500 hover:text-gray-700 transition-colors"
+                className="w-full py-2 text-white/50 hover:text-white/80 transition-colors"
               >
                 {t('premium.continueFreeFeatures')}
               </button>
@@ -90,20 +114,20 @@ const PaymentResultPopup = ({ success, canceled, onClose, onRetry, t }) => {
         ) : (
           <>
             <div className="text-7xl mb-4">😔</div>
-            <h2 className="text-2xl font-bold text-red-600 mb-2">{t('premium.paymentFailed')}</h2>
-            <p className="text-gray-600 mb-6">
+            <h2 className="text-2xl font-bold text-red-400 mb-2">{t('premium.paymentFailed')}</h2>
+            <p className="text-white/70 mb-6">
               {t('premium.failedMessage')}
             </p>
             <div className="space-y-2">
               <button
                 onClick={onRetry}
-                className="w-full py-3 bg-gradient-to-r from-amber-400 to-orange-500 text-white font-bold rounded-xl hover:shadow-lg transition-all"
+                className="w-full py-3 bg-gradient-to-r from-amber-400 to-orange-500 text-white font-bold rounded-xl hover:shadow-lg hover:shadow-amber-500/30 transition-all"
               >
                 {t('premium.tryAgain')}
               </button>
               <button
                 onClick={onClose}
-                className="w-full py-2 text-gray-500 hover:text-gray-700 transition-colors"
+                className="w-full py-2 text-white/50 hover:text-white/80 transition-colors"
               >
                 {t('premium.cancel')}
               </button>
@@ -157,8 +181,11 @@ const KidsPremiumGate = ({ onClose, feature = 'premium', lockedTheme = null, ret
 
       // Redirect to Stripe checkout
       if (data.url) {
-        // Mark that we're going to Stripe for payment (so we can detect if user returns without completing)
+        // Store payment context so App.jsx can route back correctly
         localStorage.setItem('kids_payment_pending', 'true');
+        localStorage.setItem('payment_source', source);
+        localStorage.setItem('payment_feature', feature);
+        localStorage.setItem('payment_return_path', returnPath);
         window.location.href = data.url;
       } else {
         console.error('No checkout URL returned');
@@ -212,6 +239,27 @@ const KidsPremiumGate = ({ onClose, feature = 'premium', lockedTheme = null, ret
         description: t('kids.moreStationsDesc'),
       };
     }
+    if (feature === 'daily_limit') {
+      return {
+        title: t('premium.dailyLimitReached', 'Daily Limit Reached'),
+        emoji: '📝',
+        description: t('premium.dailyLimitDesc', 'You\'ve used all your free daily posts and comments. Upgrade to Premium for unlimited discussions!'),
+      };
+    }
+    if (feature === 'talk_to_quran') {
+      return {
+        title: t('premium.talkToQuranPremium', 'Talk to Quran — Premium'),
+        emoji: '🤖',
+        description: t('premium.talkToQuranDesc', 'Unlock unlimited AI-powered conversations with the Quran. Ask questions, explore meanings, and deepen your understanding.'),
+      };
+    }
+    if (feature === 'premium') {
+      return {
+        title: t('premium.upgradeToPremium', 'Upgrade to Premium'),
+        emoji: '⭐',
+        description: t('premium.upgradeDesc', 'Unlock all premium features including cloud sync, Talk to Quran, HD audio, and more.'),
+      };
+    }
     return {
       title: t('kids.premiumFeature'),
       emoji: '⭐',
@@ -241,7 +289,7 @@ const KidsPremiumGate = ({ onClose, feature = 'premium', lockedTheme = null, ret
       {/* Close button */}
       <button
         onClick={onClose}
-        className="absolute top-4 right-4 z-50 p-2 rounded-full bg-white/20 backdrop-blur-md text-white hover:bg-white/30 transition-all"
+        className={`absolute top-4 ${isRTL ? 'left-4' : 'right-4'} z-50 p-2 rounded-full bg-white/20 backdrop-blur-md text-white hover:bg-white/30 transition-all`}
         disabled={isLoading}
       >
         <Icons.X className="w-6 h-6" />
@@ -299,44 +347,45 @@ const KidsPremiumGate = ({ onClose, feature = 'premium', lockedTheme = null, ret
 
         {/* Subscription options */}
         {isAuthenticated ? (
-          <div className="space-y-2 mb-4">
+          <div className="grid grid-cols-2 gap-2 mb-4">
             {SUBSCRIPTION_OPTIONS.map((option) => (
               <button
                 key={option.id}
                 onClick={() => handleUpgrade(option.id)}
                 disabled={isLoading}
                 className={`
-                  w-full p-3 rounded-xl border-2 transition-all relative
+                  p-2.5 rounded-xl border-2 transition-all relative text-center
                   ${option.popular
                     ? 'bg-gradient-to-r from-amber-400 to-orange-500 border-transparent text-white'
                     : 'bg-white/10 border-white/30 text-white hover:bg-white/20'
                   }
+                  ${option.isLifetime ? 'col-span-2' : ''}
                   ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}
                 `}
               >
+                {option.popular && (
+                  <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 px-2 py-0.5 bg-yellow-400 text-yellow-900 rounded-full text-[10px] font-bold shadow-sm">
+                    {t('premium.mostPopular')}
+                  </span>
+                )}
+                {option.savingsKey && (
+                  <span className={`absolute -top-2.5 ${isRTL ? 'left-1' : 'right-1'} px-2 py-0.5 bg-green-400 text-green-900 rounded-full text-[10px] font-bold shadow-sm`}>
+                    {t(option.savingsKey)}
+                  </span>
+                )}
                 {loadingPlan === option.id ? (
                   <div className="flex items-center justify-center gap-2">
-                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                    <span>{t('premium.processing')}</span>
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    <span className="text-sm">{t('premium.processing')}</span>
                   </div>
                 ) : (
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <span className="font-bold">{t(option.nameKey)}</span>
-                      {option.popular && (
-                        <span className="px-2 py-0.5 bg-white/20 rounded-full text-xs">
-                          {t('premium.mostPopular')}
-                        </span>
-                      )}
-                    </div>
-                    <div className="text-right">
-                      <span className="font-bold text-lg">{option.price}</span>
-                      <span className="text-sm opacity-80">{t(option.periodKey)}</span>
-                      {option.savingsKey && (
-                        <div className="text-xs text-yellow-300">{t(option.savingsKey)}</div>
-                      )}
-                    </div>
-                  </div>
+                  <>
+                    <p className="font-bold text-sm">{t(option.nameKey)}</p>
+                    <p className="text-xs opacity-70">{option.credits} {t('premium.creditsPerMo', 'credits/mo')}</p>
+                    <p className="font-bold text-lg mt-0.5">
+                      {option.price}<span className="text-sm font-normal opacity-80">{t(option.periodKey)}</span>
+                    </p>
+                  </>
                 )}
               </button>
             ))}
@@ -390,7 +439,11 @@ const KidsPremiumGate = ({ onClose, feature = 'premium', lockedTheme = null, ret
             className="text-white/40 text-xs mt-1"
             style={{ fontFamily: isRTL ? "'Noto Nastaliq Urdu', serif" : 'inherit' }}
           >
-            {lockedTheme === 'hajj-umrah' ? t('premium.umrahFreeReminder') : t('premium.trainFreeReminder')}
+            {feature === 'daily_limit'
+              ? t('premium.limitResetsDaily', 'Your free limit resets daily')
+              : feature === 'talk_to_quran'
+              ? t('premium.limitedFreeQuestions', 'Free users get limited questions per day')
+              : lockedTheme === 'hajj-umrah' ? t('premium.umrahFreeReminder') : t('premium.trainFreeReminder')}
           </p>
         </div>
 

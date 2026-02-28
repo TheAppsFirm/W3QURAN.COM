@@ -500,40 +500,7 @@ function TasbihView({ darkMode, onBack }) {
 
   const [showResetConfirm, setShowResetConfirm] = useState(false);
   const [showPremiumGate, setShowPremiumGate] = useState(false);
-  const [paymentResult, setPaymentResult] = useState(null); // 'success' | 'canceled' | null
-  const [isRefreshingUser, setIsRefreshingUser] = useState(false);
-  const paymentHandledRef = useRef(false);
-
-  // Detect payment return from Stripe (run once on mount)
-  useEffect(() => {
-    if (paymentHandledRef.current) return;
-
-    const params = new URLSearchParams(window.location.search);
-    const paymentSuccess = params.get('payment_success') === '1';
-    const paymentCanceled = params.get('payment_canceled') === '1';
-
-    if (paymentSuccess) {
-      paymentHandledRef.current = true;
-      setPaymentResult('success');
-      localStorage.removeItem('kids_payment_pending');
-      window.history.replaceState({}, '', window.location.pathname);
-
-      // Refresh user to get updated premium status
-      if (refreshUser) {
-        setIsRefreshingUser(true);
-        refreshUser().catch(() => {}).finally(() => {
-          if (mountedRef.current) setIsRefreshingUser(false);
-        });
-      }
-    } else if (paymentCanceled) {
-      paymentHandledRef.current = true;
-      setPaymentResult('canceled');
-      localStorage.removeItem('kids_payment_pending');
-      window.history.replaceState({}, '', window.location.pathname);
-    } else if (localStorage.getItem('kids_payment_pending') === 'true') {
-      localStorage.removeItem('kids_payment_pending');
-    }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  // Payment result handling is centralized in App.jsx
 
   // Reset local tasbih data only (free)
   const resetLocalData = useCallback(() => {
@@ -1196,49 +1163,7 @@ function TasbihView({ darkMode, onBack }) {
         />
       )}
 
-      {/* Payment Result Popup */}
-      {paymentResult && (
-        <div
-          className="fixed inset-0 z-[10001] flex items-center justify-center bg-black/80 backdrop-blur-sm"
-          style={{ padding: 'max(1rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) max(1rem, env(safe-area-inset-bottom)) max(1rem, env(safe-area-inset-left))' }}
-        >
-          <div className="bg-white rounded-3xl p-8 max-w-sm w-full text-center shadow-2xl">
-            {paymentResult === 'success' ? (
-              <>
-                <div className="text-7xl mb-4 animate-bounce">🎉</div>
-                <h2 className="text-2xl font-bold text-green-600 mb-2">{t('tasbih.paymentSuccess')}</h2>
-                <p className="text-gray-600 mb-6">{t('tasbih.paymentSuccessMsg')}</p>
-                <button
-                  onClick={() => setPaymentResult(null)}
-                  className="w-full py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white font-bold rounded-xl hover:shadow-lg transition-all"
-                >
-                  {isRefreshingUser ? t('tasbih.updating') : t('tasbih.continue')}
-                </button>
-              </>
-            ) : (
-              <>
-                <div className="text-7xl mb-4">🤔</div>
-                <h2 className="text-2xl font-bold text-amber-600 mb-2">{t('tasbih.paymentCanceled')}</h2>
-                <p className="text-gray-600 mb-6">{t('tasbih.paymentCanceledMsg')}</p>
-                <div className="space-y-2">
-                  <button
-                    onClick={() => { setPaymentResult(null); setShowPremiumGate(true); }}
-                    className="w-full py-3 bg-gradient-to-r from-amber-400 to-orange-500 text-white font-bold rounded-xl hover:shadow-lg transition-all"
-                  >
-                    {t('tasbih.tryAgain')}
-                  </button>
-                  <button
-                    onClick={() => setPaymentResult(null)}
-                    className="w-full py-2 text-gray-500 hover:text-gray-700 transition-colors"
-                  >
-                    {t('tasbih.continueWithFree')}
-                  </button>
-                </div>
-              </>
-            )}
-          </div>
-        </div>
-      )}
+      {/* Payment result popup is handled centrally by App.jsx */}
 
       {/* Hide scrollbar CSS */}
       <style>{`.no-scrollbar::-webkit-scrollbar { display: none; }`}</style>

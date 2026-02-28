@@ -15,7 +15,7 @@ import { ErrorBoundary, LoadingSpinner, BubbleModal, Icons } from './components/
 import { Header, FloatingMenu, StatsBar } from './components/layout';
 import { SurahBubble, LayoutSelector } from './components/bubbles';
 import { SURAHS, MAX_AYAHS } from './data';
-import { useLocalStorage, isMobileDevice, BREAKPOINTS } from './hooks';
+import { useLocalStorage, isMobileDevice, BREAKPOINTS, useCloudSync } from './hooks';
 import { updateSEO, getSEOForView } from './hooks/useSEO';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { GamificationProvider } from './contexts/GamificationContext';
@@ -75,6 +75,8 @@ const SoundHealingRoom = lazyWithRetry(() => import('./components/common/SoundHe
 const QuranicBabyNames = lazyWithRetry(() => import('./components/common/QuranicBabyNames'));
 const TalkToQuran = lazyWithRetry(() => import('./components/common/TalkToQuran'));
 const KidsMode = lazyWithRetry(() => import('./components/kids/KidsMode'));
+const KidsPremiumGate = lazyWithRetry(() => import('./components/kids/KidsPremiumGate'));
+const PaymentResultPopup = lazyWithRetry(() => import('./components/common/PaymentResultPopup'));
 const HajjUmrahJourney = lazyWithRetry(() => import('./components/kids/HajjUmrahJourney'));
 const AnalyticsPanel = lazyWithRetry(() => import('./components/widgets/AnalyticsPanel'));
 const BubbleReaderOverlay = lazyWithRetry(() => import('./components/common/BubbleReaderOverlay'));
@@ -261,7 +263,7 @@ const BlockedUserScreen = ({ reason, onDismiss }) => (
 
 function QuranBubbleApp() {
   // Auth state
-  const { isAuthenticated, isPremium, isAdmin, blocked, blockedReason, clearBlocked } = useAuth();
+  const { isAuthenticated, isPremium, isAdmin, blocked, blockedReason, clearBlocked, refreshUser } = useAuth();
 
   // State management using custom hooks for persistence
   const [view, setView] = useState('surahs');
@@ -374,6 +376,10 @@ function QuranBubbleApp() {
   const [showKidsMode, setShowKidsMode] = useState(false);
   const [adminTab, setAdminTab] = useState('overview');
   const [discussionInitial, setDiscussionInitial] = useState(null); // { surahId?, tab? }
+  // Centralized payment return state
+  const [paymentResult, setPaymentResult] = useState(null); // { success, canceled, source, feature, returnPath }
+  const [paymentPremiumGate, setPaymentPremiumGate] = useState(null); // { feature, source, returnPath } — for "Try Again"
+  const [isRefreshingUser, setIsRefreshingUser] = useState(false);
 
   // Track if we're handling a popstate event (browser back/forward)
   const isPopstateRef = useRef(false);
@@ -468,19 +474,147 @@ function QuranBubbleApp() {
     return () => clearInterval(interval);
   }, [isAuthenticated]);
 
-  // Auto-open Kids Mode when returning from payment
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const path = window.location.pathname;
-    const isPaymentReturn = params.get('payment_success') === '1' || params.get('payment_canceled') === '1';
-    const paymentPending = localStorage.getItem('kids_payment_pending');
+  // ─── Cloud Sync: Settings (premium) ───────────────────────
+  const getSettingsData = useCallback(() => {
+    const data = {};
+    ['reader_fontsize', 'reader_reciter', 'reader_translation', 'reader_show_translation',
+     'reader_tajweed', 'reader_wbw', 'reader_repeat', 'reader_autoscroll',
+     'darkMode', 'zoom', 'contentZoom', 'surahLayout'].forEach(key => {
+      const val = localStorage.getItem('quran_app_' + key);
+      if (val !== null) data[key] = val;
+    });
+    return Object.keys(data).length ? data : null;
+  }, []);
 
-    // Only open Kids Mode if returning from payment AND not on a view that handles its own payment flow
-    // TasbihView handles its own payment returns, so skip Kids Mode for /tasbih
-    if ((isPaymentReturn || paymentPending === 'true') && path !== '/tasbih') {
-      setShowKidsMode(true);
+  const applySettingsData = useCallback((serverData) => {
+    if (!serverData) return;
+    Object.entries(serverData).forEach(([key, val]) => {
+      const storageKey = 'quran_app_' + key;
+      const current = localStorage.getItem(storageKey);
+      if (current === null && val !== null) {
+        // Only apply server value if no local value exists (local wins)
+        localStorage.setItem(storageKey, val);
+      }
+    });
+    // Trigger re-render for useLocalStorage hooks listening to storage events
+    window.dispatchEvent(new Event('storage'));
+  }, []);
+
+  useCloudSync('settings', getSettingsData, applySettingsData,
+    [darkMode, zoom, contentZoom, surahLayout], isAuthenticated && isPremium);
+
+  // ─── Cloud Sync: Activity / Reading Progress (premium) ───
+  const getActivityData = useCallback(() => {
+    const data = {};
+    const progress = localStorage.getItem('quran_reading_progress');
+    const streak = localStorage.getItem('quran_reading_streak');
+    const goals = localStorage.getItem('quran_reading_goals');
+    if (progress) { try { data.progress = JSON.parse(progress); } catch {} }
+    if (streak) { try { data.streak = JSON.parse(streak); } catch {} }
+    if (goals) { try { data.goals = JSON.parse(goals); } catch {} }
+    return Object.keys(data).length ? data : null;
+  }, []);
+
+  const applyActivityData = useCallback((serverData) => {
+    if (!serverData) return;
+    // Merge progress: take max totalAyahsRead, union surahs
+    if (serverData.progress) {
+      const local = JSON.parse(localStorage.getItem('quran_reading_progress') || 'null');
+      if (!local) {
+        localStorage.setItem('quran_reading_progress', JSON.stringify(serverData.progress));
+      } else {
+        const merged = { ...local };
+        merged.totalAyahsRead = Math.max(local.totalAyahsRead || 0, serverData.progress.totalAyahsRead || 0);
+        merged.totalSurahsCompleted = Math.max(local.totalSurahsCompleted || 0, serverData.progress.totalSurahsCompleted || 0);
+        if (serverData.progress.surahs) {
+          merged.surahs = { ...merged.surahs };
+          Object.entries(serverData.progress.surahs).forEach(([sid, sdata]) => {
+            if (!merged.surahs[sid]) {
+              merged.surahs[sid] = sdata;
+            } else {
+              const localAyahs = new Set(merged.surahs[sid].completedAyahs || []);
+              (sdata.completedAyahs || []).forEach(a => localAyahs.add(a));
+              merged.surahs[sid] = { ...merged.surahs[sid], completedAyahs: [...localAyahs] };
+              merged.surahs[sid].completed = merged.surahs[sid].completed || sdata.completed;
+            }
+          });
+        }
+        localStorage.setItem('quran_reading_progress', JSON.stringify(merged));
+      }
+    }
+    // Merge streak: take max values
+    if (serverData.streak) {
+      const local = JSON.parse(localStorage.getItem('quran_reading_streak') || 'null');
+      if (!local) {
+        localStorage.setItem('quran_reading_streak', JSON.stringify(serverData.streak));
+      } else {
+        const merged = {
+          currentStreak: Math.max(local.currentStreak || 0, serverData.streak.currentStreak || 0),
+          longestStreak: Math.max(local.longestStreak || 0, serverData.streak.longestStreak || 0),
+          lastReadDate: local.lastReadDate > serverData.streak.lastReadDate ? local.lastReadDate : serverData.streak.lastReadDate,
+          readDates: [...new Set([...(local.readDates || []), ...(serverData.streak.readDates || [])])].sort(),
+        };
+        localStorage.setItem('quran_reading_streak', JSON.stringify(merged));
+      }
+    }
+    // Goals: local wins (user-set preferences)
+    if (serverData.goals && !localStorage.getItem('quran_reading_goals')) {
+      localStorage.setItem('quran_reading_goals', JSON.stringify(serverData.goals));
     }
   }, []);
+
+  useCloudSync('activity', getActivityData, applyActivityData,
+    [readingProgress], isAuthenticated && isPremium);
+
+  // Centralized payment return handler — single place for ALL payment results
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const success = params.get('payment_success') === '1';
+    const canceled = params.get('payment_canceled') === '1';
+
+    if (!success && !canceled) {
+      // Handle silent return (user closed Stripe tab without completing)
+      if (localStorage.getItem('kids_payment_pending') === 'true') {
+        localStorage.removeItem('kids_payment_pending');
+        localStorage.removeItem('payment_source');
+        localStorage.removeItem('payment_feature');
+        localStorage.removeItem('payment_return_path');
+      }
+      return;
+    }
+
+    const source = localStorage.getItem('payment_source') || 'kids';
+    const feature = localStorage.getItem('payment_feature') || 'premium';
+    const returnPath = localStorage.getItem('payment_return_path') || '/';
+
+    // Clean up localStorage
+    localStorage.removeItem('kids_payment_pending');
+    localStorage.removeItem('payment_source');
+    localStorage.removeItem('payment_feature');
+    localStorage.removeItem('payment_return_path');
+
+    // Clean URL params
+    const url = new URL(window.location);
+    url.searchParams.delete('payment_success');
+    url.searchParams.delete('payment_canceled');
+    window.history.replaceState({}, '', url.pathname + (url.search || ''));
+
+    // Refresh user premium status on success
+    if (success && refreshUser) {
+      setIsRefreshingUser(true);
+      refreshUser().catch(() => {}).finally(() => setIsRefreshingUser(false));
+    }
+
+    // Open the correct view based on source (so user lands on the same page)
+    switch (source) {
+      case 'kids': setShowKidsMode(true); break;
+      case 'talk_to_quran': setShowTalkToQuran(true); break;
+      // 'discussions', 'tasbih', 'dm_chat', 'surah_chat' — view is already set from URL parsing
+    }
+
+    // Show centralized payment result popup
+    setPaymentResult({ success, canceled, source, feature, returnPath });
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Parse URL and set initial state
   useEffect(() => {
@@ -508,6 +642,14 @@ function QuranBubbleApp() {
       const discProfileMatch = path.match(/^\/discussions\/profile\/([^/]+)$/);
       if (discProfileMatch) {
         setDiscussionInitial({ profileUserId: discProfileMatch[1] });
+        setView('discussions');
+        return;
+      }
+
+      // Check for discussion DM conversation route: /discussions/messages/:connectionId
+      const discDmMatch = path.match(/^\/discussions\/messages\/(.+)$/);
+      if (discDmMatch) {
+        setDiscussionInitial({ tab: 'dms', dmConnectionId: discDmMatch[1] });
         setView('discussions');
         return;
       }
@@ -1077,6 +1219,7 @@ function QuranBubbleApp() {
           setShowAnalytics={setShowAnalytics}
           onSettingsClick={() => setView('settings')}
           onAdminClick={() => { setView('admin'); updateURL('/admin'); }}
+          onUpgradeClick={() => setPaymentPremiumGate({ feature: 'premium', source: 'general', returnPath: window.location.pathname })}
         />
       )}
 
@@ -1327,16 +1470,17 @@ function QuranBubbleApp() {
           {view === 'daily' && <DailyVerseView darkMode={darkMode} />}
           {view === 'tasbih' && (
             <Suspense fallback={<LoadingSpinner message="Loading Tasbih..." />}>
-              <TasbihView darkMode={darkMode} onBack={() => setView('surahs')} />
+              <TasbihView darkMode={darkMode} onBack={() => window.history.back()} />
             </Suspense>
           )}
           {view === 'discussions' && (
             <DiscussionsView
               darkMode={darkMode}
-              onBack={() => { setView('surahs'); updateURL('/'); }}
+              onBack={() => window.history.back()}
               initialSurahId={discussionInitial?.surahId || null}
               initialTab={discussionInitial?.tab || null}
               initialProfileUserId={discussionInitial?.profileUserId || null}
+              initialDmConnectionId={discussionInitial?.dmConnectionId || null}
               onNavigate={(path) => { updateURL(path); setDiscussionInitial(null); }}
               onNavigateSettings={() => { setView('settings'); updateURL('/settings'); }}
               onOpenAyah={(surahId, ayahNum) => {
@@ -1349,8 +1493,8 @@ function QuranBubbleApp() {
               }}
             />
           )}
-          {view === 'privacy' && <PrivacyPolicyView darkMode={darkMode} onBack={() => setView('surahs')} />}
-          {view === 'terms' && <TermsOfServiceView darkMode={darkMode} onBack={() => setView('surahs')} />}
+          {view === 'privacy' && <PrivacyPolicyView darkMode={darkMode} onBack={() => window.history.back()} />}
+          {view === 'terms' && <TermsOfServiceView darkMode={darkMode} onBack={() => window.history.back()} />}
         </Suspense>
       </main>
 
@@ -1840,6 +1984,35 @@ function QuranBubbleApp() {
       <Suspense fallback={null}>
         <GamificationNotifications />
       </Suspense>
+
+      {/* Centralized Payment Result Popup — shown after returning from Stripe */}
+      {paymentResult && (
+        <Suspense fallback={null}>
+          <PaymentResultPopup
+            success={paymentResult.success}
+            canceled={paymentResult.canceled}
+            isLoading={isRefreshingUser}
+            onClose={() => setPaymentResult(null)}
+            onRetry={() => {
+              const { feature, source, returnPath } = paymentResult;
+              setPaymentResult(null);
+              setPaymentPremiumGate({ feature, source, returnPath });
+            }}
+          />
+        </Suspense>
+      )}
+
+      {/* Centralized Premium Gate — opened by "Try Again" from payment result */}
+      {paymentPremiumGate && (
+        <Suspense fallback={null}>
+          <KidsPremiumGate
+            feature={paymentPremiumGate.feature}
+            source={paymentPremiumGate.source}
+            returnPath={paymentPremiumGate.returnPath}
+            onClose={() => setPaymentPremiumGate(null)}
+          />
+        </Suspense>
+      )}
 
       {/* Animation styles moved to index.css for better caching */}
     </div>

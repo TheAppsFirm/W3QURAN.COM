@@ -7,7 +7,7 @@ import { Icons } from '../common';
 import VoteButton from './VoteButton';
 import AyahReference from './AyahReference';
 import UserPopover from './UserPopover';
-import { stripQuranQuotes } from './quranQuoteUtils';
+import { stripQuranQuotes, getTextDir } from './quranQuoteUtils';
 import { useTranslation } from '../../contexts/LocaleContext';
 
 const POST_TYPE_CONFIG = {
@@ -129,12 +129,12 @@ export default function PostCard({ post, onVote, onOpenPost, onOpenAyah, onDelet
         </div>
 
         {/* Title */}
-        <h3 className="text-white font-semibold text-base leading-snug mb-1 group-hover:text-purple-300 transition-colors line-clamp-2">
+        <h3 className="text-white font-semibold text-base leading-snug mb-1 group-hover:text-purple-300 transition-colors line-clamp-2" dir={getTextDir(post.title)}>
           {post.title}
         </h3>
 
         {/* Body preview */}
-        <p className="text-sm text-white/50 leading-relaxed line-clamp-3">
+        <p className="text-sm text-white/50 leading-relaxed line-clamp-3" dir={getTextDir(post.body)}>
           {stripQuranQuotes(post.body)}
         </p>
 

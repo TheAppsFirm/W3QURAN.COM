@@ -1,10 +1,11 @@
 /**
  * RichPostBody — Renders post/comment body with inline Quran quote blocks.
  * Parses [quran:S:A] markers and renders them as QuranQuoteBlock components.
+ * Auto-detects Arabic/Urdu text for RTL direction.
  */
 
 import React, { useMemo } from 'react';
-import { parseQuranQuotes, stripQuranQuotes } from './quranQuoteUtils';
+import { parseQuranQuotes, stripQuranQuotes, getTextDir } from './quranQuoteUtils';
 import QuranQuoteBlock from './QuranQuoteBlock';
 
 export default function RichPostBody({ text, onOpenAyah, truncated }) {
@@ -16,7 +17,7 @@ export default function RichPostBody({ text, onOpenAyah, truncated }) {
     const display = plain.length > 300 ? plain.slice(0, 300) + '...' : plain;
 
     return (
-      <p className="text-sm text-white/55 leading-relaxed whitespace-pre-wrap">
+      <p className="text-sm text-white/55 leading-relaxed whitespace-pre-wrap" dir={getTextDir(display)}>
         {display}
       </p>
     );
@@ -28,7 +29,7 @@ export default function RichPostBody({ text, onOpenAyah, truncated }) {
       {segments.map((segment, i) => {
         if (segment.type === 'text') {
           return (
-            <p key={i} className="text-sm text-white/55 leading-relaxed whitespace-pre-wrap">
+            <p key={i} className="text-sm text-white/55 leading-relaxed whitespace-pre-wrap" dir={getTextDir(segment.content)}>
               {segment.content}
             </p>
           );

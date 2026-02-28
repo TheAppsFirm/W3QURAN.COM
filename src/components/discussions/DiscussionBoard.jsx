@@ -3,7 +3,7 @@
  * Shows post list with sorting/filtering, create post button.
  */
 
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, lazy, Suspense } from 'react';
 import { Icons } from '../common';
 import { SURAHS } from '../../data';
 import { useDiscussionPosts, useVote, useTags } from '../../hooks/useDiscussion';
@@ -14,6 +14,8 @@ import PostCard from './PostCard';
 import PostDetail from './PostDetail';
 import CreatePostModal from './CreatePostModal';
 import ChatWindow from './ChatWindow';
+
+const PremiumGate = lazy(() => import('../kids/KidsPremiumGate'));
 
 const SORT_KEYS = [
   { id: 'hot', key: 'sortHot' },
@@ -42,6 +44,7 @@ export default function DiscussionBoard({ surahId, surahName, onOpenAyah, onView
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [typeFilter, setTypeFilter] = useState('all');
   const [activeTag, setActiveTag] = useState('');
+  const [showPremiumGate, setShowPremiumGate] = useState(false);
   const { tags, fetchTags } = useTags();
   const surahData = SURAHS.find(s => s.id === surahId);
 
@@ -315,7 +318,20 @@ export default function DiscussionBoard({ surahId, surahName, onOpenAyah, onView
           surahName={surahName}
           onClose={() => setShowCreateModal(false)}
           onSubmit={handleCreatePost}
+          onShowPremium={() => { setShowCreateModal(false); setShowPremiumGate(true); }}
         />
+      )}
+
+      {/* Premium upgrade gate */}
+      {showPremiumGate && (
+        <Suspense fallback={null}>
+          <PremiumGate
+            onClose={() => setShowPremiumGate(false)}
+            feature="daily_limit"
+            source="discussions"
+            returnPath={`/discussions/surah/${surahId}`}
+          />
+        </Suspense>
       )}
     </div>
   );

@@ -16,7 +16,7 @@ const POST_TYPES = [
   { id: 'question',   label: 'Question',   icon: '❓', desc: 'Seeking answers' },
 ];
 
-export default function CreatePostModal({ surahId, surahName, onClose, onSubmit }) {
+export default function CreatePostModal({ surahId, surahName, onClose, onSubmit, onShowPremium }) {
   const { t } = useTranslation();
   const [postType, setPostType] = useState('discussion');
   const [title, setTitle] = useState('');
@@ -62,6 +62,11 @@ export default function CreatePostModal({ surahId, surahName, onClose, onSubmit 
       await onSubmit({ postType, title: title.trim(), content: body.trim(), ayahRefs, tags: selectedTags });
       onClose();
     } catch (err) {
+      if (err.data?.requiresPremium) {
+        onClose();
+        onShowPremium?.();
+        return;
+      }
       setError(err.data?.error || err.message || 'Failed to create post');
     } finally {
       setSubmitting(false);

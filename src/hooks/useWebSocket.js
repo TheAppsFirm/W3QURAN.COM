@@ -19,6 +19,7 @@ export function useWebSocket(roomType, roomId, enabled = true) {
   const [onlineCount, setOnlineCount] = useState(0);
   const [typingUsers, setTypingUsers] = useState([]);
   const [error, setError] = useState(null);
+  const [requiresPremium, setRequiresPremium] = useState(false);
 
   const wsRef = useRef(null);
   const reconnectAttempt = useRef(0);
@@ -49,6 +50,7 @@ export function useWebSocket(roomType, roomId, enabled = true) {
         if (isUnmounted.current) return;
         setConnected(true);
         setError(null);
+        setRequiresPremium(false);
         reconnectAttempt.current = 0;
       };
 
@@ -116,6 +118,7 @@ export function useWebSocket(roomType, roomId, enabled = true) {
 
       case 'error':
         setError(data.message);
+        setRequiresPremium(!!data.requiresPremium);
         break;
 
       default:
@@ -189,6 +192,7 @@ export function useWebSocket(roomType, roomId, enabled = true) {
     onlineCount,
     typingUsers,
     error,
+    requiresPremium,
     sendMessage,
     sendTyping,
     sendStopTyping,

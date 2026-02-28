@@ -43,20 +43,20 @@ function formatDate(dateStr) {
   }
 }
 
-export default function UserProfile({ userId, onBack, onOpenPost, onNavigateSettings }) {
+export default function UserProfile({ userId, onBack, onOpenPost, onNavigateSettings, onOpenDM }) {
   const { t } = useTranslation();
   const { user: currentUser, isAuthenticated, login } = useAuth();
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [dmSent, setDmSent] = useState(false);
+  const [dmAction, setDmAction] = useState(null); // null | 'sending' | 'sent' | 'error'
   const [blockConfirm, setBlockConfirm] = useState(false);
 
   useEffect(() => {
     if (!userId) return;
     setLoading(true);
     setError(null);
-    setDmSent(false);
+    setDmAction(null);
 
     let cancelled = false;
     const controller = new AbortController();
@@ -87,8 +87,38 @@ export default function UserProfile({ userId, onBack, onOpenPost, onNavigateSett
     };
   }, [userId]);
 
-  const handleSendDM = async () => {
+  const handleDMAction = async () => {
     if (!isAuthenticated) { login(); return; }
+
+    // If already friends, open the conversation
+    if (profile.connectionStatus === 'accepted' && profile.connectionId) {
+      onOpenDM?.(profile.connectionId, { id: profile.id, name: profile.name, picture: profile.picture });
+      return;
+    }
+
+    // If we received a request from them, accept it
+    if (profile.connectionStatus === 'pending' && profile.connectionDirection === 'received') {
+      setDmAction('sending');
+      try {
+        const res = await fetch('/api/dm/respond', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ connectionId: profile.connectionId, action: 'accept' }),
+        });
+        if (res.ok) {
+          setDmAction('sent');
+          // Update profile to reflect new status
+          setProfile(prev => ({ ...prev, connectionStatus: 'accepted' }));
+        } else {
+          setDmAction('error');
+        }
+      } catch { setDmAction('error'); }
+      return;
+    }
+
+    // Otherwise, send a new DM request
+    setDmAction('sending');
     try {
       const res = await fetch('/api/dm/request', {
         method: 'POST',
@@ -100,8 +130,18 @@ export default function UserProfile({ userId, onBack, onOpenPost, onNavigateSett
           recipientPicture: profile.picture || '',
         }),
       });
-      if (res.ok) setDmSent(true);
-    } catch { /* handled */ }
+      if (res.ok) {
+        setDmAction('sent');
+        setProfile(prev => ({ ...prev, connectionStatus: 'pending', connectionDirection: 'sent' }));
+      } else {
+        const data = await res.json().catch(() => ({}));
+        // If already connected, update local state
+        if (data.error?.includes('already connected')) {
+          setProfile(prev => ({ ...prev, connectionStatus: 'accepted' }));
+        }
+        setDmAction('error');
+      }
+    } catch { setDmAction('error'); }
   };
 
   const handleBlock = async () => {
@@ -213,29 +253,95 @@ export default function UserProfile({ userId, onBack, onOpenPost, onNavigateSett
               </button>
             ) : isAuthenticated && (
               <>
-                {profile.allowDMs && (
-                  <button
-                    onClick={handleSendDM}
-                    disabled={dmSent}
-                    className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-medium
-                      text-white bg-purple-600 hover:bg-purple-500 border border-purple-500/50
-                      shadow-lg shadow-purple-500/20 transition-all disabled:opacity-50"
-                  >
-                    <Icons.MessageCircle className="w-4 h-4" />
-                    {dmSent ? t('discussions.requestSent', 'Request Sent') : t('discussions.message', 'Message')}
-                  </button>
+                {profile.connectionStatus !== 'blocked' && profile.allowDMs && (() => {
+                  const cs = profile.connectionStatus;
+                  const dir = profile.connectionDirection;
+                  const isSending = dmAction === 'sending';
+
+                  // Already friends → "Message" button (opens DM)
+                  if (cs === 'accepted') return (
+                    <button
+                      onClick={handleDMAction}
+                      className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-medium
+                        text-white bg-purple-600 hover:bg-purple-500 border border-purple-500/50
+                        shadow-lg shadow-purple-500/20 transition-all"
+                    >
+                      <Icons.MessageCircle className="w-4 h-4" />
+                      {t('discussions.message', 'Message')}
+                    </button>
+                  );
+
+                  // Pending request we sent → "Request Pending" (disabled)
+                  if (cs === 'pending' && dir === 'sent') return (
+                    <button
+                      disabled
+                      className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-medium
+                        text-amber-300/70 bg-amber-500/10 border border-amber-500/20 opacity-70 cursor-default"
+                    >
+                      <Icons.Clock className="w-4 h-4" />
+                      {t('discussions.requestPending', 'Request Pending')}
+                    </button>
+                  );
+
+                  // Pending request from them → "Accept Request"
+                  if (cs === 'pending' && dir === 'received') return (
+                    <button
+                      onClick={handleDMAction}
+                      disabled={isSending}
+                      className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-medium
+                        text-white bg-cyan-600 hover:bg-cyan-500 border border-cyan-500/50
+                        shadow-lg shadow-cyan-500/20 transition-all disabled:opacity-50"
+                    >
+                      {isSending ? (
+                        <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      ) : (
+                        <Icons.Check className="w-4 h-4" />
+                      )}
+                      {t('discussions.acceptRequest', 'Accept Request')}
+                    </button>
+                  );
+
+                  // No connection → "Send Request"
+                  return (
+                    <button
+                      onClick={handleDMAction}
+                      disabled={isSending}
+                      className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-medium
+                        text-white bg-purple-600 hover:bg-purple-500 border border-purple-500/50
+                        shadow-lg shadow-purple-500/20 transition-all disabled:opacity-50"
+                    >
+                      {isSending ? (
+                        <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      ) : (
+                        <Icons.Send className="w-4 h-4" />
+                      )}
+                      {dmAction === 'sent' ? t('discussions.requestSent', 'Request Sent') : t('discussions.sendRequest', 'Send Request')}
+                    </button>
+                  );
+                })()}
+
+                {dmAction === 'error' && (
+                  <span className="text-[11px] text-red-400/60 self-center">{t('discussions.requestFailed', 'Failed')}</span>
                 )}
-                <button
-                  onClick={handleBlock}
-                  className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-medium transition-all ${
-                    blockConfirm
-                      ? 'text-red-400 bg-red-500/20 border border-red-500/40'
-                      : 'text-red-400/60 bg-red-500/[0.06] border border-red-500/15 hover:bg-red-500/10 hover:text-red-400'
-                  }`}
-                >
-                  <Icons.Shield className="w-4 h-4" />
-                  {blockConfirm ? t('discussions.confirmBlock', 'Confirm Block?') : t('discussions.block', 'Block')}
-                </button>
+
+                {profile.connectionStatus !== 'blocked' ? (
+                  <button
+                    onClick={handleBlock}
+                    className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-medium transition-all ${
+                      blockConfirm
+                        ? 'text-red-400 bg-red-500/20 border border-red-500/40'
+                        : 'text-red-400/60 bg-red-500/[0.06] border border-red-500/15 hover:bg-red-500/10 hover:text-red-400'
+                    }`}
+                  >
+                    <Icons.Shield className="w-4 h-4" />
+                    {blockConfirm ? t('discussions.confirmBlock', 'Confirm Block?') : t('discussions.block', 'Block')}
+                  </button>
+                ) : (
+                  <span className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-medium text-red-400/50 bg-red-500/[0.06] border border-red-500/15">
+                    <Icons.Shield className="w-4 h-4" />
+                    {t('discussions.userBlocked', 'Blocked')}
+                  </span>
+                )}
               </>
             )}
           </div>

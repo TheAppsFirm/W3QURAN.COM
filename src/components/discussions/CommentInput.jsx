@@ -8,7 +8,7 @@ import { SURAHS } from '../../data';
 import { QUOTE_TRANSLATIONS } from './quranQuoteUtils';
 import { useTranslation } from '../../contexts/LocaleContext';
 
-export default function CommentInput({ onSubmit, placeholder = 'Write a comment...', compact = false }) {
+export default function CommentInput({ onSubmit, placeholder = 'Write a comment...', compact = false, onShowPremium }) {
   const { t } = useTranslation();
   const [text, setText] = useState('');
   const [submitting, setSubmitting] = useState(false);
@@ -32,6 +32,10 @@ export default function CommentInput({ onSubmit, placeholder = 'Write a comment.
       await onSubmit(trimmed);
       setText('');
     } catch (err) {
+      if (err.data?.requiresPremium) {
+        onShowPremium?.();
+        return;
+      }
       setError(err.data?.error || err.message || 'Failed to post comment');
     } finally {
       setSubmitting(false);

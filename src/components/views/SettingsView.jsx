@@ -23,12 +23,14 @@ const PRODUCTS = {
   credits_100: 'credits_100',
 };
 
-// Subscription tier info
+// Subscription tier info — prices must match Stripe live price IDs
 const SUBSCRIPTION_TIERS = [
-  { id: 'starter', name: 'Starter', credits: 30, price: '$3/mo', product: PRODUCTS.starter_monthly, color: 'from-blue-400 to-blue-500' },
-  { id: 'premium', name: 'Premium', credits: 80, price: '$7/mo', product: PRODUCTS.premium_monthly, color: 'from-purple-400 to-purple-500', popular: true },
-  { id: 'scholar', name: 'Scholar', credits: 300, price: '$15/mo', product: PRODUCTS.scholar_monthly, color: 'from-amber-400 to-amber-500' },
-  { id: 'lifetime', name: 'Lifetime', credits: 100, price: '$99', product: PRODUCTS.lifetime, color: 'from-emerald-400 to-emerald-500', oneTime: true },
+  { id: 'starter', name: 'Starter', credits: 30, price: '$3', period: '/mo', product: PRODUCTS.starter_monthly, color: 'from-blue-400 to-blue-500' },
+  { id: 'premium', name: 'Premium', credits: 80, price: '$7', period: '/mo', product: PRODUCTS.premium_monthly, color: 'from-purple-400 to-purple-500', popular: true },
+  { id: 'premium_yearly', name: 'Premium', credits: 80, price: '$60', period: '/yr', product: PRODUCTS.premium_yearly, color: 'from-purple-500 to-indigo-500', savings: 'Save 29%' },
+  { id: 'scholar', name: 'Scholar', credits: 300, price: '$20', period: '/mo', product: PRODUCTS.scholar_monthly, color: 'from-amber-400 to-amber-500' },
+  { id: 'scholar_yearly', name: 'Scholar', credits: 300, price: '$200', period: '/yr', product: PRODUCTS.scholar_yearly, color: 'from-orange-400 to-red-500', savings: 'Save 17%' },
+  { id: 'lifetime', name: 'Lifetime', credits: 100, price: '$299', period: '', product: PRODUCTS.lifetime, color: 'from-emerald-400 to-emerald-500', oneTime: true },
 ];
 
 // Credit packs
@@ -140,12 +142,12 @@ function SettingsView({ darkMode, setDarkMode, onNavigate }) {
         credentials: 'include',
         body: JSON.stringify({ product, source: 'general' }),
       });
+      const data = await res.json();
       if (!res.ok) {
-        setUpgradeError('Server error. Please try again.');
+        setUpgradeError(data.error || 'Server error. Please try again.');
         setUpgradeLoading(null);
         return;
       }
-      const data = await res.json();
       if (data.url) {
         window.location.href = data.url;
       } else {
@@ -231,7 +233,7 @@ function SettingsView({ darkMode, setDarkMode, onNavigate }) {
       <div className="max-w-lg mx-auto">
         {/* Back Button */}
         <button
-          onClick={() => onNavigate && onNavigate('surahs')}
+          onClick={() => window.history.back()}
           className={`flex items-center gap-2 mb-6 px-4 py-3 rounded-xl transition-all active:scale-95 ${
             darkMode
               ? 'text-gray-300 hover:bg-gray-800 hover:text-white'
@@ -338,7 +340,7 @@ function SettingsView({ darkMode, setDarkMode, onNavigate }) {
                       {isPremium ? t('settingsExtended.premiumPlan') : t('auth.freePlan')}
                     </span>
                     <span className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-                      {isPremium ? 'All features unlocked' : 'Basic features'}
+                      {isPremium ? 'All features unlocked' : 'Free forever'}
                     </span>
                   </div>
                 </div>
@@ -349,21 +351,59 @@ function SettingsView({ darkMode, setDarkMode, onNavigate }) {
                 )}
               </div>
 
-              {/* Upgrade Options - Show if not premium */}
+              {/* Free Plan Details + Upgrade Options - Show if not premium */}
               {!isPremium && (
                 <div className="space-y-3 pt-3 border-t border-gray-200 dark:border-gray-700">
-                  <p className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-                    Unlock premium features:
+                  {/* What's included free */}
+                  <p className={`text-sm font-medium ${darkMode ? 'text-gray-200' : 'text-gray-700'}`}>
+                    What's included free:
                   </p>
-                  <ul className={`text-xs space-y-1 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                  <ul className={`text-xs space-y-1.5 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
                     <li className="flex items-center gap-2">
-                      <Icons.Check className="w-3 h-3 text-emerald-500" /> HD Male Voice TTS
+                      <Icons.Check className="w-3 h-3 text-emerald-500 shrink-0" /> Read all 114 Surahs with translations
                     </li>
                     <li className="flex items-center gap-2">
-                      <Icons.Check className="w-3 h-3 text-emerald-500" /> Cloud Sync Across Devices
+                      <Icons.Check className="w-3 h-3 text-emerald-500 shrink-0" /> Audio recitation (10+ reciters)
                     </li>
                     <li className="flex items-center gap-2">
-                      <Icons.Check className="w-3 h-3 text-emerald-500" /> Ad-Free Experience
+                      <Icons.Check className="w-3 h-3 text-emerald-500 shrink-0" /> Word-by-word analysis & treebank
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <Icons.Check className="w-3 h-3 text-emerald-500 shrink-0" /> Tafseer from multiple sources
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <Icons.Check className="w-3 h-3 text-emerald-500 shrink-0" /> Bookmarks, search & verse sharing
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <Icons.Check className="w-3 h-3 text-emerald-500 shrink-0" /> Discussion board (5 posts & comments/day)
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <Icons.Check className="w-3 h-3 text-emerald-500 shrink-0" /> Kids Mode — Train, Duas, Prophet's Life, Hajj
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <Icons.Check className="w-3 h-3 text-emerald-500 shrink-0" /> Daily verse, prayer times & Qibla
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <Icons.Check className="w-3 h-3 text-emerald-500 shrink-0" /> Quiz, memorization & offline mode
+                    </li>
+                  </ul>
+
+                  {/* What premium unlocks */}
+                  <p className={`text-sm font-medium pt-2 ${darkMode ? 'text-gray-200' : 'text-gray-700'}`}>
+                    Upgrade to unlock:
+                  </p>
+                  <ul className={`text-xs space-y-1.5 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                    <li className="flex items-center gap-2">
+                      <Icons.Lock className="w-3 h-3 text-amber-400 shrink-0" /> Talk to Quran — AI-powered conversations
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <Icons.Lock className="w-3 h-3 text-amber-400 shrink-0" /> Unlimited discussion posts & DMs
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <Icons.Lock className="w-3 h-3 text-amber-400 shrink-0" /> Kids Mode — Garden & Desert themes
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <Icons.Lock className="w-3 h-3 text-amber-400 shrink-0" /> Cloud sync — bookmarks & progress across devices
                     </li>
                   </ul>
 
@@ -374,25 +414,34 @@ function SettingsView({ darkMode, setDarkMode, onNavigate }) {
                     </div>
                   )}
 
-                  <div className="flex gap-2 pt-2">
-                    <button
-                      onClick={() => handleCheckout(PRODUCTS.premium_monthly)}
-                      disabled={upgradeLoading}
-                      className="flex-1 py-2 px-4 bg-gradient-to-r from-purple-500 to-violet-500 text-white font-medium rounded-xl hover:shadow-lg hover:shadow-purple-500/30 transition-all disabled:opacity-50"
-                    >
-                      {upgradeLoading === PRODUCTS.premium_monthly ? 'Loading...' : '$7/mo'}
-                    </button>
-                    <button
-                      onClick={() => handleCheckout(PRODUCTS.premium_yearly)}
-                      disabled={upgradeLoading}
-                      className="flex-1 py-2 px-4 bg-gradient-to-r from-amber-400 to-orange-500 text-white font-medium rounded-xl hover:shadow-lg hover:shadow-amber-500/30 transition-all disabled:opacity-50"
-                    >
-                      {upgradeLoading === PRODUCTS.premium_yearly ? 'Loading...' : '$49/yr'}
-                    </button>
+                  <div className="grid grid-cols-2 gap-2 pt-2">
+                    {SUBSCRIPTION_TIERS.map((tier) => (
+                      <button
+                        key={tier.id}
+                        onClick={() => handleCheckout(tier.product)}
+                        disabled={upgradeLoading}
+                        className={`relative py-2 px-3 bg-gradient-to-r ${tier.color} text-white font-medium rounded-xl hover:shadow-lg transition-all disabled:opacity-50 ${
+                          tier.oneTime ? 'col-span-2' : ''
+                        }`}
+                      >
+                        {tier.popular && (
+                          <span className={`absolute -top-2.5 left-1/2 -translate-x-1/2 px-2 py-0.5 bg-yellow-400 text-yellow-900 text-[10px] font-bold rounded-full shadow-sm`}>
+                            POPULAR
+                          </span>
+                        )}
+                        {tier.savings && (
+                          <span className={`absolute -top-2.5 ${isRTL ? 'left-1' : 'right-1'} px-2 py-0.5 bg-green-400 text-green-900 text-[10px] font-bold rounded-full shadow-sm`}>
+                            {tier.savings}
+                          </span>
+                        )}
+                        <p className="text-sm font-bold">{tier.name}</p>
+                        <p className="text-xs opacity-80">{tier.credits} credits/mo</p>
+                        <p className="text-sm font-bold mt-0.5">
+                          {upgradeLoading === tier.product ? 'Loading...' : `${tier.price}${tier.period}`}
+                        </p>
+                      </button>
+                    ))}
                   </div>
-                  <p className={`text-xs text-center ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>
-                    Yearly saves 40%
-                  </p>
                 </div>
               )}
 
@@ -451,8 +500,8 @@ function SettingsView({ darkMode, setDarkMode, onNavigate }) {
           </div>
         )}
 
-        {/* Talk to Quran Credits Section */}
-        {user && (
+        {/* Talk to Quran Credits Section — only for premium/admin users */}
+        {user && (isPremium || isAdmin) && (
           <div className="mb-6">
             <h3 className={`text-sm font-semibold uppercase tracking-wider mb-3 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
               Talk to Quran
@@ -524,48 +573,17 @@ function SettingsView({ darkMode, setDarkMode, onNavigate }) {
                   {/* Free User - Premium Lock */}
                   {!isAdmin && credits?.tier === 'free' && (
                     <div className="pt-3 border-t border-gray-200 dark:border-gray-700">
-                      <div className="flex items-center gap-3 mb-3 p-3 rounded-xl bg-amber-500/10 border border-amber-500/20">
-                        <Icons.Lock className="w-5 h-5 text-amber-500" />
-                        <p className={`text-sm ${darkMode ? 'text-amber-200' : 'text-amber-700'}`}>
-                          Talk to Quran is a premium feature
-                        </p>
+                      <div className="flex items-center gap-3 p-3 rounded-xl bg-amber-500/10 border border-amber-500/20">
+                        <Icons.Lock className="w-5 h-5 text-amber-500 shrink-0" />
+                        <div>
+                          <p className={`text-sm font-medium ${darkMode ? 'text-amber-200' : 'text-amber-700'}`}>
+                            Talk to Quran is a premium feature
+                          </p>
+                          <p className={`text-xs mt-0.5 ${darkMode ? 'text-amber-200/60' : 'text-amber-600/70'}`}>
+                            Upgrade from the plan section above to unlock AI-powered Quranic conversations
+                          </p>
+                        </div>
                       </div>
-
-                      <p className={`text-sm mb-3 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-                        Upgrade to unlock AI-powered Quranic conversations:
-                      </p>
-
-                      {/* Subscription Tiers */}
-                      <div className="grid grid-cols-2 gap-2 mb-3">
-                        {SUBSCRIPTION_TIERS.slice(0, 2).map((tier) => (
-                          <button
-                            key={tier.id}
-                            onClick={() => handleCheckout(tier.product)}
-                            disabled={upgradeLoading}
-                            className={`relative p-3 rounded-xl text-center transition-all hover:scale-105 ${
-                              upgradeLoading === tier.product ? 'opacity-50' : ''
-                            } bg-gradient-to-r ${tier.color} text-white`}
-                          >
-                            {tier.popular && (
-                              <span className="absolute -top-2 left-1/2 -translate-x-1/2 px-2 py-0.5 bg-amber-400 text-amber-900 text-xs font-bold rounded-full">
-                                POPULAR
-                              </span>
-                            )}
-                            <p className="font-bold">{tier.name}</p>
-                            <p className="text-xs opacity-80">{tier.credits} credits/mo</p>
-                            <p className="text-sm font-medium mt-1">{tier.price}</p>
-                          </button>
-                        ))}
-                      </div>
-
-                      <button
-                        onClick={() => handleCheckout(PRODUCTS.lifetime)}
-                        disabled={upgradeLoading}
-                        className="w-full p-3 rounded-xl bg-gradient-to-r from-emerald-400 to-emerald-500 text-white text-center transition-all hover:scale-105"
-                      >
-                        <p className="font-bold">Lifetime - $99 one-time</p>
-                        <p className="text-xs opacity-80">100 credits/month forever</p>
-                      </button>
                     </div>
                   )}
 
@@ -648,29 +666,45 @@ function SettingsView({ darkMode, setDarkMode, onNavigate }) {
                     onClick={async () => {
                       setSyncStatus('syncing');
                       try {
-                        // Gather local data to sync
-                        const bookmarks = localStorage.getItem('bookmarks');
-                        const progress = localStorage.getItem('readingProgress');
-
-                        // Upload bookmarks
-                        if (bookmarks) {
+                        const syncUpload = async (dataType, data) => {
+                          if (!data) return;
                           await fetch('/api/user/sync', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             credentials: 'include',
-                            body: JSON.stringify({ dataType: 'bookmarks', data: JSON.parse(bookmarks) }),
+                            body: JSON.stringify({ dataType, data }),
                           });
-                        }
+                        };
 
-                        // Upload progress
-                        if (progress) {
-                          await fetch('/api/user/sync', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            credentials: 'include',
-                            body: JSON.stringify({ dataType: 'progress', data: JSON.parse(progress) }),
-                          });
-                        }
+                        // Bookmarks (quran_app_ prefix from useLocalStorage)
+                        const bookmarks = localStorage.getItem('quran_app_bookmarks');
+                        if (bookmarks) await syncUpload('bookmarks', JSON.parse(bookmarks));
+
+                        // Progress — progressTracker.js uses unprefixed keys
+                        const progress = localStorage.getItem('quran_reading_progress');
+                        if (progress) await syncUpload('progress', JSON.parse(progress));
+
+                        // Settings (reader prefs + app prefs)
+                        const settingsData = {};
+                        ['reader_fontsize', 'reader_reciter', 'reader_translation', 'reader_show_translation',
+                         'reader_tajweed', 'reader_wbw', 'reader_repeat', 'reader_autoscroll',
+                         'darkMode', 'zoom', 'contentZoom', 'surahLayout'].forEach(key => {
+                          const val = localStorage.getItem('quran_app_' + key);
+                          if (val !== null) settingsData[key] = val;
+                        });
+                        if (Object.keys(settingsData).length) await syncUpload('settings', settingsData);
+
+                        // Mood (emotional tracker)
+                        const mood = localStorage.getItem('w3quran_emotional_journey');
+                        if (mood) await syncUpload('mood', JSON.parse(mood));
+
+                        // Activity (reading streak + goals)
+                        const activityData = {};
+                        const streak = localStorage.getItem('quran_reading_streak');
+                        const goals = localStorage.getItem('quran_reading_goals');
+                        if (streak) activityData.streak = JSON.parse(streak);
+                        if (goals) activityData.goals = JSON.parse(goals);
+                        if (Object.keys(activityData).length) await syncUpload('activity', activityData);
 
                         setLastSynced(Date.now());
                         setSyncStatus('success');

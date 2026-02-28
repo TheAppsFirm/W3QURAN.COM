@@ -4,12 +4,15 @@
  * typing indicator, auto-scroll, and a text input.
  */
 
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, lazy, Suspense } from 'react';
 import { Icons } from '../common';
 import { useWebSocket } from '../../hooks/useWebSocket';
 import { useAuth } from '../../contexts/AuthContext';
 import { useIsMobile } from '../../hooks';
 import { useTranslation } from '../../contexts/LocaleContext';
+import { getTextDir } from './quranQuoteUtils';
+
+const PremiumGate = lazy(() => import('../kids/KidsPremiumGate'));
 
 function timeFormat(dateStr) {
   if (!dateStr) return '';
@@ -52,7 +55,7 @@ function MessageBubble({ msg, currentUserId, otherUser, isMobile }) {
               : 'bg-white/[0.08] text-white/80 rounded-bl-md'
             }`}
         >
-          {msg.message}
+          <span dir={getTextDir(msg.message)}>{msg.message}</span>
         </div>
 
         {/* Timestamp */}
@@ -77,20 +80,35 @@ function TypingIndicator({ userName }) {
   );
 }
 
-export default function DMConversation({ connectionId, otherUser, onBack }) {
+export default function DMConversation({ connectionId, otherUser: initialOtherUser, onBack }) {
   const { t } = useTranslation();
   const isMobile = useIsMobile();
   const { user } = useAuth();
+  const [otherUser, setOtherUser] = useState(initialOtherUser || {});
   const {
-    messages, connected, typingUsers, error,
+    messages, connected, typingUsers, error, requiresPremium,
     sendMessage, sendTyping, sendStopTyping,
   } = useWebSocket('dm', connectionId, !!connectionId);
 
   const [inputText, setInputText] = useState('');
+  const [showPremiumGate, setShowPremiumGate] = useState(false);
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
   const typingTimer = useRef(null);
   const messagesContainerRef = useRef(null);
+  const lastSentText = useRef(null);
+
+  // Fetch other user info if not provided (e.g. page refresh on DM URL)
+  useEffect(() => {
+    if (otherUser?.name || !connectionId) return;
+    fetch('/api/dm/conversations', { credentials: 'include' })
+      .then(r => r.json())
+      .then(data => {
+        const conv = (data.conversations || []).find(c => String(c.connectionId) === String(connectionId));
+        if (conv?.otherUser) setOtherUser(conv.otherUser);
+      })
+      .catch(() => {});
+  }, [connectionId, otherUser?.name]);
 
   // Auto-scroll to bottom on new messages
   useEffect(() => {
@@ -110,11 +128,20 @@ export default function DMConversation({ connectionId, otherUser, onBack }) {
     };
   }, []);
 
+  // Restore input text if rate-limited
+  useEffect(() => {
+    if (requiresPremium && lastSentText.current) {
+      setInputText(lastSentText.current);
+      lastSentText.current = null;
+    }
+  }, [requiresPremium]);
+
   const handleSend = (e) => {
     e.preventDefault();
     const text = inputText.trim();
     if (!text) return;
 
+    lastSentText.current = text;
     const success = sendMessage(text);
     if (success) {
       setInputText('');
@@ -222,8 +249,18 @@ export default function DMConversation({ connectionId, otherUser, onBack }) {
 
       {/* Error */}
       {error && (
-        <div className="px-4 py-1.5 bg-red-500/10 text-xs text-red-400/70">
-          {error}
+        <div className={`px-4 py-2 ${requiresPremium ? 'bg-amber-500/10' : 'bg-red-500/10'} text-xs flex items-center justify-between gap-2`}>
+          <span className={requiresPremium ? 'text-amber-400/80' : 'text-red-400/70'}>{error}</span>
+          {requiresPremium && (
+            <button
+              onClick={() => setShowPremiumGate(true)}
+              className="shrink-0 px-3 py-1.5 rounded-lg bg-gradient-to-r from-amber-600 to-orange-600
+                text-white text-xs font-medium hover:from-amber-500 hover:to-orange-500
+                shadow-lg shadow-amber-500/20 transition-all"
+            >
+              {t('premium.upgrade', 'Upgrade')}
+            </button>
+          )}
         </div>
       )}
 
@@ -252,6 +289,18 @@ export default function DMConversation({ connectionId, otherUser, onBack }) {
           <Icons.Send className="w-4 h-4 text-white" />
         </button>
       </form>
+
+      {/* Premium upgrade popup */}
+      {showPremiumGate && (
+        <Suspense fallback={null}>
+          <PremiumGate
+            feature="daily_limit"
+            onClose={() => setShowPremiumGate(false)}
+            source="dm_chat"
+            returnPath="/discussions?tab=messages"
+          />
+        </Suspense>
+      )}
     </div>
   );
 }
