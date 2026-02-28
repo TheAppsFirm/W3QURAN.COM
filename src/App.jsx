@@ -53,7 +53,7 @@ const PrivacyPolicyView = lazyWithRetry(() => import('./components/views/Privacy
 const TermsOfServiceView = lazyWithRetry(() => import('./components/views/TermsOfServiceView'));
 const TasbihView = lazyWithRetry(() => import('./components/views/TasbihView'));
 const DiscussionsView = lazyWithRetry(() => import('./components/views/DiscussionsView'));
-const CommunityWidget = lazyWithRetry(() => import('./components/discussions/CommunityWidget'));
+// CommunityWidget removed — discussions accessible via FloatingMenu "Chat" button
 
 // Lazy-loaded modal features (only loaded when user opens them)
 const ProgressDashboard = lazyWithRetry(() => import('./components/common/ProgressDashboard'));
@@ -1248,8 +1248,6 @@ function QuranBubbleApp() {
           onWeatherSync={() => setShowWeatherSync(true)}
           onHajjUmrah={() => setShowHajjUmrah(true)}
           onShowBookmarks={() => setShowBookmarksPanel(true)}
-          onMessages={() => { setView('discussions'); updateURL('/discussions'); }}
-          pendingDMCount={pendingDMCount}
         />
       )}
 
@@ -1416,10 +1414,7 @@ function QuranBubbleApp() {
                 </Suspense>
               )}
 
-              {/* Community Discussions Widget */}
-              <Suspense fallback={null}>
-                <CommunityWidget onNavigate={setView} />
-              </Suspense>
+              {/* Community widget removed — discussions accessible via FloatingMenu Chat button */}
             </div>
 
             {/* Filter info - positioned above the bottom floating menu */}
@@ -1534,7 +1529,7 @@ function QuranBubbleApp() {
           onUpgrade={() => {
             setSelected(null);
             setClickPosition(null);
-            setView('settings');
+            setPaymentPremiumGate({ feature: 'premium', source: 'general', returnPath: window.location.pathname });
           }}
           darkMode={darkMode}
           originPosition={clickPosition}

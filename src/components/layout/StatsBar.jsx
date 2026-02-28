@@ -157,9 +157,6 @@ const StatsBar = memo(function StatsBar({
   onWeatherSync,
   onHajjUmrah,
   onShowBookmarks,
-  // DM notifications
-  onMessages,
-  pendingDMCount = 0,
 }) {
   const gamification = useGamification();
   const { isPremium } = useAuth();
@@ -237,18 +234,6 @@ const StatsBar = memo(function StatsBar({
 
             {/* Alerts */}
             <li className="flex-shrink-0"><Suspense fallback={null}><NotificationBell userTier={isPremium ? 'premium' : 'free'} /></Suspense></li>
-
-            {/* Messages */}
-            {onMessages && (
-              <li className="flex-shrink-0 relative">
-                <BubbleButton icon={Icons.Send} label="Messages" color="#06B6D4" color2="#0891B2" onClick={onMessages} />
-                {pendingDMCount > 0 && (
-                  <span className="absolute -top-0.5 -right-0.5 w-4 h-4 rounded-full bg-red-500 text-white text-[9px] font-bold flex items-center justify-center shadow-lg z-10">
-                    {pendingDMCount > 9 ? '9+' : pendingDMCount}
-                  </span>
-                )}
-              </li>
-            )}
 
             {/* Layout */}
             {showControls && (

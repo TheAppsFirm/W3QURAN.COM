@@ -64,7 +64,7 @@ const SUBSCRIPTION_OPTIONS = [
     id: 'lifetime',
     nameKey: 'premium.lifetime',
     price: '$299',
-    periodKey: 'premium.oneTime',
+    periodKey: null,
     credits: 100,
     isLifetime: true,
   },
@@ -146,8 +146,19 @@ const KidsPremiumGate = ({ onClose, feature = 'premium', lockedTheme = null, ret
   const [loadingPlan, setLoadingPlan] = useState(null);
   const [paymentResult, setPaymentResult] = useState(null); // 'success' | 'failed' | null
 
-  // Payment result detection is handled by KidsMode.jsx at a higher level.
-  // KidsPremiumGate only handles the checkout flow initiation.
+  // Capture Escape key so it doesn't propagate to parent overlays (e.g. BubbleReaderOverlay)
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape' && !isLoading) {
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+        onClose();
+      }
+    };
+    // Use capture phase to intercept before other handlers
+    document.addEventListener('keydown', handleKeyDown, true);
+    return () => document.removeEventListener('keydown', handleKeyDown, true);
+  }, [onClose, isLoading]);
 
   // Handle upgrade click - create Stripe checkout session
   const handleUpgrade = async (planId) => {
@@ -299,11 +310,16 @@ const KidsPremiumGate = ({ onClose, feature = 'premium', lockedTheme = null, ret
   }
 
   return (
-    <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-black/70 backdrop-blur-sm overflow-y-auto py-4">
+    <div
+      className="fixed inset-0 z-[10000] flex items-center justify-center bg-black/70 backdrop-blur-sm overflow-y-auto py-4"
+      onClick={(e) => { e.stopPropagation(); if (e.target === e.currentTarget && !isLoading) onClose(); }}
+      onMouseDown={(e) => e.stopPropagation()}
+    >
       {/* Premium card */}
       <div
         className="relative bg-gradient-to-br from-purple-900 via-indigo-900 to-blue-900 rounded-2xl p-4 max-w-md mx-4 border border-white/20 shadow-2xl"
         style={{ direction: isRTL ? 'rtl' : 'ltr' }}
+        onClick={(e) => e.stopPropagation()}
       >
         {/* Header row: emoji + title + badge */}
         <div className="flex items-center gap-3 mb-2">
@@ -384,7 +400,7 @@ const KidsPremiumGate = ({ onClose, feature = 'premium', lockedTheme = null, ret
                     <p className="font-bold text-xs">{t(option.nameKey)}</p>
                     <p className="text-[10px] opacity-70">{option.credits} {t('premium.creditsPerMo', 'credits/mo')}</p>
                     <p className="font-bold text-base leading-tight">
-                      {option.price}<span className="text-xs font-normal opacity-80">{t(option.periodKey)}</span>
+                      {option.price}{option.periodKey && <span className="text-xs font-normal opacity-80">{t(option.periodKey)}</span>}
                     </p>
                   </>
                 )}

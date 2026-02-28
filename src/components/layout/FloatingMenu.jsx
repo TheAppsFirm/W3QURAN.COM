@@ -7,6 +7,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Icons } from '../common/Icons';
 import { useIsMobile } from '../../hooks';
 import { useTranslation } from '../../contexts/LocaleContext';
+import { useAuth } from '../../contexts/AuthContext';
 
 // Bubble Menu Item Component
 const BubbleMenuItem = ({ item, active, onClick, delay = 0, darkMode }) => {
@@ -129,6 +130,7 @@ function FloatingMenu({ view, setView, darkMode, onDonate, onMindMap, onMood, on
   const [showMore, setShowMore] = useState(false);
   const menuRef = useRef(null);
   const { t } = useTranslation();
+  const { isAuthenticated } = useAuth();
 
   // Close menu when clicking outside
   useEffect(() => {
@@ -147,6 +149,7 @@ function FloatingMenu({ view, setView, darkMode, onDonate, onMindMap, onMood, on
     { id: 'surahs', label: t('floatingMenu.quran'), icon: Icons.Book, gradient: ['#10b981', '#059669'] },
     { id: 'kids', label: t('floatingMenu.kids'), icon: Icons.Gamepad, isKids: true, gradient: ['#a855f7', '#7c3aed'] },
     { id: 'talk', label: t('floatingMenu.talk'), icon: Icons.Mic, isTalk: true, gradient: ['#6366f1', '#4f46e5'] },
+    { id: 'discussions', label: t('floatingMenu.chat', 'Chat'), icon: Icons.MessageCircle, isChat: true, gradient: ['#06B6D4', '#0891B2'] },
     { id: 'more', label: t('floatingMenu.more'), icon: Icons.Grid, isMore: true, gradient: ['#f59e0b', '#d97706'] },
   ];
 
@@ -308,10 +311,11 @@ function FloatingMenu({ view, setView, darkMode, onDonate, onMindMap, onMood, on
         >
           {mainItems.map((item, idx) => {
             const Icon = item.icon || Icons.Star;
-            const active = item.isMore ? showMore : view === item.id;
+            const active = item.isMore ? showMore : item.isChat ? view === 'discussions' : view === item.id;
             const gradient = item.id === 'surahs' ? ['#10b981', '#14b8a6']
               : item.id === 'kids' ? ['#EC4899', '#8B5CF6']
               : item.id === 'talk' ? ['#A855F7', '#EC4899']
+              : item.isChat ? ['#06B6D4', '#0891B2']
               : ['#f59e0b', '#eab308'];
 
             return (
@@ -325,6 +329,8 @@ function FloatingMenu({ view, setView, darkMode, onDonate, onMindMap, onMood, on
                     setView('kids');
                   } else if (item.isTalk && onTalkToQuran) {
                     onTalkToQuran();
+                  } else if (item.isChat) {
+                    setView('discussions');
                   } else {
                     setView(item.id);
                   }
@@ -399,6 +405,17 @@ function FloatingMenu({ view, setView, darkMode, onDonate, onMindMap, onMood, on
                     >
                       {moreItems.length}
                     </span>
+                  )}
+                  {/* Green dot for Chat button when logged in */}
+                  {item.isChat && isAuthenticated && (
+                    <span
+                      className="absolute -top-0.5 -right-0.5 w-3 h-3 rounded-full z-10 animate-pulse"
+                      style={{
+                        background: 'linear-gradient(135deg, #22c55e, #10b981)',
+                        boxShadow: '0 0 6px rgba(34, 197, 94, 0.6)',
+                        border: '1.5px solid rgba(255,255,255,0.8)',
+                      }}
+                    />
                   )}
                 </div>
 
