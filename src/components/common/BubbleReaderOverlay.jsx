@@ -26,6 +26,7 @@ const HeartbeatMeditation = lazy(() => import('./HeartbeatMeditation'));
 const FamilyCircle = lazy(() => import('./FamilyCircle'));
 const ReaderDiscussPanel = lazy(() => import('../discussions/ReaderDiscussPanel'));
 const TreebankOverlay = lazy(() => import('./TreebankAnalysis').then(m => ({ default: m.TreebankOverlay })));
+const KidsPremiumGate = lazy(() => import('../kids/KidsPremiumGate'));
 import { hasTreebankData, canAccessTreebank, hasOntologyData } from '../../data/treebank/index';
 import { PALETTES, SURAHS, fetchTafseer, getTafseersByLanguage, getDefaultTafseer, TRANSLATION_TO_TAFSEER_LANG, getVideosForSurah, generateSearchQuery, SCHOLARS, SURAH_TOPICS, TAFSEER_SOURCES, markAyahRead } from '../../data';
 import { OVERLAY_THEMES, LAYOUT_TO_OVERLAY_THEME, getOverlayTheme, resolveGradient } from '../../data/themes';
@@ -5017,94 +5018,16 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
         />
       </Suspense>}
 
-      {/* Premium Upgrade Prompt Modal */}
+      {/* Premium Upgrade Prompt — uses centralized KidsPremiumGate */}
       {showUpgradePrompt && (
-        <div
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm"
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            setShowUpgradePrompt(false);
-          }}
-          onMouseDown={(e) => e.stopPropagation()}
-          onTouchStart={(e) => e.stopPropagation()}
-        >
-          <div
-            className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-3xl p-6 max-w-sm mx-4 border border-white/20 shadow-2xl"
-            onClick={(e) => e.stopPropagation()}
-            onMouseDown={(e) => e.stopPropagation()}
-            onTouchStart={(e) => e.stopPropagation()}
-            style={{ animation: 'bubblePopIn 0.3s ease-out' }}
-          >
-            {/* Premium Star Icon */}
-            <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-r from-amber-400 to-orange-500 flex items-center justify-center shadow-lg shadow-amber-500/30">
-              <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-              </svg>
-            </div>
-
-            {/* Title */}
-            <h3 className="text-xl font-bold text-white text-center mb-2">
-              {upgradeFeature === 'hd-tts' ? 'HD Voice is Premium' : 'Premium Feature'}
-            </h3>
-
-            {/* Description */}
-            <p className="text-gray-300 text-center text-sm mb-4">
-              {upgradeFeature === 'hd-tts'
-                ? 'Get crystal-clear HD text-to-speech with natural male voices in Urdu, Arabic, and more.'
-                : 'This feature is available for premium members.'}
-            </p>
-
-            {/* Free Trial Note */}
-            <div className="bg-emerald-500/20 border border-emerald-500/30 rounded-xl px-4 py-2 mb-4">
-              <p className="text-emerald-400 text-xs text-center">
-                💡 Try HD TTS free on <strong>Surah Al-Fatiha</strong>!
-              </p>
-            </div>
-
-            {/* Buttons */}
-            <div className="flex flex-col gap-3">
-              {isAuthenticated ? (
-                <button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    setShowUpgradePrompt(false);
-                    // Use setTimeout to prevent background interaction
-                    setTimeout(() => {
-                      window.location.href = '/settings';
-                    }, 100);
-                  }}
-                  className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-amber-400 to-orange-500 text-white font-bold hover:shadow-lg hover:shadow-amber-500/30 transition-all"
-                >
-                  ✨ Upgrade to Premium
-                </button>
-              ) : (
-                <button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    setShowUpgradePrompt(false);
-                    setTimeout(() => login(), 100);
-                  }}
-                  className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-purple-500 to-violet-500 text-white font-bold hover:shadow-lg transition-all"
-                >
-                  Sign In to Upgrade
-                </button>
-              )}
-              <button
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  setShowUpgradePrompt(false);
-                }}
-                className="w-full py-2 text-gray-400 text-sm hover:text-white transition-all"
-              >
-                Maybe Later
-              </button>
-            </div>
-          </div>
-        </div>
+        <Suspense fallback={null}>
+          <KidsPremiumGate
+            feature={upgradeFeature || 'premium'}
+            source="surah_reader"
+            returnPath={`/surah/${surah?.id || 1}`}
+            onClose={() => setShowUpgradePrompt(false)}
+          />
+        </Suspense>
       )}
 
       {/* Surah Picker Popup */}

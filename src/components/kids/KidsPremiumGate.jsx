@@ -253,6 +253,20 @@ const KidsPremiumGate = ({ onClose, feature = 'premium', lockedTheme = null, ret
         description: t('premium.talkToQuranDesc', 'Unlock unlimited AI-powered conversations with the Quran. Ask questions, explore meanings, and deepen your understanding.'),
       };
     }
+    if (feature === 'hd-tts') {
+      return {
+        title: t('premium.hdVoicePremium', 'HD Voice is Premium'),
+        emoji: '🎧',
+        description: t('premium.hdVoiceDesc', 'Get crystal-clear HD text-to-speech with natural voices in Urdu, Arabic, and more.'),
+      };
+    }
+    if (feature === 'treebank') {
+      return {
+        title: t('premium.treebankPremium', 'Grammar Analysis is Premium'),
+        emoji: '📖',
+        description: t('premium.treebankDesc', 'Get detailed morphological analysis and dependency trees for all 114 surahs.'),
+      };
+    }
     if (feature === 'premium') {
       return {
         title: t('premium.upgradeToPremium', 'Upgrade to Premium'),
