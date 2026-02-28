@@ -366,7 +366,7 @@ function SettingsView({ darkMode, setDarkMode, onNavigate }) {
                       <Icons.Check className="w-3 h-3 text-emerald-500 shrink-0" /> Audio recitation (10+ reciters)
                     </li>
                     <li className="flex items-center gap-2">
-                      <Icons.Check className="w-3 h-3 text-emerald-500 shrink-0" /> Word-by-word analysis & treebank
+                      <Icons.Check className="w-3 h-3 text-emerald-500 shrink-0" /> Word-by-word analysis
                     </li>
                     <li className="flex items-center gap-2">
                       <Icons.Check className="w-3 h-3 text-emerald-500 shrink-0" /> Tafseer from multiple sources
@@ -401,6 +401,12 @@ function SettingsView({ darkMode, setDarkMode, onNavigate }) {
                     </li>
                     <li className="flex items-center gap-2">
                       <Icons.Lock className="w-3 h-3 text-amber-400 shrink-0" /> Kids Mode — Garden & Desert themes
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <Icons.Lock className="w-3 h-3 text-amber-400 shrink-0" /> Grammar analysis & treebank (all surahs)
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <Icons.Lock className="w-3 h-3 text-amber-400 shrink-0" /> HD text-to-speech voices
                     </li>
                     <li className="flex items-center gap-2">
                       <Icons.Lock className="w-3 h-3 text-amber-400 shrink-0" /> Cloud sync — bookmarks & progress across devices
