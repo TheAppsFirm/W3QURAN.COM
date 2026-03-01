@@ -24,6 +24,18 @@ function setCanonical(url) {
   el.setAttribute('href', url);
 }
 
+function setJsonLd(data) {
+  let el = document.getElementById('dynamic-jsonld');
+  if (!data) { if (el) el.remove(); return; }
+  if (!el) {
+    el = document.createElement('script');
+    el.id = 'dynamic-jsonld';
+    el.type = 'application/ld+json';
+    document.head.appendChild(el);
+  }
+  el.textContent = JSON.stringify(data);
+}
+
 /**
  * Update all SEO meta tags at once.
  * Call this whenever the route/view changes.
@@ -34,7 +46,7 @@ function setCanonical(url) {
  * @param {string} [opts.path] - URL path (e.g. '/surah/1')
  * @param {string} [opts.image] - OG image URL
  */
-export function updateSEO({ title, description, path = '/', image }) {
+export function updateSEO({ title, description, path = '/', image, jsonLd }) {
   const fullTitle = title || DEFAULT_TITLE;
   const fullDesc = description || DEFAULT_DESC;
   const fullUrl = `${DOMAIN}${path}`;
@@ -61,6 +73,9 @@ export function updateSEO({ title, description, path = '/', image }) {
   setMeta('name', 'twitter:description', fullDesc);
   setMeta('name', 'twitter:url', fullUrl);
   setMeta('name', 'twitter:image', fullImage);
+
+  // JSON-LD structured data
+  setJsonLd(jsonLd || null);
 }
 
 // SEO data for known views — uses clean URL paths for proper indexing
@@ -110,10 +125,27 @@ const MODAL_SEO = {
  */
 export function getSEOForView(view, surah, modal) {
   if (surah) {
+    const surahPath = `/surah/${surah.id}`;
     return {
       title: `${surah.name} (${surah.arabic}) - w3Quran`,
       description: `Read Surah ${surah.name} (${surah.arabic}) - ${surah.meaning}. ${surah.ayahs} verses. ${surah.type === 'Makki' ? 'Meccan' : 'Medinan'} surah with translation, audio, and word-by-word meanings.`,
-      path: `/surah/${surah.id}`,
+      path: surahPath,
+      jsonLd: {
+        '@context': 'https://schema.org',
+        '@type': 'Chapter',
+        'name': `Surah ${surah.name} (${surah.arabic})`,
+        'alternativeHeadline': surah.meaning,
+        'description': `Surah ${surah.name} - ${surah.meaning}. ${surah.ayahs} verses. ${surah.type === 'Makki' ? 'Meccan' : 'Medinan'} surah.`,
+        'position': surah.id,
+        'numberOfPages': surah.ayahs,
+        'inLanguage': 'ar',
+        'url': `${DOMAIN}${surahPath}`,
+        'isPartOf': {
+          '@type': 'Book',
+          'name': 'The Holy Quran',
+          'url': `${DOMAIN}`,
+        },
+      },
     };
   }
 

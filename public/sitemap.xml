@@ -1,1798 +1,861 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <!-- Homepage -->
   <url>
     <loc>https://w3quran.com/</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
-
-  <!-- Main Pages -->
   <url>
-    <loc>https://w3quran.com/daily-verse</loc>
+    <loc>https://w3quran.com/?view=daily</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>daily</changefreq>
-    <priority>0.9</priority>
+    <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://w3quran.com/kids</loc>
+    <loc>https://w3quran.com/?view=kids</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://w3quran.com/listen</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://w3quran.com/names-of-allah</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://w3quran.com/quiz</loc>
+    <loc>https://w3quran.com/?view=quiz</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://w3quran.com/prayer-times</loc>
+    <loc>https://w3quran.com/?view=names</loc>
+    <lastmod>2026-03-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://w3quran.com/?view=listen</loc>
+    <lastmod>2026-03-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://w3quran.com/?view=prayer</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://w3quran.com/tasbih</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://w3quran.com/statistics</loc>
+    <loc>https://w3quran.com/?view=stats</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://w3quran.com/settings</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.4</priority>
-  </url>
-  <url>
-    <loc>https://w3quran.com/donate</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-
-  <!-- Feature Pages -->
-  <url>
-    <loc>https://w3quran.com/search</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://w3quran.com/memorize</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://w3quran.com/hajj-umrah</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://w3quran.com/baby-names</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://w3quran.com/mind-map</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://w3quran.com/mood</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://w3quran.com/video-sync</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://w3quran.com/prophetic-map</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://w3quran.com/time-machine</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://w3quran.com/ai-guide</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://w3quran.com/ummah-pulse</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://w3quran.com/weather-verse</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://w3quran.com/sound-healing</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://w3quran.com/talk</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://w3quran.com/progress</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://w3quran.com/achievements</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://w3quran.com/faq</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-
-  <!-- Discussions Hub -->
-  <url>
-    <loc>https://w3quran.com/discussions</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-  <!-- Legal -->
-  <url>
-    <loc>https://w3quran.com/privacy</loc>
+    <loc>https://w3quran.com/?view=privacy</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://w3quran.com/terms</loc>
+    <loc>https://w3quran.com/?view=terms</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
-
-  <!-- ===== Surah Pages (114) ===== -->
   <!-- Surah 1: Al-Fatiha -->
   <url>
-    <loc>https://w3quran.com/surah/1</loc>
+    <loc>https://w3quran.com/?surah=1</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 2: Al-Baqarah -->
   <url>
-    <loc>https://w3quran.com/surah/2</loc>
+    <loc>https://w3quran.com/?surah=2</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
-  <!-- Surah 3: Al-Imran -->
+  <!-- Surah 3: Aal-E-Imran -->
   <url>
-    <loc>https://w3quran.com/surah/3</loc>
+    <loc>https://w3quran.com/?surah=3</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 4: An-Nisa -->
   <url>
-    <loc>https://w3quran.com/surah/4</loc>
+    <loc>https://w3quran.com/?surah=4</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
-  <!-- Surah 5: Al-Maidah -->
+  <!-- Surah 5: Al-Maida -->
   <url>
-    <loc>https://w3quran.com/surah/5</loc>
+    <loc>https://w3quran.com/?surah=5</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 6: Al-Anam -->
   <url>
-    <loc>https://w3quran.com/surah/6</loc>
+    <loc>https://w3quran.com/?surah=6</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 7: Al-Araf -->
   <url>
-    <loc>https://w3quran.com/surah/7</loc>
+    <loc>https://w3quran.com/?surah=7</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 8: Al-Anfal -->
   <url>
-    <loc>https://w3quran.com/surah/8</loc>
+    <loc>https://w3quran.com/?surah=8</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 9: At-Tawbah -->
   <url>
-    <loc>https://w3quran.com/surah/9</loc>
+    <loc>https://w3quran.com/?surah=9</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 10: Yunus -->
   <url>
-    <loc>https://w3quran.com/surah/10</loc>
+    <loc>https://w3quran.com/?surah=10</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 11: Hud -->
   <url>
-    <loc>https://w3quran.com/surah/11</loc>
+    <loc>https://w3quran.com/?surah=11</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 12: Yusuf -->
   <url>
-    <loc>https://w3quran.com/surah/12</loc>
+    <loc>https://w3quran.com/?surah=12</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
-  <!-- Surah 13: Ar-Rad -->
+  <!-- Surah 13: Ar-Ra'd -->
   <url>
-    <loc>https://w3quran.com/surah/13</loc>
+    <loc>https://w3quran.com/?surah=13</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 14: Ibrahim -->
   <url>
-    <loc>https://w3quran.com/surah/14</loc>
+    <loc>https://w3quran.com/?surah=14</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 15: Al-Hijr -->
   <url>
-    <loc>https://w3quran.com/surah/15</loc>
+    <loc>https://w3quran.com/?surah=15</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 16: An-Nahl -->
   <url>
-    <loc>https://w3quran.com/surah/16</loc>
+    <loc>https://w3quran.com/?surah=16</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 17: Al-Isra -->
   <url>
-    <loc>https://w3quran.com/surah/17</loc>
+    <loc>https://w3quran.com/?surah=17</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 18: Al-Kahf -->
   <url>
-    <loc>https://w3quran.com/surah/18</loc>
+    <loc>https://w3quran.com/?surah=18</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 19: Maryam -->
   <url>
-    <loc>https://w3quran.com/surah/19</loc>
+    <loc>https://w3quran.com/?surah=19</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
-  <!-- Surah 20: Ta-Ha -->
+  <!-- Surah 20: Taha -->
   <url>
-    <loc>https://w3quran.com/surah/20</loc>
+    <loc>https://w3quran.com/?surah=20</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 21: Al-Anbiya -->
   <url>
-    <loc>https://w3quran.com/surah/21</loc>
+    <loc>https://w3quran.com/?surah=21</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 22: Al-Hajj -->
   <url>
-    <loc>https://w3quran.com/surah/22</loc>
+    <loc>https://w3quran.com/?surah=22</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 23: Al-Muminun -->
   <url>
-    <loc>https://w3quran.com/surah/23</loc>
+    <loc>https://w3quran.com/?surah=23</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 24: An-Nur -->
   <url>
-    <loc>https://w3quran.com/surah/24</loc>
+    <loc>https://w3quran.com/?surah=24</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 25: Al-Furqan -->
   <url>
-    <loc>https://w3quran.com/surah/25</loc>
+    <loc>https://w3quran.com/?surah=25</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 26: Ash-Shuara -->
   <url>
-    <loc>https://w3quran.com/surah/26</loc>
+    <loc>https://w3quran.com/?surah=26</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 27: An-Naml -->
   <url>
-    <loc>https://w3quran.com/surah/27</loc>
+    <loc>https://w3quran.com/?surah=27</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 28: Al-Qasas -->
   <url>
-    <loc>https://w3quran.com/surah/28</loc>
+    <loc>https://w3quran.com/?surah=28</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 29: Al-Ankabut -->
   <url>
-    <loc>https://w3quran.com/surah/29</loc>
+    <loc>https://w3quran.com/?surah=29</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 30: Ar-Rum -->
   <url>
-    <loc>https://w3quran.com/surah/30</loc>
+    <loc>https://w3quran.com/?surah=30</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 31: Luqman -->
   <url>
-    <loc>https://w3quran.com/surah/31</loc>
+    <loc>https://w3quran.com/?surah=31</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 32: As-Sajdah -->
   <url>
-    <loc>https://w3quran.com/surah/32</loc>
+    <loc>https://w3quran.com/?surah=32</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 33: Al-Ahzab -->
   <url>
-    <loc>https://w3quran.com/surah/33</loc>
+    <loc>https://w3quran.com/?surah=33</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 34: Saba -->
   <url>
-    <loc>https://w3quran.com/surah/34</loc>
+    <loc>https://w3quran.com/?surah=34</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 35: Fatir -->
   <url>
-    <loc>https://w3quran.com/surah/35</loc>
+    <loc>https://w3quran.com/?surah=35</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 36: Ya-Sin -->
   <url>
-    <loc>https://w3quran.com/surah/36</loc>
+    <loc>https://w3quran.com/?surah=36</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 37: As-Saffat -->
   <url>
-    <loc>https://w3quran.com/surah/37</loc>
+    <loc>https://w3quran.com/?surah=37</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 38: Sad -->
   <url>
-    <loc>https://w3quran.com/surah/38</loc>
+    <loc>https://w3quran.com/?surah=38</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 39: Az-Zumar -->
   <url>
-    <loc>https://w3quran.com/surah/39</loc>
+    <loc>https://w3quran.com/?surah=39</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 40: Ghafir -->
   <url>
-    <loc>https://w3quran.com/surah/40</loc>
+    <loc>https://w3quran.com/?surah=40</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 41: Fussilat -->
   <url>
-    <loc>https://w3quran.com/surah/41</loc>
+    <loc>https://w3quran.com/?surah=41</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
-  <!-- Surah 42: Ash-Shura -->
+  <!-- Surah 42: Ash-Shuraa -->
   <url>
-    <loc>https://w3quran.com/surah/42</loc>
+    <loc>https://w3quran.com/?surah=42</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 43: Az-Zukhruf -->
   <url>
-    <loc>https://w3quran.com/surah/43</loc>
+    <loc>https://w3quran.com/?surah=43</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 44: Ad-Dukhan -->
   <url>
-    <loc>https://w3quran.com/surah/44</loc>
+    <loc>https://w3quran.com/?surah=44</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 45: Al-Jathiyah -->
   <url>
-    <loc>https://w3quran.com/surah/45</loc>
+    <loc>https://w3quran.com/?surah=45</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 46: Al-Ahqaf -->
   <url>
-    <loc>https://w3quran.com/surah/46</loc>
+    <loc>https://w3quran.com/?surah=46</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 47: Muhammad -->
   <url>
-    <loc>https://w3quran.com/surah/47</loc>
+    <loc>https://w3quran.com/?surah=47</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 48: Al-Fath -->
   <url>
-    <loc>https://w3quran.com/surah/48</loc>
+    <loc>https://w3quran.com/?surah=48</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 49: Al-Hujurat -->
   <url>
-    <loc>https://w3quran.com/surah/49</loc>
+    <loc>https://w3quran.com/?surah=49</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 50: Qaf -->
   <url>
-    <loc>https://w3quran.com/surah/50</loc>
+    <loc>https://w3quran.com/?surah=50</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 51: Adh-Dhariyat -->
   <url>
-    <loc>https://w3quran.com/surah/51</loc>
+    <loc>https://w3quran.com/?surah=51</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 52: At-Tur -->
   <url>
-    <loc>https://w3quran.com/surah/52</loc>
+    <loc>https://w3quran.com/?surah=52</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 53: An-Najm -->
   <url>
-    <loc>https://w3quran.com/surah/53</loc>
+    <loc>https://w3quran.com/?surah=53</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 54: Al-Qamar -->
   <url>
-    <loc>https://w3quran.com/surah/54</loc>
+    <loc>https://w3quran.com/?surah=54</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 55: Ar-Rahman -->
   <url>
-    <loc>https://w3quran.com/surah/55</loc>
+    <loc>https://w3quran.com/?surah=55</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 56: Al-Waqiah -->
   <url>
-    <loc>https://w3quran.com/surah/56</loc>
+    <loc>https://w3quran.com/?surah=56</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 57: Al-Hadid -->
   <url>
-    <loc>https://w3quran.com/surah/57</loc>
+    <loc>https://w3quran.com/?surah=57</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 58: Al-Mujadila -->
   <url>
-    <loc>https://w3quran.com/surah/58</loc>
+    <loc>https://w3quran.com/?surah=58</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 59: Al-Hashr -->
   <url>
-    <loc>https://w3quran.com/surah/59</loc>
+    <loc>https://w3quran.com/?surah=59</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 60: Al-Mumtahanah -->
   <url>
-    <loc>https://w3quran.com/surah/60</loc>
+    <loc>https://w3quran.com/?surah=60</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
-  <!-- Surah 61: As-Saff -->
+  <!-- Surah 61: As-Saf -->
   <url>
-    <loc>https://w3quran.com/surah/61</loc>
+    <loc>https://w3quran.com/?surah=61</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 62: Al-Jumuah -->
   <url>
-    <loc>https://w3quran.com/surah/62</loc>
+    <loc>https://w3quran.com/?surah=62</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 63: Al-Munafiqun -->
   <url>
-    <loc>https://w3quran.com/surah/63</loc>
+    <loc>https://w3quran.com/?surah=63</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 64: At-Taghabun -->
   <url>
-    <loc>https://w3quran.com/surah/64</loc>
+    <loc>https://w3quran.com/?surah=64</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 65: At-Talaq -->
   <url>
-    <loc>https://w3quran.com/surah/65</loc>
+    <loc>https://w3quran.com/?surah=65</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 66: At-Tahrim -->
   <url>
-    <loc>https://w3quran.com/surah/66</loc>
+    <loc>https://w3quran.com/?surah=66</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 67: Al-Mulk -->
   <url>
-    <loc>https://w3quran.com/surah/67</loc>
+    <loc>https://w3quran.com/?surah=67</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 68: Al-Qalam -->
   <url>
-    <loc>https://w3quran.com/surah/68</loc>
+    <loc>https://w3quran.com/?surah=68</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 69: Al-Haqqah -->
   <url>
-    <loc>https://w3quran.com/surah/69</loc>
+    <loc>https://w3quran.com/?surah=69</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 70: Al-Maarij -->
   <url>
-    <loc>https://w3quran.com/surah/70</loc>
+    <loc>https://w3quran.com/?surah=70</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 71: Nuh -->
   <url>
-    <loc>https://w3quran.com/surah/71</loc>
+    <loc>https://w3quran.com/?surah=71</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 72: Al-Jinn -->
   <url>
-    <loc>https://w3quran.com/surah/72</loc>
+    <loc>https://w3quran.com/?surah=72</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 73: Al-Muzzammil -->
   <url>
-    <loc>https://w3quran.com/surah/73</loc>
+    <loc>https://w3quran.com/?surah=73</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
-  <!-- Surah 74: Al-Muddaththir -->
+  <!-- Surah 74: Al-Muddathir -->
   <url>
-    <loc>https://w3quran.com/surah/74</loc>
+    <loc>https://w3quran.com/?surah=74</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 75: Al-Qiyamah -->
   <url>
-    <loc>https://w3quran.com/surah/75</loc>
+    <loc>https://w3quran.com/?surah=75</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 76: Al-Insan -->
   <url>
-    <loc>https://w3quran.com/surah/76</loc>
+    <loc>https://w3quran.com/?surah=76</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 77: Al-Mursalat -->
   <url>
-    <loc>https://w3quran.com/surah/77</loc>
+    <loc>https://w3quran.com/?surah=77</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 78: An-Naba -->
   <url>
-    <loc>https://w3quran.com/surah/78</loc>
+    <loc>https://w3quran.com/?surah=78</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 79: An-Naziat -->
   <url>
-    <loc>https://w3quran.com/surah/79</loc>
+    <loc>https://w3quran.com/?surah=79</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 80: Abasa -->
   <url>
-    <loc>https://w3quran.com/surah/80</loc>
+    <loc>https://w3quran.com/?surah=80</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 81: At-Takwir -->
   <url>
-    <loc>https://w3quran.com/surah/81</loc>
+    <loc>https://w3quran.com/?surah=81</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 82: Al-Infitar -->
   <url>
-    <loc>https://w3quran.com/surah/82</loc>
+    <loc>https://w3quran.com/?surah=82</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 83: Al-Mutaffifin -->
   <url>
-    <loc>https://w3quran.com/surah/83</loc>
+    <loc>https://w3quran.com/?surah=83</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 84: Al-Inshiqaq -->
   <url>
-    <loc>https://w3quran.com/surah/84</loc>
+    <loc>https://w3quran.com/?surah=84</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 85: Al-Buruj -->
   <url>
-    <loc>https://w3quran.com/surah/85</loc>
+    <loc>https://w3quran.com/?surah=85</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 86: At-Tariq -->
   <url>
-    <loc>https://w3quran.com/surah/86</loc>
+    <loc>https://w3quran.com/?surah=86</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 87: Al-Ala -->
   <url>
-    <loc>https://w3quran.com/surah/87</loc>
+    <loc>https://w3quran.com/?surah=87</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 88: Al-Ghashiyah -->
   <url>
-    <loc>https://w3quran.com/surah/88</loc>
+    <loc>https://w3quran.com/?surah=88</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 89: Al-Fajr -->
   <url>
-    <loc>https://w3quran.com/surah/89</loc>
+    <loc>https://w3quran.com/?surah=89</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 90: Al-Balad -->
   <url>
-    <loc>https://w3quran.com/surah/90</loc>
+    <loc>https://w3quran.com/?surah=90</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 91: Ash-Shams -->
   <url>
-    <loc>https://w3quran.com/surah/91</loc>
+    <loc>https://w3quran.com/?surah=91</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 92: Al-Layl -->
   <url>
-    <loc>https://w3quran.com/surah/92</loc>
+    <loc>https://w3quran.com/?surah=92</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
-  <!-- Surah 93: Ad-Duha -->
+  <!-- Surah 93: Ad-Duhaa -->
   <url>
-    <loc>https://w3quran.com/surah/93</loc>
+    <loc>https://w3quran.com/?surah=93</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 94: Ash-Sharh -->
   <url>
-    <loc>https://w3quran.com/surah/94</loc>
+    <loc>https://w3quran.com/?surah=94</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 95: At-Tin -->
   <url>
-    <loc>https://w3quran.com/surah/95</loc>
+    <loc>https://w3quran.com/?surah=95</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 96: Al-Alaq -->
   <url>
-    <loc>https://w3quran.com/surah/96</loc>
+    <loc>https://w3quran.com/?surah=96</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 97: Al-Qadr -->
   <url>
-    <loc>https://w3quran.com/surah/97</loc>
+    <loc>https://w3quran.com/?surah=97</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 98: Al-Bayyinah -->
   <url>
-    <loc>https://w3quran.com/surah/98</loc>
+    <loc>https://w3quran.com/?surah=98</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 99: Az-Zalzalah -->
   <url>
-    <loc>https://w3quran.com/surah/99</loc>
+    <loc>https://w3quran.com/?surah=99</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 100: Al-Adiyat -->
   <url>
-    <loc>https://w3quran.com/surah/100</loc>
+    <loc>https://w3quran.com/?surah=100</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 101: Al-Qariah -->
   <url>
-    <loc>https://w3quran.com/surah/101</loc>
+    <loc>https://w3quran.com/?surah=101</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 102: At-Takathur -->
   <url>
-    <loc>https://w3quran.com/surah/102</loc>
+    <loc>https://w3quran.com/?surah=102</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 103: Al-Asr -->
   <url>
-    <loc>https://w3quran.com/surah/103</loc>
+    <loc>https://w3quran.com/?surah=103</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 104: Al-Humazah -->
   <url>
-    <loc>https://w3quran.com/surah/104</loc>
+    <loc>https://w3quran.com/?surah=104</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 105: Al-Fil -->
   <url>
-    <loc>https://w3quran.com/surah/105</loc>
+    <loc>https://w3quran.com/?surah=105</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 106: Quraysh -->
   <url>
-    <loc>https://w3quran.com/surah/106</loc>
+    <loc>https://w3quran.com/?surah=106</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 107: Al-Maun -->
   <url>
-    <loc>https://w3quran.com/surah/107</loc>
+    <loc>https://w3quran.com/?surah=107</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 108: Al-Kawthar -->
   <url>
-    <loc>https://w3quran.com/surah/108</loc>
+    <loc>https://w3quran.com/?surah=108</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 109: Al-Kafirun -->
   <url>
-    <loc>https://w3quran.com/surah/109</loc>
+    <loc>https://w3quran.com/?surah=109</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 110: An-Nasr -->
   <url>
-    <loc>https://w3quran.com/surah/110</loc>
+    <loc>https://w3quran.com/?surah=110</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 111: Al-Masad -->
   <url>
-    <loc>https://w3quran.com/surah/111</loc>
+    <loc>https://w3quran.com/?surah=111</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 112: Al-Ikhlas -->
   <url>
-    <loc>https://w3quran.com/surah/112</loc>
+    <loc>https://w3quran.com/?surah=112</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 113: Al-Falaq -->
   <url>
-    <loc>https://w3quran.com/surah/113</loc>
+    <loc>https://w3quran.com/?surah=113</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- Surah 114: An-Nas -->
   <url>
-    <loc>https://w3quran.com/surah/114</loc>
+    <loc>https://w3quran.com/?surah=114</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
-  </url>
-
-  <!-- ===== Discussion Board Pages (114) ===== -->
-  <!-- Discussion: Surah 1 Al-Fatiha -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/1</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 2 Al-Baqarah -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/2</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 3 Al-Imran -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/3</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 4 An-Nisa -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/4</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 5 Al-Maidah -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/5</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 6 Al-Anam -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/6</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 7 Al-Araf -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/7</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 8 Al-Anfal -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/8</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 9 At-Tawbah -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/9</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 10 Yunus -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/10</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 11 Hud -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/11</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 12 Yusuf -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/12</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 13 Ar-Rad -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/13</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 14 Ibrahim -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/14</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 15 Al-Hijr -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/15</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 16 An-Nahl -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/16</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 17 Al-Isra -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/17</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 18 Al-Kahf -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/18</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 19 Maryam -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/19</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 20 Ta-Ha -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/20</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 21 Al-Anbiya -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/21</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 22 Al-Hajj -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/22</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 23 Al-Muminun -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/23</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 24 An-Nur -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/24</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 25 Al-Furqan -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/25</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 26 Ash-Shuara -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/26</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 27 An-Naml -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/27</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 28 Al-Qasas -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/28</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 29 Al-Ankabut -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/29</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 30 Ar-Rum -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/30</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 31 Luqman -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/31</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 32 As-Sajdah -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/32</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 33 Al-Ahzab -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/33</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 34 Saba -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/34</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 35 Fatir -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/35</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 36 Ya-Sin -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/36</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 37 As-Saffat -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/37</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 38 Sad -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/38</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 39 Az-Zumar -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/39</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 40 Ghafir -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/40</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 41 Fussilat -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/41</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 42 Ash-Shura -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/42</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 43 Az-Zukhruf -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/43</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 44 Ad-Dukhan -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/44</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 45 Al-Jathiyah -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/45</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 46 Al-Ahqaf -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/46</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 47 Muhammad -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/47</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 48 Al-Fath -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/48</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 49 Al-Hujurat -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/49</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 50 Qaf -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/50</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 51 Adh-Dhariyat -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/51</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 52 At-Tur -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/52</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 53 An-Najm -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/53</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 54 Al-Qamar -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/54</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 55 Ar-Rahman -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/55</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 56 Al-Waqiah -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/56</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 57 Al-Hadid -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/57</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 58 Al-Mujadila -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/58</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 59 Al-Hashr -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/59</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 60 Al-Mumtahanah -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/60</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 61 As-Saff -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/61</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 62 Al-Jumuah -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/62</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 63 Al-Munafiqun -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/63</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 64 At-Taghabun -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/64</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 65 At-Talaq -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/65</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 66 At-Tahrim -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/66</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 67 Al-Mulk -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/67</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 68 Al-Qalam -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/68</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 69 Al-Haqqah -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/69</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 70 Al-Maarij -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/70</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 71 Nuh -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/71</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 72 Al-Jinn -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/72</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 73 Al-Muzzammil -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/73</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 74 Al-Muddaththir -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/74</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 75 Al-Qiyamah -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/75</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 76 Al-Insan -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/76</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 77 Al-Mursalat -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/77</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 78 An-Naba -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/78</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 79 An-Naziat -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/79</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 80 Abasa -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/80</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 81 At-Takwir -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/81</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 82 Al-Infitar -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/82</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 83 Al-Mutaffifin -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/83</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 84 Al-Inshiqaq -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/84</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 85 Al-Buruj -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/85</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 86 At-Tariq -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/86</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 87 Al-Ala -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/87</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 88 Al-Ghashiyah -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/88</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 89 Al-Fajr -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/89</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 90 Al-Balad -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/90</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 91 Ash-Shams -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/91</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 92 Al-Layl -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/92</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 93 Ad-Duha -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/93</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 94 Ash-Sharh -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/94</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 95 At-Tin -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/95</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 96 Al-Alaq -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/96</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 97 Al-Qadr -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/97</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 98 Al-Bayyinah -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/98</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 99 Az-Zalzalah -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/99</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 100 Al-Adiyat -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/100</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 101 Al-Qariah -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/101</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 102 At-Takathur -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/102</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 103 Al-Asr -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/103</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 104 Al-Humazah -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/104</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 105 Al-Fil -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/105</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 106 Quraysh -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/106</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 107 Al-Maun -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/107</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 108 Al-Kawthar -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/108</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 109 Al-Kafirun -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/109</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 110 An-Nasr -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/110</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 111 Al-Masad -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/111</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 112 Al-Ikhlas -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/112</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 113 Al-Falaq -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/113</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <!-- Discussion: Surah 114 An-Nas -->
-  <url>
-    <loc>https://w3quran.com/discussions/surah/114</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
   </url>
 </urlset>

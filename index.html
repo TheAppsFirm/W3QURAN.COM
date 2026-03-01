@@ -11,7 +11,19 @@
     <meta name="keywords" content="Quran, Islam, Islamic, Muslim, Arabic, Surah, Ayah, Verse, Holy Book, w3Quran, Quran App, Learn Quran, Quran Online, Read Quran, Quran Translation, Quran Audio, Kids Quran, Hajj, Umrah, Hajj Guide, Umrah Guide, 3D Hajj Journey, Interactive Hajj, Tawaf, Sai, Mina, Arafat, Muzdalifah, Prayer Times, Qibla Direction, 99 Names of Allah, Asma ul Husna, Quran Memorization, Hifz, Tafseer, Quran Tafseer, Daily Quran Verse, Quran Quiz, Islamic App, Muslim App, Quran Word by Word, Quran Urdu Translation, Quran Arabic, Tajweed, Quran Recitation, Al Quran" />
     <meta name="author" content="w3Quran" />
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
-    <!-- canonical is set dynamically by useSEO.js per page -->
+    <link rel="canonical" href="https://w3quran.com/" />
+    <script>
+      // Set canonical + OG URL immediately (before React) so Googlebot sees correct URL on first render
+      (function(){
+        var url = 'https://w3quran.com' + window.location.pathname;
+        var c = document.querySelector('link[rel="canonical"]');
+        if (c) c.href = url;
+        var og = document.querySelector('meta[property="og:url"]');
+        if (og) og.setAttribute('content', url);
+        var tw = document.querySelector('meta[name="twitter:url"]');
+        if (tw) tw.setAttribute('content', url);
+      })();
+    </script>
 
     <!-- Search Engine Verification -->
     <!-- INSTRUCTIONS: Replace YOUR_CODE with actual verification codes from:
@@ -143,6 +155,45 @@
         {"@type": "HowToStep", "name": "Completion", "text": "Umrah is complete, make dua and give thanks"}
       ]
     }
+    </script>
+
+    <!-- WebSite schema for sitelinks search box -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "w3Quran",
+      "url": "https://w3quran.com",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://w3quran.com/search?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+
+    <!-- Dynamic Breadcrumb + Page schema (set by URL path before React) -->
+    <script>
+      (function(){
+        var p = window.location.pathname;
+        var d = 'https://w3quran.com';
+        var crumbs = [{"@type":"ListItem","position":1,"name":"Home","item":d+"/"}];
+        var m = p.match(/^\/surah\/(\d+)$/);
+        if (m) {
+          crumbs.push({"@type":"ListItem","position":2,"name":"Surah "+m[1],"item":d+p});
+        }
+        var dm = p.match(/^\/discussions\/surah\/(\d+)$/);
+        if (dm) {
+          crumbs.push({"@type":"ListItem","position":2,"name":"Discussions","item":d+"/discussions"});
+          crumbs.push({"@type":"ListItem","position":3,"name":"Surah "+dm[1],"item":d+p});
+        }
+        if (crumbs.length > 1) {
+          var s = document.createElement('script');
+          s.type = 'application/ld+json';
+          s.textContent = JSON.stringify({"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":crumbs});
+          document.head.appendChild(s);
+        }
+      })();
     </script>
 
     <!-- Preconnect to external resources -->
