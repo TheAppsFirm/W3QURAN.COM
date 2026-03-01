@@ -84,12 +84,15 @@ function TypingIndicator({ userName }) {
 export default function DMConversation({ connectionId, otherUser: initialOtherUser, onBack }) {
   const { t } = useTranslation();
   const isMobile = useIsMobile();
-  const { user } = useAuth();
+  const { user, isAdmin } = useAuth();
   const [otherUser, setOtherUser] = useState(initialOtherUser || {});
+  const [connStatus, setConnStatus] = useState('accepted'); // assume accepted, verify on mount
+  const [connDirection, setConnDirection] = useState(null); // 'sent' | 'received'
+  const canSend = isAdmin || connStatus === 'accepted';
   const {
     messages, connected, typingUsers, error, requiresPremium,
     sendMessage, sendTyping, sendStopTyping,
-  } = useWebSocket('dm', connectionId, !!connectionId);
+  } = useWebSocket('dm', connectionId, !!connectionId && canSend);
 
   const [inputText, setInputText] = useState('');
   const [showPremiumGate, setShowPremiumGate] = useState(false);
@@ -99,17 +102,38 @@ export default function DMConversation({ connectionId, otherUser: initialOtherUs
   const messagesContainerRef = useRef(null);
   const lastSentText = useRef(null);
 
-  // Fetch other user info if not provided (e.g. page refresh on DM URL)
+  // Fetch other user info + verify connection status
   useEffect(() => {
-    if (otherUser?.name || !connectionId) return;
+    if (!connectionId) return;
+    if (otherUser?.name && connStatus === 'accepted') return;
     fetch('/api/dm/conversations', { credentials: 'include' })
       .then(r => r.json())
       .then(data => {
+        // Check accepted conversations
         const conv = (data.conversations || []).find(c => String(c.connectionId) === String(connectionId));
-        if (conv?.otherUser) setOtherUser(conv.otherUser);
+        if (conv) {
+          if (conv.otherUser) setOtherUser(conv.otherUser);
+          setConnStatus('accepted');
+          return;
+        }
+        // Check sent pending requests
+        const sent = (data.sent || []).find(c => String(c.connectionId) === String(connectionId));
+        if (sent) {
+          if (sent.to) setOtherUser(sent.to);
+          setConnStatus('pending');
+          setConnDirection('sent');
+          return;
+        }
+        // Check received pending requests
+        const received = (data.pending || []).find(c => String(c.connectionId) === String(connectionId));
+        if (received) {
+          if (received.from) setOtherUser(received.from);
+          setConnStatus('pending');
+          setConnDirection('received');
+        }
       })
       .catch(() => {});
-  }, [connectionId, otherUser?.name]);
+  }, [connectionId]);
 
   // Auto-scroll to bottom on new messages
   useEffect(() => {
@@ -205,7 +229,9 @@ export default function DMConversation({ connectionId, otherUser: initialOtherUs
         <div className="flex-1 min-w-0">
           <h4 className="text-sm text-white font-medium truncate">{otherUser?.name || 'Unknown'}</h4>
           <span className="text-[10px] text-white/25">
-            {connected ? t('discussions.online', 'Online') : t('discussions.connecting', 'Connecting...')}
+            {!canSend
+              ? t('discussions.pendingRequest', 'Request pending')
+              : connected ? t('discussions.online', 'Online') : t('discussions.connecting', 'Connecting...')}
           </span>
         </div>
       </div>
@@ -218,14 +244,30 @@ export default function DMConversation({ connectionId, otherUser: initialOtherUs
         {messages.length === 0 ? (
           <div className="flex items-center justify-center h-full">
             <div className="text-center py-8 px-4">
-              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500/20 to-cyan-500/20
-                flex items-center justify-center mx-auto mb-3">
-                <Icons.MessageCircle className="w-6 h-6 text-white/15" />
+              <div className={`w-12 h-12 rounded-full ${!canSend ? 'bg-amber-500/10' : 'bg-gradient-to-br from-purple-500/20 to-cyan-500/20'}
+                flex items-center justify-center mx-auto mb-3`}>
+                {!canSend
+                  ? <Icons.Lock className="w-6 h-6 text-amber-400/30" />
+                  : <Icons.MessageCircle className="w-6 h-6 text-white/15" />
+                }
               </div>
-              <p className="text-sm text-white/20">{t('discussions.noMessagesYet', 'No messages yet')}</p>
-              <p className="text-xs text-white/10 mt-1">
-                {t('discussions.sayHelloTo', 'Say hello to')} {otherUser?.name?.split(' ')[0] || 'them'}!
-              </p>
+              {!canSend ? (
+                <>
+                  <p className="text-sm text-amber-400/50">{t('discussions.notFriendYetTitle', 'Not your friend yet')}</p>
+                  <p className="text-xs text-white/20 mt-1">
+                    {connDirection === 'sent'
+                      ? t('discussions.waitForAcceptShort', 'Waiting for them to accept your request')
+                      : t('discussions.acceptToChat', 'Accept the request to start chatting')}
+                  </p>
+                </>
+              ) : (
+                <>
+                  <p className="text-sm text-white/20">{t('discussions.noMessagesYet', 'No messages yet')}</p>
+                  <p className="text-xs text-white/10 mt-1">
+                    {t('discussions.sayHelloTo', 'Say hello to')} {otherUser?.name?.split(' ')[0] || 'them'}!
+                  </p>
+                </>
+              )}
             </div>
           </div>
         ) : (
@@ -265,6 +307,25 @@ export default function DMConversation({ connectionId, otherUser: initialOtherUs
         </div>
       )}
 
+      {/* Not-friends banner for non-admin users */}
+      {!canSend && connStatus === 'pending' && (
+        <div className="px-4 py-3 bg-amber-500/10 border-t border-amber-500/20 text-center">
+          <div className="flex items-center justify-center gap-2 mb-1">
+            <Icons.Lock className="w-4 h-4 text-amber-400/70" />
+            <span className="text-sm text-amber-400/90 font-medium">
+              {connDirection === 'sent'
+                ? t('discussions.requestPending', 'Friend request pending')
+                : t('discussions.notFriendYet', 'Not connected yet')}
+            </span>
+          </div>
+          <p className="text-xs text-white/30">
+            {connDirection === 'sent'
+              ? t('discussions.waitForAccept', 'You cannot send messages until your request is accepted.')
+              : t('discussions.acceptFirst', 'Accept the friend request to start chatting.')}
+          </p>
+        </div>
+      )}
+
       {/* Input */}
       <form onSubmit={handleSend} className="p-3 border-t border-white/10 flex gap-2" style={{ paddingBottom: 'max(12px, env(safe-area-inset-bottom))' }}>
         <input
@@ -273,9 +334,11 @@ export default function DMConversation({ connectionId, otherUser: initialOtherUs
           value={inputText}
           onChange={handleInputChange}
           onKeyDown={handleKeyDown}
-          placeholder={t('discussions.typeMessage', 'Type a message...')}
+          placeholder={!canSend
+            ? t('discussions.cannotMessage', 'Cannot send messages yet')
+            : t('discussions.typeMessage', 'Type a message...')}
           maxLength={500}
-          disabled={!connected}
+          disabled={!connected || !canSend}
           className="flex-1 px-3 py-2 rounded-xl bg-white/5 border border-white/10
             text-white text-base sm:text-sm placeholder-white/25
             focus:outline-none focus:border-purple-500/40 transition-colors
@@ -283,7 +346,7 @@ export default function DMConversation({ connectionId, otherUser: initialOtherUs
         />
         <button
           type="submit"
-          disabled={!inputText.trim() || !connected}
+          disabled={!inputText.trim() || !connected || !canSend}
           className="w-9 h-9 flex items-center justify-center rounded-xl bg-cyan-600
             hover:bg-cyan-500 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
         >
