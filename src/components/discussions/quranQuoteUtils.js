@@ -290,7 +290,7 @@ export async function fetchVerseForQuote(surah, ayah, translationId) {
   if (transInfo?.altApi) {
     // Fetch from Al Quran Cloud API (Arabic + translation in one call)
     const res = await fetch(
-      `https://api.alquran.cloud/v1/ayah/${surah}:${ayah}/quran-uthmani,${transInfo.altApi}`
+      `https://api.alquran.cloud/v1/ayah/${surah}:${ayah}/editions/quran-uthmani,${transInfo.altApi}`
     );
     if (!res.ok) throw new Error('Fetch failed');
     const json = await res.json();
