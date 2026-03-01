@@ -426,6 +426,12 @@ function QuranBubbleApp() {
     setInitialPanel(null);
   }, []);
 
+  // Reliable "go home" — always navigates to surahs view + updates URL
+  const goHome = useCallback(() => {
+    setView('surahs');
+    updateURL('/');
+  }, [updateURL]);
+
   // Kill all global audio sources - prevents double-playing across features
   const stopAllGlobalAudio = useCallback(() => {
     window.speechSynthesis?.cancel();
@@ -1461,9 +1467,9 @@ function QuranBubbleApp() {
 
         {/* Other Views (lazy-loaded) */}
         <Suspense fallback={<LoadingSpinner message="Loading..." />}>
-          {view === 'listen' && <ListenView darkMode={darkMode} />}
-          {view === 'donate' && <DonateView darkMode={darkMode} />}
-          {view === 'settings' && <SettingsView darkMode={darkMode} setDarkMode={setDarkMode} onNavigate={setView} />}
+          {view === 'listen' && <ListenView darkMode={darkMode} onBack={goHome} />}
+          {view === 'donate' && <DonateView darkMode={darkMode} onBack={goHome} />}
+          {view === 'settings' && <SettingsView darkMode={darkMode} setDarkMode={setDarkMode} onNavigate={setView} onBack={goHome} />}
           {view === 'admin' && (
             <AdminDashboard
               onClose={() => setView('settings')}
@@ -1474,19 +1480,20 @@ function QuranBubbleApp() {
               }}
             />
           )}
-          {view === 'names' && <NamesOfAllahView darkMode={darkMode} />}
-          {view === 'quiz' && <QuizView darkMode={darkMode} onEarnPoints={handleEarnPoints} />}
-          {view === 'prayer' && <PrayerTimesView darkMode={darkMode} />}
+          {view === 'names' && <NamesOfAllahView darkMode={darkMode} onBack={goHome} />}
+          {view === 'quiz' && <QuizView darkMode={darkMode} onEarnPoints={handleEarnPoints} onBack={goHome} />}
+          {view === 'prayer' && <PrayerTimesView darkMode={darkMode} onBack={goHome} />}
           {view === 'stats' && (
             <StatisticsView
               darkMode={darkMode}
               readingProgress={readingProgress}
+              onBack={goHome}
             />
           )}
-          {view === 'daily' && <DailyVerseView darkMode={darkMode} />}
+          {view === 'daily' && <DailyVerseView darkMode={darkMode} onBack={goHome} />}
           {view === 'tasbih' && (
             <Suspense fallback={<LoadingSpinner message="Loading Tasbih..." />}>
-              <TasbihView darkMode={darkMode} onBack={() => window.history.back()} />
+              <TasbihView darkMode={darkMode} onBack={goHome} />
             </Suspense>
           )}
           {view === 'discussions' && (
@@ -1509,8 +1516,8 @@ function QuranBubbleApp() {
               }}
             />
           )}
-          {view === 'privacy' && <PrivacyPolicyView darkMode={darkMode} onBack={() => window.history.back()} />}
-          {view === 'terms' && <TermsOfServiceView darkMode={darkMode} onBack={() => window.history.back()} />}
+          {view === 'privacy' && <PrivacyPolicyView darkMode={darkMode} onBack={goHome} />}
+          {view === 'terms' && <TermsOfServiceView darkMode={darkMode} onBack={goHome} />}
         </Suspense>
       </main>
 

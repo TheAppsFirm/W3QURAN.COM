@@ -8,7 +8,7 @@ import { Icons } from '../common/Icons';
 import { PALETTES } from '../../data';
 import { useTranslation } from '../../contexts/LocaleContext';
 
-function DonateView({ darkMode }) {
+function DonateView({ darkMode, onBack }) {
   const { t, isRTL } = useTranslation();
   const [selectedAmount, setSelectedAmount] = useState(null);
   const [customAmount, setCustomAmount] = useState('');
@@ -16,7 +16,7 @@ function DonateView({ darkMode }) {
 
   // Handle back navigation
   const handleBack = () => {
-    window.history.back();
+    onBack ? onBack() : window.history.back();
   };
 
   const amounts = [5, 10, 25, 50, 100, 'Custom'];

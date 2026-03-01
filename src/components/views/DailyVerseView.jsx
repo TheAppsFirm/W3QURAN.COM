@@ -34,7 +34,7 @@ const GROUPED_TRANSLATIONS = (() => {
   });
 })();
 
-function DailyVerseView({ darkMode }) {
+function DailyVerseView({ darkMode, onBack }) {
   const { t, isRTL, language } = useTranslation();
 
   // Smart verse selection on load
@@ -194,7 +194,7 @@ function DailyVerseView({ darkMode }) {
       ? `${TRANSLATIONS[selectedTranslation].languageNative} — ${TRANSLATIONS[selectedTranslation].nameEn || TRANSLATIONS[selectedTranslation].name}`
       : TRANSLATIONS[selectedTranslation]?.name;
 
-  const handleBack = () => window.history.back();
+  const handleBack = () => onBack ? onBack() : window.history.back();
 
   return (
     <div className={`h-full overflow-auto ${darkMode ? 'text-white' : ''}`}

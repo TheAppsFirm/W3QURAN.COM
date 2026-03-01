@@ -6,7 +6,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Icons } from '../common';
 import { SURAHS } from '../../data';
 import { useTags } from '../../hooks/useDiscussion';
-import { QUOTE_TRANSLATIONS } from './quranQuoteUtils';
+import { QUOTE_TRANSLATIONS, fetchVerseForQuote } from './quranQuoteUtils';
 import { useTranslation } from '../../contexts/LocaleContext';
 
 const POST_TYPES = [
@@ -300,13 +300,8 @@ export default function CreatePostModal({ surahId, surahName, onClose, onSubmit,
                         setQuoteLoading(true);
                         setQuotePreview(null);
                         try {
-                          const res = await fetch(
-                            `https://api.quran.com/api/v4/verses/by_key/${quoteSurah}:${quoteAyah}?words=false&translations=${quoteTranslation}&fields=text_uthmani`
-                          );
-                          const json = await res.json();
-                          const ar = json.verse?.text_uthmani || '';
-                          const tr = (json.verse?.translations?.[0]?.text || '').replace(/<[^>]+>/g, '');
-                          setQuotePreview({ arabic: ar, translation: tr });
+                          const result = await fetchVerseForQuote(quoteSurah, quoteAyah, quoteTranslation);
+                          setQuotePreview({ arabic: result.arabic, translation: result.translation });
                         } catch { setQuotePreview({ arabic: '', translation: 'Failed to load' }); }
                         setQuoteLoading(false);
                       }}

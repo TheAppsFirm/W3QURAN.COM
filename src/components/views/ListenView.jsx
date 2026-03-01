@@ -28,7 +28,7 @@ const TRANSLATIONS = [
   { id: 'urdu', name: 'Fateh Muhammad Jalandhri', language: 'Urdu', description: 'Popular Urdu translation' },
 ];
 
-function ListenView({ level, darkMode }) {
+function ListenView({ level, darkMode, onBack }) {
   const { t, isRTL } = useTranslation();
   const [activeTab, setActiveTab] = useState('reciters');
   const [selectedReciter, setSelectedReciter] = useLocalStorage('reader_reciter', 'ar.alafasy');
@@ -40,7 +40,7 @@ function ListenView({ level, darkMode }) {
 
   // Handle back navigation
   const handleBack = () => {
-    window.history.back();
+    onBack ? onBack() : window.history.back();
   };
 
   const filteredReciters = RECITERS.filter((r) => {

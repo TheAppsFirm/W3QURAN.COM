@@ -21,6 +21,7 @@ export function getTextDir(text) {
 export const QUOTE_TRANSLATIONS = [
   // === Urdu (اردو) ===
   { id: 234, name: 'فتح محمد جالندھری', nameEn: 'Jalandhry', lang: 'Urdu', langNative: 'اردو', langCode: 'ur' },
+  { id: 9001, name: 'کنزالایمان (احمد رضا خان)', nameEn: 'Kanzul Iman', lang: 'Urdu', langNative: 'اردو', langCode: 'ur', altApi: 'ur.kanzuliman' },
   { id: 97,  name: 'مودودی (تفہیم)', nameEn: 'Maududi', lang: 'Urdu', langNative: 'اردو', langCode: 'ur' },
   { id: 54,  name: 'جوناگڑھی', nameEn: 'Junagarhi', lang: 'Urdu', langNative: 'اردو', langCode: 'ur' },
   { id: 819, name: 'وحیدالدین خان', nameEn: 'Wahiduddin Khan', lang: 'Urdu', langNative: 'اردو', langCode: 'ur' },
@@ -277,6 +278,44 @@ export const QUOTE_TRANSLATIONS = [
   // === Yau (Yaw) ===
   { id: 798, name: 'Abdul Hamid Silika', nameEn: 'Abdul Hamid Silika', lang: 'Yau', langCode: 'yaw' },
 ];
+
+/**
+ * Fetch a verse from the appropriate API.
+ * Most translations use Quran.com API v4 (numeric IDs).
+ * Translations with `altApi` field use Al Quran Cloud API (e.g. Kanzul Iman).
+ */
+export async function fetchVerseForQuote(surah, ayah, translationId) {
+  const transInfo = QUOTE_TRANSLATIONS.find(t => t.id === translationId);
+
+  if (transInfo?.altApi) {
+    // Fetch from Al Quran Cloud API (Arabic + translation in one call)
+    const res = await fetch(
+      `https://api.alquran.cloud/v1/ayah/${surah}:${ayah}/quran-uthmani,${transInfo.altApi}`
+    );
+    if (!res.ok) throw new Error('Fetch failed');
+    const json = await res.json();
+    const editions = json.data || [];
+    const arabicEdition = editions.find(e => e.edition?.identifier === 'quran-uthmani');
+    const transEdition = editions.find(e => e.edition?.identifier === transInfo.altApi);
+    return {
+      arabic: arabicEdition?.text || '',
+      translation: transEdition?.text || '',
+    };
+  }
+
+  // Default: Quran.com API v4
+  const res = await fetch(
+    `https://api.quran.com/api/v4/verses/by_key/${surah}:${ayah}?words=false&translations=${translationId}&fields=text_uthmani`
+  );
+  if (!res.ok) throw new Error('Fetch failed');
+  const json = await res.json();
+  const arabicText = json.verse?.text_uthmani || '';
+  const rawTranslation = json.verse?.translations?.[0]?.text || '';
+  return {
+    arabic: arabicText,
+    translation: rawTranslation.replace(/<[^>]+>/g, ''),
+  };
+}
 
 /**
  * Parse text containing [quran:S:A] or [quran:S:A:TID] markers into segments.

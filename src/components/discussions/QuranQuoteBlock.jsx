@@ -6,7 +6,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { getSurahById } from '../../data';
-import { QUOTE_TRANSLATIONS } from './quranQuoteUtils';
+import { QUOTE_TRANSLATIONS, fetchVerseForQuote } from './quranQuoteUtils';
 
 // Module-level cache to avoid re-fetching the same ayah+translation
 const verseCache = new Map();
@@ -44,22 +44,14 @@ export default function QuranQuoteBlock({ surah, ayah, translationId = 234, onOp
       setError(false);
 
       try {
-        const res = await fetch(
-          `https://api.quran.com/api/v4/verses/by_key/${surah}:${ayah}?words=false&translations=${translationId}&fields=text_uthmani`
-        );
-        if (!res.ok) throw new Error('Fetch failed');
-        const json = await res.json();
+        const result = await fetchVerseForQuote(surah, ayah, translationId);
 
         if (cancelled) return;
 
-        const arabicText = json.verse?.text_uthmani || '';
-        const rawTranslation = json.verse?.translations?.[0]?.text || '';
-        const cleanTranslation = rawTranslation.replace(/<[^>]+>/g, '');
+        verseCache.set(key, { arabic: result.arabic, translation: result.translation });
 
-        verseCache.set(key, { arabic: arabicText, translation: cleanTranslation });
-
-        setArabic(arabicText);
-        setTranslation(cleanTranslation);
+        setArabic(result.arabic);
+        setTranslation(result.translation);
       } catch {
         if (!cancelled) setError(true);
       } finally {

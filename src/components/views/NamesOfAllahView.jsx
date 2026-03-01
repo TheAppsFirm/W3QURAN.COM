@@ -9,7 +9,7 @@ import { NAMES_OF_ALLAH, PALETTES } from '../../data';
 import { shareName } from '../../utils/shareUtils';
 import { useTranslation } from '../../contexts/LocaleContext';
 
-function NamesOfAllahView({ darkMode }) {
+function NamesOfAllahView({ darkMode, onBack }) {
   const { t, isRTL } = useTranslation();
   const [selectedName, setSelectedName] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
@@ -78,7 +78,7 @@ function NamesOfAllahView({ darkMode }) {
 
   // Handle back navigation
   const handleBack = () => {
-    window.history.back();
+    onBack ? onBack() : window.history.back();
   };
 
   return (

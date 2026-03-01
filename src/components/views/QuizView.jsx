@@ -9,7 +9,7 @@ import { QUIZ_QUESTIONS } from '../../data';
 import { useGamification } from '../../hooks/useGamification';
 import { useTranslation } from '../../contexts/LocaleContext';
 
-function QuizView({ darkMode, onEarnPoints }) {
+function QuizView({ darkMode, onEarnPoints, onBack }) {
   const { t, isRTL } = useTranslation();
   const gamification = useGamification();
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -25,7 +25,7 @@ function QuizView({ darkMode, onEarnPoints }) {
 
   // Handle back navigation
   const handleBack = () => {
-    window.history.back();
+    onBack ? onBack() : window.history.back();
   };
 
   const handleAnswer = (index) => {

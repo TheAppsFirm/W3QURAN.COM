@@ -40,7 +40,7 @@ const CREDIT_PACKS = [
   { credits: 100, price: '$7', product: PRODUCTS.credits_100 },
 ];
 
-function SettingsView({ darkMode, setDarkMode, onNavigate }) {
+function SettingsView({ darkMode, setDarkMode, onNavigate, onBack }) {
   const { t, isRTL } = useTranslation();
   const { user, subscription, isPremium, isAdmin, loading: authLoading, refreshUser } = useAuth();
   const [upgradeLoading, setUpgradeLoading] = useState(null);
@@ -233,7 +233,7 @@ function SettingsView({ darkMode, setDarkMode, onNavigate }) {
       <div className="max-w-lg mx-auto">
         {/* Back Button */}
         <button
-          onClick={() => window.history.back()}
+          onClick={() => onBack ? onBack() : window.history.back()}
           className={`flex items-center gap-2 mb-6 px-4 py-3 rounded-xl transition-all active:scale-95 ${
             darkMode
               ? 'text-gray-300 hover:bg-gray-800 hover:text-white'

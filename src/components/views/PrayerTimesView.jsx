@@ -31,7 +31,7 @@ const formatTime = (time24, use12Hour, tFn) => {
   return `${hours12}:${minutes.toString().padStart(2, '0')} ${period}`;
 };
 
-function PrayerTimesView({ darkMode }) {
+function PrayerTimesView({ darkMode, onBack }) {
   const { t, isRTL } = useTranslation();
   // Location state
   const [location, setLocation] = useLocalStorage('prayer_location', null);
@@ -340,7 +340,7 @@ function PrayerTimesView({ darkMode }) {
 
   // Handle back navigation
   const handleBack = () => {
-    window.history.back();
+    onBack ? onBack() : window.history.back();
   };
 
   return (

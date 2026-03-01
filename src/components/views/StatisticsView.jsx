@@ -17,14 +17,14 @@ import {
 import { loadProgress } from '../../data/progressTracker';
 import { useTranslation } from '../../contexts/LocaleContext';
 
-function StatisticsView({ darkMode, readingProgress, streak: propStreak, points }) {
+function StatisticsView({ darkMode, readingProgress, streak: propStreak, points, onBack }) {
   const { t, isRTL } = useTranslation();
   // Real statistics
   const [weeklyData, setWeeklyData] = useState([0, 0, 0, 0, 0, 0, 0]);
 
   // Handle back navigation
   const handleBack = () => {
-    window.history.back();
+    onBack ? onBack() : window.history.back();
   };
   const [realStreak, setRealStreak] = useState(0);
   const [totalAyahs, setTotalAyahs] = useState(0);
