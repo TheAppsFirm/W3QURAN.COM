@@ -224,30 +224,35 @@ const ScholarVideoSync = memo(function ScholarVideoSync({
     }
   }, [hasVideos, selectedVideo, syncedVideos]);
 
-  // Handle visibility changes - expand from mini player or reset forceShow
+  // Handle visibility changes - expand from mini player when parent re-opens modal
+  const prevVisibleRef = useRef(isVisible);
   useEffect(() => {
-    if (isVisible) {
-      // If modal becomes visible while in mini player mode, expand it
-      if (miniPlayerMode) {
-        setMiniPlayerMode(false);
-      }
-      // Reset force show since we're now properly visible
+    // Only act when isVisible transitions from false → true (parent re-opens)
+    if (isVisible && !prevVisibleRef.current) {
+      setMiniPlayerMode(false);
       setForceShowFull(false);
     }
-  }, [isVisible, miniPlayerMode]);
+    prevVisibleRef.current = isVisible;
+  }, [isVisible]);
 
-  // Handle verse click from timeline
+  // Handle verse click from timeline — seek within the embedded player
   const handleVerseClick = useCallback((verse, timestamp) => {
     if (onAyahChange) {
       onAyahChange(verse);
     }
-    // In a real implementation, you would use YouTube API to seek
-    // For now, we'll open the video at that timestamp
-    if (selectedVideo) {
-      const url = `${getYouTubeWatchUrl(selectedVideo.id)}&t=${timestamp}`;
-      window.open(url, '_blank');
+    // Seek within the embedded YouTube iframe using postMessage API
+    if (playerRef.current?.contentWindow) {
+      playerRef.current.contentWindow.postMessage(
+        JSON.stringify({ event: 'command', func: 'seekTo', args: [timestamp, true] }),
+        '*'
+      );
+      // Also ensure the video is playing after seek
+      playerRef.current.contentWindow.postMessage(
+        JSON.stringify({ event: 'command', func: 'playVideo', args: [] }),
+        '*'
+      );
     }
-  }, [onAyahChange, selectedVideo]);
+  }, [onAyahChange]);
 
   // Handle video selection
   const handleVideoSelect = useCallback((video) => {
@@ -256,10 +261,21 @@ const ScholarVideoSync = memo(function ScholarVideoSync({
     setSelectedScholar(scholar);
   }, []);
 
-  // Toggle mini player
+  // Toggle mini player - close the full modal but keep component alive as mini player
   const toggleMiniPlayer = useCallback(() => {
     setMiniPlayerMode(true);
-    // Don't call onClose - we want to keep the component mounted for mini player
+    onClose?.(); // Tell parent to set isVisible=false so re-open works cleanly
+  }, [onClose]);
+
+  // Toggle fullscreen on the video iframe
+  const toggleFullscreen = useCallback(() => {
+    const iframe = playerRef.current;
+    if (!iframe) return;
+    if (document.fullscreenElement) {
+      document.exitFullscreen?.();
+    } else {
+      (iframe.requestFullscreen || iframe.webkitRequestFullscreen || iframe.msRequestFullscreen)?.call(iframe);
+    }
   }, []);
 
   // Open YouTube search for surahs without synced videos
@@ -350,13 +366,22 @@ const ScholarVideoSync = memo(function ScholarVideoSync({
 
           <div className="flex items-center gap-2">
             {selectedVideo && (
-              <button
-                onClick={toggleMiniPlayer}
-                className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-all text-white/70 hover:text-white"
-                title="Mini Player"
-              >
-                <Icons.Minimize className="w-4 h-4" />
-              </button>
+              <>
+                <button
+                  onClick={toggleFullscreen}
+                  className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-all text-white/70 hover:text-white"
+                  title="Fullscreen"
+                >
+                  <Icons.Maximize className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={toggleMiniPlayer}
+                  className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-all text-white/70 hover:text-white"
+                  title="Mini Player"
+                >
+                  <Icons.Minimize className="w-4 h-4" />
+                </button>
+              </>
             )}
             <button
               onClick={handleClose}

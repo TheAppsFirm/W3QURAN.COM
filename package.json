@@ -22,7 +22,13 @@
     "sitemap": "node scripts/generate-sitemap.js",
     "indexnow": "node scripts/indexnow.js",
     "google-index": "node scripts/google-index.js",
-    "prebuild": "node scripts/generate-sitemap.js"
+    "prebuild": "node scripts/generate-sitemap.js",
+    "db:setup": "node scripts/db-setup.mjs",
+    "db:reset": "node scripts/db-setup.mjs --reset",
+    "db:check": "node scripts/db-setup.mjs --check",
+    "db:backup": "node scripts/db-backup.mjs",
+    "db:backup:tables": "node scripts/db-backup.mjs --tables",
+    "db:backup:local": "node scripts/db-backup.mjs --local"
   },
   "dependencies": {
     "@quranjs/api": "^2.1.0",

@@ -277,16 +277,19 @@ export default function CreatePostModal({ surahId, surahName, onClose, onSubmit,
                         className="w-full px-2 py-1.5 rounded-lg bg-white/5 border border-white/10 text-white text-xs
                           focus:outline-none focus:border-amber-500/50 appearance-none"
                       >
-                        <optgroup label="اردو — Urdu" className="bg-slate-800">
-                          {QUOTE_TRANSLATIONS.filter(tr => tr.lang === 'Urdu').map(tr => (
-                            <option key={tr.id} value={tr.id} className="bg-slate-800">{tr.name} ({tr.nameEn})</option>
-                          ))}
-                        </optgroup>
-                        <optgroup label="English" className="bg-slate-800">
-                          {QUOTE_TRANSLATIONS.filter(tr => tr.lang === 'English').map(tr => (
-                            <option key={tr.id} value={tr.id} className="bg-slate-800">{tr.nameEn}</option>
-                          ))}
-                        </optgroup>
+                        {[...new Set(QUOTE_TRANSLATIONS.map(tr => tr.lang))].map(lang => {
+                          const items = QUOTE_TRANSLATIONS.filter(tr => tr.lang === lang);
+                          const label = items[0]?.langNative ? `${items[0].langNative} — ${lang}` : lang;
+                          return (
+                            <optgroup key={lang} label={label} className="bg-slate-800">
+                              {items.map(tr => (
+                                <option key={tr.id} value={tr.id} className="bg-slate-800">
+                                  {tr.langNative ? `${tr.name} (${tr.nameEn})` : tr.nameEn}
+                                </option>
+                              ))}
+                            </optgroup>
+                          );
+                        })}
                       </select>
                     </div>
 

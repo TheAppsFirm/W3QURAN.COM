@@ -49,6 +49,7 @@ export default function DiscussionsView({ darkMode, onBack, initialSurahId, init
   const [profileReturnSurah, setProfileReturnSurah] = useState(null);
   const [pendingPostId, setPendingPostId] = useState(null);
   const [pendingRequestCount, setPendingRequestCount] = useState(0);
+  const [loginPrompt, setLoginPrompt] = useState(null); // { tab: 'dms' | 'profile' }
   const pollRef = useRef(null);
 
   // Poll for pending friend requests (shows badge on tabs)
@@ -81,11 +82,11 @@ export default function DiscussionsView({ darkMode, onBack, initialSurahId, init
   };
   const switchTab = (tab) => {
     if (tab === 'dms') {
-      if (!isAuthenticated) { login(); return; }
+      if (!isAuthenticated) { setLoginPrompt({ tab: 'dms' }); return; }
       setTopTab('dms');
       onNavigate?.('/discussions/messages');
     } else if (tab === 'profile') {
-      if (!isAuthenticated) { login(); return; }
+      if (!isAuthenticated) { setLoginPrompt({ tab: 'profile' }); return; }
       setTopTab('profile');
       onNavigate?.('/discussions/profile');
     } else {
@@ -489,6 +490,81 @@ export default function DiscussionsView({ darkMode, onBack, initialSurahId, init
             )}
           </>
         )}
+      </div>
+
+      {/* Login prompt modal */}
+      {loginPrompt && (
+        <LoginPromptModal
+          tab={loginPrompt.tab}
+          onLogin={() => { setLoginPrompt(null); login(); }}
+          onClose={() => setLoginPrompt(null)}
+        />
+      )}
+    </div>
+  );
+}
+
+function LoginPromptModal({ tab, onLogin, onClose }) {
+  const { t } = useTranslation();
+  const isMessages = tab === 'dms';
+
+  return (
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4" onClick={onClose}>
+      {/* Backdrop */}
+      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+      {/* Modal */}
+      <div
+        className="relative w-full max-w-sm rounded-2xl border border-white/10 bg-gradient-to-b from-slate-800/95 to-slate-900/95 backdrop-blur-xl shadow-2xl shadow-black/40 overflow-hidden animate-[scaleIn_0.2s_ease-out]"
+        onClick={e => e.stopPropagation()}
+      >
+        {/* Accent line */}
+        <div className={`h-1 bg-gradient-to-r ${isMessages ? 'from-cyan-500 via-blue-500 to-cyan-400' : 'from-emerald-500 via-teal-500 to-emerald-400'}`} />
+
+        <div className="px-6 pt-6 pb-6">
+          {/* Icon + title */}
+          <div className="flex flex-col items-center text-center mb-5">
+            <div className={`w-16 h-16 rounded-2xl mb-4 flex items-center justify-center ${
+              isMessages
+                ? 'bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border border-cyan-500/20'
+                : 'bg-gradient-to-br from-emerald-500/20 to-teal-500/20 border border-emerald-500/20'
+            }`}>
+              {isMessages
+                ? <Icons.Send className="w-7 h-7 text-cyan-400" />
+                : <Icons.User className="w-7 h-7 text-emerald-400" />
+              }
+            </div>
+            <h3 className="text-lg font-semibold text-white">
+              {t('discussions.signInRequired', 'Sign In Required')}
+            </h3>
+            <p className="text-sm text-white/50 mt-2.5 leading-relaxed">
+              {isMessages
+                ? t('discussions.signInMessages', 'Sign in to send and receive direct messages from other community members.')
+                : t('discussions.signInProfile', 'Sign in to view your profile, manage friends, and track your discussion activity.')
+              }
+            </p>
+          </div>
+
+          {/* Buttons */}
+          <div className="flex gap-3">
+            <button
+              onClick={onClose}
+              className="flex-1 py-2.5 rounded-xl text-sm font-medium text-white/60 bg-white/5 border border-white/10 hover:bg-white/10 hover:text-white/80 transition-all"
+            >
+              {t('common.cancel', 'Cancel')}
+            </button>
+            <button
+              onClick={onLogin}
+              className={`flex-1 py-2.5 rounded-xl text-sm font-medium text-white transition-all flex items-center justify-center gap-2 ${
+                isMessages
+                  ? 'bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 shadow-lg shadow-cyan-500/20'
+                  : 'bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 shadow-lg shadow-emerald-500/20'
+              }`}
+            >
+              <Icons.Lock className="w-4 h-4" />
+              {t('discussions.signIn', 'Sign In')}
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );

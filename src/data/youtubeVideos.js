@@ -171,7 +171,7 @@ export const getYouTubeEmbedUrl = (videoId) => {
     const playlistId = videoId.replace('playlist:', '');
     return `https://www.youtube.com/embed/videoseries?list=${playlistId}`;
   }
-  return `https://www.youtube.com/embed/${videoId}?rel=0&modestbranding=1`;
+  return `https://www.youtube.com/embed/${videoId}?rel=0&modestbranding=1&enablejsapi=1&origin=${typeof window !== 'undefined' ? window.location.origin : ''}`;
 };
 
 // Generate YouTube watch URL

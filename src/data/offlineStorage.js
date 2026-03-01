@@ -3,6 +3,8 @@
  * Single Responsibility: Handle IndexedDB operations for offline Quran access
  */
 
+import { VERSE_COUNTS, getGlobalAyahNumber } from '../hooks/useAudioPlayer';
+
 const DB_NAME = 'QuranOfflineDB';
 const DB_VERSION = 1;
 
@@ -11,7 +13,7 @@ const STORES = {
   SURAHS: 'surahs',           // Full surah data with ayahs
   TRANSLATIONS: 'translations', // Cached translations
   TAFSEER: 'tafseer',         // Cached tafseer
-  AUDIO: 'audio',             // Audio files
+  // Note: Audio is stored in Cache API (caches.open('w3quran-audio-offline')), not IndexedDB
   SETTINGS: 'settings',       // User preferences
   METADATA: 'metadata',       // Download metadata
 };
@@ -80,14 +82,6 @@ export const initDB = () => {
           keyPath: ['surahId', 'ayahNumber', 'tafseerSource'],
         });
         tafseerStore.createIndex('surahId', 'surahId', { unique: false });
-      }
-
-      // Audio store
-      if (!database.objectStoreNames.contains(STORES.AUDIO)) {
-        const audioStore = database.createObjectStore(STORES.AUDIO, {
-          keyPath: ['surahId', 'reciterId'],
-        });
-        audioStore.createIndex('surahId', 'surahId', { unique: false });
       }
 
       // Settings store
@@ -243,57 +237,6 @@ export const getCachedTafseer = async (surahId, ayahNumber, tafseerSource) => {
 };
 
 /**
- * Save audio file to offline storage
- */
-export const saveAudioOffline = async (surahId, reciterId, audioBlob) => {
-  const database = await getDB();
-  if (!database) return null;
-  return new Promise((resolve, reject) => {
-    const transaction = database.transaction([STORES.AUDIO, STORES.METADATA], 'readwrite');
-    const store = transaction.objectStore(STORES.AUDIO);
-    const metaStore = transaction.objectStore(STORES.METADATA);
-
-    store.put({
-      surahId,
-      reciterId,
-      audioBlob,
-      cachedAt: Date.now(),
-    });
-
-    metaStore.put({
-      key: `audio_${surahId}_${reciterId}`,
-      type: 'audio',
-      surahId,
-      reciterId,
-      size: audioBlob.size,
-      cachedAt: Date.now(),
-    });
-
-    transaction.oncomplete = () => resolve(true);
-    transaction.onerror = () => reject(transaction.error);
-  });
-};
-
-/**
- * Get cached audio
- */
-export const getCachedAudio = async (surahId, reciterId) => {
-  const database = await getDB();
-  if (!database) return null;
-  return new Promise((resolve, reject) => {
-    const transaction = database.transaction(STORES.AUDIO, 'readonly');
-    const store = transaction.objectStore(STORES.AUDIO);
-    const request = store.get([surahId, reciterId]);
-
-    request.onsuccess = () => {
-      const result = request.result;
-      resolve(result ? result.audioBlob : null);
-    };
-    request.onerror = () => reject(request.error);
-  });
-};
-
-/**
  * Get all download metadata
  */
 export const getDownloadMetadata = async () => {
@@ -359,39 +302,25 @@ export const clearAllCache = async () => {
   if (!database) return null;
   return new Promise((resolve, reject) => {
     const transaction = database.transaction(
-      [STORES.SURAHS, STORES.TRANSLATIONS, STORES.TAFSEER, STORES.AUDIO, STORES.METADATA],
+      [STORES.SURAHS, STORES.TRANSLATIONS, STORES.TAFSEER, STORES.METADATA],
       'readwrite'
     );
 
     transaction.objectStore(STORES.SURAHS).clear();
     transaction.objectStore(STORES.TRANSLATIONS).clear();
     transaction.objectStore(STORES.TAFSEER).clear();
-    transaction.objectStore(STORES.AUDIO).clear();
     transaction.objectStore(STORES.METADATA).clear();
 
-    transaction.oncomplete = () => resolve(true);
+    transaction.oncomplete = async () => {
+      // Also clear Cache API (where audio is stored)
+      if ('caches' in window) {
+        try { await caches.delete('w3quran-audio-offline'); } catch (e) { /* ignore */ }
+      }
+      resolve(true);
+    };
     transaction.onerror = () => reject(transaction.error);
   });
 };
-
-/**
- * Download surah for offline use
- */
-// Verse counts per surah for audio URL calculation
-const VERSE_COUNTS = [
-  0, 7, 286, 200, 176, 120, 165, 206, 75, 129, 109, 123, 111, 43, 52, 99, 128,
-  111, 110, 98, 135, 112, 78, 118, 64, 77, 227, 93, 88, 69, 60, 34, 30, 73,
-  54, 45, 83, 182, 88, 75, 85, 54, 53, 89, 59, 37, 35, 38, 29, 18, 45, 60, 49,
-  62, 55, 78, 96, 29, 22, 24, 13, 14, 11, 11, 18, 12, 12, 30, 52, 52, 44, 28,
-  28, 20, 56, 40, 31, 50, 40, 46, 42, 29, 19, 36, 25, 22, 17, 19, 26, 30, 20,
-  15, 21, 11, 8, 8, 19, 5, 8, 8, 11, 11, 8, 3, 9, 5, 4, 7, 3, 6, 3, 5, 4, 5, 6
-];
-
-function getGlobalAyahNumber(surahId, ayahNum) {
-  let g = 0;
-  for (let i = 1; i < surahId; i++) g += VERSE_COUNTS[i];
-  return g + ayahNum;
-}
 
 /**
  * Cache audio files for a surah into the browser Cache API
@@ -475,27 +404,55 @@ export const getDownloadedAudio = async () => {
  * Delete audio cache for a specific surah
  */
 export const deleteAudioCacheForSurah = async (surahId, reciterId = 'ar.alafasy') => {
-  // Delete MP3s from Cache API
+  // Delete MP3s from Cache API — scan all cached keys for this surah
   if ('caches' in window) {
     try {
       const cache = await caches.open('w3quran-audio-offline');
       const totalAyahs = VERSE_COUNTS[surahId] || 0;
+
+      // Delete Islamic Network CDN format
       const baseUrl = `https://cdn.islamic.network/quran/audio/128/${reciterId}`;
       for (let j = 1; j <= totalAyahs; j++) {
         const globalAyah = getGlobalAyahNumber(surahId, j);
         await cache.delete(`${baseUrl}/${globalAyah}.mp3`);
       }
+
+      // Also delete EveryAyah format if reciterId matches narrator pattern
+      const surahStr = String(surahId).padStart(3, '0');
+      const keys = await cache.keys();
+      for (const req of keys) {
+        const url = req.url;
+        // Match EveryAyah URLs for this surah (e.g. .../001001.mp3 to .../001286.mp3)
+        if (url.includes('everyayah.com') && url.endsWith('.mp3')) {
+          const filename = url.split('/').pop().replace('.mp3', '');
+          if (filename.startsWith(surahStr)) {
+            await cache.delete(req);
+          }
+        }
+      }
     } catch {}
   }
-  // Delete metadata from IndexedDB
+  // Delete metadata from IndexedDB — delete all metadata entries for this surah
   const database = await getDB();
   if (!database) return null;
-  await new Promise((resolve, reject) => {
+  // Delete specific reciter metadata
+  await new Promise((resolve) => {
     const tx = database.transaction(STORES.METADATA, 'readwrite');
     tx.objectStore(STORES.METADATA).delete(`audio_${surahId}_${reciterId}`);
     tx.oncomplete = () => resolve();
-    tx.onerror = () => reject(tx.error);
+    tx.onerror = () => resolve();
   });
+  // Also clean up any other audio metadata for this surah
+  const allMeta = await getDownloadMetadata();
+  const audioMetaForSurah = allMeta.filter(m => m.type === 'audio' && m.surahId === surahId);
+  for (const meta of audioMetaForSurah) {
+    await new Promise((resolve) => {
+      const tx = database.transaction(STORES.METADATA, 'readwrite');
+      tx.objectStore(STORES.METADATA).delete(meta.key);
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => resolve();
+    });
+  }
 };
 
 /**
@@ -503,7 +460,7 @@ export const deleteAudioCacheForSurah = async (surahId, reciterId = 'ar.alafasy'
  * and create metadata entries so the size display is correct.
  * Only runs for surahs that have text metadata but no audio metadata.
  */
-export const migrateAudioMetadata = async (surahIds, reciterId = 'ar.alafasy') => {
+export const migrateAudioMetadata = async (surahIds) => {
   if (!('caches' in window)) return;
 
   let cache;
@@ -515,58 +472,98 @@ export const migrateAudioMetadata = async (surahIds, reciterId = 'ar.alafasy') =
 
   const database = await getDB();
   if (!database) return;
-  const baseUrl = `https://cdn.islamic.network/quran/audio/128/${reciterId}`;
 
-  for (const surahId of surahIds) {
-    // Check if audio metadata already exists
-    const existing = await new Promise((resolve) => {
-      const tx = database.transaction(STORES.METADATA, 'readonly');
-      const req = tx.objectStore(STORES.METADATA).get(`audio_${surahId}_${reciterId}`);
-      req.onsuccess = () => resolve(req.result);
-      req.onerror = () => resolve(null);
-    });
+  // Get all cached URLs to scan for any reciter's audio
+  let cachedKeys;
+  try {
+    cachedKeys = await cache.keys();
+  } catch {
+    return;
+  }
 
-    if (existing) continue; // Already has metadata
+  // Build a map: surahId -> { reciterId, urls[] } from cached URLs
+  // Islamic Network pattern: cdn.islamic.network/quran/audio/128/{reciterId}/{globalAyah}.mp3
+  // EveryAyah pattern: everyayah.com/data/.../{SSSAAA}.mp3
+  const islamicNetRegex = /cdn\.islamic\.network\/quran\/audio\/\d+\/([^/]+)\/(\d+)\.mp3/;
+  const everyAyahRegex = /everyayah\.com\/.*\/(\d{3})(\d{3})\.mp3/;
 
-    const totalAyahs = VERSE_COUNTS[surahId] || 0;
-    if (totalAyahs === 0) continue;
+  // Map globalAyah -> { surahId, ayahNum } for reverse lookup
+  const globalToSurah = {};
+  let g = 0;
+  for (let s = 1; s <= 114; s++) {
+    const count = VERSE_COUNTS[s] || 0;
+    for (let a = 1; a <= count; a++) {
+      g++;
+      globalToSurah[g] = { surahId: s, ayahNum: a };
+    }
+  }
 
-    // Quick check: is the first ayah cached?
-    const firstGlobal = getGlobalAyahNumber(surahId, 1);
-    const firstResp = await cache.match(`${baseUrl}/${firstGlobal}.mp3`);
-    if (!firstResp) continue; // No audio cached for this surah
+  // Collect found audio by surahId+reciterId
+  const found = {}; // key: `${surahId}_${reciterId}` -> { count, totalBytes }
 
-    // Audio exists — sample a few ayahs to estimate total size
-    const sampleIndices = [1, Math.ceil(totalAyahs / 2), totalAyahs];
-    let sampleBytes = 0;
-    let sampleCount = 0;
+  for (const req of cachedKeys) {
+    const url = req.url;
+    let surahId, detectedReciter;
 
-    for (const ayahNum of sampleIndices) {
-      const globalAyah = getGlobalAyahNumber(surahId, ayahNum);
-      const resp = await cache.match(`${baseUrl}/${globalAyah}.mp3`);
-      if (resp) {
-        const len = parseInt(resp.headers.get('content-length') || '0', 10);
-        if (len > 0) {
-          sampleBytes += len;
-          sampleCount++;
-        }
+    const inMatch = url.match(islamicNetRegex);
+    if (inMatch) {
+      detectedReciter = inMatch[1];
+      const globalNum = parseInt(inMatch[2]);
+      const info = globalToSurah[globalNum];
+      if (info) surahId = info.surahId;
+    }
+
+    if (!surahId) {
+      const eaMatch = url.match(everyAyahRegex);
+      if (eaMatch) {
+        surahId = parseInt(eaMatch[1]);
+        // Extract reciter from URL path between last known segment and filename
+        // e.g. everyayah.com/data/translations/urdu_farhat_hashmi/001001.mp3
+        const pathParts = new URL(url).pathname.split('/');
+        detectedReciter = pathParts.slice(2, -1).join('/'); // everything between /data/ and filename
       }
     }
 
-    // Estimate total: average sample size * total ayahs
-    const avgSize = sampleCount > 0 ? sampleBytes / sampleCount : 0;
-    const estimatedTotal = Math.round(avgSize * totalAyahs);
+    if (!surahId || !detectedReciter) continue;
+    if (!surahIds.includes(surahId)) continue;
 
-    // Save metadata
+    const key = `${surahId}_${detectedReciter}`;
+    if (!found[key]) found[key] = { surahId, reciterId: detectedReciter, count: 0, totalBytes: 0 };
+    found[key].count++;
+    // Estimate size from Content-Length if available
+    try {
+      const resp = await cache.match(req);
+      if (resp) {
+        const len = parseInt(resp.headers.get('content-length') || '0', 10);
+        found[key].totalBytes += len;
+      }
+    } catch {}
+  }
+
+  // Save metadata for each found surah+reciter combo
+  for (const info of Object.values(found)) {
+    if (info.count === 0) continue;
+
+    const metaKey = `audio_${info.surahId}_${info.reciterId}`;
+
+    // Check if metadata already exists
+    const existing = await new Promise((resolve) => {
+      const tx = database.transaction(STORES.METADATA, 'readonly');
+      const req = tx.objectStore(STORES.METADATA).get(metaKey);
+      req.onsuccess = () => resolve(req.result);
+      req.onerror = () => resolve(null);
+    });
+    if (existing) continue;
+
     await new Promise((resolve) => {
       const tx = database.transaction(STORES.METADATA, 'readwrite');
       tx.objectStore(STORES.METADATA).put({
-        key: `audio_${surahId}_${reciterId}`,
+        key: metaKey,
         type: 'audio',
-        surahId,
-        reciterId,
-        size: estimatedTotal,
-        ayahCount: totalAyahs,
+        surahId: info.surahId,
+        reciterId: info.reciterId,
+        size: info.totalBytes,
+        ayahCount: info.count,
         cachedAt: Date.now(),
       });
       tx.oncomplete = () => resolve();
@@ -575,7 +572,88 @@ export const migrateAudioMetadata = async (surahIds, reciterId = 'ar.alafasy') =
   }
 };
 
-export const downloadSurahForOffline = async (surahId, translationId, onProgress, { includeAudio = true, reciterId = 'ar.alafasy' } = {}) => {
+/**
+ * Cache narrator/translation audio for a surah
+ * Supports both EveryAyah format (SSSAAA.mp3) and Islamic Network CDN (globalAyah.mp3)
+ */
+export const cacheNarratorAudioForSurah = async (surahId, narratorId, narratorConfig, onAudioProgress) => {
+  if (!('caches' in window) || !narratorConfig) return 0;
+  const cache = await caches.open('w3quran-audio-offline');
+  const totalAyahs = VERSE_COUNTS[surahId] || 0;
+  let totalBytes = 0;
+
+  for (let i = 1; i <= totalAyahs; i += 5) {
+    const batch = [];
+    for (let j = i; j < i + 5 && j <= totalAyahs; j++) {
+      let url;
+      if (narratorConfig.type === 'everyayah') {
+        const surahStr = String(surahId).padStart(3, '0');
+        const ayahStr = String(j).padStart(3, '0');
+        url = `${narratorConfig.baseUrl}/${surahStr}${ayahStr}.mp3`;
+      } else {
+        const globalAyah = getGlobalAyahNumber(surahId, j);
+        url = `${narratorConfig.baseUrl}/${globalAyah}.mp3`;
+      }
+      batch.push(
+        (async () => {
+          const cached = await cache.match(url);
+          if (cached) {
+            totalBytes += parseInt(cached.headers.get('content-length') || '0', 10);
+            return;
+          }
+          try {
+            const resp = await fetch(url);
+            if (resp.ok) {
+              totalBytes += parseInt(resp.headers.get('content-length') || '0', 10);
+              await cache.put(url, resp);
+            }
+          } catch {}
+        })()
+      );
+    }
+    await Promise.all(batch);
+    if (onAudioProgress) onAudioProgress(Math.min(i + 4, totalAyahs), totalAyahs);
+  }
+
+  // Save metadata
+  const database = await getDB();
+  if (database) {
+    await new Promise((resolve) => {
+      const tx = database.transaction(STORES.METADATA, 'readwrite');
+      tx.objectStore(STORES.METADATA).put({
+        key: `audio_${surahId}_${narratorId}`,
+        type: 'audio',
+        surahId,
+        reciterId: narratorId,
+        size: totalBytes,
+        ayahCount: totalAyahs,
+        cachedAt: Date.now(),
+      });
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => resolve();
+    });
+  }
+
+  return totalBytes;
+};
+
+/**
+ * Check if audio URL is in offline Cache API
+ */
+export const getOfflineCachedAudioUrl = async (url) => {
+  if (!('caches' in window)) return null;
+  try {
+    const cache = await caches.open('w3quran-audio-offline');
+    const resp = await cache.match(url);
+    if (resp) {
+      const blob = await resp.blob();
+      return URL.createObjectURL(blob);
+    }
+  } catch {}
+  return null;
+};
+
+export const downloadSurahForOffline = async (surahId, translationId, onProgress, { includeAudio = true, reciterId = 'ar.alafasy', narratorId = null, narratorConfig = null } = {}) => {
   try {
     // Fetch both Arabic text and translation in parallel
     const [arabicRes, translationRes] = await Promise.all([
@@ -603,13 +681,21 @@ export const downloadSurahForOffline = async (surahId, translationId, onProgress
     await saveSurahOffline(surahId, 'quran-uthmani', arabicJson.data);
     await saveSurahOffline(surahId, translationId, translationJson.data);
 
-    if (onProgress) onProgress(includeAudio ? 50 : 100);
+    if (onProgress) onProgress(includeAudio ? 30 : 100);
 
     // Cache audio files for offline playback
     if (includeAudio) {
+      const hasNarrator = narratorId && narratorConfig;
+      // Arabic reciter audio (30-65% progress)
       await cacheAudioForSurah(surahId, reciterId, (done, total) => {
-        if (onProgress) onProgress(50 + Math.round((done / total) * 50));
+        if (onProgress) onProgress(30 + Math.round((done / total) * (hasNarrator ? 35 : 70)));
       });
+      // Narrator/translation audio (65-100% progress)
+      if (hasNarrator) {
+        await cacheNarratorAudioForSurah(surahId, narratorId, narratorConfig, (done, total) => {
+          if (onProgress) onProgress(65 + Math.round((done / total) * 35));
+        });
+      }
     }
 
     return translationJson.data;

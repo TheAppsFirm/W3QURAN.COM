@@ -15,18 +15,46 @@ const AUDIO_SOURCES = {
   'ar.abdurrahmaansudais': 'https://cdn.islamic.network/quran/audio/128/ar.abdurrahmaansudais',
   'ar.abdulsamad': 'https://cdn.islamic.network/quran/audio/128/ar.abdulsamad',
   'ar.husary': 'https://cdn.islamic.network/quran/audio/128/ar.husary',
+  'ar.husarymujawwad': 'https://cdn.islamic.network/quran/audio/128/ar.husarymujawwad',
   'ar.minshawi': 'https://cdn.islamic.network/quran/audio/128/ar.minshawi',
+  'ar.minshawimujawwad': 'https://cdn.islamic.network/quran/audio/128/ar.minshawimujawwad',
   'ar.shaatree': 'https://cdn.islamic.network/quran/audio/128/ar.shaatree',
+  'ar.abdulbasitmurattal': 'https://cdn.islamic.network/quran/audio/128/ar.abdulbasitmurattal',
+  'ar.abdullahbasfar': 'https://cdn.islamic.network/quran/audio/128/ar.abdullahbasfar',
+  'ar.ahmedajamy': 'https://cdn.islamic.network/quran/audio/128/ar.ahmedajamy',
+  'ar.hanirifai': 'https://cdn.islamic.network/quran/audio/128/ar.hanirifai',
+  'ar.hudhaify': 'https://cdn.islamic.network/quran/audio/128/ar.hudhaify',
+  'ar.ibrahimakhbar': 'https://cdn.islamic.network/quran/audio/128/ar.ibrahimakhbar',
+  'ar.mahermuaiqly': 'https://cdn.islamic.network/quran/audio/128/ar.mahermuaiqly',
+  'ar.muhammadayyoub': 'https://cdn.islamic.network/quran/audio/128/ar.muhammadayyoub',
+  'ar.muhammadjibreel': 'https://cdn.islamic.network/quran/audio/128/ar.muhammadjibreel',
+  'ar.saoodshuraym': 'https://cdn.islamic.network/quran/audio/128/ar.saoodshuraym',
+  'ar.parhizgar': 'https://cdn.islamic.network/quran/audio/128/ar.parhizgar',
+  'ar.aymanswoaid': 'https://cdn.islamic.network/quran/audio/128/ar.aymanswoaid',
 };
 
 // Popular reciters with their identifiers
 export const RECITERS = {
-  'ar.alafasy': { name: 'Mishary Rashid Alafasy', country: 'Kuwait' },
-  'ar.abdurrahmaansudais': { name: 'Abdul Rahman Al-Sudais', country: 'Saudi Arabia' },
-  'ar.abdulsamad': { name: 'Abdul Samad', country: 'Egypt' },
-  'ar.shaatree': { name: 'Abu Bakr Al-Shatri', country: 'Saudi Arabia' },
-  'ar.husary': { name: 'Mahmoud Khalil Al-Husary', country: 'Egypt' },
-  'ar.minshawi': { name: 'Mohamed Siddiq Al-Minshawi', country: 'Egypt' },
+  'ar.alafasy': { name: 'Mishary Rashid Alafasy', nameAr: 'مشاري العفاسي', country: 'Kuwait', style: 'Murattal', image: 'https://static.qurancdn.com/images/reciters/6/mishary-rashid-alafasy-profile.jpeg?v=1' },
+  'ar.abdurrahmaansudais': { name: 'Abdul Rahman Al-Sudais', nameAr: 'عبدالرحمن السديس', country: 'Saudi Arabia', style: 'Murattal', image: 'https://static.qurancdn.com/images/reciters/2/abdul-rahman-al-sudais-profile.jpeg?v=1' },
+  'ar.abdulsamad': { name: 'Abdul Basit Abdul Samad', nameAr: 'عبدالباسط عبدالصمد', country: 'Egypt', style: 'Mujawwad', image: 'https://static.qurancdn.com/images/reciters/1/abdelbasset-profile.jpeg?v=1' },
+  'ar.abdulbasitmurattal': { name: 'Abdul Basit Abdul Samad', nameAr: 'عبدالباسط عبدالصمد', country: 'Egypt', style: 'Murattal', image: 'https://static.qurancdn.com/images/reciters/1/abdelbasset-profile.jpeg?v=1' },
+  'ar.shaatree': { name: 'Abu Bakr Al-Shatri', nameAr: 'أبو بكر الشاطري', country: 'Saudi Arabia', style: 'Murattal', image: 'https://static.qurancdn.com/images/reciters/3/abu-bakr-al-shatri-pofile.jpeg' },
+  'ar.husary': { name: 'Mahmoud Khalil Al-Husary', nameAr: 'محمود خليل الحصري', country: 'Egypt', style: 'Murattal', image: 'https://static.qurancdn.com/images/reciters/5/mahmoud-khalil-al-hussary-profile.png?v=1' },
+  'ar.husarymujawwad': { name: 'Mahmoud Khalil Al-Husary', nameAr: 'محمود خليل الحصري', country: 'Egypt', style: 'Mujawwad', image: 'https://static.qurancdn.com/images/reciters/5/mahmoud-khalil-al-hussary-profile.png?v=1' },
+  'ar.minshawi': { name: 'Mohamed Siddiq Al-Minshawi', nameAr: 'محمد صديق المنشاوي', country: 'Egypt', style: 'Murattal', image: 'https://static.qurancdn.com/images/reciters/7/mohamed-siddiq-el-minshawi-profile.jpeg?v=1' },
+  'ar.minshawimujawwad': { name: 'Mohamed Siddiq Al-Minshawi', nameAr: 'محمد صديق المنشاوي', country: 'Egypt', style: 'Mujawwad', image: 'https://static.qurancdn.com/images/reciters/7/mohamed-siddiq-el-minshawi-profile.jpeg?v=1' },
+  'ar.mahermuaiqly': { name: 'Maher Al-Muaiqly', nameAr: 'ماهر المعيقلي', country: 'Saudi Arabia', style: 'Murattal', image: 'https://static.qurancdn.com/images/reciters/25/Maher-al-Muaiqly-profile.png?v=1' },
+  'ar.saoodshuraym': { name: 'Saud Al-Shuraym', nameAr: 'سعود الشريم', country: 'Saudi Arabia', style: 'Murattal', image: 'https://static.qurancdn.com/images/reciters/8/saoud-shuraim-profile.jpeg?v=1' },
+  'ar.hudhaify': { name: 'Ali Al-Hudhaify', nameAr: 'علي بن عبدالرحمن الحذيفي', country: 'Saudi Arabia', style: 'Murattal', image: 'https://www.assabile.com/media/person/200x256/ali-alhodaifi.png' },
+  'ar.abdullahbasfar': { name: 'Abdullah Basfar', nameAr: 'عبد الله بصفر', country: 'Saudi Arabia', style: 'Murattal', image: 'https://www.assabile.com/media/person/200x256/abdullah-ibn-ali-basfar.png' },
+  'ar.ahmedajamy': { name: 'Ahmed ibn Ali al-Ajamy', nameAr: 'أحمد بن علي العجمي', country: 'Saudi Arabia', style: 'Murattal', image: 'https://static.qurancdn.com/images/reciters/22/Ahmed-ibn-Ali-al-Ajmy-profile.png?v=1' },
+  'ar.hanirifai': { name: 'Hani Ar-Rifai', nameAr: 'هاني الرفاعي', country: 'Saudi Arabia', style: 'Murattal', image: 'https://static.qurancdn.com/images/reciters/4/hani-ar-rifai-profile.jpeg?v=1' },
+  'ar.ibrahimakhbar': { name: 'Ibrahim Al-Akhdar', nameAr: 'إبراهيم الأخضر', country: 'Saudi Arabia', style: 'Murattal', image: 'https://www.assabile.com/media/person/200x256/ibrahim-al-akhdar.png' },
+  'ar.muhammadayyoub': { name: 'Muhammad Ayyub', nameAr: 'محمد أيوب', country: 'Saudi Arabia', style: 'Murattal', image: 'https://www.assabile.com/media/person/200x256/mohamed-ayoub.png' },
+  'ar.muhammadjibreel': { name: 'Muhammad Jibreel', nameAr: 'محمد جبريل', country: 'Egypt', style: 'Murattal', image: 'https://www.assabile.com/media/person/200x256/muhammad-jebril.png' },
+  'ar.parhizgar': { name: 'Shahriar Parhizgar', nameAr: 'شهریار پرهیزگار', country: 'Iran', style: 'Murattal', image: 'https://www.assabile.com/media/person/200x256/shahriar-parhizgar.jpg' },
+  'ar.aymanswoaid': { name: 'Ayman Sowaid', nameAr: 'أيمن سويد', country: 'Syria', style: 'Murattal', image: 'https://www.assabile.com/media/person/200x256/ayman-swid.jpg' },
 };
 
 // ============================================
@@ -34,11 +62,12 @@ export const RECITERS = {
 // ============================================
 
 // Translation audio CDN sources
-// Using EveryAyah.com which has complete coverage (all 114 surahs)
-const TRANSLATION_AUDIO_SOURCES = {
+// EveryAyah.com: SSSAAA.mp3 format (surah-ayah, zero-padded)
+// Islamic Network CDN: {globalAyahNumber}.mp3 format (1-6236)
+export const TRANSLATION_AUDIO_SOURCES = {
   // === URDU ===
   'ur.khan': {
-    type: 'everyayah', // Uses SSSAAA.mp3 format (surah-ayah)
+    type: 'everyayah',
     baseUrl: 'https://everyayah.com/data/translations/urdu_shamshad_ali_khan_46kbps',
   },
   'ur.farhat': {
@@ -50,6 +79,21 @@ const TRANSLATION_AUDIO_SOURCES = {
   'en.walk': {
     type: 'everyayah',
     baseUrl: 'https://everyayah.com/data/English/Sahih_Intnl_Ibrahim_Walk_192kbps',
+  },
+  // === FRENCH ===
+  'fr.leclerc': {
+    type: 'islamic-network', // Uses global ayah number (1-6236)
+    baseUrl: 'https://cdn.islamic.network/quran/audio/128/fr.leclerc',
+  },
+  // === CHINESE ===
+  'zh.chinese': {
+    type: 'islamic-network',
+    baseUrl: 'https://cdn.islamic.network/quran/audio/128/zh.chinese',
+  },
+  // === RUSSIAN ===
+  'ru.kuliev': {
+    type: 'islamic-network',
+    baseUrl: 'https://cdn.islamic.network/quran/audio/128/ru.kuliev-audio',
   },
   // === PERSIAN (FARSI) ===
   'fa.hedayatfar': {
@@ -129,6 +173,48 @@ export const TRANSLATION_RECITERS = {
     styleLabel: 'Sentence',
     matchesTranslations: ['en.sahih'], // Only matches Sahih International text
   },
+  // === FRENCH (Français) ===
+  'fr.leclerc': {
+    name: 'Youssouf Leclerc',
+    nameNative: 'Youssouf Leclerc',
+    language: 'French',
+    languageNative: 'Français',
+    translation: 'Leclerc',
+    translationNative: 'Leclerc',
+    translationShort: 'Leclerc',
+    country: 'France',
+    style: 'sentence',
+    styleLabel: 'Phrase',
+    matchesTranslations: ['fr.hamidullah'], // Best match for French translations
+  },
+  // === CHINESE (中文) ===
+  'zh.chinese': {
+    name: 'Chinese Narrator',
+    nameNative: '中文朗读',
+    language: 'Chinese',
+    languageNative: '中文',
+    translation: 'Chinese Translation',
+    translationNative: '中文翻译',
+    translationShort: '中文',
+    country: 'China',
+    style: 'sentence',
+    styleLabel: '句子',
+    matchesTranslations: ['zh.jian', 'zh.majian'], // Ma Jian translation (not Ma Zhong Gang which uses different wording)
+  },
+  // === RUSSIAN (Русский) ===
+  'ru.kuliev': {
+    name: 'Elmir Kuliev',
+    nameNative: 'Эльмир Кулиев',
+    language: 'Russian',
+    languageNative: 'Русский',
+    translation: 'Kuliev',
+    translationNative: 'Кулиев',
+    translationShort: 'Кулиев',
+    country: 'Russia',
+    style: 'sentence',
+    styleLabel: 'Предложение',
+    matchesTranslations: ['ru.kuliev'],
+  },
   // === PERSIAN (FARSI) ===
   'fa.hedayatfar': {
     name: 'Hedayatfar',
@@ -168,7 +254,7 @@ export const TRANSLATION_RECITERS = {
     country: 'Azerbaijan',
     style: 'sentence',
     styleLabel: 'Cümlə',
-    matchesTranslations: ['az.balayev'],
+    matchesTranslations: [], // No matching text translation available — Balayev reads a different text than Mammadaliyev/Musayev
   },
   // === BOSNIAN ===
   'bs.korkut': {
@@ -200,14 +286,24 @@ export const TRANSLATION_TO_AUDIO_MAP = {
   // === ENGLISH ===
   // Ibrahim Walk reads Sahih International - TRUE MATCH
   'en.sahih': 'en.walk',
-  // Other English translations - NO MATCH, will use TTS
+
+  // === FRENCH ===
+  'fr.hamidullah': 'fr.leclerc',
+
+  // === CHINESE === (Ma Jian translation only — Ma Zhong Gang uses different wording, falls back to TTS)
+  'zh.jian': 'zh.chinese',
+  'zh.majian': 'zh.chinese',
+
+  // === RUSSIAN ===
+  'ru.kuliev': 'ru.kuliev',
 
   // === PERSIAN ===
   'fa.fooladvand': 'fa.hedayatfar',
   'fa.makarem': 'fa.kabiri',
 
   // === AZERBAIJANI ===
-  'az.balayev': 'az.balayev',
+  // Note: az.balayev narrator exists but no matching text translation in our system
+  // Balayev reads a different translation than Mammadaliyev or Musayev — text won't match audio
 
   // === BOSNIAN ===
   'bs.korkut': 'bs.korkut',
@@ -251,13 +347,13 @@ export function getTranslationAudioUrl(surahId, ayahNum, audioId = 'ur.khan') {
     return `${source.baseUrl}/${surahStr}${ayahStr}.mp3`;
   }
 
-  // Default: global ayah number format
+  // Islamic Network CDN & others: global ayah number format (1-6236)
   const globalAyah = getGlobalAyahNumber(surahId, ayahNum);
   return `${source.baseUrl}/${globalAyah}.mp3`;
 }
 
 // Verse counts per surah (index 0 is unused, index 1 = Al-Fatiha with 7 verses, etc.)
-const VERSE_COUNTS = [
+export const VERSE_COUNTS = [
   0, 7, 286, 200, 176, 120, 165, 206, 75, 129, 109, 123, 111, 43, 52, 99, 128,
   111, 110, 98, 135, 112, 78, 118, 64, 77, 227, 93, 88, 69, 60, 34, 30, 73,
   54, 45, 83, 182, 88, 75, 85, 54, 53, 89, 59, 37, 35, 38, 29, 18, 45, 60, 49,

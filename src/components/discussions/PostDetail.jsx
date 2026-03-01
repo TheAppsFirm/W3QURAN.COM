@@ -16,7 +16,8 @@ import UserPopover from './UserPopover';
 import { useTranslation } from '../../contexts/LocaleContext';
 import { getTextDir } from './quranQuoteUtils';
 
-const PremiumGate = lazy(() => import('../kids/KidsPremiumGate'));
+const lazyRetry = (fn) => lazy(() => fn().catch(() => { if (!sessionStorage.getItem('chunk_reload')) { sessionStorage.setItem('chunk_reload', '1'); window.location.reload(); } return fn(); }));
+const PremiumGate = lazyRetry(() => import('../kids/KidsPremiumGate'));
 
 const POST_TYPE_CONFIG = {
   discussion: { label: 'Discussion', icon: '💬', color: 'text-cyan-400', bg: 'bg-cyan-500/15', border: 'border-cyan-500/30', glow: 'shadow-cyan-500/5' },

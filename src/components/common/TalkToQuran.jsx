@@ -10,7 +10,8 @@ import { useLocale } from '../../contexts';
 import { useTranslation } from '../../contexts/LocaleContext';
 import logger from '../../utils/logger';
 
-const KidsPremiumGate = lazy(() => import('../kids/KidsPremiumGate'));
+const lazyRetry = (fn) => lazy(() => fn().catch(() => { if (!sessionStorage.getItem('chunk_reload')) { sessionStorage.setItem('chunk_reload', '1'); window.location.reload(); } return fn(); }));
+const KidsPremiumGate = lazyRetry(() => import('../kids/KidsPremiumGate'));
 
 // Max messages to keep in state for performance
 const MAX_MESSAGES = 50;

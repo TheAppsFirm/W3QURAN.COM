@@ -130,10 +130,10 @@ html[lang="ur"] body {
   line-height: 1.8;
 }
 
-/* Jameel Noori Nastaleeq — loaded locally */
+/* Noto Nastaliq Urdu — loaded locally for Urdu Nastaleeq rendering */
 @font-face {
-  font-family: 'Jameel Noori Nastaleeq';
-  src: url('/fonts/JameelNooriNastaleeq.ttf') format('truetype');
+  font-family: 'Noto Nastaliq Urdu';
+  src: url('/fonts/NotoNastaliqUrdu.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -141,7 +141,7 @@ html[lang="ur"] body {
 
 /* Urdu Font — Nastaleeq style */
 .font-urdu {
-  font-family: 'Jameel Noori Nastaleeq', 'Noto Nastaliq Urdu', 'Nastaliq', 'Urdu Typesetting', serif;
+  font-family: 'Noto Nastaliq Urdu', 'Jameel Noori Nastaleeq', 'Nastaliq', 'Urdu Typesetting', serif;
   direction: rtl;
   text-align: right;
   line-height: 2.2;

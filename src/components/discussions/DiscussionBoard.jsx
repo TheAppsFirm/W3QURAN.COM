@@ -15,7 +15,8 @@ import PostDetail from './PostDetail';
 import CreatePostModal from './CreatePostModal';
 import ChatWindow from './ChatWindow';
 
-const PremiumGate = lazy(() => import('../kids/KidsPremiumGate'));
+const lazyRetry = (fn) => lazy(() => fn().catch(() => { if (!sessionStorage.getItem('chunk_reload')) { sessionStorage.setItem('chunk_reload', '1'); window.location.reload(); } return fn(); }));
+const PremiumGate = lazyRetry(() => import('../kids/KidsPremiumGate'));
 
 const SORT_KEYS = [
   { id: 'hot', key: 'sortHot' },

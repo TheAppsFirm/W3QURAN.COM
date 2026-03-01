@@ -12,7 +12,8 @@ import { useIsMobile } from '../../hooks';
 import { useTranslation } from '../../contexts/LocaleContext';
 import { getTextDir } from './quranQuoteUtils';
 
-const PremiumGate = lazy(() => import('../kids/KidsPremiumGate'));
+const lazyRetry = (fn) => lazy(() => fn().catch(() => { if (!sessionStorage.getItem('chunk_reload')) { sessionStorage.setItem('chunk_reload', '1'); window.location.reload(); } return fn(); }));
+const PremiumGate = lazyRetry(() => import('../kids/KidsPremiumGate'));
 
 function timeFormat(dateStr) {
   if (!dateStr) return '';

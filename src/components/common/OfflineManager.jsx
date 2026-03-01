@@ -24,7 +24,7 @@ import {
 } from '../../data/offlineStorage';
 import { SURAHS } from '../../data';
 import { TRANSLATIONS } from '../../hooks/useTranslationsAPI';
-import { RECITERS } from '../../hooks/useAudioPlayer';
+import { RECITERS, TRANSLATION_RECITERS, TRANSLATION_AUDIO_SOURCES } from '../../hooks/useAudioPlayer';
 
 const formatBytes = (bytes) => {
   if (bytes === 0) return '0 B';
@@ -164,13 +164,22 @@ const DownloadedItem = memo(function DownloadedItem({ surahId, entries, audioInf
  */
 const OfflineManager = memo(function OfflineManager({ onClose, translationId }) {
   const { t, isRTL } = useTranslation();
-  // Use the user's selected reader translation/reciter, fallback to defaults
+  // Use the user's selected reader translation/reciter/narrator, fallback to defaults
   if (!translationId) {
     try { translationId = localStorage.getItem('reader_translation')?.replace(/^"|"$/g, '') || 'en.sahih'; } catch { translationId = 'en.sahih'; }
   }
   let reciterId = 'ar.alafasy';
   try { reciterId = localStorage.getItem('reader_reciter')?.replace(/^"|"$/g, '') || 'ar.alafasy'; } catch {}
-  const downloadOpts = { includeAudio: true, reciterId };
+  // Read translation narrator (e.g. 'ur.farhat', 'ur.khan', 'en.walk') for offline download
+  let narratorId = null;
+  try {
+    const stored = localStorage.getItem('reader_translation_narrator')?.replace(/^"|"$/g, '');
+    if (stored && stored !== 'tts' && TRANSLATION_AUDIO_SOURCES[stored]) {
+      narratorId = stored;
+    }
+  } catch {}
+  const narratorConfig = narratorId ? TRANSLATION_AUDIO_SOURCES[narratorId] : null;
+  const downloadOpts = { includeAudio: true, reciterId, narratorId, narratorConfig };
   const [activeTab, setActiveTab] = useState('status');
   const [networkOnline, setNetworkOnline] = useState(isOnline());
   const [downloadedSurahs, setDownloadedSurahs] = useState([]);
@@ -190,7 +199,7 @@ const OfflineManager = memo(function OfflineManager({ onClose, translationId }) 
     const textSurahIds = [...new Set(downloaded.map(d => d.surahId))];
     const needsMigration = textSurahIds.filter(id => !audioSurahIds.has(id));
     if (needsMigration.length > 0) {
-      await migrateAudioMetadata(needsMigration, reciterId);
+      await migrateAudioMetadata(needsMigration);
       audioList = await getDownloadedAudio(); // Reload after migration
     }
 
@@ -227,7 +236,7 @@ const OfflineManager = memo(function OfflineManager({ onClose, translationId }) 
     setIsDownloading(true);
     try {
       await downloadSurahForOffline(surahId, translationId, (progress) => {
-        setDownloadProgress({ progress, current: 1, total: 1, phase: progress <= 50 ? 'text' : 'audio' });
+        setDownloadProgress({ progress, current: 1, total: 1, phase: progress <= 30 ? 'text' : 'audio' });
       }, downloadOpts);
       setCachedStatus(prev => ({ ...prev, [surahId]: true }));
       await loadAllData();
@@ -336,7 +345,7 @@ const OfflineManager = memo(function OfflineManager({ onClose, translationId }) 
       </div>
 
       {/* Download config info */}
-      <div className="flex items-center gap-3 px-2 mb-3">
+      <div className="flex items-center gap-3 px-2 mb-3 flex-wrap">
         <div className="flex items-center gap-1">
           <Icons.BookOpen className="w-3 h-3 text-white/30" />
           <span className="text-[10px] text-white/40">{getTranslationLabel(translationId)}</span>
@@ -345,6 +354,12 @@ const OfflineManager = memo(function OfflineManager({ onClose, translationId }) 
           <Icons.Volume2 className="w-3 h-3 text-white/30" />
           <span className="text-[10px] text-white/40">{getReciterLabel(reciterId)}</span>
         </div>
+        {narratorId && TRANSLATION_RECITERS[narratorId] && (
+          <div className="flex items-center gap-1">
+            <Icons.Headphones className="w-3 h-3 text-cyan-400/40" />
+            <span className="text-[10px] text-cyan-400/50">{TRANSLATION_RECITERS[narratorId].name}</span>
+          </div>
+        )}
       </div>
 
       {/* Tab Pills */}

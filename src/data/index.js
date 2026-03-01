@@ -115,8 +115,6 @@ export {
   isSurahCached,
   saveTafseerOffline,
   getCachedTafseer,
-  saveAudioOffline,
-  getCachedAudio,
   getDownloadedSurahs,
   getTotalStorageUsed,
   deleteCachedSurah,

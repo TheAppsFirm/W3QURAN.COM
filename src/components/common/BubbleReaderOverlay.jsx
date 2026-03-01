@@ -13,25 +13,37 @@ import { Icons } from './Icons';
 import YouTubePlayer from './YouTubePlayer';
 // trackReadingActivity is dynamically imported at call site to avoid pulling in GlobalUmmahPulse
 
+// Retry wrapper for lazy imports — handles stale chunk hashes after deploys
+const lazyWithRetry = (importFn) => lazy(() =>
+  importFn().catch(() => {
+    const hasReloaded = sessionStorage.getItem('chunk_reload');
+    if (!hasReloaded) {
+      sessionStorage.setItem('chunk_reload', '1');
+      window.location.reload();
+    }
+    return importFn();
+  })
+);
+
 // Lazy-loaded feature components (only loaded when user activates them)
-const VerseArtGenerator = lazy(() => import('./VerseArtGenerator'));
-const EmotionalTracker = lazy(() => import('./EmotionalTracker'));
-const MoodEntryForm = lazy(() => import('./EmotionalTracker').then(m => ({ default: m.MoodEntryForm })));
-const AyahConnectionMap = lazy(() => import('./AyahConnectionMap'));
-const ScholarVideoSync = lazy(() => import('./ScholarVideoSync'));
-const LivingVisualization = lazy(() => import('./LivingVisualization'));
-const TimeCapsule = lazy(() => import('./TimeCapsule'));
-const VoiceControl = lazy(() => import('./VoiceControl'));
-const HeartbeatMeditation = lazy(() => import('./HeartbeatMeditation'));
-const FamilyCircle = lazy(() => import('./FamilyCircle'));
-const ReaderDiscussPanel = lazy(() => import('../discussions/ReaderDiscussPanel'));
-const TreebankOverlay = lazy(() => import('./TreebankAnalysis').then(m => ({ default: m.TreebankOverlay })));
-const KidsPremiumGate = lazy(() => import('../kids/KidsPremiumGate'));
+const VerseArtGenerator = lazyWithRetry(() => import('./VerseArtGenerator'));
+const EmotionalTracker = lazyWithRetry(() => import('./EmotionalTracker'));
+const MoodEntryForm = lazyWithRetry(() => import('./EmotionalTracker').then(m => ({ default: m.MoodEntryForm })));
+const AyahConnectionMap = lazyWithRetry(() => import('./AyahConnectionMap'));
+const ScholarVideoSync = lazyWithRetry(() => import('./ScholarVideoSync'));
+const LivingVisualization = lazyWithRetry(() => import('./LivingVisualization'));
+const TimeCapsule = lazyWithRetry(() => import('./TimeCapsule'));
+const VoiceControl = lazyWithRetry(() => import('./VoiceControl'));
+const HeartbeatMeditation = lazyWithRetry(() => import('./HeartbeatMeditation'));
+const FamilyCircle = lazyWithRetry(() => import('./FamilyCircle'));
+const ReaderDiscussPanel = lazyWithRetry(() => import('../discussions/ReaderDiscussPanel'));
+const TreebankOverlay = lazyWithRetry(() => import('./TreebankAnalysis').then(m => ({ default: m.TreebankOverlay })));
+const KidsPremiumGate = lazyWithRetry(() => import('../kids/KidsPremiumGate'));
 import { hasTreebankData, canAccessTreebank, hasOntologyData } from '../../data/treebank/index';
 import { PALETTES, SURAHS, fetchTafseer, getTafseersByLanguage, getDefaultTafseer, TRANSLATION_TO_TAFSEER_LANG, getVideosForSurah, generateSearchQuery, SCHOLARS, SURAH_TOPICS, TAFSEER_SOURCES, markAyahRead } from '../../data';
 import { OVERLAY_THEMES, LAYOUT_TO_OVERLAY_THEME, getOverlayTheme, resolveGradient } from '../../data/themes';
 import { useQuranAPI, useMultilingualWords, TRANSLATIONS } from '../../hooks/useQuranAPI';
-import { speakText, getTranslationAudioSource, getTranslationAudioUrl, getAvailableTranslationAudio, TRANSLATION_RECITERS, getGlobalAyahNumber } from '../../hooks/useAudioPlayer';
+import { speakText, getTranslationAudioSource, getTranslationAudioUrl, getAvailableTranslationAudio, TRANSLATION_RECITERS, RECITERS, getGlobalAyahNumber } from '../../hooks/useAudioPlayer';
 import { useLocalStorage, useIsMobile } from '../../hooks';
 import { logReadingSession, trackSurahCompletion, trackFeatureUsage } from '../../utils/trackingUtils';
 import { shareVerse } from '../../utils/shareUtils';
@@ -39,7 +51,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { useTranslation, useLocale } from '../../contexts/LocaleContext';
 import logger from '../../utils/logger';
 import { trackSurahRead, trackFeatureUse, trackAudioPlay, trackTafseerView } from '../../utils/analyticsTracker';
-import { getCachedSurah, getDownloadedAudio } from '../../data/offlineStorage';
+import { getCachedSurah, getDownloadedAudio, getOfflineCachedAudioUrl } from '../../data/offlineStorage';
 
 // 14 Sajdah (Prostration) Ayat — where a Muslim must perform sujood when reading
 const SAJDAH_AYAT = {
@@ -48,6 +60,29 @@ const SAJDAH_AYAT = {
   41: [38], 53: [62], 84: [21], 96: [19],
 };
 import { useGamification } from '../../hooks/useGamification';
+
+// Audio source URLs for narrators with pre-recorded verse-by-verse audio
+// Note: Translations not listed here will use Google Cloud TTS
+const NARRATOR_URL_CONFIG = {
+  // Urdu - EveryAyah (verse-by-verse files)
+  'ur.khan': { type: 'everyayah', baseUrl: 'https://everyayah.com/data/translations/urdu_shamshad_ali_khan_46kbps' },
+  'ur.farhat': { type: 'everyayah', baseUrl: 'https://everyayah.com/data/translations/urdu_farhat_hashmi' },
+  // English
+  'en.walk': { type: 'everyayah', baseUrl: 'https://everyayah.com/data/English/Sahih_Intnl_Ibrahim_Walk_192kbps' },
+  // French - Islamic Network CDN (global ayah number format)
+  'fr.leclerc': { type: 'islamic-network', baseUrl: 'https://cdn.islamic.network/quran/audio/128/fr.leclerc' },
+  // Chinese - Islamic Network CDN
+  'zh.chinese': { type: 'islamic-network', baseUrl: 'https://cdn.islamic.network/quran/audio/128/zh.chinese' },
+  // Russian - Islamic Network CDN
+  'ru.kuliev': { type: 'islamic-network', baseUrl: 'https://cdn.islamic.network/quran/audio/128/ru.kuliev-audio' },
+  // Persian
+  'fa.hedayatfar': { type: 'everyayah', baseUrl: 'https://everyayah.com/data/translations/Fooladvand_Hedayatfar_40Kbps' },
+  'fa.kabiri': { type: 'everyayah', baseUrl: 'https://everyayah.com/data/translations/Makarem_Kabiri_16Kbps' },
+  // Azerbaijani
+  'az.balayev': { type: 'everyayah', baseUrl: 'https://everyayah.com/data/translations/azerbaijani/balayev' },
+  // Bosnian
+  'bs.korkut': { type: 'everyayah', baseUrl: 'https://everyayah.com/data/translations/besim_korkut_ajet_po_ajet' },
+};
 
 // Browser detection for Safari-specific optimizations
 const isSafari = typeof navigator !== 'undefined' && /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
@@ -101,15 +136,7 @@ const sanitizeHTML = (html) => {
 // Audio CDN (with 64kbps fallback on error - handled in error handler)
 const AUDIO_CDN = 'https://cdn.islamic.network/quran/audio/128';
 
-// Reciters
-const RECITERS = {
-  'ar.alafasy': { name: 'Mishary Alafasy', country: 'Kuwait' },
-  'ar.abdurrahmaansudais': { name: 'Abdul Rahman Al-Sudais', country: 'Saudi Arabia' },
-  'ar.abdulsamad': { name: 'Abdul Samad', country: 'Egypt' },
-  'ar.shaatree': { name: 'Abu Bakr Al-Shatri', country: 'Saudi Arabia' },
-  'ar.husary': { name: 'Mahmoud Khalil Al-Husary', country: 'Egypt' },
-  'ar.minshawi': { name: 'Mohamed Al-Minshawi', country: 'Egypt' },
-};
+// RECITERS imported from useAudioPlayer.js (20 Arabic reciters)
 
 // Layout style configurations moved to src/data/themes.js
 // Import OVERLAY_THEMES, LAYOUT_TO_OVERLAY_THEME, getOverlayTheme from there
@@ -129,16 +156,6 @@ const FEATURES = [
   { id: 'bookmark', icon: 'Bookmark', label: 'Bookmarks', color: '#EC4899', gradient: 'from-pink-500 to-rose-600' },
   { id: 'youtube', icon: 'Video', label: 'Videos', color: '#EF4444', gradient: 'from-red-500 to-rose-600' },
   { id: 'share', icon: 'Share', label: 'Share', color: '#10B981', gradient: 'from-emerald-500 to-teal-600' },
-];
-
-// Verse counts for global ayah calculation
-const VERSE_COUNTS = [
-  0, 7, 286, 200, 176, 120, 165, 206, 75, 129, 109, 123, 111, 43, 52, 99, 128,
-  111, 110, 98, 135, 112, 78, 118, 64, 77, 227, 93, 88, 69, 60, 34, 30, 73,
-  54, 45, 83, 182, 88, 75, 85, 54, 53, 89, 59, 37, 35, 38, 29, 18, 45, 60, 49,
-  62, 55, 78, 96, 29, 22, 24, 13, 14, 11, 11, 18, 12, 12, 30, 52, 52, 44, 28,
-  28, 20, 56, 40, 31, 50, 40, 46, 42, 29, 19, 36, 25, 22, 17, 19, 26, 30, 20,
-  15, 21, 11, 8, 8, 19, 5, 8, 8, 11, 11, 8, 3, 9, 5, 4, 7, 3, 6, 3, 5, 4, 5, 6
 ];
 
 // Tajweed Text Renderer
@@ -1553,6 +1570,13 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
   const [showSurahDetails, setShowSurahDetails] = useState(false);
   const [showSurahPicker, setShowSurahPicker] = useState(false);
   const [surahSearchQuery, setSurahSearchQuery] = useState('');
+  const [showReciterPicker, setShowReciterPicker] = useState(false);
+  const [reciterSearchQuery, setReciterSearchQuery] = useState('');
+  const [showTranslationPicker, setShowTranslationPicker] = useState(false);
+  const [translationSearchQuery, setTranslationSearchQuery] = useState('');
+  const [showNarratorPicker, setShowNarratorPicker] = useState(false);
+  const [showLanguagePicker, setShowLanguagePicker] = useState(false);
+  const [languageSearchQuery, setLanguageSearchQuery] = useState('');
   const [selectionMode, setSelectionMode] = useState(false);
   const [selectedVerses, setSelectedVerses] = useState([]);
 
@@ -1561,8 +1585,12 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
   const [audioLoading, setAudioLoading] = useState(false);
   const [audioError, setAudioError] = useState(null);
   const [speakingAyah, setSpeakingAyah] = useState(null); // Track which ayah translation is being spoken (TTS)
+  const [ttsLoading, setTtsLoading] = useState(false); // Track when TTS audio is being fetched
+  const ttsPremiumDismissedRef = useRef(false); // Track if user dismissed premium gate (use browser TTS fallback)
   const [narratorPlayingAyah, setNarratorPlayingAyah] = useState(null); // Track which ayah narrator is playing (human voice)
   const narratorAyahAudioRef = useRef(null); // Ref for per-ayah narrator audio
+  const [lafziActiveWord, setLafziActiveWord] = useState(null); // { ayah, wordIdx } - currently highlighted word in Lafzi mode
+  const lafziWordTimerRef = useRef(null); // Interval timer for Lafzi word highlighting
 
   // Translation Audio Playback State
   const [isPlayingTranslation, setIsPlayingTranslation] = useState(false);
@@ -1572,6 +1600,7 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
   const [combinedPhase, setCombinedPhase] = useState('arabic'); // 'arabic' | 'translation' - which phase of combined playback
   const [translationAudioSource, setTranslationAudioSource] = useState(null); // 'api' | 'tts' | null
   const [translationReciterInfo, setTranslationReciterInfo] = useState(null); // Info about the API audio reciter
+  const [audioInfoMessage, setAudioInfoMessage] = useState(null); // Temporary info message about audio availability
   const [selectedTranslationNarrator, setSelectedTranslationNarrator] = useLocalStorage('reader_translation_narrator', null); // User-selected narrator override
 
   const audioRef = useRef(null);
@@ -1583,9 +1612,14 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
   const versesRef = useRef([]);
 
   // Audio prefetch cache for smooth playback
-  const audioCacheRef = useRef(new Map()); // Map<cacheKey, {audio: Audio, blob: Blob}>
+  const audioCacheRef = useRef(new Map()); // Map<cacheKey, {audio: Audio, url: string, estimatedBytes: number}>
+  const audioCacheBytesRef = useRef(0); // Track total estimated cache size in bytes
   const prefetchAbortRef = useRef(null); // AbortController for canceling prefetch
   const prefetchingRef = useRef(new Set()); // Currently prefetching URLs
+
+  // Pre-prepared translation audio for combined mode (loads while Arabic is playing)
+  // { ayahNum, type: 'api'|'tts', audio?: Audio, blobUrl?: string, ready: boolean }
+  const translationPreloadRef = useRef(null);
 
   // Offline status for this surah
   const [offlineStatus, setOfflineStatus] = useState(null); // { hasArabic, hasTranslation, translationLabel, hasAudio, reciterName }
@@ -1645,20 +1679,20 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
     }
   }, []);
 
-  // Reader style - optimized for each layout's theme (light or dark)
-  // CRITICAL: Uses OVERLAY_STYLES config values for dynamic theming
-  const readerStyleConfig = useMemo(() => {
+  // Overlay style configuration — computed once, used by both overlayConfig and readerStyleConfig
+  // CRITICAL: Apply dynamic styles for Timeline (Makki/Madani) and Length layouts
+  const overlayConfig = useMemo(() => {
     const styleKey = layoutToOverlayStyle[layoutStyle] || 'bubble';
-    let styleConfig = { ...OVERLAY_STYLES[styleKey] };
+    let config = { ...OVERLAY_STYLES[styleKey] };
 
     // Apply dynamic styles for Timeline (Revelation) layout based on Makki/Madani
     if (styleKey === 'timeline' && surah) {
       const isMakki = surah.type === 'Makki' || surah.revelationType === 'Meccan';
       const dynamicStyle = isMakki
-        ? styleConfig.getMakkiStyle?.()
-        : styleConfig.getMadaniStyle?.();
+        ? config.getMakkiStyle?.()
+        : config.getMadaniStyle?.();
       if (dynamicStyle) {
-        styleConfig = { ...styleConfig, ...dynamicStyle };
+        config = { ...config, ...dynamicStyle };
       }
     }
 
@@ -1667,30 +1701,35 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
       const ayahCount = surah.ayahs || 0;
       let dynamicStyle;
       if (ayahCount <= 30) {
-        dynamicStyle = styleConfig.getShortStyle?.();
+        dynamicStyle = config.getShortStyle?.();
       } else if (ayahCount <= 80) {
-        dynamicStyle = styleConfig.getMediumStyle?.();
+        dynamicStyle = config.getMediumStyle?.();
       } else {
-        dynamicStyle = styleConfig.getLongStyle?.();
+        dynamicStyle = config.getLongStyle?.();
       }
       if (dynamicStyle) {
-        styleConfig = { ...styleConfig, ...dynamicStyle };
+        config = { ...config, ...dynamicStyle };
       }
     }
 
-    const isDark = styleConfig?.isDark ?? true;
-    const isCalm = styleConfig?.isCalm ?? true;
+    return config;
+  }, [layoutStyle, surah]);
+
+  // Reader style derived from overlayConfig — adds verse-level styling colors
+  const readerStyleConfig = useMemo(() => {
+    const isDark = overlayConfig?.isDark ?? true;
+    const isCalm = overlayConfig?.isCalm ?? true;
 
     // Extract theme colors from config, with sensible defaults
     const colors = {
-      text: styleConfig?.textColor || (isDark ? 'rgba(255,255,255,0.95)' : '#1e293b'),
-      translation: styleConfig?.translationColor || (isDark ? 'rgba(255,255,255,0.7)' : '#64748b'),
-      verseBg: styleConfig?.verseBg || (isDark ? 'rgba(255,255,255,0.04)' : '#f8fafc'),
-      verseBorder: styleConfig?.verseBorder || (isDark ? 'rgba(255,255,255,0.06)' : '#e2e8f0'),
-      activeBg: styleConfig?.activeBg || (isDark ? 'rgba(20,184,166,0.12)' : '#f0fdf4'),
-      activeBorder: styleConfig?.activeBorder || (isDark ? 'rgba(20,184,166,0.3)' : '#86efac'),
-      badgeBg: styleConfig?.badgeBg || (isDark ? 'rgba(20,184,166,0.2)' : '#ecfdf5'),
-      badgeColor: styleConfig?.badgeColor || (isDark ? '#5eead4' : '#059669'),
+      text: overlayConfig?.textColor || (isDark ? 'rgba(255,255,255,0.95)' : '#1e293b'),
+      translation: overlayConfig?.translationColor || (isDark ? 'rgba(255,255,255,0.7)' : '#64748b'),
+      verseBg: overlayConfig?.verseBg || (isDark ? 'rgba(255,255,255,0.04)' : '#f8fafc'),
+      verseBorder: overlayConfig?.verseBorder || (isDark ? 'rgba(255,255,255,0.06)' : '#e2e8f0'),
+      activeBg: overlayConfig?.activeBg || (isDark ? 'rgba(20,184,166,0.12)' : '#f0fdf4'),
+      activeBorder: overlayConfig?.activeBorder || (isDark ? 'rgba(20,184,166,0.3)' : '#86efac'),
+      badgeBg: overlayConfig?.badgeBg || (isDark ? 'rgba(20,184,166,0.2)' : '#ecfdf5'),
+      badgeColor: overlayConfig?.badgeColor || (isDark ? '#5eead4' : '#059669'),
     };
 
     return {
@@ -1699,7 +1738,7 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
       isCalm,
       colors,
       // Base verse card classes (layout only, colors via inline styles)
-      verse: 'rounded-2xl p-5 transition-all duration-500',
+      verse: 'rounded-2xl p-5 transition-[background,border-color,box-shadow] duration-500 ease-in-out',
       // Empty Tailwind classes - all styling via inline styles now
       verseActive: '',
       verseDefault: '',
@@ -1710,7 +1749,7 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
       translationExtra: '',
       badgePosition: 'inline',
     };
-  }, [layoutStyle, surah]);
+  }, [overlayConfig]);
 
   // Log surah open event and track reading start time
   // Use refs for cleanup to avoid stale closure issues
@@ -1790,6 +1829,57 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
     return selectedTranslation.split('.')[0] || 'en';
   }, [selectedTranslation]);
 
+  // Get the display label for the current translation's language
+  const translationLanguageLabel = useMemo(() => {
+    const info = TRANSLATIONS[selectedTranslation];
+    if (!info) return null;
+    return info.languageNative || info.language || null;
+  }, [selectedTranslation]);
+
+  // Build list of available languages with counts for the language picker
+  const availableLanguages = useMemo(() => {
+    const langMap = {};
+    Object.entries(TRANSLATIONS).forEach(([id, info]) => {
+      const lang = info.language;
+      if (!langMap[lang]) {
+        langMap[lang] = {
+          code: id.split('.')[0],
+          name: lang,
+          nameNative: info.languageNative || lang,
+          count: 0,
+          defaultTranslation: id,
+          hasNarrator: false,
+        };
+      }
+      langMap[lang].count++;
+    });
+    // Check which languages have human narrators
+    Object.values(TRANSLATION_RECITERS).forEach(r => {
+      if (r.source !== 'tts' && r.language && langMap[r.language]) {
+        langMap[r.language].hasNarrator = true;
+      }
+    });
+    return Object.values(langMap).sort((a, b) => {
+      // Put current language first, then by count
+      if (a.code === ttsLanguage) return -1;
+      if (b.code === ttsLanguage) return 1;
+      return b.count - a.count;
+    });
+  }, [ttsLanguage]);
+
+  // Handle language change — auto-select best translation for the language
+  const handleLanguageChange = useCallback((langCode) => {
+    // Find the best translation for this language
+    const langTranslations = Object.entries(TRANSLATIONS).filter(([id]) => id.startsWith(langCode + '.'));
+    if (langTranslations.length === 0) return;
+
+    // Prefer the current translation if it matches the language
+    if (selectedTranslation.startsWith(langCode + '.')) return;
+
+    // Pick the first translation for this language
+    setSelectedTranslation(langTranslations[0][0]);
+  }, [selectedTranslation, setSelectedTranslation]);
+
   // Get all translation narrators for current language
   const allLanguageNarrators = useMemo(() => {
     return getAvailableTranslationAudio(ttsLanguage);
@@ -1818,7 +1908,7 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
       nameNative: 'گوگل ٹی ٹی ایس',
       translationShort: 'TTS',
       style: 'tts',
-      styleLabel: 'AI آواز',
+      styleLabel: 'AI Voice',
     });
 
     return narrators;
@@ -1866,30 +1956,14 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
     return smartDefaultNarrator;
   }, [selectedTranslationNarrator, ttsLanguage, smartDefaultNarrator, availableNarrators]);
 
-  // Audio source URLs for narrators with pre-recorded verse-by-verse audio
-  // Note: Translations not listed here will use Google Cloud TTS
-  const narratorUrlConfig = {
-    // Urdu - EveryAyah (verse-by-verse files) - Shamshad Ali Khan / Hafeez Jalandhari
-    'ur.khan': { type: 'everyayah', baseUrl: 'https://everyayah.com/data/translations/urdu_shamshad_ali_khan_46kbps' },
-    'ur.farhat': { type: 'everyayah', baseUrl: 'https://everyayah.com/data/translations/urdu_farhat_hashmi' },
-    // Note: ur.kanzuliman uses Google Cloud TTS (no pre-recorded verse audio)
-    // English
-    'en.walk': { type: 'everyayah', baseUrl: 'https://everyayah.com/data/English/Sahih_Intnl_Ibrahim_Walk_192kbps' },
-    // Persian
-    'fa.hedayatfar': { type: 'everyayah', baseUrl: 'https://everyayah.com/data/translations/Fooladvand_Hedayatfar_40Kbps' },
-    'fa.kabiri': { type: 'everyayah', baseUrl: 'https://everyayah.com/data/translations/Makarem_Kabiri_16Kbps' },
-    // Azerbaijani
-    'az.balayev': { type: 'everyayah', baseUrl: 'https://everyayah.com/data/translations/azerbaijani/balayev' },
-    // Bosnian
-    'bs.korkut': { type: 'everyayah', baseUrl: 'https://everyayah.com/data/translations/besim_korkut_ajet_po_ajet' },
-  };
+  // NARRATOR_URL_CONFIG is at module level (NARRATOR_URL_CONFIG)
 
   // Build API audio source from effective narrator
   const apiAudioSource = useMemo(() => {
-    if (!effectiveNarrator || !narratorUrlConfig[effectiveNarrator]) {
+    if (!effectiveNarrator || !NARRATOR_URL_CONFIG[effectiveNarrator]) {
       return null;
     }
-    const config = narratorUrlConfig[effectiveNarrator];
+    const config = NARRATOR_URL_CONFIG[effectiveNarrator];
     return {
       audioId: effectiveNarrator,
       type: config.type,
@@ -1898,25 +1972,88 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
     };
   }, [effectiveNarrator]);
 
+  // Lafzi mode: word-by-word narrator is selected — show inline meanings under each word
+  const isLafziMode = useMemo(() => {
+    if (!effectiveNarrator || effectiveNarrator === 'tts') return false;
+    return TRANSLATION_RECITERS[effectiveNarrator]?.style === 'word-by-word';
+  }, [effectiveNarrator]);
+
+  // Lafzi word-by-word highlight sync helpers (MUST be defined before handleNarratorChange)
+  const startLafziWordSync = useCallback((targetAyah, audioDuration) => {
+    if (lafziWordTimerRef.current) clearInterval(lafziWordTimerRef.current);
+    const words = wordsMapRef.current?.[targetAyah];
+    if (!words || words.length === 0) return;
+    const wordCount = words.length;
+    const interval = (audioDuration * 1000) / wordCount;
+    let idx = 0;
+    setLafziActiveWord({ ayah: targetAyah, wordIdx: 0 });
+    lafziWordTimerRef.current = setInterval(() => {
+      idx++;
+      if (idx < wordCount) {
+        setLafziActiveWord({ ayah: targetAyah, wordIdx: idx });
+      } else {
+        clearInterval(lafziWordTimerRef.current);
+        lafziWordTimerRef.current = null;
+        setLafziActiveWord(null);
+      }
+    }, interval);
+  }, []);
+  const stopLafziWordSync = useCallback(() => {
+    if (lafziWordTimerRef.current) { clearInterval(lafziWordTimerRef.current); lafziWordTimerRef.current = null; }
+    setLafziActiveWord(null);
+  }, []);
+
   // Handle narrator dropdown change - just update state, effect handles restart
   const handleNarratorChange = useCallback((newNarrator) => {
-    console.log('[Narrator] Changing to:', newNarrator);
+    // Stop any currently playing audio when switching narrators
+    if (narratorAyahAudioRef.current) { narratorAyahAudioRef.current.pause(); narratorAyahAudioRef.current = null; }
+    if (translationAudioRef.current) { translationAudioRef.current.pause(); translationAudioRef.current = null; }
+    if (ttsAudioRef.current) { ttsAudioRef.current.pause(); ttsAudioRef.current = null; }
+    if (window.speechSynthesis) window.speechSynthesis.cancel();
+    setNarratorPlayingAyah(null);
+    setSpeakingAyah(null);
+    stopLafziWordSync();
+
     setSelectedTranslationNarrator(newNarrator);
-  }, [setSelectedTranslationNarrator]);
+    if (newNarrator && newNarrator !== 'tts') {
+      const reciterInfo = TRANSLATION_RECITERS[newNarrator];
+      // Auto-switch text translation to match the narrator's translation
+      if (reciterInfo?.matchesTranslations?.length > 0) {
+        const matchedTranslation = reciterInfo.matchesTranslations[0];
+        if (matchedTranslation && matchedTranslation !== selectedTranslation) {
+          setSelectedTranslation(matchedTranslation);
+        }
+      }
+      // Auto-enable word-by-word mode for lafzi (word-by-word) narrators
+      if (reciterInfo?.style === 'word-by-word') {
+        setWordByWordMode(true);
+      }
+    }
+  }, [setSelectedTranslationNarrator, selectedTranslation, setSelectedTranslation, setWordByWordMode, stopLafziWordSync]);
+
+  // Auto-enable word-by-word mode if current narrator is a word-by-word style narrator (e.g. Lafzi)
+  useEffect(() => {
+    if (effectiveNarrator && effectiveNarrator !== 'tts') {
+      const reciterInfo = TRANSLATION_RECITERS[effectiveNarrator];
+      if (reciterInfo?.style === 'word-by-word' && !wordByWordMode) {
+        setWordByWordMode(true);
+      }
+    }
+  }, [effectiveNarrator]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // ============ AUDIO PREFETCH SYSTEM ============
   // Prefetch upcoming ayahs for instant playback
 
   // Clear audio cache
   const clearAudioCache = useCallback(() => {
-    console.log('[Prefetch] Clearing audio cache, size:', audioCacheRef.current.size);
-    // Revoke blob URLs to free memory
+    // Stop and release cached Audio elements
     audioCacheRef.current.forEach((cached) => {
-      if (cached.blobUrl) URL.revokeObjectURL(cached.blobUrl);
+      if (cached.audio) { cached.audio.src = ''; cached.audio.load(); }
     });
     audioCacheRef.current.clear();
+    audioCacheBytesRef.current = 0;
     prefetchingRef.current.clear();
-    // Abort any pending fetches
+    // Abort any pending prefetches
     if (prefetchAbortRef.current) {
       prefetchAbortRef.current.abort();
       prefetchAbortRef.current = null;
@@ -1928,41 +2065,39 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
     return `${surahId}-${ayahNum}-${reciterId}`;
   }, []);
 
-  // Prefetch a single audio file
+  // Prefetch a single audio file using Audio element preloading (avoids CORS issues with fetch)
   const prefetchAudio = useCallback(async (url, cacheKey, signal) => {
     if (audioCacheRef.current.has(cacheKey) || prefetchingRef.current.has(cacheKey)) {
       return; // Already cached or prefetching
     }
 
     prefetchingRef.current.add(cacheKey);
-    console.log('[Prefetch] Starting prefetch:', cacheKey);
-
     try {
-      const response = await fetch(url, { signal });
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-
-      const blob = await response.blob();
-      const blobUrl = URL.createObjectURL(blob);
-
-      // Create preloaded Audio element
       const audio = new Audio();
       audio.preload = 'auto';
-      audio.src = blobUrl;
+      audio.src = url;
 
-      // Wait for audio to be ready
+      // Abort handling
+      const onAbort = () => { audio.src = ''; audio.load(); };
+      if (signal) signal.addEventListener('abort', onAbort, { once: true });
+
+      // Wait for audio to be buffered enough to play
       await new Promise((resolve, reject) => {
         audio.oncanplaythrough = resolve;
-        audio.onerror = reject;
-        // Timeout after 10 seconds
+        audio.onerror = () => reject(new Error('Audio load failed'));
+        if (signal?.aborted) { reject(new DOMException('Aborted', 'AbortError')); return; }
         setTimeout(resolve, 10000);
       });
 
-      audioCacheRef.current.set(cacheKey, { audio, blobUrl, url });
-      console.log('[Prefetch] Cached:', cacheKey);
-    } catch (err) {
-      if (err.name !== 'AbortError') {
-        console.log('[Prefetch] Failed:', cacheKey, err.message);
-      }
+      if (signal) signal.removeEventListener('abort', onAbort);
+      if (signal?.aborted) return;
+
+      // Estimate size: 128kbps MP3 = 16KB/sec
+      const estimatedBytes = Math.round((audio.duration || 10) * 16 * 1024);
+      audioCacheRef.current.set(cacheKey, { audio, url, estimatedBytes });
+      audioCacheBytesRef.current += estimatedBytes;
+    } catch {
+      // Ignore prefetch errors (abort, network, etc.)
     } finally {
       prefetchingRef.current.delete(cacheKey);
     }
@@ -1977,7 +2112,6 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
     const effectiveCount = checkMemoryPressure() ? 0 : safariCount; // Skip if high memory
 
     if (effectiveCount === 0) {
-      console.log('[Prefetch] Skipping - memory pressure or Safari limit');
       return;
     }
 
@@ -1990,17 +2124,19 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
 
     const total = totalVersesRef.current || surah.ayahs;
 
-    // Limit cache size on Safari to prevent memory buildup
-    if (isMobileSafari && audioCacheRef.current.size > 5) {
-      console.log('[Prefetch] Clearing old cache entries for Safari');
+    // Limit cache size by estimated bytes to prevent unbounded memory growth
+    // 128kbps MP3: ~1MB per minute of audio
+    const maxCacheBytes = isMobileSafari ? 10 * 1024 * 1024 : 30 * 1024 * 1024; // 10MB Safari, 30MB desktop
+    if (audioCacheBytesRef.current > maxCacheBytes) {
       const entries = Array.from(audioCacheRef.current.entries());
-      // Keep only the 3 most recent entries
-      entries.slice(0, entries.length - 3).forEach(([key, cached]) => {
-        if (cached.blobUrl) {
-          URL.revokeObjectURL(cached.blobUrl);
-        }
+      // Evict oldest entries until under 60% of limit
+      const targetBytes = maxCacheBytes * 0.6;
+      for (const [key, cached] of entries) {
+        if (audioCacheBytesRef.current <= targetBytes) break;
+        audioCacheBytesRef.current -= (cached.estimatedBytes || 0);
+        if (cached.audio) { cached.audio.src = ''; cached.audio.load(); }
         audioCacheRef.current.delete(key);
-      });
+      }
     }
 
     for (let i = 1; i <= effectiveCount; i++) {
@@ -2016,8 +2152,8 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
       prefetchAudio(arabicUrl, arabicKey, signal);
 
       // Skip translation prefetch on Safari to save memory
-      if (!isMobileSafari && effectiveNarrator && narratorUrlConfig[effectiveNarrator]) {
-        const config = narratorUrlConfig[effectiveNarrator];
+      if (!isMobileSafari && effectiveNarrator && NARRATOR_URL_CONFIG[effectiveNarrator]) {
+        const config = NARRATOR_URL_CONFIG[effectiveNarrator];
         if (config.type === 'everyayah') {
           const transUrl = `${config.baseUrl}/${paddedSurah}${paddedAyah}.mp3`;
           const transKey = getAudioCacheKey(surah.id, nextAyah, effectiveNarrator);
@@ -2032,13 +2168,11 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
     const key = getAudioCacheKey(surahId, ayahNum, reciterId);
     const cached = audioCacheRef.current.get(key);
     if (cached) {
-      console.log('[Prefetch] Cache HIT:', key);
-      // Clone the audio for playback (so we can reuse cached version)
-      const audio = new Audio(cached.blobUrl);
+      // Clone from cached URL for playback (so cached version stays reusable)
+      const audio = new Audio(cached.url);
       audio.preload = 'auto';
       return audio;
     }
-    console.log('[Prefetch] Cache MISS:', key);
     return null;
   }, [getAudioCacheKey]);
 
@@ -2051,14 +2185,12 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
   useEffect(() => {
     // Stop any playing translation audio
     if (translationAudioRef.current) {
-      console.log('[Translation-Change] Stopping translation audio');
       translationAudioRef.current.pause();
       translationAudioRef.current.src = '';
       translationAudioRef.current = null;
     }
     // Clear the prefetch cache for old translation
     clearAudioCache();
-    console.log('[Translation-Change] Cleared cache for new translation:', selectedTranslation, 'narrator:', effectiveNarrator);
   }, [selectedTranslation, effectiveNarrator, clearAudioCache]);
 
   // ============ END AUDIO PREFETCH SYSTEM ============
@@ -2073,22 +2205,22 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
   // API key is stored server-side in Cloudflare environment variables
   // Premium feature: HD TTS requires premium OR Surah Al-Fatiha (free trial)
   const playGoogleCloudTTS = useCallback(async (text, langCode = 'ur') => {
-    console.log('[TTS] Calling proxy with lang:', langCode, 'text length:', text?.length);
-
     // Check premium access - HD TTS is free for Fatiha, premium for others
     if (!canUseHDTTS) {
-      console.log('[TTS] HD TTS requires premium. Surah:', surah?.id);
+      // If user already dismissed premium gate, use browser TTS fallback (free)
+      if (ttsPremiumDismissedRef.current) {
+        return { useBrowserTTS: true, text, langCode };
+      }
       setUpgradeFeature('hd-tts');
       setShowUpgradePrompt(true);
       return { blocked: true }; // Premium required - don't advance ayah
     }
 
+    setTtsLoading(true);
     try {
       // Use server-side proxy - API key is stored securely on server
       // Pass surah ID for server-side premium verification
       const response = await fetch(`/api/tts?text=${encodeURIComponent(text)}&lang=${langCode}&surah=${surah?.id || 0}`);
-
-      console.log('[TTS] Proxy response status:', response.status);
 
       if (!response.ok) {
         const contentType = response.headers.get('content-type');
@@ -2096,17 +2228,22 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
           const errorData = await response.json();
           // Handle server-side premium check rejection
           if (errorData.code === 'PREMIUM_REQUIRED') {
-            console.log('[TTS] Server rejected - premium required');
             setUpgradeFeature('hd-tts');
             setShowUpgradePrompt(true);
+            setTtsLoading(false);
             return { blocked: true };
           }
           if (errorData.useBrowserTTS) {
-            console.log('[TTS] Server suggests browser TTS fallback');
+            setTtsLoading(false);
             return null;
           }
         }
         console.error('[TTS] Proxy error:', response.status);
+        setTtsLoading(false);
+        // Fall back to browser TTS on server error
+        if ('speechSynthesis' in window) {
+          return { useBrowserTTS: true, text, langCode };
+        }
         return null;
       }
 
@@ -2114,22 +2251,112 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
       const audioBlob = await response.blob();
       if (audioBlob.size < 100) {
         console.error('[TTS] Audio too small, likely error');
+        setTtsLoading(false);
+        if ('speechSynthesis' in window) {
+          return { useBrowserTTS: true, text, langCode };
+        }
         return null;
       }
 
       const audioUrl = URL.createObjectURL(audioBlob);
-      console.log('[TTS] Got audio, size:', audioBlob.size);
-
+      setTtsLoading(false);
       return audioUrl;
     } catch (error) {
       console.error('[TTS] Error:', error);
+      setTtsLoading(false);
+      // Fall back to browser TTS when server fails
+      if ('speechSynthesis' in window) {
+        return { useBrowserTTS: true, text, langCode };
+      }
       return null;
     }
   }, [canUseHDTTS, surah?.id]);
 
+  // Pre-prepare translation audio for combined mode (called when Arabic starts playing)
+  const preloadTranslationForCombined = useCallback(async (ayahNum) => {
+    if (!isPlayingCombinedRef.current) return;
+
+    const verse = versesRef.current.find(v => v.number === ayahNum);
+    if (!verse?.translation) return;
+
+    // Don't preload if already preloaded for this ayah
+    if (translationPreloadRef.current?.ayahNum === ayahNum && translationPreloadRef.current?.ready) return;
+
+    // Clear any previous preload
+    if (translationPreloadRef.current?.audio) {
+      translationPreloadRef.current.audio.pause();
+      translationPreloadRef.current.audio.src = '';
+    }
+    if (translationPreloadRef.current?.blobUrl) {
+      URL.revokeObjectURL(translationPreloadRef.current.blobUrl);
+    }
+    translationPreloadRef.current = { ayahNum, type: null, ready: false };
+
+    // Determine narrator
+    const translationSource = getTranslationAudioSource(selectedTranslation);
+    const defaultNarrator = translationSource?.audioId || null;
+    const narrator = effectiveNarrator === 'tts' ? null : (effectiveNarrator || defaultNarrator);
+    const config = narrator ? NARRATOR_URL_CONFIG[narrator] : null;
+
+    // Try API audio first (if narrator available and not timestamp-based)
+    if (config && narrator && config.type !== 'timestamp') {
+      const apiUrl = getTranslationAudioUrl(surah?.id, ayahNum, narrator);
+      if (apiUrl) {
+        const audio = new Audio();
+        audio.preload = 'auto';
+        audio.src = apiUrl;
+        translationPreloadRef.current = { ayahNum, type: 'api', audio, narrator, ready: false };
+
+        audio.oncanplaythrough = () => {
+          if (translationPreloadRef.current?.ayahNum === ayahNum) {
+            translationPreloadRef.current.ready = true;
+          }
+        };
+        audio.onerror = () => {
+          // API failed — fall back to preloading TTS
+          translationPreloadRef.current = { ayahNum, type: null, ready: false };
+          preloadTTS();
+        };
+        return;
+      }
+    }
+
+    // Fall back to TTS preload
+    const preloadTTS = async () => {
+      if (!isPlayingCombinedRef.current) return;
+      if (translationPreloadRef.current?.ayahNum !== ayahNum) return;
+
+      const text = verse.translation;
+      const maxLength = 4000;
+      const truncatedText = text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
+
+      try {
+        const result = await playGoogleCloudTTS(truncatedText, ttsLanguage);
+        // Only store if still relevant (same ayah, still in combined mode)
+        if (!isPlayingCombinedRef.current || translationPreloadRef.current?.ayahNum !== ayahNum) return;
+
+        if (result?.blocked || result?.useBrowserTTS) {
+          // Can't preload premium-blocked or browser TTS — will handle at play time
+          translationPreloadRef.current = { ayahNum, type: result?.useBrowserTTS ? 'browser-tts' : 'blocked', ready: true, result };
+          return;
+        }
+
+        if (result && typeof result === 'string') {
+          const audio = new Audio(result);
+          audio.preload = 'auto';
+          translationPreloadRef.current = { ayahNum, type: 'tts', audio, blobUrl: result, ready: true };
+        }
+      } catch {
+        // Ignore preload failures
+      }
+    };
+
+    await preloadTTS();
+  }, [effectiveNarrator, selectedTranslation, surah?.id, ttsLanguage, playGoogleCloudTTS]);
+
   // Speak translation using Google Cloud TTS API (single verse tap)
   const speakTranslation = useCallback(async (ayahNum, translationText) => {
-    if (!translationText) return;
+    if (!translationText || typeof translationText !== 'string') return;
 
     // If already speaking this ayah, stop it
     if (speakingAyah === ayahNum) {
@@ -2137,7 +2364,9 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
         ttsAudioRef.current.pause();
         ttsAudioRef.current = null;
       }
+      if (window.speechSynthesis) window.speechSynthesis.cancel();
       setSpeakingAyah(null);
+      setTtsLoading(false);
       return;
     }
 
@@ -2156,13 +2385,25 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
     setSpeakingAyah(ayahNum);
 
     // Use Google Cloud TTS API
-    console.log('[GoogleTTS] Speaking ayah:', ayahNum, 'lang:', ttsLanguage);
     const result = await playGoogleCloudTTS(translationText, ttsLanguage);
 
     // Check if blocked by premium gate
     if (result?.blocked) {
-      console.log('[TTS] Blocked by premium gate');
       setSpeakingAyah(null);
+      setTtsLoading(false);
+      return;
+    }
+
+    // Browser TTS fallback (free tier after premium gate dismissed)
+    if (result?.useBrowserTTS && 'speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(result.text);
+      const langMap = { ur: 'ur-PK', hi: 'hi-IN', en: 'en-US', ar: 'ar-SA', zh: 'zh-CN', ja: 'ja-JP', ko: 'ko-KR', es: 'es-ES', fr: 'fr-FR', de: 'de-DE' };
+      utterance.lang = langMap[result.langCode] || result.langCode;
+      utterance.rate = 0.9;
+      utterance.onend = () => setSpeakingAyah(null);
+      utterance.onerror = () => setSpeakingAyah(null);
+      window.speechSynthesis.speak(utterance);
       return;
     }
 
@@ -2187,6 +2428,8 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
     } else {
       // No audio available (API error)
       setSpeakingAyah(null);
+      setAudioInfoMessage(t('reader.ttsUnavailable', 'Translation audio unavailable — check your connection'));
+      setTimeout(() => setAudioInfoMessage(null), 4000);
     }
   }, [speakingAyah, ttsLanguage, playGoogleCloudTTS]);
 
@@ -2216,25 +2459,71 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
 
     // Find best human narrator (not TTS)
     const narrator = effectiveNarrator !== 'tts' ? effectiveNarrator : defaultNarratorForTranslation;
-    if (!narrator || !narratorUrlConfig[narrator]) return;
+    if (!narrator || !NARRATOR_URL_CONFIG[narrator]) {
+      // No human narrator available — tell the user which translations have one
+      const langNarrators = Object.entries(TRANSLATION_RECITERS)
+        .filter(([id, info]) => id.startsWith(ttsLanguage) && info.source !== 'tts')
+        .map(([, info]) => info.translationShort || info.translation);
+      if (langNarrators.length > 0) {
+        setAudioInfoMessage(
+          ttsLanguage === 'ur'
+            ? `انسانی آواز صرف ${langNarrators.join(' / ')} ترجمے کے لیے دستیاب ہے`
+            : `Human narrator only available for: ${langNarrators.join(', ')}`
+        );
+      } else {
+        setAudioInfoMessage(
+          ttsLanguage === 'ur'
+            ? 'اس زبان کے لیے انسانی آواز دستیاب نہیں — TTS استعمال کریں'
+            : `No human narrator available for this language — use TTS instead`
+        );
+      }
+      setTimeout(() => setAudioInfoMessage(null), 4000);
+      return;
+    }
 
     // Inner function to play a specific ayah
     const playNarratorForAyah = (targetAyah) => {
       const url = getTranslationAudioUrl(surah?.id, targetAyah, narrator);
-      if (!url) { setNarratorPlayingAyah(null); return; }
+      if (!url) { setNarratorPlayingAyah(null); stopLafziWordSync(); return; }
 
+      stopLafziWordSync();
       setNarratorPlayingAyah(targetAyah);
       setCurrentAyah(targetAyah);
       setTranslationAyah(targetAyah);
-      const audio = new Audio(url);
+      const audio = new Audio();
       narratorAyahAudioRef.current = audio;
+      // Try offline cache first, then CDN
+      getOfflineCachedAudioUrl(url).then(offlineUrl => {
+        if (offlineUrl && narratorAyahAudioRef.current === audio) {
+          audio.src = offlineUrl;
+        } else {
+          audio.src = url;
+        }
+        audio.load();
+        audio.play().catch(() => { stopLafziWordSync(); setNarratorPlayingAyah(null); narratorAyahAudioRef.current = null; });
+      }).catch(() => {
+        audio.src = url;
+        audio.load();
+        audio.play().catch(() => { stopLafziWordSync(); setNarratorPlayingAyah(null); narratorAyahAudioRef.current = null; });
+      });
+
+      // Start word highlighting once we know the duration
+      audio.onloadedmetadata = () => {
+        if (isLafziMode && audio.duration && isFinite(audio.duration)) {
+          startLafziWordSync(targetAyah, audio.duration);
+        }
+      };
 
       audio.onended = () => {
+        stopLafziWordSync();
         const repeat = repeatModeRef.current;
         const total = totalVersesRef.current;
         if (repeat === 'verse') {
           // Repeat same ayah
           audio.currentTime = 0;
+          if (isLafziMode && audio.duration && isFinite(audio.duration)) {
+            startLafziWordSync(targetAyah, audio.duration);
+          }
           audio.play().catch(() => { setNarratorPlayingAyah(null); narratorAyahAudioRef.current = null; });
         } else if (targetAyah < total) {
           // Advance to next ayah (surah repeat will loop back at the end)
@@ -2247,12 +2536,11 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
           narratorAyahAudioRef.current = null;
         }
       };
-      audio.onerror = () => { setNarratorPlayingAyah(null); narratorAyahAudioRef.current = null; };
-      audio.play().catch(() => { setNarratorPlayingAyah(null); narratorAyahAudioRef.current = null; });
+      audio.onerror = () => { stopLafziWordSync(); setNarratorPlayingAyah(null); narratorAyahAudioRef.current = null; };
     };
 
     playNarratorForAyah(ayahNum);
-  }, [narratorPlayingAyah, effectiveNarrator, defaultNarratorForTranslation, surah?.id]);
+  }, [narratorPlayingAyah, effectiveNarrator, defaultNarratorForTranslation, surah?.id, isLafziMode]);
 
   // Play translation audio using Google Cloud TTS API (continuous playback)
   const playTranslationWithTTS = useCallback(async (ayahNum, translationText, totalAyahs, playbackId) => {
@@ -2262,7 +2550,6 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
       ? translationText.substring(0, maxLength) + '...'
       : translationText;
 
-    console.log('[GoogleTTS] Playing ayah:', ayahNum, 'lang:', ttsLanguage);
     setTranslationAudioSource('tts');
     setTranslationReciterInfo({ name: 'Google TTS', nameNative: 'گوگل ٹی ٹی ایس' });
 
@@ -2273,14 +2560,65 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
 
       // Check if blocked by premium gate - stop playback, don't advance
       if (result?.blocked) {
-        console.log('[GoogleTTS] Blocked by premium gate - stopping playback');
         setIsPlayingTranslation(false);
         isPlayingTranslationRef.current = false;
+        setTtsLoading(false);
         return;
+      }
+
+      // Browser TTS fallback (free tier after premium gate dismissed)
+      if (result?.useBrowserTTS && 'speechSynthesis' in window) {
+        setTranslationAudioSource('browser-tts');
+        setTranslationReciterInfo({ name: 'Browser TTS', nameNative: 'براؤزر ٹی ٹی ایس' });
+
+        return new Promise((resolve) => {
+          window.speechSynthesis.cancel();
+          const utterance = new SpeechSynthesisUtterance(result.text);
+          // Map language code to BCP-47
+          const langMap = { ur: 'ur-PK', hi: 'hi-IN', en: 'en-US', ar: 'ar-SA', zh: 'zh-CN', ja: 'ja-JP', ko: 'ko-KR', es: 'es-ES', fr: 'fr-FR', de: 'de-DE', pt: 'pt-BR', it: 'it-IT', nl: 'nl-NL', ru: 'ru-RU', tr: 'tr-TR', id: 'id-ID', ms: 'ms-MY', th: 'th-TH', vi: 'vi-VN', fa: 'fa-IR', bn: 'bn-IN', ta: 'ta-IN', te: 'te-IN', ml: 'ml-IN', sw: 'sw-KE', pl: 'pl-PL' };
+          utterance.lang = langMap[result.langCode] || result.langCode;
+          utterance.rate = 0.9;
+
+          utterance.onend = () => {
+            if (!isLast && isPlayingTranslationRef.current) {
+              setTranslationAyah(prev => prev + 1);
+            } else if (isLast && repeatModeRef.current === 'surah') {
+              setTranslationAyah(1); setCurrentAyah(1);
+            } else if (isLast && playAllSurahsRef.current) {
+              const currentSurahId = surahRef.current?.id;
+              if (currentSurahId && currentSurahId < 114) {
+                const nextS = SURAHS.find(s => s.id === currentSurahId + 1);
+                if (nextS && onChangeSurahRef.current) {
+                  setCurrentAyah(1); setTranslationAyah(1);
+                  playAllAdvancingRef.current = true; onChangeSurahRef.current(nextS);
+                }
+              } else { setIsPlayingTranslation(false); isPlayingTranslationRef.current = false; }
+            } else {
+              setIsPlayingTranslation(false);
+              isPlayingTranslationRef.current = false;
+              setTranslationAyah(1);
+            }
+            resolve();
+          };
+
+          utterance.onerror = () => {
+            if (!isLast && isPlayingTranslationRef.current) {
+              setTimeout(() => setTranslationAyah(prev => prev + 1), 300);
+            } else {
+              setIsPlayingTranslation(false);
+              isPlayingTranslationRef.current = false;
+            }
+            resolve();
+          };
+
+          window.speechSynthesis.speak(utterance);
+        });
       }
 
       if (!result || typeof result !== 'string') {
         console.error('[GoogleTTS] Failed to get audio URL, advancing...');
+        setAudioInfoMessage(t('reader.ttsUnavailable', 'Translation audio unavailable — check your connection'));
+        setTimeout(() => setAudioInfoMessage(null), 4000);
         if (!isLast && isPlayingTranslationRef.current) {
           setTimeout(() => setTranslationAyah(prev => prev + 1), 300);
         } else if (isLast && repeatModeRef.current === 'surah') {
@@ -2344,9 +2682,7 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
         }
       };
 
-      console.log('[GoogleTTS] Attempting to play audio...');
       await audio.play();
-      console.log('[GoogleTTS] Audio playing successfully');
     } catch (error) {
       console.error('[GoogleTTS] Error playing TTS:', error);
       if (!isLast && isPlayingTranslationRef.current) {
@@ -2370,9 +2706,11 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
 
   // Play full surah translation audio (API audio first, TTS fallback)
   const playTranslationAudio = useCallback((ayahNum, translationText, totalAyahs) => {
-    if (!translationText) {
-      // No translation available - auto-advance to next verse
-      console.log('[TranslationAudio] No translation text for ayah', ayahNum, '- advancing');
+    // Guard: translation may be object {en, ur} instead of string
+    if (!translationText || typeof translationText !== 'string') {
+      // No translation available - show info and auto-advance
+      setAudioInfoMessage(t('reader.noTranslationAudio', 'No translation text available for this ayah'));
+      setTimeout(() => setAudioInfoMessage(null), 3000);
       const isLast = ayahNum >= totalAyahs;
       if (!isLast && isPlayingTranslationRef.current) {
         setTranslationAyah(prev => prev + 1);
@@ -2418,8 +2756,17 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
         setTranslationAudioSource('api');
         setTranslationReciterInfo(apiAudioSource.reciter);
 
+        // Lafzi word highlighting when metadata is available
+        audio.onloadedmetadata = () => {
+          if (translationAudioRef.current?._playbackId !== playbackId) return;
+          if (isLafziMode && audio.duration && isFinite(audio.duration)) {
+            startLafziWordSync(ayahNum, audio.duration);
+          }
+        };
+
         audio.onended = () => {
           if (translationAudioRef.current?._playbackId !== playbackId) return;
+          stopLafziWordSync();
           if (!isLast && isPlayingTranslationRef.current) {
             setTranslationAyah(prev => prev + 1);
           } else if (isLast && playAllSurahsRef.current) {
@@ -2440,31 +2787,65 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
 
         audio.onerror = () => {
           if (translationAudioRef.current?._playbackId !== playbackId) return;
+          stopLafziWordSync();
           // API audio failed - fall back to TTS
-          console.log('[TranslationAudio] API audio failed, falling back to TTS');
+          setAudioInfoMessage(t('reader.switchingToTTS', 'Narrator audio unavailable — switching to TTS'));
+          setTimeout(() => setAudioInfoMessage(null), 3000);
           playTranslationWithTTS(ayahNum, translationText, totalAyahs, playbackId);
         };
 
-        audio.src = apiUrl;
-        audio.load();
-
-        audio.oncanplaythrough = () => {
-          if (translationAudioRef.current?._playbackId !== playbackId) return;
-          audio.play().catch((err) => {
-            if (err.name === 'AbortError') return;
-            // Play failed - fall back to TTS
-            console.log('[TranslationAudio] API audio play failed, falling back to TTS');
-            playTranslationWithTTS(ayahNum, translationText, totalAyahs, playbackId);
-          });
+        // Try offline cache first, then CDN
+        const loadAndPlay = (src) => {
+          audio.src = src;
+          audio.load();
+          audio.oncanplaythrough = () => {
+            if (translationAudioRef.current?._playbackId !== playbackId) return;
+            audio.play().catch((err) => {
+              if (err.name === 'AbortError') return;
+              stopLafziWordSync();
+              playTranslationWithTTS(ayahNum, translationText, totalAyahs, playbackId);
+            });
+          };
         };
+        getOfflineCachedAudioUrl(apiUrl).then(offlineUrl => {
+          if (offlineUrl && translationAudioRef.current?._playbackId === playbackId) {
+            loadAndPlay(offlineUrl);
+          } else {
+            loadAndPlay(apiUrl);
+          }
+        }).catch(() => loadAndPlay(apiUrl));
 
         return;
       }
     }
 
-    // No API audio available - use TTS directly
+    // No API audio available - use TTS directly (show info only once per playback session)
+    if (ayahNum === 1 || ayahNum === (surahRef.current?.ayahs || 999)) {
+      setAudioInfoMessage(t('reader.usingTTS', 'No narrator audio for this translation — using TTS'));
+      setTimeout(() => setAudioInfoMessage(null), 3000);
+    }
     playTranslationWithTTS(ayahNum, translationText, totalAyahs, playbackId);
-  }, [ttsLanguage, apiAudioSource, surah?.id, playTranslationWithTTS]);
+  }, [ttsLanguage, apiAudioSource, surah?.id, playTranslationWithTTS, isLafziMode, startLafziWordSync, stopLafziWordSync]);
+
+  // Scroll to a specific ayah (with progressive loading expansion and retry)
+  const scrollToAyah = useCallback((ayahNum) => {
+    if (!versesContainerRef.current) return;
+    // Expand progressive loading if needed
+    if (isLargeSurah && ayahNum > visibleVerseCount) {
+      setVisibleVerseCount(Math.min(ayahNum + 10, surah?.ayahs || ayahNum));
+    }
+    let attempts = 0;
+    const tryScroll = () => {
+      const el = versesContainerRef.current?.querySelector(`[data-ayah="${ayahNum}"]`);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } else if (attempts < 10) {
+        attempts++;
+        setTimeout(tryScroll, 100);
+      }
+    };
+    setTimeout(tryScroll, 50);
+  }, [isLargeSurah, visibleVerseCount, surah?.ayahs]);
 
   // Toggle translation playback
   const toggleTranslationPlayback = useCallback(() => {
@@ -2474,35 +2855,48 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
         translationAudioRef.current.pause();
         translationAudioRef.current = null;
       }
+      if (window.speechSynthesis) window.speechSynthesis.cancel();
       setIsPlayingTranslation(false);
       isPlayingTranslationRef.current = false;
+      setTtsLoading(false);
+      stopLafziWordSync();
     } else {
+      // Early premium check — if no API audio available and TTS requires premium, gate immediately
+      // Skip if user already dismissed premium gate (browser TTS fallback will be used)
+      if (!apiAudioSource && !canUseHDTTS && !ttsPremiumDismissedRef.current) {
+        setUpgradeFeature('hd-tts');
+        setShowUpgradePrompt(true);
+        return;
+      }
       // Stop per-ayah audio systems
       if (ttsAudioRef.current) { ttsAudioRef.current.pause(); ttsAudioRef.current = null; }
       if (narratorAyahAudioRef.current) { narratorAyahAudioRef.current.pause(); narratorAyahAudioRef.current = null; }
+      if (window.speechSynthesis) window.speechSynthesis.cancel();
       setSpeakingAyah(null);
       setNarratorPlayingAyah(null);
       // Start from current ayah
       setTranslationAyah(currentAyah);
       setIsPlayingTranslation(true);
       isPlayingTranslationRef.current = true;
-      // Stop Arabic recitation if playing
+      // Scroll to the ayah being played
+      scrollToAyah(currentAyah);
+      // Stop Arabic recitation if playing — pause immediately to prevent overlap
       if (isPlaying) {
+        if (audioRef.current) audioRef.current.pause();
         setIsPlaying(false);
       }
     }
-  }, [isPlayingTranslation, currentAyah, isPlaying]);
+  }, [isPlayingTranslation, currentAyah, isPlaying, apiAudioSource, canUseHDTTS, scrollToAyah]);
 
   // Toggle combined playback (Arabic + Translation)
   const toggleCombinedPlayback = useCallback(() => {
-    console.log('[Combined] Toggle called, isPlayingCombined:', isPlayingCombined);
     if (isPlayingCombined) {
       // Stop combined playback
-      console.log('[Combined] Stopping combined playback');
       setIsPlayingCombined(false);
       isPlayingCombinedRef.current = false;
       setIsPlaying(false);
       setCombinedPhase('arabic');
+      setTtsLoading(false);
       if (translationAudioRef.current) {
         translationAudioRef.current.pause();
         translationAudioRef.current = null;
@@ -2510,10 +2904,17 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
       if (audioRef.current) {
         audioRef.current.pause();
       }
+      if (window.speechSynthesis) window.speechSynthesis.cancel();
     } else {
-      // Start combined playback from current ayah
-      console.log('[Combined] Starting combined playback from ayah:', currentAyah);
+      // Early premium check — combined mode needs TTS for the translation phase
+      // Skip if user already dismissed premium gate (browser TTS fallback will be used)
+      if (!apiAudioSource && !canUseHDTTS && !ttsPremiumDismissedRef.current) {
+        setUpgradeFeature('hd-tts');
+        setShowUpgradePrompt(true);
+        return;
+      }
 
+      // Start combined playback from current ayah
       // IMPORTANT: Stop any existing translation audio first
       if (translationAudioRef.current) {
         translationAudioRef.current.pause();
@@ -2529,6 +2930,7 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
       // Stop per-ayah audio systems
       if (ttsAudioRef.current) { ttsAudioRef.current.pause(); ttsAudioRef.current = null; }
       if (narratorAyahAudioRef.current) { narratorAyahAudioRef.current.pause(); narratorAyahAudioRef.current = null; }
+      if (window.speechSynthesis) window.speechSynthesis.cancel();
       setSpeakingAyah(null);
       setNarratorPlayingAyah(null);
 
@@ -2537,8 +2939,10 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
       isPlayingCombinedRef.current = true;
       setCombinedPhase('arabic');
       setIsPlaying(true);
+      // Scroll to the ayah being played
+      scrollToAyah(currentAyah);
     }
-  }, [isPlayingCombined, isPlayingTranslation, currentAyah]);
+  }, [isPlayingCombined, isPlayingTranslation, currentAyah, apiAudioSource, canUseHDTTS, scrollToAyah]);
 
   // Stop translation when switching surahs (unless Play All is advancing)
   useEffect(() => {
@@ -2603,48 +3007,25 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
   useEffect(() => { repeatModeRef.current = repeatMode; }, [repeatMode]);
   useEffect(() => { playAllSurahsRef.current = playAllSurahs; }, [playAllSurahs]);
 
-  const { verses, loading, error } = useQuranAPI(surah?.id, { translationId: selectedTranslation, includeTajweed: tajweedMode, includeWordByWord: false });
+  const { verses: rawVerses, loading: rawLoading, error } = useQuranAPI(surah?.id, { translationId: selectedTranslation, includeTajweed: tajweedMode, includeWordByWord: false });
+
+  // Smooth surah transition: keep old verses during loading to avoid flash/jerk
+  const prevVersesRef = useRef([]);
+  const [surahTransitioning, setSurahTransitioning] = useState(false);
+  const verses = rawLoading && prevVersesRef.current.length > 0 ? prevVersesRef.current : rawVerses;
+  const loading = rawLoading && prevVersesRef.current.length === 0; // Only show spinner on initial load
+
+  useEffect(() => {
+    if (!rawLoading && rawVerses.length > 0) {
+      prevVersesRef.current = rawVerses;
+      setSurahTransitioning(false);
+    }
+  }, [rawLoading, rawVerses]);
   const { wordsMap, loading: wordsLoading, isFallback: isWordsFallback, userLanguage: wordsUserLang } = useMultilingualWords(wordByWordMode ? surah?.id : null, selectedTranslation);
+  const wordsMapRef = useRef(wordsMap);
+  useEffect(() => { wordsMapRef.current = wordsMap; }, [wordsMap]);
 
   const palette = useMemo(() => PALETTES[(surah?.id - 1) % 10], [surah?.id]);
-
-  // Get overlay style configuration based on layout
-  // CRITICAL: Apply dynamic styles for Timeline (Makki/Madani) and Length layouts
-  const overlayConfig = useMemo(() => {
-    const styleKey = layoutToOverlayStyle[layoutStyle] || 'bubble';
-    let config = { ...OVERLAY_STYLES[styleKey] };
-
-    // Apply dynamic styles for Timeline (Revelation) layout based on Makki/Madani
-    if (styleKey === 'timeline' && surah) {
-      const isMakki = surah.type === 'Makki' || surah.revelationType === 'Meccan';
-      const dynamicStyle = isMakki
-        ? config.getMakkiStyle?.()
-        : config.getMadaniStyle?.();
-      if (dynamicStyle) {
-        config = { ...config, ...dynamicStyle };
-      }
-    }
-
-    // Apply dynamic styles for Length layout based on ayah count
-    if (styleKey === 'length' && surah) {
-      const ayahCount = surah.ayahs || 0;
-      let dynamicStyle;
-      if (ayahCount <= 30) {
-        dynamicStyle = config.getShortStyle?.();
-      } else if (ayahCount <= 80) {
-        dynamicStyle = config.getMediumStyle?.();
-      } else {
-        dynamicStyle = config.getLongStyle?.();
-      }
-      if (dynamicStyle) {
-        config = { ...config, ...dynamicStyle };
-      }
-    }
-
-    // Debug: log which style is being applied
-    console.log('[BubbleReaderOverlay] Layout:', layoutStyle, '→ Style:', styleKey, '→ isDark:', config?.isDark);
-    return config;
-  }, [layoutStyle, surah]);
 
   const totalVerses = verses.length || surah?.ayahs || 0;
   const totalVersesRef = useRef(totalVerses);
@@ -2671,8 +3052,6 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
 
     // Only restart if narrator actually changed and audio is playing
     if (prevNarrator && effectiveNarrator && prevNarrator !== effectiveNarrator) {
-      console.log('[Narrator] Changed from', prevNarrator, 'to', effectiveNarrator);
-
       if (isPlayingTranslation && translationAudioRef.current) {
         // Stop current audio
         translationAudioRef.current.pause();
@@ -2683,7 +3062,7 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
         const verse = currentVerses.find(v => v.number === translationAyah);
         if (verse) {
           // Build new audio source directly from new narrator
-          const config = narratorUrlConfig[effectiveNarrator];
+          const config = NARRATOR_URL_CONFIG[effectiveNarrator];
           const newSource = config ? {
             audioId: effectiveNarrator,
             type: config.type,  // Use actual type from config (everyayah or timestamp)
@@ -2722,9 +3101,7 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
                   }
                 };
 
-                audio.play().catch(err => {
-                  console.log('[Narrator] Play failed:', err);
-                });
+                audio.play().catch(() => {});
               }
             }
           }
@@ -2784,18 +3161,14 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
     if (isLoadingTranslationRef.current) return;
     isLoadingTranslationRef.current = true;
 
-    // IMPORTANT: Stop Arabic audio when translation starts
-    // This prevents both audios playing simultaneously
-    if (isPlaying) {
+    // Stop Arabic audio when translation starts — use ref to avoid dep on isPlaying
+    if (isPlayingRef.current) {
+      if (audioRef.current) audioRef.current.pause();
       setIsPlaying(false);
-      if (audioRef.current) {
-        audioRef.current.pause();
-      }
     }
 
     const verse = verses.find(v => v.number === translationAyah);
     if (!verse) {
-      console.log('Verse not found:', translationAyah, 'available:', verses.map(v => v.number));
       setIsPlayingTranslation(false);
       isPlayingTranslationRef.current = false;
       isLoadingTranslationRef.current = false;
@@ -2804,6 +3177,7 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
 
     // Sync currentAyah with translationAyah so verse gets highlighted and scrolled
     setCurrentAyah(translationAyah);
+    scrollToAyah(translationAyah);
 
     // Pass total verses count so playTranslationAudio can determine if last
     playTranslationAudio(translationAyah, verse.translation, verses.length);
@@ -2812,28 +3186,40 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
     Promise.resolve().then(() => { isLoadingTranslationRef.current = false; });
 
     // No cleanup here - playTranslationAudio handles stopping previous audio
-    // Cleanup was causing race condition by pausing before new audio could start
-  }, [isPlayingTranslation, translationAyah, verses, playTranslationAudio, isPlayingCombined, isPlaying]);
+  }, [isPlayingTranslation, translationAyah, verses, playTranslationAudio, isPlayingCombined]);
 
   // Cleanup all audio refs on unmount
   useEffect(() => {
     return () => {
+      // Revoke blob URLs to prevent memory leaks
       if (translationAudioRef.current) {
-        translationAudioRef.current.pause();
-        translationAudioRef.current = null;
+        if (translationAudioRef.current._audioUrl?.startsWith('blob:')) URL.revokeObjectURL(translationAudioRef.current._audioUrl);
+        translationAudioRef.current.pause(); translationAudioRef.current = null;
       }
       if (ttsAudioRef.current) {
-        ttsAudioRef.current.pause();
-        ttsAudioRef.current = null;
+        if (ttsAudioRef.current._audioUrl?.startsWith('blob:')) URL.revokeObjectURL(ttsAudioRef.current._audioUrl);
+        ttsAudioRef.current.pause(); ttsAudioRef.current = null;
       }
       if (narratorAyahAudioRef.current) {
-        narratorAyahAudioRef.current.pause();
-        narratorAyahAudioRef.current = null;
+        narratorAyahAudioRef.current.pause(); narratorAyahAudioRef.current = null;
       }
       if (wordAudioRef.current) {
-        wordAudioRef.current.pause();
-        wordAudioRef.current = null;
+        wordAudioRef.current.pause(); wordAudioRef.current = null;
       }
+      // Clean up Lafzi word highlight timer
+      if (lafziWordTimerRef.current) { clearInterval(lafziWordTimerRef.current); lafziWordTimerRef.current = null; }
+      // Cancel browser TTS
+      if (window.speechSynthesis) window.speechSynthesis.cancel();
+      // Clean up preload
+      if (translationPreloadRef.current?.audio) { translationPreloadRef.current.audio.pause(); translationPreloadRef.current.audio.src = ''; }
+      if (translationPreloadRef.current?.blobUrl) URL.revokeObjectURL(translationPreloadRef.current.blobUrl);
+      translationPreloadRef.current = null;
+      // Release cached audio elements
+      audioCacheRef.current.forEach((cached) => {
+        if (cached.audio) { cached.audio.src = ''; cached.audio.load(); }
+      });
+      audioCacheRef.current.clear();
+      audioCacheBytesRef.current = 0;
     };
   }, []);
 
@@ -2878,20 +3264,9 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
 
   // Play translation TTS for combined mode (called after Arabic ends)
   const playCombinedTranslation = useCallback((ayahNum) => {
-    console.log('[Combined] ========================================');
-    console.log('[Combined] playCombinedTranslation called for ayah:', ayahNum);
-    console.log('[Combined] selectedTranslation:', selectedTranslation);
-    console.log('[Combined] effectiveNarrator:', effectiveNarrator);
-    console.log('[Combined] surah?.id:', surah?.id);
-    console.log('[Combined] isPlayingCombinedRef:', isPlayingCombinedRef.current);
-    console.log('[Combined] versesRef.current length:', versesRef.current?.length);
-
     const verse = versesRef.current.find(v => v.number === ayahNum);
-    console.log('[Combined] Found verse:', verse ? `ayah ${verse.number}` : 'NOT FOUND');
-    console.log('[Combined] Translation text:', verse?.translation?.substring(0, 50) + '...');
 
     if (!verse?.translation) {
-      console.log('[Combined] No translation for ayah:', ayahNum, '- skipping to next');
       // No translation, move to next verse
       const total = totalVersesRef.current;
       if (ayahNum < total) {
@@ -2907,7 +3282,6 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
 
     // Stop any existing translation audio
     if (translationAudioRef.current) {
-      console.log('[Combined] Stopping existing translation audio');
       const oldAudio = translationAudioRef.current;
       translationAudioRef.current = null;
       oldAudio.pause();
@@ -2915,19 +3289,13 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
     }
 
     setCombinedPhase('translation');
-    console.log('[Combined] Set phase to translation');
 
     const playbackId = Date.now();
     const total = totalVersesRef.current;
-    console.log('[Combined] Playback ID:', playbackId, 'Total verses:', total);
 
     // Helper to advance to next verse after translation ends
     const advanceToNext = () => {
-      console.log('[Combined] ----------------------------------------');
-      console.log('[Combined] advanceToNext called for ayah:', ayahNum);
-      console.log('[Combined] total:', total, 'isPlayingCombined:', isPlayingCombinedRef.current);
       if (!isPlayingCombinedRef.current) {
-        console.log('[Combined] Not playing combined anymore, stopping');
         return;
       }
       // Track verse listened via gamification
@@ -2937,24 +3305,20 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
       const repeat = repeatModeRef.current;
       if (repeat === 'verse') {
         // Repeat same ayah (Arabic + Translation again)
-        console.log('[Combined] Verse repeat — replaying ayah:', ayahNum);
         setCombinedPhase('arabic');
-        setCurrentAyah(ayahNum); // Trigger Arabic replay
-        // Force re-trigger by toggling off/on
-        setIsPlaying(false);
-        setTimeout(() => setIsPlaying(true), 50);
+        // Restart Arabic audio directly without state toggle (avoids UI jerk)
+        if (audioRef.current) {
+          audioRef.current.currentTime = 0;
+          audioRef.current.play().catch(() => {});
+        }
       } else if (ayahNum < total) {
-        console.log('[Combined] Advancing to next verse:', ayahNum + 1);
         setCombinedPhase('arabic');
         setCurrentAyah(ayahNum + 1);
-        console.log('[Combined] setCurrentAyah called with:', ayahNum + 1);
       } else if (repeat === 'surah') {
-        console.log('[Combined] Surah repeat — looping to ayah 1');
         setCombinedPhase('arabic');
         setCurrentAyah(1);
         setTranslationAyah(1);
       } else if (playAllSurahsRef.current) {
-        console.log('[Combined] Last verse reached, Play All active - advancing to next surah');
         if (g?.isActive) g.recordAction('listen_surah', { surahId: surah?.id });
         const currentSurahId = surahRef.current?.id;
         if (currentSurahId && currentSurahId < 114) {
@@ -2972,7 +3336,6 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
           setCombinedPhase('arabic');
         }
       } else {
-        console.log('[Combined] Last verse reached, stopping');
         // Track surah listened
         if (g?.isActive) g.recordAction('listen_surah', { surahId: surah?.id });
         setIsPlayingCombined(false);
@@ -2984,47 +3347,57 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
 
     // Helper to play with Google Cloud TTS
     const playWithTTS = async () => {
-      console.log('[Combined-TTS] ========================================');
-      console.log('[Combined-TTS] playWithTTS FUNCTION ENTERED');
-      console.log('[Combined-TTS] Starting TTS for ayah:', ayahNum);
-      console.log('[Combined-TTS] ttsLanguage:', ttsLanguage);
-      console.log('[Combined-TTS] selectedTranslation:', selectedTranslation);
-      console.log('[Combined-TTS] isPlayingCombinedRef:', isPlayingCombinedRef.current);
-      console.log('[Combined-TTS] verse translation text:', verse?.translation?.substring(0, 100));
-
       const text = verse.translation;
       const maxLength = 4000;
       const truncatedText = text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
-      console.log('[Combined-TTS] Text length:', text.length, 'Truncated:', truncatedText.length);
 
       setTranslationAudioSource('tts');
       setTranslationReciterInfo({ name: 'Google TTS', nameNative: 'گوگل ٹی ٹی ایس' });
 
       try {
-        console.log('[Combined-TTS] Calling playGoogleCloudTTS...');
         const result = await playGoogleCloudTTS(truncatedText, ttsLanguage);
-        console.log('[Combined-TTS] Got result:', result?.blocked ? 'BLOCKED' : (result ? 'YES (data URL)' : 'NO'));
+
+        // User stopped combined mode while TTS was loading — bail out
+        if (!isPlayingCombinedRef.current) {
+          return;
+        }
 
         // Check if blocked by premium gate - stop playback, don't advance
         if (result?.blocked) {
-          console.log('[Combined-TTS] Blocked by premium gate - stopping combined playback');
           setIsPlayingCombined(false);
           isPlayingCombinedRef.current = false;
           setCombinedPhase('arabic');
+          setTtsLoading(false);
+          return;
+        }
+
+        // Browser TTS fallback (free tier after premium gate dismissed)
+        if (result?.useBrowserTTS && 'speechSynthesis' in window) {
+          window.speechSynthesis.cancel();
+          const utterance = new SpeechSynthesisUtterance(result.text);
+          const langMap = { ur: 'ur-PK', hi: 'hi-IN', en: 'en-US', ar: 'ar-SA', zh: 'zh-CN', ja: 'ja-JP', ko: 'ko-KR', es: 'es-ES', fr: 'fr-FR', de: 'de-DE' };
+          utterance.lang = langMap[result.langCode] || result.langCode;
+          utterance.rate = 0.9;
+          utterance.onend = () => advanceToNext();
+          utterance.onerror = () => {
+            if (isPlayingCombinedRef.current && ayahNum < total) {
+              setCombinedPhase('arabic');
+              setTimeout(() => setCurrentAyah(ayahNum + 1), 300);
+            }
+          };
+          window.speechSynthesis.speak(utterance);
           return;
         }
 
         if (!result || typeof result !== 'string') {
           console.error('[Combined-TTS] Google TTS failed to get audio URL');
           if (isPlayingCombinedRef.current && ayahNum < total) {
-            console.log('[Combined-TTS] Skipping to next ayah due to failure');
             setCombinedPhase('arabic');
             setTimeout(() => setCurrentAyah(ayahNum + 1), 300);
           }
           return;
         }
 
-        console.log('[Combined-TTS] Creating Audio object...');
         const ttsAudio = new Audio(result);
         ttsAudio._playbackId = playbackId;
         ttsAudio._audioUrl = result;
@@ -3032,11 +3405,8 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
         translationAudioRef.current = ttsAudio;
 
         ttsAudio.onended = () => {
-          console.log('[Combined-TTS] Audio ended event fired for ayah:', ayahNum);
-          console.log('[Combined-TTS] playbackId check:', translationAudioRef.current?._playbackId, '===', playbackId);
           // Data URLs don't need revoking
           if (translationAudioRef.current?._playbackId !== playbackId) {
-            console.log('[Combined-TTS] Playback ID mismatch, ignoring ended event');
             return;
           }
           advanceToNext();
@@ -3046,31 +3416,57 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
           console.error('[Combined-TTS] Audio playback error for ayah:', ayahNum, e);
           // Data URLs don't need revoking
           if (isPlayingCombinedRef.current && ayahNum < total) {
-            console.log('[Combined-TTS] Skipping to next ayah due to error');
             setCombinedPhase('arabic');
             setTimeout(() => setCurrentAyah(ayahNum + 1), 300);
           }
         };
 
-        console.log('[Combined-TTS] Calling play()...');
         await ttsAudio.play();
-        console.log('[Combined-TTS] Play started successfully for ayah:', ayahNum);
       } catch (error) {
         console.error('[Combined-TTS] Exception caught:', error);
         if (isPlayingCombinedRef.current && ayahNum < total) {
-          console.log('[Combined-TTS] Skipping to next ayah due to exception');
           setCombinedPhase('arabic');
           setTimeout(() => setCurrentAyah(ayahNum + 1), 300);
         }
       }
     };
 
+    // ── Check for pre-prepared translation audio (loaded while Arabic was playing) ──
+    const preloaded = translationPreloadRef.current;
+    if (preloaded?.ayahNum === ayahNum && preloaded?.ready) {
+      translationPreloadRef.current = null; // Consume it
+
+      if (preloaded.type === 'api' && preloaded.audio) {
+        const audio = preloaded.audio;
+        audio._playbackId = playbackId;
+        audio._isAPI = true;
+        translationAudioRef.current = audio;
+        setTranslationAudioSource('api');
+        setTranslationReciterInfo(TRANSLATION_RECITERS[preloaded.narrator] || { name: 'Narrator' });
+        audio.onended = () => { if (translationAudioRef.current?._playbackId !== playbackId) return; advanceToNext(); };
+        audio.onerror = () => { if (translationAudioRef.current?._playbackId !== playbackId) return; playWithTTS(); };
+        audio.play().catch(() => playWithTTS());
+        return;
+      }
+
+      if (preloaded.type === 'tts' && preloaded.audio) {
+        const audio = preloaded.audio;
+        audio._playbackId = playbackId;
+        audio._isTTS = true;
+        translationAudioRef.current = audio;
+        setTranslationAudioSource('tts');
+        setTranslationReciterInfo({ name: 'Google TTS', nameNative: 'گوگل ٹی ٹی ایس' });
+        audio.onended = () => { if (preloaded.blobUrl) URL.revokeObjectURL(preloaded.blobUrl); if (translationAudioRef.current?._playbackId !== playbackId) return; advanceToNext(); };
+        audio.onerror = () => { if (preloaded.blobUrl) URL.revokeObjectURL(preloaded.blobUrl); if (isPlayingCombinedRef.current && ayahNum < total) { setCombinedPhase('arabic'); setTimeout(() => setCurrentAyah(ayahNum + 1), 300); } };
+        audio.play().catch(() => { if (isPlayingCombinedRef.current && ayahNum < total) { setCombinedPhase('arabic'); setTimeout(() => setCurrentAyah(ayahNum + 1), 300); } });
+        return;
+      }
+      // browser-tts or blocked — fall through to normal flow
+    }
+
     // Check if user explicitly selected TTS
-    console.log('[Combined] effectiveNarrator check:', effectiveNarrator);
     if (effectiveNarrator === 'tts') {
-      console.log('[Combined] User selected TTS, calling playWithTTS()');
       playWithTTS();
-      console.log('[Combined] playWithTTS() called');
       return;
     }
 
@@ -3082,37 +3478,26 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
     // Use effectiveNarrator if set, otherwise use default for translation
     let narrator = effectiveNarrator || defaultNarrator;
 
-    console.log('[Combined-API] ========================================');
-    console.log('[Combined-API] selectedTranslation:', selectedTranslation);
-    console.log('[Combined-API] defaultNarrator:', defaultNarrator);
-    console.log('[Combined-API] effectiveNarrator:', effectiveNarrator);
-    console.log('[Combined-API] resolved narrator:', narrator);
-
-    const config = narrator ? narratorUrlConfig[narrator] : null;
-    console.log('[Combined-API] config:', config);
+    const config = narrator ? NARRATOR_URL_CONFIG[narrator] : null;
 
     if (config && narrator) {
       // For timestamp-based (Kanz ul Iman), use TTS in combined mode
       // (timestamp-based doesn't work well for combined mode - would need complex seeking)
       if (config.type === 'timestamp') {
-        console.log('[Combined-API] Timestamp-based narrator, using TTS');
         playWithTTS();
         return;
       }
 
       // EveryAyah-style API audio
       const apiUrl = getTranslationAudioUrl(surah?.id, ayahNum, narrator);
-      console.log('[Combined-API] Generated API URL:', apiUrl);
       if (apiUrl) {
         // Check cache first for instant playback
         const cachedAudio = getCachedAudio(surah?.id, ayahNum, narrator);
         let audio;
 
         if (cachedAudio) {
-          console.log('[Combined-API] Using CACHED audio for ayah:', ayahNum);
           audio = cachedAudio;
         } else {
-          console.log('[Combined-API] Creating Audio object for API audio...');
           audio = new Audio();
         }
 
@@ -3125,19 +3510,14 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
         setTranslationReciterInfo(TRANSLATION_RECITERS[narrator]);
 
         audio.onended = () => {
-          console.log('[Combined-API] Audio ended event fired for ayah:', ayahNum);
-          console.log('[Combined-API] playbackId check:', translationAudioRef.current?._playbackId, '===', playbackId);
           if (translationAudioRef.current?._playbackId !== playbackId) {
-            console.log('[Combined-API] Playback ID mismatch, ignoring ended event');
             return;
           }
           advanceToNext();
         };
 
-        audio.onerror = (e) => {
-          console.log('[Combined-API] Audio error event fired for ayah:', ayahNum);
+        audio.onerror = () => {
           if (translationAudioRef.current?._playbackId !== playbackId) return;
-          console.log('[Combined-API] API audio failed:', e.target?.error?.message || 'Unknown error', '- falling back to TTS');
           playWithTTS();
         };
 
@@ -3145,26 +3525,19 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
         if (!cachedAudio) {
           audio.src = apiUrl;
           audio.load();
-          console.log('[Combined-API] Loading API audio...');
 
           audio.oncanplaythrough = () => {
-            console.log('[Combined-API] canplaythrough event fired for ayah:', ayahNum);
             if (translationAudioRef.current?._playbackId !== playbackId) {
-              console.log('[Combined-API] Playback ID mismatch, ignoring canplaythrough');
               return;
             }
-            console.log('[Combined-API] API audio ready, calling play()');
             audio.play().catch((err) => {
-              console.log('[Combined-API] Play failed:', err.name, err.message);
               if (err.name === 'AbortError') return;
               playWithTTS();
             });
           };
         } else {
           // Cached audio is already ready, play immediately
-          console.log('[Combined-API] Cached audio ready, playing immediately');
           audio.play().catch((err) => {
-            console.log('[Combined-API] Cached play failed:', err.name, err.message);
             if (err.name === 'AbortError') return;
             playWithTTS();
           });
@@ -3172,14 +3545,10 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
 
         return;
       } else {
-        console.log('[Combined-API] No API URL generated, falling back to TTS');
       }
-    } else {
-      console.log('[Combined-API] No config or narrator, falling back to TTS');
     }
 
     // No API audio available - use TTS
-    console.log('[Combined] No API audio, using TTS fallback');
     playWithTTS();
   }, [ttsLanguage, effectiveNarrator, surah?.id, selectedTranslation]);
 
@@ -3211,7 +3580,6 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
       // Try backup CDN on first failure (only if using primary CDN)
       if (retryCount === 0 && currentSrc.includes('/audio/128/')) {
         audioRetryCountRef.current = 1;
-        console.log('[Audio] Primary CDN failed, trying backup CDN (64kbps)');
         const backupSrc = currentSrc.replace('/audio/128/', '/audio/64/');
         audio.src = backupSrc;
         audio.load();
@@ -3231,22 +3599,12 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
       const total = totalVersesRef.current;
       const mode = audioModeRef.current;
 
-      console.log('[Arabic-Ended] ========================================');
-      console.log('[Arabic-Ended] Audio ended event fired');
-      console.log('[Arabic-Ended] mode:', mode);
-      console.log('[Arabic-Ended] isPlayingCombinedRef:', isPlayingCombinedRef.current);
-      console.log('[Arabic-Ended] currentAyahRef:', current);
-      console.log('[Arabic-Ended] totalVersesRef:', total);
-      console.log('[Arabic-Ended] repeatMode:', repeat);
-
       // Combined mode: play translation after Arabic
       if (mode === 'combined' && isPlayingCombinedRef.current) {
-        console.log('[Arabic-Ended] Mode is combined, calling playCombinedTranslation for ayah:', current);
         playCombinedTranslationRef.current(current);
         return;
       }
 
-      console.log('[Arabic-Ended] Not combined mode, using normal flow');
       // Track verse listened via gamification
       const g = gamificationRef.current;
       if (g?.isActive) g.recordAction('listen_verse', { surahId: surahRef.current?.id, ayahNum: current });
@@ -3292,11 +3650,12 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
     };
   }, []); // Empty deps - audio element created once, uses refs for callbacks
 
+  // Load audio source when ayah/surah/reciter changes (NOT on play state changes — prevents stutter)
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio || !surah?.id) return;
 
-    // Check cache first for instant playback
+    // Check memory cache first for instant playback
     const cachedAudio = getCachedAudio(surah.id, currentAyah, selectedReciter);
     const globalAyah = getGlobalAyahNumber(surah.id, currentAyah);
     const url = `${AUDIO_CDN}/${selectedReciter}/${globalAyah}.mp3`;
@@ -3304,27 +3663,38 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
     audio.pause();
 
     if (cachedAudio) {
-      // Use cached blob URL for instant playback
       audio.src = cachedAudio.src;
-      console.log('[Audio] Using cached audio for ayah:', currentAyah);
+      audio.load();
     } else {
-      // Fall back to network URL
+      // Try offline Cache API before hitting CDN (for downloaded surahs)
+      getOfflineCachedAudioUrl(url).then(offlineUrl => {
+        if (offlineUrl && audioRef.current) {
+          audioRef.current.src = offlineUrl;
+          audioRef.current.load();
+          if (isPlayingRef.current) audioRef.current.play().catch(() => {});
+        }
+      });
+      // Set CDN URL immediately (will be overridden by offline URL if found)
       audio.src = url;
-      console.log('[Audio] Loading from network for ayah:', currentAyah);
+      audio.load();
     }
 
-    audio.load();
+    // Always scroll to current ayah during active playback; respect autoScroll when idle
+    if ((autoScroll || isPlayingRef.current || isPlayingCombinedRef.current) && versesContainerRef.current) {
+      scrollToAyah(currentAyah);
+    }
+  }, [surah?.id, currentAyah, selectedReciter, autoScroll, getCachedAudio, scrollToAyah]);
 
-    // Prefetch next ayahs in background
-    if (isPlaying || isPlayingCombined) {
+  // Prefetch & preload in separate effect — depends on play state but doesn't reload audio
+  useEffect(() => {
+    if (!surah?.id) return;
+    if (isPlayingRef.current || isPlayingCombinedRef.current) {
       prefetchNextAyahs(currentAyah, 3);
     }
-
-    if (autoScroll && versesContainerRef.current) {
-      const ayahElement = versesContainerRef.current.querySelector(`[data-ayah="${currentAyah}"]`);
-      if (ayahElement) ayahElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    if (isPlayingCombinedRef.current) {
+      preloadTranslationForCombined(currentAyah);
     }
-  }, [surah?.id, currentAyah, selectedReciter, autoScroll, getCachedAudio, prefetchNextAyahs, isPlaying, isPlayingCombined]);
+  }, [surah?.id, currentAyah, prefetchNextAyahs, preloadTranslationForCombined]);
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -3357,11 +3727,24 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
 
   // Central audio stop — stops all audio systems and resets play states
   const stopAllAudio = useCallback(() => {
-    if (audioRef.current) { audioRef.current.pause(); }
-    if (translationAudioRef.current) { translationAudioRef.current.pause(); translationAudioRef.current = null; }
-    if (ttsAudioRef.current) { ttsAudioRef.current.pause(); ttsAudioRef.current = null; }
+    if (audioRef.current) { audioRef.current.pause(); audioRef.current.currentTime = 0; }
+    // Revoke blob URLs before nulling to prevent memory leaks
+    if (translationAudioRef.current) {
+      if (translationAudioRef.current._audioUrl?.startsWith('blob:')) URL.revokeObjectURL(translationAudioRef.current._audioUrl);
+      translationAudioRef.current.pause(); translationAudioRef.current = null;
+    }
+    if (ttsAudioRef.current) {
+      if (ttsAudioRef.current._audioUrl?.startsWith('blob:')) URL.revokeObjectURL(ttsAudioRef.current._audioUrl);
+      ttsAudioRef.current.pause(); ttsAudioRef.current = null;
+    }
     if (narratorAyahAudioRef.current) { narratorAyahAudioRef.current.pause(); narratorAyahAudioRef.current = null; }
+    // Stop word audio to prevent double audio
+    if (wordAudioRef.current) { wordAudioRef.current.pause(); wordAudioRef.current = null; }
     if (window.speechSynthesis) window.speechSynthesis.cancel();
+    // Clean up translation preload
+    if (translationPreloadRef.current?.audio) { translationPreloadRef.current.audio.pause(); translationPreloadRef.current.audio.src = ''; }
+    if (translationPreloadRef.current?.blobUrl) URL.revokeObjectURL(translationPreloadRef.current.blobUrl);
+    translationPreloadRef.current = null;
     setIsPlaying(false);
     setIsPlayingTranslation(false);
     isPlayingTranslationRef.current = false;
@@ -3370,40 +3753,62 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
     setCombinedPhase('arabic');
     setSpeakingAyah(null);
     setNarratorPlayingAyah(null);
+    setTtsLoading(false);
+    setAudioLoading(false);
+    setWordAudioPlaying(false);
+    // Clear Lafzi word highlighting
+    if (lafziWordTimerRef.current) { clearInterval(lafziWordTimerRef.current); lafziWordTimerRef.current = null; }
+    setLafziActiveWord(null);
   }, []);
 
   // Mode-aware play/pause toggle
   const togglePlayPause = useCallback(() => {
     if (audioMode === 'arabic') {
-      setIsPlaying(prev => !prev);
+      setIsPlaying(prev => {
+        if (!prev) scrollToAyah(currentAyah); // Scroll to current ayah when starting play
+        return !prev;
+      });
     } else if (audioMode === 'translation') {
       toggleTranslationPlayback();
     } else if (audioMode === 'combined') {
       toggleCombinedPlayback();
     }
-  }, [audioMode, toggleTranslationPlayback, toggleCombinedPlayback]);
+  }, [audioMode, toggleTranslationPlayback, toggleCombinedPlayback, scrollToAyah, currentAyah]);
 
   // Ref to always have latest handleClose (defined below)
   const handleCloseRef = useRef(null);
 
+  // Entrance animation — only on mount
   useEffect(() => {
     setIsAnimating(true);
     const timer = setTimeout(() => setIsAnimating(false), 50);
+    document.body.style.overflow = 'hidden';
+    return () => { clearTimeout(timer); document.body.style.overflow = ''; };
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Keyboard handler — uses existing refs to avoid re-triggering animation
+  const selectedWordDataRef = useRef(selectedWordData);
+  const leftFeatureRef = useRef(leftFeature);
+  const showTafseerRef = useRef(showTafseer);
+  useEffect(() => { selectedWordDataRef.current = selectedWordData; }, [selectedWordData]);
+  useEffect(() => { leftFeatureRef.current = leftFeature; }, [leftFeature]);
+  useEffect(() => { showTafseerRef.current = showTafseer; }, [showTafseer]);
+
+  useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === 'Escape') {
-        if (selectedWordData) setSelectedWordData(null);
-        else if (leftFeature) setLeftFeature(null);
-        else if (showTafseer) setShowTafseer(false);
+        if (selectedWordDataRef.current) setSelectedWordData(null);
+        else if (leftFeatureRef.current) setLeftFeature(null);
+        else if (showTafseerRef.current) setShowTafseer(false);
         else if (handleCloseRef.current) handleCloseRef.current();
       }
       if (e.key === ' ' && !e.target.matches('input, textarea, select')) { e.preventDefault(); togglePlayPause(); }
-      if (e.key === 'ArrowRight' && currentAyah < totalVerses) { setCurrentAyah(prev => prev + 1); setTranslationAyah(prev => Math.min(totalVerses, prev + 1)); }
-      if (e.key === 'ArrowLeft' && currentAyah > 1) { setCurrentAyah(prev => prev - 1); setTranslationAyah(prev => Math.max(1, prev - 1)); }
+      if (e.key === 'ArrowRight' && currentAyahRef.current < totalVersesRef.current) { setCurrentAyah(prev => prev + 1); setTranslationAyah(prev => Math.min(totalVersesRef.current, prev + 1)); }
+      if (e.key === 'ArrowLeft' && currentAyahRef.current > 1) { setCurrentAyah(prev => prev - 1); setTranslationAyah(prev => Math.max(1, prev - 1)); }
     };
     document.addEventListener('keydown', handleKeyDown);
-    document.body.style.overflow = 'hidden';
-    return () => { clearTimeout(timer); document.removeEventListener('keydown', handleKeyDown); document.body.style.overflow = ''; };
-  }, [currentAyah, totalVerses, selectedWordData, leftFeature, showTafseer, togglePlayPause]);
+    return () => { document.removeEventListener('keydown', handleKeyDown); };
+  }, [togglePlayPause]);
 
   // Handle initial panel from URL
   useEffect(() => {
@@ -3536,8 +3941,11 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
     if (!newSurah || !onChangeSurah) return;
     stopAllAudio();
     if (audioRef.current) { audioRef.current.src = ''; }
+    setSurahTransitioning(true);
     setCurrentAyah(1); setTranslationAyah(1); setSelectedWordData(null);
     setShowTafseer(false); setLeftFeature(null);
+    // Scroll to top before transitioning
+    if (versesContainerRef.current) versesContainerRef.current.scrollTop = 0;
     onChangeSurah(newSurah);
   }, [onChangeSurah, stopAllAudio]);
 
@@ -3586,6 +3994,7 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
       setLeftFeature(prev => {
         if (prev === featureId) {
           if (featureId === 'share') setShareVerseData(null);
+          if (featureId === 'memorize') setMemorizeSettings({ hideLevel: 0 });
           return null;
         } else {
           // Clear shareVerseData when opening share from top bar (will use currentVerse)
@@ -3598,7 +4007,12 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
 
   // Memoized close handlers to prevent re-renders
   const closeTafseer = useCallback(() => setShowTafseer(false), []);
-  const closeLeftFeature = useCallback(() => setLeftFeature(null), []);
+  const closeLeftFeature = useCallback(() => {
+    setLeftFeature(prev => {
+      if (prev === 'memorize') setMemorizeSettings({ hideLevel: 0 });
+      return null;
+    });
+  }, []);
   const closeShareFeature = useCallback(() => { setLeftFeature(null); setShareVerseData(null); }, []);
   const handleAyahChange = useCallback((newAyah) => setCurrentAyah(newAyah), []);
 
@@ -4442,7 +4856,7 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
                   <div className="mt-2 mx-4 p-2 bg-amber-500/30 backdrop-blur-sm rounded-xl flex items-center justify-center gap-2" style={{ animation: 'slideDown 0.2s ease-out' }}>
                     <Icons.AlertCircle className="w-3.5 h-3.5 text-amber-200" />
                     <span className="text-[10px] text-white/90">
-                      Word meanings shown in <strong>English</strong> — {wordsUserLang === 'ur' ? 'Urdu' : wordsUserLang} not available for this surah
+                      Word meanings shown in <strong>English</strong> — {translationLanguageLabel || wordsUserLang} not available for this surah
                     </span>
                   </div>
                 )}
@@ -4456,12 +4870,27 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
                       <span className="text-[9px] w-10 text-center text-white/80">{fontSize}</span>
                       <button onClick={increaseFontSize} disabled={FONT_SIZE_KEYS.indexOf(fontSize) >= FONT_SIZE_KEYS.length - 1}
                         className="w-6 h-6 rounded-full bg-white/30 flex items-center justify-center hover:bg-white/40 active:scale-95 text-white font-bold text-sm leading-none disabled:opacity-30">+</button>
-                      <select value={selectedTranslation} onChange={(e) => setSelectedTranslation(e.target.value)} className="px-1.5 py-0.5 rounded-full text-[10px] bg-white/20 text-white cursor-pointer max-w-[100px] truncate">
-                        {Object.entries(TRANSLATIONS).map(([id, info]) => (<option key={id} value={id} className="text-gray-800">{info.name}</option>))}
-                      </select>
-                      <select value={selectedReciter} onChange={(e) => setSelectedReciter(e.target.value)} className="px-1.5 py-0.5 rounded-full text-[10px] bg-white/20 text-white cursor-pointer max-w-[100px] truncate">
-                        {Object.entries(RECITERS).map(([id, info]) => (<option key={id} value={id} className="text-gray-800">{info.name}</option>))}
-                      </select>
+                      <button
+                        onClick={() => { setShowLanguagePicker(true); setLanguageSearchQuery(''); }}
+                        className="px-2 py-0.5 rounded-full text-[10px] bg-emerald-500/30 text-white cursor-pointer hover:bg-emerald-500/40 transition-all flex items-center gap-1"
+                      >
+                        <Icons.Globe className="w-2.5 h-2.5 text-emerald-300 shrink-0" />
+                        <span className="truncate">{translationLanguageLabel || 'Language'}</span>
+                      </button>
+                      <button
+                        onClick={() => { setShowTranslationPicker(true); setTranslationSearchQuery(''); }}
+                        className="px-2 py-0.5 rounded-full text-[10px] bg-white/20 text-white cursor-pointer max-w-[100px] truncate hover:bg-white/30 transition-all flex items-center gap-1"
+                      >
+                        <Icons.BookOpen className="w-2.5 h-2.5 text-cyan-300 shrink-0" />
+                        <span className="truncate">{TRANSLATIONS[selectedTranslation]?.nameEn || TRANSLATIONS[selectedTranslation]?.name || selectedTranslation.split('.')[1]}</span>
+                      </button>
+                      <button
+                        onClick={() => { setShowReciterPicker(true); setReciterSearchQuery(''); }}
+                        className="px-2 py-0.5 rounded-full text-[10px] bg-white/20 text-white cursor-pointer max-w-[100px] truncate hover:bg-white/30 transition-all flex items-center gap-1"
+                      >
+                        <Icons.Mic className="w-2.5 h-2.5 text-amber-300 shrink-0" />
+                        <span className="truncate">{RECITERS[selectedReciter]?.name?.split(' ').slice(-1)[0] || 'Reciter'}</span>
+                      </button>
                     </div>
                     {/* Row 2: Trans + Repeat + Play All */}
                     <div className="flex items-center justify-center gap-1.5">
@@ -4480,7 +4909,7 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
               <div ref={versesContainerRef} className="flex-1 overflow-y-auto px-5 sm:px-6"
                 style={{ maskImage: 'linear-gradient(to bottom, transparent 0%, black 1.5%, black 98.5%, transparent 100%)', WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 1.5%, black 98.5%, transparent 100%)' }}>
                 {loading ? (
-                  <div className="flex flex-col items-center justify-center h-32 gap-2">
+                  <div className="flex flex-col items-center justify-center h-32 gap-2 animate-[fadeIn_0.3s_ease-out]">
                     <Icons.Loader className="w-10 h-10 animate-spin text-white/60" />
                     <p className="text-xs text-white/70">Loading...</p>
                   </div>
@@ -4490,7 +4919,14 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
                     <p className="text-sm">{error}</p>
                   </div>
                 ) : (
-                  <div className={`py-2 ${readerStyleConfig.container}`}>
+                  <div className="relative">
+                  {/* Subtle loading overlay during surah transition */}
+                  {surahTransitioning && (
+                    <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none">
+                      <Icons.Loader className="w-8 h-8 animate-spin text-white/40" />
+                    </div>
+                  )}
+                  <div className={`py-2 ${readerStyleConfig.container} transition-opacity duration-300 ease-out ${surahTransitioning ? 'opacity-20' : 'opacity-100'}`}>
                     {/* Book Page Navigator - only for book layout */}
                     {readerStyle === 'book' && totalPages > 1 && (
                       <div className="sticky top-0 z-20 bg-black/50 backdrop-blur-xl rounded-xl p-2 sm:p-3 mb-3 border border-amber-700/30">
@@ -4585,7 +5021,6 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
                         borderColor: isCurrentAyah ? verseColors.activeBorder : verseColors.verseBorder,
                         borderWidth: '1px',
                         borderStyle: 'solid',
-                        transform: 'scale(1)',
                         boxShadow: isCurrentAyah ? '0 0 20px rgba(255,255,255,0.15)' : isSelected ? '0 0 15px rgba(16,185,129,0.3)' : isSajdah ? '0 0 12px rgba(239,68,68,0.1)' : 'none',
                         ...(isSajdah ? { borderLeft: '3px solid rgba(239,68,68,0.5)' } : {}),
                       };
@@ -4610,29 +5045,87 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
                             <span className={readerStyleConfig.ayahBadge} style={{ background: verseColors.badgeBg, color: verseColors.badgeColor, border: `1px solid ${verseColors.activeBorder}` }}>{ayahNum}</span>
                           )}
 
-                          <div className="leading-[2.2] mb-2" style={{ fontFamily: "'Scheherazade New', serif", fontSize: fontSizeMap[fontSize].arabic, color: verseColors.text, textShadow: readerStyleConfig.isDark ? '0 1px 6px rgba(0,0,0,0.3)' : 'none', wordWrap: 'break-word', overflowWrap: 'break-word', maxWidth: '100%' }} dir="rtl" lang="ar">
-                            {wordByWordMode ? (
-                              wordMeanings.length > 0 ? (
-                                wordMeanings.map((wordData, wordIdx) => (
-                                  <WordItem key={`${ayahNum}-${wordIdx}`} word={wordData.arabic} isActive={selectedWordData?.key === `${ayahNum}-${wordIdx}`} hidden={shouldHideWord(wordIdx)} showOnHover={hideLevel > 0 && hideLevel < 4}
-                                    onClick={() => setSelectedWordData({ key: `${ayahNum}-${wordIdx}`, word: wordData.arabic, meaning: wordData.meaning, transliteration: wordData.transliteration, audioUrl: wordData.audioUrl || null, isLoading: false })} />
-                                ))
+                          {/* Lafzi mode: inline word-by-word with meanings under each word */}
+                          {isLafziMode && wordByWordMode && wordMeanings.length > 0 ? (
+                            <>
+                              <div className="flex flex-wrap justify-center gap-2 mb-2" dir="rtl">
+                                {wordMeanings.map((wordData, wordIdx) => {
+                                  const isNarrating = lafziActiveWord?.ayah === ayahNum && lafziActiveWord?.wordIdx === wordIdx;
+                                  const isClicked = selectedWordData?.key === `${ayahNum}-${wordIdx}`;
+                                  return (
+                                    <div key={`${ayahNum}-lafzi-${wordIdx}`}
+                                      className={`flex flex-col items-center px-2 py-1.5 rounded-xl cursor-pointer transition-all ${
+                                        isNarrating
+                                          ? 'scale-[1.18] z-10'
+                                          : isClicked
+                                            ? 'bg-yellow-400/30 ring-1 ring-yellow-300/50'
+                                            : 'hover:bg-white/15'
+                                      }`}
+                                      style={isNarrating ? {
+                                        background: 'radial-gradient(ellipse at center, rgba(251,191,36,0.35) 0%, rgba(251,191,36,0.12) 60%, transparent 100%)',
+                                        boxShadow: '0 0 20px 6px rgba(251,191,36,0.3), 0 0 40px 12px rgba(251,191,36,0.1)',
+                                        borderRadius: '12px',
+                                        transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
+                                      } : { transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)' }}
+                                      onClick={() => setSelectedWordData({ key: `${ayahNum}-${wordIdx}`, word: wordData.arabic, meaning: wordData.meaning, transliteration: wordData.transliteration, audioUrl: wordData.audioUrl || null, isLoading: false })}
+                                    >
+                                      <span style={{
+                                        fontFamily: "'Scheherazade New', serif",
+                                        fontSize: isNarrating ? `calc(${fontSizeMap[fontSize].arabic} * 1.1)` : fontSizeMap[fontSize].arabic,
+                                        color: isNarrating ? '#fbbf24' : verseColors.text,
+                                        textShadow: isNarrating ? '0 0 12px rgba(251,191,36,0.6), 0 2px 8px rgba(0,0,0,0.3)' : (readerStyleConfig.isDark ? '0 1px 6px rgba(0,0,0,0.3)' : 'none'),
+                                        transition: 'all 0.25s',
+                                      }} lang="ar">
+                                        {wordData.arabic}
+                                      </span>
+                                      <span className="font-urdu leading-tight mt-0.5" style={{
+                                        fontSize: `calc(${fontSizeMap[fontSize].translation} * 0.85)`,
+                                        color: isNarrating ? '#fcd34d' : verseColors.translation,
+                                        opacity: isNarrating ? 1 : 0.9,
+                                        textShadow: isNarrating ? '0 0 8px rgba(252,211,77,0.4)' : 'none',
+                                        transition: 'all 0.25s',
+                                      }} dir="rtl">
+                                        {wordData.meaning}
+                                      </span>
+                                      {wordData.transliteration && (
+                                        <span className="text-[10px] leading-tight mt-0.5" style={{ color: verseColors.translation, opacity: isNarrating ? 0.8 : 0.5 }}>
+                                          {wordData.transliteration}
+                                        </span>
+                                      )}
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                              {/* Inline badge - after Arabic text */}
+                              {readerStyleConfig.badgePosition === 'inline' && (
+                                <span className={readerStyleConfig.ayahBadge} style={{ background: verseColors.badgeBg, color: verseColors.badgeColor, border: `1px solid ${verseColors.activeBorder}` }}>{ayahNum}</span>
+                              )}
+                            </>
+                          ) : (
+                            <div className="leading-[2.2] mb-2" style={{ fontFamily: "'Scheherazade New', serif", fontSize: fontSizeMap[fontSize].arabic, color: verseColors.text, textShadow: readerStyleConfig.isDark ? '0 1px 6px rgba(0,0,0,0.3)' : 'none', wordWrap: 'break-word', overflowWrap: 'break-word', maxWidth: '100%' }} dir="rtl" lang="ar">
+                              {wordByWordMode ? (
+                                wordMeanings.length > 0 ? (
+                                  wordMeanings.map((wordData, wordIdx) => (
+                                    <WordItem key={`${ayahNum}-${wordIdx}`} word={wordData.arabic} isActive={selectedWordData?.key === `${ayahNum}-${wordIdx}`} hidden={shouldHideWord(wordIdx)} showOnHover={hideLevel > 0 && hideLevel < 4}
+                                      onClick={() => setSelectedWordData({ key: `${ayahNum}-${wordIdx}`, word: wordData.arabic, meaning: wordData.meaning, transliteration: wordData.transliteration, audioUrl: wordData.audioUrl || null, isLoading: false })} />
+                                  ))
+                                ) : (
+                                  arabicWords.map((word, wordIdx) => (
+                                    <WordItem key={`${ayahNum}-${wordIdx}`} word={word} isActive={selectedWordData?.key === `${ayahNum}-${wordIdx}`} hidden={shouldHideWord(wordIdx)} showOnHover={hideLevel > 0 && hideLevel < 4}
+                                      onClick={() => setSelectedWordData({ key: `${ayahNum}-${wordIdx}`, word, meaning: '', transliteration: '', isLoading: wordsLoading })} />
+                                  ))
+                                )
+                              ) : tajweedMode && verse.tajweedSegments ? (
+                                <TajweedText segments={verse.tajweedSegments} />
                               ) : (
-                                arabicWords.map((word, wordIdx) => (
-                                  <WordItem key={`${ayahNum}-${wordIdx}`} word={word} isActive={selectedWordData?.key === `${ayahNum}-${wordIdx}`} hidden={shouldHideWord(wordIdx)} showOnHover={hideLevel > 0 && hideLevel < 4}
-                                    onClick={() => setSelectedWordData({ key: `${ayahNum}-${wordIdx}`, word, meaning: '', transliteration: '', isLoading: wordsLoading })} />
-                                ))
-                              )
-                            ) : tajweedMode && verse.tajweedSegments ? (
-                              <TajweedText segments={verse.tajweedSegments} />
-                            ) : (
-                              verse.arabic
-                            )}
-                            {/* Inline badge - after Arabic text */}
-                            {readerStyleConfig.badgePosition === 'inline' && (
-                              <span className={readerStyleConfig.ayahBadge} style={{ background: verseColors.badgeBg, color: verseColors.badgeColor, border: `1px solid ${verseColors.activeBorder}` }}>{ayahNum}</span>
-                            )}
-                          </div>
+                                verse.arabic
+                              )}
+                              {/* Inline badge - after Arabic text */}
+                              {readerStyleConfig.badgePosition === 'inline' && (
+                                <span className={readerStyleConfig.ayahBadge} style={{ background: verseColors.badgeBg, color: verseColors.badgeColor, border: `1px solid ${verseColors.activeBorder}` }}>{ayahNum}</span>
+                              )}
+                            </div>
+                          )}
 
                           {/* Absolute positioned badge - top corner or centered */}
                           {(readerStyleConfig.badgePosition === 'absolute' || readerStyleConfig.badgePosition === 'absolute-bottom') && (
@@ -4647,83 +5140,109 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
                             </div>
                           )}
 
-                          {showTranslation && verse.translation && (
-                            <p className={`leading-relaxed mb-2 ${selectedTranslation.startsWith('ur.') ? 'font-urdu' : ''}`}
-                              dir={selectedTranslation.startsWith('ur.') || selectedTranslation.startsWith('ar.') ? 'rtl' : 'ltr'}
+                          {/* In Lafzi mode, sentence translation is replaced by inline word meanings above */}
+                          {showTranslation && verse.translation && !(isLafziMode && wordByWordMode && wordMeanings.length > 0) && (
+                            <p className={`leading-relaxed mb-2 ${['ur.','fa.','ps.','sd.'].some(p => selectedTranslation.startsWith(p)) ? 'font-urdu' : ''}`}
+                              dir={['ur.','ar.','fa.','ps.','ku.','sd.','he.','ug.','dv.'].some(p => selectedTranslation.startsWith(p)) ? 'rtl' : 'ltr'}
                               style={{ fontSize: fontSizeMap[fontSize].translation, color: verseColors.translation }}>{verse.translation}</p>
                           )}
 
                           {selectedWordData?.key?.startsWith(`${ayahNum}-`) && (
                             <div className="mt-2 p-3 rounded-xl" style={{ animation: 'slideDown 0.2s ease-out', background: readerStyleConfig.isDark ? 'rgba(0,0,0,0.3)' : 'rgba(0,0,0,0.05)' }}>
                               <div className="flex items-start gap-3">
-                                {/* Play Word Audio Button - Always show, disabled if no audio */}
-                                <button
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    if (!selectedWordData.audioUrl) return;
+                                {/* Play Word Audio Button - Free for Surah 1, Premium for others */}
+                                {(() => {
+                                  const canPlayWordAudio = isPremium || surah?.id === 1;
+                                  return (
+                                    <button
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        if (!canPlayWordAudio) {
+                                          setUpgradeFeature('word-audio');
+                                          setShowUpgradePrompt(true);
+                                          return;
+                                        }
+                                        if (!selectedWordData.audioUrl) return;
 
-                                    // Stop any previous word audio
-                                    if (wordAudioRef.current) {
-                                      wordAudioRef.current.pause();
-                                      wordAudioRef.current.src = '';
-                                      wordAudioRef.current = null;
-                                    }
+                                        // Stop all other audio to prevent double playback
+                                        if (audioRef.current) audioRef.current.pause();
+                                        if (translationAudioRef.current) { translationAudioRef.current.pause(); translationAudioRef.current = null; }
+                                        if (ttsAudioRef.current) { ttsAudioRef.current.pause(); ttsAudioRef.current = null; }
+                                        if (narratorAyahAudioRef.current) { narratorAyahAudioRef.current.pause(); narratorAyahAudioRef.current = null; }
+                                        if (window.speechSynthesis) window.speechSynthesis.cancel();
+                                        if (wordAudioRef.current) {
+                                          wordAudioRef.current.pause();
+                                          wordAudioRef.current.src = '';
+                                          wordAudioRef.current = null;
+                                        }
+                                        setIsPlaying(false);
+                                        setIsPlayingTranslation(false); isPlayingTranslationRef.current = false;
+                                        setIsPlayingCombined(false); isPlayingCombinedRef.current = false;
+                                        setSpeakingAyah(null); setNarratorPlayingAyah(null);
 
-                                    setWordAudioError(null);
-                                    setWordAudioPlaying(true);
-                                    const audio = new Audio(selectedWordData.audioUrl);
-                                    wordAudioRef.current = audio; // Store ref
+                                        setWordAudioError(null);
+                                        setWordAudioPlaying(true);
+                                        const audio = new Audio(selectedWordData.audioUrl);
+                                        wordAudioRef.current = audio;
 
-                                    // Set timeout for slow loading
-                                    const timeout = setTimeout(() => {
-                                      setWordAudioError('Audio loading slow...');
-                                    }, 3000);
+                                        const timeout = setTimeout(() => {
+                                          setWordAudioError('Audio loading slow...');
+                                        }, 3000);
 
-                                    audio.oncanplaythrough = () => clearTimeout(timeout);
-                                    audio.onended = () => {
-                                      setWordAudioPlaying(false);
-                                      setWordAudioError(null);
-                                      wordAudioRef.current = null;
-                                    };
-                                    audio.onerror = () => {
-                                      clearTimeout(timeout);
-                                      setWordAudioPlaying(false);
-                                      setWordAudioError('Failed to load audio');
-                                      wordAudioRef.current = null;
-                                      setTimeout(() => setWordAudioError(null), 3000);
-                                    };
-                                    audio.play().catch(() => {
-                                      clearTimeout(timeout);
-                                      setWordAudioPlaying(false);
-                                      setWordAudioError('Playback failed');
-                                      wordAudioRef.current = null;
-                                      setTimeout(() => setWordAudioError(null), 3000);
-                                    });
-                                  }}
-                                  disabled={!selectedWordData.audioUrl || wordAudioPlaying}
-                                  className={`p-2 rounded-full transition-all ${
-                                    wordAudioPlaying
-                                      ? 'bg-emerald-500 animate-pulse cursor-wait'
-                                      : selectedWordData.audioUrl
-                                        ? 'bg-emerald-500/80 hover:bg-emerald-500 hover:scale-110 cursor-pointer'
-                                        : 'bg-gray-500/30 cursor-not-allowed opacity-50'
-                                  }`}
-                                  aria-label={selectedWordData.audioUrl ? "Play word audio" : "Audio not available"}
-                                  title={selectedWordData.audioUrl ? "Play pronunciation" : "Audio not available for this word"}
-                                >
-                                  {wordAudioPlaying ? (
-                                    <Icons.Loader className="w-4 h-4 text-white animate-spin" />
-                                  ) : selectedWordData.audioUrl ? (
-                                    <Icons.Play className="w-4 h-4 text-white" />
-                                  ) : (
-                                    <Icons.Volume className="w-4 h-4 text-white/50" />
-                                  )}
-                                </button>
+                                        audio.oncanplaythrough = () => clearTimeout(timeout);
+                                        audio.onended = () => {
+                                          setWordAudioPlaying(false);
+                                          setWordAudioError(null);
+                                          wordAudioRef.current = null;
+                                        };
+                                        audio.onerror = () => {
+                                          clearTimeout(timeout);
+                                          setWordAudioPlaying(false);
+                                          setWordAudioError('Failed to load audio');
+                                          wordAudioRef.current = null;
+                                          setTimeout(() => setWordAudioError(null), 3000);
+                                        };
+                                        audio.play().catch(() => {
+                                          clearTimeout(timeout);
+                                          setWordAudioPlaying(false);
+                                          setWordAudioError('Playback failed');
+                                          wordAudioRef.current = null;
+                                          setTimeout(() => setWordAudioError(null), 3000);
+                                        });
+                                      }}
+                                      disabled={(!selectedWordData.audioUrl && canPlayWordAudio) || wordAudioPlaying}
+                                      className={`p-2 rounded-full transition-all relative ${
+                                        wordAudioPlaying
+                                          ? 'bg-emerald-500 animate-pulse cursor-wait'
+                                          : !canPlayWordAudio
+                                            ? 'bg-amber-500/30 hover:bg-amber-500/50 cursor-pointer'
+                                            : selectedWordData.audioUrl
+                                              ? 'bg-emerald-500/80 hover:bg-emerald-500 hover:scale-110 cursor-pointer'
+                                              : 'bg-gray-500/30 cursor-not-allowed opacity-50'
+                                      }`}
+                                      aria-label={!canPlayWordAudio ? "Premium: Word pronunciation" : selectedWordData.audioUrl ? "Play word audio" : "Audio not available"}
+                                      title={!canPlayWordAudio ? "Premium feature — Free for Surah Al-Fatiha" : selectedWordData.audioUrl ? "Play pronunciation" : "Audio not available for this word"}
+                                    >
+                                      {wordAudioPlaying ? (
+                                        <Icons.Loader className="w-4 h-4 text-white animate-spin" />
+                                      ) : !canPlayWordAudio ? (
+                                        <Icons.Lock className="w-4 h-4 text-amber-400" />
+                                      ) : selectedWordData.audioUrl ? (
+                                        <Icons.Play className="w-4 h-4 text-white" />
+                                      ) : (
+                                        <Icons.Volume className="w-4 h-4 text-white/50" />
+                                      )}
+                                    </button>
+                                  );
+                                })()}
                                 <div className="text-2xl" style={{ fontFamily: "'Scheherazade New', serif" }} dir="rtl">{selectedWordData.word}</div>
                                 <div className="flex-1 text-left">
                                   {selectedWordData.transliteration && <p className="text-white/60 text-xs italic">{selectedWordData.transliteration}</p>}
                                   <p className="text-white text-sm">{selectedWordData.meaning || 'Loading...'}</p>
-                                  {!selectedWordData.audioUrl && (
+                                  {!isPremium && surah?.id !== 1 && selectedWordData.audioUrl && (
+                                    <p className="text-amber-400/60 text-[10px] mt-1">Premium — Free for Al-Fatiha</p>
+                                  )}
+                                  {(isPremium || surah?.id === 1) && !selectedWordData.audioUrl && (
                                     <p className="text-amber-400/60 text-[10px] mt-1">Audio not available</p>
                                   )}
                                   {wordAudioError && (
@@ -4738,34 +5257,50 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
                           )}
 
                           <div className="flex items-center gap-1.5">
-                            <button onClick={() => toggleAyahPlayback(ayahNum)} className={`p-1.5 rounded-full transition-all hover:scale-110 ${isCurrentAyah && isPlaying ? 'bg-white/40' : 'bg-white/15'}`} title="Play Arabic recitation">
-                              {audioLoading && isCurrentAyah ? <Icons.Loader className="w-3 h-3 animate-spin" /> : isCurrentAyah && isPlaying ? <Icons.Pause className="w-3 h-3" /> : <Icons.Play className="w-3 h-3" />}
+                            {(() => {
+                              const isArabicPlaying = isCurrentAyah && isPlaying;
+                              const isTranslationActive = isCurrentAyah && (isPlayingTranslation || isPlayingCombined);
+                              const isAnyActive = isArabicPlaying || isTranslationActive;
+                              return (
+                            <button onClick={() => toggleAyahPlayback(ayahNum)} className={`p-1.5 rounded-full transition-all hover:scale-110 ${isArabicPlaying ? 'bg-white/40' : isTranslationActive ? 'bg-cyan-500/30' : 'bg-white/15'}`} title="Play Arabic recitation">
+                              {(audioLoading || ttsLoading) && isCurrentAyah ? <Icons.Loader className="w-3 h-3 animate-spin" /> : isArabicPlaying ? <Icons.Pause className="w-3 h-3" /> : isTranslationActive ? <Icons.Volume className="w-3 h-3 text-cyan-300" /> : <Icons.Play className="w-3 h-3" />}
                             </button>
+                              );
+                            })()}
                             {/* Per-ayah human narrator button (free) */}
-                            {showTranslation && verse.translation && hasMatchingAudio && (
+                            {showTranslation && verse.translation && hasMatchingAudio && (() => {
+                              const isNarratorActive = narratorPlayingAyah === ayahNum;
+                              return (
                               <button
                                 onClick={() => playAyahNarrator(ayahNum)}
-                                className={`p-1.5 rounded-full transition-all hover:scale-110 ${narratorPlayingAyah === ayahNum ? 'bg-emerald-500/80 animate-pulse' : 'bg-white/15'}`}
+                                className={`p-1.5 rounded-full transition-all hover:scale-110 ${isNarratorActive ? 'bg-emerald-500/80 animate-pulse' : 'bg-white/15'}`}
                                 title="Listen translation (narrator)"
                               >
-                                {narratorPlayingAyah === ayahNum ? <Icons.Volume className="w-3 h-3 text-emerald-200" /> : <Icons.Mic className="w-3 h-3 text-emerald-300" />}
+                                {isNarratorActive ? <Icons.Volume className="w-3 h-3 text-emerald-200" /> : <Icons.Mic className="w-3 h-3 text-emerald-300" />}
                               </button>
-                            )}
-                            {/* Per-ayah TTS button (premium) */}
-                            {showTranslation && verse.translation && (
+                              );
+                            })()}
+                            {/* Per-ayah TTS button (premium) — highlights for single-tap TTS AND continuous translation mode */}
+                            {showTranslation && verse.translation && (() => {
+                              const isSingleTTS = speakingAyah === ayahNum;
+                              const isContinuousTranslation = (isPlayingTranslation || isPlayingCombined) && translationAyah === ayahNum;
+                              const isActive = isSingleTTS || isContinuousTranslation;
+                              const isLoading = isActive && ttsLoading;
+                              return (
                               <button
-                                onClick={() => speakTranslation(ayahNum, verse.translation)}
-                                className={`p-1.5 rounded-full transition-all hover:scale-110 relative ${speakingAyah === ayahNum ? 'bg-cyan-500/80 animate-pulse' : 'bg-white/15'}`}
+                                onClick={() => isContinuousTranslation ? (isPlayingTranslation ? toggleTranslationPlayback() : toggleCombinedPlayback()) : speakTranslation(ayahNum, verse.translation)}
+                                className={`p-1.5 rounded-full transition-all hover:scale-110 relative ${isActive ? 'bg-cyan-500/80 animate-pulse' : 'bg-white/15'}`}
                                 title={canUseHDTTS ? 'Read translation aloud (TTS)' : 'Premium: Read translation aloud (TTS)'}
                               >
-                                {speakingAyah === ayahNum ? <Icons.Volume className="w-3 h-3" /> : <Icons.Headphones className="w-3 h-3" />}
+                                {isLoading ? <Icons.Loader className="w-3 h-3 animate-spin" /> : isActive ? <Icons.Volume className="w-3 h-3" /> : <Icons.Headphones className="w-3 h-3" />}
                                 {!canUseHDTTS && surah?.id !== 1 && (
                                   <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-amber-500 rounded-full flex items-center justify-center">
                                     <Icons.Lock className="w-1.5 h-1.5 text-white" />
                                   </span>
                                 )}
                               </button>
-                            )}
+                              );
+                            })()}
                             <button onClick={() => handleShareVerse(verse, ayahNum)} className={`p-1.5 rounded-full transition-all hover:scale-110 ${shareStatus === ayahNum ? 'bg-emerald-500/80' : 'bg-white/15'}`} title="Share verse">
                               {shareStatus === ayahNum ? <Icons.Check className="w-3 h-3" /> : <Icons.Share className="w-3 h-3" />}
                             </button>
@@ -4824,6 +5359,7 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
 
                     <div className="h-4" />
                   </div>
+                  </div>
                 )}
               </div>
 
@@ -4840,10 +5376,22 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
                       stopAllAudio();
                       setCurrentAyah(val);
                       setTranslationAyah(val);
-                      setTimeout(() => {
+                      // For large surahs, expand rendered verses first
+                      if (isLargeSurah && val > visibleVerseCount) {
+                        setVisibleVerseCount(Math.min(val + 10, surah?.ayahs || val));
+                      }
+                      // Retry scroll until element appears (handles progressive loading + React re-render)
+                      let attempts = 0;
+                      const tryScroll = () => {
                         const el = versesContainerRef.current?.querySelector(`[data-ayah="${val}"]`);
-                        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                      }, 100);
+                        if (el) {
+                          el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        } else if (attempts < 10) {
+                          attempts++;
+                          setTimeout(tryScroll, 100);
+                        }
+                      };
+                      setTimeout(tryScroll, 50);
                     }}
                     disabled={!totalVerses}
                     className="bg-white/20 text-white border border-white/25 rounded-full px-2 py-1 text-xs font-medium outline-none cursor-pointer disabled:opacity-50"
@@ -4872,27 +5420,30 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
                     className={`px-2.5 py-1 rounded-full text-xs font-medium transition-all ${audioMode === 'translation' ? 'bg-cyan-500/50 text-white' : 'bg-white/10 text-white/60'}`}
                     title={apiAudioSource ? `Audio: ${apiAudioSource.reciter?.name}` : 'TTS Audio (No narrator available)'}
                   >
-                    {ttsLanguage === 'ur' ? 'اردو' : t('reader.translation')}
+                    {translationLanguageLabel || t('reader.translation')}
                     {apiAudioSource ? (
                       <span className="ml-1 text-emerald-300">●</span>
                     ) : (
                       <span className="ml-1 text-amber-300" title="TTS only">○</span>
                     )}
                   </button>
-                  {/* Narrator selector - only show when audio narrators are available */}
+                  {/* Narrator selector button */}
                   {availableNarrators.length > 0 && (audioMode === 'translation' || audioMode === 'combined') && (
-                    <select
-                      value={effectiveNarrator || ''}
-                      onChange={(e) => handleNarratorChange(e.target.value)}
-                      className="px-2 py-1 rounded-full text-xs font-medium bg-white/10 text-white/90 border-none outline-none cursor-pointer hover:bg-white/20 transition-all"
-                      style={{ maxWidth: '120px' }}
+                    <button
+                      onClick={() => setShowNarratorPicker(true)}
+                      className="px-2 py-1 rounded-full text-xs font-medium bg-white/10 text-white/90 cursor-pointer hover:bg-white/20 transition-all flex items-center gap-1"
+                      style={{ maxWidth: '140px' }}
                     >
-                      {availableNarrators.map((narrator) => (
-                        <option key={narrator.id} value={narrator.id} className="bg-gray-800 text-white">
-                          {narrator.translationShort || narrator.name} ({narrator.styleLabel || (narrator.style === 'word-by-word' ? 'لفظی' : 'جملہ')}) {narrator.id === 'tts' && !canUseHDTTS ? '🔒' : ''}
-                        </option>
-                      ))}
-                    </select>
+                      {effectiveNarrator === 'tts' ? (
+                        <span className="text-amber-300">TTS (AI Voice)</span>
+                      ) : (
+                        <>
+                          <span className="text-emerald-300 shrink-0">&#9679;</span>
+                          <span className="truncate">{TRANSLATION_RECITERS[effectiveNarrator]?.translationShort || TRANSLATION_RECITERS[effectiveNarrator]?.name || 'Narrator'}</span>
+                        </>
+                      )}
+                      <Icons.ChevronDown className="w-3 h-3 shrink-0 text-white/40" />
+                    </button>
                   )}
                   {/* TTS indicator when no API audio available */}
                   {!hasMatchingAudio && (audioMode === 'translation' || audioMode === 'combined') && (
@@ -4904,6 +5455,7 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
                     onClick={() => {
                       stopAllAudio();
                       setAudioMode('combined');
+                      setTranslationAyah(currentAyah);
                     }}
                     className={`px-2.5 py-1 rounded-full text-xs font-medium transition-all ${audioMode === 'combined' ? 'bg-gradient-to-r from-amber-500/50 to-cyan-500/50 text-white' : 'bg-white/10 text-white/60'}`}
                     title="Play Arabic then Translation for each verse"
@@ -4919,6 +5471,11 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
                       const newAyah = Math.max(1, currentAyah - 1);
                       setCurrentAyah(newAyah);
                       setTranslationAyah(newAyah);
+                      stopLafziWordSync();
+                      setTimeout(() => {
+                        const el = versesContainerRef.current?.querySelector(`[data-ayah="${newAyah}"]`);
+                        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                      }, 100);
                     }}
                     disabled={currentAyah <= 1}
                     className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center hover:bg-white/30 transition-all disabled:opacity-30"
@@ -4936,13 +5493,13 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
                     <button onClick={toggleTranslationPlayback}
                       className={`w-12 h-12 rounded-full flex items-center justify-center hover:scale-105 transition-all ${isPlayingTranslation ? 'bg-cyan-500/60' : 'bg-white/30 hover:bg-white/40'}`}
                       style={{ boxShadow: '0 4px 15px rgba(0,0,0,0.2)' }}>
-                      {isPlayingTranslation ? <Icons.Pause className="w-5 h-5" /> : <Icons.Headphones className="w-5 h-5" />}
+                      {ttsLoading ? <Icons.Loader className="w-5 h-5 animate-spin" /> : isPlayingTranslation ? <Icons.Pause className="w-5 h-5" /> : <Icons.Play className="w-5 h-5 ml-0.5" />}
                     </button>
                   ) : (
                     <button onClick={toggleCombinedPlayback}
                       className={`w-12 h-12 rounded-full flex items-center justify-center hover:scale-105 transition-all ${isPlayingCombined ? 'bg-gradient-to-r from-amber-500/60 to-cyan-500/60' : 'bg-white/30 hover:bg-white/40'}`}
                       style={{ boxShadow: '0 4px 15px rgba(0,0,0,0.2)' }}>
-                      {isPlayingCombined ? <Icons.Pause className="w-5 h-5" /> : <Icons.Play className="w-5 h-5 ml-0.5" />}
+                      {ttsLoading && isPlayingCombined ? <Icons.Loader className="w-5 h-5 animate-spin" /> : isPlayingCombined ? <Icons.Pause className="w-5 h-5" /> : <Icons.Play className="w-5 h-5 ml-0.5" />}
                     </button>
                   )}
 
@@ -4951,6 +5508,14 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
                       const newAyah = Math.min(totalVerses, currentAyah + 1);
                       setCurrentAyah(newAyah);
                       setTranslationAyah(newAyah);
+                      stopLafziWordSync();
+                      if (isLargeSurah && newAyah > visibleVerseCount) {
+                        setVisibleVerseCount(Math.min(newAyah + 10, surah?.ayahs || newAyah));
+                      }
+                      setTimeout(() => {
+                        const el = versesContainerRef.current?.querySelector(`[data-ayah="${newAyah}"]`);
+                        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                      }, 100);
                     }}
                     disabled={currentAyah >= totalVerses}
                     className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center hover:bg-white/30 transition-all disabled:opacity-30"
@@ -4965,9 +5530,9 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
                       {isPlayingTranslation && translationAudioSource && (
                         <span className={`text-[10px] ${translationAudioSource === 'api' ? 'text-emerald-300' : 'text-amber-300'}`}>
                           {translationAudioSource === 'api' ? (
-                            <>🎙 {translationReciterInfo?.name || 'Shamshad Ali Khan'}</>
+                            <>🎙 {translationReciterInfo?.name || 'Narrator'}</>
                           ) : (
-                            <>🤖 TTS ({ttsLanguage === 'ur' ? 'Urdu' : ttsLanguage.toUpperCase()})</>
+                            <>🤖 TTS ({translationLanguageLabel || ttsLanguage.toUpperCase()})</>
                           )}
                         </span>
                       )}
@@ -4983,13 +5548,24 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
                       {isPlayingCombined && (
                         <span className="ml-1">
                           ({combinedPhase === 'arabic' ? '🔊 Arabic' : (
-                            translationAudioSource === 'api' ? '🎙 Urdu' : '🤖 TTS'
+                            translationAudioSource === 'api' ? `🎙 ${translationLanguageLabel || 'Translation'}` : '🤖 TTS'
                           )})
                         </span>
                       )}
                     </span>
                   )}
                 </div>
+
+                {/* Audio info message (e.g. "No audio available for this translation") */}
+                {audioInfoMessage && (
+                  <div className="mt-2 px-3 py-2 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs text-amber-300/80 text-center animate-[fadeIn_0.3s_ease-out] flex items-center justify-center gap-2">
+                    <Icons.Info className="w-3.5 h-3.5 shrink-0" />
+                    <span>{audioInfoMessage}</span>
+                    <button onClick={() => setAudioInfoMessage(null)} className="shrink-0 p-0.5 rounded-full hover:bg-white/10">
+                      <Icons.X className="w-3 h-3" />
+                    </button>
+                  </div>
+                )}
 
               </div>
             </div>
@@ -5025,7 +5601,13 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
             feature={upgradeFeature || 'premium'}
             source="surah_reader"
             returnPath={`/surah/${surah?.id || 1}`}
-            onClose={() => setShowUpgradePrompt(false)}
+            onClose={() => {
+              setShowUpgradePrompt(false);
+              // Mark that user dismissed premium gate — allow browser TTS fallback next time
+              if (upgradeFeature === 'hd-tts') {
+                ttsPremiumDismissedRef.current = true;
+              }
+            }}
           />
         </Suspense>
       )}
@@ -5072,14 +5654,21 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
             </div>
             {/* Surah list */}
             <div className="flex-1 overflow-y-auto px-3 pb-4 custom-scrollbar" style={{ minHeight: 0 }}>
-              {SURAHS.filter(s => {
-                if (!surahSearchQuery.trim()) return true;
-                const q = surahSearchQuery.toLowerCase().trim();
-                return s.name.toLowerCase().includes(q)
-                  || s.arabic.includes(q)
-                  || String(s.id).includes(q)
-                  || (s.meaning && s.meaning.toLowerCase().includes(q));
-              }).map((s, idx) => {
+              {(() => {
+                const filtered = surahSearchQuery.trim()
+                  ? SURAHS.filter(s => {
+                      const q = surahSearchQuery.toLowerCase().trim();
+                      return s.name.toLowerCase().includes(q)
+                        || s.arabic.includes(q)
+                        || String(s.id).includes(q)
+                        || (s.meaning && s.meaning.toLowerCase().includes(q));
+                    })
+                  : SURAHS;
+                return filtered.length === 0 ? (
+                  <div className="text-center py-8 text-white/40 text-sm">
+                    {t('reader.noSurahFound', 'No surah found')}
+                  </div>
+                ) : filtered.map((s, idx) => {
                 const isActive = s.id === surah.id;
                 const palette = PALETTES[s.id % PALETTES.length];
                 const color = palette?.colors?.[0] || '#8B5CF6';
@@ -5134,17 +5723,500 @@ const BubbleReaderOverlay = memo(function BubbleReaderOverlay({ surah, onClose, 
                     )}
                   </button>
                 );
+              });
+              })()}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Language Picker Popup */}
+      {showLanguagePicker && (
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
+          onClick={() => setShowLanguagePicker(false)}
+          style={{ background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(8px)', animation: 'fadeIn 0.2s ease-out' }}>
+          <div className="relative w-full max-w-sm max-h-[80vh] flex flex-col rounded-3xl overflow-hidden shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              background: 'linear-gradient(135deg, #064e3b 0%, #065f46 50%, #064e3b 100%)',
+              border: '1px solid rgba(16, 185, 129, 0.3)',
+              boxShadow: '0 0 60px rgba(16, 185, 129, 0.15), 0 25px 50px rgba(0,0,0,0.5)',
+              animation: 'surahPickerIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)'
+            }}>
+            {/* Header */}
+            <div className="flex-shrink-0 p-5 pb-3 text-center">
+              <div className="flex items-center justify-between mb-3">
+                <div className="w-8" />
+                <h3 className="text-lg font-bold text-white flex items-center gap-2 justify-center">
+                  <Icons.Globe className="w-5 h-5 text-emerald-400" />
+                  {t('reader.selectLanguage', 'Select Language')}
+                </h3>
+                <button onClick={() => setShowLanguagePicker(false)}
+                  className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-all">
+                  <Icons.X className="w-4 h-4 text-white/70" />
+                </button>
+              </div>
+              <p className="text-[11px] text-white/30 mb-3">{availableLanguages.length} {t('reader.languagesAvailable', 'languages available')}</p>
+              {/* Search */}
+              <div className="relative">
+                <Icons.Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+                <input
+                  type="text"
+                  value={languageSearchQuery}
+                  onChange={(e) => setLanguageSearchQuery(e.target.value)}
+                  placeholder={t('reader.searchLanguage', 'Search language...')}
+                  className="w-full pl-10 pr-4 py-2.5 rounded-2xl text-sm text-white placeholder-white/40 outline-none transition-all"
+                  style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.15)' }}
+                  autoFocus
+                />
+              </div>
+            </div>
+            {/* Language list */}
+            <div className="flex-1 overflow-y-auto px-3 pb-4 custom-scrollbar" style={{ minHeight: 0 }}>
+              {availableLanguages.filter(lang => {
+                if (!languageSearchQuery.trim()) return true;
+                const q = languageSearchQuery.toLowerCase().trim();
+                return lang.name.toLowerCase().includes(q) || lang.nameNative.includes(q) || lang.code.includes(q);
+              }).map((lang, idx) => {
+                const isActive = ttsLanguage === lang.code;
+                return (
+                  <button
+                    key={lang.code}
+                    onClick={() => { handleLanguageChange(lang.code); setShowLanguagePicker(false); }}
+                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-2xl mb-1 transition-all duration-200 group ${
+                      isActive
+                        ? 'bg-gradient-to-r from-emerald-500/30 to-teal-500/30 border border-emerald-400/40'
+                        : 'hover:bg-white/8 border border-transparent'
+                    }`}
+                    style={{ animation: `surahItemIn 0.12s ease-out ${idx * 0.015}s both` }}
+                  >
+                    {/* Language code badge */}
+                    <div className={`w-9 h-9 flex-shrink-0 rounded-xl flex items-center justify-center text-[10px] font-bold uppercase transition-all ${
+                      isActive ? 'bg-emerald-500/25 text-emerald-300 border border-emerald-400/40' : 'bg-white/5 text-white/40 border border-transparent'
+                    }`}>
+                      {lang.code}
+                    </div>
+                    {/* Info */}
+                    <div className="flex-1 min-w-0 text-left">
+                      <div className="flex items-center gap-2">
+                        <span className={`text-sm font-semibold truncate ${isActive ? 'text-white' : 'text-white/80 group-hover:text-white'}`}>
+                          {lang.nameNative !== lang.name ? lang.nameNative : lang.name}
+                        </span>
+                        {lang.nameNative !== lang.name && (
+                          <span className="text-[11px] text-white/30 truncate">{lang.name}</span>
+                        )}
+                      </div>
+                      <div className="flex items-center gap-2 mt-0.5">
+                        <span className="text-[10px] text-white/30">{lang.count} {lang.count === 1 ? 'translation' : 'translations'}</span>
+                        {lang.hasNarrator && (
+                          <>
+                            <span className="text-[10px] text-white/20">|</span>
+                            <span className="text-[10px] text-emerald-400/70 flex items-center gap-0.5">
+                              <Icons.Mic className="w-2.5 h-2.5" /> Human voice
+                            </span>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                    {/* Active dot */}
+                    {isActive && (
+                      <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: '#10B981', boxShadow: '0 0 8px #10B981' }} />
+                    )}
+                  </button>
+                );
               })}
               {/* No results */}
-              {SURAHS.filter(s => {
-                if (!surahSearchQuery.trim()) return true;
-                const q = surahSearchQuery.toLowerCase().trim();
-                return s.name.toLowerCase().includes(q) || s.arabic.includes(q) || String(s.id).includes(q) || (s.meaning && s.meaning.toLowerCase().includes(q));
+              {availableLanguages.filter(lang => {
+                if (!languageSearchQuery.trim()) return true;
+                const q = languageSearchQuery.toLowerCase().trim();
+                return lang.name.toLowerCase().includes(q) || lang.nameNative.includes(q) || lang.code.includes(q);
               }).length === 0 && (
                 <div className="text-center py-8 text-white/40 text-sm">
-                  {t('reader.noSurahFound', 'No surah found')}
+                  {t('reader.noLanguageFound', 'No language found')}
                 </div>
               )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Reciter Picker Popup */}
+      {showReciterPicker && (
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
+          onClick={() => setShowReciterPicker(false)}
+          style={{ background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(8px)', animation: 'fadeIn 0.2s ease-out' }}>
+          <div className="relative w-full max-w-md max-h-[80vh] flex flex-col rounded-3xl overflow-hidden shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #1a1a2e 100%)',
+              border: '1px solid rgba(245, 158, 11, 0.3)',
+              boxShadow: '0 0 60px rgba(245, 158, 11, 0.15), 0 25px 50px rgba(0,0,0,0.5)',
+              animation: 'surahPickerIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)'
+            }}>
+            {/* Header */}
+            <div className="flex-shrink-0 p-5 pb-3 text-center">
+              <div className="flex items-center justify-between mb-3">
+                <div className="w-8" />
+                <h3 className="text-lg font-bold text-white flex items-center gap-2 justify-center">
+                  <Icons.Mic className="w-5 h-5 text-amber-400" />
+                  {t('reader.selectReciter', 'Select Reciter')}
+                </h3>
+                <button onClick={() => setShowReciterPicker(false)}
+                  className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-all">
+                  <Icons.X className="w-4 h-4 text-white/70" />
+                </button>
+              </div>
+              <p className="text-[11px] text-white/30 mb-3">{Object.keys(RECITERS).length} {t('reader.recitersAvailable', 'reciters available')}</p>
+              {/* Search */}
+              <div className="relative">
+                <Icons.Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+                <input
+                  type="text"
+                  value={reciterSearchQuery}
+                  onChange={(e) => setReciterSearchQuery(e.target.value)}
+                  placeholder={t('reader.searchReciter', 'Search reciter name...')}
+                  className="w-full pl-10 pr-4 py-2.5 rounded-2xl text-sm text-white placeholder-white/40 outline-none transition-all"
+                  style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.15)' }}
+                  autoFocus
+                />
+              </div>
+            </div>
+            {/* Reciter list */}
+            <div className="flex-1 overflow-y-auto px-3 pb-4 custom-scrollbar" style={{ minHeight: 0 }}>
+              {Object.entries(RECITERS).filter(([id, info]) => {
+                if (!reciterSearchQuery.trim()) return true;
+                const q = reciterSearchQuery.toLowerCase().trim();
+                return info.name.toLowerCase().includes(q)
+                  || (info.nameAr || '').includes(q)
+                  || (info.country || '').toLowerCase().includes(q)
+                  || (info.style || '').toLowerCase().includes(q);
+              }).map(([id, info], idx) => {
+                const isActive = id === selectedReciter;
+                const initials = info.name.split(' ').filter(w => w.length > 2).slice(0, 2).map(w => w[0]).join('');
+                const countryColors = {
+                  'Kuwait': '#22C55E', 'Saudi Arabia': '#10B981', 'Egypt': '#F59E0B',
+                  'Iran': '#EC4899', 'Syria': '#8B5CF6',
+                };
+                const color = countryColors[info.country] || '#6366F1';
+                return (
+                  <button
+                    key={id}
+                    onClick={() => { setSelectedReciter(id); setShowReciterPicker(false); }}
+                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-2xl mb-1 transition-all duration-200 group ${
+                      isActive
+                        ? 'bg-gradient-to-r from-amber-500/25 to-orange-500/25 border border-amber-400/40'
+                        : 'hover:bg-white/8 border border-transparent'
+                    }`}
+                    style={{ animation: `surahItemIn 0.15s ease-out ${idx * 0.02}s both` }}
+                  >
+                    {/* Avatar with image or initials fallback */}
+                    <div className="w-10 h-10 flex-shrink-0 rounded-xl overflow-hidden relative transition-all"
+                      style={{
+                        background: isActive ? `${color}30` : 'rgba(255,255,255,0.06)',
+                        border: isActive ? `2px solid ${color}` : '2px solid transparent',
+                        boxShadow: isActive ? `0 0 12px ${color}40` : 'none'
+                      }}>
+                      {info.image ? (
+                        <img
+                          src={info.image}
+                          alt=""
+                          className="w-full h-full object-cover"
+                          loading="lazy"
+                          onError={(e) => { e.target.style.display = 'none'; }}
+                        />
+                      ) : null}
+                      <span className={`absolute inset-0 flex items-center justify-center text-xs font-bold ${info.image ? 'opacity-0' : ''}`}
+                        style={{ color: isActive ? color : 'rgba(255,255,255,0.5)' }}>
+                        {initials}
+                      </span>
+                    </div>
+                    {/* Info */}
+                    <div className="flex-1 min-w-0 text-left">
+                      <div className="flex items-center justify-between gap-2">
+                        <span className={`text-sm font-semibold truncate ${isActive ? 'text-white' : 'text-white/80 group-hover:text-white'}`}>
+                          {info.name}
+                        </span>
+                        {info.nameAr && (
+                          <span className="text-sm flex-shrink-0 text-white/50" style={{ fontFamily: "'Scheherazade New', serif" }} dir="rtl">
+                            {info.nameAr}
+                          </span>
+                        )}
+                      </div>
+                      <div className="flex items-center gap-2 mt-0.5">
+                        <span className="text-[11px] text-white/40">{info.country}</span>
+                        {info.style && (
+                          <>
+                            <span className="text-[10px] text-white/25">|</span>
+                            <span className={`text-[10px] px-1.5 py-0.5 rounded-full ${
+                              info.style === 'Mujawwad' ? 'bg-purple-500/15 text-purple-400/70' : 'bg-emerald-500/15 text-emerald-400/70'
+                            }`}>
+                              {info.style}
+                            </span>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                    {/* Active dot */}
+                    {isActive && (
+                      <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: '#F59E0B', boxShadow: '0 0 8px #F59E0B' }} />
+                    )}
+                  </button>
+                );
+              })}
+              {/* No results */}
+              {Object.entries(RECITERS).filter(([, info]) => {
+                if (!reciterSearchQuery.trim()) return true;
+                const q = reciterSearchQuery.toLowerCase().trim();
+                return info.name.toLowerCase().includes(q) || (info.nameAr || '').includes(q) || (info.country || '').toLowerCase().includes(q);
+              }).length === 0 && (
+                <div className="text-center py-8 text-white/40 text-sm">
+                  {t('reader.noReciterFound', 'No reciter found')}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Translation Picker Popup */}
+      {showTranslationPicker && (
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
+          onClick={() => setShowTranslationPicker(false)}
+          style={{ background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(8px)', animation: 'fadeIn 0.2s ease-out' }}>
+          <div className="relative w-full max-w-md max-h-[80vh] flex flex-col rounded-3xl overflow-hidden shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%)',
+              border: '1px solid rgba(6, 182, 212, 0.3)',
+              boxShadow: '0 0 60px rgba(6, 182, 212, 0.15), 0 25px 50px rgba(0,0,0,0.5)',
+              animation: 'surahPickerIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)'
+            }}>
+            {/* Header */}
+            <div className="flex-shrink-0 p-5 pb-3 text-center">
+              <div className="flex items-center justify-between mb-3">
+                <div className="w-8" />
+                <h3 className="text-lg font-bold text-white flex items-center gap-2 justify-center">
+                  <Icons.BookOpen className="w-5 h-5 text-cyan-400" />
+                  {t('reader.selectTranslation', 'Select Translation')}
+                </h3>
+                <button onClick={() => setShowTranslationPicker(false)}
+                  className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-all">
+                  <Icons.X className="w-4 h-4 text-white/70" />
+                </button>
+              </div>
+              <p className="text-[11px] text-white/30 mb-3">{Object.keys(TRANSLATIONS).length} {t('reader.translationsAvailable', 'translations in')} {new Set(Object.values(TRANSLATIONS).map(t => t.language)).size} {t('reader.languages', 'languages')}</p>
+              {/* Search */}
+              <div className="relative">
+                <Icons.Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+                <input
+                  type="text"
+                  value={translationSearchQuery}
+                  onChange={(e) => setTranslationSearchQuery(e.target.value)}
+                  placeholder={t('reader.searchTranslation', 'Search by name, language...')}
+                  className="w-full pl-10 pr-4 py-2.5 rounded-2xl text-sm text-white placeholder-white/40 outline-none transition-all"
+                  style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.15)' }}
+                  autoFocus
+                />
+              </div>
+            </div>
+            {/* Translation list grouped by language */}
+            <div className="flex-1 overflow-y-auto px-3 pb-4 custom-scrollbar" style={{ minHeight: 0 }}>
+              {(() => {
+                const groups = {};
+                Object.entries(TRANSLATIONS).forEach(([id, info]) => {
+                  const lang = info.language;
+                  if (!groups[lang]) groups[lang] = [];
+                  groups[lang].push([id, info]);
+                });
+                const q = translationSearchQuery.toLowerCase().trim();
+                let itemIdx = 0;
+                return Object.entries(groups).filter(([lang, items]) => {
+                  if (!q) return true;
+                  return lang.toLowerCase().includes(q)
+                    || items.some(([id, info]) =>
+                      info.name.toLowerCase().includes(q)
+                      || (info.nameEn || '').toLowerCase().includes(q)
+                      || (info.languageNative || '').includes(q)
+                      || id.toLowerCase().includes(q)
+                    );
+                }).map(([lang, items]) => {
+                  const filteredItems = !q ? items : items.filter(([id, info]) =>
+                    lang.toLowerCase().includes(q)
+                    || info.name.toLowerCase().includes(q)
+                    || (info.nameEn || '').toLowerCase().includes(q)
+                    || (info.languageNative || '').includes(q)
+                    || id.toLowerCase().includes(q)
+                  );
+                  if (filteredItems.length === 0) return null;
+                  const langNative = filteredItems[0][1].languageNative;
+                  const langColors = {
+                    'Urdu': '#10B981', 'English': '#3B82F6', 'Arabic': '#F59E0B', 'French': '#EC4899',
+                    'Turkish': '#EF4444', 'Chinese': '#F97316', 'Japanese': '#8B5CF6', 'Korean': '#6366F1',
+                    'Spanish': '#EAB308', 'German': '#64748B', 'Russian': '#14B8A6', 'Hindi': '#F97316',
+                    'Persian': '#A855F7', 'Bengali': '#22C55E', 'Indonesian': '#EF4444', 'Malay': '#06B6D4',
+                  };
+                  const langColor = langColors[lang] || '#6366F1';
+                  return (
+                    <div key={lang} className="mb-3">
+                      {/* Language group header */}
+                      <div className="flex items-center gap-2 px-2 py-1.5 mb-1">
+                        <div className="w-1.5 h-1.5 rounded-full" style={{ background: langColor }} />
+                        <span className="text-xs font-semibold text-white/60">{langNative ? `${langNative} — ${lang}` : lang}</span>
+                        <span className="text-[10px] text-white/25">({filteredItems.length})</span>
+                        <div className="flex-1 h-px bg-white/5" />
+                      </div>
+                      {/* Translations in this language */}
+                      {filteredItems.map(([id, info]) => {
+                        const isActive = id === selectedTranslation;
+                        const hasAudio = !!TRANSLATION_RECITERS[Object.keys(TRANSLATION_RECITERS).find(k => {
+                          const r = TRANSLATION_RECITERS[k];
+                          return r.matchesTranslations?.includes(id);
+                        })];
+                        const currentIdx = itemIdx++;
+                        return (
+                          <button
+                            key={id}
+                            onClick={() => { setSelectedTranslation(id); setShowTranslationPicker(false); }}
+                            className={`w-full flex items-center gap-3 px-3 py-2 rounded-2xl mb-0.5 transition-all duration-200 group ${
+                              isActive
+                                ? 'bg-gradient-to-r from-cyan-500/25 to-blue-500/25 border border-cyan-400/40'
+                                : 'hover:bg-white/8 border border-transparent'
+                            }`}
+                            style={{ animation: `surahItemIn 0.15s ease-out ${currentIdx * 0.015}s both` }}
+                          >
+                            {/* Avatar/Initial */}
+                            <div className="w-9 h-9 flex-shrink-0 rounded-xl flex items-center justify-center text-[10px] font-bold transition-all"
+                              style={{
+                                background: isActive ? `${langColor}25` : 'rgba(255,255,255,0.04)',
+                                color: isActive ? langColor : 'rgba(255,255,255,0.4)',
+                                border: isActive ? `1px solid ${langColor}40` : '1px solid transparent'
+                              }}>
+                              {id.split('.')[0].toUpperCase()}
+                            </div>
+                            {/* Info */}
+                            <div className="flex-1 min-w-0 text-left">
+                              <div className="flex items-center gap-2">
+                                <span className={`text-sm truncate ${isActive ? 'text-white font-semibold' : 'text-white/75 group-hover:text-white'}`}>
+                                  {info.nameEn || info.name}
+                                </span>
+                                {hasAudio && <span className="text-emerald-400 text-[10px]" title="Human narrator available">🎙</span>}
+                              </div>
+                              {info.nameEn && info.name !== info.nameEn && (
+                                <span className="text-[11px] text-white/35 block truncate" dir="auto">{info.name}</span>
+                              )}
+                            </div>
+                            {/* Active dot */}
+                            {isActive && (
+                              <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: '#06B6D4', boxShadow: '0 0 8px #06B6D4' }} />
+                            )}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  );
+                });
+              })()}
+              {/* No results */}
+              {(() => {
+                const q = translationSearchQuery.toLowerCase().trim();
+                if (!q) return null;
+                const hasResults = Object.entries(TRANSLATIONS).some(([id, info]) =>
+                  info.name.toLowerCase().includes(q)
+                  || (info.nameEn || '').toLowerCase().includes(q)
+                  || info.language.toLowerCase().includes(q)
+                  || (info.languageNative || '').includes(q)
+                  || id.toLowerCase().includes(q)
+                );
+                if (hasResults) return null;
+                return (
+                  <div className="text-center py-8 text-white/40 text-sm">
+                    {t('reader.noTranslationFound', 'No translation found')}
+                  </div>
+                );
+              })()}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Narrator Picker Popup (compact) */}
+      {showNarratorPicker && (
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
+          onClick={() => setShowNarratorPicker(false)}
+          style={{ background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(6px)', animation: 'fadeIn 0.2s ease-out' }}>
+          <div className="relative w-full max-w-sm flex flex-col rounded-3xl overflow-hidden shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #1a1a2e 100%)',
+              border: '1px solid rgba(16, 185, 129, 0.3)',
+              boxShadow: '0 0 40px rgba(16, 185, 129, 0.15), 0 20px 40px rgba(0,0,0,0.5)',
+              animation: 'surahPickerIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)'
+            }}>
+            {/* Header */}
+            <div className="flex items-center justify-between p-4 pb-2">
+              <h3 className="text-base font-bold text-white flex items-center gap-2">
+                <Icons.Volume2 className="w-4 h-4 text-emerald-400" />
+                {t('reader.selectNarrator', 'Select Narrator')}
+              </h3>
+              <button onClick={() => setShowNarratorPicker(false)}
+                className="w-7 h-7 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-all">
+                <Icons.X className="w-3.5 h-3.5 text-white/70" />
+              </button>
+            </div>
+            <p className="text-[11px] text-white/30 px-4 mb-2">
+              {translationLanguageLabel || 'Translation'} — {availableNarrators.length} {t('reader.optionsAvailable', 'options')}
+            </p>
+            {/* Narrator list */}
+            <div className="px-3 pb-4">
+              {availableNarrators.map((narrator, idx) => {
+                const isActive = narrator.id === effectiveNarrator;
+                const isTTS = narrator.id === 'tts';
+                const reciterInfo = !isTTS ? TRANSLATION_RECITERS[narrator.id] : null;
+                return (
+                  <button
+                    key={narrator.id}
+                    onClick={() => { handleNarratorChange(narrator.id); setShowNarratorPicker(false); }}
+                    className={`w-full flex items-center gap-3 px-3 py-3 rounded-2xl mb-1 transition-all duration-200 group ${
+                      isActive
+                        ? 'bg-gradient-to-r from-emerald-500/25 to-teal-500/25 border border-emerald-400/40'
+                        : 'hover:bg-white/8 border border-transparent'
+                    }`}
+                    style={{ animation: `surahItemIn 0.15s ease-out ${idx * 0.05}s both` }}
+                  >
+                    {/* Icon */}
+                    <div className={`w-10 h-10 flex-shrink-0 rounded-xl flex items-center justify-center transition-all ${
+                      isActive ? 'bg-emerald-500/20' : 'bg-white/5'
+                    }`}>
+                      {isTTS ? (
+                        <Icons.Cpu className="w-5 h-5 text-amber-400" />
+                      ) : (
+                        <Icons.Mic className="w-5 h-5 text-emerald-400" />
+                      )}
+                    </div>
+                    {/* Info */}
+                    <div className="flex-1 min-w-0 text-left">
+                      <div className="flex items-center gap-2">
+                        <span className={`text-sm font-semibold truncate ${isActive ? 'text-white' : 'text-white/80 group-hover:text-white'}`}>
+                          {isTTS ? 'TTS (AI Voice)' : (narrator.name || reciterInfo?.name)}
+                        </span>
+                        {isTTS && !canUseHDTTS && (
+                          <span className="text-amber-400 text-[10px]">Premium</span>
+                        )}
+                      </div>
+                      <span className="text-[11px] text-white/35">
+                        {isTTS
+                          ? t('reader.googleCloudTTS', 'Google Cloud Text-to-Speech')
+                          : `${reciterInfo?.translation || ''} — ${narrator.styleLabel || (narrator.style === 'word-by-word' ? 'Word-by-word' : 'Full sentence')}`
+                        }
+                      </span>
+                    </div>
+                    {/* Active dot */}
+                    {isActive && (
+                      <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: '#10B981', boxShadow: '0 0 8px #10B981' }} />
+                    )}
+                  </button>
+                );
+              })}
             </div>
           </div>
         </div>

@@ -44,6 +44,7 @@ import { Icons } from '../../common/Icons';
  * @param {Function} props.goToPrevAyah - Navigate to previous ayah
  * @param {Function} props.goToNextAyah - Navigate to next ayah
  * @param {Function} props.setTranslationAyah - Set translation ayah number
+ * @param {string} [props.translationLanguageLabel] - Display label for the translation language (native name)
  * @param {Object} props.audioRef - Ref to Arabic audio element
  */
 const AudioControls = memo(function AudioControls({
@@ -62,10 +63,12 @@ const AudioControls = memo(function AudioControls({
   translationReciterInfo,
   apiAudioSource,
   ttsLanguage,
+  translationLanguageLabel,
   effectiveNarrator,
   availableNarrators,
   hasMatchingAudio,
   onNarratorChange,
+  ttsLoading,
   togglePlayPause,
   toggleTranslationPlayback,
   toggleCombinedPlayback,
@@ -144,7 +147,7 @@ const AudioControls = memo(function AudioControls({
           }`}
           title={apiAudioSource ? `Audio: ${apiAudioSource.reciter?.name}` : 'TTS Audio (No narrator available)'}
         >
-          {ttsLanguage === 'ur' ? 'اردو' : 'Translation'}
+          {translationLanguageLabel || 'Translation'}
           {apiAudioSource ? (
             <span className="ml-1 text-emerald-300">●</span>
           ) : (
@@ -222,10 +225,12 @@ const AudioControls = memo(function AudioControls({
             }`}
             style={{ boxShadow: '0 4px 15px rgba(0,0,0,0.2)' }}
           >
-            {isPlayingTranslation ? (
+            {ttsLoading ? (
+              <Icons.Loader className="w-5 h-5 animate-spin" />
+            ) : isPlayingTranslation ? (
               <Icons.Pause className="w-5 h-5" />
             ) : (
-              <Icons.Headphones className="w-5 h-5" />
+              <Icons.Play className="w-5 h-5 ml-0.5" />
             )}
           </button>
         ) : (

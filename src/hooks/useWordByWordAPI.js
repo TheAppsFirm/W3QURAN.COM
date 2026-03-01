@@ -86,6 +86,59 @@ export const POS_LABELS = {
 };
 
 /**
+ * Fetch word-by-word translations from local static files (Dr. Farhat Hashmi)
+ * Complete coverage: all 114 surahs, 70,537 words
+ * Includes: Urdu, Hindi, Roman transliteration, Arabic root words
+ *
+ * @param {number} surahId - Surah number (1-114)
+ * @param {string} language - Language code ('ur' or 'hi')
+ * @returns {Promise<Object|null>} - Words map { ayahNum: [{ arabic, meaning, transliteration, root }] } or null
+ */
+/**
+ * Generate word audio URL from Quran.com CDN
+ * Pattern: https://audio.qurancdn.com/wbw/{SSS}_{AAA}_{WWW}.mp3
+ */
+function getWordAudioUrl(surahId, ayahNum, wordPosition) {
+  const s = String(surahId).padStart(3, '0');
+  const a = String(ayahNum).padStart(3, '0');
+  const w = String(wordPosition).padStart(3, '0');
+  return `https://audio.qurancdn.com/wbw/${s}_${a}_${w}.mp3`;
+}
+
+async function fetchLocalFarhatWBW(surahId, language = 'ur') {
+  if (language !== 'ur' && language !== 'hi') return null;
+
+  const cacheKey = `wbw-farhat-${surahId}-${language}`;
+  if (hasInCache(cacheKey)) {
+    return getFromCache(cacheKey);
+  }
+
+  try {
+    const response = await fetch(`/data/wbw/${surahId}.json`);
+    if (!response.ok) return null;
+
+    const data = await response.json();
+    const wordsMap = {};
+
+    Object.entries(data).forEach(([ayahNum, words]) => {
+      wordsMap[parseInt(ayahNum)] = words.map((w, idx) => ({
+        arabic: w.ar || '',
+        meaning: language === 'hi' ? (w.hi || w.ur || '') : (w.ur || ''),
+        transliteration: w.ro || '',
+        root: w.rt || '',
+        position: idx + 1,
+        audioUrl: getWordAudioUrl(surahId, ayahNum, idx + 1),
+      }));
+    });
+
+    setInCache(cacheKey, wordsMap);
+    return wordsMap;
+  } catch {
+    return null;
+  }
+}
+
+/**
  * Fetch word-by-word translations from QuranWBW.com static API
  * Has complete coverage for all 114 surahs in multiple languages including Urdu
  *
@@ -221,6 +274,7 @@ async function fetchCompleteQuranWBWData(surahId, language = 'ur') {
         meaning: meaning || '',
         transliteration: transliterations[idx] || '',
         position: idx + 1,
+        audioUrl: getWordAudioUrl(surahId, ayahNum, idx + 1),
       }));
     });
 
@@ -381,18 +435,34 @@ export function useMultilingualWords(surahId, translationId = 'en.sahih') {
 
     async function fetchWords() {
       try {
-        // Priority 1: Check local data (has curated multi-language support)
+        // Priority 1: Try local Farhat Hashmi data (Urdu/Hindi, all 114 surahs, offline-capable)
+        // Preferred over old wordMeanings.js for ur/hi because it covers all surahs consistently
+        if (targetLang === 'ur' || targetLang === 'hi') {
+          const farhatData = await fetchLocalFarhatWBW(surahId, targetLang);
+          if (!cancelled && farhatData && Object.keys(farhatData).length > 0) {
+            setWordsMap(farhatData);
+            setIsLocalData(true);
+            setIsAuthenticated(false);
+            setIsFallback(false);
+            setCurrentLang(targetLang);
+            setLoading(false);
+            return;
+          }
+        }
+
+        // Priority 2: Check old local data (curated multi-language support for surahs 1,112,113,114)
         if (hasLocalWordMeanings(surahId)) {
           const surahData = WORD_MEANINGS[surahId];
           const localWordsMap = {};
 
           Object.entries(surahData).forEach(([ayahNum, words]) => {
-            localWordsMap[parseInt(ayahNum)] = words.map(w => {
+            localWordsMap[parseInt(ayahNum)] = words.map((w, idx) => {
               const meaning = w[targetLang] || w.en;
               return {
                 arabic: w.ar,
                 meaning: meaning,
                 transliteration: w.transliteration || '',
+                audioUrl: getWordAudioUrl(surahId, ayahNum, idx + 1),
               };
             });
           });
@@ -408,25 +478,19 @@ export function useMultilingualWords(surahId, translationId = 'en.sahih') {
           return;
         }
 
-        // Priority 2: Try QuranWBW API (has complete Urdu, Hindi, Bengali, Turkish, English, etc.)
+        // Priority 3: Try QuranWBW API (has complete Urdu, Hindi, Bengali, Turkish, English, etc.)
         if (QURANWBW_LANG_IDS[targetLang]) {
-          console.log(`[WBW] Trying QuranWBW for language: ${targetLang}, surah: ${surahId}`);
           const wbwData = await fetchCompleteQuranWBWData(surahId, targetLang);
 
           if (!cancelled && wbwData && Object.keys(wbwData).length > 0) {
-            console.log(`[WBW] Got QuranWBW data for ${targetLang}, surah ${surahId}:`, Object.keys(wbwData).length, 'verses');
             setWordsMap(wbwData);
             setIsLocalData(false);
-            setIsAuthenticated(true); // Mark as authenticated source (reliable)
+            setIsAuthenticated(true);
             setIsFallback(false);
             setCurrentLang(targetLang);
             setLoading(false);
             return;
-          } else {
-            console.log(`[WBW] No QuranWBW data for ${targetLang}, falling back...`);
           }
-        } else {
-          console.log(`[WBW] No QuranWBW support for language: ${targetLang}`);
         }
 
         // Priority 3: Try authenticated API (Quran Foundation - limited language support)

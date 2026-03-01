@@ -12,7 +12,8 @@ import { QUOTE_TRANSLATIONS } from './quranQuoteUtils';
 import RichPostBody from './RichPostBody';
 import { useTranslation } from '../../contexts/LocaleContext';
 
-const PremiumGate = lazy(() => import('../kids/KidsPremiumGate'));
+const lazyRetry = (fn) => lazy(() => fn().catch(() => { if (!sessionStorage.getItem('chunk_reload')) { sessionStorage.setItem('chunk_reload', '1'); window.location.reload(); } return fn(); }));
+const PremiumGate = lazyRetry(() => import('../kids/KidsPremiumGate'));
 
 const REACTIONS = ['❤️', '👍', '📖', '🤲', 'ماشاءالله'];
 
@@ -147,6 +148,8 @@ export default function ChatWindow({ surahId, surahName }) {
   const [quoteAyah, setQuoteAyah] = useState(1);
   const [quoteTranslation, setQuoteTranslation] = useState(234);
   const [quoteComment, setQuoteComment] = useState('');
+  const [quoteLoading, setQuoteLoading] = useState(false);
+  const [quotePreview, setQuotePreview] = useState(null);
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
   const typingTimer = useRef(null);
@@ -377,7 +380,7 @@ export default function ChatWindow({ surahId, surahName }) {
           <div className="flex gap-2">
             <select
               value={quoteSurah}
-              onChange={e => setQuoteSurah(Number(e.target.value))}
+              onChange={e => { setQuoteSurah(Number(e.target.value)); setQuotePreview(null); }}
               className="flex-1 px-2 py-1.5 rounded-lg bg-white/5 border border-white/10 text-white text-xs focus:outline-none appearance-none"
             >
               {SURAHS.map(s => (
@@ -389,27 +392,74 @@ export default function ChatWindow({ surahId, surahName }) {
               min={1}
               max={286}
               value={quoteAyah}
-              onChange={e => setQuoteAyah(Number(e.target.value))}
+              onChange={e => { setQuoteAyah(Number(e.target.value)); setQuotePreview(null); }}
               placeholder="Ayah"
               className="w-16 px-2 py-1.5 rounded-lg bg-white/5 border border-white/10 text-white text-xs focus:outline-none"
             />
           </div>
           <select
             value={quoteTranslation}
-            onChange={e => setQuoteTranslation(Number(e.target.value))}
+            onChange={e => { setQuoteTranslation(Number(e.target.value)); setQuotePreview(null); }}
             className="w-full px-2 py-1.5 rounded-lg bg-white/5 border border-white/10 text-white text-xs focus:outline-none appearance-none"
           >
-            <optgroup label="اردو — Urdu" className="bg-slate-800">
-              {QUOTE_TRANSLATIONS.filter(tr => tr.lang === 'Urdu').map(tr => (
-                <option key={tr.id} value={tr.id} className="bg-slate-800">{tr.name} ({tr.nameEn})</option>
-              ))}
-            </optgroup>
-            <optgroup label="English" className="bg-slate-800">
-              {QUOTE_TRANSLATIONS.filter(tr => tr.lang === 'English').map(tr => (
-                <option key={tr.id} value={tr.id} className="bg-slate-800">{tr.nameEn}</option>
-              ))}
-            </optgroup>
+            {[...new Set(QUOTE_TRANSLATIONS.map(tr => tr.lang))].map(lang => {
+              const items = QUOTE_TRANSLATIONS.filter(tr => tr.lang === lang);
+              const label = items[0]?.langNative ? `${items[0].langNative} — ${lang}` : lang;
+              return (
+                <optgroup key={lang} label={label} className="bg-slate-800">
+                  {items.map(tr => (
+                    <option key={tr.id} value={tr.id} className="bg-slate-800">
+                      {tr.langNative ? `${tr.name} (${tr.nameEn})` : tr.nameEn}
+                    </option>
+                  ))}
+                </optgroup>
+              );
+            })}
           </select>
+          {/* Preview button */}
+          <button
+            type="button"
+            onClick={async () => {
+              setQuoteLoading(true);
+              setQuotePreview(null);
+              try {
+                const res = await fetch(
+                  `https://api.quran.com/api/v4/verses/by_key/${quoteSurah}:${quoteAyah}?words=false&translations=${quoteTranslation}&fields=text_uthmani`
+                );
+                const json = await res.json();
+                const ar = json.verse?.text_uthmani || '';
+                const tr = (json.verse?.translations?.[0]?.text || '').replace(/<[^>]+>/g, '');
+                setQuotePreview({ arabic: ar, translation: tr });
+              } catch { setQuotePreview({ arabic: '', translation: 'Failed to load' }); }
+              setQuoteLoading(false);
+            }}
+            disabled={quoteLoading}
+            className="w-full py-1.5 rounded-lg bg-white/5 border border-white/10 text-xs text-white/50
+              hover:bg-white/10 hover:text-white/70 transition-colors disabled:opacity-30"
+          >
+            {quoteLoading ? t('discussions.loading', 'Loading...') : t('discussions.previewVerse', 'Preview Verse')}
+          </button>
+
+          {/* Preview display */}
+          {quotePreview && (
+            <div className="rounded-lg bg-amber-500/[0.06] border-l-2 border-amber-500/40 p-2.5 space-y-1.5">
+              <p className="text-right text-sm leading-loose text-white/85" dir="rtl"
+                style={{ fontFamily: "'Scheherazade New', serif" }}>
+                {quotePreview.arabic}
+              </p>
+              {quotePreview.translation && (
+                <p className={`text-[11px] leading-relaxed text-white/45 ${
+                  QUOTE_TRANSLATIONS.find(tr => tr.id === quoteTranslation)?.langCode === 'ur' ? 'text-right' : ''
+                }`}
+                  dir={QUOTE_TRANSLATIONS.find(tr => tr.id === quoteTranslation)?.langCode === 'ur' ? 'rtl' : 'ltr'}
+                  style={QUOTE_TRANSLATIONS.find(tr => tr.id === quoteTranslation)?.langCode === 'ur' ? { fontFamily: "'Noto Nastaliq Urdu', serif" } : {}}
+                >
+                  {quotePreview.translation}
+                </p>
+              )}
+            </div>
+          )}
+
           <input
             type="text"
             value={quoteComment}
@@ -421,7 +471,7 @@ export default function ChatWindow({ surahId, surahName }) {
           <div className="flex gap-2">
             <button
               type="button"
-              onClick={() => setShowQuote(false)}
+              onClick={() => { setShowQuote(false); setQuotePreview(null); }}
               className="flex-1 py-1.5 rounded-lg bg-white/5 border border-white/10 text-xs text-white/40
                 hover:bg-white/10 transition-colors"
             >

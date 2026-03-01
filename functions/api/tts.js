@@ -7,23 +7,79 @@
 // Male voices: Achird, Algenib, Charon, Enceladus, Fenrir, Orus, Puck, etc.
 // Female voices: Aoede, Kore, Leda, Zephyr, etc.
 const GOOGLE_CLOUD_VOICES = {
+  // South Asian
   ur: { languageCode: 'ur-IN', name: 'ur-IN-Chirp3-HD-Puck' },
   hi: { languageCode: 'hi-IN', name: 'hi-IN-Chirp3-HD-Puck' },
+  bn: { languageCode: 'bn-IN', name: 'bn-IN-Chirp3-HD-Charon' },
+  ta: { languageCode: 'ta-IN', name: 'ta-IN-Chirp3-HD-Charon' },
+  te: { languageCode: 'te-IN', name: 'te-IN-Chirp3-HD-Charon' },
+  ml: { languageCode: 'ml-IN', name: 'ml-IN-Chirp3-HD-Charon' },
+  kn: { languageCode: 'kn-IN', name: 'kn-IN-Chirp3-HD-Charon' },
+  gu: { languageCode: 'gu-IN', name: 'gu-IN-Chirp3-HD-Charon' },
+  mr: { languageCode: 'mr-IN', name: 'mr-IN-Chirp3-HD-Charon' },
+  // English & Arabic
   en: { languageCode: 'en-US', name: 'en-US-Chirp3-HD-Charon' },
   ar: { languageCode: 'ar-XA', name: 'ar-XA-Chirp3-HD-Charon' },
+  // East Asian
+  zh: { languageCode: 'cmn-CN', name: 'cmn-CN-Chirp3-HD-Charon' },
+  ja: { languageCode: 'ja-JP', name: 'ja-JP-Chirp3-HD-Charon' },
+  ko: { languageCode: 'ko-KR', name: 'ko-KR-Chirp3-HD-Charon' },
+  // European - Western
+  es: { languageCode: 'es-ES', name: 'es-ES-Chirp3-HD-Charon' },
+  fr: { languageCode: 'fr-FR', name: 'fr-FR-Chirp3-HD-Charon' },
+  de: { languageCode: 'de-DE', name: 'de-DE-Chirp3-HD-Charon' },
+  pt: { languageCode: 'pt-BR', name: 'pt-BR-Chirp3-HD-Charon' },
+  it: { languageCode: 'it-IT', name: 'it-IT-Chirp3-HD-Charon' },
+  nl: { languageCode: 'nl-NL', name: 'nl-NL-Chirp3-HD-Charon' },
+  // European - Northern
+  sv: { languageCode: 'sv-SE', name: 'sv-SE-Chirp3-HD-Charon' },
+  no: { languageCode: 'nb-NO', name: 'nb-NO-Chirp3-HD-Charon' },
+  fi: { languageCode: 'fi-FI', name: 'fi-FI-Chirp3-HD-Charon' },
+  // European - Eastern
+  ru: { languageCode: 'ru-RU', name: 'ru-RU-Chirp3-HD-Charon' },
+  pl: { languageCode: 'pl-PL', name: 'pl-PL-Chirp3-HD-Charon' },
+  cs: { languageCode: 'cs-CZ', name: 'cs-CZ-Chirp3-HD-Charon' },
+  ro: { languageCode: 'ro-RO', name: 'ro-RO-Chirp3-HD-Charon' },
+  bg: { languageCode: 'bg-BG', name: 'bg-BG-Chirp3-HD-Charon' },
+  uk: { languageCode: 'uk-UA', name: 'uk-UA-Chirp3-HD-Charon' },
+  hu: { languageCode: 'hu-HU', name: 'hu-HU-Chirp3-HD-Charon' },
+  hr: { languageCode: 'hr-HR', name: 'hr-HR-Chirp3-HD-Charon' },
+  sr: { languageCode: 'sr-RS', name: 'sr-RS-Chirp3-HD-Charon' },
+  sk: { languageCode: 'sk-SK', name: 'sk-SK-Chirp3-HD-Charon' },
+  sq: { languageCode: 'sq-AL', name: 'sq-AL-Chirp3-HD-Charon' },
+  // Turkish & Central Asian
+  tr: { languageCode: 'tr-TR', name: 'tr-TR-Chirp3-HD-Charon' },
+  // Southeast Asian
+  id: { languageCode: 'id-ID', name: 'id-ID-Chirp3-HD-Charon' },
+  ms: { languageCode: 'ms-MY', name: 'ms-MY-Chirp3-HD-Charon' },
+  th: { languageCode: 'th-TH', name: 'th-TH-Chirp3-HD-Charon' },
+  vi: { languageCode: 'vi-VN', name: 'vi-VN-Chirp3-HD-Charon' },
+  tl: { languageCode: 'fil-PH', name: 'fil-PH-Chirp3-HD-Charon' },
+  // Middle Eastern
+  fa: { languageCode: 'fa-IR', name: 'fa-IR-Chirp3-HD-Charon' },
+  he: { languageCode: 'he-IL', name: 'he-IL-Chirp3-HD-Charon' },
+  // African
+  sw: { languageCode: 'sw-KE', name: 'sw-KE-Chirp3-HD-Charon' },
 };
 
 // Language code mapping for fallback TTS providers
+// Language code mapping for fallback TTS (Google Translate)
+// Used when Chirp3-HD is unavailable for a language
 const LANG_MAPPING = {
-  'ur': 'ur-PK',
-  'en': 'en-US',
-  'hi': 'hi-IN',
-  'ar': 'ar-SA',
-  'bn': 'bn-BD',
-  'tr': 'tr-TR',
-  'id': 'id-ID',
-  'fr': 'fr-FR',
-  'de': 'de-DE',
+  'ur': 'ur', 'en': 'en', 'hi': 'hi', 'ar': 'ar',
+  'bn': 'bn', 'ta': 'ta', 'te': 'te', 'ml': 'ml', 'kn': 'kn', 'gu': 'gu', 'mr': 'mr',
+  'zh': 'zh-CN', 'ja': 'ja', 'ko': 'ko',
+  'es': 'es', 'fr': 'fr', 'de': 'de', 'pt': 'pt', 'it': 'it', 'nl': 'nl',
+  'sv': 'sv', 'no': 'no', 'fi': 'fi',
+  'ru': 'ru', 'pl': 'pl', 'cs': 'cs', 'ro': 'ro', 'bg': 'bg', 'uk': 'uk', 'hu': 'hu',
+  'hr': 'hr', 'sr': 'sr', 'sk': 'sk', 'sq': 'sq', 'bs': 'bs',
+  'tr': 'tr', 'az': 'az',
+  'id': 'id', 'ms': 'ms', 'th': 'th', 'vi': 'vi', 'tl': 'tl', 'km': 'km', 'my': 'my',
+  'fa': 'fa', 'he': 'iw', 'ps': 'ps', 'ku': 'ku', 'sd': 'sd',
+  'sw': 'sw', 'ha': 'ha', 'yo': 'yo', 'so': 'so', 'am': 'am',
+  'ne': 'ne', 'si': 'si',
+  'uz': 'uz', 'kk': 'kk', 'tg': 'tg',
+  'as': 'as', 'dv': 'dv',
 };
 
 /**
@@ -182,10 +238,11 @@ export async function onRequest(context) {
     }
 
     // Source 2: Google Translate TTS (with tw-ob client) - free fallback
+    const translateLang = LANG_MAPPING[lang] || lang;
     if (!audioData) {
       try {
-        console.log('[TTS] Trying Google Translate TTS (tw-ob)');
-        const ttsUrl1 = `https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=${lang}&q=${encodeURIComponent(truncatedText)}`;
+        console.log('[TTS] Trying Google Translate TTS (tw-ob) lang:', translateLang);
+        const ttsUrl1 = `https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=${translateLang}&q=${encodeURIComponent(truncatedText)}`;
         const response1 = await fetch(ttsUrl1, {
           headers: {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
@@ -208,7 +265,7 @@ export async function onRequest(context) {
     // Source 3: Google Translate TTS (with gtx client)
     if (!audioData) {
       try {
-        const ttsUrl2 = `https://translate.google.com/translate_tts?ie=UTF-8&client=gtx&tl=${lang}&q=${encodeURIComponent(truncatedText)}`;
+        const ttsUrl2 = `https://translate.google.com/translate_tts?ie=UTF-8&client=gtx&tl=${translateLang}&q=${encodeURIComponent(truncatedText)}`;
         const response2 = await fetch(ttsUrl2, {
           headers: {
             'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 16_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.0 Mobile/15E148 Safari/604.1',
@@ -227,10 +284,10 @@ export async function onRequest(context) {
     }
 
     // Source 4: VoiceRSS free tier (as final fallback for common languages)
-    if (!audioData && ['en', 'ur', 'hi', 'ar'].includes(lang)) {
+    if (!audioData && ['en', 'ur', 'hi', 'ar', 'zh', 'ja', 'ko', 'es', 'fr', 'de', 'ru', 'tr'].includes(lang)) {
       try {
         // VoiceRSS has a free tier with limited requests
-        const voiceRssLang = LANG_MAPPING[lang] || 'en-us';
+        const voiceRssLang = translateLang || 'en-us';
         const ttsUrl3 = `https://api.voicerss.org/?key=demo&hl=${voiceRssLang}&src=${encodeURIComponent(truncatedText)}&c=MP3`;
         const response3 = await fetch(ttsUrl3);
         if (response3.ok) {

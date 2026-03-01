@@ -1155,7 +1155,7 @@ const RelationshipCard = memo(function RelationshipCard({ relationship, lang }) 
   // Use type as label if no label field (new structure)
   const labelText = relationship.label
     ? getOntologyText(relationship.label, lang)
-    : relationship.type;
+    : getConnectionTypeLabel(relationship.type, lang);
 
   const typeColor = typeColors[relationship.type] || '#888';
 
@@ -1233,6 +1233,36 @@ const ThematicFlow = memo(function ThematicFlow({ flow, lang }) {
 });
 
 /**
+ * Connection type translations for cross references
+ */
+const CONNECTION_TYPE_LABELS = {
+  direct_answer: { en: 'direct answer', ur: 'براہ راست جواب', ar: 'إجابة مباشرة' },
+  thematic_expansion: { en: 'thematic expansion', ur: 'موضوعاتی توسیع', ar: 'توسع موضوعي' },
+  direct_reference: { en: 'direct reference', ur: 'براہ راست حوالہ', ar: 'إشارة مباشرة' },
+  historical_connection: { en: 'historical connection', ur: 'تاریخی تعلق', ar: 'ارتباط تاريخي' },
+  thematic_parallel: { en: 'thematic parallel', ur: 'موضوعاتی مماثلت', ar: 'تشابه موضوعي' },
+  complementary: { en: 'complementary', ur: 'تکمیلی', ar: 'تكميلي' },
+  sequential_relationship: { en: 'sequential relationship', ur: 'ترتیبی تعلق', ar: 'علاقة تسلسلية' },
+  thematic_series: { en: 'thematic series', ur: 'موضوعاتی سلسلہ', ar: 'سلسلة موضوعية' },
+  cause_effect: { en: 'cause & effect', ur: 'سبب و نتیجہ', ar: 'سبب ونتيجة' },
+  contrast: { en: 'contrast', ur: 'تضاد', ar: 'تضاد' },
+  elaboration: { en: 'elaboration', ur: 'تفصیل', ar: 'تفصيل' },
+  parallel: { en: 'parallel', ur: 'متوازی', ar: 'متوازي' },
+  foundation: { en: 'foundation', ur: 'بنیاد', ar: 'أساس' },
+  warning: { en: 'warning', ur: 'تنبیہ', ar: 'تحذير' },
+  reward: { en: 'reward', ur: 'اجر', ar: 'جزاء' },
+  proof: { en: 'proof', ur: 'دلیل', ar: 'برهان' },
+  evidence: { en: 'evidence', ur: 'شہادت', ar: 'شهادة' },
+};
+
+const getConnectionTypeLabel = (type, lang) => {
+  if (!type) return '';
+  const labels = CONNECTION_TYPE_LABELS[type];
+  if (labels) return labels[lang] || labels.en || type.replace(/_/g, ' ');
+  return type.replace(/_/g, ' ');
+};
+
+/**
  * Cross Reference Card
  * Updated to handle both old crossReferences and new connectionToOtherSurahs structures
  */
@@ -1262,7 +1292,7 @@ const CrossReferenceCard = memo(function CrossReferenceCard({ reference, lang, l
             className="text-xs px-2 py-0.5 rounded-full"
             style={{ backgroundColor: `${color}30`, color }}
           >
-            {reference.type?.replace(/_/g, ' ')}
+            {getConnectionTypeLabel(reference.type, lang)}
           </span>
         </div>
         <p className={`text-sm text-white/70 ${lang === 'ur' || lang === 'ar' ? 'text-right' : ''}`} dir={lang === 'ur' || lang === 'ar' ? 'rtl' : 'ltr'}>
@@ -1472,7 +1502,7 @@ export const OntologyView = memo(function OntologyView({ surahId, lang = 'en', i
           {activeTab === 'flow' && ontology.thematicFlow && (
             <div>
               <h4 className="text-white font-medium mb-4">
-                {ontology.thematicFlow.title || getOntologyText(ontology.thematicFlow.label, lang)}
+                {getOntologyText(ontology.thematicFlow.title, lang) || getOntologyText(ontology.thematicFlow.label, lang)}
               </h4>
               <ThematicFlow flow={ontology.thematicFlow} lang={lang} />
             </div>
