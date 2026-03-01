@@ -10,7 +10,6 @@ import { useAuth } from '../../contexts/AuthContext';
 import { useIsMobile } from '../../hooks';
 import { QUOTE_TRANSLATIONS, fetchVerseForQuote } from './quranQuoteUtils';
 import RichPostBody from './RichPostBody';
-import UserPopover from './UserPopover';
 import { useTranslation } from '../../contexts/LocaleContext';
 
 const lazyRetry = (fn) => lazy(() => fn().catch(() => { if (!sessionStorage.getItem('chunk_reload')) { sessionStorage.setItem('chunk_reload', '1'); window.location.reload(); } return fn(); }));
@@ -30,8 +29,6 @@ function timeFormat(dateStr) {
 function ChatMessage({ msg, currentUserId, onReply, onReact, onDeleteRequest, onOpenAyah, onViewProfile, isAdmin, selectMode, isSelected, onToggleSelect, isMobile }) {
   const { t } = useTranslation();
   const [showReactPicker, setShowReactPicker] = useState(false);
-  const [popoverUser, setPopoverUser] = useState(null);
-  const [popoverPos, setPopoverPos] = useState(null);
   const isOwn = msg.userId === currentUserId;
   const canDelete = isAdmin || isOwn;
 
@@ -40,9 +37,8 @@ function ChatMessage({ msg, currentUserId, onReply, onReact, onDeleteRequest, on
 
   const handleUserClick = (e) => {
     e.stopPropagation();
-    if (selectMode) return;
-    setPopoverUser({ id: msg.userId, name: msg.userName, picture: msg.userPicture });
-    setPopoverPos({ top: Math.min(e.clientY + 8, window.innerHeight - 300), left: Math.min(e.clientX, window.innerWidth - 260) });
+    if (selectMode || !onViewProfile) return;
+    onViewProfile(msg.userId);
   };
 
   return (
@@ -165,15 +161,6 @@ function ChatMessage({ msg, currentUserId, onReply, onReact, onDeleteRequest, on
         )}
       </div>
 
-      {/* User Profile Popover */}
-      {popoverUser && (
-        <UserPopover
-          user={popoverUser}
-          position={popoverPos}
-          onClose={() => setPopoverUser(null)}
-          onViewProfile={onViewProfile}
-        />
-      )}
     </div>
   );
 }
