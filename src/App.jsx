@@ -832,51 +832,39 @@ function QuranBubbleApp() {
 
   // Update page title + meta tags (OG, description, canonical) based on current state
   useEffect(() => {
-    let title = 'w3Quran - The Holy Quran';
-
     if (overlayReaderSurah) {
-      // Surah page — full SEO with description
       const seo = getSEOForView(null, overlayReaderSurah);
-      updateSEO(seo);
-      return;
-    } else if (showSearchPanel) {
-      title = 'Search - w3Quran';
-    } else if (showProgressDashboard) {
-      title = 'Progress - w3Quran';
-    } else if (showHifzMode) {
-      title = 'Memorization (Hifz) - w3Quran';
-    } else if (showMindMap) {
-      title = 'Word Search Map - w3Quran';
-    } else if (showMoodTracker) {
-      title = 'Mood Tracker - w3Quran';
-    } else if (showVideoSync) {
-      title = 'Scholar Videos - w3Quran';
-    } else if (showPropheticMap) {
-      title = 'Prophetic World Map - w3Quran';
-    } else if (showCompanionAI) {
-      title = 'AI Companion - w3Quran';
-    } else if (showGlobalPulse) {
-      title = 'Global Ummah Pulse - w3Quran';
-    } else if (showWeatherSync) {
-      title = 'Weather Verses - w3Quran';
-    } else if (showSoundHealing) {
-      title = 'Sound Healing - w3Quran';
-    } else if (showBabyNames) {
-      title = 'Quranic Baby Names - w3Quran';
-    } else {
-      // Known views — use SEO data with descriptions
-      const seo = getSEOForView(view);
       updateSEO(seo);
       return;
     }
 
-    // Fallback for modals/overlays — title only
-    updateSEO({ title });
+    // Detect active modal and use full SEO data
+    const modalMap = {
+      search: showSearchPanel, progress: showProgressDashboard,
+      hifz: showHifzMode, mindMap: showMindMap, mood: showMoodTracker,
+      videoSync: showVideoSync, propheticMap: showPropheticMap,
+      timeMachine: showTimeMachine, companionAI: showCompanionAI,
+      globalPulse: showGlobalPulse, weatherSync: showWeatherSync,
+      soundHealing: showSoundHealing, babyNames: showBabyNames,
+      hajjUmrah: showHajjUmrah, talkToQuran: showTalkToQuran,
+      achievements: showGamificationHub,
+    };
+    const activeModal = Object.keys(modalMap).find(k => modalMap[k]);
+    if (activeModal) {
+      const seo = getSEOForView(view, null, activeModal);
+      updateSEO(seo);
+      return;
+    }
+
+    // Known views — use SEO data with descriptions
+    const seo = getSEOForView(view);
+    updateSEO(seo);
   }, [
     view, overlayReaderSurah, showSearchPanel, showProgressDashboard,
     showHifzMode, showMindMap, showMoodTracker, showVideoSync,
-    showPropheticMap, showCompanionAI, showGlobalPulse, showWeatherSync,
-    showSoundHealing, showBabyNames
+    showPropheticMap, showTimeMachine, showCompanionAI, showGlobalPulse,
+    showWeatherSync, showSoundHealing, showBabyNames, showHajjUmrah,
+    showTalkToQuran, showGamificationHub
   ]);
 
   // Navigate back helper - closes modals and navigates to previous route

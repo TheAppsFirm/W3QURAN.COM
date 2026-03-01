@@ -8,7 +8,7 @@
  *  - Online presence tracking
  *  - Message persistence to D1
  *  - Emoji reactions
- *  - Rate limiting (free users: 5/day)
+ *  - Rate limiting (free users: 1 DM/day, admin/premium unlimited)
  */
 
 const MAX_STORED_MESSAGES = 500;
@@ -245,8 +245,8 @@ export class ChatRoom {
     const text = (data.text || '').trim();
     if (!text || text.length > MAX_MESSAGE_LENGTH) return;
 
-    // Rate limit: only for DMs (group chat is unlimited)
-    if (session.roomType === 'dm') {
+    // Rate limit: only for DMs from free users (group chat is unlimited, admin/premium bypass)
+    if (session.roomType === 'dm' && !session.isAdmin) {
       const isLimited = await this.checkRateLimit(session.userId);
       if (isLimited) {
         ws.send(JSON.stringify({
