@@ -1,16 +1,42 @@
 /**
  * useWebSocket.js
  * WebSocket hook with auto-reconnect for chat rooms.
+ *
+ * Auth flow:
+ * 1. Client calls /api/auth/chat-token (same-origin, reads HttpOnly cookie)
+ * 2. API validates session, returns the token
+ * 3. Client connects to wss://chat.w3quran.com/ws/...?token=TOKEN
+ * 4. Chat worker validates token against D1 sessions table
  */
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 
 const CHAT_WS_URL = import.meta.env.VITE_CHAT_WS_URL ||
   (typeof window !== 'undefined' && window.location.hostname === 'localhost'
-    ? `ws://localhost:8787`
+    ? 'ws://localhost:8787'
     : 'wss://chat.w3quran.com');
-const RECONNECT_DELAYS = [1000, 2000, 4000, 8000, 15000]; // exponential backoff
+const RECONNECT_DELAYS = [1000, 2000, 4000, 8000, 15000];
 const MAX_RECONNECT_ATTEMPTS = 10;
+
+/**
+ * Fetch chat token from same-origin API.
+ * In local dev, reads cookie directly (not HttpOnly in dev mode).
+ * In production, hits /api/auth/chat-token which reads the HttpOnly cookie server-side.
+ */
+async function fetchChatToken() {
+  if (typeof window !== 'undefined' && window.location.hostname === 'localhost') {
+    const m = document.cookie.match(/w3quran_session=([^;]+)/);
+    return m ? m[1] : null;
+  }
+  try {
+    const res = await fetch('/api/auth/chat-token', { credentials: 'include' });
+    if (!res.ok) return null;
+    const data = await res.json();
+    return data.token || null;
+  } catch {
+    return null;
+  }
+}
 
 export function useWebSocket(roomType, roomId, enabled = true) {
   const [messages, setMessages] = useState([]);
@@ -25,28 +51,67 @@ export function useWebSocket(roomType, roomId, enabled = true) {
   const reconnectAttempt = useRef(0);
   const reconnectTimer = useRef(null);
   const isUnmounted = useRef(false);
+  const enabledRef = useRef(enabled);
   const chatTokenRef = useRef(null);
 
-  // Fetch chat token from same-origin API (reads HttpOnly cookie server-side)
-  const fetchChatToken = useCallback(async () => {
-    // In local dev, read cookie directly (not HttpOnly in dev)
-    if (typeof window !== 'undefined' && window.location.hostname === 'localhost') {
-      const sessionMatch = document.cookie.match(/w3quran_session=([^;]+)/);
-      return sessionMatch ? sessionMatch[1] : null;
-    }
-    // In production, fetch from API since cookie is HttpOnly
-    try {
-      const res = await fetch('/api/auth/chat-token', { credentials: 'include' });
-      if (!res.ok) return null;
-      const data = await res.json();
-      return data.token || null;
-    } catch {
-      return null;
+  // Keep enabledRef in sync so callbacks can check current value
+  enabledRef.current = enabled;
+
+  const handleMessage = useCallback((data) => {
+    switch (data.type) {
+      case 'history':
+        setMessages(data.messages || []);
+        break;
+      case 'message':
+        setMessages(prev => [...prev, data.message]);
+        break;
+      case 'presence':
+        setOnlineUsers(data.users || []);
+        setOnlineCount(data.count || 0);
+        break;
+      case 'typing':
+        setTypingUsers(prev => {
+          if (prev.some(u => u.userId === data.userId)) return prev;
+          return [...prev, { userId: data.userId, userName: data.userName }];
+        });
+        break;
+      case 'stop_typing':
+        setTypingUsers(prev => prev.filter(u => u.userId !== data.userId));
+        break;
+      case 'reaction_update':
+        setMessages(prev => prev.map(m =>
+          m.id === data.messageId ? { ...m, reactions: data.reactions } : m
+        ));
+        break;
+      case 'chat_cleared':
+        setMessages([]);
+        break;
+      case 'error':
+        setError(data.message);
+        setRequiresPremium(!!data.requiresPremium);
+        break;
+      default:
+        break;
     }
   }, []);
 
-  const connect = useCallback(async () => {
-    if (!roomType || !roomId || !enabled || isUnmounted.current) return;
+  const scheduleReconnect = useCallback(() => {
+    // Don't reconnect if unmounted or disabled (logged out)
+    if (isUnmounted.current || !enabledRef.current) return;
+    if (reconnectAttempt.current >= MAX_RECONNECT_ATTEMPTS) return;
+
+    const delay = RECONNECT_DELAYS[Math.min(reconnectAttempt.current, RECONNECT_DELAYS.length - 1)];
+    reconnectAttempt.current += 1;
+
+    reconnectTimer.current = setTimeout(() => {
+      if (!isUnmounted.current && enabledRef.current) {
+        connectWs();
+      }
+    }, delay);
+  }, []); // stable — uses refs only
+
+  const connectWs = useCallback(async () => {
+    if (!roomType || !roomId || !enabledRef.current || isUnmounted.current) return;
 
     // Clean up existing connection
     if (wsRef.current) {
@@ -54,17 +119,21 @@ export function useWebSocket(roomType, roomId, enabled = true) {
       wsRef.current = null;
     }
 
-    // Get auth token if we don't have one
+    // Fetch token if we don't have one cached
     if (!chatTokenRef.current) {
       chatTokenRef.current = await fetchChatToken();
     }
 
+    // Still no token — user isn't authenticated
     if (!chatTokenRef.current) {
       setError('Not authenticated');
-      return;
+      return; // Don't schedule reconnect — wait for enabled to change
     }
 
-    let url = `${CHAT_WS_URL}/ws/${roomType}/${roomId}?token=${chatTokenRef.current}`;
+    // Check again after async gap
+    if (!enabledRef.current || isUnmounted.current) return;
+
+    const url = `${CHAT_WS_URL}/ws/${roomType}/${roomId}?token=${chatTokenRef.current}`;
 
     try {
       const ws = new WebSocket(url);
@@ -81,8 +150,7 @@ export function useWebSocket(roomType, roomId, enabled = true) {
       ws.onmessage = (event) => {
         if (isUnmounted.current) return;
         try {
-          const data = JSON.parse(event.data);
-          handleMessage(data);
+          handleMessage(JSON.parse(event.data));
         } catch { /* ignore parse errors */ }
       };
 
@@ -90,85 +158,69 @@ export function useWebSocket(roomType, roomId, enabled = true) {
         if (isUnmounted.current) return;
         setConnected(false);
         wsRef.current = null;
-        // If closed with 401/auth error, clear cached token so it refetches
-        if (event.code === 1008 || event.code === 4401) {
+
+        // Auth failure — clear cached token so next connect refetches
+        if (event.code === 1008 || event.code === 4401 || event.code === 4001) {
           chatTokenRef.current = null;
         }
+
         scheduleReconnect();
       };
 
       ws.onerror = () => {
         if (isUnmounted.current) return;
         setError('Connection failed');
-        // onclose will fire after onerror
+        // onclose fires after onerror — reconnect handled there
       };
-    } catch (e) {
+    } catch {
       setError('Failed to connect');
       scheduleReconnect();
     }
-  }, [roomType, roomId, enabled, fetchChatToken]);
+  }, [roomType, roomId, handleMessage, scheduleReconnect]);
 
-  const handleMessage = useCallback((data) => {
-    switch (data.type) {
-      case 'history':
-        setMessages(data.messages || []);
-        break;
+  // Connect when enabled, disconnect + reset when disabled (logout)
+  useEffect(() => {
+    isUnmounted.current = false;
 
-      case 'message':
-        setMessages(prev => [...prev, data.message]);
-        break;
-
-      case 'presence':
-        setOnlineUsers(data.users || []);
-        setOnlineCount(data.count || 0);
-        break;
-
-      case 'typing':
-        setTypingUsers(prev => {
-          if (prev.some(u => u.userId === data.userId)) return prev;
-          return [...prev, { userId: data.userId, userName: data.userName }];
-        });
-        break;
-
-      case 'stop_typing':
-        setTypingUsers(prev => prev.filter(u => u.userId !== data.userId));
-        break;
-
-      case 'reaction_update':
-        setMessages(prev => prev.map(m =>
-          m.id === data.messageId ? { ...m, reactions: data.reactions } : m
-        ));
-        break;
-
-      case 'chat_cleared':
-        setMessages([]);
-        break;
-
-      case 'error':
-        setError(data.message);
-        setRequiresPremium(!!data.requiresPremium);
-        break;
-
-      default:
-        break;
+    if (enabled) {
+      connectWs();
+    } else {
+      // Disabled (logged out) — full cleanup
+      if (reconnectTimer.current) {
+        clearTimeout(reconnectTimer.current);
+        reconnectTimer.current = null;
+      }
+      if (wsRef.current) {
+        wsRef.current.close();
+        wsRef.current = null;
+      }
+      chatTokenRef.current = null;
+      reconnectAttempt.current = 0;
+      setConnected(false);
+      setError(null);
+      setMessages([]);
+      setOnlineUsers([]);
+      setOnlineCount(0);
+      setTypingUsers([]);
+      setRequiresPremium(false);
     }
-  }, []);
 
-  const scheduleReconnect = useCallback(() => {
-    if (isUnmounted.current || reconnectAttempt.current >= MAX_RECONNECT_ATTEMPTS) return;
-
-    const delay = RECONNECT_DELAYS[Math.min(reconnectAttempt.current, RECONNECT_DELAYS.length - 1)];
-    reconnectAttempt.current += 1;
-
-    reconnectTimer.current = setTimeout(() => {
-      if (!isUnmounted.current) connect();
-    }, delay);
-  }, [connect]);
+    return () => {
+      isUnmounted.current = true;
+      if (reconnectTimer.current) {
+        clearTimeout(reconnectTimer.current);
+        reconnectTimer.current = null;
+      }
+      if (wsRef.current) {
+        wsRef.current.close();
+        wsRef.current = null;
+      }
+    };
+  }, [connectWs, enabled]);
 
   // Send a chat message
   const sendMessage = useCallback((text, replyTo = null) => {
     if (!wsRef.current || wsRef.current.readyState !== WebSocket.OPEN) return false;
-
     wsRef.current.send(JSON.stringify({
       type: 'message',
       text,
@@ -179,38 +231,20 @@ export function useWebSocket(roomType, roomId, enabled = true) {
     return true;
   }, []);
 
-  // Send typing indicator
   const sendTyping = useCallback(() => {
     if (!wsRef.current || wsRef.current.readyState !== WebSocket.OPEN) return;
     wsRef.current.send(JSON.stringify({ type: 'typing' }));
   }, []);
 
-  // Send stop typing
   const sendStopTyping = useCallback(() => {
     if (!wsRef.current || wsRef.current.readyState !== WebSocket.OPEN) return;
     wsRef.current.send(JSON.stringify({ type: 'stop_typing' }));
   }, []);
 
-  // Send reaction
   const sendReaction = useCallback((messageId, emoji) => {
     if (!wsRef.current || wsRef.current.readyState !== WebSocket.OPEN) return;
     wsRef.current.send(JSON.stringify({ type: 'reaction', messageId, emoji }));
   }, []);
-
-  // Connect/disconnect on mount/unmount
-  useEffect(() => {
-    isUnmounted.current = false;
-    if (enabled) connect();
-
-    return () => {
-      isUnmounted.current = true;
-      if (reconnectTimer.current) clearTimeout(reconnectTimer.current);
-      if (wsRef.current) {
-        wsRef.current.close();
-        wsRef.current = null;
-      }
-    };
-  }, [connect, enabled]);
 
   return {
     messages,

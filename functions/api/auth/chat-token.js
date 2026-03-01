@@ -11,9 +11,17 @@
 export async function onRequest(context) {
   const { env, request } = context;
 
+  // Only allow GET
+  if (request.method !== 'GET') {
+    return new Response(JSON.stringify({ error: 'Method not allowed' }), {
+      status: 405,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
   const cookieHeader = request.headers.get('Cookie') || '';
   const cookies = Object.fromEntries(
-    cookieHeader.split(';').map(c => {
+    cookieHeader.split(';').filter(c => c.includes('=')).map(c => {
       const [key, ...val] = c.trim().split('=');
       return [key, val.join('=')];
     })
@@ -24,6 +32,13 @@ export async function onRequest(context) {
   if (!sessionToken) {
     return new Response(JSON.stringify({ error: 'Not authenticated' }), {
       status: 401,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
+  if (!env.DB) {
+    return new Response(JSON.stringify({ error: 'Service unavailable' }), {
+      status: 503,
       headers: { 'Content-Type': 'application/json' },
     });
   }
@@ -45,9 +60,12 @@ export async function onRequest(context) {
 
     return new Response(JSON.stringify({ token: sessionToken }), {
       status: 200,
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'Cache-Control': 'private, no-store',
+      },
     });
-  } catch {
+  } catch (err) {
     return new Response(JSON.stringify({ error: 'Service unavailable' }), {
       status: 503,
       headers: { 'Content-Type': 'application/json' },
