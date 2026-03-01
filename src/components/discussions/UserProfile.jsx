@@ -130,11 +130,17 @@ export default function UserProfile({ userId, onBack, onOpenPost, onNavigateSett
           recipientPicture: profile.picture || '',
         }),
       });
+      const data = await res.json().catch(() => ({}));
       if (res.ok) {
-        setDmAction('sent');
-        setProfile(prev => ({ ...prev, connectionStatus: 'pending', connectionDirection: 'sent' }));
+        // Admin auto-accept or already connected → open DM directly
+        if (data.autoAccepted || data.alreadyConnected) {
+          setProfile(prev => ({ ...prev, connectionStatus: 'accepted', connectionId: data.connectionId }));
+          onOpenDM?.(data.connectionId, { id: profile.id, name: profile.name, picture: profile.picture });
+        } else {
+          setDmAction('sent');
+          setProfile(prev => ({ ...prev, connectionStatus: 'pending', connectionDirection: 'sent' }));
+        }
       } else {
-        const data = await res.json().catch(() => ({}));
         // If already connected, update local state
         if (data.error?.includes('already connected')) {
           setProfile(prev => ({ ...prev, connectionStatus: 'accepted' }));
