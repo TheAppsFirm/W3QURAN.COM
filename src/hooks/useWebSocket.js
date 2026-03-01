@@ -37,6 +37,7 @@ export function useWebSocket(roomType, roomId, enabled = true) {
 
     let url = `${CHAT_WS_URL}/ws/${roomType}/${roomId}`;
     // For local dev: pass session token as query param since cross-port cookies don't work
+    // In production: cookie with Domain=.w3quran.com is sent automatically to chat.w3quran.com
     if (typeof window !== 'undefined' && window.location.hostname === 'localhost' && CHAT_WS_URL.includes('localhost')) {
       const sessionMatch = document.cookie.match(/w3quran_session=([^;]+)/);
       if (sessionMatch) url += `?token=${sessionMatch[1]}`;

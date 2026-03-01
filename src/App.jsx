@@ -1492,7 +1492,7 @@ function QuranBubbleApp() {
           {view === 'discussions' && (
             <DiscussionsView
               darkMode={darkMode}
-              onBack={() => window.history.back()}
+              onBack={() => { setView('home'); updateURL('/'); }}
               initialSurahId={discussionInitial?.surahId || null}
               initialTab={discussionInitial?.tab || null}
               initialProfileUserId={discussionInitial?.profileUserId || null}

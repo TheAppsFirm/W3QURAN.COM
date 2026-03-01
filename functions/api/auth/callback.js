@@ -178,7 +178,7 @@ export async function onRequest(context) {
       status: 302,
       headers: {
         'Location': baseUrl + '/?auth_success=1',
-        'Set-Cookie': `w3quran_session=${sessionToken}; Path=/; HttpOnly;${securePart} SameSite=Lax; Expires=${expiresAt.toUTCString()}`,
+        'Set-Cookie': `w3quran_session=${sessionToken}; Path=/; HttpOnly;${securePart} SameSite=None; Domain=.w3quran.com; Expires=${expiresAt.toUTCString()}`,
       },
     });
 
