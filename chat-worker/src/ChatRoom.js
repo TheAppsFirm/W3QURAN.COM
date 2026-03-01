@@ -13,7 +13,7 @@
 
 const MAX_STORED_MESSAGES = 500;
 const REACTIONS = ['❤️', '👍', '📖', '🤲', 'ماشاءالله'];
-const FREE_DAILY_LIMIT = 5;
+const FREE_DAILY_LIMIT = 1; // 1 DM per day for free users (group chat is unlimited)
 const MAX_MESSAGE_LENGTH = 500;
 
 // ─── Inline Content Filter (can't import from Pages Functions) ─────
@@ -245,15 +245,17 @@ export class ChatRoom {
     const text = (data.text || '').trim();
     if (!text || text.length > MAX_MESSAGE_LENGTH) return;
 
-    // Rate limit check for free users
-    const isLimited = await this.checkRateLimit(session.userId);
-    if (isLimited) {
-      ws.send(JSON.stringify({
-        type: 'error',
-        message: 'Daily limit reached. Upgrade to premium for unlimited messages.',
-        requiresPremium: true,
-      }));
-      return;
+    // Rate limit: only for DMs (group chat is unlimited)
+    if (session.roomType === 'dm') {
+      const isLimited = await this.checkRateLimit(session.userId);
+      if (isLimited) {
+        ws.send(JSON.stringify({
+          type: 'error',
+          message: 'Daily DM limit reached. Upgrade to premium for unlimited messages.',
+          requiresPremium: true,
+        }));
+        return;
+      }
     }
 
     // Content filter — check for banned/flagged words (before sanitize, on raw text)

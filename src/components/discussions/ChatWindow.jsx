@@ -26,15 +26,34 @@ function timeFormat(dateStr) {
   }
 }
 
-function ChatMessage({ msg, currentUserId, onReply, onReact, onDelete, onOpenAyah, isAdmin, showReactions, isMobile }) {
+function ChatMessage({ msg, currentUserId, onReply, onReact, onDeleteRequest, onOpenAyah, isAdmin, selectMode, isSelected, onToggleSelect, isMobile }) {
   const { t } = useTranslation();
   const [showReactPicker, setShowReactPicker] = useState(false);
   const isOwn = msg.userId === currentUserId;
+  const canDelete = isAdmin || isOwn;
+
+  // In select mode, only allow selecting own messages (for non-admin) or any (for admin)
+  const canSelect = selectMode && (isAdmin || isOwn);
 
   return (
-    <div className={`group flex gap-2 px-3 py-1.5 hover:bg-white/[0.03] transition-colors ${isOwn ? 'flex-row-reverse' : ''}`}>
+    <div
+      className={`group flex gap-2 px-3 py-1.5 transition-colors ${isOwn ? 'flex-row-reverse' : ''}
+        ${selectMode ? 'cursor-pointer' : 'hover:bg-white/[0.03]'}
+        ${isSelected ? 'bg-red-500/10' : ''}`}
+      onClick={canSelect ? () => onToggleSelect(msg.id) : undefined}
+    >
+      {/* Selection checkbox */}
+      {selectMode && canSelect && (
+        <div className="flex items-center shrink-0 mt-0.5">
+          <div className={`w-5 h-5 rounded-md flex items-center justify-center transition-all border
+            ${isSelected ? 'bg-red-500 border-red-500' : 'bg-white/10 border-white/20'}`}>
+            {isSelected && <Icons.Check className="w-3.5 h-3.5 text-white" />}
+          </div>
+        </div>
+      )}
+
       {/* Avatar */}
-      {!isOwn && (
+      {!isOwn && !selectMode && (
         msg.userPicture ? (
           <img src={msg.userPicture} alt="" className="w-6 h-6 rounded-full mt-0.5 shrink-0" referrerPolicy="no-referrer" />
         ) : (
@@ -65,7 +84,8 @@ function ChatMessage({ msg, currentUserId, onReply, onReact, onDelete, onOpenAya
           ${isOwn
             ? 'bg-purple-600/40 text-white rounded-br-md'
             : 'bg-white/[0.08] text-white/80 rounded-bl-md'
-          }`}
+          }
+          ${isSelected ? 'ring-1 ring-red-400/60' : ''}`}
         >
           <RichPostBody text={msg.message} onOpenAyah={onOpenAyah} />
         </div>
@@ -80,7 +100,7 @@ function ChatMessage({ msg, currentUserId, onReply, onReact, onDelete, onOpenAya
             {Object.entries(msg.reactions).map(([emoji, users]) => (
               <button
                 key={emoji}
-                onClick={() => onReact(msg.id, emoji)}
+                onClick={(e) => { e.stopPropagation(); onReact(msg.id, emoji); }}
                 className={`text-xs px-1.5 py-0.5 rounded-full border transition-colors
                   ${users.includes(currentUserId)
                     ? 'bg-purple-500/20 border-purple-500/40'
@@ -94,36 +114,38 @@ function ChatMessage({ msg, currentUserId, onReply, onReact, onDelete, onOpenAya
         )}
 
         {/* Actions — always visible on mobile, hover on desktop */}
-        <div className={`${isMobile ? 'flex' : 'hidden group-hover:flex'} items-center gap-1 mt-0.5`}>
-          <button
-            onClick={() => onReply(msg)}
-            className="text-[10px] text-white/20 hover:text-purple-400 active:text-purple-400 transition-colors p-1"
-          >
-            {t('discussions.reply', 'Reply')}
-          </button>
-          <button
-            onClick={() => setShowReactPicker(!showReactPicker)}
-            className="text-[10px] text-white/20 hover:text-yellow-400 active:text-yellow-400 transition-colors p-1"
-          >
-            {t('discussions.react', 'React')}
-          </button>
-          {(isAdmin || isOwn) && (
+        {!selectMode && (
+          <div className={`${isMobile ? 'flex' : 'hidden group-hover:flex'} items-center gap-1 mt-0.5`}>
             <button
-              onClick={() => onDelete?.(msg.id)}
-              className="text-[10px] text-white/20 hover:text-red-400 active:text-red-400 transition-colors p-1"
+              onClick={() => onReply(msg)}
+              className="text-[10px] text-white/20 hover:text-purple-400 active:text-purple-400 transition-colors p-1"
             >
-              {t('discussions.delete', 'Delete')}
+              {t('discussions.reply', 'Reply')}
             </button>
-          )}
-        </div>
+            <button
+              onClick={() => setShowReactPicker(!showReactPicker)}
+              className="text-[10px] text-white/20 hover:text-yellow-400 active:text-yellow-400 transition-colors p-1"
+            >
+              {t('discussions.react', 'React')}
+            </button>
+            {canDelete && (
+              <button
+                onClick={() => onDeleteRequest?.(msg.id)}
+                className="text-[10px] text-white/20 hover:text-red-400 active:text-red-400 transition-colors p-1"
+              >
+                {t('discussions.delete', 'Delete')}
+              </button>
+            )}
+          </div>
+        )}
 
         {/* Reaction picker */}
-        {showReactPicker && (
+        {showReactPicker && !selectMode && (
           <div className="flex gap-1 mt-1 p-1 rounded-lg bg-slate-800 border border-white/10">
             {REACTIONS.map(emoji => (
               <button
                 key={emoji}
-                onClick={() => { onReact(msg.id, emoji); setShowReactPicker(false); }}
+                onClick={(e) => { e.stopPropagation(); onReact(msg.id, emoji); setShowReactPicker(false); }}
                 className="w-7 h-7 flex items-center justify-center rounded hover:bg-white/10 text-sm transition-colors"
               >
                 {emoji}
@@ -136,7 +158,7 @@ function ChatMessage({ msg, currentUserId, onReply, onReact, onDelete, onOpenAya
   );
 }
 
-export default function ChatWindow({ surahId, surahName }) {
+export default function ChatWindow({ surahId, surahName, onOpenAyah }) {
   const isMobile = useIsMobile();
   const { user, isAuthenticated, isAdmin, login } = useAuth();
   const { t } = useTranslation();
@@ -161,9 +183,16 @@ export default function ChatWindow({ surahId, surahName }) {
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
   const typingTimer = useRef(null);
-  // Ref to avoid stale closure in insert handler
   const quoteRef = useRef({ surah: 1, ayah: 1, translation: 234, comment: '' });
   quoteRef.current = { surah: quoteSurah, ayah: quoteAyah, translation: quoteTranslation, comment: quoteComment };
+
+  // Delete confirmation state
+  const [deleteConfirm, setDeleteConfirm] = useState(null); // null | { ids: [...] }
+  const [deleting, setDeleting] = useState(false);
+
+  // Multi-select mode
+  const [selectMode, setSelectMode] = useState(false);
+  const [selectedMsgs, setSelectedMsgs] = useState([]);
 
   // Auto-scroll to bottom on new messages
   useEffect(() => {
@@ -225,6 +254,48 @@ export default function ChatWindow({ surahId, surahName }) {
     setShowClearConfirm(false);
   };
 
+  // Single message delete request — shows confirmation
+  const handleDeleteRequest = useCallback((msgId) => {
+    setDeleteConfirm({ ids: [msgId] });
+  }, []);
+
+  // Multi-select delete — shows confirmation for all selected
+  const handleBulkDeleteRequest = useCallback(() => {
+    if (selectedMsgs.length === 0) return;
+    setDeleteConfirm({ ids: [...selectedMsgs] });
+  }, [selectedMsgs]);
+
+  // Confirm delete — send delete for each message
+  const confirmDelete = useCallback(() => {
+    if (!deleteConfirm?.ids?.length) return;
+    setDeleting(true);
+    for (const id of deleteConfirm.ids) {
+      sendDelete(id);
+    }
+    setDeleting(false);
+    setDeleteConfirm(null);
+    // Exit select mode after bulk delete
+    if (selectMode) {
+      setSelectMode(false);
+      setSelectedMsgs([]);
+    }
+  }, [deleteConfirm, sendDelete, selectMode]);
+
+  // Toggle message selection
+  const toggleSelect = useCallback((msgId) => {
+    setSelectedMsgs(prev =>
+      prev.includes(msgId)
+        ? prev.filter(id => id !== msgId)
+        : [...prev, msgId]
+    );
+  }, []);
+
+  // Exit select mode
+  const exitSelectMode = useCallback(() => {
+    setSelectMode(false);
+    setSelectedMsgs([]);
+  }, []);
+
   return (
     <div className="flex flex-col h-full">
       {/* Header */}
@@ -241,19 +312,105 @@ export default function ChatWindow({ surahId, surahName }) {
           )}
         </div>
 
-        {/* Admin: Clear Chat */}
-        {isAdmin && (
-          <button
-            onClick={() => setShowClearConfirm(true)}
-            className="flex items-center gap-1 px-2 py-1 rounded-lg text-[10px] text-red-400/50
-              hover:text-red-300 hover:bg-red-500/10 border border-transparent hover:border-red-500/20 transition-all"
-            title="Clear all messages"
-          >
-            <Icons.Trash className="w-3 h-3" />
-            {t('discussions.clearChat', 'Clear')}
-          </button>
-        )}
+        <div className="flex items-center gap-1">
+          {/* Select mode toggle — visible for admin always, for users when they have messages */}
+          {isAuthenticated && !selectMode && (
+            <button
+              onClick={() => setSelectMode(true)}
+              className="flex items-center gap-1 px-2 py-1 rounded-lg text-[10px] text-white/30
+                hover:text-white/60 hover:bg-white/5 border border-transparent hover:border-white/10 transition-all"
+              title="Select messages"
+            >
+              <Icons.Check className="w-3 h-3" />
+              {t('discussions.select', 'Select')}
+            </button>
+          )}
+
+          {/* Admin: Clear Chat */}
+          {isAdmin && !selectMode && (
+            <button
+              onClick={() => setShowClearConfirm(true)}
+              className="flex items-center gap-1 px-2 py-1 rounded-lg text-[10px] text-red-400/50
+                hover:text-red-300 hover:bg-red-500/10 border border-transparent hover:border-red-500/20 transition-all"
+              title="Clear all messages"
+            >
+              <Icons.Trash className="w-3 h-3" />
+              {t('discussions.clearChat', 'Clear')}
+            </button>
+          )}
+        </div>
       </div>
+
+      {/* Select mode bar */}
+      {selectMode && (
+        <div className="flex items-center justify-between px-4 py-2 bg-red-500/10 border-b border-red-500/20">
+          <div className="flex items-center gap-2">
+            <span className="text-xs text-white/70">
+              {selectedMsgs.length === 0
+                ? t('discussions.tapToSelect', 'Tap messages to select')
+                : `${selectedMsgs.length} ${t('discussions.selected', 'selected')}`}
+            </span>
+          </div>
+          <div className="flex items-center gap-2">
+            {selectedMsgs.length > 0 && (
+              <button
+                onClick={handleBulkDeleteRequest}
+                className="px-2.5 py-1 rounded-lg text-[10px] font-medium text-white bg-red-600 hover:bg-red-500 transition-colors"
+              >
+                {t('discussions.deleteSelected', 'Delete')} ({selectedMsgs.length})
+              </button>
+            )}
+            <button
+              onClick={exitSelectMode}
+              className="px-2.5 py-1 rounded-lg text-[10px] text-white/50 bg-white/5 hover:bg-white/10 transition-colors"
+            >
+              {t('common.cancel', 'Cancel')}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {deleteConfirm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" onClick={() => { setDeleteConfirm(null); setDeleting(false); }}>
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+          <div className="relative w-full max-w-sm rounded-2xl border border-white/10 bg-gradient-to-b from-slate-800 to-slate-900 shadow-2xl p-6" onClick={e => e.stopPropagation()}>
+            <div className="flex flex-col items-center text-center">
+              <div className="w-12 h-12 rounded-full bg-red-500/15 border border-red-500/30 flex items-center justify-center mb-4">
+                <Icons.Trash className="w-5 h-5 text-red-400" />
+              </div>
+              <h3 className="text-white font-semibold text-lg mb-1">
+                {deleteConfirm.ids.length > 1
+                  ? t('discussions.deleteMessagesQuestion', 'Delete Messages?')
+                  : t('discussions.deleteMessageQuestion', 'Delete Message?')}
+              </h3>
+              <p className="text-sm text-white/40 mb-6">
+                {deleteConfirm.ids.length > 1
+                  ? `${deleteConfirm.ids.length} ${t('discussions.messagesWillBeDeleted', 'messages will be permanently deleted. This cannot be undone.')}`
+                  : t('discussions.messageWillBeDeleted', 'This message will be permanently deleted. This cannot be undone.')}
+              </p>
+              <div className="flex gap-3 w-full">
+                <button
+                  onClick={() => { setDeleteConfirm(null); setDeleting(false); }}
+                  className="flex-1 px-4 py-2.5 rounded-xl text-sm font-medium text-white/60
+                    bg-white/5 border border-white/10 hover:bg-white/10 transition-all"
+                >
+                  {t('common.cancel', 'Cancel')}
+                </button>
+                <button
+                  onClick={confirmDelete}
+                  disabled={deleting}
+                  className="flex-1 px-4 py-2.5 rounded-xl text-sm font-medium text-white
+                    bg-red-600 hover:bg-red-500 border border-red-500/50 shadow-lg shadow-red-500/20
+                    transition-all disabled:opacity-50"
+                >
+                  {deleting ? t('discussions.deleting', 'Deleting...') : t('discussions.delete', 'Delete')}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Clear Chat Confirmation */}
       {showClearConfirm && (
@@ -321,8 +478,12 @@ export default function ChatWindow({ surahId, surahName }) {
               currentUserId={user?.id}
               onReply={handleReply}
               onReact={sendReaction}
-              onDelete={sendDelete}
+              onDeleteRequest={handleDeleteRequest}
+              onOpenAyah={onOpenAyah}
               isAdmin={isAdmin}
+              selectMode={selectMode}
+              isSelected={selectedMsgs.includes(msg.id)}
+              onToggleSelect={toggleSelect}
               isMobile={isMobile}
             />
           ))
@@ -504,7 +665,7 @@ export default function ChatWindow({ surahId, surahName }) {
       )}
 
       {/* Input */}
-      {isAuthenticated && (
+      {isAuthenticated && !selectMode && (
         <form onSubmit={handleSend} className="p-3 border-t border-white/10 flex gap-2" style={{ paddingBottom: 'max(12px, env(safe-area-inset-bottom))' }}>
           <input
             ref={inputRef}
