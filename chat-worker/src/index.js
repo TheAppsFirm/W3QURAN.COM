@@ -86,6 +86,7 @@ export default {
         'X-User-Id': user.id,
         'X-User-Name': user.name || 'Anonymous',
         'X-User-Picture': user.picture || '',
+        'X-Is-Admin': user.isAdmin ? 'true' : 'false',
         'X-Room-Type': roomType,
         'X-Room-Id': roomId,
       }),
@@ -115,7 +116,13 @@ async function verifySession(request, env) {
       JOIN users u ON s.user_id = u.id
       WHERE s.token = ? AND s.expires_at > datetime('now')
     `).bind(match[1]).first();
-    return user || null;
+    if (!user) return null;
+
+    // Check admin status
+    const adminEmails = (env.ADMIN_EMAILS || '').split(',').map(e => e.trim().toLowerCase()).filter(Boolean);
+    user.isAdmin = adminEmails.includes(user.email?.toLowerCase());
+
+    return user;
   } catch {
     return null;
   }

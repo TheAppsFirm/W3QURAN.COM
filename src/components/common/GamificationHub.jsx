@@ -412,8 +412,8 @@ const LeaderboardTab = memo(function LeaderboardTab({ data, loading, error, sort
       <div className="flex gap-2">
         {[
           { id: 'xp', label: t('gamification.sortXP', 'XP (Naikee)') },
-          { id: 'streak', label: t('gamification.sortStreak', 'Streak') },
-          { id: 'verses', label: t('gamification.sortVerses', 'Verses') },
+          { id: 'streak', label: t('gamification.sortStreak', 'Streak (Istiqamat)') },
+          { id: 'verses', label: t('gamification.sortVerses', 'Verses (Tilawat)') },
         ].map(s => (
           <button
             key={s.id}

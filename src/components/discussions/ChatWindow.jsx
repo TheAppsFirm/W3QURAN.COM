@@ -26,7 +26,7 @@ function timeFormat(dateStr) {
   }
 }
 
-function ChatMessage({ msg, currentUserId, onReply, onReact, showReactions, isMobile }) {
+function ChatMessage({ msg, currentUserId, onReply, onReact, onDelete, onOpenAyah, isAdmin, showReactions, isMobile }) {
   const { t } = useTranslation();
   const [showReactPicker, setShowReactPicker] = useState(false);
   const isOwn = msg.userId === currentUserId;
@@ -67,7 +67,7 @@ function ChatMessage({ msg, currentUserId, onReply, onReact, showReactions, isMo
             : 'bg-white/[0.08] text-white/80 rounded-bl-md'
           }`}
         >
-          <RichPostBody text={msg.message} />
+          <RichPostBody text={msg.message} onOpenAyah={onOpenAyah} />
         </div>
 
         {isOwn && (
@@ -107,6 +107,14 @@ function ChatMessage({ msg, currentUserId, onReply, onReact, showReactions, isMo
           >
             {t('discussions.react', 'React')}
           </button>
+          {(isAdmin || isOwn) && (
+            <button
+              onClick={() => onDelete?.(msg.id)}
+              className="text-[10px] text-white/20 hover:text-red-400 active:text-red-400 transition-colors p-1"
+            >
+              {t('discussions.delete', 'Delete')}
+            </button>
+          )}
         </div>
 
         {/* Reaction picker */}
@@ -136,7 +144,7 @@ export default function ChatWindow({ surahId, surahName }) {
   const [clearing, setClearing] = useState(false);
   const {
     messages, setMessages, connected, onlineUsers, onlineCount, typingUsers, error, requiresPremium,
-    sendMessage, sendTyping, sendStopTyping, sendReaction,
+    sendMessage, sendTyping, sendStopTyping, sendReaction, sendDelete,
   } = useWebSocket('surah', String(surahId), isAuthenticated);
 
   const [inputText, setInputText] = useState('');
@@ -313,6 +321,8 @@ export default function ChatWindow({ surahId, surahName }) {
               currentUserId={user?.id}
               onReply={handleReply}
               onReact={sendReaction}
+              onDelete={sendDelete}
+              isAdmin={isAdmin}
               isMobile={isMobile}
             />
           ))

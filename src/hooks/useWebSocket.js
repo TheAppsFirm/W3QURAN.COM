@@ -83,6 +83,9 @@ export function useWebSocket(roomType, roomId, enabled = true) {
           m.id === data.messageId ? { ...m, reactions: data.reactions } : m
         ));
         break;
+      case 'message_deleted':
+        setMessages(prev => prev.filter(m => m.id !== data.messageId));
+        break;
       case 'chat_cleared':
         setMessages([]);
         break;
@@ -246,6 +249,11 @@ export function useWebSocket(roomType, roomId, enabled = true) {
     wsRef.current.send(JSON.stringify({ type: 'reaction', messageId, emoji }));
   }, []);
 
+  const sendDelete = useCallback((messageId) => {
+    if (!wsRef.current || wsRef.current.readyState !== WebSocket.OPEN) return;
+    wsRef.current.send(JSON.stringify({ type: 'delete', messageId }));
+  }, []);
+
   return {
     messages,
     setMessages,
@@ -259,5 +267,6 @@ export function useWebSocket(roomType, roomId, enabled = true) {
     sendTyping,
     sendStopTyping,
     sendReaction,
+    sendDelete,
   };
 }

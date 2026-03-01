@@ -156,6 +156,7 @@ export class ChatRoom {
     const userId = request.headers.get('X-User-Id');
     const userName = request.headers.get('X-User-Name');
     const userPicture = request.headers.get('X-User-Picture');
+    const isAdmin = request.headers.get('X-Is-Admin') === 'true';
     const roomType = request.headers.get('X-Room-Type');
     const roomId = request.headers.get('X-Room-Id');
 
@@ -167,6 +168,7 @@ export class ChatRoom {
       userId,
       userName,
       userPicture,
+      isAdmin,
       roomType,
       roomId,
       joinedAt: Date.now(),
@@ -212,6 +214,9 @@ export class ChatRoom {
         break;
       case 'reaction':
         await this.handleReaction(session, data);
+        break;
+      case 'delete':
+        await this.handleDeleteMessage(ws, session, data);
         break;
       default:
         break;
@@ -324,6 +329,36 @@ export class ChatRoom {
 
     // Broadcast to all connected users
     this.broadcast(JSON.stringify({ type: 'message', message }));
+  }
+
+  // ─── Admin Delete Single Message ─────────────────────────
+
+  async handleDeleteMessage(ws, session, data) {
+    const messageId = data.messageId;
+    if (!messageId) return;
+
+    try {
+      // Verify authorization: admin can delete any message, users can only delete their own
+      if (!session.isAdmin) {
+        const msg = await this.env.DB.prepare(
+          'SELECT user_id FROM chat_messages WHERE id = ? AND is_deleted = FALSE'
+        ).bind(messageId).first();
+        if (!msg || msg.user_id !== session.userId) {
+          ws.send(JSON.stringify({ type: 'error', message: 'Not authorized' }));
+          return;
+        }
+      }
+
+      await this.env.DB.prepare(
+        'UPDATE chat_messages SET is_deleted = TRUE WHERE id = ?'
+      ).bind(messageId).run();
+
+      // Broadcast removal to all connected users
+      this.broadcast(JSON.stringify({ type: 'message_deleted', messageId }));
+    } catch (e) {
+      console.error('Failed to delete message:', e);
+      ws.send(JSON.stringify({ type: 'error', message: 'Failed to delete message' }));
+    }
   }
 
   // ─── Typing Indicator ─────────────────────────────────────
