@@ -10,6 +10,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { useIsMobile } from '../../hooks';
 import { QUOTE_TRANSLATIONS, fetchVerseForQuote } from './quranQuoteUtils';
 import RichPostBody from './RichPostBody';
+import UserPopover from './UserPopover';
 import { useTranslation } from '../../contexts/LocaleContext';
 
 const lazyRetry = (fn) => lazy(() => fn().catch(() => { if (!sessionStorage.getItem('chunk_reload')) { sessionStorage.setItem('chunk_reload', '1'); window.location.reload(); } return fn(); }));
@@ -26,14 +27,23 @@ function timeFormat(dateStr) {
   }
 }
 
-function ChatMessage({ msg, currentUserId, onReply, onReact, onDeleteRequest, onOpenAyah, isAdmin, selectMode, isSelected, onToggleSelect, isMobile }) {
+function ChatMessage({ msg, currentUserId, onReply, onReact, onDeleteRequest, onOpenAyah, onViewProfile, isAdmin, selectMode, isSelected, onToggleSelect, isMobile }) {
   const { t } = useTranslation();
   const [showReactPicker, setShowReactPicker] = useState(false);
+  const [popoverUser, setPopoverUser] = useState(null);
+  const [popoverPos, setPopoverPos] = useState(null);
   const isOwn = msg.userId === currentUserId;
   const canDelete = isAdmin || isOwn;
 
   // In select mode, only allow selecting own messages (for non-admin) or any (for admin)
   const canSelect = selectMode && (isAdmin || isOwn);
+
+  const handleUserClick = (e) => {
+    e.stopPropagation();
+    if (selectMode) return;
+    setPopoverUser({ id: msg.userId, name: msg.userName, picture: msg.userPicture });
+    setPopoverPos({ top: Math.min(e.clientY + 8, window.innerHeight - 300), left: Math.min(e.clientX, window.innerWidth - 260) });
+  };
 
   return (
     <div
@@ -55,9 +65,9 @@ function ChatMessage({ msg, currentUserId, onReply, onReact, onDeleteRequest, on
       {/* Avatar */}
       {!isOwn && !selectMode && (
         msg.userPicture ? (
-          <img src={msg.userPicture} alt="" className="w-6 h-6 rounded-full mt-0.5 shrink-0" referrerPolicy="no-referrer" />
+          <img src={msg.userPicture} alt="" className="w-6 h-6 rounded-full mt-0.5 shrink-0 cursor-pointer hover:ring-2 hover:ring-purple-400/50 transition-all" referrerPolicy="no-referrer" onClick={handleUserClick} />
         ) : (
-          <div className="w-6 h-6 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-white text-[9px] font-bold mt-0.5 shrink-0">
+          <div className="w-6 h-6 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-white text-[9px] font-bold mt-0.5 shrink-0 cursor-pointer hover:ring-2 hover:ring-purple-400/50 transition-all" onClick={handleUserClick}>
             {(msg.userName || '?')[0]}
           </div>
         )
@@ -67,7 +77,7 @@ function ChatMessage({ msg, currentUserId, onReply, onReact, onDeleteRequest, on
         {/* Name + time */}
         {!isOwn && (
           <div className="flex items-center gap-1.5 mb-0.5">
-            <span className="text-xs text-white/50 font-medium">{msg.userName}</span>
+            <span className="text-xs text-white/50 font-medium cursor-pointer hover:text-purple-300 transition-colors" onClick={handleUserClick}>{msg.userName}</span>
             <span className="text-[10px] text-white/20">{timeFormat(msg.createdAt)}</span>
           </div>
         )}
@@ -154,11 +164,21 @@ function ChatMessage({ msg, currentUserId, onReply, onReact, onDeleteRequest, on
           </div>
         )}
       </div>
+
+      {/* User Profile Popover */}
+      {popoverUser && (
+        <UserPopover
+          user={popoverUser}
+          position={popoverPos}
+          onClose={() => setPopoverUser(null)}
+          onViewProfile={onViewProfile}
+        />
+      )}
     </div>
   );
 }
 
-export default function ChatWindow({ surahId, surahName, onOpenAyah }) {
+export default function ChatWindow({ surahId, surahName, onOpenAyah, onViewProfile }) {
   const isMobile = useIsMobile();
   const { user, isAuthenticated, isAdmin, login } = useAuth();
   const { t } = useTranslation();
@@ -480,6 +500,7 @@ export default function ChatWindow({ surahId, surahName, onOpenAyah }) {
               onReact={sendReaction}
               onDeleteRequest={handleDeleteRequest}
               onOpenAyah={onOpenAyah}
+              onViewProfile={onViewProfile}
               isAdmin={isAdmin}
               selectMode={selectMode}
               isSelected={selectedMsgs.includes(msg.id)}

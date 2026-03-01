@@ -181,7 +181,7 @@ export default function DiscussionBoard({ surahId, surahName, onOpenAyah, onView
       {/* Live Chat Tab */}
       {activeTab === 'chat' && (
         <div className="rounded-xl border border-white/10 bg-white/[0.03] overflow-hidden" style={{ height: isMobile ? 'calc(100dvh - 200px)' : '500px' }}>
-          <ChatWindow surahId={surahId} surahName={surahName} onOpenAyah={onOpenAyah} />
+          <ChatWindow surahId={surahId} surahName={surahName} onOpenAyah={onOpenAyah} onViewProfile={onViewProfile} />
         </div>
       )}
 
