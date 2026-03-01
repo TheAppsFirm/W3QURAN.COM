@@ -314,9 +314,10 @@ export class ChatRoom {
       });
     }
 
-    // Persist to D1
+    // Persist to D1 and use the DB-generated ID so reactions can find the message
     try {
-      await this.persistMessage(message);
+      const dbId = await this.persistMessage(message);
+      if (dbId) message.id = dbId;
     } catch (e) {
       console.error('Failed to persist message:', e);
     }
@@ -442,7 +443,7 @@ export class ChatRoom {
   // ─── Persistence ──────────────────────────────────────────
 
   async persistMessage(message) {
-    await this.env.DB.prepare(`
+    const result = await this.env.DB.prepare(`
       INSERT INTO chat_messages (room_type, room_id, user_id, user_name, user_picture, message, reply_to_id, reactions)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     `).bind(
@@ -455,6 +456,9 @@ export class ChatRoom {
       message.replyToId,
       JSON.stringify(message.reactions),
     ).run();
+
+    // Return the auto-generated DB row ID
+    return result?.meta?.last_row_id || null;
 
     // Trim old messages (keep last MAX_STORED_MESSAGES per room)
     await this.env.DB.prepare(`
