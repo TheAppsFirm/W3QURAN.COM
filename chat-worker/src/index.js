@@ -96,12 +96,13 @@ export default {
 };
 
 /**
- * Verify session from cookie or query param (dev only) — same logic as main app.
+ * Verify session from cookie or query param.
+ * Production uses ?token= param (fetched via /api/auth/chat-token on the main domain).
+ * Cookie fallback for same-origin scenarios.
  */
 async function verifySession(request, env) {
   const cookies = request.headers.get('Cookie') || '';
   const cookieMatch = cookies.match(/w3quran_session=([^;]+)/);
-  // Also check query param for local dev (cross-port cookies don't work)
   const url = new URL(request.url);
   const tokenParam = url.searchParams.get('token');
   const match = cookieMatch ? cookieMatch : (tokenParam ? [null, tokenParam] : null);

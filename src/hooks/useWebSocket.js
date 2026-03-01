@@ -25,8 +25,27 @@ export function useWebSocket(roomType, roomId, enabled = true) {
   const reconnectAttempt = useRef(0);
   const reconnectTimer = useRef(null);
   const isUnmounted = useRef(false);
+  const chatTokenRef = useRef(null);
 
-  const connect = useCallback(() => {
+  // Fetch chat token from same-origin API (reads HttpOnly cookie server-side)
+  const fetchChatToken = useCallback(async () => {
+    // In local dev, read cookie directly (not HttpOnly in dev)
+    if (typeof window !== 'undefined' && window.location.hostname === 'localhost') {
+      const sessionMatch = document.cookie.match(/w3quran_session=([^;]+)/);
+      return sessionMatch ? sessionMatch[1] : null;
+    }
+    // In production, fetch from API since cookie is HttpOnly
+    try {
+      const res = await fetch('/api/auth/chat-token', { credentials: 'include' });
+      if (!res.ok) return null;
+      const data = await res.json();
+      return data.token || null;
+    } catch {
+      return null;
+    }
+  }, []);
+
+  const connect = useCallback(async () => {
     if (!roomType || !roomId || !enabled || isUnmounted.current) return;
 
     // Clean up existing connection
@@ -35,13 +54,17 @@ export function useWebSocket(roomType, roomId, enabled = true) {
       wsRef.current = null;
     }
 
-    let url = `${CHAT_WS_URL}/ws/${roomType}/${roomId}`;
-    // For local dev: pass session token as query param since cross-port cookies don't work
-    // In production: cookie with Domain=.w3quran.com is sent automatically to chat.w3quran.com
-    if (typeof window !== 'undefined' && window.location.hostname === 'localhost' && CHAT_WS_URL.includes('localhost')) {
-      const sessionMatch = document.cookie.match(/w3quran_session=([^;]+)/);
-      if (sessionMatch) url += `?token=${sessionMatch[1]}`;
+    // Get auth token if we don't have one
+    if (!chatTokenRef.current) {
+      chatTokenRef.current = await fetchChatToken();
     }
+
+    if (!chatTokenRef.current) {
+      setError('Not authenticated');
+      return;
+    }
+
+    let url = `${CHAT_WS_URL}/ws/${roomType}/${roomId}?token=${chatTokenRef.current}`;
 
     try {
       const ws = new WebSocket(url);
@@ -63,10 +86,14 @@ export function useWebSocket(roomType, roomId, enabled = true) {
         } catch { /* ignore parse errors */ }
       };
 
-      ws.onclose = () => {
+      ws.onclose = (event) => {
         if (isUnmounted.current) return;
         setConnected(false);
         wsRef.current = null;
+        // If closed with 401/auth error, clear cached token so it refetches
+        if (event.code === 1008 || event.code === 4401) {
+          chatTokenRef.current = null;
+        }
         scheduleReconnect();
       };
 
@@ -79,7 +106,7 @@ export function useWebSocket(roomType, roomId, enabled = true) {
       setError('Failed to connect');
       scheduleReconnect();
     }
-  }, [roomType, roomId, enabled]);
+  }, [roomType, roomId, enabled, fetchChatToken]);
 
   const handleMessage = useCallback((data) => {
     switch (data.type) {

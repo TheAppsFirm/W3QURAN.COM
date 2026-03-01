@@ -32,7 +32,7 @@ export async function onRequest(context) {
     status: 200,
     headers: {
       'Content-Type': 'application/json',
-      'Set-Cookie': 'w3quran_session=; Path=/; HttpOnly; Secure; SameSite=None; Domain=.w3quran.com; Max-Age=0',
+      'Set-Cookie': 'w3quran_session=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0',
     },
   });
 }
